@@ -8,11 +8,12 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { TransitionGroup, Transition } from 'react-transition-group'
-import { getNotifications, toggleNotificationSeen, markAllNotificationsRead, toggleNotificationRead, visitNotifications,
+import { getNotifications, toggleNotificationSeen, markAllNotificationsRead, markAllNotificationsSeen, toggleNotificationRead, visitNotifications,
   toggleBundledNotificationRead, viewOlderNotifications, hideOlderNotifications } from '../../routes/notifications/actions'
 import {
   splitNotificationsBySources,
   filterReadNotifications,
+  filterSeenNotifications,
   limitQuantityInSources,
   preRenderNotifications,
 } from '../../routes/notifications/helpers/notifications'
@@ -31,7 +32,7 @@ import './NotificationsDropdown.scss'
 const NotificationsDropdownContainerView = (props) => {
   const {initialized, isLoading, lastVisited, sources, notifications, markAllNotificationsRead, toggleNotificationRead, toggleNotificationSeen,
     pending, toggleBundledNotificationRead, visitNotifications, oldSourceIds, viewOlderNotifications, isDropdownMobileOpen, isDropdownWebOpen,
-    toggleNotificationsDropdownMobile, toggleNotificationsDropdownWeb } = props
+    toggleNotificationsDropdownMobile, toggleNotificationsDropdownWeb, markAllNotificationsSeen } = props
   if (!initialized && isLoading) {
     return (
       <NotificationsDropdown hasUnread={false}>
@@ -51,9 +52,11 @@ const NotificationsDropdownContainerView = (props) => {
   }
 
   const notReadNotifications = filterReadNotifications(notifications)
+  const notSeenNotifications = filterSeenNotifications(notifications)
   const allNotificationsBySources = splitNotificationsBySources(sources, notReadNotifications)
 
   const hasUnread = notReadNotifications.length > 0
+  const hasUnseen = notSeenNotifications.length > 0
   // we have to give Dropdown component some time
   // before removing notification item node from the list
   // otherwise dropdown thinks we clicked outside and closes dropdown
@@ -70,7 +73,7 @@ const NotificationsDropdownContainerView = (props) => {
       }, 0)
     }
   }
-  const hasNew = hasUnread
+  const hasNew =  hasUnseen
   let notificationsEmpty = (
     <NotificationsEmpty>
       <p className="notifications-empty-note">
@@ -90,6 +93,12 @@ const NotificationsDropdownContainerView = (props) => {
         </p>
       </NotificationsEmpty>
     )
+  }
+
+  const markNotificationsSeen = (isOpen) => {
+    if (isOpen) {
+      markAllNotificationsSeen()
+    }
   }
 
   // this function checks that notification is not seen yet,
@@ -122,6 +131,7 @@ const NotificationsDropdownContainerView = (props) => {
               onToggle={(isOpen) => {
                 toggleNotificationsDropdownWeb(isOpen)
                 visitNotifications()
+                markNotificationsSeen(isOpen)
               }}
             >
               {isDropdownWebOpen && <div>
@@ -310,7 +320,6 @@ class NotificationsDropdownContainer extends React.Component {
   render() {
     const { notifications, ...restProps } = this.props
     const preRenderedNotifications = preRenderNotifications(notifications)
-
     return (
       <NotificationsDropdownContainerView
         {...restProps}
@@ -334,6 +343,7 @@ const mapDispatchToProps = {
   visitNotifications,
   toggleNotificationSeen,
   markAllNotificationsRead,
+  markAllNotificationsSeen,
   toggleNotificationRead,
   toggleBundledNotificationRead,
   viewOlderNotifications,

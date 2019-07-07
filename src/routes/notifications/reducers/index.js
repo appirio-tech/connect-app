@@ -9,6 +9,7 @@ import {
   TOGGLE_NOTIFICATION_SEEN,
   SET_NOTIFICATIONS_FILTER_BY,
   MARK_ALL_NOTIFICATIONS_READ,
+  MARK_ALL_NOTIFICATIONS_SEEN,
   TOGGLE_NOTIFICATION_READ,
   VIEW_OLDER_NOTIFICATIONS_SUCCESS,
   HIDE_OLDER_NOTIFICATIONS_SUCCESS,
@@ -104,6 +105,17 @@ export default (state = initialState, action) => {
       pending: false,
       ...getNotificationsAndFilterBy(state.notifications.map(n => (
         !action.payload || n.sourceId === action.payload ? { ...n, isRead: action.isRead } : n
+      )), state.filterBy)
+    }
+    return newState
+  }
+
+  case MARK_ALL_NOTIFICATIONS_SEEN: {
+    const newState = {
+      ...state,
+      pending: false,
+      ...getNotificationsAndFilterBy(state.notifications.map(n => (
+        !action.payload || n.sourcId === action.payload ? { ...n, seen: action.isSeen } : n
       )), state.filterBy)
     }
     return newState

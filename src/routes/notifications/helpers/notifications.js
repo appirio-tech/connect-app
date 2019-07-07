@@ -214,6 +214,14 @@ export const filterNotificationsByPosts = (notifications, posts) => {
 export const filterReadNotifications = (notifications) => _.filter(notifications, { isRead: false })
 
 /**
+ * 
+ * @param {Array} notifications list of notifications
+ * 
+ * @return {Array} list of filtered notifications
+ */
+export const filterSeenNotifications = (notifications) => _.filter(notifications, { seen: false })
+
+/**
  * Filter notifications that belongs to project:projectId
  *
  * @param  {Array}  notifications list of notifications
