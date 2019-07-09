@@ -117,7 +117,7 @@ class TemplateForm extends Component {
         }
       }
     } else if (isCheckbox) {
-      value = false
+      value = value
     }
 
     if (label === 'id') {

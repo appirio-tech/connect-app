@@ -26,6 +26,7 @@ import {
   CREATE_PRODUCT_TEMPLATE_PENDING,
   CREATE_PROJECT_TYPE_PENDING,
   CREATE_PRODUCT_TEMPLATE_FAILURE,
+  CREATE_PRODUCT_CATEGORY_FAILURE,
   CREATE_PROJECT_TYPE_FAILURE,
   CREATE_PRODUCT_TEMPLATE_SUCCESS,
   CREATE_PROJECT_TYPE_SUCCESS,
@@ -80,6 +81,7 @@ export const initialState = {
   versionOptionsLoading: false,
   isLoading: false,
   isRemoving: false,
+  persistedMetaFormData: null,
   error: false,
 }
 
@@ -168,17 +170,20 @@ export default function(state = initialState, action) {
   case ADD_PROJECTS_METADATA_FAILURE:
   case CREATE_PROJECT_TEMPLATE_FAILURE:
   case CREATE_PRODUCT_TEMPLATE_FAILURE:
+  case CREATE_PRODUCT_CATEGORY_FAILURE:
   case CREATE_PROJECT_TYPE_FAILURE:
   case CREATE_MILESTONE_TEMPLATE_FAILURE:
   case CREATE_FORM_FAILURE:
   case CREATE_PLAN_CONFIG_FAILURE:
   case CREATE_PRICE_CONFIG_FAILURE:
+  if (action.payload.response) {
     Alert.error(`PROJECT METADATA CREATE FAILED: ${action.payload.response.data.result.content.message}`)
+  }
     return {
       ...state,
       isLoading: false,
-      error: action.payload.response.data.result.content.message,
-      metadata: action.payload.values
+      error: action.payload.response ? action.payload.response.data.result.content.message : '',
+      persistedMetaFormData: JSON.parse(action.payload.config.data).param
     }
   case UPDATE_PROJECTS_METADATA_FAILURE:
     Alert.error(`PROJECT METADATA UPDATE FAILED: ${action.payload.response.data.result.content.message}`)

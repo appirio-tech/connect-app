@@ -280,13 +280,20 @@ class MetaDataPanel extends React.Component {
   }
 
   getMetadata(props) {
-    const { metadata, metadataType, isNew } = props
+    const { metadata, metadataType, isNew, templates } = props
+    let persistedMetaFormData = templates.persistedMetaFormData
     const { metadata : dirtyMetadata } = this.state
     if (isNew && !metadata && !dirtyMetadata) {
       if (metadataType === 'projectTemplate') {
+        if (persistedMetaFormData) {
+          return { scope: persistedMetaFormData.scope, phases: persistedMetaFormData.phases, category: persistedMetaFormData.category }
+        }
         return { scope: { sections: sectionsDefaultValue }, phases: phasesDefaultValue }
       }
       if (metadataType === 'productTemplate') {
+        if (persistedMetaFormData) {
+          return { template: persistedMetaFormData.template, category: persistedMetaFormData.category, subCategory: persistedMetaFormData.subCategory }
+        }
         return { template: { sections: sectionsDefaultValue } }
       }
       if (metadataType === 'projectType') {
@@ -346,6 +353,7 @@ class MetaDataPanel extends React.Component {
    */
   getFields(props, metadataWithVersion) {
     const { metadataType, templates, isNew } = props
+    let persistedMetaFormData = templates.persistedMetaFormData
     let fields = []
     const metadata = this.getMetadata(props)
     if (metadataType === 'productTemplate') {
@@ -353,46 +361,46 @@ class MetaDataPanel extends React.Component {
       const categoryValue = metadata && metadata.category ? metadata.category : prodCatOptions[0].value
       const subCategoryValue = metadata && metadata.subCategory ? metadata.subCategory : prodCatOptions[0].value
       fields = fields.concat([
-        { key: 'id', type: 'number' },
-        { key: 'name', type: 'text' },
-        { key: 'productKey', type: 'text' },
+        { key: 'id', type: 'number'},
+        { key: 'name', type: 'text', value: persistedMetaFormData && persistedMetaFormData.name },
+        { key: 'productKey', type: 'text', value: persistedMetaFormData && persistedMetaFormData.productKey },
         { key: 'category', type: 'dropdown', options: prodCatOptions, value: categoryValue },
         { key: 'subCategory', type: 'dropdown', options: prodCatOptions, value: subCategoryValue },
-        { key: 'icon', type: 'text' },
-        { key: 'brief', type: 'text' },
-        { key: 'details', type: 'text' },
-        { key: 'aliases', type: 'array' },
-        { key: 'disabled', type: 'checkbox' },
-        { key: 'hidden', type: 'checkbox' },
-        { key: 'isAddOn', type: 'checkbox' },
+        { key: 'icon', type: 'text', value: persistedMetaFormData && persistedMetaFormData.icon },
+        { key: 'brief', type: 'text', value: persistedMetaFormData && persistedMetaFormData.brief },
+        { key: 'details', type: 'text', value: persistedMetaFormData && persistedMetaFormData.details },
+        { key: 'aliases', type: 'array', value: persistedMetaFormData && persistedMetaFormData.aliases },
+        { key: 'disabled', type: 'checkbox', value: persistedMetaFormData && persistedMetaFormData.disabled },
+        { key: 'hidden', type: 'checkbox', value: persistedMetaFormData && persistedMetaFormData.hidden },
+        { key: 'isAddOn', type: 'checkbox', value: persistedMetaFormData && persistedMetaFormData.isAddOn },
       ])
     } else if (metadataType === 'projectTemplate') {
       const projectTypeOptions = this.getProductCategoryOptions(templates.projectTypes)
       const value = metadata && metadata.category ? metadata.category : projectTypeOptions[0].value
       fields = fields.concat([
         { key: 'id', type: 'number' },
-        { key: 'name', type: 'text' },
-        { key: 'key', type: 'text' },
+        { key: 'name', type: 'text', value: persistedMetaFormData && persistedMetaFormData.name },
+        { key: 'key', type: 'text', value: persistedMetaFormData && persistedMetaFormData.key },
         { key: 'category', type: 'dropdown', options: projectTypeOptions, value },
-        { key: 'icon', type: 'text' },
-        { key: 'question', type: 'text' },
-        { key: 'info', type: 'text' },
-        { key: 'aliases', type: 'array' },
-        { key: 'phases', type: 'json', value: phasesDefaultValue },
-        { key: 'disabled', type: 'checkbox' },
-        { key: 'hidden', type: 'checkbox' },
+        { key: 'icon', type: 'text', value: persistedMetaFormData && persistedMetaFormData.icon },
+        { key: 'question', type: 'text', value: persistedMetaFormData && persistedMetaFormData.question },
+        { key: 'info', type: 'text', value: persistedMetaFormData && persistedMetaFormData.info },
+        { key: 'aliases', type: 'array', value: persistedMetaFormData && persistedMetaFormData.aliases },
+        { key: 'phases', type: 'json', value: metadata.phases },
+        { key: 'disabled', type: 'checkbox', value: persistedMetaFormData && persistedMetaFormData.disabled },
+        { key: 'hidden', type: 'checkbox', value: persistedMetaFormData && persistedMetaFormData.hidden },
       ])
     } else if (metadataType === 'projectType') {
       fields = fields.concat([
-        { key: 'key', type: 'text' },
-        { key: 'displayName', type: 'text' },
-        { key: 'icon', type: 'text' },
-        { key: 'question', type: 'text' },
-        { key: 'info', type: 'text' },
-        { key: 'aliases', type: 'array' },
-        { key: 'metadata', type: 'json' },
-        { key: 'disabled', type: 'checkbox' },
-        { key: 'hidden', type: 'checkbox' },
+        { key: 'key', type: 'text', value: persistedMetaFormData && persistedMetaFormData.key },
+        { key: 'displayName', type: 'text', value: persistedMetaFormData && persistedMetaFormData.displayName },
+        { key: 'icon', type: 'text', value: persistedMetaFormData && persistedMetaFormData.icon },
+        { key: 'question', type: 'text', value: persistedMetaFormData && persistedMetaFormData.question },
+        { key: 'info', type: 'text', value: persistedMetaFormData && persistedMetaFormData.info },
+        { key: 'aliases', type: 'array', value: persistedMetaFormData && persistedMetaFormData.aliases },
+        { key: 'metadata', type: 'json', value: persistedMetaFormData && persistedMetaFormData.metadata },
+        { key: 'disabled', type: 'checkbox', value: persistedMetaFormData && persistedMetaFormData.disabled },
+        { key: 'hidden', type: 'checkbox', value: persistedMetaFormData && persistedMetaFormData.hidden },
       ])
     } else if (metadataWithVersion) {
       if (isNew) {
@@ -411,15 +419,15 @@ class MetaDataPanel extends React.Component {
       }
     } else if (metadataType === 'productCategory') {
       fields = fields.concat([
-        { key: 'key', type: 'text' },
-        { key: 'displayName', type: 'text' },
-        { key: 'icon', type: 'text' },
-        { key: 'question', type: 'text' },
-        { key: 'info', type: 'text' },
-        { key: 'aliases', type: 'array' },
+        { key: 'key', type: 'text', value: persistedMetaFormData && persistedMetaFormData.key },
+        { key: 'displayName', type: 'text', value: persistedMetaFormData && persistedMetaFormData.displayName },
+        { key: 'icon', type: 'text', value: persistedMetaFormData && persistedMetaFormData.icon },
+        { key: 'question', type: 'text', value: persistedMetaFormData && persistedMetaFormData.question },
+        { key: 'info', type: 'text', value: persistedMetaFormData && persistedMetaFormData.info },
+        { key: 'aliases', type: 'array', value: persistedMetaFormData && persistedMetaFormData.aliases },
         // { key: 'metadata', type: 'json' },
-        { key: 'disabled', type: 'checkbox' },
-        { key: 'hidden', type: 'checkbox' },
+        { key: 'disabled', type: 'checkbox', value: persistedMetaFormData && persistedMetaFormData.disabled },
+        { key: 'hidden', type: 'checkbox', value: persistedMetaFormData && persistedMetaFormData.hidden },
       ])
     } else if (metadataType === 'milestoneTemplate') {
       const productTemplateOptions = templates.productTemplates.map((item) => {
@@ -430,19 +438,24 @@ class MetaDataPanel extends React.Component {
       })
 
       fields = fields.concat([
-        { key: 'name', type: 'text' },
-        { key: 'description', type: 'textarea' },
-        { key: 'duration', type: 'number' },
-        { key: 'type', type: 'text' },
-        { key: 'order', type: 'number' },
-        { key: 'plannedText', type: 'textarea' },
-        { key: 'activeText', type: 'textarea' },
-        { key: 'completedText', type: 'textarea' },
-        { key: 'blockedText', type: 'textarea' },
+        { key: 'name', type: 'text', value: persistedMetaFormData && persistedMetaFormData.name },
+        { key: 'description', type: 'textarea', value: persistedMetaFormData && persistedMetaFormData.description },
+        { key: 'duration', type: 'number', value: persistedMetaFormData && persistedMetaFormData.duration },
+        { key: 'type', type: 'text', value: persistedMetaFormData && persistedMetaFormData.type },
+        { key: 'order', type: 'number', value: persistedMetaFormData && persistedMetaFormData.order },
+        { key: 'plannedText', type: 'textarea', value: persistedMetaFormData && persistedMetaFormData.plannedText },
+        { key: 'activeText', type: 'textarea', value: persistedMetaFormData && persistedMetaFormData.activeText },
+        { key: 'completedText', type: 'textarea', value: persistedMetaFormData && persistedMetaFormData.completedText },
+        { key: 'blockedText', type: 'textarea', value: persistedMetaFormData && persistedMetaFormData.blockedText },
         { key: 'reference', type: 'text', readonly: true, value: 'productTemplate' },
-        { key: 'referenceId', type: 'dropdown', options: productTemplateOptions, value: String(productTemplateOptions[0].value) },
-        { key: 'metadata', type: 'json' },
-        { key: 'hidden', type: 'checkbox' },
+        { key: 'referenceId', type: 'dropdown', options: productTemplateOptions, value: persistedMetaFormData && persistedMetaFormData.referenceId },
+        { key: 'metadata', type: 'json', value: persistedMetaFormData && persistedMetaFormData.metadata },
+        { key: 'hidden', type: 'checkbox', value: persistedMetaFormData && persistedMetaFormData.hidden },
+      ])
+    } else if (metadataType === 'priceConfig' || metadataType === 'planConfig' || metadataType === 'form') {
+      fields = fields.concat([
+        { key: 'key', type: 'text', value: persistedMetaFormData && persistedMetaFormData.key },
+        { key: 'config', type: 'json', value: persistedMetaFormData && persistedMetaFormData.config },
       ])
     }
     return fields
@@ -822,6 +835,7 @@ class MetaDataPanel extends React.Component {
     } else if (metadata && metadataWithVersion && metadata.config) {
       template = metadata.config
     }
+    console.log('render is called again')
     // TODO remove: temporary let non-admin user see metadata (they still couldn't save because server will reject)
     if (!isAdmin && isAdmin) {
       return (
