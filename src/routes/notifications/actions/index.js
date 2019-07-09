@@ -73,20 +73,17 @@ export const setNotificationsFilterBy = (filterBy) => (dispatch) => dispatch({
 
 export const markAllNotificationsSeen = (sourceId, notifications = []) => (dispatch) => {
   let ids = null;
-  if (sourceId) {
-    const sourceNfs = _.filter(notifications, n => n.sourceId === sourceId && !n.seen)
-    if (sourceNfs.length === 0) {
-      return
-    }
-    ids = _.map(sourceNfs, n => n.id).join('-')
+  const sourceNfs = _.filter(notifications, n => !n.seen)
+  if (sourceNfs.length === 0) {
+    return
   }
+  ids = _.map(sourceNfs, n => n.id).join('-')
 
   dispatch({
     type: NOTIFICATIONS_PENDING
   })
 
   handleDispatchMarkAllNotificationsSeen(dispatch, sourceId, true)
-  console.log('making request now')
   notificationsService.markNotificationsSeen(ids).catch(err => {
     Alert.error(`Failed to mark notification seen. ${err.message}`)
     handleDispatchMarkAllNotificationsSeen(dispatch, sourceId, false)
