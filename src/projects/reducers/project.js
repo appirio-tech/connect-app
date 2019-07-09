@@ -617,7 +617,15 @@ export const projectState = function (state=initialState, action) {
   }
 
   case PROJECT_DIRTY: {
-    const updatedProject = _.mergeWith({}, _.omit(state.project, 'isDirty'), action.payload,
+    let payload = action.payload
+    let stateProject = _.omit(state.project, 'isDirty')
+    if (action.payload.details.appDefinition.targetDevices) {
+      if (action.payload.details.appDefinition.targetDevices.indexOf('web-browser') == -1) {
+        payload = _.omit(action.payload, 'details.appDefinition.progressiveResponsive')
+        stateProject = _.omit(state.project, ['isDirty','details.appDefinition.progressiveResponsive'])
+      }
+    }
+    const updatedProject = _.mergeWith({}, stateProject, payload,
       // customizer to override arrays with changed values
       (objValue, srcValue, key) => {
         // when we update some array values, we have to replace them completely, rather than merge
