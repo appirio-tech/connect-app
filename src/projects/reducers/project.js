@@ -337,6 +337,7 @@ export const projectState = function (state=initialState, action) {
       ...action.payload,
       budget: _.cloneDeep(state.project.budget),
       duration: _.cloneDeep(state.project.duration),
+      invites: _.cloneDeep(state.project.invites),
     }
 
     return Object.assign({}, state, {

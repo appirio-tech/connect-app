@@ -19,6 +19,14 @@
     display: none;
   }
 
+  :global .Tooltip {
+    width: 180px;
+
+    .tooltip-target {
+      cursor: pointer;
+    }
+  }
+
   & + & {
     margin-top: 2 * $base-unit;
   }
@@ -40,7 +48,6 @@
 
 .title {
   @include roboto-bold;
-  flex: 0 0 180px;
   font-size: $tc-label-lg;
   overflow: hidden;
   padding: 0 2 * $base-unit;

@@ -11,6 +11,9 @@ import cn from 'classnames'
 import IconX from '../../../../assets/icons/ui-x-mark.svg'
 import IconCarretDown from '../../../../assets/icons/arrow-6px-carret-down-normal.svg'
 
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
+import { TOOLTIP_DEFAULT_DELAY } from '../../../../config/constants'
+
 import './Accordion.scss'
 
 /**
@@ -132,7 +135,14 @@ class Accordion extends React.Component {
     return (
       <div styleName={cn('container', { 'is-open': isOpen })}>
         <button styleName="header" onClick={this.toggle}>
-          <h5 styleName="title">{title}</h5>
+          <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+            <div className="tooltip-target">
+              <h5 styleName="title">{title}</h5>
+            </div>
+            <div className="tooltip-body">
+              {title}
+            </div>
+          </Tooltip>
           <div styleName="value">{this.formatValue()}</div>
           <div styleName="toggle">
             {isOpen ? <IconX styleName="toggle-icon" /> : <IconCarretDown styleName="toggle-icon" />}

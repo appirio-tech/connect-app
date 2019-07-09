@@ -290,6 +290,9 @@ class TemplateForm extends Component {
   showDelete() {
     this.setState({
       showDeleteConfirm: true,
+      forcedError: {
+        verifyPrimaryKeyValue: null,
+      }
     })
   }
 
