@@ -11,6 +11,8 @@ import { getProjectById,
   updateProduct as updateProductAPI,
   updatePhase as updatePhaseAPI,
   createProjectPhase,
+  createScopeChangeRequest as createScopeChangeRequestAPI,
+  updateScopeChangeRequest as updateScopeChangeRequestAPI,
 } from '../../api/projects'
 import {
   getProjectInviteById,
@@ -315,6 +317,35 @@ export function updateProject(projectId, updatedProps, updateExisting = false) {
     return dispatch({
       type: UPDATE_PROJECT,
       payload: updateProjectAPI(projectId, updatedProps, updateExisting)
+    })
+  }
+}
+
+export function createScopeChangeRequest(projectId, request) {
+  return (dispatch) => {
+    return dispatch({
+      type: UPDATE_PROJECT, // TODO update constants for scope change actions
+      payload: createScopeChangeRequestAPI(projectId, request)
+    })
+  }
+}
+
+export function approveScopeChange(projectId, scopeChangeRequestId) {
+  const request = { status : 'approved' }
+  return (dispatch) => {
+    return dispatch({
+      type: UPDATE_PROJECT, // TODO update constants for scope change actions
+      payload: updateScopeChangeRequestAPI(projectId, scopeChangeRequestId, request)
+    })
+  }
+}
+
+export function rejectScopeChange(projectId, scopeChangeRequestId) {
+  const request = { status : 'rejected' }
+  return (dispatch) => {
+    return dispatch({
+      type: UPDATE_PROJECT, // TODO update constants for scope change actions
+      payload: updateScopeChangeRequestAPI(projectId, scopeChangeRequestId, request)
     })
   }
 }

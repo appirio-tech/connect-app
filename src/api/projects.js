@@ -107,6 +107,31 @@ export function updateProject(projectId, updatedProps, updateExisting) {
 }
 
 /**
+ * Create scope change request for the given project with the given details
+ * @param  {integer} projectId    project Id
+ * @param  {object} request scope change request object
+ * @return {promise}              created scope change request
+ */
+export function createScopeChangeRequest(projectId, request) {
+  return axios.post(`${PROJECTS_API_URL}/v4/projects/${projectId}/scopeChangeRequests`, { param: request })
+    .then(resp => {
+      return _.get(resp.data, 'result.content')
+    })
+}/**
+ * Create scope change request for the given project with the given details
+ * @param  {integer} projectId    project Id
+ * @param  {integer} requestId    scope change request Id
+ * @param  {object} updatedProps updated request properties
+ * @return {promise}              updated request
+ */
+export function updateScopeChangeRequest(projectId, requestId, updatedProps) {
+  return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/scopeChangeRequests/${requestId}`, { param: updatedProps })
+    .then(resp => {
+      return _.get(resp.data, 'result.content')
+    })
+}
+
+/**
  * Update phase using patch
  * @param  {integer} projectId    project Id
  * @param  {integer} phaseId    phase Id

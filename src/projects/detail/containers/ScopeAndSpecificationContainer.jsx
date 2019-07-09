@@ -18,8 +18,17 @@ import {
   SCREEN_BREAKPOINT_MD,
   PROJECT_ATTACHMENTS_FOLDER,
   EVENT_TYPE,
+  PROJECT_ROLE_OWNER,
+  PROJECT_ROLE_CUSTOMER,
 } from '../../../config/constants'
-import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
+import {
+  updateProject,
+  fireProjectDirty,
+  fireProjectDirtyUndo,
+  createScopeChangeRequest,
+  approveScopeChange,
+  rejectScopeChange,
+} from '../../actions/project'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import NotificationsReader from '../../../components/NotificationsReader'
@@ -56,9 +65,18 @@ class SpecificationContainer extends Component {
      && _.isEqual(nextProps.error, this.props.error)
     )
   }
-  saveProject(model) {
+  saveProject(model, scopeFreezed) {
     // compare old & new
-    this.props.updateProject(this.props.project.id, model)
+    if (scopeFreezed) {
+      const scopeChangeRequest = {
+        title: 'Test change', // TODO ask from user or deduce using JSON compare libfrary
+        oldScope: this.props.project.details,
+        newScope: model.details,
+      }
+      this.props.createScopeChangeRequest(this.props.project.id, scopeChangeRequest)
+    } else {
+      this.props.updateProject(this.props.project.id, model)
+    }
   }
 
   removeProjectAttachment(attachmentId) {
@@ -71,6 +89,14 @@ class SpecificationContainer extends Component {
 
   addProjectAttachment(attachment) {
     this.props.addProjectAttachment(this.props.project.id, attachment)
+  }
+
+  approveScopeChange(pendingScopeChange) {
+    this.props.approveScopeChange(this.props.project.id, pendingScopeChange.id)
+  }
+
+  rejectScopeChange(pendingScopeChange) {
+    this.props.rejectScopeChange(this.props.project.id, pendingScopeChange.id)
   }
 
   render() {
@@ -86,12 +112,20 @@ class SpecificationContainer extends Component {
       estimationQuestion,
     } = this.props
     const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
+    const isCustomer = _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
 
     const leftArea = (
       <ProjectSpecSidebar project={project} sections={template.sections} currentMemberRole={currentMemberRole} />
     )
+
+    // look for any pending scope change request
+    let pendingScopeChange = null
+    if (project.scopeChangeRequests) {
+      const pendingStatuses = ['pending', 'approved']
+      pendingScopeChange = _.find(project.scopeChangeRequests, scr => pendingStatuses.indexOf(scr.status) !== -1)
+    }
 
     return (
       <TwoColsLayout>
@@ -130,6 +164,10 @@ class SpecificationContainer extends Component {
             productTemplates={allProductTemplates}
             productCategories={productCategories}
             showHidden
+            pendingScopeChange={pendingScopeChange}
+            isCustomer={isCustomer}
+            approveScopeChange={this.approveScopeChange}
+            rejectScopeChange={this.rejectScopeChange}
           />
           {!!estimationQuestion &&
             <ProjectEstimation
@@ -138,6 +176,10 @@ class SpecificationContainer extends Component {
               project={project}
               theme="dashboard"
             />
+          }
+          {
+            pendingScopeChange &&
+            <div>{pendingScopeChange.title}</div>
           }
         </TwoColsLayout.Content>
       </TwoColsLayout>
@@ -178,11 +220,14 @@ const mapStateToProps = ({projectState, loadUser, templates}) => {
 
 const mapDispatchToProps = {
   updateProject,
+  createScopeChangeRequest,
   fireProjectDirty,
   fireProjectDirtyUndo,
   addProjectAttachment,
   updateProjectAttachment,
   removeProjectAttachment,
+  approveScopeChange,
+  rejectScopeChange,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpecificationContainer)
