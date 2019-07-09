@@ -25,6 +25,10 @@
     .tooltip-target {
       cursor: pointer;
     }
+
+    .tooltip-body {
+      white-space: normal;
+    }
   }
 
   & + & {
