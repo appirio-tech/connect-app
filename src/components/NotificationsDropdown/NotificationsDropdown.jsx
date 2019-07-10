@@ -22,27 +22,28 @@ class NotificationsDropdown extends React.Component {
 
   toggle(isOpen) {
     if (typeof isOpen === 'object') {
-      this.props.toggle(!this.state.isOpen)
+      this.props.onToggle(!this.state.isOpen)
       this.setState({ isOpen: !this.state.isOpen})
     } else {
-      this.props.toggle(isOpen)
+      this.props.onToggle(isOpen)
     }
   }
 
   render() {
+    const { hasUnread, hasNew, children } = this.props
     return (
       <div className="notifications-dropdown">
         <EnhancedDropdown theme="UserDropdownMenu" pointerShadow noAutoclose onToggle={this.toggle}>
           <div className="dropdown-menu-header">
             <NotificationsBell
-              hasUnread={props.hasUnread}
-              hasNew={props.hasNew}
+              hasUnread={hasUnread}
+              hasNew={hasNew}
               onClick={this.toggle}
               />
           </div>
           <div className="dropdown-menu-list">
             <div className="notifications-dropdown-content">
-              {props.children}
+              {children}
             </div>
           </div>
         </EnhancedDropdown>

@@ -97,7 +97,7 @@ const NotificationsDropdownContainerView = (props) => {
 
   const markNotificationsSeen = (isOpen) => {
     if (isOpen) {
-      markAllNotificationsSeen()
+      markAllNotificationsSeen(null, notifications)
     }
   }
 
