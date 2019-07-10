@@ -8,7 +8,7 @@ import FileDeletionConfirmModal from './FileDeletionConfirmModal'
 import './FileList.scss'
 
 const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent, canModify, projectMembers, 
-  loggedInUser }) => (
+  loggedInUser, askForPermissions }) => (
   <Panel className={cn('file-list', {'modal-active': deletingFile})}>
     {deletingFile && <div className="modal-overlay" />}
     {
@@ -18,7 +18,7 @@ const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent, canMod
           onDeleteIntent(null)
         }
         const _onFileDeleteCancel = () => onDeleteIntent(null)
-        if (deletingFile === file.id) {
+        if (deletingFile && deletingFile === file.id) {
           return (
             <FileDeletionConfirmModal
               key={i}
@@ -37,6 +37,7 @@ const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent, canMod
             canModify={canModify}
             projectMembers={projectMembers}
             loggedInUser={loggedInUser}
+            askForPermissions={askForPermissions}
           />
         )
       })

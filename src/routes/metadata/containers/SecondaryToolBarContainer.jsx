@@ -24,6 +24,9 @@ const SecondaryToolBarContainer = ({
     { label: 'Project Types', to: '/metadata/projectTypes' },
     { label: 'Product Categories', to: '/metadata/productCategories' },
     { label: 'Milestone Templates', to: '/metadata/milestoneTemplates' },
+    { label: 'Forms', to: '/metadata/forms' },
+    { label: 'Plan Configs', to: '/metadata/planConfigs' },
+    { label: 'Price Configs', to: '/metadata/priceConfigs' },
   ]
 
   return (

@@ -21,6 +21,11 @@ const PortalSubSection = ({
   currentWizardStep,
   productTemplates,
   productCategories,
+  addAttachment,
+  updateAttachment,
+  removeAttachment,
+  canManageAttachments,
+  attachmentsStorePath,
 }) => (
   <div>
     {content.map(({ sectionIndex }) => {
@@ -42,6 +47,11 @@ const PortalSubSection = ({
             resetFeatures={ () => {} }//dummy
             validate={() => {}}//dummy
             isCreation
+            addAttachment={addAttachment}
+            updateAttachment={updateAttachment}
+            removeAttachment={removeAttachment}
+            attachmentsStorePath={attachmentsStorePath}
+            canManageAttachments={canManageAttachments}
           />
         )
       } else {
