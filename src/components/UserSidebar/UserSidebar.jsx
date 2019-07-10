@@ -25,7 +25,12 @@ const navLinks = [{
   label: 'ACCOUNT & SECURITY',
   to: '/settings/account',
   Icon: FileIcon
-}]
+}, {
+  label: 'NOTIFICATIONS',
+  to: '/notifications',
+  Icon: FileIcon
+}
+]
 
 const UserSidebar = ({user}) => {
   return (

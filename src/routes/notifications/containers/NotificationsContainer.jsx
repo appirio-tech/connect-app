@@ -2,13 +2,14 @@
  * Container component for notifications list with filter
  */
 import React, { Component } from 'react'
+import MediaQuery from 'react-responsive'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Sticky from '../../../components/Sticky'
 import { getNotifications, setNotificationsFilterBy, markAllNotificationsRead,
-  toggleNotificationRead, viewOlderNotifications, toggleBundledNotificationRead, 
+  toggleNotificationRead, viewOlderNotifications, toggleBundledNotificationRead,
   hideOlderNotifications, toggleNotificationSeen } from '../actions'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import NotificationsSection from '../../../components/NotificationsSection/NotificationsSection'
@@ -16,15 +17,17 @@ import NotificationsSectionTitle from '../../../components/NotificationsSectionT
 import SideFilter from '../../../components/SideFilter/SideFilter'
 import NotificationsEmpty from '../../../components/NotificationsEmpty/NotificationsEmpty'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import { 
-  getNotificationsFilters, 
-  splitNotificationsBySources, 
-  filterReadNotifications, 
+import {
+  getNotificationsFilters,
+  splitNotificationsBySources,
+  filterReadNotifications,
   limitQuantityInSources,
-  preRenderNotifications, 
+  preRenderNotifications,
 } from '../helpers/notifications'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
-import { NOTIFICATIONS_NEW_PER_SOURCE } from '../../../config/constants'
+import { NOTIFICATIONS_NEW_PER_SOURCE, SCREEN_BREAKPOINT_MD } from '../../../config/constants'
+import TwoColsLayout from '../../../components/TwoColsLayout'
+import UserSidebar from '../../../components/UserSidebar/UserSidebar'
 import './NotificationsContainer.scss'
 
 const NotificationsContainerView = (props) => {
@@ -33,7 +36,7 @@ const NotificationsContainerView = (props) => {
   }
   const { sources, notifications, filterBy, setNotificationsFilterBy,
     markAllNotificationsRead, toggleNotificationRead, viewOlderNotifications,
-    oldSourceIds, pending, toggleBundledNotificationRead } = props
+    oldSourceIds, pending, toggleBundledNotificationRead, user } = props
   const notReadNotifications = filterReadNotifications(notifications)
   const allNotificationsBySources = splitNotificationsBySources(sources, notReadNotifications)
   const notificationsBySources = limitQuantityInSources(
@@ -75,56 +78,75 @@ const NotificationsContainerView = (props) => {
   }
 
   return (
-    <div className="notifications-container">
-      <div className="content">
-        {globalSource && globalSource.total > 0 &&
-          <NotificationsSection
-            {...globalSource}
-            isGlobal
-            onMarkAllClick={() => !pending && markAllNotificationsRead('global', notifications)}
-            onReadToggleClick={toggleNotificationOrBundleRead}
-            onViewOlderClick={() => viewOlderNotifications(globalSource.id)}
-            onLinkClick={(notificationId) => {
-              markNotificationSeen(notificationId)
-            }}
-          />
-        }
-        {projectSources.length > 0 && <NotificationsSectionTitle title="Project" isGlobal />}
-        {projectSources.filter(source => source.total > 0).map(source => (
-          <NotificationsSection
-            key={source.id}
-            {...source}
-            onMarkAllClick={() => !pending && markAllNotificationsRead(source.id, notifications)}
-            onReadToggleClick={toggleNotificationOrBundleRead}
-            onViewOlderClick={() => viewOlderNotifications(source.id)}
-            onLinkClick={(notificationId) => {
-              markNotificationSeen(notificationId)
-            }}
-          />
-        ))}
-        {globalSource || projectSources.length > 0 ?
-          <div className="end-of-list">End of list</div> :
-          <NotificationsEmpty>
-            <p className="notifications-empty-note">
-              Maybe you need to check your <Link to="/settings/notifications" className="tc-link">notification settings</Link> to
-              get up  to date with the latest activity from your projects?
-            </p>
-          </NotificationsEmpty>
-        }
-      </div>
-      <aside className="filters">
-        <Sticky top={90}>
-          <SideFilter
-            filterSections={getNotificationsFilters(allNotificationsBySources)}
-            selectedFilter={filterBy}
-            onFilterItemClick={setNotificationsFilterBy}
-          >
-            <Link to="/settings/notifications" className="tc-btn tc-btn-default">Notification Settings</Link>
-          </SideFilter>
-          <FooterV2 />
-        </Sticky>
-      </aside>
-    </div>
+    <TwoColsLayout noPadding>
+      <TwoColsLayout.Sidebar>
+        <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+          {(matches) => {
+            if (matches) {
+              return (
+                <Sticky top={60}>
+                  <UserSidebar user={user}/>
+                </Sticky>
+              )
+            } else {
+              return <UserSidebar user={user}/>
+            }
+          }}
+        </MediaQuery>
+      </TwoColsLayout.Sidebar>
+      <TwoColsLayout.Content>
+        <div className="notifications-container">
+          <div className="content">
+            {globalSource && globalSource.total > 0 &&
+              <NotificationsSection
+                {...globalSource}
+                isGlobal
+                onMarkAllClick={() => !pending && markAllNotificationsRead('global', notifications)}
+                onReadToggleClick={toggleNotificationOrBundleRead}
+                onViewOlderClick={() => viewOlderNotifications(globalSource.id)}
+                onLinkClick={(notificationId) => {
+                  markNotificationSeen(notificationId)
+                }}
+              />
+            }
+            {projectSources.length > 0 && <NotificationsSectionTitle title="Project" isGlobal />}
+            {projectSources.filter(source => source.total > 0).map(source => (
+              <NotificationsSection
+                key={source.id}
+                {...source}
+                onMarkAllClick={() => !pending && markAllNotificationsRead(source.id, notifications)}
+                onReadToggleClick={toggleNotificationOrBundleRead}
+                onViewOlderClick={() => viewOlderNotifications(source.id)}
+                onLinkClick={(notificationId) => {
+                  markNotificationSeen(notificationId)
+                }}
+              />
+            ))}
+            {globalSource || projectSources.length > 0 ?
+              <div className="end-of-list">End of list</div> :
+              <NotificationsEmpty>
+                <p className="notifications-empty-note">
+                  Maybe you need to check your <Link to="/settings/notifications" className="tc-link">notification settings</Link> to
+                  get up  to date with the latest activity from your projects?
+                </p>
+              </NotificationsEmpty>
+            }
+          </div>
+          <aside className="filters">
+            <Sticky top={90}>
+              <SideFilter
+                filterSections={getNotificationsFilters(allNotificationsBySources)}
+                selectedFilter={filterBy}
+                onFilterItemClick={setNotificationsFilterBy}
+              >
+                <Link to="/settings/notifications" className="tc-btn tc-btn-default">Notification Settings</Link>
+              </SideFilter>
+              <FooterV2 />
+            </Sticky>
+          </aside>
+        </div>
+      </TwoColsLayout.Content>
+    </TwoColsLayout>
   )
 }
 
@@ -152,7 +174,7 @@ class NotificationsContainer extends Component {
     return (
       <NotificationsContainerView
         {...{
-          ...restProps, 
+          ...restProps,
           notifications: preRenderedNotifications,
         }}
       />
@@ -174,7 +196,9 @@ NotificationsContainer.propTypes = {
   pending: PropTypes.bool
 }
 
-const mapStateToProps = ({ notifications }) => notifications
+const mapStateToProps = ({ notifications, loadUser }) => {
+  return Object.assign({}, notifications, { user: loadUser.user })
+}
 
 const mapDispatchToProps = {
   getNotifications,

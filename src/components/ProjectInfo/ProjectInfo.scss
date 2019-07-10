@@ -59,18 +59,21 @@
       margin-top: $base_unit;
       text-transform: uppercase;
       white-space: nowrap;
+      float: left;
     }
 
     .project-status-ref {
       @include roboto-medium;
-      background-color: $tc-gray-05;
+      background-color: $tc-gray-10;
       border-radius: 4px;
       color: $tc-gray-50;
       font-size: 13px;
       height: 20px;
       line-height: 20px;
       padding: 0 2 * $base-unit;
+      margin-top: $base-unit;
       white-space: nowrap;
+      float: right;
     }
 
     .project-card-body {
@@ -92,20 +95,6 @@
             display: none;
           }
         }
-      }
-    }
-
-    .project-info-header {
-      display: flex;
-      fill: $tc-gray-50;
-      justify-content: space-between;
-      padding-left: 4 * $base_unit;
-      padding-right: 4 * $base_unit;
-      padding-top: 4 * $base_unit;
-
-      .project-delete-icon {
-        margin-top: 4px;
-        margin-left: $base_unit;
       }
     }
   }

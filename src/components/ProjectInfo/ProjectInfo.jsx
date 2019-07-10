@@ -3,7 +3,6 @@ import PT from 'prop-types'
 import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
-import Panel from '../Panel/Panel'
 import DeleteProjectModal from './DeleteProjectModal'
 import ProjectCardBody from '../../projects/components/projectsCard/ProjectCardBody'
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
@@ -17,26 +16,12 @@ class ProjectInfo extends Component {
 
   constructor(props) {
     super(props)
-    this.toggleProjectDelete = this.toggleProjectDelete.bind(this)
-    this.onConfirmDelete = this.onConfirmDelete.bind(this)
-  }
-
-  componentWillMount() {
-    this.setState({ showDeleteConfirm: false })
-  }
-
-  toggleProjectDelete() {
-    this.setState({ showDeleteConfirm: !this.state.showDeleteConfirm })
-  }
-
-  onConfirmDelete() {
-    this.props.onDeleteProject()
   }
 
   render() {
-    const { project, currentMemberRole, duration, canDeleteProject,
-      onChangeStatus, isSuperUser, phases, onSubmitForReview, isProjectProcessing } = this.props
-    const { showDeleteConfirm } = this.state
+    const { project, currentMemberRole, duration,
+      onChangeStatus, isSuperUser, phases, onSubmitForReview, isProjectProcessing,
+      showDeleteConfirm, toggleProjectDelete, onConfirmDelete } = this.props
 
     const code = _.get(project, 'details.utm.code', '')
 
@@ -65,12 +50,6 @@ class ProjectInfo extends Component {
 
     return (
       <div className="project-info">
-        {canDeleteProject && !showDeleteConfirm &&
-        <div className="project-info-header">
-          <div className="project-delete-icon">
-            <Panel.DeleteBtn onClick={this.toggleProjectDelete} />
-          </div>
-        </div>}
         <div className="project-status">
           <div>
             <div styleName="project-name">{_.unescape(project.name)}</div>
@@ -80,8 +59,8 @@ class ProjectInfo extends Component {
         </div>
         {showDeleteConfirm &&
           <DeleteProjectModal
-            onCancel={this.toggleProjectDelete}
-            onConfirm={this.onConfirmDelete}
+            onCancel={toggleProjectDelete}
+            onConfirm={onConfirmDelete}
           />
         }
         {showReviewBtn ? (
