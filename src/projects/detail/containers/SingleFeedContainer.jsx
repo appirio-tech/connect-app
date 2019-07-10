@@ -28,7 +28,6 @@ const bindMethods = [
   'onTopicChange',
   'onSaveTopic',
   'onDeleteTopic',
-  'onEnterFullscreenClick',
 ]
 
 class SingleFeedContainer extends React.Component {

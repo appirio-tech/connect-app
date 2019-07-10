@@ -7,6 +7,8 @@
 import React from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+import Alert from 'react-s-alert'
 
 import {
   filterReadNotifications,
@@ -28,7 +30,6 @@ import { addProductAttachment, updateProductAttachment, removeProductAttachment 
 
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
-import FeedContainer from './FeedContainer'
 import Sticky from '../../../components/Sticky'
 import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import TwoColsLayout from '../../../components/TwoColsLayout'
@@ -62,10 +63,15 @@ class DashboardContainer extends React.Component {
     super(props)
 
     this.state = {
-      open: false
+      open: false,
+      matchesTopicUrl: null,
+      matchesPostUrl: null,
+      topicIdForPost: null
     }
     this.onNotificationRead = this.onNotificationRead.bind(this)
     this.toggleDrawer = this.toggleDrawer.bind(this)
+
+    this.alertedFailedTopicRedirect = false
   }
 
   onNotificationRead(notification) {
@@ -88,6 +94,18 @@ class DashboardContainer extends React.Component {
         }
       })
     }
+
+    /*
+    For redirecting old urls to new urls for topics and posts
+    Old TOPIC: '/projects/{{projectId}}/#feed-{{topicId}}',
+    Old POST: '/projects/{{projectId}}/#comment-{{postId}}',
+    */
+    const matchesTopicUrl = location.hash.match(/#feed-(\d+)/)
+    const matchesPostUrl = location.hash.match(/#comment-(\d+)/)
+    this.setState({
+      matchesPostUrl,
+      matchesTopicUrl
+    })
   }
 
   componentWillUnmount() {
@@ -96,10 +114,38 @@ class DashboardContainer extends React.Component {
     collapseAllProjectPhases()
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { isFeedsLoading } = nextProps
+    const { matchesPostUrl } = this.state
+
+    // we need topicId for redirecting old post url (/projects/{{projectId}}/#comment-{{postId}})
+    if (!isFeedsLoading && matchesPostUrl && !this.alertedFailedTopicRedirect) {
+      const topicIdForPost = this.getTopicIdForPost(matchesPostUrl[1])
+      this.setState({ topicIdForPost })
+      this.alertFailedTopicRedirection(matchesPostUrl, topicIdForPost, isFeedsLoading)
+    }
+  }
+
   toggleDrawer() {
     this.setState((prevState) => ({
       open: !prevState.open
     }))
+  }
+
+  // Get topic id corresponding to the post that we're trying to redirect to
+  getTopicIdForPost(postId) {
+    const {feeds} = this.props
+    const topic = feeds && feeds
+      .find(feed => feed.posts.find(p => p.id === Number(postId)))
+    return topic && topic.id
+  }
+
+  // Alert user in case the post is not available / not accessible to him.
+  alertFailedTopicRedirection(matchesPostUrl, topicIdForPost, isFeedsLoading) {
+    if (matchesPostUrl && !topicIdForPost && !isFeedsLoading) {
+      this.alertedFailedTopicRedirect = true
+      Alert.error('Couldn\'t find the post')
+    }
   }
 
   render() {
@@ -136,6 +182,7 @@ class DashboardContainer extends React.Component {
       removeProjectAttachment,
       location,
     } = this.props
+    const { matchesPostUrl, matchesTopicUrl, topicIdForPost } = this.state
 
 
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
@@ -186,6 +233,9 @@ class DashboardContainer extends React.Component {
             { eventType: EVENT_TYPE.MEMBER.MANAGER_JOINED, contents: { projectId: project.id } },
           ]}
         />
+
+        {matchesTopicUrl && <Redirect to={`/projects/${project.id}/messages/${matchesTopicUrl[1]}`} />}
+        {matchesPostUrl && topicIdForPost && <Redirect to={`/projects/${project.id}/messages/${topicIdForPost}#comment-${matchesPostUrl[1]}`}  />}
 
         <TwoColsLayout.Sidebar>
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
@@ -252,12 +302,6 @@ class DashboardContainer extends React.Component {
               collapseProjectPhase={collapseProjectPhase}
             />
           }
-
-          <FeedContainer
-            currentMemberRole={currentMemberRole}
-            project={project}
-            isSuperUser={isSuperUser}
-          />
         </TwoColsLayout.Content>
       </TwoColsLayout>
     )

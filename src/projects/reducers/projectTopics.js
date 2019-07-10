@@ -35,6 +35,7 @@ import {
   GET_PROJECT_FEED_COMMENT_FAILURE
 } from '../../config/constants'
 import update from 'react-addons-update'
+import { getLinksFromPost } from '../../helpers/draftJSHelper'
 
 
 const initialState = {
@@ -86,7 +87,17 @@ export const projectTopics = function (state=initialState, action) {
 
     const topics = _.sortBy(payload.topics, (t) => {
       return moment(t.lastActivityAt)
-    }).reverse()
+    })
+      .reverse()
+      .map(topic => ({
+        ...topic,
+        posts: topic.posts.map(post => ({
+          ...post,
+          links: getLinksFromPost(
+            !_.isEmpty(post.newContent) ? post.newContent : post.rawContent
+          )
+        }))
+      }))
 
     const feedUpdateQuery = {}
     feedUpdateQuery[action.meta.tag] = { $merge: { topics, totalCount: payload.totalCount } }

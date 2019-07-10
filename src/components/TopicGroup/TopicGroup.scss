@@ -1,0 +1,9 @@
+@import "~tc-ui/src/styles/tc-includes";
+@import "../../styles/includes";
+
+.noPostMessage {
+  text-align: center;
+  padding: 15px;
+  background-color: $tc-gray-10;
+  border-radius: 10px;
+}

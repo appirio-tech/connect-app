@@ -1,0 +1,79 @@
+@import "~tc-ui/src/styles/tc-includes";
+@import "../../styles/includes";
+
+.container {
+  display: flex;
+  align-items: center;
+
+  padding: 15px 20px;
+  background-color: $tc-gray-0;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+.userImage {
+  margin-right: 20px;
+}
+
+.body {
+  flex-grow: 1;
+}
+
+.title {
+  @include roboto;
+
+  font-size: 16px;
+  line-height: 30px;
+  color: $tc-gray-90;
+
+  &.unreadPosts {
+    @include roboto-bold;
+  }
+}
+
+.subTitle {
+  @include roboto;
+
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.newMessagesLabel {
+  color: $tc-pastel-crimson;
+}
+
+.lastMessageLabel {
+  color: $tc-gray-30;
+}
+
+.lastAuthorName {
+  @include roboto-bold;
+  color: $tc-gray-90;
+}
+
+.metaInfo {
+  @include roboto;
+
+  color: $tc-gray-70;
+  font-size: 12px;
+}
+
+.topcoderOnlyLabel {
+  @include roboto-bold;
+
+  color: $tc-pastel-green;
+}
+
+.metaInfoItem + .metaInfoItem {
+  &::before {
+    content: "";
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 5px;
+    width: 5px;
+    background-color: $tc-gray-10;
+    vertical-align: middle;
+    border-radius: 100%;
+  }
+}

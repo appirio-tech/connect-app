@@ -14,6 +14,8 @@ import { EVENT_TYPE, PROJECT_FEED_TYPE_MESSAGES, PROJECT_ROLE_CUSTOMER } from '.
 import XMarkIcon from '../../assets/icons/x-mark.svg'
 import FullscreenIcon from '../../assets/icons/ui-fullscreen.svg'
 import LockIcon from '../../assets/icons/lock.svg'
+import InvisibleIcon from '../../assets/icons/invisible-12-white.svg'
+import CloseIcon from 'appirio-tech-react-components/components/Icons/CloseIcon'
 
 import './Feed.scss'
 
@@ -99,13 +101,10 @@ class Feed extends React.Component {
       id, user, currentUser, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
       allowComments, comments, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
       onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, allMembers,
-      onEnterFullscreenClick, onExitFullscreenClick, isFullScreen, commentId, projectMembers, commentAnchorPrefix, tag
+      onEnterFullscreenClick, onExitFullscreenClick, isFullScreen, commentId, projectMembers, commentAnchorPrefix, tag,
+      inTopicDrawer, onDrawerClose
     } = this.props
     const { editTopicMode, headerHeight } = this.state
-    let authorName = user ? user.firstName : 'Unknown'
-    if (authorName && user && user.lastName) {
-      authorName += ' ' + user.lastName
-    }
 
     let topicHeader = null
     const isPrivate = tag === PROJECT_FEED_TYPE_MESSAGES
@@ -116,39 +115,55 @@ class Feed extends React.Component {
       const feedLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#feed-${id}`
 
       topicHeader = (
-        <header styleName={'feed-header' + (isPrivate ? ' is-private' : '' )} ref="header">
-          <NotificationsReader 
+        <header
+          styleName={
+            'feed-header' +
+            (isPrivate ? ' is-private' : '') +
+            (inTopicDrawer ? ' in-topic-drawer' : '')
+          }
+          ref="header"
+        >
+          <NotificationsReader
             id={`topic-${id}`}
             criteria={{ eventType: EVENT_TYPE.TOPIC.CREATED, contents: { topicId: id } }}
           />
           {editTopicMode ? (
-            <div styleName="header-edit">
-              <RichTextArea
-                editMode
-                messageId={topicMessage.id}
-                isGettingComment={topicMessage.isGettingComment}
-                content={content}
-                title={title}
-                oldTitle={this.props.title}
-                onPost={this.onSaveTopic}
-                onPostChange={this.onTopicChange}
-                isCreating={isSavingTopic}
-                hasError={error}
-                cancelEdit={this.cancelEditTopic}
-                disableContent
-                editingTopic = {editTopicMode}
-              />
+            <div styleName={cn('header-edit', {hasCloseButton: inTopicDrawer})}>
+              <div styleName="rich-text-wrapper">
+                <RichTextArea
+                  editMode
+                  messageId={topicMessage.id}
+                  isGettingComment={topicMessage.isGettingComment}
+                  content={content}
+                  title={title}
+                  oldTitle={this.props.title}
+                  onPost={this.onSaveTopic}
+                  onPostChange={this.onTopicChange}
+                  isCreating={isSavingTopic}
+                  hasError={error}
+                  cancelEdit={this.cancelEditTopic}
+                  disableContent
+                  editingTopic = {editTopicMode}
+                  textAreaOnly={!!inTopicDrawer}
+                />
+              </div>
+              {
+                inTopicDrawer &&
+                <span onClick={onDrawerClose} styleName="close-icon">
+                  <CloseIcon />
+                </span>
+              }
             </div>
           ) : (
             <div styleName="header-view">
               <div styleName="header-view-inner">
-                {isPrivate && <div styleName="lock-icon"><LockIcon /></div>}
+                {isPrivate &&<div styleName="lock-icon" title="Private topic">{(!inTopicDrawer ? <LockIcon /> : <InvisibleIcon />)}</div>}
                 <div styleName="header-info">
                   <div styleName="title">{title}</div>
-                  <div styleName="header-details">
+                  {!inTopicDrawer ? <div styleName="header-details">
                     <Link to={feedLink}>{moment(topicMessage.date).format('MMM D YYYY')}</Link>
                     <span>{comments.length} post{comments.length !== 1 ? 's' : ''}</span>
-                  </div>
+                  </div> : null}
                 </div>
                 <div styleName="header-actions">
                   {self && !isFullScreen && (
@@ -157,8 +172,14 @@ class Feed extends React.Component {
                       hideDelete={comments.length > 1}
                       onEdit={this.onEditTopic}
                       onDelete={onDeleteTopic}
+                      inDarkBackground={inTopicDrawer}
                     />
                   )}
+                  {
+                    inTopicDrawer && <span onClick={onDrawerClose} styleName="close-icon">
+                      <CloseIcon />
+                    </span>
+                  }
                   {!!onEnterFullscreenClick && <button styleName="fullscreen" onClick={onEnterFullscreenClick}><FullscreenIcon /></button>}
                   {!!onExitFullscreenClick && <button styleName="fullscreen fullscreen-exit" onClick={onExitFullscreenClick}><XMarkIcon /></button>}
                 </div>
@@ -241,6 +262,8 @@ Feed.propTypes = {
   onEnterFullscreenClick: PropTypes.func,
   isFullScreen: PropTypes.bool,
   commentAnchorPrefix: PropTypes.string,
+  inTopicDrawer: PropTypes.bool,
+  onDrawerClose: PropTypes.func
 }
 
 export default Feed

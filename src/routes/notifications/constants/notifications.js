@@ -15,8 +15,8 @@ export const GOTO = {
   PROJECT_DASHBOARD: '/projects/{{projectId}}',
   PROJECT_SPECIFICATION: '/projects/{{projectId}}/scope',
   PROJECT_PLAN: '/projects/{{projectId}}/plan',
-  TOPIC: '/projects/{{projectId}}/#feed-{{topicId}}',
-  POST: '/projects/{{projectId}}/#comment-{{postId}}',
+  TOPIC: '/projects/{{projectId}}/messages/{{topicId}}',
+  POST: '/projects/{{projectId}}/messages/{{topicId}}#comment-{{postId}}',
   PHASE_POST: '/projects/{{projectId}}/plan#phase-{{phaseId}}-posts-{{postId}}',
   FILE_LIST: '/projects/{{projectId}}/specification#appDefinition-files',
   PHASE: '/projects/{{projectId}}/plan#phase-{{phaseId}}',
@@ -669,9 +669,9 @@ export const NOTIFICATION_RULES = (() => {
 
 /**
  * Build criteria to filter all notifications related to phase timeline tab
- * 
+ *
  * @param {Object} timeline timeline
- * 
+ *
  * @returns {Array} notifications filter criteria
  */
 export const buildPhaseTimelineNotificationsCriteria = (timeline) => ([
@@ -683,9 +683,9 @@ export const buildPhaseTimelineNotificationsCriteria = (timeline) => ([
 
 /**
  * Build criteria to filter all notifications related to phase specification tab
- * 
+ *
  * @param {Object} phase phase
- * 
+ *
  * @returns {Array} notifications filter criteria
  */
 export const buildPhaseSpecifiationNotificationsCriteria = (phase) => ([

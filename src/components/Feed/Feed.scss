@@ -30,6 +30,11 @@
     background-color: $tc-orange-10;
   }
 
+  &.in-topic-drawer {
+    background-color: $tc-dark-blue-100;
+    border-radius: 0;
+  }
+
   .is-fullscreen & {
     border-radius: 0;
     position: fixed;
@@ -91,6 +96,10 @@
   padding-right: 4 * $base-unit;
 }
 
+.in-topic-drawer .title {
+  color: $tc-gray-0;
+}
+
 .header-edit {
   min-height: 60px;
 }
@@ -133,7 +142,29 @@
       margin-top: 5px;
     }
   }
+
+  .close-icon {
+    cursor: pointer;
+    margin-left: 8px;
+  }
 }
+
+.hasCloseButton {
+  display: flex;
+  align-items: center;
+
+  .rich-text-wrapper {
+    width: calc(100% - 40px);
+    flex-grow: 1;
+    position: relative;
+  }
+
+
+  .close-icon {
+    margin: 0 20px;
+  }
+}
+
 
 .fullscreen {
   border: 0;
