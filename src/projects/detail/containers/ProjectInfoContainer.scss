@@ -1,0 +1,93 @@
+@import "~tc-ui/src/styles/tc-includes";
+
+.breadcrumb {
+  @include roboto;
+
+  font-size: 12px;
+  line-height: 20px;
+  color: $tc-gray-90;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+
+  .icon-tail-left {
+    fill: $tc-gray-90;
+    height: 13px;
+    margin-right: 10px;
+  }
+}
+
+.separator {
+  border-top-color: $tc-gray-20;
+  border-top-style: solid;
+  border-bottom: none;
+  margin: 0 20px;
+}
+
+.separator-margin-bottom {
+  margin-bottom: 20px;
+}
+
+.separator-margin-top {
+  margin-top: 20px;
+}
+
+.menulist-container {
+  margin: 20px 0;
+}
+
+.administration-section {
+  @include roboto;
+}
+
+.administration-title {
+  font-size: 10px;
+  color: $tc-gray-50;
+  margin-left: 20px;
+  letter-spacing: 0.8px;
+}
+
+.all-project-link-wrapper {
+  padding: 20px;
+}
+
+.project-status-toggle {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 5px 0;
+
+  :global {
+    .panel {
+      // avoid double padding for editable project status
+      padding: 0;
+    }
+
+    svg {
+      margin-top: 7px;
+      display: inline-block;
+    }
+
+    .status-header {
+      .status-label {
+        text-transform: uppercase;
+        line-height: 30px;
+      }
+    }
+
+    .caret {
+      margin-top: 3px;
+    }
+
+    .project-progress {
+      display: flex;
+
+      .progress-text {
+        text-transform: uppercase;
+        margin-left: 10px;
+        line-height: 16px;
+      }
+    }
+  }
+}

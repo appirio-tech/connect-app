@@ -22,17 +22,18 @@ class NotificationSettingsContainer extends React.Component {
   }
 
   render() {
-    const { notificationSettings, saveNotificationSettings, isCustomer } = this.props
+    const { notificationSettings, saveNotificationSettings, isCustomer, user } = this.props
 
     return (
       <SettingsPanel
         title="Notifications"
+        user={user}
         isWide
       >
-        <NotificationSettingsFormWithLoader 
-          values={notificationSettings} 
-          onSubmit={saveNotificationSettings} 
-          isCustomer={isCustomer} 
+        <NotificationSettingsFormWithLoader
+          values={notificationSettings}
+          onSubmit={saveNotificationSettings}
+          isCustomer={isCustomer}
         />
       </SettingsPanel>
     )
@@ -49,10 +50,11 @@ const NotificationSettingsContainerWithAuth = requiresAuthentication(Notificatio
 
 const mapStateToProps = ({ settings, loadUser }) => {
   const powerUserRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-  
+
   return {
     notificationSettings: settings.notifications,
-    isCustomer: _.intersection(loadUser.user.roles, powerUserRoles).length === 0
+    isCustomer: _.intersection(loadUser.user.roles, powerUserRoles).length === 0,
+    user: loadUser.user
   }
 }
 

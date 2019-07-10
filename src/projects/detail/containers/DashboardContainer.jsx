@@ -237,11 +237,11 @@ class DashboardContainer extends React.Component {
         {matchesTopicUrl && <Redirect to={`/projects/${project.id}/messages/${matchesTopicUrl[1]}`} />}
         {matchesPostUrl && topicIdForPost && <Redirect to={`/projects/${project.id}/messages/${topicIdForPost}#comment-${matchesPostUrl[1]}`}  />}
 
-        <TwoColsLayout.Sidebar>
+        <TwoColsLayout.Sidebar wrapperClass="gray-bg">
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
               if (matches) {
-                return <Sticky top={110}>{leftArea}</Sticky>
+                return <Sticky top={60}>{leftArea}</Sticky>
               } else {
                 return leftArea
               }

@@ -16,7 +16,7 @@ import { isProjectEstimationPresent } from '../../../../helpers/projectHelper'
 
 import './ReviewProjectButton.scss'
 
-const ReviewProjectButton = ({ project, disabled, onClick }) => {
+const ReviewProjectButton = ({ project, disabled, onClick, wrapperClass }) => {
   const submitButton = (
     <button className="tc-btn tc-btn-primary tc-btn-md"
       onClick={onClick}
@@ -27,7 +27,7 @@ const ReviewProjectButton = ({ project, disabled, onClick }) => {
   const hasEstimation = isProjectEstimationPresent(project)
 
   return (
-    <div styleName="container">
+    <div styleName={cn('container', wrapperClass)}>
       <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
         {(matches) => {
           if (matches) {
@@ -60,6 +60,7 @@ ReviewProjectButton.propTypes = {
   disabled: PT.bool,
   project: PT.object.isRequired,
   onClick: PT.func.isRequired,
+  wrapperClass: PT.string
 }
 
 export default ReviewProjectButton

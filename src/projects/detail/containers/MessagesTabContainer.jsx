@@ -156,7 +156,7 @@ class MessagesTabContainer extends React.Component {
       <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
         {matches => {
           if (matches) {
-            return <Sticky top={110}>{leftArea}</Sticky>
+            return <Sticky top={60}>{leftArea}</Sticky>
           } else {
             return leftArea
           }
@@ -252,7 +252,9 @@ class MessagesTabContainer extends React.Component {
 
     return (
       <TwoColsLayout>
-        <TwoColsLayout.Sidebar>{leftArea}</TwoColsLayout.Sidebar>
+        <TwoColsLayout.Sidebar wrapperClass="gray-bg">
+          {leftArea}
+        </TwoColsLayout.Sidebar>
 
         <TwoColsLayout.Content>
           {/* Automatically refresh topics */}
