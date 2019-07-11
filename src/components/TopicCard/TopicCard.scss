@@ -17,6 +17,8 @@
 
 .body {
   flex-grow: 1;
+  min-width: 0;
+  padding-right: 2 * $base-unit;
 }
 
 .title {
@@ -25,6 +27,9 @@
   font-size: 16px;
   line-height: 30px;
   color: $tc-gray-90;
+  white-space: nowrap; 
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 
   &.unreadPosts {
     @include roboto-bold;
@@ -56,6 +61,7 @@
 
   color: $tc-gray-70;
   font-size: 12px;
+  flex-shrink: 0;
 }
 
 .topcoderOnlyLabel {

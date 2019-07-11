@@ -32,7 +32,7 @@ const TopicCard = ({
 
   const lastMessageUserId = last(posts).userId
   const lastMessageAuthor = get(allMembers, lastMessageUserId)
-  const lastMessageDate = formatDate(last(posts).lastMessageDate)
+  const lastMessageDate = formatDate(last(posts).date)
   const numNewMessages = get(notifications, 'length')
   const newMessagesFromDate = formatDate(get(notifications, '0.date'))
   const numFiles = sumBy(posts, p => get(p, 'attachments.length', 0))

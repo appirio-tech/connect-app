@@ -19,12 +19,12 @@ const TopicDrawer = ({
     <Drawer
       open={open}
       containerStyle={{
-        top: '110px',
-        height: 'calc(100% - 110px)',
+        top: '60px',
+        height: 'calc(100% - 60px)',
         display: 'flex',
         flexDirection: 'column'
       }}
-      overlayStyle={{ top: '110px', left: '360px' }}
+      overlayStyle={{ top: '60px', left: '280px' }}
       onRequestChange={open => !open && onClose()}
     >
       {open && (

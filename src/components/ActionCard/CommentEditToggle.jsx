@@ -39,11 +39,15 @@ export default class CommentEditToggle extends React.Component {
     const {showDeleteConfirm } = this.state
     const editOptions = {label:this.props.forTopic ? 'Edit Title' : 'Edit post', val:'1'}
     const deleteOptions = {label:this.props.forTopic ? 'Delete thread' : 'Delete post', val:'2'}
+
     return (
       <div className="dropdownContainer">
         <Dropdown pointerShadow className="drop-down edit-toggle-container">
           <div className={cn('dropdown-menu-header', 'edit-toggle')} title="Edit">
-            <div styleName={cn('edit-toggle-btn', {'in-dark-bg': this.props.inDarkBackground})}><i/><i/><i/></div>
+            {
+              this.props.moreButton ? this.props.moreButton :
+                <div styleName={cn('edit-toggle-btn', {'in-dark-bg': this.props.inDarkBackground})}><i/><i/><i/></div>
+            }
           </div>
           <div className="dropdown-menu-list down-layer">
             <ul>
@@ -92,5 +96,6 @@ CommentEditToggle.propTypes = {
   hideDelete: PropTypes.bool,
   inDarkBackground: PropTypes.bool,
   onEdit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
+  moreButton: PropTypes.node
 }
