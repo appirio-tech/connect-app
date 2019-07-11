@@ -45,7 +45,7 @@ class TopicGroup extends React.Component {
       ? topics.filter(topic => topic.tag === PROJECT_FEED_TYPE_MESSAGES)
       : topics
 
-    const adminTopicsLength = topics ? topics.filter(topic => topic.tag === PROJECT_FEED_TYPE_MESSAGES).length : 0
+    const privateTopicsLength = topics ? topics.filter(topic => topic.tag === PROJECT_FEED_TYPE_MESSAGES).length : 0
 
     return topics && topics.length ? (
       <div>
@@ -53,7 +53,7 @@ class TopicGroup extends React.Component {
           onlyAdmin={onlyAdmin}
           onAdminFilterChange={this.setOnlyAdmin}
           title={groupTitle}
-          adminCount={adminTopicsLength}
+          privateTopicsCount={privateTopicsLength}
         />
 
         {filteredTopics.length ? (
