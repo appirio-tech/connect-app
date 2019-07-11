@@ -1,0 +1,39 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.assets-info-wrapper {
+  background-color: $tc-white;
+  border-radius: 10px;
+  margin-top: 30px;
+  padding: 20px;
+}
+
+.section-title {
+  color: $tc-gray-90;
+  font-family: Roboto;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+  text-align: left;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.assets-header-button {
+  display: block;
+  float: right;
+}
+
+.add-new-button {
+  border-radius: 10px;
+  width: 105px;
+  height: 20px;
+  color: $tc-white;
+  font-family: Roboto;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  background-color: $tc-dark-blue-100;
+  border: 0;
+}
