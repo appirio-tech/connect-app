@@ -39,6 +39,8 @@ const onRouteChange = (pathname) => {
       window.analytics.page('Project Scope')
     } else if (/^\/projects\/\d+\/plan\/?$/.test(pathname)) {
       window.analytics.page('Project Plan')
+    }  else if (/^\/projects\/\d+\/assets\/?$/.test(pathname)) {
+      window.analytics.page('Assets Library')
     } else if (/^\/settings\/notifications\/?$/.test(pathname)) {
       window.analytics.page('Notification Settings')
     } else if (/^\/notifications\/?$/.test(pathname)) {
