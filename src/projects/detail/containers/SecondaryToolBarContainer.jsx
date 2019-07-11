@@ -24,6 +24,7 @@ const SecondaryToolBarContainer = ({
     { label: 'Messages', to: `/projects/${match.params.projectId}/messages` },
     { label: 'Scope', to: `/projects/${match.params.projectId}/scope` },
     { label: 'Project Plan', to: `/projects/${match.params.projectId}/plan` },
+    { label: 'Assets Library', to: `/projects/${match.params.projectId}/assets` },
   ] : [
     { label: 'Dashboard', to: `/projects/${match.params.projectId}` },
     { label: 'Specification', to: `/projects/${match.params.projectId}/specification` },

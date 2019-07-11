@@ -1,0 +1,52 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.new-link-dialog {
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  box-shadow: 0 2px 9px 0 rgba($tc-gray-90, 0.15);
+  border-radius: 6px;
+  z-index: 30;
+  max-width: 600px;
+  width: 50%;
+}
+
+.new-link-dialog-overlay {
+  background: rgba($tc-gray-90, 0.6);
+  z-index: 20;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.new-link-dialog-bg {
+  position: fixed;
+  transition: opacity 0.33s;
+  z-index: 2147483647;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  line-height: 1.4;
+  font-family: Roboto-regular, Roboto, sans-serif;
+  text-align: left;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  background-color: rgba($tc-gray-90, 0.6);
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+}
+
+.new-link-dialog-no-scroll {
+  overflow: hidden;
+}
