@@ -49,7 +49,9 @@
 }
 
 .all-project-link-wrapper {
+  display: flex;
   padding: 20px;
+  justify-content: space-between
 }
 
 .project-status-toggle {

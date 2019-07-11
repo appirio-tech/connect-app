@@ -15,6 +15,7 @@ import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
   PROJECT_STATUS_COMPLETED, PHASE_STATUS_REVIEWED, PHASE_STATUS_ACTIVE } from '../../../config/constants'
 import PERMISSIONS from '../../../config/permissions'
 import { checkPermission } from '../../../helpers/permissions'
+import Panel from '../../../components/Panel/Panel'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 import ProjectDirectLinks from '../../../projects/list/components/Projects/ProjectDirectLinks'
 import ProjectStatus from '../../../components/ProjectStatus/ProjectStatus'
@@ -37,7 +38,8 @@ class ProjectInfoContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      duration: {}
+      duration: {},
+      showDeleteConfirm: false
     }
     this.onChangeStatus = this.onChangeStatus.bind(this)
     this.onDeleteProject = this.onDeleteProject.bind(this)
@@ -56,6 +58,8 @@ class ProjectInfoContainer extends React.Component {
     this.getFileAttachmentName = this.getFileAttachmentName.bind(this)
     this.extractAttachmentLinksFromPosts = this.extractAttachmentLinksFromPosts.bind(this)
     this.deletePostAttachment = this.deletePostAttachment.bind(this)
+    this.toggleProjectDelete = this.toggleProjectDelete.bind(this)
+    this.onConfirmDelete = this.onConfirmDelete.bind(this)
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
@@ -68,6 +72,7 @@ class ProjectInfoContainer extends React.Component {
       !_.isEqual(nextProps.isProjectProcessing, this.props.isProjectProcessing) ||
       !_.isEqual(nextProps.attachmentsAwaitingPermission, this.props.attachmentsAwaitingPermission) ||
       !_.isEqual(nextProps.attachmentPermissions, this.props.attachmentPermissions) ||
+      !_.isEqual(nextState.showDeleteConfirm, this.state.showDeleteConfirm) ||
       nextProps.activeChannelId !== this.props.activeChannelId
   }
 
@@ -109,6 +114,14 @@ class ProjectInfoContainer extends React.Component {
     if (!_.isEmpty(location.hash) && location.hash !== this.props.location.hash) {
       this.handleUrlHash(props)
     }
+  }
+
+  toggleProjectDelete() {
+    this.setState({ showDeleteConfirm: !this.state.showDeleteConfirm })
+  }
+
+  onConfirmDelete() {
+    this.onDeleteProject()
   }
 
   // this is just to see if the comment/feed/post/phase the url hash is attempting to scroll to is loaded or not
@@ -400,7 +413,7 @@ class ProjectInfoContainer extends React.Component {
   }
 
   render() {
-    const { duration } = this.state
+    const { duration, showDeleteConfirm } = this.state
     const { project, currentMemberRole, isSuperUser, phases, hideInfo, hideMembers,
       productsTimelines, isProjectProcessing } = this.props
     let directLinks = null
@@ -441,6 +454,10 @@ class ProjectInfoContainer extends React.Component {
                 <span>ALL PROJECTS</span>
               </div>
             </Link>
+            {canDeleteProject && !showDeleteConfirm &&
+            <div className="project-delete-icon">
+              <Panel.DeleteBtn onClick={this.toggleProjectDelete} />
+            </div>}
           </div>
 
           {/* Separator above project description */}
@@ -459,6 +476,9 @@ class ProjectInfoContainer extends React.Component {
               productsTimelines = {productsTimelines}
               onSubmitForReview={this.onSubmitForReview}
               isProjectProcessing={isProjectProcessing}
+              toggleProjectDelete={this.toggleProjectDelete}
+              onConfirmDelete={this.onConfirmDelete}
+              showDeleteConfirm={showDeleteConfirm}
             />
           }
 
