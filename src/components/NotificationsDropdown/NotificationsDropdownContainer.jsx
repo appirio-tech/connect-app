@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { TransitionGroup, Transition } from 'react-transition-group'
-import { getNotifications, toggleNotificationSeen, markAllNotificationsRead, markAllNotificationsSeen, toggleNotificationRead, visitNotifications,
+import { getNotifications, toggleNotificationSeen, markAllNotificationsRead, markAllNotificationsSeen, toggleNotificationRead,
   toggleBundledNotificationRead, viewOlderNotifications, hideOlderNotifications } from '../../routes/notifications/actions'
 import {
   splitNotificationsBySources,
@@ -30,8 +30,8 @@ import { NOTIFICATIONS_DROPDOWN_PER_SOURCE, NOTIFICATIONS_NEW_PER_SOURCE, REFRES
 import './NotificationsDropdown.scss'
 
 const NotificationsDropdownContainerView = (props) => {
-  const {initialized, isLoading, lastVisited, sources, notifications, markAllNotificationsRead, toggleNotificationRead, toggleNotificationSeen,
-    pending, toggleBundledNotificationRead, visitNotifications, oldSourceIds, viewOlderNotifications, isDropdownMobileOpen, isDropdownWebOpen,
+  const {initialized, isLoading, sources, notifications, markAllNotificationsRead, toggleNotificationRead, toggleNotificationSeen,
+    pending, toggleBundledNotificationRead, oldSourceIds, viewOlderNotifications, isDropdownMobileOpen, isDropdownWebOpen,
     toggleNotificationsDropdownMobile, toggleNotificationsDropdownWeb, markAllNotificationsSeen } = props
   if (!initialized && isLoading) {
     return (
@@ -73,7 +73,7 @@ const NotificationsDropdownContainerView = (props) => {
       }, 0)
     }
   }
-  const hasNew =  hasUnseen
+
   let notificationsEmpty = (
     <NotificationsEmpty>
       <p className="notifications-empty-note">
@@ -127,10 +127,9 @@ const NotificationsDropdownContainerView = (props) => {
           return (
             <NotificationsDropdown
               hasUnread={hasUnread}
-              hasNew={hasNew}
+              hasNew={hasUnseen}
               onToggle={(isOpen) => {
                 toggleNotificationsDropdownWeb(isOpen)
-                visitNotifications()
                 markNotificationsSeen(isOpen)
               }}
             >
@@ -202,10 +201,9 @@ const NotificationsDropdownContainerView = (props) => {
           return (
             <NotificationsMobilePage
               hasUnread={hasUnread}
-              hasNew={hasNew}
+              hasNew={hasUnseen}
               onToggle={() => {
                 toggleNotificationsDropdownMobile()
-                visitNotifications()
               }}
               isOpen={isDropdownMobileOpen}
             >
@@ -271,13 +269,11 @@ class NotificationsDropdownContainer extends React.Component {
 
     this.onToggleNotificationsDropdownWeb = this.onToggleNotificationsDropdownWeb.bind(this)
     this.onToggleNotificationsDropdownMobile = this.onToggleNotificationsDropdownMobile.bind(this)
-    this.onVisitNotifications = this.onVisitNotifications.bind(this)
   }
 
   componentDidMount() {
     this.props.getNotifications()
     this.autoRefreshNotifications = setInterval(() => this.props.getNotifications(), REFRESH_NOTIFICATIONS_INTERVAL)
-    this.setState({ lastVisited: this.props.lastVisited })
   }
 
   componentWillUnmount() {
@@ -286,7 +282,6 @@ class NotificationsDropdownContainer extends React.Component {
     this.onToggleNotificationsDropdownMobile(false)
     this.onToggleNotificationsDropdownWeb(false)
     this.props.hideOlderNotifications()
-    this.state.notificationsVisited && this.props.visitNotifications()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -310,13 +305,6 @@ class NotificationsDropdownContainer extends React.Component {
     this.setState({ isDropdownMobileOpen: !_.isUndefined(isOpen) ? isOpen : !this.state.isDropdownMobileOpen})
   }
 
-  onVisitNotifications() {
-    this.setState({
-      lastVisited: _.maxBy(_.map(this.props.notifications, n => new Date(n.date))),
-      notificationsVisited: true
-    })
-  }
-
   render() {
     const { notifications, ...restProps } = this.props
     const preRenderedNotifications = preRenderNotifications(notifications)
@@ -326,8 +314,6 @@ class NotificationsDropdownContainer extends React.Component {
         notifications={preRenderedNotifications}
         toggleNotificationsDropdownWeb={this.onToggleNotificationsDropdownWeb}
         toggleNotificationsDropdownMobile={this.onToggleNotificationsDropdownMobile}
-        visitNotifications={this.onVisitNotifications}
-        lastVisited={this.state.lastVisited}
         isDropdownMobileOpen={this.state.isDropdownMobileOpen}
         isDropdownWebOpen={this.state.isDropdownWebOpen}
       />
@@ -340,7 +326,6 @@ const mapStateToProps = ({ notifications }) => notifications
 
 const mapDispatchToProps = {
   getNotifications,
-  visitNotifications,
   toggleNotificationSeen,
   markAllNotificationsRead,
   markAllNotificationsSeen,

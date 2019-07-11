@@ -16,13 +16,9 @@ const markNotificationsRead = (id) => {
   }
 }
 
-// the id can be either: null/undefined (mark all); notification id; or '-' separated ids, e.g. '123-456-789'
+// the id can be either: notification id; or '-' separated ids, e.g. '123-456-789'
 const markNotificationsSeen = (id) => {
-  if (id) {
     return axios.put(`${TC_NOTIFICATION_URL}/${id}/seen`)
-  } else {
-    return axios.put(`${TC_NOTIFICATION_URL}/seen`)
-  }
 }
 
 const getNotifications = () => {

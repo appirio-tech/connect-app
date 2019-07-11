@@ -26,6 +26,7 @@ class NotificationsDropdown extends React.Component {
       this.setState({ isOpen: !this.state.isOpen})
     } else {
       this.props.onToggle(isOpen)
+      this.setState({ isOpen })
     }
   }
 
@@ -39,7 +40,7 @@ class NotificationsDropdown extends React.Component {
               hasUnread={hasUnread}
               hasNew={hasNew}
               onClick={this.toggle}
-              />
+            />
           </div>
           <div className="dropdown-menu-list">
             <div className="notifications-dropdown-content">

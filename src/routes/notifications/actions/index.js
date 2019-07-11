@@ -5,7 +5,6 @@ import {
   GET_NOTIFICATIONS_PENDING,
   GET_NOTIFICATIONS_SUCCESS,
   GET_NOTIFICATIONS_FAILURE,
-  VISIT_NOTIFICATIONS,
   TOGGLE_NOTIFICATION_SEEN,
   SET_NOTIFICATIONS_FILTER_BY,
   MARK_ALL_NOTIFICATIONS_READ,
@@ -60,19 +59,13 @@ export const getNotifications = () => (dispatch) => {
   })
 }
 
-export const visitNotifications = () => (dispatch) => {
-  dispatch({
-    type: VISIT_NOTIFICATIONS
-  })
-}
-
 export const setNotificationsFilterBy = (filterBy) => (dispatch) => dispatch({
   type: SET_NOTIFICATIONS_FILTER_BY,
   payload: filterBy
 })
 
 export const markAllNotificationsSeen = (sourceId, notifications = []) => (dispatch) => {
-  let ids = null;
+  let ids = null
   const sourceNfs = _.filter(notifications, n => !n.seen)
   if (sourceNfs.length === 0) {
     return
