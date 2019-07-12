@@ -45,13 +45,15 @@ class TopicGroup extends React.Component {
       ? topics.filter(topic => topic.tag === PROJECT_FEED_TYPE_MESSAGES)
       : topics
 
+    const privateTopicsLength = topics ? topics.filter(topic => topic.tag === PROJECT_FEED_TYPE_MESSAGES).length : 0
+
     return topics && topics.length ? (
       <div>
         <CardListHeader
           onlyAdmin={onlyAdmin}
           onAdminFilterChange={this.setOnlyAdmin}
           title={groupTitle}
-          count={topics.length}
+          privateTopicsCount={privateTopicsLength}
         />
 
         {filteredTopics.length ? (

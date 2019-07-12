@@ -8,6 +8,7 @@ import FeedComments from './FeedComments'
 import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
 import NotificationsReader from '../../components/NotificationsReader'
+import IconButton from '../IconButton/IconButton'
 
 import { EVENT_TYPE, PROJECT_FEED_TYPE_MESSAGES, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 
@@ -16,6 +17,7 @@ import FullscreenIcon from '../../assets/icons/ui-fullscreen.svg'
 import LockIcon from '../../assets/icons/lock.svg'
 import InvisibleIcon from '../../assets/icons/invisible-12-white.svg'
 import CloseIcon from 'appirio-tech-react-components/components/Icons/CloseIcon'
+import MoreIcon from '../../assets/icons/more.svg'
 
 import './Feed.scss'
 
@@ -114,6 +116,8 @@ class Feed extends React.Component {
       const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
       const feedLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#feed-${id}`
 
+      const moreButton = (<IconButton Icon={MoreIcon} />)
+
       topicHeader = (
         <header
           styleName={
@@ -149,9 +153,7 @@ class Feed extends React.Component {
               </div>
               {
                 inTopicDrawer &&
-                <span onClick={onDrawerClose} styleName="close-icon">
-                  <CloseIcon />
-                </span>
+                <IconButton onClick={onDrawerClose} Icon={CloseIcon} />
               }
             </div>
           ) : (
@@ -173,12 +175,12 @@ class Feed extends React.Component {
                       onEdit={this.onEditTopic}
                       onDelete={onDeleteTopic}
                       inDarkBackground={inTopicDrawer}
+                      moreButton={moreButton}
                     />
                   )}
                   {
-                    inTopicDrawer && <span onClick={onDrawerClose} styleName="close-icon">
-                      <CloseIcon />
-                    </span>
+                    inTopicDrawer &&
+                    <IconButton onClick={onDrawerClose} Icon={CloseIcon} />
                   }
                   {!!onEnterFullscreenClick && <button styleName="fullscreen" onClick={onEnterFullscreenClick}><FullscreenIcon /></button>}
                   {!!onExitFullscreenClick && <button styleName="fullscreen fullscreen-exit" onClick={onExitFullscreenClick}><XMarkIcon /></button>}
