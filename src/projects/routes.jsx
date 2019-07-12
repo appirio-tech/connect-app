@@ -27,10 +27,13 @@ const ProjectDetailWithAuth = requiresAuthentication(() =>
     <Route path="/projects/:projectId/messages" render={() => <ProjectDetail component={MessagesTabContainer} />} />
     <Route path="/projects/:projectId/specification" render={() => <ProjectDetail component={SpecificationContainer} />} />
     <Route path="/projects/:projectId/scope" render={() => <ProjectDetail component={Scope} />} />
-    <Route path="/projects/:projectId/plan" render={({ match, location }) => {
-      // redirect Project Plan URLs to the dashboard keeping the hash
-      return <Redirect to={`/projects/${match.params.projectId}${_.get(location, 'hash', '')}`} />
-    }} />
+    <Route
+      path="/projects/:projectId/plan"
+      render={({ match, location }) => {
+        // redirect Project Plan URLs to the dashboard keeping the hash
+        return <Redirect to={`/projects/${match.params.projectId}${_.get(location, 'hash', '')}`} />
+      }}
+    />
     <Route path="/projects/:projectId/assets" render={() => <ProjectDetail component={AssetsLibrary} />} />
     <Route path="/projects/:projectId/add-phase" render={() => <ProjectDetail component={ProjectAddPhaseContainer} />} />
     <Route path="/projects/:projectId/discussions/:discussionId?" render={() => <ProjectDetail component={ProjectMessages} />} />

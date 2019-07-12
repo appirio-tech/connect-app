@@ -14,11 +14,11 @@ import {
 
 const UserSummary = ({user}) => {
   // TODO: Replace hardcoded values with real data
-  const stats = {
+  /* const stats = {
     activeProjects: 4,
     drafts: 7,
     delivered: 5
-  }
+  } */
   const powerUserRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   const isCustomer = _.intersection(user.roles, powerUserRoles).length === 0
   const role = isCustomer ? 'Customer' : 'Member'
@@ -42,7 +42,7 @@ const UserSummary = ({user}) => {
           </div>
         </div>
       </div>
-      <div styleName="stats" >
+      {/* <div styleName="stats" >
         <div styleName="stat" >
           <div styleName="stat-number">{stats.activeProjects}</div>
           <div styleName="stat-name">Active Projects</div>
@@ -55,7 +55,7 @@ const UserSummary = ({user}) => {
           <div styleName="stat-number">{stats.delivered}</div>
           <div styleName="stat-name">Delivered</div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
