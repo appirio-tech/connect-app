@@ -175,6 +175,8 @@
             color: $tc-black;
             font-size: $tc-label-lg;
             max-width: calc(100% - 60px);
+            flex: 1;
+            overflow: hidden;
 
             .span-name {
               text-overflow: ellipsis;
@@ -182,6 +184,13 @@
               overflow: hidden;
               max-width: 200px;
               padding-bottom: 2px;
+            }
+
+            .member-handle-container {
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;
+              margin-right: 20px;
             }
 
             .member-handle {
