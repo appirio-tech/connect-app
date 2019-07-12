@@ -159,14 +159,18 @@
             display: flex;
             align-items: center;
             flex-grow: 1;
-            max-width: 316px;
+            width: 0;
             margin-right: 10px;
+
+            @media screen and (max-width: $screen-md - 1px) {
+              width: auto;
+            }
           }
 
           .member-name {
             display: flex;
             margin-left: $base-unit*4;
-            margin-right: $base-unit*4;
+            margin-right: auto;
             @include roboto-bold;
             color: $tc-black;
             font-size: $tc-label-lg;
