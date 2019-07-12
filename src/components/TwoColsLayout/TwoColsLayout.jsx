@@ -10,12 +10,10 @@ import './TwoColsLayout.scss'
 
 const TwoColsLayout = ({
   children,
-  noSecondaryToolbar,
   noPadding,
 }) => (
   <div
     styleName={cn('container', {
-      'no-secondary-toolbar': noSecondaryToolbar,
       'no-padding': noPadding,
     })}
   >
@@ -37,13 +35,11 @@ TwoColsLayout.Content = ({ children }) => (
 
 TwoColsLayout.defaultProps = {
   children: null,
-  noSecondaryToolbar: false,
   noPadding: false,
 }
 
 TwoColsLayout.propTypes = {
   children: PropTypes.node,
-  noSecondaryToolbar: PropTypes.bool,
   noPadding: PropTypes.bool,
 }
 

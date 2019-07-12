@@ -124,7 +124,7 @@ class SpecificationContainer extends Component {
             { eventType: EVENT_TYPE.PROJECT.SPECIFICATION_MODIFIED, contents: { projectId: project.id } },
           ]}
         />
-        <TwoColsLayout.Sidebar wrapperClass="gray-bg">
+        <TwoColsLayout.Sidebar>
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
               if (matches) {

@@ -141,7 +141,7 @@ class ProjectPlanContainer extends React.Component {
             { eventType: EVENT_TYPE.PROJECT_PLAN.PROGRESS_UPDATED, contents: { projectId: project.id } },
           ]}
         />
-        <TwoColsLayout.Sidebar wrapperClass="gray-bg">
+        <TwoColsLayout.Sidebar>
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
               if (matches) {

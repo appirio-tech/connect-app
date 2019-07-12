@@ -9,19 +9,11 @@
 }
 
 .sidebar {
-  background-color: $tc-white;
-  min-height: calc(100vh - 110px); /* minus primary and secondary toolbar height */
+  background-color: $tc-gray-05;
+  min-height: calc(100vh - 60px); /* minus primary and secondary toolbar height */
   padding-bottom: 10 * $base-unit;
   position: relative;
   width: 280px;
-
-  .no-secondary-toolbar & {
-    min-height: calc(100vh - 60px); /* minus primary toolbar height only */
-  }
-
-  &.gray-bg {
-    background-color: $tc-gray-05;
-  }
 
   /*
     if there is not enough space for sidebar to be 360

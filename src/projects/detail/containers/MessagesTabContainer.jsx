@@ -252,7 +252,7 @@ class MessagesTabContainer extends React.Component {
 
     return (
       <TwoColsLayout>
-        <TwoColsLayout.Sidebar wrapperClass="gray-bg">
+        <TwoColsLayout.Sidebar>
           {leftArea}
         </TwoColsLayout.Sidebar>
 

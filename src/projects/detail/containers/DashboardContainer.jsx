@@ -237,7 +237,7 @@ class DashboardContainer extends React.Component {
         {matchesTopicUrl && <Redirect to={`/projects/${project.id}/messages/${matchesTopicUrl[1]}`} />}
         {matchesPostUrl && topicIdForPost && <Redirect to={`/projects/${project.id}/messages/${topicIdForPost}#comment-${matchesPostUrl[1]}`}  />}
 
-        <TwoColsLayout.Sidebar wrapperClass="gray-bg">
+        <TwoColsLayout.Sidebar>
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
               if (matches) {
