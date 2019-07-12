@@ -9,29 +9,25 @@ import './UserSidebar.scss'
 const navLinks = [{
   label: 'ALL PROJECTS',
   to: '/projects',
-  Icon: FileIcon
+  Icon: FileIcon,
+  exact: false,
 }, {
   label: 'MY PROFILE',
   to: '/settings/profile',
   Icon: FileIcon,
-  exact: true
 }, {
   label: 'NOTIFICATION SETTINGS',
   to: '/settings/notifications',
   Icon: FileIcon,
-  exact: true
 }, {
   label: 'ACCOUNT & SECURITY',
   to: '/settings/account',
   Icon: FileIcon,
-  exact: true
 }, {
   label: 'NOTIFICATIONS',
   to: '/notifications',
   Icon: FileIcon,
-  exact: true
-}
-]
+}]
 
 const UserSidebar = ({user}) => {
   return (
