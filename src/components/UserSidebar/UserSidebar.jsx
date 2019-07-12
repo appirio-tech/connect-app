@@ -8,27 +8,28 @@ import './UserSidebar.scss'
 
 const navLinks = [{
   label: 'ALL PROJECTS',
-  to: '/projects?sort=updatedAt%20desc',
-  Icon: FileIcon,
-  isActive(_match, location) {
-    return !!location.pathname.match(/^\/projects/)
-  }
+  to: '/projects',
+  Icon: FileIcon
 }, {
   label: 'MY PROFILE',
   to: '/settings/profile',
-  Icon: FileIcon
+  Icon: FileIcon,
+  exact: true
 }, {
   label: 'NOTIFICATION SETTINGS',
   to: '/settings/notifications',
-  Icon: FileIcon
+  Icon: FileIcon,
+  exact: true
 }, {
   label: 'ACCOUNT & SECURITY',
   to: '/settings/account',
-  Icon: FileIcon
+  Icon: FileIcon,
+  exact: true
 }, {
   label: 'NOTIFICATIONS',
   to: '/notifications',
-  Icon: FileIcon
+  Icon: FileIcon,
+  exact: true
 }
 ]
 
