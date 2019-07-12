@@ -27,7 +27,6 @@ const initialState = {
   notifications: [],
   // ids of sources that will also show old notifications
   oldSourceIds: [],
-  lastVisited: new Date(0),
   pending: false,
   readers: {},
 }
@@ -73,9 +72,6 @@ export default (state = initialState, action) => {
     return { ...state, initialized: true, isLoading: false, notifications: action.payload, sources: getSources(action.payload) }
   case GET_NOTIFICATIONS_FAILURE:
     return { ...state, isLoading: false }
-
-  case VISIT_NOTIFICATIONS:
-    return {...state, lastVisited: _.maxBy(_.map(state.notifications, n => new Date(n.date)))}
 
   case TOGGLE_NOTIFICATION_SEEN: {
     const ids = action.payload.split('-')

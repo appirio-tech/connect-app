@@ -261,7 +261,6 @@ class NotificationsDropdownContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      lastVisited: new Date(0),
       isDropdownWebOpen: false,
       isDropdownMobileOpen: false,
       notificationsVisited: false,
