@@ -166,10 +166,11 @@
           .member-name {
             display: flex;
             margin-left: $base-unit*4;
+            margin-right: $base-unit*4;
             @include roboto-bold;
             color: $tc-black;
             font-size: $tc-label-lg;
-            width: calc(100% - 60px);
+            max-width: calc(100% - 60px);
 
             .span-name {
               text-overflow: ellipsis;
@@ -239,6 +240,7 @@
             border-radius: 5px;
             border: 1px solid $tc-gray-40;
             background: white;
+            min-width: 300px;
 
             .member-role {
               padding: $base-unit $base-unit*2;
