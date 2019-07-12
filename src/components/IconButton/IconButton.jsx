@@ -5,8 +5,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './IconButton.scss'
 
-const IconButton = ({ icon, onClick }) => {
-  const Icon = icon
+const IconButton = ({ Icon, onClick }) => {
 
   return (
     <div styleName="button" onClick={onClick}>
@@ -16,7 +15,7 @@ const IconButton = ({ icon, onClick }) => {
 }
 
 IconButton.propTypes = {
-  icon: PropTypes.func.isRequired,
+  Icon: PropTypes.func.isRequired,
   onClick: PropTypes.func
 }
 

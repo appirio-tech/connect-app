@@ -116,7 +116,7 @@ class Feed extends React.Component {
       const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
       const feedLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#feed-${id}`
 
-      const moreButton = (<IconButton icon={MoreIcon} />)
+      const moreButton = (<IconButton Icon={MoreIcon} />)
 
       topicHeader = (
         <header
@@ -153,7 +153,7 @@ class Feed extends React.Component {
               </div>
               {
                 inTopicDrawer &&
-                <IconButton onClick={onDrawerClose} icon={CloseIcon} />
+                <IconButton onClick={onDrawerClose} Icon={CloseIcon} />
               }
             </div>
           ) : (
@@ -180,7 +180,7 @@ class Feed extends React.Component {
                   )}
                   {
                     inTopicDrawer &&
-                    <IconButton onClick={onDrawerClose} icon={CloseIcon} />
+                    <IconButton onClick={onDrawerClose} Icon={CloseIcon} />
                   }
                   {!!onEnterFullscreenClick && <button styleName="fullscreen" onClick={onEnterFullscreenClick}><FullscreenIcon /></button>}
                   {!!onExitFullscreenClick && <button styleName="fullscreen fullscreen-exit" onClick={onExitFullscreenClick}><XMarkIcon /></button>}
