@@ -93,6 +93,7 @@
       .Avatar {
         height: 40px;
         width: 40px;
+        flex-shrink: 0;
       }
 
       .project-dialog {
@@ -147,33 +148,34 @@
           padding: $base-unit*2 $base-unit*4;
           display: flex;
           align-items: center;
-          flex-wrap: wrap;
           justify-content: center;
 
           @media screen and (max-width: $screen-md - 1px) {
             padding: $base-unit*2;
+            flex-wrap: wrap;
           }
 
           .memer-details {
             display: flex;
             align-items: center;
             flex-grow: 1;
+            max-width: 316px;
+            margin-right: 10px;
           }
 
           .member-name {
             display: flex;
-            flex-grow: 1;
             margin-left: $base-unit*4;
             @include roboto-bold;
             color: $tc-black;
             font-size: $tc-label-lg;
+            width: calc(100% - 60px);
 
             .span-name {
               text-overflow: ellipsis;
               white-space: nowrap;
               overflow: hidden;
               max-width: 200px;
-              display: inline-block;
               padding-bottom: 2px;
             }
 
@@ -181,6 +183,10 @@
               @include roboto;
               margin-left: $base-unit*2;
               color: $tc-gray-60;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;
+              max-width: calc(100% - 40px);
             }
 
             @media screen and (max-width: $screen-md - 1px) {
