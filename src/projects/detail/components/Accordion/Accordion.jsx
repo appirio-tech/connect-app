@@ -40,6 +40,41 @@ const createValueMapper = (valuesMap) => (value) => (
   valuesMap[value] && (valuesMap[value].summaryLabel || valuesMap[value].label || valuesMap[value].title)
 )
 
+/**
+ * Create a function which can map desision slider to labels
+ *
+ * @param {Array} options options array
+ *
+ * @returns {Function} valueMapper
+ */
+const createSliderDecisionValueMapper = (options) => (value) => {
+  const min = 1
+  const max = 100
+  const tmp = []
+  const unit = (max - min)/(options.length - 1)
+  for(let i=0; i < options.length; i++) {
+    tmp.push({
+      point: i * unit + min,
+      option: options[i]
+    })
+  }
+  let optionValue = options[options.length - 1];
+  for(let i=0; i < tmp.length - 1; i++) {
+    if (value < tmp[i+1].point) {
+      const leftValue = value - tmp[i].point
+      const rightValue = tmp[i+1].point - value
+      if (rightValue <= leftValue) {
+        optionValue = tmp[i+1].option
+      } else {
+        optionValue = tmp[i].option
+      }
+      break
+    }
+  }
+
+  return optionValue && (optionValue.summaryLabel || optionValue.label || optionValue.title)
+}
+
 class Accordion extends React.Component {
   constructor(props) {
     super(props)
@@ -108,6 +143,7 @@ class Accordion extends React.Component {
 
     const valuesMap = _.keyBy(options, 'value')
     const mapValue = createValueMapper(valuesMap)
+    const mapDecisionValue = createSliderDecisionValueMapper(options)
 
     if (!value) {
       return 'N/A'//value
@@ -119,7 +155,7 @@ class Accordion extends React.Component {
     case TYPE.ADD_ONS: return `${value.length} selected`
     case TYPE.SKILLS: return `${value.length} selected`
     case TYPE.SLIDER_RADIO: return mapValue(value)
-    case TYPE.SLIDER_STANDARD: return mapValue(value)
+    case TYPE.SLIDER_STANDARD: return mapDecisionValue(value)
     case TYPE.SELECT_DROPDOWN: return mapValue(value)
     default: return value
     }
