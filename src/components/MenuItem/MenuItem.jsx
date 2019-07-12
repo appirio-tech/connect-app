@@ -6,13 +6,15 @@ import styles from './MenuItem.scss'
 
 const MenuItem = ({ navLink }) => {
   const Icon = navLink.Icon
+  const exact = navLink.isActive ? true : navLink.exact
+
   return (
     <li>
       <NavLink
         to={navLink.to}
         className={styles.navItem}
         activeClassName={styles.active}
-        exact
+        exact={exact}
         isActive={navLink.isActive}
       >
         <Icon className={styles.icon} />
@@ -27,6 +29,7 @@ MenuItem.propTypes = {
     label: PT.string,
     to: PT.string,
     Icon: PT.func,
+    exact: PT.bool,
     isActive: PT.func
   })
 }

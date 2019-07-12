@@ -1,5 +1,11 @@
 import React from 'react'
-import SecondaryToolBarContainer from '../containers/SecondaryToolBarContainer'
+import Sticky from 'react-stickynode'
+import MediaQuery from 'react-responsive'
+import TwoColsLayout from '../../../components/TwoColsLayout'
+import MetadataSidebar from './MetadataSidebar'
+
+import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
+
 import './MetaDataLayout.scss'
 
 class MetaDataLayout extends React.Component {
@@ -8,17 +14,27 @@ class MetaDataLayout extends React.Component {
   }
 
   render() {
-
-    const location = this.props.location.pathname
     return (
-      <div styleName="container">
-        <div styleName="secondary-toolbar">
-          { /* pass location, to make sure that component is re-rendered when location is changed
-                it's necessary to update the active state of the tabs */ }
-          <SecondaryToolBarContainer location={location} />
-        </div>
-        {this.props.main}
-      </div>
+      <TwoColsLayout noPadding>
+        <TwoColsLayout.Sidebar>
+          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+            {(matches) => {
+              if (matches) {
+                return (
+                  <Sticky top={60}>
+                    <MetadataSidebar/>
+                  </Sticky>
+                )
+              } else {
+                return <MetadataSidebar/>
+              }
+            }}
+          </MediaQuery>
+        </TwoColsLayout.Sidebar>
+        <TwoColsLayout.Content>
+          {this.props.main}
+        </TwoColsLayout.Content>
+      </TwoColsLayout>
     )
   }
 }
