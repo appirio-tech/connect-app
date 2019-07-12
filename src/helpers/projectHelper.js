@@ -338,7 +338,6 @@ export function getProjectNavLinks(project, projectId) {
     { label: 'Dashboard', to: `/projects/${projectId}`, Icon: FileIcon },
     { label: 'Messages', to: `/projects/${projectId}/messages`, Icon: FileIcon },
     { label: 'Scope', to: `/projects/${projectId}/scope`, Icon: FileIcon },
-    { label: 'Project Plan', to: `/projects/${projectId}/plan`, Icon: FileIcon },
     // { label: 'Reports', to: '#', Icon: FileIcon },
     { label: 'Assets Library', to: `/projects/${projectId}/assets`, Icon: FileIcon },
   ] : [
