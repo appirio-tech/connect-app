@@ -211,6 +211,7 @@ class SpecQuestions extends React.Component {
     case 'textbox':
       ChildElem = TCFormFields.Textarea
       elemProps.wrapperClass = 'row'
+      elemProps.rows = 3
       elemProps.autoResize = true
       if (q.validations) {
         elemProps.validations = q.validations
