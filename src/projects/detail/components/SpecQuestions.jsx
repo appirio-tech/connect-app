@@ -278,6 +278,16 @@ class SpecQuestions extends React.Component {
         included: false
       })
       break
+    case 'slider-standard':
+      ChildElem = TCFormFields.SliderStandard
+      _.assign(elemProps, {
+        options: q.options,
+        min: 0,
+        max: 100,
+        step: 1,
+        included: false
+      })
+      break
     case 'add-ons':
       ChildElem = AddonOptions
 
@@ -370,6 +380,7 @@ class SpecQuestions extends React.Component {
       productCategories,
       isCreation,
     } = this.props
+    console.log('totest questions', questions)
     const { skillOptions } = this.state
 
     return (
@@ -389,7 +400,7 @@ class SpecQuestions extends React.Component {
           (isCreation || !question.hiddenOnEdit)
         ).map((q, index) => {
           return  (
-            _.includes(['checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills', 'slide-radiogroup', 'select-dropdown'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
+            _.includes(['checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills', 'slide-radiogroup', 'slider-standard', 'select-dropdown'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
               <Accordion
                 key={q.fieldName || `accordion-${index}`}
                 title={q.summaryTitle || q.title}

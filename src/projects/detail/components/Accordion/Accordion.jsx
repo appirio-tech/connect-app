@@ -25,6 +25,7 @@ const TYPE = {
   NUMBERINPUT: 'numberinput',
   SKILLS: 'skills',
   SLIDER_RADIO: 'slide-radiogroup',
+  SLIDER_STANDARD: 'slider-standard',
   SELECT_DROPDOWN: 'select-dropdown'
 }
 
@@ -118,6 +119,7 @@ class Accordion extends React.Component {
     case TYPE.ADD_ONS: return `${value.length} selected`
     case TYPE.SKILLS: return `${value.length} selected`
     case TYPE.SLIDER_RADIO: return mapValue(value)
+    case TYPE.SLIDER_STANDARD: return mapValue(value)
     case TYPE.SELECT_DROPDOWN: return mapValue(value)
     default: return value
     }
