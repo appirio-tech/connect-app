@@ -9,7 +9,7 @@ const MenuList = ({ navLinks }) => (
   <nav className={styles.container}>
     <ul>
       {!!navLinks &&
-        navLinks.map((link, i) => <MenuItem key={i} navLink={link} />)}
+        navLinks.map((link, i) => <MenuItem key={i} {...link} />)}
     </ul>
   </nav>
 )
@@ -17,9 +17,10 @@ const MenuList = ({ navLinks }) => (
 MenuList.propTypes = {
   navLinks: PT.arrayOf(
     PT.shape({
-      label: PT.string,
-      to: PT.string,
-      Icon: PT.func,
+      label: PT.string.isRequired,
+      to: PT.string.isRequired,
+      Icon: PT.func.isRequired,
+      exact: PT.bool,
       isActive: PT.func
     })
   )
