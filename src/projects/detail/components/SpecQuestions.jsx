@@ -281,11 +281,11 @@ class SpecQuestions extends React.Component {
     case 'slider-standard':
       ChildElem = TCFormFields.SliderStandard
       _.assign(elemProps, {
-        options: q.options,
-        min: 0,
-        max: 100,
-        step: 1,
-        included: false
+        minLabel: q.minLabel,
+        maxLabel: q.maxLabel,
+        min: q.min,
+        max: q.max,
+        step: q.step,
       })
       break
     case 'add-ons':
@@ -380,7 +380,6 @@ class SpecQuestions extends React.Component {
       productCategories,
       isCreation,
     } = this.props
-    console.log('totest questions', questions)
     const { skillOptions } = this.state
 
     return (
@@ -405,6 +404,7 @@ class SpecQuestions extends React.Component {
                 key={q.fieldName || `accordion-${index}`}
                 title={q.summaryTitle || q.title}
                 type={q.type}
+                question={q}
                 options={q.options || skillOptions || buildAddonsOptions(q, productTemplates, productCategories)}
               >
                 {this.renderQ(q, index)}

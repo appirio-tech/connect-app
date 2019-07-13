@@ -43,36 +43,19 @@ const createValueMapper = (valuesMap) => (value) => (
 /**
  * Create a function which can map desision slider to labels
  *
- * @param {Array} options options array
+ * @param {Object} question object
  *
  * @returns {Function} valueMapper
  */
-const createSliderDecisionValueMapper = (options) => (value) => {
-  const min = 1
-  const max = 100
-  const tmp = []
-  const unit = (max - min)/(options.length - 1)
-  for(let i=0; i < options.length; i++) {
-    tmp.push({
-      point: i * unit + min,
-      option: options[i]
-    })
+const createSliderDecisionValueMapper = (question) => (value) => {
+  const { min, max, minLabel, maxLabel } = question
+  const leftValue = value - min
+  const rightValue = max - value
+  if (rightValue <= leftValue) {
+    return maxLabel
+  } else {
+    return minLabel
   }
-  let optionValue = options[options.length - 1];
-  for(let i=0; i < tmp.length - 1; i++) {
-    if (value < tmp[i+1].point) {
-      const leftValue = value - tmp[i].point
-      const rightValue = tmp[i+1].point - value
-      if (rightValue <= leftValue) {
-        optionValue = tmp[i+1].option
-      } else {
-        optionValue = tmp[i].option
-      }
-      break
-    }
-  }
-
-  return optionValue && (optionValue.summaryLabel || optionValue.label || optionValue.title)
 }
 
 class Accordion extends React.Component {
@@ -138,12 +121,12 @@ class Accordion extends React.Component {
   }
 
   formatValue() {
-    const { type, options } = this.props
+    const { type, options, question } = this.props
     const { value } = this.state
 
     const valuesMap = _.keyBy(options, 'value')
     const mapValue = createValueMapper(valuesMap)
-    const mapDecisionValue = createSliderDecisionValueMapper(options)
+    const mapDecisionValue = createSliderDecisionValueMapper(question)
 
     if (!value) {
       return 'N/A'//value
@@ -199,6 +182,10 @@ Accordion.propTypes = {
    * We need options so we can render labels of values instead of raw values
    */
   options: PT.array.isRequired,
+  /**
+   * Full question object
+   */
+  question: PT.object.isRequired,
 }
 
 export default Accordion
