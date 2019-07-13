@@ -8,6 +8,7 @@ import { renderComponent, branch, compose, withProps } from 'recompose'
 import { loadProjectDashboard } from '../actions/projectDashboard'
 import { clearLoadedProject } from '../actions/project'
 import { acceptOrRefuseInvite } from '../actions/projectMember'
+import { loadProjects } from '../actions/loadProjects'
 
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
@@ -165,6 +166,8 @@ class ProjectDetail extends Component {
       status: isJoining ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
     }).then(() => {
       if(!isJoining) {
+        // navigate to project listing and reload projects
+        this.props.loadProjects({ sort: 'updatedAt desc' })
         this.props.history.push('/projects/')
       } else {
         this.props.loadProjectDashboard(this.props.match.params.projectId)
@@ -231,7 +234,7 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
   }
 }
 
-const mapDispatchToProps = { loadProjectDashboard, clearLoadedProject, acceptOrRefuseInvite }
+const mapDispatchToProps = { loadProjectDashboard, clearLoadedProject, acceptOrRefuseInvite, loadProjects }
 
 ProjectDetail.propTypes = {
   project: PropTypes.object,

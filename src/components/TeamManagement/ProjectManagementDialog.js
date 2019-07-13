@@ -176,7 +176,7 @@ class ProjectManagementDialog extends React.Component {
                   />
                   <div className="member-name">
                     {!invite.email && <span className="span-name">{userFullName}</span>}
-                    <span>
+                    <span className="member-handle-container">
                       {!invite.email && <span className="member-handle">@{handle}</span>}
                       {invite.email && <span className="member-email">{invite.email}</span>}
                     </span>

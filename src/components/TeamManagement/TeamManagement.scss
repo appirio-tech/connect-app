@@ -93,6 +93,7 @@
       .Avatar {
         height: 40px;
         width: 40px;
+        flex-shrink: 0;
       }
 
       .project-dialog {
@@ -147,40 +148,59 @@
           padding: $base-unit*2 $base-unit*4;
           display: flex;
           align-items: center;
-          flex-wrap: wrap;
           justify-content: center;
 
           @media screen and (max-width: $screen-md - 1px) {
             padding: $base-unit*2;
+            flex-wrap: wrap;
           }
 
           .memer-details {
             display: flex;
             align-items: center;
             flex-grow: 1;
+            width: 0;
+            margin-right: 10px;
+
+            @media screen and (max-width: $screen-md - 1px) {
+              width: auto;
+            }
           }
 
           .member-name {
             display: flex;
-            flex-grow: 1;
             margin-left: $base-unit*4;
+            margin-right: auto;
             @include roboto-bold;
             color: $tc-black;
             font-size: $tc-label-lg;
+            max-width: calc(100% - 60px);
+            flex: 1;
+            overflow: hidden;
 
             .span-name {
               text-overflow: ellipsis;
               white-space: nowrap;
               overflow: hidden;
               max-width: 200px;
-              display: inline-block;
               padding-bottom: 2px;
+            }
+
+            .member-handle-container {
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;
+              margin-right: 20px;
             }
 
             .member-handle {
               @include roboto;
               margin-left: $base-unit*2;
               color: $tc-gray-60;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;
+              max-width: calc(100% - 40px);
             }
 
             @media screen and (max-width: $screen-md - 1px) {
@@ -233,6 +253,7 @@
             border-radius: 5px;
             border: 1px solid $tc-gray-40;
             background: white;
+            min-width: 300px;
 
             .member-role {
               padding: $base-unit $base-unit*2;
