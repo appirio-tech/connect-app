@@ -105,7 +105,7 @@ const page500 = compose(
 )
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
-const errorHandler = showErrorMessageIfError(props => props.error)
+const errorHandler = showErrorMessageIfError(props => props.errorTemp)
 const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving)
 const ProductTemplateDetailsWithLoaderEnhanced = enhance(errorHandler(ProductTemplateDetails))
 const ProductTemplateDetailsWithLoaderAndAuth = requiresAuthentication(ProductTemplateDetailsWithLoaderEnhanced)
