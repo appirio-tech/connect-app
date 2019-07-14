@@ -61,6 +61,19 @@ const parseErrorObj = (action) => {
   }
 }
 
+// remove empty object, null/undefined value and empty string recursively from passed obj
+const deepClean = obj => _.transform(obj, (result, value, key) => {
+  const isCollection = _.isObject(value)
+  const cleaned = isCollection ? deepClean(value) : value
+  // exclude if empty object, null, undefined or empty string
+  if ((isCollection && _.isEmpty(cleaned)) || _.isNil(value) || value === '') {
+    return
+  }
+  _.isArray(result) ? result.push(cleaned) : (result[key] = cleaned)
+})
+
+const clean = obj => _.isObject(obj) ? deepClean(obj) : obj
+
 /**
  * Updates a product in the phase list without mutations
  *
@@ -631,13 +644,38 @@ export const projectState = function (state=initialState, action) {
         if (key === 'screens' || key === 'features' || key === 'capabilities') {
           return srcValue// srcValue contains the changed values from action payload
         }
+
+        // project's name might contain ampersand
+        if (key === 'name') {
+          return _.escape(srcValue)
+        }
+
+        // the number of budget qty properties in srcValue
+        // needs to be matched up with corresponding value in deliverables
+        if (key === 'budgetDetails') {
+          if (srcValue.deliverables) {
+            const allowed = srcValue.deliverables.map(v => {
+              if (v === 'dev') return 'development'
+              else if (v === 'data-science') return 'dataScience'
+              return v
+            })
+            const filtered = Object.keys(srcValue)
+              .filter(key => allowed.includes(key))
+              .reduce((obj, key) => {
+                obj[key] = srcValue[key]
+                return obj
+              }, {})
+            return { ...filtered, deliverables: srcValue.deliverables }
+          }
+          return srcValue
+        }
       }
     )
     // dont' compare this properties as they could be not added to `projectNonDirty`
     // or mutated somewhere in the app
-    const skipProperties = ['members']
-    const clearUpdatedProject = _.omit(updatedProject, skipProperties)
-    const clearUpdatedNonDirtyProject = _.omit(state.projectNonDirty, skipProperties)
+    const skipProperties = ['members', 'invites']
+    const clearUpdatedProject = clean(_.omit(updatedProject, skipProperties))
+    const clearUpdatedNonDirtyProject = clean(_.omit(state.projectNonDirty, skipProperties))
     if (!_.isEqual(clearUpdatedProject, clearUpdatedNonDirtyProject)) {
       updatedProject.isDirty = true
     }
