@@ -669,6 +669,20 @@ export const projectState = function (state=initialState, action) {
           }
           return srcValue
         }
+
+        // reset the values when deselected
+        if (key === 'deploymentTargets') {
+          if (!action.payload.deliverables) {
+            srcValue = []
+          }
+          return srcValue
+        }
+        if (key === 'progressiveResponsive') {
+          if (!(action.payload.targetDevices && action.payload.targetDevices.includes('web-browser'))) {
+            srcValue = ''
+          }
+          return srcValue
+        }
       }
     )
     // dont' compare this properties as they could be not added to `projectNonDirty`
