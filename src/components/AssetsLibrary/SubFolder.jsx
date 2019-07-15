@@ -4,7 +4,7 @@ import cn from 'classnames'
 
 import DeleteFileLinkModal from '../LinksMenu/DeleteFileLinkModal'
 import ItemOperations from './ItemOperations'
-import FolderIcon from '../../assets/icons/default.svg'
+import FolderIcon from '../../assets/icons/v.2.5/icon-folder-small.svg'
 
 import './GridView.scss'
 class SubFolder extends React.Component {
@@ -90,7 +90,7 @@ class SubFolder extends React.Component {
               try {
                 if (this.isURLValid(childLink.title)) {
                   //Link Icon here
-                  iconPath = require('../../assets/icons/default.svg')
+                  iconPath = require('../../assets/icons/link-12.svg')
                 } else {
                   iconPath = require('../../assets/icons/' + childLink.title.split('.')[1] +'.svg')
                 }
