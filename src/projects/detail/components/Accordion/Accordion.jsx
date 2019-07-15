@@ -28,6 +28,7 @@ const TYPE = {
   NUMBERINPUT: 'numberinput',
   SKILLS: 'skills',
   SLIDER_RADIO: 'slide-radiogroup',
+  SLIDER_STANDARD: 'slider-standard',
   SELECT_DROPDOWN: 'select-dropdown'
 }
 
@@ -41,6 +42,24 @@ const TYPE = {
 const createValueMapper = (valuesMap) => (value) => (
   valuesMap[value] && (valuesMap[value].summaryLabel || valuesMap[value].label || valuesMap[value].title)
 )
+
+/**
+ * Create a function which can map desision slider to labels
+ *
+ * @param {Object} question object
+ *
+ * @returns {Function} valueMapper
+ */
+const createSliderDecisionValueMapper = (question) => (value) => {
+  const { min, max, minLabel, maxLabel } = question
+  const leftValue = value - min
+  const rightValue = max - value
+  if (rightValue <= leftValue) {
+    return maxLabel
+  } else {
+    return minLabel
+  }
+}
 
 class Accordion extends React.Component {
   constructor(props) {
@@ -105,11 +124,12 @@ class Accordion extends React.Component {
   }
 
   formatValue() {
-    const { type, options } = this.props
+    const { type, options, question } = this.props
     const { value } = this.state
 
     const valuesMap = _.keyBy(options, 'value')
     const mapValue = createValueMapper(valuesMap)
+    const mapDecisionValue = createSliderDecisionValueMapper(question)
 
     if (!value) {
       return 'N/A'//value
@@ -121,6 +141,7 @@ class Accordion extends React.Component {
     case TYPE.ADD_ONS: return `${value.length} selected`
     case TYPE.SKILLS: return `${value.length} selected`
     case TYPE.SLIDER_RADIO: return mapValue(value)
+    case TYPE.SLIDER_STANDARD: return mapDecisionValue(value)
     case TYPE.SELECT_DROPDOWN: return mapValue(value)
     default: return value
     }
@@ -171,6 +192,10 @@ Accordion.propTypes = {
    * We need options so we can render labels of values instead of raw values
    */
   options: PT.array.isRequired,
+  /**
+   * Full question object
+   */
+  question: PT.object.isRequired,
 }
 
 export default Accordion

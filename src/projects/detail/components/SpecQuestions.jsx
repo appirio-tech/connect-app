@@ -279,6 +279,16 @@ class SpecQuestions extends React.Component {
         included: false
       })
       break
+    case 'slider-standard':
+      ChildElem = TCFormFields.SliderStandard
+      _.assign(elemProps, {
+        minLabel: q.minLabel,
+        maxLabel: q.maxLabel,
+        min: q.min,
+        max: q.max,
+        step: q.step,
+      })
+      break
     case 'add-ons':
       ChildElem = AddonOptions
 
@@ -390,11 +400,12 @@ class SpecQuestions extends React.Component {
           (isCreation || !question.hiddenOnEdit)
         ).map((q, index) => {
           return  (
-            _.includes(['checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills', 'slide-radiogroup', 'select-dropdown'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
+            _.includes(['checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills', 'slide-radiogroup', 'slider-standard', 'select-dropdown'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
               <Accordion
                 key={q.fieldName || `accordion-${index}`}
                 title={q.summaryTitle || q.title}
                 type={q.type}
+                question={q}
                 options={q.options || skillOptions || buildAddonsOptions(q, productTemplates, productCategories)}
               >
                 {this.renderQ(q, index)}
