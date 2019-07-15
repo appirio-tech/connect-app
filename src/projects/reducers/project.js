@@ -25,6 +25,7 @@ import {
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
+import { clean } from '../../helpers/utils'
 
 const initialState = {
   isLoading: true,
@@ -60,19 +61,6 @@ const parseErrorObj = (action) => {
     details: JSON.parse(_.get(data, 'details', null))
   }
 }
-
-// remove empty object, null/undefined value and empty string recursively from passed obj
-const deepClean = obj => _.transform(obj, (result, value, key) => {
-  const isCollection = _.isObject(value)
-  const cleaned = isCollection ? deepClean(value) : value
-  // exclude if empty object, null, undefined or empty string
-  if ((isCollection && _.isEmpty(cleaned)) || _.isNil(value) || value === '') {
-    return
-  }
-  _.isArray(result) ? result.push(cleaned) : (result[key] = cleaned)
-})
-
-const clean = obj => _.isObject(obj) ? deepClean(obj) : obj
 
 /**
  * Updates a product in the phase list without mutations
@@ -648,40 +636,6 @@ export const projectState = function (state=initialState, action) {
         // project's name might contain ampersand
         if (key === 'name') {
           return _.escape(srcValue)
-        }
-
-        // the number of budget qty properties in srcValue
-        // needs to be matched up with corresponding value in deliverables
-        if (key === 'budgetDetails') {
-          if (srcValue.deliverables) {
-            const allowed = srcValue.deliverables.map(v => {
-              if (v === 'dev') return 'development'
-              else if (v === 'data-science') return 'dataScience'
-              return v
-            })
-            const filtered = Object.keys(srcValue)
-              .filter(key => allowed.includes(key))
-              .reduce((obj, key) => {
-                obj[key] = srcValue[key]
-                return obj
-              }, {})
-            return { ...filtered, deliverables: srcValue.deliverables }
-          }
-          return srcValue
-        }
-
-        // reset the values when deselected
-        if (key === 'deploymentTargets') {
-          if (!action.payload.deliverables) {
-            srcValue = []
-          }
-          return srcValue
-        }
-        if (key === 'progressiveResponsive') {
-          if (!(action.payload.targetDevices && action.payload.targetDevices.includes('web-browser'))) {
-            srcValue = ''
-          }
-          return srcValue
         }
       }
     )

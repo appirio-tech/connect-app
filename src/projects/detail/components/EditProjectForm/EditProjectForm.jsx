@@ -23,6 +23,7 @@ import {
   STEP_VISIBILITY,
   STEP_STATE,
 } from '../../../../helpers/wizardHelper'
+import { clean } from '../../../../helpers/utils'
 
 import './EditProjectForm.scss'
 
@@ -151,6 +152,17 @@ class EditProjectForm extends Component {
           template: updatedTemplate,
           project: hidedSomeNodes ? nextProps.project : this.state.project,
         })
+
+        // re-check again if any hidden values when an option is deselected
+        const updatedProject = clean(removeValuesOfHiddenNodes(updatedTemplate, nextProps.project))
+        const skipProperties = ['members', 'invites']
+        const clearUpdatedProject = clean(_.omit(updatedProject, [...skipProperties, 'isDirty']))
+        const clearUpdatedNonDirtyProject = clean(_.omit(nextProps.projectNonDirty, skipProperties))
+        const isDirty = !_.isEqual(clearUpdatedProject, clearUpdatedNonDirtyProject)
+        // update the state, always use this flag to check if changed
+        this.setState({
+          isProjectDirty: isDirty,
+        })
       }
     }
   }
@@ -206,7 +218,7 @@ class EditProjectForm extends Component {
   }
 
   isChanged() {
-    return !!this.props.project.isDirty
+    return !!this.state.isProjectDirty
   }
 
   enableButton() {
