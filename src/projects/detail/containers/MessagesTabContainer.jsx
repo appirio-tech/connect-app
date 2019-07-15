@@ -394,7 +394,8 @@ const mapStateToProps = ({
     error: projectTopics.error,
     projectMembers,
     phasesTopics,
-    allMembers
+    allMembers,
+    canAccessPrivatePosts,
   }
 }
 
