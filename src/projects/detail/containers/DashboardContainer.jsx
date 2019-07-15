@@ -43,6 +43,7 @@ import { getProjectTemplateById } from '../../../helpers/templates'
 import PERMISSIONS from '../../../config/permissions'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
+import ProjectEstimation from '../../create/components/ProjectEstimation'
 
 import {
   PHASE_STATUS_ACTIVE,
@@ -188,6 +189,7 @@ class DashboardContainer extends React.Component {
       updateProjectAttachment,
       removeProjectAttachment,
       location,
+      estimationQuestion,
     } = this.props
     const { matchesPostUrl, matchesTopicUrl, topicIdForPost } = this.state
 
@@ -275,14 +277,23 @@ class DashboardContainer extends React.Component {
               onNotificationRead={this.onNotificationRead}
             />
           }
-          <button type="button" onClick={this.toggleDrawer}>Toggle drawer</button>
+          {/* <button type="button" onClick={this.toggleDrawer}>Toggle drawer</button> */}
+          {!!estimationQuestion &&
+            <ProjectEstimation
+              onClick={this.toggleDrawer}
+              question={estimationQuestion}
+              template={template}
+              project={project}
+              theme="dashboard"
+            />
+          }
           {/* The following containerStyle and overlayStyle are needed for shrink drawer and overlay size for not
               covering sidebar and topbar
            */}
           <ProjectScopeDrawer
             open={this.state.open}
-            containerStyle={{top: '110px', height: 'calc(100% - 110px)', display: 'flex', flexDirection: 'column' }}
-            overlayStyle={{top: '110px', left: '360px'}}
+            containerStyle={{top: '60px', height: 'calc(100% - 60px)', display: 'flex', flexDirection: 'column' }}
+            overlayStyle={{top: '60px', left: '280px'}}
             onRequestChange={(open) => this.setState({open})}
             isSuperUser={isSuperUser}
             project={project}

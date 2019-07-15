@@ -27,7 +27,6 @@ import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../act
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import NotificationsReader from '../../../components/NotificationsReader'
-import ProjectEstimation from '../../create/components/ProjectEstimation'
 import { getProjectProductTemplates } from '../../../helpers/templates'
 
 // This handles showing a spinner while the state is being loaded async
@@ -87,7 +86,6 @@ class SpecificationContainer extends Component {
       template,
       allProductTemplates,
       productCategories,
-      estimationQuestion,
       phases,
       isManageUser,
       feeds,
@@ -154,14 +152,6 @@ class SpecificationContainer extends Component {
             productCategories={productCategories}
             showHidden
           />
-          {!!estimationQuestion &&
-            <ProjectEstimation
-              question={estimationQuestion}
-              template={template}
-              project={project}
-              theme="dashboard"
-            />
-          }
         </TwoColsLayout.Content>
       </TwoColsLayout>
     )
