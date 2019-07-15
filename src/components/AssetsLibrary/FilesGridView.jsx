@@ -11,7 +11,7 @@ import EditFileAttachment from '../LinksMenu/EditFileAttachment'
 import SubFolder from './SubFolder'
 import ItemOperations from './ItemOperations'
 
-import FolderIcon from '../../assets/icons/default.svg'
+import FolderIcon from '../../assets/icons/v.2.5/icon-folder-small.svg'
 
 import './GridView.scss'
 

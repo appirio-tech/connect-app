@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import React from 'react'
 import PT from 'prop-types'
+import cn from 'classnames'
 
 import styles from './MenuItem.scss'
 
@@ -8,6 +9,7 @@ const MenuItem = ({
   label,
   to,
   Icon,
+  iconClassName,
   exact,
   isActive,
 }) => (
@@ -19,7 +21,7 @@ const MenuItem = ({
       exact={exact}
       isActive={isActive}
     >
-      <Icon className={styles.icon} />
+      {!!Icon && <Icon className={cn(styles.icon, styles[iconClassName])} />}
       {label}
     </NavLink>
   </li>
@@ -32,7 +34,8 @@ MenuItem.defaultProps = {
 MenuItem.propTypes = {
   label: PT.string.isRequired,
   to: PT.string.isRequired,
-  Icon: PT.func.isRequired,
+  Icon: PT.func,
+  iconClassName: PT.string,
   exact: PT.bool,
   isActive: PT.func
 }

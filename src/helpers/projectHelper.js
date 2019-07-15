@@ -13,7 +13,11 @@ import {
   NEW_PROJECT_PATH,
 } from '../config/constants'
 
-import FileIcon from '../assets/icons/file.svg'
+import ScopeIcon from '../assets/icons/text-16px_list-bullet.svg'
+import DashboardIcon from '../assets/icons/v.2.5/icon-dashboard.svg'
+import MessagesIcon from '../assets/icons/v.2.5/icon-messages.svg'
+// import ReportsIcon from '../assets/icons/v.2.5/icon-reports.svg'
+import AssetsLibraryIcon from '../assets/icons/v.2.5/icon-assets-library.svg'
 import InvisibleIcon from '../assets/icons/invisible.svg'
 
 import { formatNumberWithCommas } from './format'
@@ -335,20 +339,20 @@ export function getNewProjectLink(orgConfigs) {
 export function getProjectNavLinks(project, projectId) {
   // choose set of menu links based on the project version
   const navLinks = project.version === 'v3' ? [
-    { label: 'Dashboard', to: `/projects/${projectId}`, Icon: FileIcon },
-    { label: 'Messages', to: `/projects/${projectId}/messages`, Icon: FileIcon },
-    { label: 'Scope', to: `/projects/${projectId}/scope`, Icon: FileIcon },
-    // { label: 'Reports', to: '#', Icon: FileIcon },
-    { label: 'Assets Library', to: `/projects/${projectId}/assets`, Icon: FileIcon },
+    { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
+    { label: 'Messages', to: `/projects/${projectId}/messages`, Icon: MessagesIcon, iconClassName: 'stroke' },
+    { label: 'Scope', to: `/projects/${projectId}/scope`, Icon: ScopeIcon, iconClassName: 'fill' },
+    // { label: 'Reports', to: '#', Icon: ReportsIcon },
+    { label: 'Assets Library', to: `/projects/${projectId}/assets`, Icon: AssetsLibraryIcon, iconClassName: 'stroke' },
   ] : [
-    { label: 'Dashboard', to: `/projects/${projectId}`, Icon: FileIcon },
-    { label: 'Specification', to: `/projects/${projectId}/specification`, Icon: FileIcon },
+    { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
+    { label: 'Specification', to: `/projects/${projectId}/specification`, Icon: ScopeIcon, iconClassName: 'fill' },
   ]
 
   // `Discussions` items can be added as soon as project is loaded
   // if discussions are not hidden for it
   if (project.details && !project.details.hideDiscussions) {
-    navLinks.push({ label: 'Discussions', to: `/projects/${projectId}/discussions`, Icon: InvisibleIcon })
+    navLinks.push({ label: 'Discussions', to: `/projects/${projectId}/discussions`, Icon: InvisibleIcon, iconClassName: 'fill' })
   }
 
   return navLinks

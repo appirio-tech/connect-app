@@ -2,31 +2,40 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import UserSummary from '../UserSummary/UserSummary'
 import MenuList from '../MenuList/MenuList'
-import FileIcon from '../../assets/icons/file.svg'
+import NotificationsIcon from '../../assets/icons/ui-bell.svg'
+import AllProjectsIcon from '../../assets/icons/v.2.5/icon-all-projects.svg'
+import MyProfileIcon from '../../assets/icons/v.2.5/icon-my-profile.svg'
+import NotificationSettingsIcon from '../../assets/icons/v.2.5/icon-notification-setting.svg'
+import AccountSecurityIcon from '../../assets/icons/v.2.5/icon-account-security.svg'
 
 import './UserSidebar.scss'
 
 const navLinks = [{
   label: 'ALL PROJECTS',
   to: '/projects',
-  Icon: FileIcon,
+  Icon: AllProjectsIcon,
+  iconClassName: 'fill',
   exact: false,
 }, {
   label: 'MY PROFILE',
   to: '/settings/profile',
-  Icon: FileIcon,
+  Icon: MyProfileIcon,
+  iconClassName: 'fill',
 }, {
   label: 'NOTIFICATION SETTINGS',
   to: '/settings/notifications',
-  Icon: FileIcon,
+  Icon: NotificationSettingsIcon,
+  iconClassName: 'fill',
 }, {
   label: 'ACCOUNT & SECURITY',
   to: '/settings/account',
-  Icon: FileIcon,
+  Icon: AccountSecurityIcon,
+  iconClassName: 'fill',
 }, {
   label: 'NOTIFICATIONS',
   to: '/notifications',
-  Icon: FileIcon,
+  Icon: NotificationsIcon,
+  iconClassName: 'fill',
 }]
 
 const UserSidebar = ({user}) => {
