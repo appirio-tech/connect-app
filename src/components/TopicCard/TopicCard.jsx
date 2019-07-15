@@ -25,14 +25,15 @@ const TopicCard = ({
   notifications,
   author,
   allMembers,
-  unread
+  unread,
+  lastActivityAt,
 }) => {
   const formatDate = dateStr => moment(dateStr).format('MMMM D')
   const pluralize = (name, num) => `${name}${num > 1 ? 's' : ''}`
 
   const lastMessageUserId = last(posts).userId
   const lastMessageAuthor = get(allMembers, lastMessageUserId)
-  const lastMessageDate = formatDate(last(posts).date)
+  const lastMessageDate = formatDate(lastActivityAt)
   const numNewMessages = get(notifications, 'length')
   const newMessagesFromDate = formatDate(get(notifications, '0.date'))
   const numFiles = sumBy(posts, p => get(p, 'attachments.length', 0))
@@ -113,7 +114,8 @@ TopicCard.propTypes = {
   notifications: PropTypes.array,
   author: PropTypes.object,
   allMembers: PropTypes.object,
-  unread: PropTypes.bool
+  unread: PropTypes.bool,
+  lastActivityAt: PropTypes.string,
 }
 
 export default TopicCard

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { get } from 'lodash'
+import { get, orderBy } from 'lodash'
 
 import CardListHeader from '../CardListHeader/CardListHeader'
 import TopicCard from '../TopicCard/TopicCard'
@@ -41,9 +41,10 @@ class TopicGroup extends React.Component {
       unread
     } = this.props
     const { onlyAdmin } = this.state
+    const sortedTopics = orderBy(topics || [], ['lastActivityAt'], ['desc'])
     const filteredTopics = onlyAdmin
-      ? topics.filter(topic => topic.tag === PROJECT_FEED_TYPE_MESSAGES)
-      : topics
+      ? sortedTopics.filter(topic => topic.tag === PROJECT_FEED_TYPE_MESSAGES)
+      : sortedTopics
 
     const privateTopicsLength = topics ? topics.filter(topic => topic.tag === PROJECT_FEED_TYPE_MESSAGES).length : 0
 
@@ -72,6 +73,7 @@ class TopicGroup extends React.Component {
               allMembers={authors}
               isTopcoderOnly={topic.tag === PROJECT_FEED_TYPE_MESSAGES}
               unread={unread}
+              lastActivityAt={topic.lastActivityAt}
             />
           ))
         ) : (
