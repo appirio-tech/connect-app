@@ -75,7 +75,14 @@
   font-size: 15px;
   font-weight: 400;
   line-height: 30px;
+  min-width: 0;
   text-align: left;
+
+  > p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .item-modified {

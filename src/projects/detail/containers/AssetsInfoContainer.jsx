@@ -548,7 +548,7 @@ class AssetsInfoContainer extends React.Component {
 
     const formatModifyDate = (link) => ((link.updatedAt) ? moment(link.updatedAt).format('MM/DD/YYYY h:mm A') : '—')
 
-    const formatFolderTitle = (linkTitle) => ((linkTitle.length > 27) ? linkTitle.substr(0, 27)+'...' : linkTitle)
+    const formatFolderTitle = (linkTitle) => linkTitle
 
     return (
       <div styleName="assets-info-wrapper">

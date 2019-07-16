@@ -99,7 +99,7 @@ class SubFolder extends React.Component {
               }
               return (<li styleName="assets-gridview-row" key={`childlink-${childLink.address}-${i}`}>
                 <div styleName="flex-item item-type"><img width={42} height={42} src={ iconPath } /></div>
-                <div styleName="flex-item item-name"> {renderLink(childLink)}</div>
+                <div styleName="flex-item item-name"><p>{renderLink(childLink)}</p></div>
                 <div styleName="flex-item item-modified">{formatModifyDate(childLink)}</div>
                 <div styleName="flex-item item-action">
                   {childLink.deletable && this.hasAccess(childLink.createdBy) && (

@@ -124,7 +124,7 @@ const FilesGridView = ({
                 return (
                   <li styleName="assets-gridview-row" onClick={changeSubFolder} key={'assets-gridview-folder-' + idx}>
                     <div styleName="flex-item item-type"><FolderIcon /></div>
-                    <div styleName="flex-item item-name hand">{formatFolderTitle(link.title)}</div>
+                    <div styleName="flex-item item-name hand"><p>{formatFolderTitle(link.title)}</p></div>
                     <div styleName="flex-item item-modified">{formatModifyDate(link)}</div>
                     <div styleName="flex-item item-action"/>
                   </li>)
@@ -160,7 +160,7 @@ const FilesGridView = ({
                     <div styleName="flex-item item-type">
                       <img width={42} height={42} src={iconPath} />
                     </div>
-                    <div styleName="flex-item item-name">{renderLink(link)}</div>
+                    <div styleName="flex-item item-name"><p>{renderLink(link)}</p></div>
                     <div styleName="flex-item item-modified">{formatModifyDate(link)}</div>
                     <div styleName="flex-item item-action">
                       {canEdit && (
