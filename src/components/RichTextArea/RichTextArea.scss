@@ -6,6 +6,21 @@
     padding: 2 * $base-unit 0 0;
     position: relative;
 
+    .title-edit-actions {
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: $tc-gray-10;
+      border-radius: 3px;
+
+      & > span {
+        padding: 8px;
+        display: inline-block;
+        cursor: pointer;
+      }
+    }
+
     &.expanded {
       .tc-textarea .textarea-footer .textarea-footer-inner {
         display: block;

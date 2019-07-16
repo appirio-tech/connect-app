@@ -97,6 +97,10 @@
       background-color: $tc-orange-10;
     }
 
+    &.panel-links-container {
+      background: none;
+    }
+
     .panel-body {
       &.active {
         position: relative;

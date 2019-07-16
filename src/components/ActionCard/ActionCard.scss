@@ -617,7 +617,8 @@
 
   .delete-post-dialog-overlay {
     background: rgba($tc-gray-90, 0.6);
-    z-index: 20;
+    // As the posts are moved to topic drawer, need high z value to raise above them
+    z-index: 1301;
     position: fixed;
     top: 0;
     left: 0;

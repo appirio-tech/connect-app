@@ -268,14 +268,30 @@ class EditProjectForm extends Component {
 
 
   render() {
-    const { isEdittable, showHidden, productTemplates, productCategories, disableAutoScrolling } = this.props
+    const { isEdittable, showHidden, productTemplates, productCategories, onlyShowSummary, isInsideDrawer, disableAutoScrolling } = this.props
     const { template } = this.state
-    const { project, dirtyProject } = this.state
+    const { project } = this.state
+    let { dirtyProject } = this.state
     const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
       const anySectionInvalid = _.some(template.sections, (s) => s.isInvalid)
+      const currentWizardStep = {
+        sectionIndex: idx,
+        subSectionIndex: 0,
+        questionIndex: 0,
+        optionIndex: 0,
+      }
+      let hide = false
+      if (onlyShowSummary) {
+        hide = idx < (template.sections.length - 1)
+        if (!hide) {
+          dirtyProject = project
+        } else {
+          return null
+        }
+      }
       return (
-        <div key={idx}>
+        <div className="spec-section-container" key={idx}>
           <SpecSection
             {...section}
             project={project}
@@ -296,6 +312,7 @@ class EditProjectForm extends Component {
             removeAttachment={this.props.removeAttachment}
             attachmentsStorePath={this.props.attachmentsStorePath}
             canManageAttachments={this.props.canManageAttachments}
+            currentWizardStep={currentWizardStep}
           />
           <div className="section-footer section-footer-spec">
             <button className="tc-btn tc-btn-primary tc-btn-md"
@@ -311,6 +328,7 @@ class EditProjectForm extends Component {
       <div
         className={cn(
           'editProjectForm', {
+            ['is-inside-drawer']: isInsideDrawer,
             [`form-theme-${template.theme}`]: template.theme
           }
         )}
@@ -355,6 +373,8 @@ class EditProjectForm extends Component {
 
 EditProjectForm.defaultProps = {
   shouldUpdateTemplate: false,
+  onlyShowSummary: false,
+  isInsideDrawer: false,
   disableAutoScrolling: false,
 }
 
@@ -373,6 +393,8 @@ EditProjectForm.propTypes = {
   updateAttachment: PropTypes.func.isRequired,
   removeAttachment: PropTypes.func.isRequired,
   shouldUpdateTemplate: PropTypes.bool,
+  onlyShowSummary: PropTypes.bool,
+  isInsideDrawer: PropTypes.bool,
   disableAutoScrolling: PropTypes.bool,
 }
 

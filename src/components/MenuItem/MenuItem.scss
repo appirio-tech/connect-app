@@ -1,0 +1,72 @@
+@import "../../styles/includes";
+
+.navItem {
+    @include roboto;
+
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    margin-right: -1px;
+    position: relative;
+    font-size: 14px;
+
+    &,
+    &:avtive,
+    &:visited,
+    &:hover {
+      color: $tc-gray-80;
+    }
+  }
+
+  .icon {
+    margin-right: 10px;
+    width: 24px;
+
+    &.stroke {
+      stroke: $tc-gray-50;
+    }
+
+    &.fille {
+      fill: $tc-gray-50;
+    }
+  }
+
+  .active .icon.stroke g,
+  .active .icon.stroke path {
+    stroke: $tc-dark-blue-100;
+  }
+
+  .active .icon.fill circle,
+  .active .icon.fill path {
+    fill: $tc-dark-blue-100;
+  }
+
+  .active {
+    @include roboto-bold;
+    background-color: $tc-gray-neutral-dark;
+    color: $tc-gray-90;
+
+    &::after,
+    &::before {
+      content: "";
+      position: absolute;
+      height: 12px;
+      width: 12px;
+      background: none;
+      pointer-events: none;
+      border-bottom-right-radius: 8px;
+      box-shadow: 2px 2px $tc-gray-neutral-dark;
+    }
+
+    &::before {
+      right: 0;
+      top: 0;
+      transform: translateY(-100%);
+    }
+
+    &::after {
+      right: 0;
+      bottom: 0;
+      transform: translateY(100%) rotate(270deg);
+    }
+  }

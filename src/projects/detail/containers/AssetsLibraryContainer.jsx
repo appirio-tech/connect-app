@@ -1,6 +1,6 @@
 /**
- * ProjectPlanContainer container
- * displays content of the Project Plan tab
+ * AssetsInfoContainer container
+ * displays content of the Assets Info tab
  *
  * NOTE data is loaded by the parent ProjectDetail component
  */
@@ -11,40 +11,30 @@ import { withRouter } from 'react-router-dom'
 import _ from 'lodash'
 
 import {
-  updateProduct,
-  fireProductDirty,
-  fireProductDirtyUndo,
-  deleteProjectPhase,
   expandProjectPhase,
-  collapseProjectPhase,
   collapseAllProjectPhases,
 } from '../../actions/project'
-import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
 import TwoColsLayout from '../../../components/TwoColsLayout'
-import ProjectStages from '../components/ProjectStages'
-import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
+
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
+import AssetsInfoContainer from './AssetsInfoContainer'
 import NotificationsReader from '../../../components/NotificationsReader'
 import {
   SCREEN_BREAKPOINT_MD,
-  PHASE_STATUS_DRAFT,
-  PROJECT_STATUS_COMPLETED,
   PHASE_STATUS_ACTIVE,
-  PROJECT_STATUS_CANCELLED,
   PROJECT_FEED_TYPE_PRIMARY,
   PROJECT_FEED_TYPE_MESSAGES,
   EVENT_TYPE,
 } from '../../../config/constants'
 import Sticky from '../../../components/Sticky'
-import { Link } from 'react-router-dom'
 import PERMISSIONS from '../../../config/permissions'
 import { checkPermission } from '../../../helpers/permissions'
 
-import './ProjectPlanContainer.scss'
+import './AssetsLibraryContainer.scss'
 
-class ProjectPlanContainer extends React.Component {
+class AssetsLibraryContainer extends React.Component {
   constructor(props) {
     super(props)
 
@@ -92,25 +82,12 @@ class ProjectPlanContainer extends React.Component {
       feeds,
       isFeedsLoading,
       phases,
-      phasesNonDirty,
       productsTimelines,
       phasesTopics,
       isProcessing,
-      isLoadingPhases,
       location,
     } = this.props
 
-    // manager user sees all phases
-    // customer user doesn't see unplanned (draft) phases
-    const visiblePhases = phases && phases.filter((phase) => (
-      isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
-    ))
-    const visiblePhasesIds = _.map(visiblePhases, 'id')
-    const visiblePhasesNonDirty = phasesNonDirty && phasesNonDirty.filter((phaseNonDirty) => (
-      _.includes(visiblePhasesIds, phaseNonDirty.id)
-    ))
-
-    const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
     const isProjectPlan = true
 
     const leftArea = (
@@ -145,7 +122,7 @@ class ProjectPlanContainer extends React.Component {
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
               if (matches) {
-                return <Sticky top={110}>{leftArea}</Sticky>
+                return <Sticky top={60}>{leftArea}</Sticky>
               } else {
                 return leftArea
               }
@@ -153,20 +130,15 @@ class ProjectPlanContainer extends React.Component {
           </MediaQuery>
         </TwoColsLayout.Sidebar>
         <TwoColsLayout.Content>
-          {visiblePhases && visiblePhases.length > 0 ? (
-            <ProjectStages
-              {...{
-                ...this.props,
-                phases: visiblePhases,
-                phasesNonDirty: visiblePhasesNonDirty,
-              }}
-            />
-          ) : (
-            <ProjectPlanEmpty isManageUser={isManageUser} />
-          )}
-          {isProjectLive && checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project, phases)  && !isLoadingPhases && (<div styleName="add-button-container">
-            <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
-          </div>)}
+          <AssetsInfoContainer
+            currentMemberRole={currentMemberRole}
+            phases={phases}
+            project={project}
+            isSuperUser={isSuperUser}
+            isManageUser={isManageUser}
+            feeds={feeds}
+            phasesTopics={phasesTopics}
+          />
         </TwoColsLayout.Content>
 
       </TwoColsLayout>
@@ -174,18 +146,17 @@ class ProjectPlanContainer extends React.Component {
   }
 }
 
-ProjectPlanContainer.propTypes = {
+AssetsLibraryContainer.propTypes = {
   currentMemberRole: PT.string.isRequired,
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
   isManageUser: PT.bool.isRequired,
   project: PT.object.isRequired,
-  productTemplates: PT.array.isRequired,
   phases: PT.array.isRequired,
   productsTimelines: PT.object.isRequired,
 }
 
-const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates }) => {
+const mapStateToProps = ({ projectState, projectTopics, phasesTopics }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -193,29 +164,16 @@ const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates 
   }
 
   return {
-    productTemplates: templates.productTemplates,
-    productCategories: templates.productCategories,
     phases: projectState.phases,
-    phasesNonDirty: projectState.phasesNonDirty,
     feeds: allFeed,
     isFeedsLoading: projectTopics.isLoading,
     phasesTopics,
-    phasesStates: projectState.phasesStates,
-    isLoadingPhases: projectState.isLoadingPhases,
   }
 }
 
 const mapDispatchToProps = {
-  updateProduct,
-  fireProductDirty,
-  fireProductDirtyUndo,
-  addProductAttachment,
-  updateProductAttachment,
-  removeProductAttachment,
-  deleteProjectPhase,
   expandProjectPhase,
-  collapseProjectPhase,
   collapseAllProjectPhases,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProjectPlanContainer))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AssetsLibraryContainer))
