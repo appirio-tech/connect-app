@@ -35,6 +35,7 @@ class TemplateForm extends Component {
       primaryKeyType: '',
       primaryKeyValue: null,
       verifyPrimaryKeyValue: null,
+      isNewVersion: false,
       forcedError: {
         verifyPrimaryKeyValue: null,
       }
@@ -50,6 +51,7 @@ class TemplateForm extends Component {
     this.onChangeDropdown = this.onChangeDropdown.bind(this)
     this.onVerifyPrimaryKeyValueChange = this.onVerifyPrimaryKeyValueChange.bind(this)
     this.init = this.init.bind(this)
+    this.onCreateNewVersion = this.onCreateNewVersion.bind(this)
   }
 
   componentDidMount() {
@@ -65,12 +67,13 @@ class TemplateForm extends Component {
   }
 
   init(props) {
-    const { metadata, metadataType, isNew } = props
+    const { metadata, metadataType, isNew, metadataWithVersion } = props
     const name = metadataType
-    const type = metadata && metadata.hasOwnProperty('id') ? 'number' : 'text'
+    const type = metadata && metadata.hasOwnProperty('id') && !metadataWithVersion ? 'number' : 'text'
     let primaryKeyValue = null
     primaryKeyValue = metadata && metadata.hasOwnProperty('id') ? metadata['id'] : null
     primaryKeyValue = metadata && !metadata.hasOwnProperty('id') ? metadata['key'] : primaryKeyValue
+    primaryKeyValue = metadata && metadata.hasOwnProperty('key') && metadataWithVersion ? metadata['key'] : primaryKeyValue
 
     this.setState({
       // productCategories: metadataType === 'productTemplate' ? this.getProductCategoryOptions() : [],
@@ -90,9 +93,10 @@ class TemplateForm extends Component {
     const isDropdown = type === 'dropdown'
     const isObject = type === 'object'
     const isJSON = type === 'json'
+    const isJSONFullScreen = type === 'jsonfullscreen'
     const isCheckbox = type === 'checkbox'
     const isTextarea = type === 'textarea'
-    const isTextBox = !isDropdown && !isCheckbox && !isObject && !isJSON && !isTextarea
+    const isTextBox = !isDropdown && !isCheckbox && !isObject && !isJSON && !isTextarea && !isJSONFullScreen
     const options = isDropdown ? field['options'] : []
     let value = field['value']
     let isReadOnly = false
@@ -107,8 +111,8 @@ class TemplateForm extends Component {
           isReadOnly = true
         }
       }
-      if (!values.hasOwnProperty('id') && label === 'key') {
-        if (!this.props.isNew) {
+      if ((!values.hasOwnProperty('id') || this.props.metadataWithVersion) && label === 'key') {
+        if (!this.props.isNew || this.state.isNewVersion) {
           isReadOnly = true
         }
       }
@@ -121,8 +125,8 @@ class TemplateForm extends Component {
     }
 
     return (
-      !isHidden && <div className="field" key={label}>
-        <div className="label">{`${!isCheckbox ? label : ''}`}</div>
+      !isHidden && <div className={`field ${isReadOnly ? 'read-only' : ''}`} key={label}>
+        <div className="label">{`${!isCheckbox && !isJSONFullScreen ? label : ''}`}</div>
         {
           isTextBox && (
             <TCFormFields.TextInput
@@ -159,7 +163,10 @@ class TemplateForm extends Component {
                 name={label}
                 options={options}
                 theme="default max-height"
-                onSelect={ this.onChangeDropdown }
+                onSelect={(option) => {
+                  this.props.dropdownChange(label, option)
+                  this.onChangeDropdown(option)
+                }}
                 value={value}
                 required
               />
@@ -196,9 +203,28 @@ class TemplateForm extends Component {
                 value={value}
                 ace={ace}
                 mode="code"
-                allowedModes={ ['code', 'tree', 'view']}
+                allowedModes={['code', 'tree', 'view']}
                 theme="ace/theme/github"
                 onChange={(json) => { this.onJSONEdit(field, json) }}
+              />
+            </div>
+          )
+        }
+        {
+          isJSONFullScreen && (
+            <div className="json_editor_wrapper">
+              <div>
+                <div className="label">{label}</div>
+                <button type="button" className="tc-btn tc-btn-primary tc-btn-sm maximize-btn" onClick={this.props.enterFullScreen}>Maximize</button>
+              </div>
+              <JsonEditor
+                ref={this.props.setJsonEditorRef}
+                value={value}
+                ace={ace}
+                mode="code"
+                allowedModes={['code', 'tree', 'view']}
+                theme="ace/theme/github"
+                onChange={(json) => { this.props.changeJSONEdit(json) }}
               />
             </div>
           )
@@ -224,7 +250,7 @@ class TemplateForm extends Component {
     }
 
     if (state.verifyPrimaryKeyValue !== null && state.verifyPrimaryKeyValue !== state.primaryKeyValue.toString()) {
-      errors.verifyPrimaryKeyValue = `The ${state.primaryKeyType === 'number' ? 'id' : 'key'} do not match`
+      errors.verifyPrimaryKeyValue = `The ${state.primaryKeyType === 'number' ? 'id' : 'key'} does not match`
     }
     return errors
   }
@@ -242,6 +268,13 @@ class TemplateForm extends Component {
     this.props.createTemplate(true)
   }
 
+  onCreateNewVersion() {
+    this.setState({
+      isNewVersion: true,
+    })
+    this.props.createNewVersion()
+  }
+
   onSave() {
     const { saveTemplate } = this.props
     const { primaryKeyValue, values } = this.state
@@ -257,6 +290,9 @@ class TemplateForm extends Component {
   showDelete() {
     this.setState({
       showDeleteConfirm: true,
+      forcedError: {
+        verifyPrimaryKeyValue: null,
+      }
     })
   }
 
@@ -320,7 +356,7 @@ class TemplateForm extends Component {
   }
 
   render() {
-    const { fields } = this.props
+    const { fields, metadata, metadataWithVersion } = this.props
     const {
       // name,
       showDeleteConfirm,
@@ -340,6 +376,19 @@ class TemplateForm extends Component {
         >
           {
             _.map(fields, (field) => this.getField(field))
+          }
+          {
+            metadataWithVersion && metadata.revision && (
+              <div className="history-field">
+                <div className="label">revision</div>
+                <span className="field-value">
+                  {metadata.revision}
+                </span>
+                <span className="title-action" onClick={this.props.toggleModalOpen}>
+                  See history
+                </span>
+              </div>
+            )
           }
           <div className="controls">
             <button
@@ -367,6 +416,21 @@ class TemplateForm extends Component {
               Delete
             </button>
           </div>
+          {
+            metadataWithVersion && (
+              <div className="controls">
+                <button
+                  type="submit"
+                  className="tc-btn new-version-btn"
+                  disabled={!this.state.valid || !this.state.textAreaValid}
+                  onClick={this.onCreateNewVersion}
+                  disabled={this.props.isNew}
+                >
+                  Create New Version
+                </button>
+              </div>
+            )
+          }
         </Formsy.Form>
         <Modal
           isOpen={ showDeleteConfirm }
@@ -414,18 +478,36 @@ class TemplateForm extends Component {
   }
 }
 
+TemplateForm.defaultProps = {
+  enterFullScreen: () => {},
+  createNewVersion: () => {},
+  dropdownChange: () => {},
+  changeJSONEdit: () => {},
+  toggleModalOpen: () => {},
+  productCategories: [],
+  projectTypes: [],
+  metadataWithVersion: false,
+}
+
 TemplateForm.propTypes = {
   isNew: PropTypes.bool.isRequired,
+  metadataWithVersion: PropTypes.bool,
   fields: PropTypes.array.isRequired,
-  productCategories: PropTypes.array.isRequired,
-  projectTypes: PropTypes.array.isRequired,
+  productCategories: PropTypes.array,
+  projectTypes: PropTypes.array,
   metadata: PropTypes.object.isRequired,
   metadataType: PropTypes.string.isRequired,
   deleteTemplate: PropTypes.func.isRequired,
   saveTemplate: PropTypes.func.isRequired,
   changeTemplate: PropTypes.func.isRequired,
   createTemplate: PropTypes.func.isRequired,
+  createNewVersion: PropTypes.func,
+  dropdownChange: PropTypes.func,
+  changeJSONEdit: PropTypes.func,
+  toggleModalOpen: PropTypes.func,
+  setJsonEditorRef: PropTypes.func.isRequired,
   loadProjectMetadata: PropTypes.func.isRequired,
+  enterFullScreen: PropTypes.func,
 }
 
 export default TemplateForm

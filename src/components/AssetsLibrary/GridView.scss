@@ -1,0 +1,137 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.assets-gridview-title {
+  color: $tc-gray-90;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.assets-gridview-header,
+.assets-gridview-row {
+  border-bottom: 1px solid $tc-gray-10;
+  display: flex;
+  width: 100%;
+}
+
+.assets-gridview-header {
+  padding: 10px 0;
+}
+
+.assets-gridview-row {
+  padding: 15px 0;
+
+  &:hover {
+    background-color: rgba($tc-dark-blue-10, .5);
+  }
+}
+
+.assets-gridview-container {
+  margin-top: 30px;
+}
+
+.flex-item-title, .flex-item {
+  -webkit-align-items: center;
+  align-items: center;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: left;
+}
+
+.flex-item-title {
+  color: $tc-gray-50;
+}
+
+.flex-item,
+.flex-item a {
+  color: $tc-gray-90;
+}
+
+.item-type {
+  -webkit-box-flex: 0;
+  -ms-flex: none;
+  flex: none;
+  width: 60px;
+
+  svg, img {
+    height: 30px;
+    width: 30px;
+    margin-left: 4px;
+  }
+}
+
+.item-name {
+  -webkit-box-flex: 8;
+  -ms-flex: 8 1 505px;
+  flex: 8 1 505px;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 30px;
+  min-width: 0;
+  text-align: left;
+
+  > p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.item-modified {
+  -webkit-box-flex: 0;
+  -ms-flex: none;
+  flex: none;
+  width: 140px;
+  text-align: right;
+  display: inline-block;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 30px;
+}
+
+.item-action {
+  -webkit-box-flex: 0;
+  -ms-flex: none;
+  flex: none;
+  width: 100px;
+  justify-content: flex-end;
+  padding-right: 4px;
+}
+
+.item-action .link-buttons {
+  margin: 0;
+}
+
+.delete-confirmation-modal {
+  position: relative;
+  z-index: 2;
+}
+
+.hand {
+  cursor: pointer;
+}
+
+.assets-gridview-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: $tc-white;
+  opacity: 0.8;
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.assets-gridview-container-active {
+  position: relative;
+}

@@ -4,7 +4,6 @@
   .project-info {
     display: flex;
     flex-direction: column;
-    background-color: $tc-white;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
     padding-bottom: 25px;
@@ -51,43 +50,36 @@
       text-transform: uppercase;
     }
 
-    .project-status-info {
-      display: flex;
-      justify-content: space-between;
-    }
-
     .project-status-time {
       @include roboto;
-      color: $tc-gray-50;
+      color: $tc-gray-70;
       font-size: 10px;
-      letter-spacing: 0.4px;
-      line-height: 15px;
+      letter-spacing: 0.8px;
+      line-height: 20px;
       margin-top: $base_unit;
       text-transform: uppercase;
       white-space: nowrap;
+      float: left;
     }
 
     .project-status-ref {
       @include roboto-medium;
-      background-color: $tc-gray-05;
+      background-color: $tc-gray-10;
       border-radius: 4px;
       color: $tc-gray-50;
       font-size: 13px;
       height: 20px;
       line-height: 20px;
       padding: 0 2 * $base-unit;
+      margin-top: $base-unit;
       white-space: nowrap;
-    }
-
-    .project-status-progress {
-      margin: 2 * $base-unit 0;
+      float: right;
     }
 
     .project-card-body {
       padding-left: 4 * $base_unit;
       padding-right: 4 * $base_unit;
       z-index: 1;
-      min-height: 135px;
 
       @media screen and (max-width: $screen-md - 1px) {
         min-height: 0;
@@ -96,7 +88,6 @@
       .project-description {
         max-height: 120px;
         min-height: 10px;
-        margin-bottom: 5 * $base_unit;
         word-wrap: break-word;
 
         @media screen and (max-width: $screen-md - 1px) {
@@ -106,20 +97,16 @@
         }
       }
     }
-
-    .project-info-header {
-      display: flex;
-      fill: $tc-gray-50;
-      justify-content: space-between;
-      padding-left: 4 * $base_unit;
-      padding-right: 4 * $base_unit;
-      padding-top: 4 * $base_unit;
-
-      .project-delete-icon {
-        margin-top: 4px;
-        margin-left: $base_unit;
-      }
-    }
   }
 }
 
+.project-name {
+  @include roboto-bold;
+
+  font-size: 22px;
+  line-height: 30px;
+  color: $tc-gray-90;
+  margin-top: 20px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

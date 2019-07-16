@@ -125,7 +125,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'dev-msinteg']
+              only: ['dev', 'dev-msinteg', 'feature/attachments_during_project_creation', 'feature/redesign']
 
       - deployProd:
           context : org-global

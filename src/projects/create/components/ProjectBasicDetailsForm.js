@@ -193,7 +193,9 @@ class ProjectBasicDetailsForm extends Component {
   }
 
   render() {
-    const { isEditable, submitBtnText, dirtyProject, productTemplates, productCategories } = this.props
+    const { isEditable, submitBtnText, dirtyProject, productTemplates, productCategories,
+      addAttachment, updateAttachment, removeAttachment, canManageAttachments, attachmentsStorePath
+    } = this.props
     const {
       project,
       canSubmit,
@@ -229,6 +231,11 @@ class ProjectBasicDetailsForm extends Component {
               dirtyProject={dirtyProject}
               productTemplates={productTemplates}
               productCategories={productCategories}
+              addAttachment={addAttachment}
+              updateAttachment={updateAttachment}
+              removeAttachment={removeAttachment}
+              attachmentsStorePath={attachmentsStorePath}
+              canManageAttachments={canManageAttachments}
               // when creating a project we can treat project as dirty,
               // as we didn't have project at all and now creating something
               isProjectDirty

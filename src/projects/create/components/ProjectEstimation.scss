@@ -85,10 +85,11 @@ $timeline-colors: (design: #5A52A3, development: #306BE1, qa: #35A3BC, deploymen
   }
 }
 
-.dashboard{
+.dashboard {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 6px 1px $tc-gray-neutral-dark;
+  cursor: pointer;
   padding: 15px 20px 20px 20px;
   margin-top: 15px;
   .title {
