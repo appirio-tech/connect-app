@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom'
 import React from 'react'
 import PT from 'prop-types'
 import cn from 'classnames'
+import NotificationBadge from '../NotificationBadge/NotificationBadge'
 
 import styles from './MenuItem.scss'
 
@@ -12,6 +13,7 @@ const MenuItem = ({
   iconClassName,
   exact,
   isActive,
+  count,
 }) => (
   <li>
     <NavLink
@@ -21,8 +23,13 @@ const MenuItem = ({
       exact={exact}
       isActive={isActive}
     >
-      {!!Icon && <Icon className={cn(styles.icon, styles[iconClassName])} />}
-      {label}
+      <span styleName="left">
+        {!!Icon && <Icon className={cn(styles.icon, styles[iconClassName])} />}
+        {label}
+      </span>
+      <span styleName="right">
+        {!!count && <NotificationBadge count={count} />}
+      </span>
     </NavLink>
   </li>
 )
@@ -37,7 +44,8 @@ MenuItem.propTypes = {
   Icon: PT.func,
   iconClassName: PT.string,
   exact: PT.bool,
-  isActive: PT.func
+  isActive: PT.func,
+  count: PT.number,
 }
 
 export default MenuItem

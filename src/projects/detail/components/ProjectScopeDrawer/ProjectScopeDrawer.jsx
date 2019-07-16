@@ -16,6 +16,7 @@ import {
 import spinnerWhileLoading from '../../../../components/LoadingSpinner'
 import EditProjectForm from '../../components/EditProjectForm'
 import './ProjectScopeDrawer.scss'
+import { updateSection } from '../../../../helpers/wizardHelper'
 
 
 // This handles showing a spinner while the state is being loaded async
@@ -66,20 +67,33 @@ class ProjectScopeDrawer extends Component {
 
     const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
-    const haveEstimateQuestion = _.some(_.get(template, 'sections', []), {id: 'summary-final'})
+    const finalSummaryIndex = _.findIndex(_.get(template, 'sections', []), {
+      id: 'summary-final'
+    })
 
-    if (haveEstimateQuestion) {
-      template.wizard = null
-      if (template.sections.length > 0) {
-        const lastSection = template.sections[template.sections.length - 1]
-        lastSection.nextButtonText = 'Save changes'
-        _.forEach(template.sections, (section) => {
-          section.hiddenOnEdit = false
-        })
-        lastSection.subSections.shift()
+    let currentWizardStep
+    let drawerTemplate = template
+
+    // if there is a final summary section, then we would show only summary section
+    // and should pass `currentWizardStep` to the `EditProjectForm`
+    if (finalSummaryIndex > -1) {
+      currentWizardStep = {
+        sectionIndex: finalSummaryIndex,
+        subSectionIndex: 0,
+        questionIndex: 0,
+        optionIndex: 0,
       }
-    }
 
+      // remove title from the final summary section
+      // TODO: this is hardcoded logic, we should come with a better solution
+      //       on how to hide the summary page title during editing
+      drawerTemplate = updateSection(template, finalSummaryIndex, {
+        subSections: {
+          // remove the first subsection which contains the title
+          $splice: [[0, 1]]
+        }
+      })
+    }
 
     return (
       <Drawer {...this.props}>
@@ -98,7 +112,7 @@ class ProjectScopeDrawer extends Component {
             <EnhancedEditProjectForm
               isInsideDrawer
               project={project}
-              template={template}
+              template={drawerTemplate}
               isEdittable={editPriv}
               submitHandler={this.saveProject}
               saving={processing}
@@ -111,7 +125,7 @@ class ProjectScopeDrawer extends Component {
               canManageAttachments={!!currentMemberRole}
               productTemplates={productTemplates}
               productCategories={productCategories}
-              onlyShowSummary={haveEstimateQuestion}
+              currentWizardStep={currentWizardStep}
               showHidden
             />
           )}

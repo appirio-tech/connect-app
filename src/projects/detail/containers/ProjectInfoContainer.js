@@ -30,6 +30,11 @@ import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
 import './ProjectInfoContainer.scss'
 import MenuList from '../../../components/MenuList/MenuList'
 import editableProjectStatus from '../../../components/ProjectStatus/editableProjectStatus'
+import {
+  filterNotificationsByProjectId,
+  filterReadNotifications,
+  filterPostsMentionNotifications,
+} from '../../../routes/notifications/helpers/notifications'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
@@ -72,6 +77,7 @@ class ProjectInfoContainer extends React.Component {
       !_.isEqual(nextProps.isProjectProcessing, this.props.isProjectProcessing) ||
       !_.isEqual(nextProps.attachmentsAwaitingPermission, this.props.attachmentsAwaitingPermission) ||
       !_.isEqual(nextProps.attachmentPermissions, this.props.attachmentPermissions) ||
+      !_.isEqual(nextProps.notifications, this.props.notifications) ||
       !_.isEqual(nextState.showDeleteConfirm, this.state.showDeleteConfirm) ||
       nextProps.activeChannelId !== this.props.activeChannelId
   }
@@ -415,7 +421,7 @@ class ProjectInfoContainer extends React.Component {
   render() {
     const { duration, showDeleteConfirm } = this.state
     const { project, currentMemberRole, isSuperUser, phases, hideInfo, hideMembers,
-      productsTimelines, isProjectProcessing } = this.props
+      productsTimelines, isProjectProcessing, notifications } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -431,7 +437,17 @@ class ProjectInfoContainer extends React.Component {
 
     const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER && project.status === 'draft'
 
-    const navLinks = getProjectNavLinks(project, project.id)
+    const projectNotReadNotifications = filterReadNotifications(filterNotificationsByProjectId(notifications, project.id))
+    const notReadMessageNotifications = filterPostsMentionNotifications(projectNotReadNotifications)
+
+    const navLinks = getProjectNavLinks(project, project.id).map((navLink) => {
+      if (navLink.label === 'Messages') {
+        navLink.count = notReadMessageNotifications.length
+      }
+
+      return navLink
+    })
+
     const canEdit = (
       project.status !== PROJECT_STATUS_COMPLETED && (isSuperUser || (currentMemberRole
       && (_.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1)))
@@ -541,11 +557,12 @@ ProjectInfoContainer.PropTypes = {
   canAccessPrivatePosts: PropTypes.bool.isRequired,
 }
 
-const mapStateToProps = ({ templates }) => {
+const mapStateToProps = ({ templates, notifications }) => {
   const canAccessPrivatePosts = checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
   return ({
     projectTemplates : templates.projectTemplates,
-    canAccessPrivatePosts
+    canAccessPrivatePosts,
+    notifications: notifications.notifications,
   })
 }
 
