@@ -9,8 +9,8 @@ import EditLinkModal from '../LinksMenu/EditLinkModal'
 import SubFolder from './SubFolder'
 import ItemOperations from './ItemOperations'
 
-import FolderIcon from '../../assets/icons/default.svg'
-import LinkIcon from '../../assets/icons/default.svg'
+import FolderIcon from '../../assets/icons/v.2.5/icon-folder-small.svg'
+import LinkIcon from '../../assets/icons/link-12.svg'
 
 import './GridView.scss'
 const LinksGridView = ({
