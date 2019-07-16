@@ -20,6 +20,7 @@ import {
   initWizard,
   removeValuesOfHiddenNodes,
   updateNodesByConditions,
+  getVisibilityForRendering,
   STEP_VISIBILITY,
   STEP_STATE,
 } from '../../../../helpers/wizardHelper'
@@ -80,6 +81,7 @@ class EditProjectForm extends Component {
     this.state = {
       template,
       hasDependantFields,
+      dirtyProject: Object.assign({}, props.project),
     }
   }
 
@@ -266,32 +268,32 @@ class EditProjectForm extends Component {
     return projectStatus === 'completed'
   }
 
-
   render() {
-    const { isEdittable, showHidden, productTemplates, productCategories, onlyShowSummary, isInsideDrawer, disableAutoScrolling } = this.props
+    const {
+      isEdittable,
+      showHidden,
+      productTemplates,
+      productCategories,
+      isInsideDrawer,
+      disableAutoScrolling,
+      currentWizardStep,
+    } = this.props
     const { template } = this.state
-    const { project } = this.state
-    let { dirtyProject } = this.state
+    const { project, dirtyProject } = this.state
     const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
       const anySectionInvalid = _.some(template.sections, (s) => s.isInvalid)
-      const currentWizardStep = {
-        sectionIndex: idx,
-        subSectionIndex: 0,
-        questionIndex: 0,
-        optionIndex: 0,
-      }
-      let hide = false
-      if (onlyShowSummary) {
-        hide = idx < (template.sections.length - 1)
-        if (!hide) {
-          dirtyProject = project
-        } else {
-          return null
-        }
-      }
       return (
-        <div className="spec-section-container" key={idx}>
+        <div
+          key={section.id || `section-${idx}`}
+          className={cn(
+            'spec-section-container', {
+              [`section-theme-${section.theme}`]: !!section.theme,
+              [`section-state-${section.stepState}`]: !!section.stepState,
+              [`section-visibility-${section.visibilityForRendering}`]: !!section.visibilityForRendering
+            }
+          )}
+        >
           <SpecSection
             {...section}
             project={project}
@@ -347,13 +349,20 @@ class EditProjectForm extends Component {
         >
           {template.sections.map(section => ({
             ...section,
-            // in edit form we always show steps in read-optimized mode
-            visibilityForRendering: STEP_VISIBILITY.READ_OPTIMIZED,
+            visibilityForRendering: currentWizardStep ?
+              // if define currentWizardStep, then use it to determine visibility of the setp
+              getVisibilityForRendering(template, section, currentWizardStep) :
+              // otherwise, in edit form we always show steps in read-optimized mode
+              STEP_VISIBILITY.READ_OPTIMIZED,
             // in edit form we always treat steps as completed aka 'prev'
             stepState: STEP_STATE.PREV
           })).filter((section) => (
-            // hide sections in edit mode
-            !section.hiddenOnEdit
+            // hide if we are in a wizard mode and section is hidden for now
+            section.visibilityForRendering !== STEP_VISIBILITY.NONE &&
+            // hide if section is hidden by condition
+            (!_.get(section, '__wizard.hiddenByCondition')) &&
+            // hide sections in edit mode, except we defined the particular step to show
+            (!section.hiddenOnEdit || currentWizardStep)
           )).map(renderSection)}
           <FeaturePickerFormField
             name="details.appDefinition.features"
@@ -393,9 +402,14 @@ EditProjectForm.propTypes = {
   updateAttachment: PropTypes.func.isRequired,
   removeAttachment: PropTypes.func.isRequired,
   shouldUpdateTemplate: PropTypes.bool,
-  onlyShowSummary: PropTypes.bool,
   isInsideDrawer: PropTypes.bool,
   disableAutoScrolling: PropTypes.bool,
+  /**
+   * If `currentWizardStep` is defined, then edit form shows form in the wizard mode
+   * with this step as current, instead of showing all the sections.
+   * NOTE: when `currentWizardStep` is defined, the `hiddenOnEdit` are ignored for `sections`.
+   */
+  currentWizardStep: PropTypes.any,
 }
 
 export default EditProjectForm
