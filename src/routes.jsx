@@ -124,10 +124,16 @@ class Routes extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    const messagesRouteRegExp = /projects\/\d+\/messages/
+    const navigateBetweenMessages = prevProps.location.pathname.match(messagesRouteRegExp) &&
+      this.props.location.pathname.match(messagesRouteRegExp)
+
     if (this.props.location.pathname !== prevProps.location.pathname) {
       if (this.props.location.hash !== '') {
         scrollToHash(this.props.location.hash)
-      } else {
+
+      // don't scroll to the top when open/close a drawer with messages
+      } else if (!navigateBetweenMessages) {
         window.scrollTo(0, 0)
       }
     } else if (this.props.location.hash !== prevProps.location.hash && this.props.location.hash !== '') {
