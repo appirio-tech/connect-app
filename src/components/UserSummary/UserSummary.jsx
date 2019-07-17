@@ -4,13 +4,6 @@ import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import moment from 'moment'
 
 import './UserSummary.scss'
-import _ from 'lodash'
-import {
-  ROLE_CONNECT_COPILOT,
-  ROLE_CONNECT_MANAGER,
-  ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN } from '../../../config/constants'
-
 
 const UserSummary = ({user}) => {
   // TODO: Replace hardcoded values with real data
@@ -19,9 +12,6 @@ const UserSummary = ({user}) => {
     drafts: 7,
     delivered: 5
   } */
-  const powerUserRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-  const isCustomer = _.intersection(user.roles, powerUserRoles).length === 0
-  const role = isCustomer ? 'Customer' : 'Member'
   const userName = (user.firstName && user.lastName) && `${user.firstName} ${user.lastName}`
   const memberSince = moment(user.createdAt).format('MMM YYYY')
   return (
@@ -38,7 +28,7 @@ const UserSummary = ({user}) => {
             @{user.handle}
           </div>
           <div styleName="member-since">
-            {role} since {memberSince}
+            User since {memberSince}
           </div>
         </div>
       </div>
