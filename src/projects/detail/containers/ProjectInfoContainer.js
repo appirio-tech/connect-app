@@ -438,11 +438,15 @@ class ProjectInfoContainer extends React.Component {
     const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER && project.status === 'draft'
 
     const projectNotReadNotifications = filterReadNotifications(filterNotificationsByProjectId(notifications, project.id))
-    const notReadMessageNotifications = filterTopicAndPostChangedNotifications(projectNotReadNotifications)
+    const notReadMessageNotifications = filterTopicAndPostChangedNotifications(projectNotReadNotifications, /^(?:MESSAGES|PRIMARY)$/)
+    const notReadPhaseNotifications = filterTopicAndPostChangedNotifications(projectNotReadNotifications, /^phase#\d+$/)
 
     const navLinks = getProjectNavLinks(project, project.id).map((navLink) => {
       if (navLink.label === 'Messages') {
         navLink.count = notReadMessageNotifications.length
+      }
+      if (navLink.label === 'Dashboard') {
+        navLink.count = notReadPhaseNotifications.length
       }
 
       return navLink

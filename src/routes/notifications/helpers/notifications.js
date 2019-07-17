@@ -74,7 +74,7 @@ export const renderGoTo = (goTo, contents) => {
   } else {
     goToHandlebars = goTo
   }
-  
+
   return Handlebars.compile(goToHandlebars)(contents)
 }
 
@@ -214,9 +214,9 @@ export const filterNotificationsByPosts = (notifications, posts) => {
 export const filterReadNotifications = (notifications) => _.filter(notifications, { isRead: false })
 
 /**
- * 
+ *
  * @param {Array} notifications list of notifications
- * 
+ *
  * @return {Array} list of filtered notifications
  */
 export const filterSeenNotifications = (notifications) => _.filter(notifications, { seen: false })
@@ -238,21 +238,35 @@ export const filterNotificationsByProjectId = (notifications, projectId) => _.fi
  * Filter notifications about Topic and Post changed
  *
  * @param  {Array}  notifications list of notifications
+ * @param  {RegExp} [tagRegExp]   regexp to filter notification by tags
  *
  * @return {Array}                notifications list filtered of notifications
  */
-export const filterTopicAndPostChangedNotifications = (notifications) => _.filter(notifications, (notification) => {
-  return notification.eventType === EVENT_TYPE.TOPIC.CREATED ||
-         notification.eventType === EVENT_TYPE.POST.CREATED ||
-         notification.eventType === EVENT_TYPE.POST.UPDATED ||
-         notification.eventType === EVENT_TYPE.POST.MENTION
-})
+export const filterTopicAndPostChangedNotifications = (notifications, tagRegExp) => {
+  let topicAndPostNotifications = _.filter(notifications, (notification) => (
+    notification.eventType === EVENT_TYPE.TOPIC.CREATED ||
+    notification.eventType === EVENT_TYPE.POST.CREATED ||
+    notification.eventType === EVENT_TYPE.POST.UPDATED ||
+    notification.eventType === EVENT_TYPE.POST.MENTION
+  ))
+
+  // filter messages using `tags`
+  if (tagRegExp) {
+    topicAndPostNotifications = _.filter(topicAndPostNotifications, (notification) => {
+      const tags = _.get(notification, 'contents.tags', [])
+
+      return _.some(tags, tag => tagRegExp.test(tag))
+    })
+  }
+
+  return topicAndPostNotifications
+}
 
 /**
  * Filter notification about post mentions
  * @param {Array} notifications list of notifications
- * 
- * @return {Array} notifications list filtered by post mention event type 
+ *
+ * @return {Array} notifications list filtered by post mention event type
  */
 export const filterPostsMentionNotifications = (notifications) => _.filter(notifications, (notification) => {
   return notification.eventType === EVENT_TYPE.POST.MENTION
@@ -430,9 +444,9 @@ const bundleNotifications = (notificationsWithRules) => {
 /**
  * Prepare notification contents:
  * - extracts phaseId from tags
- * 
+ *
  * @param {Object} contents notification contents
- * 
+ *
  * @returns {Object} notification contents
  */
 const prepareNotificationContents = (contents) => {
