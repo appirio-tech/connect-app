@@ -44,59 +44,6 @@
         }
       }
 
-      .breadcrumb {
-        @include tc-label-xs;
-        line-height: 6 * $base-unit;
-        color: $tc-gray-10;
-        position: relative;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: flex;
-        margin-right: 4 * $base-unit;
-
-        a {
-          display: flex;
-          align-items: center;
-          flex-shrink: 0;
-          color: $tc-gray-50;
-          text-transform: uppercase;
-
-          @media screen and (max-width: $screen-md - 1px) {
-            span {
-              display: none;
-            }
-          }
-
-          .icon-tail-left {// Back arrow
-            fill: $tc-gray-50;
-            height: 13px;
-            margin-right: 5px;
-
-            @media screen and (max-width: $screen-md - 1px) {
-              fill: $tc-white;
-              height: auto;
-              margin-left: 3 * $base-unit;
-              margin-right: 40px; /* take same space to align title at the center */
-              width: 22px;
-            }
-          }
-
-          &:hover,
-          &.hover {
-            text-decoration: none;
-            color: $tc-orange-30;
-
-            .icon-tail-left {// Back arrow
-              fill: $tc-orange-30;
-
-              @media screen and (max-width: $screen-md - 1px) {
-                fill: $tc-white;
-              }
-            }
-          }
-        }
-      }
-
       .bar-column.project-name {
         display: flex;
         align-items: center;

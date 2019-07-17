@@ -9,28 +9,23 @@
 }
 
 .sidebar {
-  background-color: $tc-white;
-  box-shadow: 1px 1px 0 0 $tc-gray-10, 0 1px 0 0 $tc-gray-10;
-  min-height: calc(100vh - 110px); /* minus primary and secondary toolbar height */
+  background-color: $tc-gray-05;
+  min-height: calc(100vh - 60px); /* minus primary and secondary toolbar height */
   padding-bottom: 10 * $base-unit;
   position: relative;
-  width: 360px;
-
-  .no-secondary-toolbar & {
-    min-height: calc(100vh - 60px); /* minus primary toolbar height only */
-  }
+  width: 280px;
 
   /*
     if there is not enough space for sidebar to be 360
     than sidebar becomes 1/3 of the width
 
-    NOTE, it could be done using min-width: 360px and flex: 1
+    NOTE, it could be done using min-width: 280px and flex: 1
           but we cannot use that approach because of styles in Feed.scss
           for .is-fullscreen .feed-header where we need to calculate
           the width of the .content block and cannot do it otherwise
           because media queries ignore scrollbar width
   */
-  @media screen and (min-width: $screen-md) and (max-width: 360px * 3) {
+  @media screen and (min-width: $screen-md) and (max-width: 280px * 3) {
     width: 100% * 1/3;
   }
 
@@ -48,7 +43,7 @@
   padding-left: 4 * $base-unit;
   padding-right: 4 * $base-unit;
   /* minus sidebar width and minus sidebar border width */
-  width: calc(100% - 360px - 1px);
+  width: calc(100% - 280px - 1px);
 
   .no-padding & {
     padding: 0;
@@ -64,7 +59,7 @@
           the width of the .content block and cannot do it otherwise
           because media queries ignore scrollbar width
   */
-  @media screen and (min-width: $screen-md) and (max-width: 360px * 3) {
+  @media screen and (min-width: $screen-md) and (max-width: 280px * 3) {
     /* minus sidebar border width */
     width: calc(100% * 2/3 - 1px);
   }

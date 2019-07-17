@@ -98,7 +98,7 @@ export default class FileListItem extends React.Component {
   }
 
   renderEditing() {
-    const { title, description, projectMembers, loggedInUser } = this.props
+    const { title, description, projectMembers, loggedInUser, askForPermissions } = this.props
     const { errors, allowedUsers } = this.state
     const onExitEdit = () => this.setState({isEditing: false, errors: {} })
     return (
@@ -113,12 +113,14 @@ export default class FileListItem extends React.Component {
         { (errors && errors.title) && <div className="error-message">{ errors.title }</div> }
         <textarea defaultValue={description} ref="desc" maxLength={250} className="tc-textarea" />
         { (errors && errors.desc) && <div className="error-message">{ errors.desc }</div> }
-        <UserAutoComplete
-          onUpdate={this.onUserIdChange}
-          projectMembers={projectMembers}
-          loggedInUser={loggedInUser}
-          selectedUsers={this.userIdsToHandles(allowedUsers).map((handle) => ({ value: handle, label: handle }))}
-        />
+        { askForPermissions &&
+          <UserAutoComplete
+            onUpdate={this.onUserIdChange}
+            projectMembers={projectMembers}
+            loggedInUser={loggedInUser}
+            selectedUsers={this.userIdsToHandles(allowedUsers).map((handle) => ({ value: handle, label: handle }))}
+          />
+        }
       </div>
     )
   }

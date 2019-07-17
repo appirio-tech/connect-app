@@ -12,7 +12,7 @@ import _ from 'lodash'
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
 function ProjectCardBody({ project, projectCanBeActive, duration, currentMemberRole, descLinesCount = 8,
-  onChangeStatus, isSuperUser, showLink, showLinkURL, canEditStatus = true }) {
+  onChangeStatus, isSuperUser, showLink, showLinkURL, canEditStatus = true, hideStatus }) {
   if (!project) return null
 
   const canEdit = canEditStatus && (
@@ -35,7 +35,7 @@ function ProjectCardBody({ project, projectCanBeActive, duration, currentMemberR
         text={_.unescape(project.description)}
         textTruncateChild={showLink ? <Link className="read-more-link" to={showLinkURL || projectDetailsURL}>read more</Link> : <span className="read-more-link">read more</span>}
       />
-      <div className="project-status">
+      {!hideStatus && <div className="project-status">
         {(project.status !== PROJECT_STATUS_ACTIVE || progress === 0) &&
           <EnhancedProjectStatus
             status={project.status}
@@ -54,7 +54,7 @@ function ProjectCardBody({ project, projectCanBeActive, duration, currentMemberR
             <span className="progress-text">{progress}% completed</span>
           </ProjectProgress>
         }
-      </div>
+      </div>}
     </div>
   )
 }
@@ -73,7 +73,8 @@ ProjectCardBody.propTypes = {
   duration: PT.object.isRequired,
   showLink: PT.bool,
   showLinkURL: PT.string,
-  canEditStatus: PT.bool
+  canEditStatus: PT.bool,
+  hideStatus: PT.bool
 }
 
 export default ProjectCardBody

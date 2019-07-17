@@ -13,7 +13,9 @@ import FillProjectDetails from './FillProjectDetails'
 import ProjectSubmitted from './ProjectSubmitted'
 
 import update from 'react-addons-update'
-import { LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH, LS_INCOMPLETE_WIZARD } from '../../../config/constants'
+import { 
+  LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH, LS_INCOMPLETE_WIZARD, PROJECT_ATTACHMENTS_FOLDER
+} from '../../../config/constants'
 import './ProjectWizard.scss'
 
 const WZ_STEP_INCOMP_PROJ_CONF = 0
@@ -433,6 +435,7 @@ class ProjectWizard extends Component {
     const { processing, showModal, userRoles, projectTemplates, projectTypes, projectId, match, templates } = this.props
     const { project, dirtyProject, wizardStep } = this.state
     const params = match.params
+    const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/new-project/`
 
     return (
       <Wizard
@@ -473,6 +476,11 @@ class ProjectWizard extends Component {
           submitBtnText="Continue"
           userRoles={ userRoles }
           onBackClick={() => this.handleStepChange(wizardStep - 1)}
+          addAttachment={this.props.addAttachment}
+          updateAttachment={this.props.updateAttachment}
+          removeAttachment={this.props.removeAttachment}
+          attachmentsStorePath={attachmentsStorePath}
+          canManageAttachments
         />
         <div />
         <ProjectSubmitted

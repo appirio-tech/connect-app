@@ -14,6 +14,8 @@
 
     .Dropdown {
       top: 20px;
+      max-height: 300px;
+      overflow: auto;
     }
   }
 }
@@ -28,6 +30,17 @@
     color: $tc-gray-30;
     cursor: default;
   }
+}
+
+// for the "theme" contains "max-height" restrict the max-he
+:global(.dropdown-wrap.max-height .Dropdown ul.dropdown-menu-list) {
+  max-height: 200px;
+  overflow: auto;
+}
+
+// make dropdown higher in the z-index to cover other elements when it's opened
+:global(.dropdown-wrap.default .Dropdown) {
+  z-index: 10;
 }
 
 .dropdown-disabled {

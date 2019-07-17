@@ -10,12 +10,10 @@ import './TwoColsLayout.scss'
 
 const TwoColsLayout = ({
   children,
-  noSecondaryToolbar,
   noPadding,
 }) => (
   <div
     styleName={cn('container', {
-      'no-secondary-toolbar': noSecondaryToolbar,
       'no-padding': noPadding,
     })}
   >
@@ -23,8 +21,8 @@ const TwoColsLayout = ({
   </div>
 )
 
-TwoColsLayout.Sidebar = ({ children }) => (
-  <aside styleName="sidebar">{children}</aside>
+TwoColsLayout.Sidebar = ({ children, wrapperClass }) => (
+  <aside styleName={cn('sidebar', wrapperClass)}>{children}</aside>
 )
 
 TwoColsLayout.Content = ({ children }) => (
@@ -37,13 +35,11 @@ TwoColsLayout.Content = ({ children }) => (
 
 TwoColsLayout.defaultProps = {
   children: null,
-  noSecondaryToolbar: false,
   noPadding: false,
 }
 
 TwoColsLayout.propTypes = {
   children: PropTypes.node,
-  noSecondaryToolbar: PropTypes.bool,
   noPadding: PropTypes.bool,
 }
 

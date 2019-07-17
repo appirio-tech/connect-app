@@ -13,6 +13,13 @@ import {
   NEW_PROJECT_PATH,
 } from '../config/constants'
 
+import ScopeIcon from '../assets/icons/text-16px_list-bullet.svg'
+import DashboardIcon from '../assets/icons/v.2.5/icon-dashboard.svg'
+import MessagesIcon from '../assets/icons/v.2.5/icon-messages.svg'
+// import ReportsIcon from '../assets/icons/v.2.5/icon-reports.svg'
+import AssetsLibraryIcon from '../assets/icons/v.2.5/icon-assets-library.svg'
+import InvisibleIcon from '../assets/icons/invisible.svg'
+
 import { formatNumberWithCommas } from './format'
 
 export const getProjectRoleForCurrentUser = ({currentUserId, project}) => {
@@ -232,7 +239,7 @@ export function getPhaseActualData(phase, timeline) {
     endDate = phase.endDate && moment.utc(phase.endDate)
     duration = phase.duration ? phase.duration : 0
     progress = phase.progress ? phase.progress : 0
-    
+
     if (startDate) {
       endDate = startDate.clone().add(duration, 'days')
     } else {
@@ -322,4 +329,31 @@ export function getNewProjectLink(orgConfigs) {
   orgConfigs = _.filter(orgConfigs, (o) => { return o.configName === PROJECT_CATALOG_URL })
   if(orgConfigs.length === 1) return orgConfigs[0].configValue
   return NEW_PROJECT_PATH
+}
+
+/**
+ * Get the list of navigation links for project details view
+ * @param {Object} project - The project object
+ * @param {string} projectId - The project id
+ */
+export function getProjectNavLinks(project, projectId) {
+  // choose set of menu links based on the project version
+  const navLinks = project.version === 'v3' ? [
+    { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
+    { label: 'Messages', to: `/projects/${projectId}/messages`, Icon: MessagesIcon, iconClassName: 'stroke' },
+    { label: 'Scope', to: `/projects/${projectId}/scope`, Icon: ScopeIcon, iconClassName: 'fill' },
+    // { label: 'Reports', to: '#', Icon: ReportsIcon },
+    { label: 'Assets Library', to: `/projects/${projectId}/assets`, Icon: AssetsLibraryIcon, iconClassName: 'stroke' },
+  ] : [
+    { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
+    { label: 'Specification', to: `/projects/${projectId}/specification`, Icon: ScopeIcon, iconClassName: 'fill' },
+  ]
+
+  // `Discussions` items can be added as soon as project is loaded
+  // if discussions are not hidden for it
+  if (project.details && !project.details.hideDiscussions) {
+    navLinks.push({ label: 'Discussions', to: `/projects/${projectId}/discussions`, Icon: InvisibleIcon, iconClassName: 'fill' })
+  }
+
+  return navLinks
 }

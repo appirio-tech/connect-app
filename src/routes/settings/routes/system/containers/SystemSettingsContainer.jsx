@@ -25,6 +25,7 @@ class SystemSettingsContainer extends Component {
     return (
       <SettingsPanel
         title="Account and security"
+        user={this.props.user}
       >
         <FormEnhanced
           {...this.props}
@@ -42,10 +43,11 @@ const SystemSettingsContainerWithAuth = requiresAuthentication(SystemSettingsCon
 
 const mapStateToProps = ({ settings, loadUser }) => {
   const powerUserRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-  
+
   return {
     systemSettings: settings.system,
-    isCustomer: _.intersection(loadUser.user.roles, powerUserRoles).length === 0
+    isCustomer: _.intersection(loadUser.user.roles, powerUserRoles).length === 0,
+    user: loadUser.user
   }
 }
 

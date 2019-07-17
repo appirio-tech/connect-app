@@ -608,7 +608,7 @@ const getSiblingNodeByDir = (template, node, dir) => {
  *
  * @returns {Object} updated template
  */
-const updateOption = (template, sectionIndex, subSectionIndex, questionIndex, optionIndex, updateRule) => {
+export const updateOption = (template, sectionIndex, subSectionIndex, questionIndex, optionIndex, updateRule) => {
   const section = template.sections[sectionIndex]
   const subSection = section.subSections[subSectionIndex]
   const question = subSection.questions[questionIndex]
@@ -634,7 +634,7 @@ const updateOption = (template, sectionIndex, subSectionIndex, questionIndex, op
  *
  * @returns {Object} updated template
  */
-const updateQuestion = (template, sectionIndex, subSectionIndex, questionIndex, updateRule) => {
+export const updateQuestion = (template, sectionIndex, subSectionIndex, questionIndex, updateRule) => {
   const section = template.sections[sectionIndex]
   const subSection = section.subSections[subSectionIndex]
   const question = subSection.questions[questionIndex]
@@ -658,7 +658,7 @@ const updateQuestion = (template, sectionIndex, subSectionIndex, questionIndex, 
  *
  * @returns {Object} updated template
  */
-const updateSubSection = (template, sectionIndex, subSectionIndex, updateRule) => {
+export const updateSubSection = (template, sectionIndex, subSectionIndex, updateRule) => {
   const section = template.sections[sectionIndex]
   const subSection = section.subSections[subSectionIndex]
 
@@ -680,7 +680,7 @@ const updateSubSection = (template, sectionIndex, subSectionIndex, updateRule) =
  *
  * @returns {Object} updated template
  */
-const updateSection = (template, sectionIndex, updateRule) => {
+export const updateSection = (template, sectionIndex, updateRule) => {
   const section = template.sections[sectionIndex]
 
   const updatedSection = update(section, updateRule)
@@ -707,7 +707,7 @@ const updateSection = (template, sectionIndex, updateRule) => {
  *
  * @returns {Object} updated template
  */
-const updateNodeObject = (template, node, updateRule, level) => {
+export const updateNodeObject = (template, node, updateRule, level) => {
   const { sectionIndex, subSectionIndex, questionIndex, optionIndex } = node
   let updatedTemplate = template
 
@@ -1004,13 +1004,32 @@ export const updateNodesByConditions = (template, project, productTemplates) => 
 export const removeValuesOfHiddenNodes = (template, project) => {
   let updatedProject = project
 
+  const fieldMap = {}
+  // iterates over all nodes to find out nodes with same fieldName
+  forEachNode(template, (nodeObject, node) => { // eslint-disable-line no-unused-vars
+    if (nodeObject.fieldName ) {
+      if (!fieldMap[nodeObject.fieldName]) {
+        fieldMap[nodeObject.fieldName] = []
+      }
+      fieldMap[nodeObject.fieldName].push(nodeObject)
+    }
+  })
+
   forEachNode(template, (nodeObject, node) => {
     const level = getNodeLevel(node)
+    let hasVisbleNodeWithSameCond = false
+    if (nodeObject.fieldName) {
+      fieldMap[nodeObject.fieldName].forEach((no) => {
+        if (!_.get(no, '__wizard.hiddenByCondition')) {
+          hasVisbleNodeWithSameCond = true
+        }
+      })
+    }
 
     switch(level) {
     // if some question is hidden, we remove it's value from the project data
     case LEVEL.QUESTION:
-      if (_.get(nodeObject, '__wizard.hiddenByCondition') && _.get(updatedProject, nodeObject.fieldName)) {
+      if (_.get(nodeObject, '__wizard.hiddenByCondition') && !hasVisbleNodeWithSameCond && _.get(updatedProject, nodeObject.fieldName)) {
         updatedProject = update(updatedProject, unflatten({
           [nodeObject.fieldName]: { $set: undefined }
         }))

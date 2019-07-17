@@ -5,10 +5,10 @@ import {
   GET_NOTIFICATIONS_PENDING,
   GET_NOTIFICATIONS_SUCCESS,
   GET_NOTIFICATIONS_FAILURE,
-  VISIT_NOTIFICATIONS,
   TOGGLE_NOTIFICATION_SEEN,
   SET_NOTIFICATIONS_FILTER_BY,
   MARK_ALL_NOTIFICATIONS_READ,
+  MARK_ALL_NOTIFICATIONS_SEEN,
   TOGGLE_NOTIFICATION_READ,
   VIEW_OLDER_NOTIFICATIONS_SUCCESS,
   HIDE_OLDER_NOTIFICATIONS_SUCCESS,
@@ -26,7 +26,6 @@ const initialState = {
   notifications: [],
   // ids of sources that will also show old notifications
   oldSourceIds: [],
-  lastVisited: new Date(0),
   pending: false,
   readers: {},
 }
@@ -73,9 +72,6 @@ export default (state = initialState, action) => {
   case GET_NOTIFICATIONS_FAILURE:
     return { ...state, isLoading: false }
 
-  case VISIT_NOTIFICATIONS:
-    return {...state, lastVisited: _.maxBy(_.map(state.notifications, n => new Date(n.date)))}
-
   case TOGGLE_NOTIFICATION_SEEN: {
     const ids = action.payload.split('-')
     const newState = {
@@ -104,6 +100,17 @@ export default (state = initialState, action) => {
       pending: false,
       ...getNotificationsAndFilterBy(state.notifications.map(n => (
         !action.payload || n.sourceId === action.payload ? { ...n, isRead: action.isRead } : n
+      )), state.filterBy)
+    }
+    return newState
+  }
+
+  case MARK_ALL_NOTIFICATIONS_SEEN: {
+    const newState = {
+      ...state,
+      pending: false,
+      ...getNotificationsAndFilterBy(state.notifications.map(n => (
+        !action.payload || n.sourcId === action.payload ? { ...n, seen: action.isSeen } : n
       )), state.filterBy)
     }
     return newState

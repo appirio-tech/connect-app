@@ -9,25 +9,48 @@ import EnhancedDropdown from './EnhancedDropdown'
 import NotificationsBell from './NotificationsBell'
 
 
-const NotificationsDropdown = (props) => {
-  return (
-    <div className="notifications-dropdown">
-      <EnhancedDropdown theme="UserDropdownMenu" pointerShadow noAutoclose onToggle={props.onToggle}>
-        <div className="dropdown-menu-header">
-          <NotificationsBell
-            hasUnread={props.hasUnread}
-            hasNew={props.hasNew}
-            onClick={props.onToggle}
-          />
-        </div>
-        <div className="dropdown-menu-list">
-          <div className="notifications-dropdown-content">
-            {props.children}
+class NotificationsDropdown extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      isOpen: false
+    }
+
+    this.toggle = this.toggle.bind(this)
+  }
+
+  toggle(isOpen) {
+    if (typeof isOpen === 'object') {
+      this.props.onToggle(!this.state.isOpen)
+      this.setState({ isOpen: !this.state.isOpen})
+    } else {
+      this.props.onToggle(isOpen)
+      this.setState({ isOpen })
+    }
+  }
+
+  render() {
+    const { hasUnread, hasNew, children } = this.props
+    return (
+      <div className="notifications-dropdown">
+        <EnhancedDropdown theme="UserDropdownMenu" pointerShadow noAutoclose onToggle={this.toggle}>
+          <div className="dropdown-menu-header">
+            <NotificationsBell
+              hasUnread={hasUnread}
+              hasNew={hasNew}
+              onClick={this.toggle}
+            />
           </div>
-        </div>
-      </EnhancedDropdown>
-    </div>
-  )
+          <div className="dropdown-menu-list">
+            <div className="notifications-dropdown-content">
+              {children}
+            </div>
+          </div>
+        </EnhancedDropdown>
+      </div>
+    )
+  }
 }
 
 NotificationsDropdown.propTypes = {

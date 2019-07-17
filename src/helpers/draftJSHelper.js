@@ -1,3 +1,6 @@
+import { values } from 'lodash'
+import markdownToState from './markdownToState'
+
 export function hasEntity (entityType, editorState) {
   const entity = getCurrentEntity(editorState)
   if (entity && entity.getType() === entityType) {
@@ -22,4 +25,15 @@ export function getCurrentEntity (editorState) {
     return editorState.getCurrentContent().getEntity(entityKey)
   }
   return null
+}
+
+export function getLinksFromPost(postContent) {
+  const contentState = markdownToState(postContent)
+  const entities = values(contentState.entityMap)
+
+  const linkEntities = entities
+    .map(e => contentState.getEntity(e))
+    .filter(e => e.type === 'LINK').map(e => e.data)
+
+  return linkEntities
 }

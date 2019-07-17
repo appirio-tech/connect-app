@@ -6,7 +6,7 @@ import moment from 'moment'
 import {
   filterReadNotifications,
   filterNotificationsByProjectId,
-  filterPostsMentionNotifications
+  filterTopicAndPostChangedNotifications
 } from '../../../../routes/notifications/helpers/notifications'
 import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 import ProjectListFilterColHeader from './ProjectListFilterColHeader'
@@ -84,8 +84,8 @@ const ProjectsGridView = props => {
         // project notifications
         const notReadNotifications = filterReadNotifications(notifications)
         const unreadProjectUpdate = filterNotificationsByProjectId(notReadNotifications, item.id)
-        const unreadMentions = filterPostsMentionNotifications(unreadProjectUpdate)
-        const unreadMentionsCount = unreadMentions.length
+        const unreadPosts = filterTopicAndPostChangedNotifications(unreadProjectUpdate)
+        const unreadPostsCount = unreadPosts.length
         const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
           <div className="spacing project-container">
@@ -93,7 +93,7 @@ const ProjectsGridView = props => {
             <div className="project-title">
               <Link to={url} className="link-title">{_.unescape(item.name)}</Link>
               <span className="badge-wrapper">
-                { unreadMentionsCount > 0 && <NotificationBadge count={unreadMentionsCount} /> }
+                { unreadPostsCount > 0 && <NotificationBadge count={unreadPostsCount} /> }
               </span>
             </div>
             <Link to={url}>

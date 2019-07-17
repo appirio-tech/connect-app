@@ -5,6 +5,13 @@
 	$reactselectcontentheight: 20px;
 	@mixin reactselectstyles {
 
+		&.height-auto .react-select__control{
+			height: auto;
+			& > div {
+				height: auto;
+			}
+		}
+
 		& .react-select__control:hover {
 			border-color: $tc-gray-50;
 		}

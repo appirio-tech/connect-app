@@ -17,6 +17,8 @@ import {
   UPDATE_PRODUCT_ATTACHMENT,
   CHANGE_ATTACHMENT_PERMISSION,
   UPLOAD_PROJECT_ATTACHMENT_FILES,
+  REMOVE_PENDING_ATTACHMENT,
+  UPDATE_PENDING_ATTACHMENT,
 } from '../../config/constants'
 
 export function uploadProjectAttachments(projectId, attachments) {
@@ -110,6 +112,24 @@ export function removeProductAttachment(projectId, phaseId, productId, attachmen
           productId,
           attachmentId: removedAttachmentId,
         }))
+    })
+  }
+}
+
+export function updatePendingAttachment(attachmentIdx, updatedAttachment) {
+  return (dispatch) => {
+    return dispatch({
+      type: UPDATE_PENDING_ATTACHMENT,
+      payload: { attachmentIdx, updatedAttachment }
+    })
+  }
+}
+
+export function removePendingAttachment(attachmentIdx) {
+  return (dispatch) => {
+    return dispatch({
+      type: REMOVE_PENDING_ATTACHMENT,
+      payload: attachmentIdx
     })
   }
 }

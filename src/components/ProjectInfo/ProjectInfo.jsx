@@ -3,17 +3,12 @@ import PT from 'prop-types'
 import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
-import Panel from '../Panel/Panel'
 import DeleteProjectModal from './DeleteProjectModal'
 import ProjectCardBody from '../../projects/components/projectsCard/ProjectCardBody'
-import ProjectDirectLinks from '../../projects/list/components/Projects/ProjectDirectLinks'
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
-import ProjectProgress from '../../projects/detail/components/ProjectProgress'
 import MediaQuery from 'react-responsive'
 import { SCREEN_BREAKPOINT_MD, PROJECT_STATUS_ACTIVE, PHASE_STATUS_ACTIVE, PHASE_STATUS_REVIEWED, PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 import ReviewProjectButton from '../../projects/detail/components/ReviewProjectButton'
-
-import { formatProjectProgressProps, formatOldProjectProgressProps } from '../../helpers/projectHelper'
 
 import './ProjectInfo.scss'
 
@@ -21,37 +16,15 @@ class ProjectInfo extends Component {
 
   constructor(props) {
     super(props)
-    this.toggleProjectDelete = this.toggleProjectDelete.bind(this)
-    this.onConfirmDelete = this.onConfirmDelete.bind(this)
-  }
-
-  componentWillMount() {
-    this.setState({ showDeleteConfirm: false })
-  }
-
-  toggleProjectDelete() {
-    this.setState({ showDeleteConfirm: !this.state.showDeleteConfirm })
-  }
-
-  onConfirmDelete() {
-    this.props.onDeleteProject()
   }
 
   render() {
-    const { project, currentMemberRole, duration, canDeleteProject,
-      onChangeStatus, directLinks, isSuperUser, phases, productsTimelines, onSubmitForReview, isProjectProcessing } = this.props
-    const { showDeleteConfirm } = this.state
+    const { project, currentMemberRole, duration,
+      onChangeStatus, isSuperUser, phases, onSubmitForReview, isProjectProcessing,
+      showDeleteConfirm, toggleProjectDelete, onConfirmDelete } = this.props
 
     const code = _.get(project, 'details.utm.code', '')
 
-    const projectProgressProps = _.omit(
-      !phases
-        ? formatOldProjectProgressProps(project)
-        : formatProjectProgressProps(project, phases, productsTimelines),
-      'labelSpent'
-    )
-
-    const activePhases = phases ? phases.filter((phase) => phase.status === PHASE_STATUS_ACTIVE) : []
     const hasReviewedOrActivePhases = !!_.find(phases, (phase) => _.includes([PHASE_STATUS_REVIEWED, PHASE_STATUS_ACTIVE], phase.status))
     const isProjectActive = project.status === PROJECT_STATUS_ACTIVE
     const isV3Project = project.version === 'v3'
@@ -71,38 +44,23 @@ class ProjectInfo extends Component {
           Topcoder will then review your drafted project and will assign a manager to get your delivery in-progress!
           Get stuck or need help? Email us at <a href="mailto:support@topcoder.com">support@topcoder.com</a>.
         </p>
-        <ReviewProjectButton project={project} onClick={onSubmitForReview} disabled={isProjectProcessing} />
-        <ProjectDirectLinks
-          directLinks={directLinks}
-        />
+        <ReviewProjectButton project={project} onClick={onSubmitForReview} disabled={isProjectProcessing} wrapperClass="no-bg" />
       </div>
     )
 
     return (
       <div className="project-info">
-        <div className="project-info-header">
-          <div className="project-status-header">project status</div>
-          {canDeleteProject && !showDeleteConfirm &&
-            <div className="project-delete-icon">
-              <Panel.DeleteBtn onClick={this.toggleProjectDelete} />
-            </div>
-          }
-        </div>
         <div className="project-status">
-          {activePhases.length > 0 &&
-            <div className="project-status-progress">
-              <ProjectProgress {...projectProgressProps} />
-            </div>
-          }
-          <div className="project-status-info">
+          <div>
+            <div styleName="project-name">{_.unescape(project.name)}</div>
             <div className="project-status-time">Created {moment(project.createdAt).format('MMM DD, YYYY')}</div>
             {!!code && <div className="project-status-ref">{_.unescape(code)}</div>}
           </div>
         </div>
         {showDeleteConfirm &&
           <DeleteProjectModal
-            onCancel={this.toggleProjectDelete}
-            onConfirm={this.onConfirmDelete}
+            onCancel={toggleProjectDelete}
+            onConfirm={onConfirmDelete}
           />
         }
         {showReviewBtn ? (
@@ -127,12 +85,10 @@ class ProjectInfo extends Component {
                   onChangeStatus={onChangeStatus}
                   isSuperUser={isSuperUser}
                   showLink
+                  hideStatus
                 />
               )}
             </MediaQuery>
-            <ProjectDirectLinks
-              directLinks={directLinks}
-            />
           </MobileExpandable>
         )}
       </div>

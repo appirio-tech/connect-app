@@ -121,7 +121,7 @@ const SpecSection = props => {
           [`subSection-visibility-${subSection.visibilityForRendering}`]: !!subSection.visibilityForRendering
         }
       )}
-      id={[id, subSection.id].join('-')}
+      id={[id, subSection.id || idx].join('-')}
     >
       {
         !subSection.hideTitle &&
@@ -228,6 +228,7 @@ const SpecSection = props => {
           removeAttachment={removeAttachment}
           attachmentsStorePath={attachmentsStorePath}
           canManageAttachments={canManageAttachments}
+          askForPermissions={!isCreation}
         />
       )
     }

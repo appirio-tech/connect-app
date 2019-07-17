@@ -18,6 +18,10 @@ import MetaDataPanel from '../components/MetaDataPanel'
 import MetaDataProjectTemplatesGridView from '../components/MetaDataProjectTemplatesGridView'
 import MetaDataProductTemplatesGridView from '../components/MetaDataProductTemplatesGridView'
 import MetaDataProjectTypesGridView from '../components/MetaDataProjectTypesGridView'
+import MetaDataFormsGridView from '../components/MetaDataFormsGridView'
+import MetaDataPlanConfigsGridView from '../components/MetaDataPlanConfigsGridView'
+import MetaDataPriceConfigsGridView from '../components/MetaDataPriceConfigsGridView'
+import MetaDataMilestoneTemplatesGridView from '../components/MetaDataMilestoneTemplatesGridView'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
@@ -53,6 +57,7 @@ class MetaDataContainer extends React.Component {
       metadataType,
       match,
     } = this.props
+
     if (metadataType === 'projectTemplates') {
       const projectTemplates = templates.projectTemplates
       return (
@@ -118,6 +123,68 @@ class MetaDataContainer extends React.Component {
         </div>
       )
     }
+
+    if (metadataType === 'forms') {
+      const forms = templates.forms
+      return (
+        <div>
+          <MetaDataFormsGridView
+            currentUser={currentUser}
+            isLoading={templates.isLoading}
+            totalCount={forms ? forms.length : 0}
+            pageNum={1}
+            forms={forms}
+            criteria={{ sort: 'createdAt' }}
+          />
+        </div>
+      )
+    }
+    if (metadataType === 'planConfigs') {
+      const planConfigs = templates.planConfigs
+      return (
+        <div>
+          <MetaDataPlanConfigsGridView
+            currentUser={currentUser}
+            isLoading={templates.isLoading}
+            totalCount={planConfigs ? planConfigs.length : 0}
+            pageNum={1}
+            projectTypes={planConfigs}
+            criteria={{ sort: 'createdAt' }}
+          />
+        </div>
+      )
+    }
+    if (metadataType === 'priceConfigs') {
+      const priceConfigs = templates.priceConfigs
+      return (
+        <div>
+          <MetaDataPriceConfigsGridView
+            currentUser={currentUser}
+            isLoading={templates.isLoading}
+            totalCount={priceConfigs ? priceConfigs.length : 0}
+            pageNum={1}
+            projectTypes={priceConfigs}
+            criteria={{ sort: 'createdAt' }}
+          />
+        </div>
+      )
+    }
+    if (metadataType === 'milestoneTemplates') {
+      const milestoneTemplates = templates.milestoneTemplates
+      return (
+        <div>
+          <MetaDataMilestoneTemplatesGridView
+            currentUser={currentUser}
+            isLoading={templates.isLoading}
+            totalCount={milestoneTemplates ? milestoneTemplates.length : 0}
+            pageNum={1}
+            milestoneTemplates={milestoneTemplates}
+            criteria={{ sort: 'createdAt' }}
+          />
+        </div>
+      )
+    }
+
     return <div>None</div>
   }
 }

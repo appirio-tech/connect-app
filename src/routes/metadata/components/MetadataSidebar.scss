@@ -1,0 +1,24 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  background: $tc-gray-05;
+  min-height: calc(100vh - 60px);
+  @media screen and (max-width: $screen-md - 1px) {
+    min-height: 0;
+  }
+}
+
+.separator {
+  border-top-color: $tc-gray-20;
+  border-top-style: solid;
+  border-bottom: none;
+  margin: 0 20px 20px 20px;
+}
+
+.section-title {
+  font-size: 10px;
+  color: $tc-gray-50;
+  margin-left: 20px;
+  letter-spacing: 0.8px;
+  margin-bottom: 10px;
+}

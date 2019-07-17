@@ -5,10 +5,10 @@ import {
   GET_NOTIFICATIONS_PENDING,
   GET_NOTIFICATIONS_SUCCESS,
   GET_NOTIFICATIONS_FAILURE,
-  VISIT_NOTIFICATIONS,
   TOGGLE_NOTIFICATION_SEEN,
   SET_NOTIFICATIONS_FILTER_BY,
   MARK_ALL_NOTIFICATIONS_READ,
+  MARK_ALL_NOTIFICATIONS_SEEN,
   MARK_NOTIFICATIONS_READ,
   TOGGLE_NOTIFICATION_READ,
   VIEW_OLDER_NOTIFICATIONS_SUCCESS,
@@ -31,10 +31,18 @@ const handleDispatchNotificationReadByType = (type, dispatch, payload, isRead) =
   })
 }
 
+const handleDispatchNotificationSeenByType = (type, dispatch, payload, isSeen) => {
+  dispatch({
+    type,
+    payload,
+    isSeen
+  })
+}
+
 const handleDispatchNotificationRead = handleDispatchNotificationReadByType.bind(this, TOGGLE_NOTIFICATION_READ)
 const handleDispatchMarkAllNotificationsRead = handleDispatchNotificationReadByType.bind(this, MARK_ALL_NOTIFICATIONS_READ)
 const handleDispatchMarkNotificationsRead = handleDispatchNotificationReadByType.bind(this, MARK_NOTIFICATIONS_READ)
-
+const handleDispatchMarkAllNotificationsSeen = handleDispatchNotificationSeenByType.bind(this, MARK_ALL_NOTIFICATIONS_SEEN)
 export const getNotifications = () => (dispatch) => {
   dispatch({ type: GET_NOTIFICATIONS_PENDING })
   notificationsService.getNotifications().then(notifications => {
@@ -51,16 +59,30 @@ export const getNotifications = () => (dispatch) => {
   })
 }
 
-export const visitNotifications = () => (dispatch) => {
-  dispatch({
-    type: VISIT_NOTIFICATIONS
-  })
-}
-
 export const setNotificationsFilterBy = (filterBy) => (dispatch) => dispatch({
   type: SET_NOTIFICATIONS_FILTER_BY,
   payload: filterBy
 })
+
+export const markAllNotificationsSeen = (sourceId, notifications = []) => (dispatch) => {
+  let ids = null
+  const sourceNfs = _.filter(notifications, n => !n.seen)
+  if (sourceNfs.length === 0) {
+    return
+  }
+  ids = _.map(sourceNfs, n => n.id).join('-')
+
+  dispatch({
+    type: NOTIFICATIONS_PENDING
+  })
+
+  handleDispatchMarkAllNotificationsSeen(dispatch, sourceId, true)
+  notificationsService.markNotificationsSeen(ids).catch(err => {
+    Alert.error(`Failed to mark notification seen. ${err.message}`)
+    handleDispatchMarkAllNotificationsSeen(dispatch, sourceId, false)
+  })
+
+}
 
 export const markAllNotificationsRead = (sourceId, notifications = []) => (dispatch) => {
   let ids = null
