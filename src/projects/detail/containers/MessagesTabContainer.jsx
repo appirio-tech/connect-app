@@ -188,6 +188,19 @@ class MessagesTabContainer extends React.Component {
     this.props.createProjectTopic(project.id, newFeed)
   }
 
+  componentWillReceiveProps(nextProps) {
+    // reset title and content in the state after successful post creation
+    // so that we treat the post editor not changed, thus when we leave the page we don't get confirmation alert
+    if (this.props.isCreatingFeed && !nextProps.isCreatingFeed && !nextProps.error) {
+      this.setState({
+        newPost: {
+          title: '',
+          content: ''
+        }
+      })
+    }
+  }
+
   isChanged() {
     const { newPost } = this.state
     const notEmpty = str => str && !!trim(str).length
