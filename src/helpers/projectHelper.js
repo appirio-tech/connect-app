@@ -340,7 +340,7 @@ export function getProjectNavLinks(project, projectId) {
   // choose set of menu links based on the project version
   const navLinks = project.version === 'v3' ? [
     { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
-    { label: 'Messages', to: `/projects/${projectId}/messages`, Icon: MessagesIcon, iconClassName: 'stroke' },
+    { label: 'Messages', to: `/projects/${projectId}/messages`, Icon: MessagesIcon, iconClassName: 'stroke', exact: false },
     { label: 'Scope', to: `/projects/${projectId}/scope`, Icon: ScopeIcon, iconClassName: 'fill' },
     // { label: 'Reports', to: '#', Icon: ReportsIcon },
     { label: 'Assets Library', to: `/projects/${projectId}/assets`, Icon: AssetsLibraryIcon, iconClassName: 'stroke' },

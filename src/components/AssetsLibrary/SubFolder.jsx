@@ -54,7 +54,7 @@ class SubFolder extends React.Component {
   }
 
   render() {
-    const { link, renderLink, goBack, formatModifyDate } = this.props
+    const { link, renderLink, goBack, formatModifyDate, isLinkSubFolder } = this.props
     const { linkToDelete } = this.state
     return (
       <div styleName={cn({'assets-gridview-container-active': (linkToDelete >= 0)}, '')}>
@@ -88,7 +88,7 @@ class SubFolder extends React.Component {
               }
               let iconPath
               try {
-                if (this.isURLValid(childLink.title)) {
+                if (isLinkSubFolder) {
                   //Link Icon here
                   iconPath = require('../../assets/icons/link-12.svg')
                 } else {
