@@ -13,14 +13,14 @@
     -ms-flex: $number;
     flex: $number;
   }
-  
+
   // FIXME
   .messages-container {
     @include flexBox;
     max-width: 1110px;
-    margin: 20px auto;
+    margin: 20px;
     height: calc(100% - 80px);// 20px is for bottom margin, 60px for footer
-  
+
     .left-area {
       @include flexWidth(1);
       max-width: 360px;
@@ -31,28 +31,27 @@
       @include flexWidth(2);
       margin-left: 4 * $base-unit;
       overflow-y: auto;
-  
+
       .messaging-empty-state {
         margin-bottom: 4 * $base-unit;
       }
-  
+
       .new-post-composer {
         margin-bottom: 4 * $base-unit;
         background-color: $tc-white;
-  
+
         .modal-row:hover {
           background-color: $tc-white;
         }
-  
+
         .btn-close {
           display: none;
         }
       }
-  
+
       .feed-action-card + .feed-action-card {
         margin-top: 4 * $base-unit;
       }
     }
   }
 }
-  
