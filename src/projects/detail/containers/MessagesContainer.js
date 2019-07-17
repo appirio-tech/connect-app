@@ -3,14 +3,16 @@ import React from 'react'
 import { Prompt, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import update from 'react-addons-update'
+import MediaQuery from 'react-responsive'
 import MessageList from '../../../components/MessageList/MessageList'
 import MessagingEmptyState from '../../../components/MessageList/MessagingEmptyState'
 import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
 import { loadProjectMessages, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import FullHeightContainer from 'appirio-tech-react-components/components/FullHeightContainer/FullHeightContainer'
-import FooterV2 from '../../../components/FooterV2/FooterV2'
+import TwoColsLayout from '../../../components/TwoColsLayout'
+import Sticky from '../../../components/Sticky'
+import ProjectInfoContainer from './ProjectInfoContainer'
 
 import {
   THREAD_MESSAGES_PAGE_SIZE,
@@ -19,7 +21,8 @@ import {
   CODER_BOT_USERID,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
-  TC_SYSTEM_USERID
+  TC_SYSTEM_USERID,
+  SCREEN_BREAKPOINT_MD,
 } from '../../../config/constants'
 
 const SYSTEM_USER = {
@@ -417,9 +420,58 @@ class MessagesView extends React.Component {
     })
   }
 
+  /**
+   * Returns the sidebar content
+   */
+  getSidebarContent() {
+    const {
+      location,
+      currentMemberRole,
+      project,
+      phases,
+      isSuperUser,
+      isManageUser,
+      productsTimelines,
+      phasesTopics,
+      isProcessing
+    } = this.props
+
+    const leftArea = (
+      <ProjectInfoContainer
+        location={location}
+        currentMemberRole={currentMemberRole}
+        project={project}
+        phases={phases}
+        isSuperUser={isSuperUser}
+        isManageUser={isManageUser}
+        productsTimelines={productsTimelines}
+        phasesTopics={phasesTopics}
+        isProjectProcessing={isProcessing}
+
+        // we never load feeds from the old Discussions tab,
+        // otherwise it would cause conflicts with the logic to load feeds on in this Container
+        feeds={[]}
+        isFeedsLoading
+      />
+    )
+
+    return (
+      <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+        {matches => {
+          if (matches) {
+            return <Sticky top={60}>{leftArea}</Sticky>
+          } else {
+            return leftArea
+          }
+        }}
+      </MediaQuery>
+    )
+  }
+
   render() {
     const {threads, isCreateNewMessage, showEmptyState, scrollPosition} = this.state
     const { currentUser, isCreatingFeed, currentMemberRole, error } = this.props
+    const leftArea = this.getSidebarContent()
     const activeThread = threads.filter((item) => item.isActive)[0]
     const onLeaveMessage = this.onLeave() || ''
     const renderRightPanel = () => {
@@ -460,34 +512,39 @@ class MessagesView extends React.Component {
     }
 
     return (
-      <FullHeightContainer offset={80}>
-        <Prompt
-          when={!!onLeaveMessage}
-          message={onLeaveMessage}
-        />
-        <div className="messages-container">
-          <div className="left-area">
-            <MessageList
-              onAdd={this.onNewThreadClick}
-              threads={threads}
-              onSelect={this.onThreadSelect}
-              showAddButton={!!currentMemberRole}
-              showEmptyState={showEmptyState && !threads.length}
-              scrollPosition={scrollPosition}
-            />
-            <FooterV2 />
+      <TwoColsLayout noPadding>
+        <TwoColsLayout.Sidebar>
+          {leftArea}
+        </TwoColsLayout.Sidebar>
+
+        <TwoColsLayout.Content>
+          <Prompt
+            when={!!onLeaveMessage}
+            message={onLeaveMessage}
+          />
+          <div className="messages-container">
+            <div className="left-area">
+              <MessageList
+                onAdd={this.onNewThreadClick}
+                threads={threads}
+                onSelect={this.onThreadSelect}
+                showAddButton={!!currentMemberRole}
+                showEmptyState={showEmptyState && !threads.length}
+                scrollPosition={scrollPosition}
+              />
+            </div>
+            <div className="right-area">
+              { (showEmptyState && !threads.length) &&
+                  <MessagingEmptyState
+                    currentUser={currentUser}
+                    onClose={() => this.setState({showEmptyState: false})}
+                  />
+              }
+              { renderRightPanel() }
+            </div>
           </div>
-          <div className="right-area">
-            { (showEmptyState && !threads.length) &&
-                <MessagingEmptyState
-                  currentUser={currentUser}
-                  onClose={() => this.setState({showEmptyState: false})}
-                />
-            }
-            { renderRightPanel() }
-          </div>
-        </div>
-      </FullHeightContainer>
+        </TwoColsLayout.Content>
+      </TwoColsLayout>
     )
   }
 }

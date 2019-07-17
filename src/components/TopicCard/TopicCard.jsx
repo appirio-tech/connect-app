@@ -7,11 +7,23 @@ import cn from 'classnames'
 
 import UserTooltip from '../User/UserTooltip'
 import NotificationBellAvatar from './NotificationBellAvatar'
+import {
+  CODER_BOT_USER_FNAME,
+  CODER_BOT_USER_LNAME,
+} from '../../config/constants'
+import { isSystemUser } from '../../helpers/tcHelpers'
+
 import FileIcon from '../../assets/icons/file-12.svg'
 import LinkIcon from '../../assets/icons/link-12.svg'
 import InvisibleIcon from '../../assets/icons/invisible-12.svg'
 
 import styles from './TopicCard.scss'
+
+const SYSTEM_USER = {
+  firstName: CODER_BOT_USER_FNAME,
+  lastName: CODER_BOT_USER_LNAME,
+  photoURL: require('../../assets/images/avatar-coder.svg')
+}
 
 /**
  * The topic card that shows the topic title, number of links, files, etc
@@ -32,12 +44,14 @@ const TopicCard = ({
   const pluralize = (name, num) => `${name}${num > 1 ? 's' : ''}`
 
   const lastMessageUserId = last(posts).userId
-  const lastMessageAuthor = get(allMembers, lastMessageUserId)
+  const lastMessageAuthor = isSystemUser(lastMessageUserId) ? SYSTEM_USER : get(allMembers, lastMessageUserId)
   const lastMessageDate = formatDate(lastActivityAt)
   const numNewMessages = get(notifications, 'length')
   const newMessagesFromDate = formatDate(get(notifications, '0.date'))
   const numFiles = sumBy(posts, p => get(p, 'attachments.length', 0))
   const numLinks = sumBy(posts, p => get(p, 'links.length', 0))
+
+  const authorUser = isSystemUser(get(author, 'userId')) ? SYSTEM_USER : author
 
   return (
     <Link to={`/projects/${projectId}/messages/${topicId}`}>
@@ -47,7 +61,7 @@ const TopicCard = ({
           {numNewMessages && <NotificationBellAvatar />}
           {!numNewMessages && author && (
             <UserTooltip
-              usr={author}
+              usr={authorUser}
               previewAvatar
               size={40}
               id={'userTooltip-inTopicCard-' + topicId}
