@@ -60,8 +60,8 @@ class SkillsQuestion extends React.Component {
       const mappedSelectedCategories = _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
 
       const currentValues = getValue() || []
-      const prevAvailableOptions = options.filter(option => _.intersection(option.categories.map(c => c.toLowerCase()), mappedPrevSelectedCategories).length > 0)
-      const nextAvailableOptions = options.filter(option => _.intersection(option.categories.map(c => c.toLowerCase()), mappedSelectedCategories).length > 0)
+      const prevAvailableOptions = options.filter(option => _.intersection((option.categories || []).map(c => c.toLowerCase()), mappedPrevSelectedCategories).length > 0)
+      const nextAvailableOptions = options.filter(option => _.intersection((option.categories || []).map(c => c.toLowerCase()), mappedSelectedCategories).length > 0)
       const prevValues = currentValues.filter(skill => _.some(prevAvailableOptions, skill))
       const nextValues = currentValues.filter(skill => _.some(nextAvailableOptions, skill))
 
@@ -114,7 +114,7 @@ class SkillsQuestion extends React.Component {
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
     const mappedCategories = _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
     const availableOptions = options
-      .filter(option => _.intersection(option.categories.map(c => c.toLowerCase()), mappedCategories).length > 0)
+      .filter(option => _.intersection((option.categories || []).map(c => c.toLowerCase()), mappedCategories).length > 0)
       .map(
         option => _.pick(option, ['id', 'name'])
       )
