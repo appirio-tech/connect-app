@@ -59,6 +59,7 @@ const LinksGridView = ({
           renderLink={ renderLink }
           goBack={goBack}
           formatModifyDate={formatModifyDate}
+          isLinkSubFolder
         />)}
       {(!subFolderContent) && (
         <div styleName={cn({'assets-gridview-container-active': (linkToEdit >= 0  || linkToDelete >= 0)}, '')}>
