@@ -33,7 +33,7 @@ import editableProjectStatus from '../../../components/ProjectStatus/editablePro
 import {
   filterNotificationsByProjectId,
   filterReadNotifications,
-  filterPostsMentionNotifications,
+  filterTopicAndPostChangedNotifications,
 } from '../../../routes/notifications/helpers/notifications'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
@@ -438,7 +438,7 @@ class ProjectInfoContainer extends React.Component {
     const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER && project.status === 'draft'
 
     const projectNotReadNotifications = filterReadNotifications(filterNotificationsByProjectId(notifications, project.id))
-    const notReadMessageNotifications = filterPostsMentionNotifications(projectNotReadNotifications)
+    const notReadMessageNotifications = filterTopicAndPostChangedNotifications(projectNotReadNotifications)
 
     const navLinks = getProjectNavLinks(project, project.id).map((navLink) => {
       if (navLink.label === 'Messages') {
