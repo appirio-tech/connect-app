@@ -127,7 +127,10 @@ export function createScopeChangeRequest(projectId, request) {
 export function updateScopeChangeRequest(projectId, requestId, updatedProps) {
   return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/scopeChangeRequests/${requestId}`, { param: updatedProps })
     .then(resp => {
-      return _.get(resp.data, 'result.content')
+      return {
+        response: _.get(resp.data, 'result.content'),
+        requestId
+      }
     })
 }
 

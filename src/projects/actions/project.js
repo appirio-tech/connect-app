@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import moment from 'moment'
+import { flatten, unflatten } from 'flat'
 import { getProjectById,
   createProject as createProjectAPI,
   createProjectWithStatus as createProjectWithStatusAPI,
@@ -50,6 +51,15 @@ import {
   EXPAND_PROJECT_PHASE,
   COLLAPSE_PROJECT_PHASE,
   COLLAPSE_ALL_PROJECT_PHASES,
+  CREATE_SCOPE_CHANGE_REQUEST,
+  APPROVE_SCOPE_CHANGE,
+  REJECT_SCOPE_CHANGE,
+  CANCEL_SCOPE_CHANGE,
+  ACTIVATE_SCOPE_CHANGE,
+  SCOPE_CHANGE_REQ_STATUS_ACTIVATED,
+  SCOPE_CHANGE_REQ_STATUS_APPROVED,
+  SCOPE_CHANGE_REQ_STATUS_REJECTED,
+  SCOPE_CHANGE_REQ_STATUS_CANCELED,
 } from '../../config/constants'
 import {
   updateProductMilestone,
@@ -322,29 +332,64 @@ export function updateProject(projectId, updatedProps, updateExisting = false) {
 }
 
 export function createScopeChangeRequest(projectId, request) {
+  const flatNewScope = flatten(request.newScope, { safe: true })
+  const emptyKeys = _.keys(flatNewScope).filter(key => {
+    const value = _.get(request.newScope, key)
+
+    const isEmptyObject = _.isObject(value) && _.isEmpty(value)
+    const isEmptyString = value === ''
+
+    return isEmptyObject || isEmptyString
+  })
+
+  const cleanedRequest = {
+    ...request,
+    newScope: unflatten(_.omit(flatNewScope, emptyKeys))
+  }
+
   return (dispatch) => {
     return dispatch({
-      type: UPDATE_PROJECT, // TODO update constants for scope change actions
-      payload: createScopeChangeRequestAPI(projectId, request)
+      type: CREATE_SCOPE_CHANGE_REQUEST,
+      payload: createScopeChangeRequestAPI(projectId, cleanedRequest)
     })
   }
 }
 
 export function approveScopeChange(projectId, scopeChangeRequestId) {
-  const request = { status : 'approved' }
+  const request = { status : SCOPE_CHANGE_REQ_STATUS_APPROVED }
   return (dispatch) => {
     return dispatch({
-      type: UPDATE_PROJECT, // TODO update constants for scope change actions
+      type: APPROVE_SCOPE_CHANGE,
       payload: updateScopeChangeRequestAPI(projectId, scopeChangeRequestId, request)
     })
   }
 }
 
 export function rejectScopeChange(projectId, scopeChangeRequestId) {
-  const request = { status : 'rejected' }
+  const request = { status : SCOPE_CHANGE_REQ_STATUS_REJECTED }
   return (dispatch) => {
     return dispatch({
-      type: UPDATE_PROJECT, // TODO update constants for scope change actions
+      type: REJECT_SCOPE_CHANGE,
+      payload: updateScopeChangeRequestAPI(projectId, scopeChangeRequestId, request)
+    })
+  }
+}
+
+export function cancelScopeChange(projectId, scopeChangeRequestId) {
+  const request = { status: SCOPE_CHANGE_REQ_STATUS_CANCELED }
+  return (dispatch) => {
+    return dispatch({
+      type: CANCEL_SCOPE_CHANGE,
+      payload: updateScopeChangeRequestAPI(projectId, scopeChangeRequestId, request)
+    })
+  }
+}
+
+export function activateScopeChange(projectId, scopeChangeRequestId) {
+  const request = { status: SCOPE_CHANGE_REQ_STATUS_ACTIVATED }
+  return (dispatch) => {
+    return dispatch({
+      type: ACTIVATE_SCOPE_CHANGE,
       payload: updateScopeChangeRequestAPI(projectId, scopeChangeRequestId, request)
     })
   }
