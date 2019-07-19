@@ -1,4 +1,5 @@
 import {convertFromRaw} from 'draft-js'
+import _ from 'lodash'
 const Remarkable = require('remarkable')
 
 // Block level items, key is Remarkable's key for them, value returned is
@@ -294,7 +295,7 @@ function markdownToState(markdown, options = {}) {
 
   return convertFromRaw({
     entityMap,
-    blocks
+    blocks: _.filter(blocks, b => b.text)
   })
 }
 
