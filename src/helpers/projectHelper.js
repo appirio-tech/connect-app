@@ -337,23 +337,26 @@ export function getNewProjectLink(orgConfigs) {
  * @param {string} projectId - The project id
  */
 export function getProjectNavLinks(project, projectId) {
+  let messagesTab = null
+  // `Discussions` items can be added as soon as project is loaded
+  // if discussions are not hidden for it
+  if (project.details && !project.details.hideDiscussions) {
+    messagesTab = { label: 'Discussions', to: `/projects/${projectId}/discussions`, Icon: InvisibleIcon, iconClassName: 'fill' }
+  } else {
+    messagesTab = { label: 'Messages', to: `/projects/${projectId}/messages`, Icon: MessagesIcon, iconClassName: 'stroke', exact: false }
+  }
   // choose set of menu links based on the project version
   const navLinks = project.version === 'v3' ? [
     { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
-    { label: 'Messages', to: `/projects/${projectId}/messages`, Icon: MessagesIcon, iconClassName: 'stroke', exact: false },
+    messagesTab,
     { label: 'Scope', to: `/projects/${projectId}/scope`, Icon: ScopeIcon, iconClassName: 'fill' },
     // { label: 'Reports', to: '#', Icon: ReportsIcon },
     { label: 'Assets Library', to: `/projects/${projectId}/assets`, Icon: AssetsLibraryIcon, iconClassName: 'stroke' },
   ] : [
     { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
+    messagesTab,
     { label: 'Specification', to: `/projects/${projectId}/specification`, Icon: ScopeIcon, iconClassName: 'fill' },
   ]
-
-  // `Discussions` items can be added as soon as project is loaded
-  // if discussions are not hidden for it
-  if (project.details && !project.details.hideDiscussions) {
-    navLinks.push({ label: 'Discussions', to: `/projects/${projectId}/discussions`, Icon: InvisibleIcon, iconClassName: 'fill' })
-  }
 
   return navLinks
 }
