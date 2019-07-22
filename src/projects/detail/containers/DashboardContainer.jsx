@@ -8,7 +8,6 @@ import React from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import Alert from 'react-s-alert'
 import './DashboardContainer.scss'
 
 import {
