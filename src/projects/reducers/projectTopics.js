@@ -37,8 +37,15 @@ import {
 import update from 'react-addons-update'
 import { getLinksFromPost } from '../../helpers/draftJSHelper'
 
-
 const initialState = {
+  // as we can load different kind of topics in parallel we have to track their loading status separately
+  isLoadingPerTag: {
+    MESSAGES: false,
+    PRIMARY: false,
+  },
+  // `isLoading` would indicate the loading of any kind of topic as aggregation value for the values above
+  // technically we could aggregate inside components, but as we already use `isLoading` in many places
+  // so we do it inside the reducer for backward compatibility
   isLoading: false,
   isCreatingFeed: false,
   error: false,
@@ -49,6 +56,28 @@ const initialState = {
   }
 }
 
+/**
+ * Builds updated value of `isLoadingPerTag` state
+ *
+ * @param {Object}  currentIsLoadingPerTag current `isLoadingPerTag` state
+ * @param {String}  tag                    topic tag
+ * @param {Boolean} isLoading              `true` if topic with such tag is loading now
+ *
+ * @returns {Object} update value for `isLoadingPerTag` state
+ */
+const updateIsLoadingPerTag = (currentIsLoadingPerTag, tag, isLoading) => ({
+  ...currentIsLoadingPerTag,
+  [tag]: isLoading,
+})
+
+/**
+ * Calculates values for `isLoading` state value based on `isLoadingPerTag` state
+ *
+ * @param {Object} isLoadingPerTag `isLoadingPerTag` state
+ *
+ * @returns {Boolean} `true` if topic with any tag is loaded
+ */
+const getIsLoading = (isLoadingPerTag) => _.some(_.values(isLoadingPerTag))
 
 export const projectTopics = function (state=initialState, action) {
   const payload = action.payload
@@ -63,9 +92,11 @@ export const projectTopics = function (state=initialState, action) {
     if (action.meta.projectId === state.projectId) {
       const feedUpdateQuery = {}
       feedUpdateQuery[action.meta.tag] = { $merge: { topics: [], totalCount: 0 } }
+      const updatedIsLoadingPerTag = updateIsLoadingPerTag(state.isLoadingPerTag, action.meta.tag, true)
       return update(state, {
         feeds: feedUpdateQuery,
-        isLoading: { $set: true },
+        isLoadingPerTag: { $set: updatedIsLoadingPerTag },
+        isLoading: { $set: getIsLoading(updatedIsLoadingPerTag) },
         error: { $set: false }
       })
     } else {
@@ -101,18 +132,23 @@ export const projectTopics = function (state=initialState, action) {
 
     const feedUpdateQuery = {}
     feedUpdateQuery[action.meta.tag] = { $merge: { topics, totalCount: payload.totalCount } }
+    const updatedIsLoadingPerTag = updateIsLoadingPerTag(state.isLoadingPerTag, action.meta.tag, false)
     return update(state, {
-      isLoading: {$set: false},
+      isLoadingPerTag: {$set: updatedIsLoadingPerTag},
+      isLoading: {$set: getIsLoading(updatedIsLoadingPerTag)},
       error: {$set: false},
       feeds: feedUpdateQuery
     })
   }
   case LOAD_PROJECT_FEEDS_MEMBERS_FAILURE:
-  case LOAD_PROJECT_FEEDS_FAILURE:
+  case LOAD_PROJECT_FEEDS_FAILURE: {
+    const updatedIsLoadingPerTag = updateIsLoadingPerTag(state.isLoadingPerTag, action.meta.tag, false)
     return Object.assign({}, initialState, {
-      isLoading: false,
+      isLoadingPerTag: {$set: updatedIsLoadingPerTag},
+      isLoading: {$set: getIsLoading(updatedIsLoadingPerTag)},
       error: true
     })
+  }
   case CREATE_PROJECT_FEED_PENDING:
     return Object.assign({}, state, {
       isCreatingFeed: true,

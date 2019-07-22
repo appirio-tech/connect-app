@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Prompt } from 'react-router-dom'
+import { Prompt, withRouter } from 'react-router-dom'
+import Alert from 'react-s-alert'
 import MediaQuery from 'react-responsive'
 import {
   groupBy,
@@ -189,6 +190,22 @@ class MessagesTabContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // if we have URL like `/projects/{projectId}/messages#comment-{postId}` without mentioning topicId
+    // then we should try to find topic of such post and redirect to the full URL with topicId
+    const matchesPostUrl = this.props.match.path === '/projects/:projectId/messages' &&
+      this.props.location.hash.match(/#comment-(\d+)/)
+    // as soon as all topics are loaded we will redirect to the correct URL, if there such topic
+    if (this.props.isFeedsLoading && !nextProps.isFeedsLoading && matchesPostUrl) {
+      const postId = parseInt(matchesPostUrl[1], 10)
+      const topic = nextProps.feeds.find(feed => _.find(feed.posts, { id: postId }))
+
+      if (topic) {
+        this.props.history.replace(`/projects/${this.props.match.params.projectId}/messages/${topic.id}#comment-${postId}`)
+      } else {
+        Alert.error('Couldn\'t find the post referred in URL')
+      }
+    }
+
     // reset title and content in the state after successful post creation
     // so that we treat the post editor not changed, thus when we leave the page we don't get confirmation alert
     if (this.props.isCreatingFeed && !nextProps.isCreatingFeed && !nextProps.error) {
@@ -421,4 +438,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MessagesTabContainer)
+)(withRouter(MessagesTabContainer))

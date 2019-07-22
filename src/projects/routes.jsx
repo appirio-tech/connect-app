@@ -21,7 +21,26 @@ const FileDownloadWithAuth = requiresAuthentication(FileDownload)
 
 const ProjectDetailWithAuth = requiresAuthentication(() =>
   (<Switch>
-    <Route exact path="/projects/:projectId" render={() => <ProjectDetail component={Dashboard} />} />
+    <Route
+      exact
+      path="/projects/:projectId"
+      render={({ match, location }) => {
+        const matchesTopicUrl = location.hash.match(/#feed-(\d+)/)
+        const matchesPostUrl = location.hash.match(/#comment-(\d+)/)
+
+        // redirect old Topic URLs to the topics on the messages tab
+        if (matchesTopicUrl) {
+          return <Redirect to={`/projects/${match.params.projectId}/messages/${matchesTopicUrl[1]}`} />
+
+        // redirect old Posts URLs to the messages tab
+        // as we don't know the topic ID form the URL, message tab should take care about it
+        } else if (matchesPostUrl) {
+          return <Redirect to={`/projects/${match.params.projectId}/messages${location.hash}`} />
+        }
+
+        return <ProjectDetail component={Dashboard} />
+      }}
+    />
     <Route path="/projects/:projectId/status/:statusId" render={() => <ProjectDetail component={Dashboard} />} />
     <Route path="/projects/:projectId/messages/:topicId" render={() => <ProjectDetail component={MessagesTabContainer} />} />
     <Route path="/projects/:projectId/messages" render={() => <ProjectDetail component={MessagesTabContainer} />} />
