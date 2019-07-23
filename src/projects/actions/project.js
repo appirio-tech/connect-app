@@ -334,12 +334,13 @@ export function updateProject(projectId, updatedProps, updateExisting = false) {
 export function createScopeChangeRequest(projectId, request) {
   const flatNewScope = flatten(request.newScope, { safe: true })
   const emptyKeys = _.keys(flatNewScope).filter(key => {
-    const value = _.get(request.newScope, key)
+    const newValue = _.get(request.newScope, key)
+    const oldValue = _.get(request.oldScope, key)
 
-    const isEmptyObject = _.isObject(value) && _.isEmpty(value)
-    const isEmptyString = value === ''
+    const isUnChangedEmptyObject = _.isObject(newValue) && _.isEmpty(newValue) && (_.isObject(oldValue) && !_.isEmpty(oldValue) || _.isNil(oldValue))
+    const isUnChangedEmptyString = newValue === '' && oldValue !== ''
 
-    return isEmptyObject || isEmptyString
+    return isUnChangedEmptyObject || isUnChangedEmptyString
   })
 
   const cleanedRequest = {

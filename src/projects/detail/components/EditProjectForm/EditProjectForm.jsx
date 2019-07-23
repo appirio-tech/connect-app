@@ -140,10 +140,7 @@ class EditProjectForm extends Component {
         isSaving: false
       })
 
-      // settimeout to let the component render with updated project
-      setTimeout(() => {
-        this.refs.form.reset()
-      })
+      this.refs.form.reset()
     }
 
     if (hasDependantFields && !_.isEqual(this.props.project, nextProps.project)) {

@@ -33,6 +33,12 @@ class ScopeChangeRequest extends React.Component {
     })
   }
 
+  /*
+    Gets the fields of new scope with values that are different from the old scope
+    E.g. if the old scope is {appDefinition: { numScreens: '5-8', nativeOrHybrid: 'native' }} and
+    the new scope is {appDefinition: { numScreens: '5-8', nativeOrHybrid: 'hybrid' }}, then the function would return
+    { appDefinition.nativeOrHybrid: 'hybrid' }
+  */
   getDiff(oldScope, newScope) {
     const oldFlatScope = flatten(oldScope, { safe: true })
     const newFlatScope = flatten(newScope, { safe: true })
@@ -40,6 +46,10 @@ class ScopeChangeRequest extends React.Component {
     return _.omitBy(newFlatScope, (newValue, key) => _.isEqual(oldFlatScope[key], newValue))
   }
 
+  /*
+    Gets the readable field label (E.g. Number of Screens) from the field key (E.g. appDefinition.numScreens)
+    using the template definition
+  */
   deduceFieldLabel(template, invertedScopeFieldPaths, fieldkey) {
     const key = invertedScopeFieldPaths[`details.${fieldkey}`].replace(/\.fieldName$/, '')
     const fieldDescriptionObject = _.get(template, key)
@@ -58,6 +68,12 @@ class ScopeChangeRequest extends React.Component {
 
     We need to know the full path of the fieldname to derive a meaningful label for the field.
     The label would be available in template.sections[1].subSections[2]questions[0] as summaryTitle or title
+
+    The function returns a map of "full property path for the value" to the "full property path of the fieldname"
+    E.g. {
+      details.appDefinition.numberScreens: "template.sections[1].subSections[2]questions[0].fieldName",
+      details.appDefinition.nativeOrHybrid: "template.sections[1].subSections[2]questions[1].fieldName"
+    }
   */
   getInvertedScopeFieldPaths(flatTemplate) {
     const scopeFieldPaths = _.omitBy(flatTemplate, (value, key) => {
@@ -66,6 +82,10 @@ class ScopeChangeRequest extends React.Component {
     return _.invert(scopeFieldPaths)
   }
 
+  /*
+    Gets the list of changes found in the new scope by comparing it with the old scope.
+    The list created can then be used to display the changes in a readable format in the UI.
+  */
   getChanges(props) {
     const { pendingScopeChange, template } = props
     const { oldScope, newScope } = pendingScopeChange
@@ -137,7 +157,7 @@ class ScopeChangeRequest extends React.Component {
               Activate
             </button>
           )}
-          {isRequestor && isPending && (
+          {(isRequestor || isAdmin) && isPending && (
             <button className="tc-btn tc-btn-warning tc-btn-md" onClick={onCancel}>
               Cancel
             </button>

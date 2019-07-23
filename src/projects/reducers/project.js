@@ -23,7 +23,6 @@ import {
   ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, RELOAD_PROJECT_MEMBERS_SUCCESS,
   UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION,
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS, APPROVE_SCOPE_CHANGE_SUCCESS, REJECT_SCOPE_CHANGE_SUCCESS, CANCEL_SCOPE_CHANGE_SUCCESS, ACTIVATE_SCOPE_CHANGE_SUCCESS,
-  SCOPE_CHANGE_REQ_STATUS_APPROVED, SCOPE_CHANGE_REQ_STATUS_REJECTED, SCOPE_CHANGE_REQ_STATUS_CANCELED, SCOPE_CHANGE_REQ_STATUS_ACTIVATED,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -98,14 +97,12 @@ function updateProductInPhases(phases, phaseId, productId, updateProduct, should
  * @param {number} requestId - the id of targetted scope change request
  * @param {string} status - the new status to update
  */
-function updateScopeChangeStatus(scopeChangeRequests, requestId, status) {
-  const index = _.findIndex(scopeChangeRequests, s => s.id === requestId)
+function updateScopeChangeStatus(scopeChangeRequests, updatedScopeChange) {
+  const index = _.findIndex(scopeChangeRequests, s => s.id === updatedScopeChange.id)
   if (index > -1) {
     return update(scopeChangeRequests, {
       [index]: {
-        status: {
-          $set: status
-        }
+        $set: updatedScopeChange
       }
     })
   }
@@ -352,36 +349,8 @@ export const projectState = function (state=initialState, action) {
     })
 
 
-  case APPROVE_SCOPE_CHANGE_SUCCESS: {
-    state = revertDirtyProject(state)
-    return update(state, {
-      project: {
-        scopeChangeRequests: {
-          $set: updateScopeChangeStatus(
-            state.project.scopeChangeRequests,
-            action.payload.requestId,
-            SCOPE_CHANGE_REQ_STATUS_APPROVED
-          )
-        }
-      }
-    })
-  }
-
-  case REJECT_SCOPE_CHANGE_SUCCESS: {
-    state = revertDirtyProject(state)
-    return update(state, {
-      project: {
-        scopeChangeRequests: {
-          $set: updateScopeChangeStatus(
-            state.project.scopeChangeRequests,
-            action.payload.requestId,
-            SCOPE_CHANGE_REQ_STATUS_REJECTED
-          )
-        }
-      }
-    })
-  }
-
+  case APPROVE_SCOPE_CHANGE_SUCCESS:
+  case REJECT_SCOPE_CHANGE_SUCCESS:
   case CANCEL_SCOPE_CHANGE_SUCCESS: {
     state = revertDirtyProject(state)
     return update(state, {
@@ -389,8 +358,7 @@ export const projectState = function (state=initialState, action) {
         scopeChangeRequests: {
           $set: updateScopeChangeStatus(
             state.project.scopeChangeRequests,
-            action.payload.requestId,
-            SCOPE_CHANGE_REQ_STATUS_CANCELED
+            action.payload
           )
         }
       }
@@ -402,12 +370,8 @@ export const projectState = function (state=initialState, action) {
 
     const updatedScopeChangeRequests = updateScopeChangeStatus(
       state.project.scopeChangeRequests,
-      action.payload.requestId,
-      SCOPE_CHANGE_REQ_STATUS_ACTIVATED
+      action.payload
     )
-
-    const index = _.findIndex(updatedScopeChangeRequests, s => s.id === action.payload.requestId)
-    const currentChangeRequest = updatedScopeChangeRequests[index]
 
     return update(state, {
       project: {
@@ -415,7 +379,7 @@ export const projectState = function (state=initialState, action) {
           $set: updatedScopeChangeRequests
         },
         details: {
-          $set: _.cloneDeep(currentChangeRequest.newScope)
+          $set: _.cloneDeep(action.payload.newScope)
         }
       }
     })
