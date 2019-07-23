@@ -337,8 +337,8 @@ export function createScopeChangeRequest(projectId, request) {
     const newValue = _.get(request.newScope, key)
     const oldValue = _.get(request.oldScope, key)
 
-    const isUnChangedEmptyObject = _.isObject(newValue) && _.isEmpty(newValue) && (_.isObject(oldValue) && !_.isEmpty(oldValue) || _.isNil(oldValue))
-    const isUnChangedEmptyString = newValue === '' && oldValue !== ''
+    const isUnChangedEmptyObject = _.isObject(newValue) && _.isEmpty(newValue) && (_.isObject(oldValue) && _.isEmpty(oldValue) || _.isNil(oldValue))
+    const isUnChangedEmptyString = newValue === '' && (oldValue === '' || _.isNil(oldValue))
 
     return isUnChangedEmptyObject || isUnChangedEmptyString
   })
