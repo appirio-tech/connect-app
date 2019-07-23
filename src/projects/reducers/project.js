@@ -340,28 +340,34 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
-  case CREATE_SCOPE_CHANGE_REQUEST_SUCCESS:
+  case CREATE_SCOPE_CHANGE_REQUEST_SUCCESS: {
     state = revertDirtyProject(state)
-    return update(state, {
-      project: {
-        scopeChangeRequests: { $push: [action.payload] }
-      }
-    })
 
+    const project = update(state.project, {
+      scopeChangeRequests: { $push: [action.payload] }
+    })
+    return Object.assign({}, state, {
+      project,
+      projectNonDirty: _.cloneDeep(project)
+    })
+  }
 
   case APPROVE_SCOPE_CHANGE_SUCCESS:
   case REJECT_SCOPE_CHANGE_SUCCESS:
   case CANCEL_SCOPE_CHANGE_SUCCESS: {
     state = revertDirtyProject(state)
-    return update(state, {
-      project: {
-        scopeChangeRequests: {
-          $set: updateScopeChangeStatus(
-            state.project.scopeChangeRequests,
-            action.payload
-          )
-        }
+
+    const project = update(state.project, {
+      scopeChangeRequests: {
+        $set: updateScopeChangeStatus(
+          state.project.scopeChangeRequests,
+          action.payload
+        )
       }
+    })
+    return Object.assign({}, state, {
+      project,
+      projectNonDirty: _.cloneDeep(project)
     })
   }
 
@@ -372,16 +378,18 @@ export const projectState = function (state=initialState, action) {
       state.project.scopeChangeRequests,
       action.payload
     )
-
-    return update(state, {
-      project: {
-        scopeChangeRequests: {
-          $set: updatedScopeChangeRequests
-        },
-        details: {
-          $set: _.cloneDeep(action.payload.newScope)
-        }
+    const updatedDetails = _.merge({}, state.project.details, _.cloneDeep(action.payload.newScope))
+    const project = update(state.project, {
+      scopeChangeRequests: {
+        $set: updatedScopeChangeRequests
+      },
+      details: {
+        $set: updatedDetails
       }
+    })
+    return Object.assign({}, state, {
+      project,
+      projectNonDirty: _.cloneDeep(project)
     })
   }
 

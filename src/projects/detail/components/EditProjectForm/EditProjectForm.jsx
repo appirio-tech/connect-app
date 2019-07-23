@@ -139,8 +139,6 @@ class EditProjectForm extends Component {
         canSubmit: false,
         isSaving: false
       })
-
-      this.refs.form.reset()
     }
 
     if (hasDependantFields && !_.isEqual(this.props.project, nextProps.project)) {
@@ -259,6 +257,10 @@ class EditProjectForm extends Component {
     const modelWithoutHiddenValues = removeValuesOfHiddenNodes(this.state.template, model)
     const scopeFreezed = this.isScopeFreezed()
     this.props.submitHandler(modelWithoutHiddenValues, scopeFreezed)
+
+    if (scopeFreezed) {
+      this.refs.form.reset()
+    }
   }
 
   /**
@@ -267,10 +269,8 @@ class EditProjectForm extends Component {
    * @param change changed form model in flattened form
    * @param isChanged flag that indicates if form actually changed from initial model values
    */
-  handleChange(change, isChanged) {
-    if (isChanged) {
-      this.props.fireProjectDirty(unflatten(change))
-    }
+  handleChange(change) {
+    this.props.fireProjectDirty(unflatten(change))
   }
 
   makeDeliveredPhaseReadOnly(projectStatus) {
