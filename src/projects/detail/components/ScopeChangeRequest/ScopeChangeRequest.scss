@@ -1,0 +1,48 @@
+@import "~tc-ui/src/styles/tc-includes";
+
+.card {
+  @include roboto;
+
+  background-color: $tc-gray-0;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px 1px $tc-gray-neutral-dark;
+  padding: 15px 20px 20px 20px;
+  margin-top: 15px;
+}
+
+.cardTitle {
+  @include roboto-bold;
+
+  font-size: 16px;
+  line-height: 30px;
+  color: $tc-gray-100;
+  margin-bottom: 5px;
+}
+
+.changeItem {
+  font-size: 16px;
+  line-height: 28px;
+}
+
+.newValue {
+  color: $tc-green-110;
+}
+
+.oldValue {
+  color: $tc-red-70;
+}
+
+.buttonsContainer {
+  text-align: center;
+  margin-top: 12px;
+
+  & > button {
+    margin-right: 12px;
+  }
+}
+
+.note {
+  color: $tc-gray-50;
+  font-size: 13px;
+  margin-top: 22px;
+}

@@ -71,8 +71,6 @@ class EditProjectForm extends Component {
     this.onLeave = this.onLeave.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.makeDeliveredPhaseReadOnly = this.makeDeliveredPhaseReadOnly.bind(this)
-    this.approveScopeChange = this.approveScopeChange.bind(this)
-    this.rejectScopeChange = this.rejectScopeChange.bind(this)
     this.isScopeFreezed = this.isScopeFreezed.bind(this)
 
     // init wizard to support dependant questions
@@ -259,6 +257,10 @@ class EditProjectForm extends Component {
     const modelWithoutHiddenValues = removeValuesOfHiddenNodes(this.state.template, model)
     const scopeFreezed = this.isScopeFreezed()
     this.props.submitHandler(modelWithoutHiddenValues, scopeFreezed)
+
+    if (scopeFreezed) {
+      this.refs.form.reset()
+    }
   }
 
   /**
@@ -275,16 +277,6 @@ class EditProjectForm extends Component {
     return projectStatus === PROJECT_STATUS_COMPLETED
   }
 
-  approveScopeChange() {
-    const { pendingScopeChange } = this.props
-    this.props.approveScopeChange(pendingScopeChange)
-  }
-
-  rejectScopeChange() {
-    const { pendingScopeChange } = this.props
-    this.props.rejectScopeChange(pendingScopeChange)
-  }
-
   render() {
     const {
       isEdittable,
@@ -293,7 +285,6 @@ class EditProjectForm extends Component {
       productCategories,
       disableAutoScrolling,
       pendingScopeChange,
-      isCustomer,
     } = this.props
     const { template } = this.state
     const { project, dirtyProject } = this.state
@@ -329,20 +320,6 @@ class EditProjectForm extends Component {
                 type="submit"
                 disabled={(!this.isChanged() || this.state.isSaving) || anySectionInvalid || !this.state.canSubmit || this.makeDeliveredPhaseReadOnly(project.status)}
               >{ this.isScopeFreezed() ? 'Submit Change Request' : 'Save Changes'}</button>
-            }
-            {
-              pendingScopeChange && isCustomer && (
-                <div>
-                  <button className="tc-btn tc-btn-primary tc-btn-md"
-                    type="button"
-                    onClick={this.approveScopeChange}
-                  >Approve</button>
-                  <button className="tc-btn tc-btn-primary tc-btn-md"
-                    type="button"
-                    onClick={this.rejectScopeChange}
-                  >Reject</button>
-                </div>
-              )
             }
           </div>
         </div>
@@ -417,8 +394,6 @@ EditProjectForm.propTypes = {
   shouldUpdateTemplate: PropTypes.bool,
   disableAutoScrolling: PropTypes.bool,
   pendingScopeChange: PropTypes.object,
-  approveScopeChange: PropTypes.func.isRequired,
-  rejectScopeChange: PropTypes.func.isRequired,
 }
 
 export default EditProjectForm
