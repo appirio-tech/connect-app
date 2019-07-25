@@ -1,5 +1,4 @@
 import {convertFromRaw} from 'draft-js'
-import _ from 'lodash'
 const Remarkable = require('remarkable')
 
 // Block level items, key is Remarkable's key for them, value returned is
@@ -285,7 +284,12 @@ function markdownToState(markdown, options = {}) {
       // but right now this code doesn't support that.
       if (item.level === 0 || item.type === 'list_item_open') {
         const block = Object.assign({
-          depth: 0
+          depth: 0,
+          // set default values when creating a block, usually the block would have some inline items and
+          // so these default values would be overwritten because of inline items by `blockToModify` object above
+          text: '',
+          inlineStyleRanges: [],
+          entityRanges: [],
         }, BlockTypes[itemType](item))
 
         blocks.push(block)
@@ -295,7 +299,7 @@ function markdownToState(markdown, options = {}) {
 
   return convertFromRaw({
     entityMap,
-    blocks: _.filter(blocks, b => b.text)
+    blocks,
   })
 }
 
