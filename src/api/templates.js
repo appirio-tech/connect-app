@@ -11,7 +11,7 @@ import { PROJECTS_API_URL } from '../config/constants'
  * @return {Promise} projects metadata (projectTemplates, productTemplates and projectTypes)
  */
 export function getProjectsMetadata() {
-  return axios.get(`${PROJECTS_API_URL}/v4/projects/metadata`)
+  return axios.get(`${PROJECTS_API_URL}/v4/projects/metadata?includeAllReferred=true`)
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
 
