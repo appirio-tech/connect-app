@@ -61,6 +61,7 @@ class MessagesTabContainer extends React.Component {
     this.onNewPost = this.onNewPost.bind(this)
     this.onNewPostChange = this.onNewPostChange.bind(this)
     this.isChanged = this.isChanged.bind(this)
+    this.onLeave = this.onLeave.bind(this)
     this.onRefreshFeeds = this.onRefreshFeeds.bind(this)
   }
 
