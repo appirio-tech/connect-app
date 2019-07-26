@@ -34,6 +34,41 @@ export function getProjectCreationTemplateField(
 }
 
 /**
+ * Builds the scope for a template, combining v3 and v2 templates
+ * @param {*} template
+ * @param {*} forms
+ * @param {*} priceConfigs
+ */
+export function buildTemplateScope(template, forms, priceConfigs) {
+  const form = _.find(forms, template.form) || { config: {} }
+  const priceConfig = _.find(priceConfigs, template.priceConfig) || { config: {} }
+  return {
+    ...template.scope,
+    ...form.config,
+    ...priceConfig.config
+  }
+}
+
+/**
+ * Builds a template, combining v3 and v2 templates
+ * @param {*} template
+ * @param {*} forms
+ * @param {*} planConfigs
+ * @param {*} priceConfigs
+ */
+export function buildTemplate(template, forms, planConfigs, priceConfigs) {
+  const planConfig = _.find(planConfigs, template.planConfig) || { config: {} }
+  return {
+    ...template,
+    scope: buildTemplateScope(template, forms, priceConfigs),
+    phases: {
+      ...(template.phases || {}),
+      ...planConfig.config
+    }
+  }
+}
+
+/**
  * Finds project template by its alias
  *
  * NOTE: search only by the first alias
