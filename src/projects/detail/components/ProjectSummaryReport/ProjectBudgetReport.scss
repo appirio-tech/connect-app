@@ -1,0 +1,86 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.header {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.title-and-description {
+    flex: 1;
+}
+
+.title {
+    @include roboto-bold;
+    font-size: 20px;
+    color: $tc-black;
+    line-height: 30px;
+}
+
+.description {
+    @include roboto;
+    font-size: 12px;
+    color: $tc-gray-40;
+    line-height: 20px;
+}
+
+.budget-part {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: 20px;
+}
+
+.circle {
+    display: inline-block;
+    border-radius: 5px;
+    width: 10px;
+    height: 10px;
+    margin-right: 10px;
+}
+
+.money {
+    @include roboto;
+    font-size: 16px;
+    color: $tc-black;
+    line-height: 20px;
+    margin-bottom: 5px;
+}
+
+.part-of-budget {
+    @include roboto;
+    font-size: 10px;
+    color: $tc-gray-60;
+    line-height: 20px;
+}
+
+.work {
+    background: #FFC43D;
+}
+
+.fees {
+    background: #B671D7;
+}
+
+.revenue {
+    background: #26B3C5;
+}
+
+.remaining {
+    background: #E9E9E9;
+}
+
+.budget-distribution {
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #E9E9E9;
+}
+
+.budget-distribution-part {
+    height: 20px;
+}
+
+.revenue.budget-distribution-part {
+    border-radius: 0 10px 10px 0;
+}

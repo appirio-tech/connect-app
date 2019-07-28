@@ -1,0 +1,32 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.title {
+    @include roboto-bold;
+    font-size: 20px;
+    color: $tc-black;
+    line-height: 30px;
+    margin-bottom: 30px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+}
+
+.value {
+    @include roboto;
+    font-size: 36px;
+    color: $tc-black;
+    line-height: 40px;
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.label {
+    @include roboto;
+    font-size: 10px;
+    color: $tc-gray-40;
+    line-height: 20px;
+    letter-spacing: 0.8px;
+    text-align: right;
+}
