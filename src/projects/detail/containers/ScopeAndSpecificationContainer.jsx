@@ -123,7 +123,6 @@ class SpecificationContainer extends Component {
       template,
       allProductTemplates,
       productCategories,
-      estimationQuestion,
       currentUserId,
       phases,
       isManageUser,
@@ -202,14 +201,6 @@ class SpecificationContainer extends Component {
             pendingScopeChange={pendingScopeChange}
             isCustomer={isCustomer}
           />
-          {!!estimationQuestion &&
-            <ProjectEstimation
-              question={estimationQuestion}
-              template={template}
-              project={project}
-              theme="dashboard"
-            />
-          }
           {
             pendingScopeChange &&
             <ScopeChangeRequest
