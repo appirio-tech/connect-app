@@ -27,6 +27,7 @@ import {
 import { clean } from '../../../../helpers/utils'
 
 import './EditProjectForm.scss'
+import { PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_COMPLETED } from '../../../../config/constants'
 
 const FeaturePickerModal = ({ project, isEdittable, showFeaturesDialog, hideFeaturesDialog, saveFeatures, setValue }) => {
   const setFormValue = (features, featureSeeAttached=false) => {
@@ -72,6 +73,7 @@ class EditProjectForm extends Component {
     this.onLeave = this.onLeave.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.makeDeliveredPhaseReadOnly = this.makeDeliveredPhaseReadOnly.bind(this)
+    this.isScopeFreezed = this.isScopeFreezed.bind(this)
 
     // init wizard to support dependant questions
     const {
@@ -260,10 +262,19 @@ class EditProjectForm extends Component {
     // this.props.submitHandler({ details })
   }
 
+  isScopeFreezed() {
+    return [PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW].indexOf(this.props.project.status) === -1
+  }
+
   submit(model) {
     this.setState({isSaving: true })
     const modelWithoutHiddenValues = removeValuesOfHiddenNodes(this.state.template, model)
-    this.props.submitHandler(modelWithoutHiddenValues)
+    const scopeFreezed = this.isScopeFreezed()
+    this.props.submitHandler(modelWithoutHiddenValues, scopeFreezed)
+
+    if (scopeFreezed) {
+      this.refs.form.reset()
+    }
   }
 
   /**
@@ -277,7 +288,7 @@ class EditProjectForm extends Component {
   }
 
   makeDeliveredPhaseReadOnly(projectStatus) {
-    return projectStatus === 'completed'
+    return projectStatus === PROJECT_STATUS_COMPLETED
   }
 
   render() {
@@ -286,6 +297,7 @@ class EditProjectForm extends Component {
       showHidden,
       productTemplates,
       productCategories,
+      pendingScopeChange,
       isInsideDrawer,
       disableAutoScrolling,
       currentWizardStep,
@@ -329,10 +341,12 @@ class EditProjectForm extends Component {
             currentWizardStep={currentWizardStep}
           />
           <div className="section-footer section-footer-spec">
-            <button className="tc-btn tc-btn-primary tc-btn-md"
-              type="submit"
-              disabled={(!this.isChanged() || this.state.isSaving) || anySectionInvalid || !this.state.canSubmit || this.makeDeliveredPhaseReadOnly(project.status)}
-            >Save Changes</button>
+            { !pendingScopeChange &&
+              <button className="tc-btn tc-btn-primary tc-btn-md"
+                type="submit"
+                disabled={(!this.isChanged() || this.state.isSaving) || anySectionInvalid || !this.state.canSubmit || this.makeDeliveredPhaseReadOnly(project.status)}
+              >{ this.isScopeFreezed() ? 'Submit Change Request' : 'Save Changes'}</button>
+            }
           </div>
         </div>
       )
@@ -416,6 +430,7 @@ EditProjectForm.propTypes = {
   shouldUpdateTemplate: PropTypes.bool,
   isInsideDrawer: PropTypes.bool,
   disableAutoScrolling: PropTypes.bool,
+  pendingScopeChange: PropTypes.object,
   /**
    * If `currentWizardStep` is defined, then edit form shows form in the wizard mode
    * with this step as current, instead of showing all the sections.

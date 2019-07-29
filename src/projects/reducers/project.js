@@ -21,7 +21,8 @@ import {
   REMOVE_TOPCODER_MEMBER_INVITE_PENDING, REMOVE_TOPCODER_MEMBER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_FAILURE,
   INVITE_CUSTOMER_FAILURE, INVITE_TOPCODER_MEMBER_FAILURE, INVITE_CUSTOMER_PENDING,
   ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, RELOAD_PROJECT_MEMBERS_SUCCESS,
-  UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION
+  UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION,
+  CREATE_SCOPE_CHANGE_REQUEST_SUCCESS, APPROVE_SCOPE_CHANGE_SUCCESS, REJECT_SCOPE_CHANGE_SUCCESS, CANCEL_SCOPE_CHANGE_SUCCESS, ACTIVATE_SCOPE_CHANGE_SUCCESS,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -88,6 +89,31 @@ function updateProductInPhases(phases, phaseId, productId, updateProduct, should
   })
 
   return update(phases, { $splice : [[phaseIdx, 1, updatedPhase]] })
+}
+
+/**
+ * Updates the status of a scope change request identified by the index.
+ *
+ * @param {Object} scopeChangeRequests - the list of scope change requests for the project
+ * @param {number} requestId - the id of targetted scope change request
+ * @param {string} status - the new status to update
+ */
+function updateScopeChangeStatus(scopeChangeRequests, updatedScopeChange) {
+  const index = _.findIndex(scopeChangeRequests, s => s.id === updatedScopeChange.id)
+  if (index > -1) {
+    return update(scopeChangeRequests, {
+      [index]: {
+        $set: updatedScopeChange
+      }
+    })
+  }
+  return scopeChangeRequests
+}
+
+function revertDirtyProject(state) {
+  return Object.assign({}, state, {
+    project: _.cloneDeep(state.projectNonDirty)
+  })
 }
 
 /**
@@ -312,6 +338,59 @@ export const projectState = function (state=initialState, action) {
       phases: { $set:phases },
       phasesNonDirty: { $set: action.payload },
       isLoadingPhases: { $set: false}
+    })
+  }
+
+  case CREATE_SCOPE_CHANGE_REQUEST_SUCCESS: {
+    state = revertDirtyProject(state)
+
+    const project = update(state.project, {
+      scopeChangeRequests: { $push: [action.payload] }
+    })
+    return Object.assign({}, state, {
+      project,
+      projectNonDirty: _.cloneDeep(project)
+    })
+  }
+
+  case APPROVE_SCOPE_CHANGE_SUCCESS:
+  case REJECT_SCOPE_CHANGE_SUCCESS:
+  case CANCEL_SCOPE_CHANGE_SUCCESS: {
+    state = revertDirtyProject(state)
+
+    const project = update(state.project, {
+      scopeChangeRequests: {
+        $set: updateScopeChangeStatus(
+          state.project.scopeChangeRequests,
+          action.payload
+        )
+      }
+    })
+    return Object.assign({}, state, {
+      project,
+      projectNonDirty: _.cloneDeep(project)
+    })
+  }
+
+  case ACTIVATE_SCOPE_CHANGE_SUCCESS: {
+    state = revertDirtyProject(state)
+
+    const updatedScopeChangeRequests = updateScopeChangeStatus(
+      state.project.scopeChangeRequests,
+      action.payload
+    )
+    const updatedDetails = _.merge({}, state.project.details, _.cloneDeep(action.payload.newScope))
+    const project = update(state.project, {
+      scopeChangeRequests: {
+        $set: updatedScopeChangeRequests
+      },
+      details: {
+        $set: updatedDetails
+      }
+    })
+    return Object.assign({}, state, {
+      project,
+      projectNonDirty: _.cloneDeep(project)
     })
   }
 
@@ -700,9 +779,7 @@ export const projectState = function (state=initialState, action) {
     }
 
   case PROJECT_DIRTY_UNDO: {
-    return Object.assign({}, state, {
-      project: _.cloneDeep(state.projectNonDirty)
-    })
+    return revertDirtyProject(state)
   }
 
   case PHASE_DIRTY_UNDO: {
