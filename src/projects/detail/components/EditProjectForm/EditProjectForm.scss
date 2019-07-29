@@ -20,6 +20,33 @@
   }
 
   .editProjectForm {
+    &.is-inside-drawer {
+      .right-area-item {
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0;
+
+        .boxes {
+          margin: 0;
+        }
+      }
+
+      .section-features-module {
+        margin-top: 10px;
+
+        &#summary-final- {
+          margin-top: 20px;
+        }
+      }
+
+      .spec-section-container {
+        box-shadow: none;
+      }
+
+      .section-footer {
+        margin-top: 0;
+      }
+    }
     .tc-file-field__inputs {
       height: 45px;
     }
@@ -132,6 +159,11 @@
       margin-bottom: 20px;
       border-radius: 4px;
       background-color: $tc-white;
+
+      &.right-area-item-is-inside-drawer {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
 
       @media screen and (max-width: $screen-md - 1px) {
         margin-bottom: 0;

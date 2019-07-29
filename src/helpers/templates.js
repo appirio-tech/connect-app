@@ -75,11 +75,11 @@ export function getProjectTemplateByKey(projectTemplates, projectTemplateKey) {
 
 /**
  * Find project's product templates
- * 
+ *
  * @param {Array} productTemplates list of product templates
  * @param {Array} projectTemplates list of project templates
  * @param {Object} project the project
- * 
+ *
  * @return {Array} project's product templates
  */
 export function getProjectProductTemplates(productTemplates, projectTemplates, project) {
@@ -96,7 +96,7 @@ export function getProjectProductTemplates(productTemplates, projectTemplates, p
   }
 
   const projectTemplate = getProjectTemplateById(projectTemplates, project.templateId)
-  const phases = _.get(projectTemplate, 'phases', {}) // TODO we can log error details here for missing project template
+  const phases = _.omit(_.get(projectTemplate, 'phases', {}), 'workstreamsConfig') // TODO we can log error details here for missing project template
   const projectProductTemplates = []
 
   Object.keys(phases).forEach((phaseName) => {

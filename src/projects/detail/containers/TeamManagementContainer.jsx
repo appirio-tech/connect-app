@@ -28,6 +28,7 @@ import {
   removeProjectMember,
   updateProjectMember
 } from '../../actions/projectMember'
+import { loadProjects } from '../../actions/loadProjects'
 
 class TeamManagementContainer extends Component {
 
@@ -61,7 +62,8 @@ class TeamManagementContainer extends Component {
       _.findIndex(nextProps.members,
         m => m.userId === this.props.currentUser.userId) === -1
     ) {
-      // navigate to project listing
+      // navigate to project listing and reload projects
+      this.props.loadProjects({ sort: 'updatedAt desc' })
       this.props.history.push('/projects/')
     }
     const {processingInvites} = this.props
@@ -252,6 +254,7 @@ const mapDispatchToProps = {
   deleteTopcoderMemberInvite,
   acceptOrRefuseInvite,
   reloadProjectMembers,
+  loadProjects,
 }
 
 TeamManagementContainer.propTypes = {

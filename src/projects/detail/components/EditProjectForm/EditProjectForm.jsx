@@ -20,9 +20,11 @@ import {
   initWizard,
   removeValuesOfHiddenNodes,
   updateNodesByConditions,
+  getVisibilityForRendering,
   STEP_VISIBILITY,
   STEP_STATE,
 } from '../../../../helpers/wizardHelper'
+import { clean } from '../../../../helpers/utils'
 
 import './EditProjectForm.scss'
 import { PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_COMPLETED } from '../../../../config/constants'
@@ -82,6 +84,7 @@ class EditProjectForm extends Component {
     this.state = {
       template,
       hasDependantFields,
+      dirtyProject: Object.assign({}, props.project),
     }
   }
 
@@ -153,6 +156,17 @@ class EditProjectForm extends Component {
           template: updatedTemplate,
           project: hidedSomeNodes ? nextProps.project : this.state.project,
         })
+
+        // re-check again if any hidden values when an option is deselected
+        const updatedProject = clean(removeValuesOfHiddenNodes(updatedTemplate, nextProps.project))
+        const skipProperties = ['members', 'invites']
+        const clearUpdatedProject = clean(_.omit(updatedProject, [...skipProperties, 'isDirty']))
+        const clearUpdatedNonDirtyProject = clean(_.omit(nextProps.projectNonDirty, skipProperties))
+        const isDirty = !_.isEqual(clearUpdatedProject, clearUpdatedNonDirtyProject)
+        // update the state, always use this flag to check if changed
+        this.setState({
+          isProjectDirty: isDirty,
+        })
       }
     }
   }
@@ -208,7 +222,7 @@ class EditProjectForm extends Component {
   }
 
   isChanged() {
-    return !!this.props.project.isDirty
+    return !!this.state.isProjectDirty
   }
 
   enableButton() {
@@ -283,8 +297,10 @@ class EditProjectForm extends Component {
       showHidden,
       productTemplates,
       productCategories,
-      disableAutoScrolling,
       pendingScopeChange,
+      isInsideDrawer,
+      disableAutoScrolling,
+      currentWizardStep,
     } = this.props
     const { template } = this.state
     const { project, dirtyProject } = this.state
@@ -292,7 +308,16 @@ class EditProjectForm extends Component {
     const renderSection = (section, idx) => {
       const anySectionInvalid = _.some(template.sections, (s) => s.isInvalid)
       return (
-        <div key={idx}>
+        <div
+          key={section.id || `section-${idx}`}
+          className={cn(
+            'spec-section-container', {
+              [`section-theme-${section.theme}`]: !!section.theme,
+              [`section-state-${section.stepState}`]: !!section.stepState,
+              [`section-visibility-${section.visibilityForRendering}`]: !!section.visibilityForRendering
+            }
+          )}
+        >
           <SpecSection
             {...section}
             project={project}
@@ -313,6 +338,7 @@ class EditProjectForm extends Component {
             removeAttachment={this.props.removeAttachment}
             attachmentsStorePath={this.props.attachmentsStorePath}
             canManageAttachments={this.props.canManageAttachments}
+            currentWizardStep={currentWizardStep}
           />
           <div className="section-footer section-footer-spec">
             { !pendingScopeChange &&
@@ -330,6 +356,7 @@ class EditProjectForm extends Component {
       <div
         className={cn(
           'editProjectForm', {
+            ['is-inside-drawer']: isInsideDrawer,
             [`form-theme-${template.theme}`]: template.theme
           }
         )}
@@ -348,13 +375,20 @@ class EditProjectForm extends Component {
         >
           {template.sections.map(section => ({
             ...section,
-            // in edit form we always show steps in read-optimized mode
-            visibilityForRendering: STEP_VISIBILITY.READ_OPTIMIZED,
+            visibilityForRendering: currentWizardStep ?
+              // if define currentWizardStep, then use it to determine visibility of the setp
+              getVisibilityForRendering(template, section, currentWizardStep) :
+              // otherwise, in edit form we always show steps in read-optimized mode
+              STEP_VISIBILITY.READ_OPTIMIZED,
             // in edit form we always treat steps as completed aka 'prev'
             stepState: STEP_STATE.PREV
           })).filter((section) => (
-            // hide sections in edit mode
-            !section.hiddenOnEdit
+            // hide if we are in a wizard mode and section is hidden for now
+            section.visibilityForRendering !== STEP_VISIBILITY.NONE &&
+            // hide if section is hidden by condition
+            (!_.get(section, '__wizard.hiddenByCondition')) &&
+            // hide sections in edit mode, except we defined the particular step to show
+            (!section.hiddenOnEdit || currentWizardStep)
           )).map(renderSection)}
           <FeaturePickerFormField
             name="details.appDefinition.features"
@@ -374,6 +408,8 @@ class EditProjectForm extends Component {
 
 EditProjectForm.defaultProps = {
   shouldUpdateTemplate: false,
+  onlyShowSummary: false,
+  isInsideDrawer: false,
   disableAutoScrolling: false,
 }
 
@@ -392,8 +428,15 @@ EditProjectForm.propTypes = {
   updateAttachment: PropTypes.func.isRequired,
   removeAttachment: PropTypes.func.isRequired,
   shouldUpdateTemplate: PropTypes.bool,
+  isInsideDrawer: PropTypes.bool,
   disableAutoScrolling: PropTypes.bool,
   pendingScopeChange: PropTypes.object,
+  /**
+   * If `currentWizardStep` is defined, then edit form shows form in the wizard mode
+   * with this step as current, instead of showing all the sections.
+   * NOTE: when `currentWizardStep` is defined, the `hiddenOnEdit` are ignored for `sections`.
+   */
+  currentWizardStep: PropTypes.any,
 }
 
 export default EditProjectForm

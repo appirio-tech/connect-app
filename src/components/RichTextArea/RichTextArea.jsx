@@ -22,6 +22,9 @@ import { getAvatarResized } from '../../helpers/tcHelpers'
 import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 import EditLinkPopoverWrapper from './LinkPlugin/EditLinkPopoverWrapper/EditLinkPopoverWrapper'
 
+import TitleCloseIcon from '../../assets/icons/icon-close.svg'
+import TitleSaveIcon from '../../assets/icons/icon-save.svg'
+
 import {
   FILE_PICKER_API_KEY,
   FILE_PICKER_CNAME, FILE_PICKER_FROM_SOURCES,
@@ -388,7 +391,7 @@ class RichTextArea extends React.Component {
   render() {
     const {MentionSuggestions} = this.mentionPlugin
     const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating,
-      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic, hasPrivateSwitch, canUploadAttachment, attachments } = this.props
+      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic, hasPrivateSwitch, canUploadAttachment, attachments, textAreaOnly } = this.props
     const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading, isPrivate, isAddLinkOpen, rawFiles, files} = this.state
     let canSubmit = (disableTitle || titleValue.trim())
       && (disableContent || editorState.getCurrentContent().hasText())
@@ -450,6 +453,15 @@ class RichTextArea extends React.Component {
               onChange={this.onTitleChange}
               placeholder={editorExpanded ? expandedTitlePlaceholder : titlePlaceholder || 'Title of the post'}
             />
+
+            {
+              textAreaOnly &&
+              <div className="title-edit-actions">
+                <span onClick={this.onPost}><TitleSaveIcon /></span>
+                <span onClick={this.cancelEdit}><TitleCloseIcon /></span>
+              </div>
+            }
+
             <div className="draftjs-editor tc-textarea">
               {!disableContent && !isGettingComment &&
                 <div>
@@ -532,7 +544,7 @@ class RichTextArea extends React.Component {
                         }
                       </div>
                     }
-                    <div className="tc-btns">
+                    {!textAreaOnly && <div className="tc-btns">
                       {canUploadAttachment && <div className="tc-attachment-button" onClick={this.openFileUpload}>
                         <a>Attach a file</a>
                       </div>}
@@ -562,7 +574,7 @@ class RichTextArea extends React.Component {
                           {isCreating ? 'Posting...' : 'Post'}
                         </button>
                       }
-                    </div>
+                    </div>}
                   </div>
                   {canUploadAttachment && <div className="attachment-files">
                     <ul>
@@ -630,7 +642,8 @@ RichTextArea.propTypes = {
   editingTopic: PropTypes.bool,
   hasPrivateSwitch: PropTypes.bool,
   canUploadAttachment: PropTypes.bool,
-  attachments: PropTypes.array
+  attachments: PropTypes.array,
+  textAreaOnly: PropTypes.bool
 }
 
 export default withRouter(RichTextArea)

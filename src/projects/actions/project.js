@@ -419,7 +419,9 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
     const startDateChanged = updatedProps.startDate ? updatedProps.startDate.diff(phaseStartDate) : null
     const phaseActivated = phaseStatusChanged && updatedProps.status === PHASE_STATUS_ACTIVE
     if (phaseActivated) {
-      updatedProps.startDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
+      const duration = updatedProps.duration ? updatedProps.duration : phase.duration
+      updatedProps.startDate = moment().utc().hours(0).minutes(0).seconds(0).milliseconds(0).format('YYYY-MM-DD')
+      updatedProps.endDate = moment(updatedProps.startDate).add(duration - 1, 'days').format('YYYY-MM-DD')
     }
 
     return dispatch({
@@ -463,7 +465,7 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
             timeline.id,
             {
               name: timeline.name,
-              startDate: updatedProps.startDate.format('YYYY-MM-DD'),
+              startDate: updatedProps.startDate,
               reference: timeline.reference,
               referenceId: timeline.referenceId,
             }

@@ -30,6 +30,11 @@
     background-color: $tc-orange-10;
   }
 
+  &.in-topic-drawer {
+    background-color: $tc-dark-blue-100;
+    border-radius: 0;
+  }
+
   .is-fullscreen & {
     border-radius: 0;
     position: fixed;
@@ -56,9 +61,8 @@
 .header-view {
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid $tc-gray-10;
   justify-content: center;
-  padding: 4 * $base-unit 4 * $base-unit 3 * $base-unit 4 * $base-unit;
+  padding: 2 * $base-unit 2 * $base-unit 2 * $base-unit 4 * $base-unit;
 
   :global {
     .Dropdown {
@@ -67,8 +71,8 @@
 
     .drop-down .down-layer {
       left: auto;
-      right: - 2 * $base-unit;
-      top: 2 * $base-unit;
+      right: 0;
+      top: 5 * $base-unit;
       z-index: 4;
     }
   }
@@ -76,6 +80,7 @@
 
 .header-view-inner {
   display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -87,12 +92,22 @@
   @include roboto;
   color: $tc-black;
   font-size: 20px;
-  margin-bottom: $base-unit;
+  line-height: 24px;
   padding-right: 4 * $base-unit;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  width: 0;
+}
+
+.in-topic-drawer .title {
+  color: $tc-gray-0;
 }
 
 .header-edit {
   min-height: 60px;
+  padding-right: 2 * $base-unit;
 }
 
 .header-info {
@@ -126,14 +141,22 @@
   :global {
     .dropdown-wrap.drop-down {
       display: block;
-      margin-left: 3 * $base-unit;
-    }
-
-    .dropdownContainer {
-      margin-top: 5px;
+      margin-left: 0;
     }
   }
 }
+
+.hasCloseButton {
+  display: flex;
+  align-items: center;
+
+  .rich-text-wrapper {
+    width: calc(100% - 40px);
+    flex-grow: 1;
+    position: relative;
+  }
+}
+
 
 .fullscreen {
   border: 0;

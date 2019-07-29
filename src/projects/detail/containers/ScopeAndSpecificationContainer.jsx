@@ -11,7 +11,7 @@ import _ from 'lodash'
 import Sticky from '../../../components/Sticky'
 import MediaQuery from 'react-responsive'
 
-import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
+import ProjectInfoContainer from './ProjectInfoContainer'
 import EditProjectForm from '../components/EditProjectForm'
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import ScopeChangeRequest from '../components/ScopeChangeRequest/ScopeChangeRequest'
@@ -22,7 +22,9 @@ import {
   PROJECT_ROLE_OWNER,
   PROJECT_ROLE_CUSTOMER,
   PROJECT_ROLE_MANAGER,
-  PROJECT_ROLE_ACCOUNT_MANAGER
+  PROJECT_ROLE_ACCOUNT_MANAGER,
+  PROJECT_FEED_TYPE_PRIMARY,
+  PROJECT_FEED_TYPE_MESSAGES
 } from '../../../config/constants'
 import {
   updateProject,
@@ -34,10 +36,11 @@ import {
   cancelScopeChange,
   activateScopeChange
 } from '../../actions/project'
+import PERMISSIONS from '../../../config/permissions'
+import { checkPermission } from '../../../helpers/permissions'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import NotificationsReader from '../../../components/NotificationsReader'
-import ProjectEstimation from '../../create/components/ProjectEstimation'
 import { getProjectProductTemplates } from '../../../helpers/templates'
 
 // This handles showing a spinner while the state is being loaded async
@@ -122,6 +125,13 @@ class SpecificationContainer extends Component {
       productCategories,
       estimationQuestion,
       currentUserId,
+      phases,
+      isManageUser,
+      feeds,
+      productsTimelines,
+      isFeedsLoading,
+      phasesTopics,
+      isProcessing
     } = this.props
     const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
     const isCustomer = _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
@@ -130,7 +140,19 @@ class SpecificationContainer extends Component {
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
 
     const leftArea = (
-      <ProjectSpecSidebar project={project} sections={template.sections} currentMemberRole={currentMemberRole} />
+      <ProjectInfoContainer
+        location={location}
+        currentMemberRole={currentMemberRole}
+        project={project}
+        phases={phases}
+        isSuperUser={isSuperUser}
+        isManageUser={isManageUser}
+        feeds={feeds}
+        isFeedsLoading={isFeedsLoading}
+        productsTimelines={productsTimelines}
+        phasesTopics={phasesTopics}
+        isProjectProcessing={isProcessing}
+      />
     )
 
     // look for any pending scope change request
@@ -152,7 +174,7 @@ class SpecificationContainer extends Component {
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
               if (matches) {
-                return <Sticky top={110}>{leftArea}</Sticky>
+                return <Sticky top={60}>{leftArea}</Sticky>
               } else {
                 return leftArea
               }
@@ -221,8 +243,14 @@ SpecificationContainer.propTypes = {
   ])
 }
 
-const mapStateToProps = ({projectState, loadUser, templates}) => {
+const mapStateToProps = ({projectState, loadUser, templates, projectTopics, phasesTopics}) => {
   const { projectTemplates, productTemplates } = templates
+
+  // all feeds includes primary as well as private topics if user has access to private topics
+  let feeds = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
+  if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
+    feeds = [...feeds, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
+  }
 
   return {
     processing: projectState.processing,
@@ -237,6 +265,11 @@ const mapStateToProps = ({projectState, loadUser, templates}) => {
     ) : [],
     productCategories: templates.productCategories,
     allProductTemplates: productTemplates,
+    phases: projectState.phases,
+    isFeedsLoading: projectTopics.isLoading,
+    isProcessing: projectState.processing,
+    phasesTopics,
+    feeds
   }
 }
 

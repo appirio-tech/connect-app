@@ -56,3 +56,21 @@ export const compareEmail = (email1, email2, options = { UNIQUE_GMAIL_VALIDATION
 export const compareHandles = (handle1, handle2) => (
   (handle1 || '').toLowerCase() === (handle2 || '').toLowerCase()
 )
+
+// remove empty object, null/undefined value and empty string recursively from passed obj
+const deepClean = obj => _.transform(obj, (result, value, key) => {
+  const isCollection = _.isObject(value)
+  const cleaned = isCollection ? deepClean(value) : value
+  // exclude if empty object, null, undefined or empty string
+  if ((isCollection && _.isEmpty(cleaned)) || _.isNil(value) || value === '') {
+    return
+  }
+  _.isArray(result) ? result.push(cleaned) : (result[key] = cleaned)
+})
+
+/**
+ * Helper method to clean given object from null, undefined or empty property.
+ *
+ * @param {Object} obj    the object to clean
+ */
+export const clean = obj => _.isObject(obj) ? deepClean(obj) : obj

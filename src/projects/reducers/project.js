@@ -26,6 +26,7 @@ import {
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
+import { clean } from '../../helpers/utils'
 
 const initialState = {
   isLoading: true,
@@ -416,6 +417,7 @@ export const projectState = function (state=initialState, action) {
       ...action.payload,
       budget: _.cloneDeep(state.project.budget),
       duration: _.cloneDeep(state.project.duration),
+      invites: _.cloneDeep(state.project.invites),
     }
 
     return Object.assign({}, state, {
@@ -709,13 +711,18 @@ export const projectState = function (state=initialState, action) {
         if (key === 'screens' || key === 'features' || key === 'capabilities') {
           return srcValue// srcValue contains the changed values from action payload
         }
+
+        // project's name might contain ampersand
+        if (key === 'name') {
+          return _.escape(srcValue)
+        }
       }
     )
     // dont' compare this properties as they could be not added to `projectNonDirty`
     // or mutated somewhere in the app
-    const skipProperties = ['members']
-    const clearUpdatedProject = _.omit(updatedProject, skipProperties)
-    const clearUpdatedNonDirtyProject = _.omit(state.projectNonDirty, skipProperties)
+    const skipProperties = ['members', 'invites']
+    const clearUpdatedProject = clean(_.omit(updatedProject, skipProperties))
+    const clearUpdatedNonDirtyProject = clean(_.omit(state.projectNonDirty, skipProperties))
     if (!_.isEqual(clearUpdatedProject, clearUpdatedNonDirtyProject)) {
       updatedProject.isDirty = true
     }
