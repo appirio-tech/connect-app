@@ -34,6 +34,65 @@ export function getProjectCreationTemplateField(
 }
 
 /**
+ * Builds the `scope` field for a template
+ *
+ * @param {Object} template     project template
+ * @param {Array}  forms        forms
+ * @param {Array}  priceConfigs price configs
+ *
+ * @returns {Object} project template `scope` "JSON" object
+ */
+export function buildTemplateScope(template, forms, priceConfigs) {
+  const form = template.form ? _.find(forms, template.form) : { config: {} }
+  const priceConfig = template.priceConfig ? _.find(priceConfigs, template.priceConfig) : { config: {} }
+
+  if (template.scope) {
+    return template.scope
+  } else {
+    return {
+      ...form.config,
+      ...priceConfig.config
+    }
+  }
+}
+
+/**
+ * Builds the `phases` field for a template
+ *
+ * @param {Object} template     project template
+ * @param {Array}  planConfigs  plan configs
+ *
+ * @returns {Object} project template `phases` "JSON" object
+ */
+export function buildTemplatePhases(template, planConfigs) {
+  const planConfig = template.planConfig ? _.find(planConfigs, template.planConfig) : { config: {} }
+
+  if (template.phases) {
+    return template.phases
+  } else {
+    return planConfig.config
+  }
+}
+
+/**
+ * Builds a template based on forms, planConfigs, priceConfigs
+ *
+ * @param {Object} template     project template
+ * @param {Array}  forms        forms
+ * @param {Array}  planConfigs  plan configs
+ * @param {Array}  priceConfigs price configs
+ *
+ * @returns {Object} project template
+ */
+export function buildTemplate(template, forms, planConfigs, priceConfigs) {
+  return {
+    ...template,
+    scope: buildTemplateScope(template, forms, priceConfigs),
+    phases: buildTemplatePhases(template, planConfigs),
+  }
+}
+
+/**
  * Finds project template by its alias
  *
  * NOTE: search only by the first alias
@@ -75,11 +134,11 @@ export function getProjectTemplateByKey(projectTemplates, projectTemplateKey) {
 
 /**
  * Find project's product templates
- * 
+ *
  * @param {Array} productTemplates list of product templates
  * @param {Array} projectTemplates list of project templates
  * @param {Object} project the project
- * 
+ *
  * @return {Array} project's product templates
  */
 export function getProjectProductTemplates(productTemplates, projectTemplates, project) {

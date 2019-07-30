@@ -1,6 +1,9 @@
 
 import _ from 'lodash'
 import update from 'react-addons-update'
+
+import { buildTemplate } from '../helpers/templates'
+
 import {
   LOAD_PROJECTS_METADATA_PENDING,
   LOAD_PROJECTS_METADATA_SUCCESS,
@@ -86,9 +89,12 @@ export default function(state = initialState, action) {
     }
   case LOAD_PROJECTS_METADATA_SUCCESS: {
     const { projectTemplates, projectTypes, productTemplates, productCategories, milestoneTemplates, forms, planConfigs, priceConfigs } = action.payload
+    const mergedProjectTemplates = _.map(projectTemplates, projectTemplate => {
+      return buildTemplate(projectTemplate, forms, planConfigs, priceConfigs)
+    })
     return {
       ...state,
-      projectTemplates: _.orderBy(projectTemplates, ['updatedAt'], ['desc']),
+      projectTemplates: _.orderBy(mergedProjectTemplates, ['updatedAt'], ['desc']),
       projectTypes: _.orderBy(projectTypes, ['updatedAt'], ['desc']),
       productTemplates: _.orderBy(productTemplates, ['updatedAt'], ['desc']),
       productCategories: _.orderBy(productCategories, ['updatedAt'], ['desc']),
