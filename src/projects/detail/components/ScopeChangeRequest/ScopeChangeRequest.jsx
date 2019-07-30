@@ -58,6 +58,40 @@ class ScopeChangeRequest extends React.Component {
   }
 
   /*
+    Gets the readable labels (E.g. "Banking or Financial Services") for the values (E.g. finserv)
+    using the field key (E.g. details.appDefinition.mobilityTestingType)
+  */
+  deduceValueLabel(template, invertedScopeFieldPaths, fieldkey, value) {
+    const key = invertedScopeFieldPaths[`details.${fieldkey}`].replace(/\.fieldName$/, '')
+    const fieldDescriptionObject = _.get(template, key)
+    const fieldType = fieldDescriptionObject.type
+
+    const questionTypesWithOptions = [
+      'radio-group',
+      'tiled-radio-group',
+      'see-attached-tiled-radio-group',
+      'checkbox-group',
+      'tiled-checkbox-group',
+      'select-dropdown'
+    ]
+
+    // We can deduce the label only for predefined values. Otherwise, fall back to actual value entered.
+    if (_.includes(questionTypesWithOptions, fieldType) && fieldDescriptionObject.options) {
+      const valueLabelMap = _.keyBy(fieldDescriptionObject.options, o => o.value)
+      const getLabel = option => option.label || option.title
+
+      // Checkbox like questions result in an array. Radio button like questions result in premitive value
+      if (value instanceof Array) {
+        return value.map(v => getLabel(valueLabelMap[v]))
+      } else {
+        return getLabel(valueLabelMap[value])
+      }
+    } else {
+      return value
+    }
+  }
+
+  /*
     Fieldnames from the template holds the full property path for values in the form
     e.g. "details.appDefinition.numberScreens" could be the full property path for the value of "number of screens"
     in the form model.
@@ -98,7 +132,8 @@ class ScopeChangeRequest extends React.Component {
       const oldVal = _.get(oldScope, diffKey)
       const label = this.deduceFieldLabel(template, invertedScopeFieldPaths, diffKey)
 
-      const formatValue = value => (_.isEmpty(value) ? '(empty)' : JSON.stringify(value, null, ' '))
+      const valueToLabel = value => this.deduceValueLabel(template, invertedScopeFieldPaths, diffKey, value)
+      const formatValue = value => (_.isEmpty(value) ? '(empty)' : JSON.stringify(valueToLabel(value), null, ' '))
 
       return {
         label,
