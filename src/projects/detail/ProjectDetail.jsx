@@ -17,7 +17,7 @@ import {
 } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
-import { getProjectProductTemplates, getProjectTemplateById } from '../../helpers/templates'
+import { getProjectProductTemplates, getProjectTemplateById, buildTemplate } from '../../helpers/templates'
 import Dialog from '../../components/TeamManagement/Dialog'
 import { getProductEstimate } from '../../config/projectWizard'
 
@@ -67,8 +67,7 @@ const ProjectDetailView = (props) => {
   if (!currentMemberRole && props.currentUserRoles && props.currentUserRoles.length > 0) {
     currentMemberRole = props.currentUserRoles[0]
   }
-
-  const template = _.get(props.projectTemplate, 'scope', {})
+  const template = buildTemplate(props.projectTemplate, props.forms, props.planConfigs, props.priceConfigs).scope
   let estimationQuestion = null
   const { estimateBlocks } = getProductEstimate({scope: template}, props.project)
 
@@ -207,7 +206,7 @@ class ProjectDetail extends Component {
 
 const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines, templates}) => {
   const templateId = (projectState.project || {}).templateId
-  const { projectTemplates, productTemplates } = templates
+  const { projectTemplates, productTemplates, forms, priceConfigs, planConfigs } = templates
 
   return {
     currentUserId: parseInt(loadUser.user.id),
@@ -230,7 +229,10 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
     productsTimelines,
     allProductTemplates: templates.productTemplates,
     currentUserRoles: loadUser.user.roles,
-    showUserInvited: projectState.showUserInvited
+    showUserInvited: projectState.showUserInvited,
+    forms,
+    priceConfigs,
+    planConfigs
   }
 }
 

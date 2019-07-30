@@ -38,7 +38,7 @@ import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import NotificationsReader from '../../../components/NotificationsReader'
 import { checkPermission } from '../../../helpers/permissions'
-import { getProjectTemplateById } from '../../../helpers/templates'
+import { getProjectTemplateById, buildTemplate } from '../../../helpers/templates'
 import PERMISSIONS from '../../../config/permissions'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
@@ -144,12 +144,14 @@ class DashboardContainer extends React.Component {
       removeProjectAttachment,
       location,
       estimationQuestion,
+      priceConfigs,
+      forms,
+      planConfigs
     } = this.props
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
-
     let template
     if (project.version === 'v3') {
-      template = _.get(projectTemplate, 'scope')
+      template = buildTemplate(projectTemplate, forms, planConfigs, priceConfigs).scope
     } else {
       template = _.get(productTemplates[0], 'template')
     }
@@ -298,6 +300,9 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     isFeedsLoading: projectTopics.isLoading,
     phasesStates: projectState.phasesStates,
     phasesTopics,
+    priceConfigs: templates.priceConfigs,
+    forms: templates.forms,
+    planConfigs: templates.planConfigs
   }
 }
 

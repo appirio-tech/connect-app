@@ -464,7 +464,7 @@ class ProjectWizard extends Component {
         />
         <FillProjectDetails
           project={ project }
-          templates={projectTemplates}
+          templates={templates}
           projectTemplates={ projectTemplates }
           productTemplates={templates.productTemplates}
           productCategories={templates.productCategories}
