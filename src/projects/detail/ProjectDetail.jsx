@@ -67,7 +67,8 @@ const ProjectDetailView = (props) => {
   if (!currentMemberRole && props.currentUserRoles && props.currentUserRoles.length > 0) {
     currentMemberRole = props.currentUserRoles[0]
   }
-  const template = buildTemplate(props.projectTemplate, props.forms, props.planConfigs, props.priceConfigs).scope
+  const builtTemplate = buildTemplate(props.projectTemplate, props.forms, props.planConfigs, props.priceConfigs)
+  const template = _.get(builtTemplate, 'scope', {})
   let estimationQuestion = null
   const { estimateBlocks } = getProductEstimate({scope: template}, props.project)
 

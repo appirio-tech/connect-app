@@ -151,7 +151,8 @@ class DashboardContainer extends React.Component {
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
     let template
     if (project.version === 'v3') {
-      template = buildTemplate(projectTemplate, forms, planConfigs, priceConfigs).scope
+      const builtTeamplate = buildTemplate(projectTemplate, forms, planConfigs, priceConfigs)
+      template = _.get(builtTeamplate, 'scope')
     } else {
       template = _.get(productTemplates[0], 'template')
     }
