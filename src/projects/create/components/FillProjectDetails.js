@@ -52,7 +52,7 @@ class FillProjectDetails extends Component  {
     const forms = templates.forms
     const priceConfigs = templates.priceConfigs
     const planConfigs = templates.planConfigs
-    let template = buildTemplate(projectTemplate, forms, planConfigs, priceConfigs).scope
+    const template = buildTemplate(projectTemplate, forms, planConfigs, priceConfigs).scope
 
     let header = null
 

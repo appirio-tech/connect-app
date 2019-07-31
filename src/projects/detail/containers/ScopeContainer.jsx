@@ -18,7 +18,7 @@ const ScopeContainer = (props) => {
   const priceConfigs = props.priceConfigs
   const planConfigs = props.planConfigs
   const projectTemplate = props.projectTemplate
-  let template = buildTemplate(projectTemplate, forms, planConfigs, priceConfigs).scope
+  const template = buildTemplate(projectTemplate, forms, planConfigs, priceConfigs).scope
 
   return (
     <ScopeAndSpecificationContainer
