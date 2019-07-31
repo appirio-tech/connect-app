@@ -5,7 +5,7 @@
  */
 import React from 'react'
 import { connect } from 'react-redux'
-import { getProjectTemplateById } from '../../../helpers/templates'
+import { getProjectTemplateById, buildTemplate } from '../../../helpers/templates'
 
 import ScopeAndSpecificationContainer from './ScopeAndSpecificationContainer'
 
@@ -14,8 +14,11 @@ const ScopeContainer = (props) => {
   if (!props.projectTemplate) {
     return null
   }
-
-  const template = props.projectTemplate.scope
+  const forms = props.forms
+  const priceConfigs = props.priceConfigs
+  const planConfigs = props.planConfigs
+  const projectTemplate = props.projectTemplate
+  const template = buildTemplate(projectTemplate, forms, planConfigs, priceConfigs).scope
 
   return (
     <ScopeAndSpecificationContainer
@@ -27,10 +30,13 @@ const ScopeContainer = (props) => {
   )
 }
 
-const mapStateToProps = ({ projectState : { project }, templates: { projectTemplates } }) => ({
+const mapStateToProps = ({ projectState : { project }, templates: { projectTemplates }, templates }) => ({
   projectTemplate: project && project.templateId && projectTemplates ? (
     getProjectTemplateById(projectTemplates, project.templateId)
-  ) : null
+  ) : null,
+  forms: templates.forms,
+  priceConfigs: templates.priceConfigs,
+  planConfigs: templates.planConfigs
 })
 
 const mapDispatchToProps = {}

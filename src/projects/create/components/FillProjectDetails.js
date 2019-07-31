@@ -6,6 +6,7 @@ import cn from 'classnames'
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
 import HeaderWithProgress from './HeaderWithProgress'
+import { buildTemplate } from '../../../helpers/templates'
 
 class FillProjectDetails extends Component  {
   constructor(props) {
@@ -43,13 +44,15 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, processing, submitBtnText, projectTemplates, dirtyProject, productTemplates, productCategories, shouldUpdateTemplate } = this.props
+    const { project, processing, submitBtnText, projectTemplates, dirtyProject, productTemplates, productCategories, shouldUpdateTemplate, templates } = this.props
     const { currentWizardStep } = this.state
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
-
-    const template = projectTemplate.scope
+    const forms = templates.forms
+    const priceConfigs = templates.priceConfigs
+    const planConfigs = templates.planConfigs
+    const template = buildTemplate(projectTemplate, forms, planConfigs, priceConfigs).scope
 
     let header = null
 
@@ -136,7 +139,7 @@ FillProjectDetails.propTypes = {
   productCategories: PT.array.isRequired,
   userRoles: PT.arrayOf(PT.string),
   processing: PT.bool,
-  templates: PT.array.isRequired,
+  templates: PT.object.isRequired,
   error: PT.oneOfType([
     PT.bool,
     PT.object
