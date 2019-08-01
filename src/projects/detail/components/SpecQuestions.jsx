@@ -380,6 +380,7 @@ class SpecQuestions extends React.Component {
       productTemplates,
       productCategories,
       isCreation,
+      isProjectDirty
     } = this.props
     const { skillOptions } = this.state
 
@@ -406,6 +407,7 @@ class SpecQuestions extends React.Component {
                 title={q.summaryTitle || q.title}
                 type={q.type}
                 question={q}
+                isFormReset={!isProjectDirty}
                 options={q.options || skillOptions || buildAddonsOptions(q, productTemplates, productCategories)}
               >
                 {this.renderQ(q, index)}
