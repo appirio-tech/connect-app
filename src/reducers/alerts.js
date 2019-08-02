@@ -62,6 +62,17 @@ import {
   DELETE_WORK_INFO_FAILURE,
   NEW_WORK_INFO_SUCCESS,
   NEW_WORK_INFO_FAILURE,
+  // Scope changes
+  CREATE_SCOPE_CHANGE_REQUEST_SUCCESS,
+  CREATE_SCOPE_CHANGE_REQUEST_FAILURE,
+  APPROVE_SCOPE_CHANGE_SUCCESS,
+  REJECT_SCOPE_CHANGE_SUCCESS,
+  CANCEL_SCOPE_CHANGE_SUCCESS,
+  ACTIVATE_SCOPE_CHANGE_SUCCESS,
+  APPROVE_SCOPE_CHANGE_FAILURE,
+  REJECT_SCOPE_CHANGE_FAILURE,
+  CANCEL_SCOPE_CHANGE_FAILURE,
+  ACTIVATE_SCOPE_CHANGE_FAILURE
 } from '../config/constants'
 /* eslint-enable no-unused-vars */
 
@@ -143,6 +154,46 @@ export default function(state = {}, action) {
       project: action.payload
     })
   }
+
+  case CREATE_SCOPE_CHANGE_REQUEST_SUCCESS:
+    Alert.success('Submitted the Change Request successfully')
+    return state
+
+  case CREATE_SCOPE_CHANGE_REQUEST_FAILURE:
+    Alert.error('Unable to submit the Change Request')
+    return state
+
+  case APPROVE_SCOPE_CHANGE_SUCCESS:
+    Alert.success('Approved the Scope Change successfully')
+    return state
+
+  case APPROVE_SCOPE_CHANGE_FAILURE:
+    Alert.error('Unable to Approve the Scope Change')
+    return state
+
+  case REJECT_SCOPE_CHANGE_SUCCESS:
+    Alert.success('Rejected the Scope Change successfully')
+    return state
+
+  case REJECT_SCOPE_CHANGE_FAILURE:
+    Alert.error('Unable to Reject the Scope Change')
+    return state
+
+  case CANCEL_SCOPE_CHANGE_SUCCESS:
+    Alert.success('Canceled the Scope Change successfully')
+    return state
+
+  case CANCEL_SCOPE_CHANGE_FAILURE:
+    Alert.error('Unable to Cancel the Scope Change')
+    return state
+
+  case ACTIVATE_SCOPE_CHANGE_SUCCESS:
+    Alert.success('Activated the Scope Change successfully')
+    return state
+
+  case ACTIVATE_SCOPE_CHANGE_FAILURE:
+    Alert.error('Unable to Activate the Scope Change')
+    return state
 
   case UPDATE_PRODUCT_SUCCESS:
     Alert.success('Product updated')
