@@ -379,7 +379,16 @@ export const projectState = function (state=initialState, action) {
       state.project.scopeChangeRequests,
       action.payload
     )
-    const updatedDetails = _.merge({}, state.project.details, _.cloneDeep(action.payload.newScope))
+    const updatedDetails = _.mergeWith(
+      {},
+      state.project.details,
+      _.cloneDeep(action.payload.newScope),
+      (_objValue, srcValue) => {
+        if (_.isArray(srcValue)) {
+          return srcValue
+        }
+      }
+    )
     const project = update(state.project, {
       scopeChangeRequests: {
         $set: updatedScopeChangeRequests

@@ -75,14 +75,28 @@ class Accordion extends React.Component {
   }
 
   componentDidMount() {
-    const { children } = this.props
+    const { name, value } = this.getFormControlValue(this.props)
+    this.updateValue(name, value)
+  }
 
-    // find formzy controls which have `value` property and get initial value for `value`
-    React.Children.forEach(children, (listItem) => {
+  componentDidUpdate(oldProps) {
+    if (this.props.isFormReset && !oldProps.isFormReset) {
+      const { name, value } = this.getFormControlValue(this.props)
+      this.updateValue(name, value)
+    }
+  }
+
+  getFormControlValue(props) {
+    let name
+    let value
+
+    // find formzy controls which have `value` property and get initial value
+    React.Children.forEach(props.children, (listItem) => {
       React.Children.forEach(listItem.props.children, (control) => {
-        this.updateValue(control.props.name, control.props.value)
+        ({ name, value } = control.props)
       })
     })
+    return { name, value }
   }
 
   toggle(evt) {
