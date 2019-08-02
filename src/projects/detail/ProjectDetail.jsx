@@ -13,7 +13,8 @@ import { loadProjects } from '../actions/loadProjects'
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
   ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER,
-  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED,
+  LOAD_WORK_INFO_FAILURE
 } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
@@ -48,7 +49,7 @@ const showCoderBotIfError = (hasError) => {
     t => t
   )
 }
-const errorHandler = showCoderBotIfError(props => props.error && props.error.type === LOAD_PROJECT_FAILURE)
+const errorHandler = showCoderBotIfError(props => props.error && (props.error.type === LOAD_PROJECT_FAILURE || props.error.type === LOAD_WORK_INFO_FAILURE))
 
 // This handles showing a spinner while the state is being loaded async
 const spinner = spinnerWhileLoading(props =>
@@ -205,16 +206,15 @@ class ProjectDetail extends Component {
   }
 }
 
-const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines, templates}) => {
+const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines, templates, works}) => {
   const templateId = (projectState.project || {}).templateId
   const { projectTemplates, productTemplates } = templates
-
   return {
     currentUserId: parseInt(loadUser.user.id),
     currentUserEmail: loadUser.user.email,
     isLoading: projectDashboard.isLoading,
     isProcessing: projectState.processing,
-    error: projectState.error,
+    error: works.error || projectState.error,
     project: projectState.project,
     projectNonDirty: projectState.projectNonDirty,
     projectTemplate: (templateId && projectTemplates) ? (

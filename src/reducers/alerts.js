@@ -55,8 +55,34 @@ import {
   EXTEND_PRODUCT_MILESTONE_SUCCESS,
   SUBMIT_FINAL_FIXES_REQUEST_FAILURE,
   SUBMIT_FINAL_FIXES_REQUEST_SUCCESS,
+  // Work
+  UPDATE_WORK_INFO_SUCCESS,
+  UPDATE_WORK_INFO_FAILURE,
+  DELETE_WORK_INFO_SUCCESS,
+  DELETE_WORK_INFO_FAILURE,
+  NEW_WORK_INFO_SUCCESS,
+  NEW_WORK_INFO_FAILURE,
 } from '../config/constants'
 /* eslint-enable no-unused-vars */
+
+/**
+ * Get error message
+ * @param {Object} action request action
+ *
+ * @return {String} meaningful error message
+ */
+function getErrorMessage(action) {
+  if (action.payload && action.payload.response) {
+    const rdata = action.payload.response.data
+    if (rdata && rdata.result && rdata.result.content && rdata.result.content.message) {
+      return rdata.result.content.message
+    }
+    if (action.payload.response.statusText) {
+      return action.payload.response.statusText
+    }
+  }
+  return null
+}
 
 export default function(state = {}, action) {
   switch(action.type) {
@@ -178,6 +204,46 @@ export default function(state = {}, action) {
     }
     return state
 
+  // work
+  case UPDATE_WORK_INFO_SUCCESS:
+    Alert.success('Work is updated')
+    return state
+  case UPDATE_WORK_INFO_FAILURE: {
+    const errorMessage = getErrorMessage(action)
+    if (errorMessage) {
+      Alert.error(`Work updating failed: ${errorMessage}`)
+    } else {
+      Alert.error('Work updating failed: we ran into a problem.<br/> Please try again later.')
+    }
+    return state
+  }
+  // work delete
+  case DELETE_WORK_INFO_SUCCESS:
+    Alert.success('Work is deleted')
+    return state
+  case DELETE_WORK_INFO_FAILURE: {
+    const errorMessage = getErrorMessage(action)
+    if (errorMessage) {
+      Alert.error(`Work deleting failed: ${errorMessage}`)
+    } else {
+      Alert.error('Work deleting failed: we ran into a problem.<br/> Please try again later.')
+    }
+    return state
+  }
+  // new work
+  case NEW_WORK_INFO_SUCCESS:
+    Alert.success('Work is created')
+    return state
+  case NEW_WORK_INFO_FAILURE: {
+    const errorMessage = getErrorMessage(action)
+    if (errorMessage) {
+      Alert.error(`Work creating failed: ${errorMessage}`)
+    } else {
+      Alert.error('Work creating failed: we ran into a problem.<br/> Please try again later.')
+    }
+    return state
+  }
+
   case UPDATE_PROJECT_FAILURE:
     Alert.error('Please add a name for your project and then try saving again.')
     return state
@@ -207,20 +273,15 @@ export default function(state = {}, action) {
   case COMPLETE_PRODUCT_MILESTONE_FAILURE:
   case EXTEND_PRODUCT_MILESTONE_FAILURE:
   case SUBMIT_FINAL_FIXES_REQUEST_FAILURE:
-  case ACCEPT_OR_REFUSE_INVITE_FAILURE:
-    if (action.payload && action.payload.response) {
-      const rdata = action.payload.response.data
-      if (rdata && rdata.result && rdata.result.content && rdata.result.content.message) {
-        Alert.error(rdata.result.content.message)
-        return state
-      }
-      if (action.payload.response.statusText) {
-        Alert.error(action.payload.response.statusText)
-        return state
-      }
+  case ACCEPT_OR_REFUSE_INVITE_FAILURE: {
+    const errorMessage = getErrorMessage(action)
+    if (errorMessage) {
+      Alert.error(errorMessage)
+    } else {
+      Alert.error('Whoops! we ran into a problem.<br/> Please try again later.')
     }
-    Alert.error('Whoops! we ran into a problem.<br/> Please try again later.')
     return state
+  }
   default:
     return state
   }

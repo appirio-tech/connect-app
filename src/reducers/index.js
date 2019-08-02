@@ -3,9 +3,12 @@ import searchTerm from './searchTerm'
 import loadUser from './loadUser'
 import { projectState } from '../projects/reducers/project'
 import { projectDashboard } from '../projects/reducers/projectDashboard'
+import { projectPlan } from '../projects/reducers/projectPlan'
 import { projectTopics } from '../projects/reducers/projectTopics'
 import { phasesTopics } from '../projects/reducers/phasesTopics'
 import { productsTimelines } from '../projects/reducers/productsTimelines'
+import { workstreams } from '../projects/reducers/workstreams'
+import { works } from '../projects/reducers/works'
 import navSearch from './navSearch'
 import projectSearch from '../projects/reducers/projectSearch'
 import projectSearchSuggestions from '../projects/reducers/projectSearchSuggestions'
@@ -24,6 +27,7 @@ export default combineReducers({
   projectState,
   members,
   projectDashboard,
+  projectPlan,
   projectTopics,
   phasesTopics,
   alerts,
@@ -31,4 +35,6 @@ export default combineReducers({
   settings,
   templates,
   productsTimelines,
+  workstreams,
+  works,
 })

@@ -1,0 +1,93 @@
+@import '../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.left {
+  display: flex;
+  align-items: flex-end;
+  text-transform: uppercase;
+  max-width: calc(100% - 200px);
+  flex: 1 1 100%;
+}
+
+.stream-name {
+  @include roboto-condensed-bold;
+
+  color: $tc-gray-90;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 220px);
+}
+
+.delivery-total {
+  color: $tc-gray-50;
+  font-size: 10px;
+  letter-spacing: 0.8px;
+  line-height: 22px;
+  margin-left: 15px;
+}
+
+.right {
+  display: flex;
+}
+
+.switch-item-selected,
+.switch-item {
+  border-radius: 15px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.switch-item-selected {
+  background-color: $tc-gray-05;
+}
+
+.switch-item-title-selected,
+.switch-item-title {
+  color: $tc-gray-90;
+  font-size: 12px;
+  line-height: 30px;
+}
+
+.switch-item-title {
+  color: $tc-gray-50;
+}
+
+.switch-item-title-selected {
+  @include roboto-bold;
+
+  color: $tc-gray-90;
+}
+
+.switch-item-count-selected,
+.switch-item-count {
+  @include roboto-bold;
+
+  color: $tc-white;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 12px;
+  border-radius: 9px;
+  margin-left: 3px;
+  padding: 1px 5px;
+}
+
+.switch-item-count {
+  background-color: $tc-gray-30;
+}
+
+.switch-item-count-selected {
+  background-color: $tc-gray-90;
+}

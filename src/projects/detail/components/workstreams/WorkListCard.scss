@@ -1,0 +1,72 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  background-color: $tc-white;
+  border-radius: 10px;
+  box-shadow: 0 1px 7px 2px rgba(42, 42, 42, 0.06);
+  min-height: 80px;
+  padding: 15px 20px;
+  margin-top: 10px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 50px);
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  height: 30px;
+}
+
+.title {
+  @include roboto-bold;
+
+  color: $tc-gray-90;
+  font-size: 16px;
+  line-height: 30px;
+  max-width: calc(100% - 120px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status {
+  background-color: $tc-gray-neutral-light;
+  color: $tc-gray-50;
+  display: flex;
+  align-items: center;
+  border-radius: 15px;
+  height: 20px;
+  padding: 0 10px;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.8px;
+  line-height: 20px;
+  margin-left: 21px;
+}
+
+.description {
+  color: $tc-gray-30;
+  font-size: 12px;
+  line-height: 20px;
+  word-break: break-all;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.message-counter {
+  color: $tc-pastel-crimson;
+  font-size: 12px;
+  line-height: 20px;
+  margin-left: 5px;
+}

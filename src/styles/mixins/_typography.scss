@@ -1,0 +1,11 @@
+/* Font styles. */
+
+@mixin roboto-condensed-bold {
+  font-family: "RobotoCondensed", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+}
+
+@mixin roboto-condensed-light {
+  font-family: "RobotoCondensed", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+}

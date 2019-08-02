@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import { loadMembers } from '../../actions/members'
 import { loadProject, loadProjectInvite, loadDirectProjectData } from './project'
-import { loadProjectPlan } from './projectPlan'
 import { loadProjectsMetadata } from '../../actions/templates'
 import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
 
@@ -35,13 +34,7 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
         promises.push(dispatch(loadDirectProjectData(project.directProjectId)))
       }
 
-      // for new projects load phases, products, project template and product templates
-      if (project.version === 'v3') {
-        promises.push(
-          dispatch(loadProjectPlan(projectId, userIds))
-        )
-      }
-
+      // for new projects load products, project template and product templates
       if (!productTemplates) {
         promises.push(dispatch(loadProjectsMetadata()))
       }

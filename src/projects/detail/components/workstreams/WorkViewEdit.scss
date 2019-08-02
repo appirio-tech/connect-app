@@ -1,0 +1,114 @@
+@import '../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  background: $tc-white;
+  width: 100%;
+
+  :global {
+    .SelectDropdown {
+      margin: 0;
+      margin-top: 8px;
+    }
+  }
+}
+
+.new-work {
+  .icon-close {
+    margin-left: 0;
+  }
+}
+
+.is-updating {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.left-control {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  min-width: 24px;
+}
+
+.back-icon-text {
+  @include roboto-condensed-light;
+
+  color: $tc-gray-90;
+  font-size: 20px;
+  line-height: 30px;
+  margin-left: 10px;
+}
+
+.title {
+  @include roboto-condensed-bold;
+
+  color: $tc-gray-90;
+  font-size: 20px;
+  line-height: 30px;
+  text-transform: uppercase;
+}
+
+.right-control {
+  display: flex;
+  align-items: center;
+}
+
+.icon-close {
+  margin-left: 41px;
+  cursor: pointer;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  margin: 40px 0;
+}
+
+.input-row {
+  display: flex;
+  flex: 1;
+  width: auto;
+  align-items: center;
+
+  label {
+    width: 150px;
+    text-align: right;
+    padding-right: 20px;
+    flex-shrink: 0;
+  }
+
+  input {
+    width: 0 !important;
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.two-column {
+  display: flex;
+}
+
+.group-bottom {
+  display: flex;
+  margin-top: 30px;
+  width: 100%;
+  justify-content: center;
+}
+
+.cancel-button {
+  margin-right: 10px;
+}

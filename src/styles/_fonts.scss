@@ -14,6 +14,20 @@
   }
 }
 
+@mixin font-family-full($font-name, $font-weight, $font-style, $font-url, $font-file) {
+  @font-face {
+    font-family: '#{$font-name}';
+    src: url('#{$font-url}#{$font-file}.eot');
+    src:
+      url('#{$font-url}#{$font-file}.eot?#iefix') format('embedded-opentype'),
+      url('#{$font-url}#{$font-file}.woff') format('woff'),
+      url('#{$font-url}#{$font-file}.ttf') format('truetype'),
+      url('#{$font-url}#{$font-file}.svg##{$font-name}') format('svg');
+    font-weight: $font-weight;
+    font-style: $font-style;
+  }
+}
+
 // FONT WEIGHTS
 // --------------------------------------------------------------------------------------------
 // Use the numerical value instead of the weight name.
@@ -46,3 +60,7 @@
 
 @include font-family('Roboto', 100, normal, '../assets/fonts/roboto/', 'roboto-thin');
 @include font-family('Roboto', 100, italic, '../assets/fonts/roboto/', 'roboto-thinitalic');
+
+// Roboto condensed
+@include font-family('RobotoCondensed', 700, normal, '../assets/fonts/roboto-condensed/', 'roboto-condensed-700');
+@include font-family('RobotoCondensed', 300, normal, '../assets/fonts/roboto-condensed/', 'roboto-condensed-300');

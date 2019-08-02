@@ -7,8 +7,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom'
-import './DashboardContainer.scss'
+import { withRouter } from 'react-router-dom'
 
 import {
   filterReadNotifications,
@@ -30,30 +29,36 @@ import { addProductAttachment, updateProductAttachment, removeProductAttachment 
 
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
+import PhasesContainer from './PhasesContainer'
+import WorkstreamsContainer from './WorkstreamsContainer'
+import WorkViewContainer from './WorkViewContainer'
+import WorkNewContainer from './WorkNewContainer'
 import Sticky from '../../../components/Sticky'
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
 import ProjectScopeDrawer from '../components/ProjectScopeDrawer'
-import ProjectStages from '../components/ProjectStages'
-import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import NotificationsReader from '../../../components/NotificationsReader'
 import { checkPermission } from '../../../helpers/permissions'
 import { getProjectTemplateById } from '../../../helpers/templates'
 import PERMISSIONS from '../../../config/permissions'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
+import { loadProjectPlan } from '../../actions/projectPlan'
+import { loadProjectWorkstreams } from '../../actions/workstreams'
+import {
+  loadWorkInfo,
+  updateWork,
+  createWork,
+  deleteWork,
+} from '../../actions/works'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import ProjectEstimation from '../../create/components/ProjectEstimation'
 
 import {
-  PHASE_STATUS_ACTIVE,
-  PROJECT_STATUS_COMPLETED,
-  PROJECT_STATUS_CANCELLED,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
   PROJECT_FEED_TYPE_PRIMARY,
   PROJECT_FEED_TYPE_MESSAGES,
   EVENT_TYPE,
-  PHASE_STATUS_DRAFT,
   SCREEN_BREAKPOINT_MD,
 } from '../../../config/constants'
 
@@ -69,9 +74,11 @@ class DashboardContainer extends React.Component {
 
     this.state = {
       open: false,
+      showAddWorkForWorkstream: -1
     }
     this.onNotificationRead = this.onNotificationRead.bind(this)
     this.toggleDrawer = this.toggleDrawer.bind(this)
+    this.getContentView = this.getContentView.bind(this)
   }
 
   onNotificationRead(notification) {
@@ -82,48 +89,45 @@ class DashboardContainer extends React.Component {
     }
   }
 
-  componentDidMount() {
-    // if the user is a customer and its not a direct link to a particular phase
-    // then by default expand all phases which are active
-    const { isCustomerUser, expandProjectPhase, location } = this.props
-
-    if (isCustomerUser) {
-      _.forEach(this.props.phases, phase => {
-        if (phase.status === PHASE_STATUS_ACTIVE) {
-          expandProjectPhase(phase.id)
-        }
-      })
-    }
-
-    // if the user is a customer and its not a direct link to a particular phase
-    // then by default expand all phases which are active
-    if (_.isEmpty(location.hash) && this.props.isCustomerUser) {
-      _.forEach(this.props.phases, phase => {
-        if (phase.status === PHASE_STATUS_ACTIVE) {
-          expandProjectPhase(phase.id)
-        }
-      })
-    }
-  }
-
-  componentWillUnmount() {
-    const { collapseAllProjectPhases } = this.props
-
-    collapseAllProjectPhases()
-  }
-
   toggleDrawer() {
     this.setState((prevState) => ({
       open: !prevState.open
     }))
   }
 
+  /**
+   * Get content view
+   */
+  getContentView() {
+    const {
+      project,
+      match: { params }
+    } = this.props
+    const isWorkstreams = _.get(project, 'details.settings.workstreams', false)
+    if (isWorkstreams) {
+      if (params.workId) {
+        return (<WorkViewContainer {...this.props} />)
+      }
+
+      const { showAddWorkForWorkstream } = this.state
+      if (showAddWorkForWorkstream >= 0) {
+        return (
+          <WorkNewContainer
+            {...this.props}
+            workstreamId={showAddWorkForWorkstream}
+            onClose={() => this.setState({ showAddWorkForWorkstream: -1 })}
+          />
+        )
+      }
+      return (<WorkstreamsContainer {...this.props} addWorkForWorkstream={(workstreamId) => { this.setState({ showAddWorkForWorkstream: workstreamId }) }} />)
+    }
+    return (<PhasesContainer {...this.props} />)
+  }
+
   render() {
     const {
       project,
       phases,
-      phasesNonDirty,
-      isLoadingPhases,
       currentMemberRole,
       isSuperUser,
       isManageUser,
@@ -144,7 +148,9 @@ class DashboardContainer extends React.Component {
       removeProjectAttachment,
       location,
       estimationQuestion,
+      match: { params },
     } = this.props
+    const { showAddWorkForWorkstream } = this.state
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
 
     let template
@@ -159,17 +165,6 @@ class DashboardContainer extends React.Component {
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
     const sortedUnreadProjectUpdates = _.orderBy(unreadProjectUpdate, ['date'], ['desc'])
 
-    // manager user sees all phases
-    // customer user doesn't see unplanned (draft) phases
-    const visiblePhases = phases && phases.filter((phase) => (
-      isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
-    ))
-    const visiblePhasesIds = _.map(visiblePhases, 'id')
-    const visiblePhasesNonDirty = phasesNonDirty && phasesNonDirty.filter((phaseNonDirty) => (
-      _.includes(visiblePhasesIds, phaseNonDirty.id)
-    ))
-
-    const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
 
     const leftArea = (
       <ProjectInfoContainer
@@ -226,7 +221,7 @@ class DashboardContainer extends React.Component {
             />
           }
           {/* <button type="button" onClick={this.toggleDrawer}>Toggle drawer</button> */}
-          {!!estimationQuestion &&
+          {!!estimationQuestion && !params.workId && (showAddWorkForWorkstream < 0) &&
             <ProjectEstimation
               onClick={this.toggleDrawer}
               question={estimationQuestion}
@@ -257,28 +252,14 @@ class DashboardContainer extends React.Component {
             productTemplates={productTemplates}
             productCategories={productCategories}
           />
-
-          {visiblePhases && visiblePhases.length > 0 ? (
-            <ProjectStages
-              {...{
-                ...this.props,
-                phases: visiblePhases,
-                phasesNonDirty: visiblePhasesNonDirty,
-              }}
-            />
-          ) : (
-            <ProjectPlanEmpty isManageUser={isManageUser} />
-          )}
-          {isProjectLive && checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project, phases)  && !isLoadingPhases && (<div styleName="add-button-container">
-            <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
-          </div>)}
+          {this.getContentView()}
         </TwoColsLayout.Content>
       </TwoColsLayout>
     )
   }
 }
 
-const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics }) => {
+const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics, projectPlan, workstreams, works }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -293,11 +274,20 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     isProcessing: projectState.processing,
     phases: projectState.phases,
     phasesNonDirty: projectState.phasesNonDirty,
-    isLoadingPhases: projectState.isLoadingPhases,
+    isLoadingPhases: projectState.isLoadingPhases || projectPlan.isLoading,
     feeds: allFeed,
     isFeedsLoading: projectTopics.isLoading,
+    isLoadingWorkstreams: workstreams.isLoading,
+    isLoadingWorkInfo: works.isLoading,
+    isUpdatingWorkInfo: works.isUpdating,
+    isCreatingWorkInfo: works.isCreating,
+    isDeletingWorkInfo: works.isDeleting,
+    isRequestWorkError: !!works.error,
     phasesStates: projectState.phasesStates,
     phasesTopics,
+    workstreams: workstreams.workstreams,
+    workstreamsError: workstreams.error,
+    work: works.work,
   }
 }
 
@@ -319,7 +309,13 @@ const mapDispatchToProps = {
   updateProject,
   addProjectAttachment,
   updateProjectAttachment,
-  removeProjectAttachment
+  removeProjectAttachment,
+  loadProjectPlan,
+  loadProjectWorkstreams,
+  loadWorkInfo,
+  updateWork,
+  createWork,
+  deleteWork
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(DashboardContainer))
