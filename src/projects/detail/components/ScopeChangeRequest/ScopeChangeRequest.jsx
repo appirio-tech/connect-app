@@ -64,20 +64,9 @@ class ScopeChangeRequest extends React.Component {
   deduceValueLabel(template, invertedScopeFieldPaths, fieldkey, value) {
     const key = invertedScopeFieldPaths[`details.${fieldkey}`].replace(/\.fieldName$/, '')
     const fieldDescriptionObject = _.get(template, key)
-    const fieldType = fieldDescriptionObject.type
-
-    const questionTypesWithOptions = [
-      'radio-group',
-      'tiled-radio-group',
-      'see-attached-tiled-radio-group',
-      'checkbox-group',
-      'tiled-checkbox-group',
-      'select-dropdown',
-      'slide-radiogroup'
-    ]
 
     // We can deduce the label only for predefined values. Otherwise, fall back to actual value entered.
-    if (_.includes(questionTypesWithOptions, fieldType) && fieldDescriptionObject.options) {
+    if (fieldDescriptionObject.options) {
       const valueLabelMap = _.keyBy(fieldDescriptionObject.options, o => o.value)
       const getLabel = option => option.label || option.title
 
