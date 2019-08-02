@@ -51,14 +51,36 @@ const initialState = {
 // NOTE: We should always update projectNonDirty state whenever we update the project state
 // same for phasesNonDirty
 
+/**
+ * Check if string is json
+ * @param {String} str string
+ *
+ * @return {Bool} if string is json or not
+ */
+const isJson = (str) => {
+  try {
+    JSON.parse(str)
+  } catch (e) {
+    return false
+  }
+  return true
+}
+
+/**
+ * Parse error object
+ * @param {Object} action request action
+ *
+ * @return {Object} meaningful error object
+ */
 const parseErrorObj = (action) => {
   const data = _.get(action.payload, 'response.data.result')
   const httpStatus = _.get(action.payload, 'response.status')
+  const details = _.get(data, 'details', null)
   return {
     type: action.type,
     code: _.get(data, 'status', httpStatus || 500),
     msg: _.get(data, 'content.message', ''),
-    details: JSON.parse(_.get(data, 'details', null))
+    details: isJson(details) ? JSON.parse(details) : details
   }
 }
 

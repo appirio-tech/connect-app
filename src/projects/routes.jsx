@@ -42,6 +42,7 @@ const ProjectDetailWithAuth = requiresAuthentication(() =>
       }}
     />
     <Route path="/projects/:projectId/status/:statusId" render={() => <ProjectDetail component={Dashboard} />} />
+    <Route path="/projects/:projectId/workstreams/:workstreamId/works/:workId" render={() => <ProjectDetail component={Dashboard} />} />
     <Route path="/projects/:projectId/messages/:topicId" render={() => <ProjectDetail component={MessagesTabContainer} />} />
     <Route path="/projects/:projectId/messages" render={() => <ProjectDetail component={MessagesTabContainer} />} />
     <Route path="/projects/:projectId/specification" render={() => <ProjectDetail component={SpecificationContainer} />} />

@@ -1,0 +1,21 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.add-work {
+  text-align: center;
+  margin-top: 10px;
+  text-transform: uppercase;
+  border-radius: 15px !important;
+}

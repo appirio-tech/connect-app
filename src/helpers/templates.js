@@ -75,11 +75,11 @@ export function getProjectTemplateByKey(projectTemplates, projectTemplateKey) {
 
 /**
  * Find project's product templates
- * 
+ *
  * @param {Array} productTemplates list of product templates
  * @param {Array} projectTemplates list of project templates
  * @param {Object} project the project
- * 
+ *
  * @return {Array} project's product templates
  */
 export function getProjectProductTemplates(productTemplates, projectTemplates, project) {
@@ -101,10 +101,12 @@ export function getProjectProductTemplates(productTemplates, projectTemplates, p
 
   Object.keys(phases).forEach((phaseName) => {
     const phase = phases[phaseName]
-    phase.products.forEach((product) => {
-      const productTemplate = _.find(productTemplates, { id: product.id })
-      projectProductTemplates.push(productTemplate)
-    })
+    if(phase.products) {
+      phase.products.forEach((product) => {
+        const productTemplate = _.find(productTemplates, { id: product.id })
+        projectProductTemplates.push(productTemplate)
+      })
+    }
   })
 
   return projectProductTemplates
