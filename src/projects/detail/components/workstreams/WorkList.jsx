@@ -67,12 +67,11 @@ class WorkList extends React.Component {
           </div>
         )}
         {!workstream.isLoadingWorks && (
-          <a
+          <button
             styleName="add-work"
-            className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-            href="javascript:;"
+            className="tc-btn tc-btn-primary tc-btn-sm"
             onClick={() => addWorkForWorkstream(workstream.id)}
-          >Add Work</a>
+          >Add Work</button>
         )}
       </div>
     )
