@@ -1,3 +1,4 @@
+import moment from 'moment'
 import {
   getWorkstreamWorks,
   getWorkInfo,
@@ -5,6 +6,9 @@ import {
   newWorkInfo,
   deleteWorkInfo,
 } from '../../api/works'
+import {
+  createTimeline,
+} from '../../api/timelines'
 import {
   LOAD_WORKSTREAM_WORKS,
   LOAD_WORKSTREAM_WORKS_START,
@@ -115,9 +119,30 @@ export function createWork(projectId, workstreamId, newProps) {
   return (dispatch) => {
     return dispatch({
       type: NEW_WORK_INFO,
-      payload: newWorkInfo(projectId, workstreamId, newProps)
+      payload: newWorkInfo(projectId, workstreamId, newProps).then((work) => (
+        // we also, create a timeline for work
+        createTimelineForWork(work).then(() => work)
+      ))
     })
   }
+}
+
+/**
+ * Create timeline for work
+ *
+ * @param {Object} work work
+ *
+ * @return {Promise<Object>} timeline
+ */
+function createTimelineForWork(work) {
+  return createTimeline({
+    name: 'Work timeline',
+    description: 'This timeline will represent the main milestones in this work.',
+    startDate: moment(work.startDate).format('YYYY-MM-DD'),
+    endDate: null,
+    reference: 'work',
+    referenceId: work.id,
+  })
 }
 
 /**
