@@ -10,6 +10,7 @@ const Formsy = FormsyForm.Formsy
 
 import Section from '../Section'
 import WorkViewEdit from './WorkViewEdit'
+import WorkTimelineContainer from '../../containers/WorkTimelineContainer'
 import CloseIcon from  '../../../../assets/icons/x-mark-black.svg'
 import EditIcon from  '../../../../assets/icons/icon-edit-black.svg'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
@@ -30,21 +31,11 @@ class WorkView extends React.Component {
       isEditing: false,
       selectedNav: 0,
       navs:[
-        {
-          title: 'Details',
-          content: (<div>Details tab</div>),
-        },
-        {
-          title: 'Requirements',
-          content: (<div>Requirements tab</div>),
-        },
-        {
-          title: 'Delivery Management',
-          content: (<div>Delivery Management tab</div>),
-        },
+        { title: 'Details' },
+        { title: 'Requirements' },
+        { title: 'Delivery Management' },
         {
           title: 'Assets',
-          content: (<div>Assets tab</div>),
           count: 568
         }
       ]
@@ -52,6 +43,15 @@ class WorkView extends React.Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.submitEditForm = this.submitEditForm.bind(this)
+    this.getTabContent = this.getTabContent.bind(this)
+  }
+
+  componentWillMount() {
+    const { work } = this.props
+    // reupdate selected nav  when reshow component
+    if (work && work.selectedNav) {
+      this.setState({ selectedNav: work.selectedNav })
+    }
   }
 
   /**
@@ -74,6 +74,32 @@ class WorkView extends React.Component {
   submitEditForm(model) {
     const { match: { params: { projectId, workstreamId, workId } }, updateWork } = this.props
     updateWork(projectId, workstreamId, workId, model)
+  }
+
+  /**
+   * Get selected tab content
+   */
+  getTabContent() {
+    const { navs, selectedNav } = this.state
+    const { work,  addNewMilestone, editMilestone } = this.props
+    if (navs[selectedNav].title === 'Details') {
+      return (<WorkTimelineContainer workId={work.id} editMode={false} />)
+    }
+    if (navs[selectedNav].title === 'Delivery Management') {
+      return (
+        <WorkTimelineContainer
+          workId={work.id}
+          editMode
+          addNewMilestone={addNewMilestone}
+          editMilestone={editMilestone}
+        />
+      )
+    }
+    return (
+      <div>
+        {navs[selectedNav].title + ' tab'}
+      </div>
+    )
   }
 
   render() {
@@ -99,7 +125,11 @@ class WorkView extends React.Component {
                 <span styleName="work-name">{work.name}</span>
                 <div styleName="right-control">
                   <i styleName="icon-edit" onClick={() => { this.setState({ isEditing: true }) }} title="edit"><EditIcon /></i>
-                  <Link to={`/projects/${match.params.projectId}`} styleName="icon-close">
+                  <Link
+                    onClick={() => { work.selectedNav = 0 }}
+                    to={`/projects/${match.params.projectId}`}
+                    styleName="icon-close"
+                  >
                     <CloseIcon />
                   </Link>
                 </div>
@@ -109,12 +139,14 @@ class WorkView extends React.Component {
                   onChange={ this.handleChange }
                   ref="form"
                 >
-                  <SelectDropdown
-                    name="status"
-                    value={work.status}
-                    theme="default"
-                    options={phaseStatuses}
-                  />
+                  <div styleName="status-dropdown">
+                    <SelectDropdown
+                      name="status"
+                      value={work.status}
+                      theme="default"
+                      options={phaseStatuses}
+                    />
+                  </div>
                 </Formsy.Form>
               )}
               <div styleName="nav">
@@ -122,7 +154,10 @@ class WorkView extends React.Component {
                   <div
                     key={nav.title}
                     styleName={cn('nav-item', { 'is-selected': index === this.state.selectedNav })}
-                    onClick={() => { this.setState({ selectedNav: index }) }}
+                    onClick={() => {
+                      work.selectedNav = index
+                      this.setState({ selectedNav: index })
+                    }}
                   >
                     <span styleName="nav-name">{nav.title}</span>
                     {!_.isNil(nav.count) && (<span styleName="nav-count">568</span>)}
@@ -130,7 +165,7 @@ class WorkView extends React.Component {
                 ))}
               </div>
               <div styleName="content">
-                {this.state.navs[this.state.selectedNav].content}
+                {this.getTabContent()}
               </div>
             </div>
           )}

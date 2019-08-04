@@ -62,6 +62,13 @@ import {
   DELETE_WORK_INFO_FAILURE,
   NEW_WORK_INFO_SUCCESS,
   NEW_WORK_INFO_FAILURE,
+  // Work Timeline
+  NEW_WORK_TIMELINE_MILESTONE_SUCCESS,
+  NEW_WORK_TIMELINE_MILESTONE_FAILURE,
+  UPDATE_WORK_TIMELINE_MILESTONE_SUCCESS,
+  UPDATE_WORK_TIMELINE_MILESTONE_FAILURE,
+  DELETE_WORK_TIMELINE_MILESTONE_SUCCESS,
+  DELETE_WORK_TIMELINE_MILESTONE_FAILURE,
   // Scope changes
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS,
   CREATE_SCOPE_CHANGE_REQUEST_FAILURE,
@@ -291,6 +298,45 @@ export default function(state = {}, action) {
       Alert.error(`Work creating failed: ${errorMessage}`)
     } else {
       Alert.error('Work creating failed: we ran into a problem.<br/> Please try again later.')
+    }
+    return state
+  }
+  // new work timeline
+  case NEW_WORK_TIMELINE_MILESTONE_SUCCESS:
+    Alert.success('Milestone is created')
+    return state
+  case NEW_WORK_TIMELINE_MILESTONE_FAILURE: {
+    const errorMessage = getErrorMessage(action)
+    if (errorMessage) {
+      Alert.error(`Milestone creating failed: ${errorMessage}`)
+    } else {
+      Alert.error('Milestone creating failed: we ran into a problem.<br/> Please try again later.')
+    }
+    return state
+  }
+  // update work timeline
+  case UPDATE_WORK_TIMELINE_MILESTONE_SUCCESS:
+    Alert.success('Milestone is updated')
+    return state
+  case UPDATE_WORK_TIMELINE_MILESTONE_FAILURE: {
+    const errorMessage = getErrorMessage(action)
+    if (errorMessage) {
+      Alert.error(`Milestone updating failed: ${errorMessage}`)
+    } else {
+      Alert.error('Milestone updating failed: we ran into a problem.<br/> Please try again later.')
+    }
+    return state
+  }
+  // delete work timeline
+  case DELETE_WORK_TIMELINE_MILESTONE_SUCCESS:
+    Alert.success('Milestone is deleted')
+    return state
+  case DELETE_WORK_TIMELINE_MILESTONE_FAILURE: {
+    const errorMessage = getErrorMessage(action)
+    if (errorMessage) {
+      Alert.error(`Milestone deleting failed: ${errorMessage}`)
+    } else {
+      Alert.error('Milestone deleting failed: we ran into a problem.<br/> Please try again later.')
     }
     return state
   }

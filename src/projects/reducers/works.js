@@ -23,7 +23,7 @@ const initialState = {
   isDeleting: false,
   isCreating: false,
   error: false,
-  work: {}, // work are pushed directly into it hence need to declare first
+  work: null,
 }
 
 export const works = function (state=initialState, action) {

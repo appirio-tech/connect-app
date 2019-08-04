@@ -12,10 +12,15 @@
       margin: 0;
       margin-bottom: 8px;
     }
+
+    textarea {
+      height: 73px;
+      resize: none;
+    }
   }
 }
 
-.new-work {
+.new-milestone {
   .icon-close {
     margin-left: 0;
   }
@@ -78,6 +83,12 @@
   margin: 40px 0;
 }
 
+.select-dropdown {
+  > div {
+    width: 200px;
+  }
+}
+
 .input-row {
   display: flex;
   flex: 1;
@@ -95,6 +106,13 @@
     width: 0 !important;
     flex: 1;
     min-width: 0;
+  }
+}
+
+.textarea-row {
+  label {
+    align-self: flex-start;
+    margin-top: 10px;
   }
 }
 

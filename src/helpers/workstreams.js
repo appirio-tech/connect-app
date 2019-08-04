@@ -112,3 +112,136 @@ export function getWorkActualData(work, isCreateNew) {
     budget: isCreateNew ? '' : budget
   }
 }
+
+/**
+ * Gets actual data of the milestone
+ *
+ * @param {Object} timeline    work object
+ * @param {Array} milestones    array of milestone object
+ * @param {Object} milestone    work object
+ * @param {Bool} isCreateNew    is create new
+ *
+ * @returns {{ startDate: moment.Moment, endDate: moment.Moment }} actual data
+ */
+export function getMilestoneActualData(timeline, milestones, milestone, isCreateNew) {
+  let startDate
+  let endDate
+  let duration = 0
+  if (milestone && !isCreateNew) {
+    startDate = moment(milestone.startDate)
+    endDate = moment(milestone.endDate)
+    duration = milestone.duration
+  } else {
+    // is create new
+    if (milestones.length > 0) {
+      const lastMilestone = milestones[milestones.length - 1]
+      startDate = moment(lastMilestone.endDate)
+      endDate = moment(lastMilestone.endDate).add(5, 'days')
+    } else {
+      startDate = moment(timeline.startDate)
+      endDate = moment(timeline.startDate).add(5, 'days')
+    }
+    duration = milestone.duration
+  }
+
+  return {
+    startDate: moment(startDate).format('YYYY-MM-DD'),
+    endDate: moment(endDate).format('YYYY-MM-DD'),
+    duration
+  }
+}
+
+/**
+ * Convert the milestones of timeline to array of milestone with progress
+ *
+ * @param {Object} timeline    timeline object
+ *
+ * @returns {Array} actual data
+ */
+export function convertTimelineMilestonesToMilestoneProgress(timeline) {
+  if (!timeline || !timeline.milestones || !timeline.milestones.length) {
+    return []
+  }
+  const milestones = _.orderBy(timeline.milestones, o => moment(o.startDate), ['asc'])
+  const updatedMilestones = []
+  const startTimelineTS = moment(milestones[0].startDate).unix()
+  const endTimelineTS = moment(milestones[milestones.length - 1].endDate).unix()
+  const durationTimeline = endTimelineTS - startTimelineTS
+  let isPassToday = false
+  for (let index = 0; index < milestones.length; index++) {
+    const milestone = milestones[index]
+    const startDate = moment(milestone.startDate)
+    let endDate = moment(milestone.endDate)
+    const startDateTS = startDate.unix()
+    let endDateTS = endDate.unix()
+    let duration = endDateTS - startDateTS
+    let durationOfTodayInCurrentMilestone = 0
+    const updatedMilestone = {
+      isEnd: false,
+      isStart: false,
+      startDateString: startDate.format('MMM DD'),
+      endDateString: endDate.format('MMM DD'),
+      isPast: false,
+      isCurrentMilestone: false,
+      isFuture: false,
+      progress: 0,
+      progressWidth: '0%',
+      currentProgressWidth: '0%',
+      name: milestone.name,
+      daysRemaining: '',
+      id: milestone.id,
+    }
+
+    if (index === milestones.length - 1) {
+      // last milestone
+      updatedMilestone.isEnd = true
+      updatedMilestone.progressWidth = 'auto'
+    }
+
+    if (index < milestones.length - 1 || index === 0) {
+      updatedMilestone.isStart = true
+    }
+
+    if (!isPassToday) {
+      if (index < milestones.length - 1) {
+        const nextMilestone = milestones[index + 1]
+        endDate = moment(nextMilestone.startDate)
+        endDateTS = endDate.unix()
+        duration = endDateTS - startDateTS
+      }
+      const today = moment()
+      if (startDate <= today && today <= endDate) {
+        isPassToday = true
+        updatedMilestone.isCurrentMilestone = true
+        if (duration) {
+          durationOfTodayInCurrentMilestone = (today.unix() - startDate.unix()) * 100 / duration
+          updatedMilestone.currentProgressWidth = `${durationOfTodayInCurrentMilestone}%`
+        } else {
+          updatedMilestone.currentProgressWidth = '100%'
+        }
+        const daysRemaining = endDate.diff(today, 'days')
+        updatedMilestone.daysRemaining = `${daysRemaining} day${daysRemaining > 1 ? 's' : ''} remaining`
+      }
+
+      if (today >= endDate) {
+        updatedMilestone.isPast = true
+      } else {
+        isPassToday = true
+      }
+    } else {
+      updatedMilestone.isFuture = true
+    }
+
+    if (durationTimeline) {
+      updatedMilestone.progress = duration * 100 / durationTimeline
+      updatedMilestone.progressWidth = `${updatedMilestone.progress}%`
+    }
+    if (!duration) {
+      updatedMilestone.progress = 0
+      updatedMilestone.progressWidth = `${updatedMilestone.progress}%`
+    }
+    updatedMilestones.push(updatedMilestone)
+  }
+
+  return updatedMilestones
+}

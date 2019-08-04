@@ -45,6 +45,46 @@ export function updateMilestone(timelineId, milestoneId, updatedProps) {
 }
 
 /**
+ * Delete milestone
+ *
+ * @param {Number} timelineId   timeline id
+ * @param {Number} milestoneId  milestone id
+ *
+ * @returns {Promise} empty
+ */
+export function deleteMilestone(timelineId, milestoneId) {
+  return axios.delete(`${TC_API_URL}/v4/timelines/${timelineId}/milestones/${milestoneId}`)
+}
+
+/**
+ * Get milestone
+ *
+ * @param {Number} timelineId   timeline id
+ * @param {Number} milestoneId  milestone id
+ *
+ * @returns {Promise} milestone
+ */
+export function getMilestone(timelineId, milestoneId) {
+  return axios.get(`${TC_API_URL}/v4/timelines/${timelineId}/milestones/${milestoneId}`)
+    .then(resp => _.get(resp.data, 'result.content'))
+}
+
+/**
+ * Create milestone
+ *
+ * @param {Number} timelineId   timeline id
+ * @param {Object} milestone milestone
+ *
+ * @returns {Promise} milestone
+ */
+export function createMilestone(timelineId, milestone) {
+  return axios.post(`${TC_API_URL}/v4/timelines/${timelineId}/milestones`, {
+    param: milestone
+  })
+    .then(resp => _.get(resp.data, 'result.content', {}))
+}
+
+/**
  * Get milestone templates by product template id
  *
  * @param {Number} productTemplateId product template id
