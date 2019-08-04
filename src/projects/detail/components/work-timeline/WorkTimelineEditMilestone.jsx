@@ -94,13 +94,22 @@ class WorkTimelineEditMilestone extends React.Component {
    */
   enableButton() {
     const model = this.refs.form.getModel()
-    this.setState( { canSubmit: ((
-      model.name &&
-      model.name.trim() &&
-      moment(model.startDate).isValid() &&
-      moment(model.endDate).isValid() &&
-      moment(model.startDate) <= moment(model.endDate)
-    ) ) })
+    const { isNewMilestone } = this.props
+    if (isNewMilestone) {
+      this.setState( { canSubmit: ((
+        model.name &&
+        model.name.trim() &&
+        moment(model.startDate).isValid() &&
+        moment(model.endDate).isValid() &&
+        moment(model.startDate) <= moment(model.endDate)
+      ) ) })
+    } else {
+      this.setState( { canSubmit: ((
+        model.name &&
+        model.duration &&
+        model.name.trim()
+      ) ) })
+    }
   }
 
   /**
