@@ -200,7 +200,8 @@ class WorkTimelineEditMilestone extends React.Component {
       isCreatingMilestoneInfo,
       isNewMilestone,
       isDeletingMilestoneInfo,
-      timelines
+      timelines,
+      work
     } = this.props
     const {showDeletePopup, canLeave} = this.state
     const onLeaveMessage = this.onLeave()
@@ -236,10 +237,14 @@ class WorkTimelineEditMilestone extends React.Component {
               if (!onLeaveMessage) {
                 this.props.history.push(this.getDashboardUrl())
                 onBack()
+                // reset index of tabbarin WorkView
+                work.selectedNav = 0
               } else if(this.checkCanLeave()) {
                 setTimeout(() => {
                   this.props.history.push(this.getDashboardUrl())
                   onBack()
+                  // reset index of tabbarin WorkView
+                  work.selectedNav = 0
                 })
               }
             }} className={styles['icon-close']}

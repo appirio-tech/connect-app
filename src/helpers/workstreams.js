@@ -50,7 +50,7 @@ export const getDeliveredWorkFilter = (work) => { if (work.status === 'completed
  *
  * @return {Bool} if string is json or not
  */
-const isJson = (str) => {
+export const isJson = (str) => {
   try {
     JSON.parse(str)
   } catch (e) {

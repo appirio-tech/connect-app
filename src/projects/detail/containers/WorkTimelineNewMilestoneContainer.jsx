@@ -14,7 +14,6 @@ import { createMilestone } from '../../actions/workTimelines'
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import './WorkTimelineNewMilestoneContainer.scss'
 
-
 class WorkTimelineNewMilestoneContainer extends React.Component {
   constructor(props) {
     super(props)
@@ -54,11 +53,12 @@ WorkTimelineNewMilestoneContainer.PropTypes = {
   createMilestone: PT.func.isRequired,
 }
 
-const mapStateToProps = ({workTimelines}) => {
+const mapStateToProps = ({workTimelines, works}) => {
   return {
     timelines: workTimelines.timelines,
     isCreatingMilestoneInfo: workTimelines.isCreatingMilestoneInfo,
     isRequestMilestoneError: workTimelines.error,
+    work: works.work
   }
 }
 
