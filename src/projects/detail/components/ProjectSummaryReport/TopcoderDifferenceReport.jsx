@@ -9,7 +9,7 @@ function formatLargeNumber(number) {
   } else if(number > 1e3) {
     return `${(number / 1e3).toFixed(0)}K`
   } else {
-    return number.toString()
+    return (number || '').toString()
   }
 }
 
@@ -20,7 +20,7 @@ const TopcoderDifferenceReport = ({ difference }) => {
     <div>
       <h1 styleName="title">TOPCODER DIFFERENCE</h1>
       <div styleName="stats">
-        <div>
+        {countries && <div>
           <div styleName="value">
             {countries}
           </div>
@@ -28,7 +28,8 @@ const TopcoderDifferenceReport = ({ difference }) => {
             COUNTRIES
           </div>
         </div>
-        <div>
+        }
+        {registrants && <div>
           <div styleName="value">
             {registrants}
           </div>
@@ -36,7 +37,8 @@ const TopcoderDifferenceReport = ({ difference }) => {
             REGISTRANTS
           </div>
         </div>
-        <div>
+        }
+        {designs && <div>
           <div styleName="value">
             {designs}
           </div>
@@ -44,7 +46,8 @@ const TopcoderDifferenceReport = ({ difference }) => {
             DESIGNS
           </div>
         </div>
-        <div>
+        }
+        {linesOfCode && <div>
           <div styleName="value">
             {formatLargeNumber(linesOfCode)}
           </div>
@@ -52,7 +55,8 @@ const TopcoderDifferenceReport = ({ difference }) => {
             LINES OF CODE
           </div>
         </div>
-        <div>
+        }
+        {hoursSaved && <div>
           <div styleName="value">
             {hoursSaved}
           </div>
@@ -60,7 +64,8 @@ const TopcoderDifferenceReport = ({ difference }) => {
             HOURS SAVED
           </div>
         </div>
-        <div>
+        }
+        {costSavings && <div>
           <div styleName="value">
             {formatLargeNumber(costSavings)}
           </div>
@@ -68,14 +73,15 @@ const TopcoderDifferenceReport = ({ difference }) => {
             COST SAVINGS
           </div>
         </div>
-        <div>
+        }
+        { valueCreated && <div>
           <div styleName="value">
-            ${formatNumberWithCommas(valueCreated)}
+            $ {formatNumberWithCommas(valueCreated)}
           </div>
           <div styleName="label">
             VALUE CREATED
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   )

@@ -11,7 +11,8 @@ export function getProjectSummary(projectId) {
   return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/reports?reportName=summary`)
     .then(resp => {
       const res = _.get(resp.data, 'result.content', {})
-      const challengeMetrics = _.find(res, c => c['challenge.track'] === null)
+      const overallMetrics = _.find(res, c => c['challenge.track'] === null)
+      const designMetrics = _.find(res, c => c['challenge.track'] === 'Design')
 
       return Promise.resolve({
         projectId,
@@ -21,14 +22,15 @@ export function getProjectSummary(projectId) {
           revenue: 40250,
           remaining: 19750
         },
+        // null values will be filled in as back-end implementation/integration is done. 
         topcoderDifference: {
-          countries: 12,
-          registrants: challengeMetrics['challenge.num_registrations'],
-          designs: challengeMetrics['challenge.num_submissions'],
-          linesOfCode: 1500000,
-          hoursSaved: 450,
-          costSavings: 45000,
-          valueCreated: 670000
+          countries: null,
+          registrants: overallMetrics['challenge.num_registrations'],
+          designs: designMetrics['challenge.num_submissions'],
+          linesOfCode: null,
+          hoursSaved: null,
+          costSavings: null,
+          valueCreated: null,
         }
       })
     })
