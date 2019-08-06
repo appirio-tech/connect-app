@@ -6,6 +6,7 @@ import { projectDashboard } from '../projects/reducers/projectDashboard'
 import { projectTopics } from '../projects/reducers/projectTopics'
 import { phasesTopics } from '../projects/reducers/phasesTopics'
 import { productsTimelines } from '../projects/reducers/productsTimelines'
+import { projectSummary } from '../projects/reducers/projectSummary'
 import navSearch from './navSearch'
 import projectSearch from '../projects/reducers/projectSearch'
 import projectSearchSuggestions from '../projects/reducers/projectSearchSuggestions'
@@ -25,6 +26,7 @@ export default combineReducers({
   members,
   projectDashboard,
   projectTopics,
+  projectSummary,
   phasesTopics,
   alerts,
   notifications,

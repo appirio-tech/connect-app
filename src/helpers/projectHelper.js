@@ -16,7 +16,7 @@ import {
 import ScopeIcon from '../assets/icons/text-16px_list-bullet.svg'
 import DashboardIcon from '../assets/icons/v.2.5/icon-dashboard.svg'
 import MessagesIcon from '../assets/icons/v.2.5/icon-messages.svg'
-// import ReportsIcon from '../assets/icons/v.2.5/icon-reports.svg'
+import ReportsIcon from '../assets/icons/v.2.5/icon-reports.svg'
 import AssetsLibraryIcon from '../assets/icons/v.2.5/icon-assets-library.svg'
 import InvisibleIcon from '../assets/icons/invisible.svg'
 
@@ -350,7 +350,7 @@ export function getProjectNavLinks(project, projectId) {
     { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
     messagesTab,
     { label: 'Scope', to: `/projects/${projectId}/scope`, Icon: ScopeIcon, iconClassName: 'fill' },
-    // { label: 'Reports', to: '#', Icon: ReportsIcon },
+    { label: 'Reports', to: `/projects/${projectId}/reports`, Icon: ReportsIcon, iconClassName: 'stroke' },
     { label: 'Assets Library', to: `/projects/${projectId}/assets`, Icon: AssetsLibraryIcon, iconClassName: 'stroke' },
   ] : [
     { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
