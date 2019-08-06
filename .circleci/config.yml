@@ -118,7 +118,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'dev-msinteg']
+              only: ['dev', 'dev-msinteg', 'feature/reports']
 
       - deployProd:
           context : org-global
