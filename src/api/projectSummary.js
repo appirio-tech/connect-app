@@ -11,7 +11,7 @@ export function getProjectSummary(projectId) {
   return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/reports?reportName=summary`)
     .then(resp => {
       const res = _.get(resp.data, 'result.content', {})
-      const designMetrics = _.find(res, c => c['challenge.track'] === 'Design')
+      const designMetrics = _.find(res, c => c['challenge.track'] === 'Design') || {}
       const totalRegistrants = _.sumBy(res, c => c['challenge.num_registrations'])
 
       return Promise.resolve({
