@@ -33,7 +33,7 @@ import {
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILURE,
   CLEAR_PROFILE_SETTINGS_PHOTO,
-  CONNECT_DOMAIN,
+  VERIFY_EMAIL_URL,
 } from '../../../config/constants'
 import settingsService from '../services/settings'
 import * as memberService from '../../../api/users'
@@ -97,8 +97,9 @@ export const changeEmail = (email) => (dispatch, getState) => {
   newProfile.email = email
 
   const queryParams = {
-    successUrl: `${CONNECT_DOMAIN}/settings/account/email-verification/success`,
-    failUrl: `${CONNECT_DOMAIN}/settings/account/email-verification/failure`
+    //successUrl: `${CONNECT_DOMAIN}/settings/account/email-verification/success`,
+    //failUrl: `${CONNECT_DOMAIN}/settings/account/email-verification/failure`
+    verifyUrl: `${VERIFY_EMAIL_URL}`
   }
 
   memberService.updateUserProfile(handle, newProfile, queryParams)
