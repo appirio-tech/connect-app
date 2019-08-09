@@ -31,62 +31,62 @@ export function loadWorkTimelines(workId) {
 }
 
 const demoDetails = {
-  "prevMilestoneContent": {
-    "designs": [
+  prevMilestoneContent: {
+    designs: [
       {
-        "title": "Option 1 - Creative Freedom",
-        "submissionId": "273645",
-        "previewUrl": "https://topcoder-dev-media.s3.amazonaws.com/member/profile/pshah_manager-1565325063054.jpeg",
-        "links": [
+        title: 'Option 1 - Creative Freedom',
+        submissionId: '273645',
+        previewUrl: 'https://topcoder-dev-media.s3.amazonaws.com/member/profile/pshah_manager-1565325063054.jpeg',
+        links: [
           {
-            "title": "001 Puppy Mobile",
-            "url": "https://marvelapp.com/54cf844/screen/59214040"
+            title: '001 Puppy Mobile',
+            url: 'https://marvelapp.com/54cf844/screen/59214040'
           },
           {
-            "title": "001 Puppy Desktop",
-            "url": "https://marvelapp.com/54cf844/screen/59214021"
+            title: '001 Puppy Desktop',
+            url: 'https://marvelapp.com/54cf844/screen/59214021'
           },
           {
-            "title": "GDrive",
-            "url": "https://marvelapp.com/54cf844/screen/59214017"
+            title: 'GDrive',
+            url: 'https://marvelapp.com/54cf844/screen/59214017'
           }
         ]
       },
       {
-        "title": "Option 2 - Nature",
-        "submissionId": "273646",
-        "previewUrl": "https://topcoder-dev-media.s3.amazonaws.com/member/profile/pshah_customer-1552561016111.png",
-        "links": [
+        title: 'Option 2 - Nature',
+        submissionId: '273646',
+        previewUrl: 'https://topcoder-dev-media.s3.amazonaws.com/member/profile/pshah_customer-1552561016111.png',
+        links: [
           {
-            "title": "001 Puppy Mobile",
-            "url": "https://marvelapp.com/54cf844/screen/59214040"
+            title: '001 Puppy Mobile',
+            url: 'https://marvelapp.com/54cf844/screen/59214040'
           },
           {
-            "title": "001 Puppy Desktop",
-            "url": "https://marvelapp.com/54cf844/screen/59214067"
+            title: '001 Puppy Desktop',
+            url: 'https://marvelapp.com/54cf844/screen/59214067'
           },
           {
-            "title": "GDrive",
-            "url": "https://marvelapp.com/54cf844/screen/59214068"
+            title: 'GDrive',
+            url: 'https://marvelapp.com/54cf844/screen/59214068'
           }
         ]
       },
       {
-        "title": "Option 3 - Zen/Nature",
-        "submissionId": "273647",
-        "previewUrl": "https://topcoder-dev-media.s3.amazonaws.com/member/profile/pshah_customer-1552561016111.png",
-        "links": [
+        title: 'Option 3 - Zen/Nature',
+        submissionId: '273647',
+        previewUrl: 'https://topcoder-dev-media.s3.amazonaws.com/member/profile/pshah_customer-1552561016111.png',
+        links: [
           {
-            "title": "001 Puppy Mobile",
-            "url": "https://marvelapp.com/54cf844/screen/59214040"
+            title: '001 Puppy Mobile',
+            url: 'https://marvelapp.com/54cf844/screen/59214040'
           },
           {
-            "title": "001 Puppy Desktop",
-            "url": "https://marvelapp.com/54cf844/screen/59214067"
+            title: '001 Puppy Desktop',
+            url: 'https://marvelapp.com/54cf844/screen/59214067'
           },
           {
-            "title": "GDrive",
-            "url": "https://marvelapp.com/54cf844/screen/59214068"
+            title: 'GDrive',
+            url: 'https://marvelapp.com/54cf844/screen/59214068'
           }
         ]
       }
