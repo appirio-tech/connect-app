@@ -1,0 +1,23 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.wrapper {
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin: 2%;
+    padding: 20px;
+}
+
+.title {
+    @include roboto-bold;
+    font-size: 20px;
+    color: $tc-black;
+    line-height: 30px;
+}
+
+.project-estimation {
+    margin-bottom: 30px;
+}
+
+.budget-report {
+    margin-bottom: 30px;
+}

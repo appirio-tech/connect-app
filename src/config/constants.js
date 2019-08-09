@@ -493,6 +493,12 @@ export const UPDATE_PROJECT_ATTACHMENT_FAILURE = 'UPDATE_PROJECT_ATTACHMENT_FAIL
 export const REMOVE_PENDING_ATTACHMENT         = 'REMOVE_PENDING_ATTACHMENT'
 export const UPDATE_PENDING_ATTACHMENT         = 'UPDATE_PENDING_ATTACHMENT'
 
+// Project summary
+export const LOAD_PROJECT_SUMMARY         = 'LOAD_PROJECT_SUMMARY'
+export const LOAD_PROJECT_SUMMARY_PENDING = 'LOAD_PROJECT_SUMMARY_PENDING'
+export const LOAD_PROJECT_SUMMARY_SUCCESS = 'LOAD_PROJECT_SUMMARY_SUCCESS'
+export const LOAD_PROJECT_SUMMARY_FAILURE = 'LOAD_PROJECT_SUMMARY_FAILURE'
+
 // Product attachments
 export const ADD_PRODUCT_ATTACHMENT         = 'ADD_PRODUCT_ATTACHMENT'
 export const ADD_PRODUCT_ATTACHMENT_PENDING = 'ADD_PRODUCT_ATTACHMENT_PENDING'
@@ -764,6 +770,7 @@ export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_
 export const TC_CDN_URL = process.env.NODE_ENV === 'development' ? 'https://d1aahxkjiobka8.cloudfront.net' : 'https://d2nl5eqipnb33q.cloudfront.net'
 
 export const RESET_PASSWORD_URL = `https://accounts.${DOMAIN}/connect/reset-password`
+export const VERIFY_EMAIL_URL = `http://www.${DOMAIN}/settings/account/changeEmail`
 
 export const PROJECT_NAME_MAX_LENGTH = 255
 export const PROJECT_REF_CODE_MAX_LENGTH = 32
@@ -947,51 +954,51 @@ export const MILESTONE_LINK_SUPPORTED_TYPES = [
 // Notifications event types
 export const EVENT_TYPE = {
   POST: {
-    UPDATED: 'notifications.connect.project.post.edited',
-    CREATED: 'notifications.connect.project.post.created',
-    DELETED: 'notifications.connect.project.post.deleted',
-    MENTION: 'notifications.connect.project.post.mention',
+    UPDATED: 'connect.notification.project.post.edited',
+    CREATED: 'connect.notification.project.post.created',
+    DELETED: 'connect.notification.project.post.deleted',
+    MENTION: 'connect.notification.project.post.mention',
   },
   MEMBER: {
-    JOINED: 'notifications.connect.project.member.joined',
-    LEFT: 'notifications.connect.project.member.left',
-    REMOVED: 'notifications.connect.project.member.removed',
-    MANAGER_JOINED: 'notifications.connect.project.member.managerJoined',
-    COPILOT_JOINED: 'notifications.connect.project.member.copilotJoined',
-    ASSIGNED_AS_OWNER: 'notifications.connect.project.member.assignedAsOwner',
-    INVITE_REQUESTED: 'notifications.connect.project.member.invite.requested',
-    INVITE_APPROVED: 'notifications.connect.project.member.invite.approved',
-    INVITE_REFUSED: 'notifications.connect.project.member.invite.rejected',
+    JOINED: 'connect.notification.project.member.joined',
+    LEFT: 'connect.notification.project.member.left',
+    REMOVED: 'connect.notification.project.member.removed',
+    MANAGER_JOINED: 'connect.notification.project.member.managerJoined',
+    COPILOT_JOINED: 'connect.notification.project.member.copilotJoined',
+    ASSIGNED_AS_OWNER: 'connect.notification.project.member.assignedAsOwner',
+    INVITE_REQUESTED: 'connect.notification.project.member.invite.requested',
+    INVITE_APPROVED: 'connect.notification.project.member.invite.approved',
+    INVITE_REFUSED: 'connect.notification.project.member.invite.rejected',
   },
   PROJECT: {
-    ACTIVE: 'notifications.connect.project.active',
-    APPROVED: 'notifications.connect.project.approved',
-    CANCELED: 'notifications.connect.project.canceled',
-    COMPLETED: 'notifications.connect.project.completed',
-    CREATED: 'notifications.connect.project.created',
-    FILE_UPLOADED: 'notifications.connect.project.fileUploaded',
-    LINK_CREATED: 'notifications.connect.project.linkCreated',
-    PAUSED: 'notifications.connect.project.paused',
-    SUBMITTED_FOR_REVIEW: 'notifications.connect.project.submittedForReview',
-    SPECIFICATION_MODIFIED: 'connect.action.project.updated.spec',
+    ACTIVE: 'connect.notification.project.active',
+    APPROVED: 'connect.notification.project.approved',
+    CANCELED: 'connect.notification.project.canceled',
+    COMPLETED: 'connect.notification.project.completed',
+    CREATED: 'connect.notification.project.created',
+    FILE_UPLOADED: 'connect.notification.project.fileUploaded',
+    LINK_CREATED: 'connect.notification.project.linkCreated',
+    PAUSED: 'connect.notification.project.paused',
+    SUBMITTED_FOR_REVIEW: 'connect.notification.project.submittedForReview',
+    SPECIFICATION_MODIFIED: 'connect.notification.project.updated.spec',
   },
   PROJECT_PLAN: {
-    READY: 'connect.action.project.plan.ready',
-    MODIFIED: 'connect.action.project.plan.updated',
-    PROGRESS_UPDATED: 'connect.action.project.updated.progress',
-    PHASE_ACTIVATED: 'notifications.connect.project.phase.transition.active',
-    PHASE_COMPLETED: 'notifications.connect.project.phase.transition.completed',
-    PHASE_PAYMENT_UPDATED: 'notifications.connect.project.phase.update.payment',
-    PHASE_PROGRESS_UPDATED: 'notifications.connect.project.phase.update.progress',
-    PHASE_SCOPE_UPDATED: 'notifications.connect.project.phase.update.scope',
-    PHASE_PRODUCT_SPEC_UPDATED: 'connect.action.project.product.update.spec',
-    MILESTONE_ACTIVATED: 'connect.action.timeline.milestone.transition.active',
-    MILESTONE_COMPLETED: 'connect.action.timeline.milestone.transition.completed',
-    WAITING_FOR_CUSTOMER_INPUT: 'connect.action.timeline.milestone.waiting.customer',
-    TIMELINE_ADJUSTED: 'connect.action.timeline.adjusted',
+    READY: 'connect.notification.project.plan.ready',
+    MODIFIED: 'connect.notification.project.plan.updated',
+    PROGRESS_UPDATED: 'connect.notification.project.updated.progress',
+    PHASE_ACTIVATED: 'connect.notification.project.phase.transition.active',
+    PHASE_COMPLETED: 'connect.notification.project.phase.transition.completed',
+    PHASE_PAYMENT_UPDATED: 'connect.notification.project.phase.update.payment',
+    PHASE_PROGRESS_UPDATED: 'connect.notification.project.phase.update.progress',
+    PHASE_SCOPE_UPDATED: 'connect.notification.project.phase.update.scope',
+    PHASE_PRODUCT_SPEC_UPDATED: 'connect.notification.project.product.update.spec',
+    MILESTONE_ACTIVATED: 'connect.notification.timeline.milestone.transition.active',
+    MILESTONE_COMPLETED: 'connect.notification.timeline.milestone.transition.completed',
+    WAITING_FOR_CUSTOMER_INPUT: 'connect.notification.timeline.milestone.waiting.customer',
+    TIMELINE_ADJUSTED: 'connect.notification.timeline.adjusted',
   },
   TOPIC: {
-    CREATED: 'notifications.connect.project.topic.created',
-    DELETED: 'notifications.connect.project.topic.deleted',
+    CREATED: 'connect.notification.project.topic.created',
+    DELETED: 'connect.notification.project.topic.deleted',
   },
 }
