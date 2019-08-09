@@ -11,7 +11,9 @@
   padding: 30px 40px;
   align-items: flex-start;
   position: relative;
+}
 
+.status-dropdown {
   :global {
     .SelectDropdown {
       margin: 0;
@@ -82,6 +84,7 @@
   padding: 0 15px;
   margin-right: 5px;
   cursor: pointer;
+  min-width: 0;
 }
 
 .nav-item.is-selected {
@@ -102,6 +105,9 @@
   color: $tc-gray-50;
   font-size: 16px;
   line-height: 30px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nav-count {

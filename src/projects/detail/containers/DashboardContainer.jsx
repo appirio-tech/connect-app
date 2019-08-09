@@ -33,6 +33,8 @@ import PhasesContainer from './PhasesContainer'
 import WorkstreamsContainer from './WorkstreamsContainer'
 import WorkViewContainer from './WorkViewContainer'
 import WorkNewContainer from './WorkNewContainer'
+import WorkTimelineNewMilestoneContainer from './WorkTimelineNewMilestoneContainer'
+import WorkTimelineEditMilestoneContainer from './WorkTimelineEditMilestoneContainer'
 import Sticky from '../../../components/Sticky'
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
@@ -74,7 +76,12 @@ class DashboardContainer extends React.Component {
 
     this.state = {
       open: false,
-      showAddWorkForWorkstream: -1
+      showAddWorkForWorkstream: -1,
+      showAddMilestoneForTimeline: -1,
+      showEditMilestoneForTimeline: {
+        timelineId: -1,
+        milestoneId: -1,
+      }
     }
     this.onNotificationRead = this.onNotificationRead.bind(this)
     this.toggleDrawer = this.toggleDrawer.bind(this)
@@ -105,11 +112,40 @@ class DashboardContainer extends React.Component {
     } = this.props
     const isWorkstreams = _.get(project, 'details.settings.workstreams', false)
     if (isWorkstreams) {
+      const {
+        showAddWorkForWorkstream,
+        showAddMilestoneForTimeline,
+        showEditMilestoneForTimeline
+      } = this.state
+      if (showAddMilestoneForTimeline >= 0) {
+        // show add new milestone for timeline
+        return (
+          <WorkTimelineNewMilestoneContainer
+            onBack={() => this.setState({ showAddMilestoneForTimeline: -1 })}
+            timelineId={showAddMilestoneForTimeline}
+          />
+        )
+      }
+      if (showEditMilestoneForTimeline.milestoneId >= 0) {
+        // show edit new milestone for timeline
+        return (
+          <WorkTimelineEditMilestoneContainer
+            onBack={() => this.setState({ showEditMilestoneForTimeline: {timelineId: -1, milestoneId: -1} })}
+            timelineId={showEditMilestoneForTimeline.timelineId}
+            milestoneId={showEditMilestoneForTimeline.milestoneId}
+          />
+        )
+      }
       if (params.workId) {
-        return (<WorkViewContainer {...this.props} />)
+        return (
+          <WorkViewContainer
+            {...this.props}
+            addNewMilestone={(timelineId) => this.setState({ showAddMilestoneForTimeline: timelineId }) }
+            editMilestone={(timelineId, milestoneId) => this.setState({ showEditMilestoneForTimeline: {timelineId, milestoneId} }) }
+          />
+        )
       }
 
-      const { showAddWorkForWorkstream } = this.state
       if (showAddWorkForWorkstream >= 0) {
         return (
           <WorkNewContainer
@@ -150,7 +186,11 @@ class DashboardContainer extends React.Component {
       estimationQuestion,
       match: { params },
     } = this.props
-    const { showAddWorkForWorkstream } = this.state
+    const {
+      showAddWorkForWorkstream,
+      showAddMilestoneForTimeline,
+      showEditMilestoneForTimeline,
+    } = this.state
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
 
     let template
@@ -164,7 +204,12 @@ class DashboardContainer extends React.Component {
     const notReadNotifications = filterReadNotifications(notifications)
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
     const sortedUnreadProjectUpdates = _.orderBy(unreadProjectUpdate, ['date'], ['desc'])
-
+    // if this is true, we will hide other component like estimate section
+    const onlyShowMainContent =
+      params.workId ||
+      (showAddWorkForWorkstream >= 0) ||
+      (showAddMilestoneForTimeline >= 0) ||
+      (showEditMilestoneForTimeline.milestoneId >= 0)
 
     const leftArea = (
       <ProjectInfoContainer
@@ -221,7 +266,7 @@ class DashboardContainer extends React.Component {
             />
           }
           {/* <button type="button" onClick={this.toggleDrawer}>Toggle drawer</button> */}
-          {!!estimationQuestion && !params.workId && (showAddWorkForWorkstream < 0) &&
+          {!!estimationQuestion && !onlyShowMainContent &&
             <ProjectEstimation
               onClick={this.toggleDrawer}
               question={estimationQuestion}

@@ -9,6 +9,7 @@ import { phasesTopics } from '../projects/reducers/phasesTopics'
 import { productsTimelines } from '../projects/reducers/productsTimelines'
 import { workstreams } from '../projects/reducers/workstreams'
 import { works } from '../projects/reducers/works'
+import { workTimelines } from '../projects/reducers/workTimelines'
 import navSearch from './navSearch'
 import projectSearch from '../projects/reducers/projectSearch'
 import projectSearchSuggestions from '../projects/reducers/projectSearchSuggestions'
@@ -37,4 +38,5 @@ export default combineReducers({
   productsTimelines,
   workstreams,
   works,
+  workTimelines
 })

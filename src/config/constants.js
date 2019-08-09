@@ -131,7 +131,7 @@ export const LOAD_WORK_INFO_PENDING     = 'LOAD_WORK_INFO_PENDING'
 export const LOAD_WORK_INFO_FAILURE     = 'LOAD_WORK_INFO_FAILURE'
 export const LOAD_WORK_INFO_SUCCESS     = 'LOAD_WORK_INFO_SUCCESS'
 
-// Work
+// Update Work
 export const UPDATE_WORK_INFO             = 'UPDATE_WORK_INFO'
 export const UPDATE_WORK_INFO_PENDING     = 'UPDATE_WORK_INFO_PENDING'
 export const UPDATE_WORK_INFO_FAILURE     = 'UPDATE_WORK_INFO_FAILURE'
@@ -148,6 +148,36 @@ export const DELETE_WORK_INFO             = 'DELETE_WORK_INFO'
 export const DELETE_WORK_INFO_PENDING     = 'DELETE_WORK_INFO_PENDING'
 export const DELETE_WORK_INFO_FAILURE     = 'DELETE_WORK_INFO_FAILURE'
 export const DELETE_WORK_INFO_SUCCESS     = 'DELETE_WORK_INFO_SUCCESS'
+
+// Work Timelines
+export const LOAD_WORK_TIMELINE             = 'LOAD_WORK_TIMELINE'
+export const LOAD_WORK_TIMELINE_PENDING     = 'LOAD_WORK_TIMELINE_PENDING'
+export const LOAD_WORK_TIMELINE_FAILURE     = 'LOAD_WORK_TIMELINE_FAILURE'
+export const LOAD_WORK_TIMELINE_SUCCESS     = 'LOAD_WORK_TIMELINE_SUCCESS'
+
+// Work Timelines Milestone
+export const LOAD_WORK_TIMELINE_MILESTONE             = 'LOAD_WORK_TIMELINE_MILESTONE'
+export const LOAD_WORK_TIMELINE_MILESTONE_PENDING     = 'LOAD_WORK_TIMELINE_MILESTONE_PENDING'
+export const LOAD_WORK_TIMELINE_MILESTONE_FAILURE     = 'LOAD_WORK_TIMELINE_MILESTONE_FAILURE'
+export const LOAD_WORK_TIMELINE_MILESTONE_SUCCESS     = 'LOAD_WORK_TIMELINE_MILESTONE_SUCCESS'
+
+// New Work Timeline Milestone
+export const NEW_WORK_TIMELINE_MILESTONE             = 'NEW_WORK_TIMELINE_MILESTONE'
+export const NEW_WORK_TIMELINE_MILESTONE_PENDING     = 'NEW_WORK_TIMELINE_MILESTONE_PENDING'
+export const NEW_WORK_TIMELINE_MILESTONE_FAILURE     = 'NEW_WORK_TIMELINE_MILESTONE_FAILURE'
+export const NEW_WORK_TIMELINE_MILESTONE_SUCCESS     = 'NEW_WORK_TIMELINE_MILESTONE_SUCCESS'
+
+// Update Work Timeline Milestone
+export const UPDATE_WORK_TIMELINE_MILESTONE             = 'UPDATE_WORK_TIMELINE_MILESTONE'
+export const UPDATE_WORK_TIMELINE_MILESTONE_PENDING     = 'UPDATE_WORK_TIMELINE_MILESTONE_PENDING'
+export const UPDATE_WORK_TIMELINE_MILESTONE_FAILURE     = 'UPDATE_WORK_TIMELINE_MILESTONE_FAILURE'
+export const UPDATE_WORK_TIMELINE_MILESTONE_SUCCESS     = 'UPDATE_WORK_TIMELINE_MILESTONE_SUCCESS'
+
+// Delete Work Timeline Milestone
+export const DELETE_WORK_TIMELINE_MILESTONE             = 'DELETE_WORK_TIMELINE_MILESTONE'
+export const DELETE_WORK_TIMELINE_MILESTONE_PENDING     = 'DELETE_WORK_TIMELINE_MILESTONE_PENDING'
+export const DELETE_WORK_TIMELINE_MILESTONE_FAILURE     = 'DELETE_WORK_TIMELINE_MILESTONE_FAILURE'
+export const DELETE_WORK_TIMELINE_MILESTONE_SUCCESS     = 'DELETE_WORK_TIMELINE_MILESTONE_SUCCESS'
 
 // Direct Project Data
 export const LOAD_DIRECT_PROJECT             = 'LOAD_DIRECT_PROJECT'
@@ -613,6 +643,13 @@ export const PHASE_STATUS_COMPLETED = 'completed'
 export const PHASE_STATUS_CANCELLED = 'cancelled'
 export const PHASE_STATUS_PAUSED = 'paused'
 
+
+export const MILESTONE_TYPE_PHASE_SPECIFICATION = 'phase-specification'
+export const MILESTONE_TYPE_COMMUNITY_WORK = 'community-work'
+export const MILESTONE_TYPE_CHECKPOINT_REVIEW = 'checkpoint-review'
+export const MILESTONE_TYPE_FINAL_DESIGNS = 'final-designs'
+export const MILESTONE_TYPE_FINAL_FIX = 'final-fix'
+
 export const PROJECT_STATUS = [
   {color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
   {color: 'gray', name: 'In review', fullName: 'Project is in review', value: PROJECT_STATUS_IN_REVIEW, order: 3, dropDownOrder: 2 },
@@ -631,6 +668,14 @@ export const PHASE_STATUS = [
   {color: 'black', name: 'Delivered', fullName: 'Phase is completed', value: PHASE_STATUS_COMPLETED, order: 5, dropDownOrder: 5 },
   // {color: 'black', name: 'Cancelled', fullName: 'Phase is canceled', value: PHASE_STATUS_CANCELLED, order: 6, dropDownOrder: 6 },
   // {color: 'red', name: 'Paused', fullName: 'Phase is paused', value: PHASE_STATUS_PAUSED, order: 7, dropDownOrder: 7 }
+]
+
+export const MILESTONE_TYPE = [
+  {name: 'Phase Specification', value: MILESTONE_TYPE_PHASE_SPECIFICATION },
+  {name: 'Community Work', value: MILESTONE_TYPE_COMMUNITY_WORK },
+  {name: 'Checkpoint Review', value: MILESTONE_TYPE_CHECKPOINT_REVIEW },
+  {name: 'Final Designs', value: MILESTONE_TYPE_FINAL_DESIGNS },
+  {name: 'Final Fixes', value: MILESTONE_TYPE_FINAL_FIX },
 ]
 
 // this defines default criteria to filter projects for projects list

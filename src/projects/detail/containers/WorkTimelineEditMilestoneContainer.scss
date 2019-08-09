@@ -11,6 +11,9 @@
   padding: 30px 40px;
   align-items: flex-start;
   position: relative;
+  min-height: 461px;
+  justify-content: center;
+  align-items: center;
 
   :global {
     .SelectDropdown {

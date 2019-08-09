@@ -221,6 +221,8 @@ class WorkViewEdit extends React.Component {
             <i onClick={() => {
               if (isNewWork) {
                 this.checkCanLeave(onClose)
+              } else if (!onLeaveMessage) {
+                this.props.history.push(this.getDashboardUrl())
               } else {
                 if(this.checkCanLeave(onClose)) {
                   setTimeout(() => {

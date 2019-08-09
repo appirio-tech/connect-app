@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import Alert from 'react-s-alert'
+import { isJson } from '../helpers/workstreams'
 /* eslint-disable no-unused-vars */
 import {
   // Project
@@ -62,6 +63,13 @@ import {
   DELETE_WORK_INFO_FAILURE,
   NEW_WORK_INFO_SUCCESS,
   NEW_WORK_INFO_FAILURE,
+  // Work Timeline
+  NEW_WORK_TIMELINE_MILESTONE_SUCCESS,
+  NEW_WORK_TIMELINE_MILESTONE_FAILURE,
+  UPDATE_WORK_TIMELINE_MILESTONE_SUCCESS,
+  UPDATE_WORK_TIMELINE_MILESTONE_FAILURE,
+  DELETE_WORK_TIMELINE_MILESTONE_SUCCESS,
+  DELETE_WORK_TIMELINE_MILESTONE_FAILURE,
   // Scope changes
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS,
   CREATE_SCOPE_CHANGE_REQUEST_FAILURE,
@@ -79,10 +87,11 @@ import {
 /**
  * Get error message
  * @param {Object} action request action
+ * @param {Bool} returnFullStringIfNoMessageFound return full response from server if no message found
  *
  * @return {String} meaningful error message
  */
-function getErrorMessage(action) {
+function getErrorMessage(action, returnFullStringIfNoMessageFound = false) {
   if (action.payload && action.payload.response) {
     const rdata = action.payload.response.data
     if (rdata && rdata.result && rdata.result.content && rdata.result.content.message) {
@@ -91,6 +100,16 @@ function getErrorMessage(action) {
     if (action.payload.response.statusText) {
       return action.payload.response.statusText
     }
+  }
+
+  if (returnFullStringIfNoMessageFound && action) {
+    const errorObject = (action.payload && action.payload.response) ? action.payload.response : action.payload
+    if (isJson(errorObject)) {
+      JSON.parse(errorObject)
+    } else if (errorObject) {
+      return errorObject
+    }
+
   }
   return null
 }
@@ -292,6 +311,30 @@ export default function(state = {}, action) {
     } else {
       Alert.error('Work creating failed: we ran into a problem.<br/> Please try again later.')
     }
+    return state
+  }
+  // new work timeline
+  case NEW_WORK_TIMELINE_MILESTONE_SUCCESS:
+    Alert.success('Milestone is created')
+    return state
+  case NEW_WORK_TIMELINE_MILESTONE_FAILURE: {
+    Alert.error(`Milestone creating failed: ${getErrorMessage(action, true)}`)
+    return state
+  }
+  // update work timeline
+  case UPDATE_WORK_TIMELINE_MILESTONE_SUCCESS:
+    Alert.success('Milestone is updated')
+    return state
+  case UPDATE_WORK_TIMELINE_MILESTONE_FAILURE: {
+    Alert.error(`Milestone updating failed: ${getErrorMessage(action, true)}`)
+    return state
+  }
+  // delete work timeline
+  case DELETE_WORK_TIMELINE_MILESTONE_SUCCESS:
+    Alert.success('Milestone is deleted')
+    return state
+  case DELETE_WORK_TIMELINE_MILESTONE_FAILURE: {
+    Alert.error(`Milestone deleting failed: ${getErrorMessage(action, true)}`)
     return state
   }
 

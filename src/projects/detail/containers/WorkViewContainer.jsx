@@ -13,7 +13,7 @@ import WorkView from '../components/workstreams/WorkView'
 
 
 // This handles showing a spinner while the state is being loaded async
-const enhance = spinnerWhileLoading(props => !props.isLoadingWorkInfo)
+const enhance = spinnerWhileLoading(props => !props.isLoadingWorkInfo && !_.isNil(props.work))
 const EnhancedCreateView = enhance(WorkView)
 
 
@@ -43,6 +43,5 @@ WorkViewContainer.PropTypes = {
   loadWorkInfo: PT.func.isRequired,
   work: PT.object.isRequired,
 }
-
 
 export default withRouter(WorkViewContainer)
