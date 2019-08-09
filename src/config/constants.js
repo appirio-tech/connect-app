@@ -646,6 +646,7 @@ export const PHASE_STATUS_PAUSED = 'paused'
 
 export const MILESTONE_TYPE_PHASE_SPECIFICATION = 'phase-specification'
 export const MILESTONE_TYPE_COMMUNITY_WORK = 'community-work'
+export const MILESTONE_TYPE_DESIGN_WORK = 'design-work'
 export const MILESTONE_TYPE_CHECKPOINT_REVIEW = 'checkpoint-review'
 export const MILESTONE_TYPE_FINAL_DESIGNS = 'final-designs'
 export const MILESTONE_TYPE_FINAL_FIX = 'final-fix'
@@ -672,6 +673,7 @@ export const PHASE_STATUS = [
 
 export const MILESTONE_TYPE = [
   {name: 'Phase Specification', value: MILESTONE_TYPE_PHASE_SPECIFICATION },
+  {name: 'Design Work', value: MILESTONE_TYPE_DESIGN_WORK },
   {name: 'Community Work', value: MILESTONE_TYPE_COMMUNITY_WORK },
   {name: 'Checkpoint Review', value: MILESTONE_TYPE_CHECKPOINT_REVIEW },
   {name: 'Final Designs', value: MILESTONE_TYPE_FINAL_DESIGNS },
