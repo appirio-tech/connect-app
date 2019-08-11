@@ -82,7 +82,7 @@ class WorkView extends React.Component {
    */
   getTabContent() {
     const { navs, selectedNav } = this.state
-    const { work,  addNewMilestone, editMilestone, timelines } = this.props
+    const { work,  addNewMilestone, editMilestone, timelines, inputDesignWorks } = this.props
     const timeline = _.find(timelines, { 'reference': 'work', 'referenceId': work.id }) || {}
     const activeMileStone = _.find(timeline.milestones, { 'type': 'design-work', 'status': 'active' })
 
@@ -90,7 +90,7 @@ class WorkView extends React.Component {
       return (
         <div styleName="content">
           <WorkTimelineContainer workId={work.id} editMode={false}/>
-          {!_.isEmpty(activeMileStone) && <DesignWorksMessage milestone={activeMileStone} />}
+          {!_.isEmpty(activeMileStone) && <DesignWorksMessage timeline={timeline} milestone={activeMileStone} inputDesignWorks={inputDesignWorks} />}
         </div>
       )
     }
@@ -209,7 +209,8 @@ WorkView.propTypes = {
       endDate: PT.string,
       name: PT.string,
     })),
-  })).isRequired
+  })).isRequired,
+  inputDesignWorks: PT.func.isRequired
 }
 
 export default withRouter(WorkView)

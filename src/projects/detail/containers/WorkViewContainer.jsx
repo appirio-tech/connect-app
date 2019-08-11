@@ -51,7 +51,8 @@ WorkViewContainer.PropTypes = {
       endDate: PT.string,
       name: PT.string,
     })),
-  })).isRequired
+  })).isRequired,
+  inputDesignWorks: PT.func.isRequired
 }
 
 export default withRouter(WorkViewContainer)

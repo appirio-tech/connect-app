@@ -22,11 +22,19 @@ class CreateView extends React.Component {
       isManageUser,
       workstreams,
       addWorkForWorkstream,
-      timelines
+      timelines,
+      inputDesignWorks
     } = this.props
 
     if (workstreams.length) {
-      return  (<WorkstreamsStages workstreams={workstreams} addWorkForWorkstream={addWorkForWorkstream} timelines={timelines} />)
+      return  (
+        <WorkstreamsStages
+          workstreams={workstreams}
+          addWorkForWorkstream={addWorkForWorkstream}
+          timelines={timelines}
+          inputDesignWorks={inputDesignWorks}
+        />
+      )
     }
     return (<WorkstreamsEmpty isManageUser={isManageUser} />)
   }
@@ -72,7 +80,8 @@ WorkstreamsContainer.PropTypes = {
     description: PT.string,
   })).isRequired,
   addWorkForWorkstream: PT.func.isRequired,
-  timelines: PT.array.isRequired
+  timelines: PT.array.isRequired,
+  inputDesignWorks: PT.func.isRequired
 }
 
 

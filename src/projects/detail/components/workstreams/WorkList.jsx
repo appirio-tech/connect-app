@@ -46,20 +46,24 @@ class WorkList extends React.Component {
   }
 
   /**
-   * show Input Review button when work has active "design-work" milestone
+   * get milestone data from work id
    *
-   * @return {Boolean} show button or not
+   * @return {Object} get milestone data object
    */
-  showInputReview(workId) {
+  getMilestoneData(workId) {
     const { timelines } = this.props
 
     const timeline = _.find(timelines, { 'reference': 'work', 'referenceId': workId }) || {}
     const milestone = _.find(timeline.milestones, { 'type': 'design-work', 'status': 'active' }) || {}
-    return !_.isEmpty(milestone)
+    return {
+      timeline,
+      milestone,
+      showInputReviewBtn: !_.isEmpty(milestone)
+    }
   }
 
   render() {
-    const {workstream, addWorkForWorkstream} = this.props
+    const {workstream, addWorkForWorkstream, inputDesignWorks} = this.props
     const {listType} = this.state
     return (
       <div styleName="container">
@@ -74,9 +78,20 @@ class WorkList extends React.Component {
         {workstream.isLoadingWorks && (<LoadingIndicator />)}
         {!workstream.isLoadingWorks && (
           <div styleName="content">
-            {this.getWorks().map((work) => (
-              <WorkListCard key={`work-${work.id}`} work={work} workstream={workstream} showInputReviewBtn={this.showInputReview(work.id)} />
-            ))}
+            {this.getWorks().map((work) => {
+              const milestoneData = this.getMilestoneData(work.id)
+              return (
+                <WorkListCard
+                  key={`work-${work.id}`}
+                  work={work}
+                  workstream={workstream}
+                  timeline={milestoneData.timeline}
+                  milestone={milestoneData.milestone}
+                  showInputReviewBtn={milestoneData.showInputReviewBtn}
+                  inputDesignWorks={inputDesignWorks}
+                />
+              )
+            })}
           </div>
         )}
         {!workstream.isLoadingWorks && (
@@ -105,7 +120,8 @@ WorkList.propTypes = {
     isLoadingWorks: PT.bool.isRequired,
   }).isRequired,
   addWorkForWorkstream: PT.func.isRequired,
-  timelines: PT.array.isRequired
+  timelines: PT.array.isRequired,
+  inputDesignWorks: PT.func.isRequired
 }
 
 export default withRouter(WorkList)

@@ -1,0 +1,22 @@
+@import '../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+.left-control {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  min-width: 24px;
+}
+
+.back-icon-text {
+  @include roboto-condensed-light;
+
+  color: $tc-gray-90;
+  font-size: 20px;
+  line-height: 30px;
+  margin-left: 10px;
+}
+
+.icon {
+  cursor: pointer;
+}

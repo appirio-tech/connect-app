@@ -11,7 +11,7 @@ import { PHASE_STATUS } from '../../../../config/constants'
 import './WorkListCard.scss'
 
 
-const WorkListCard = ({workstream, work, match, showInputReviewBtn}) => (
+const WorkListCard = ({workstream, work, match, showInputReviewBtn, inputDesignWorks, timeline, milestone}) => (
   <Link to={`/projects/${match.params.projectId}/workstreams/${workstream.id}/works/${work.id}`} styleName="container">
     <div styleName="left">
       <div styleName="title-container">
@@ -31,7 +31,7 @@ const WorkListCard = ({workstream, work, match, showInputReviewBtn}) => (
         <button
           styleName="input-review-btn"
           className="tc-btn tc-btn-default tc-btn-sm"
-          onClick={() => {}}
+          onClick={() => { inputDesignWorks(timeline.id, milestone.id) }}
         >Input Review</button>
       }
     </div>
@@ -51,7 +51,10 @@ WorkListCard.propTypes = {
   workstream: PT.shape({
     id: PT.number.isRequired,
   }).isRequired,
-  showInputReviewBtn: PT.bool.isRequired
+  showInputReviewBtn: PT.bool.isRequired,
+  inputDesignWorks: PT.func.isRequired,
+  timeline: PT.object.isRequired,
+  milestone: PT.object.isRequired
 }
 
 export default withRouter(WorkListCard)
