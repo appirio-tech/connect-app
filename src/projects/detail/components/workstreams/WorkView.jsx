@@ -10,7 +10,7 @@ const Formsy = FormsyForm.Formsy
 
 import Section from '../Section'
 import WorkViewEdit from './WorkViewEdit'
-import InputDesignWorks from './InputDesignWorks'
+import DesignWorksMessage from './DesignWorksMessage'
 import WorkTimelineContainer from '../../containers/WorkTimelineContainer'
 import CloseIcon from  '../../../../assets/icons/x-mark-black.svg'
 import EditIcon from  '../../../../assets/icons/icon-edit-black.svg'
@@ -90,7 +90,7 @@ class WorkView extends React.Component {
       return (
         <div styleName="content">
           <WorkTimelineContainer workId={work.id} editMode={false}/>
-          {!_.isEmpty(activeMileStone) && <InputDesignWorks milestone={activeMileStone} />}
+          {!_.isEmpty(activeMileStone) && <DesignWorksMessage milestone={activeMileStone} />}
         </div>
       )
     }

@@ -5,9 +5,9 @@ import React from 'react'
 import PT from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
-import './InputDesignWorks.scss'
+import './DesignWorksMessage.scss'
 
-const InputDesignWorks = ({ milestone }) => (
+const DesignWorksMessage = ({ milestone }) => (
   <div styleName="input-design-work-container">
     <div styleName="title">{milestone.name} milestone reached</div>
     <div styleName="active-text">{milestone.activeText}</div>
@@ -19,10 +19,10 @@ const InputDesignWorks = ({ milestone }) => (
   </div>
 )
 
-InputDesignWorks.defaultProps = {
+DesignWorksMessage.defaultProps = {
 }
 
-InputDesignWorks.propTypes = {
+DesignWorksMessage.propTypes = {
   milestone: PT.shape({
     id: PT.number,
     startDate: PT.string,
@@ -32,4 +32,4 @@ InputDesignWorks.propTypes = {
   })
 }
 
-export default withRouter(InputDesignWorks)
+export default withRouter(DesignWorksMessage)
