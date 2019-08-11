@@ -304,7 +304,7 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics, projectPlan, workstreams, works }) => {
+const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics, projectPlan, workstreams, works, workTimelines }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -333,6 +333,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     workstreams: workstreams.workstreams,
     workstreamsError: workstreams.error,
     work: works.work,
+    timelines: workTimelines.timelines
   }
 }
 

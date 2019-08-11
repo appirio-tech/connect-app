@@ -77,26 +77,54 @@ class WorkView extends React.Component {
   }
 
   /**
+   * Get input design work content
+   */
+  getInputDesignWorkContent(milestone) {
+    return (
+      <div styleName="input-design-work-container">
+        <div styleName="title">{milestone.name} milestone reached</div>
+        <div styleName="active-text">{milestone.activeText}</div>
+        <button
+          styleName="input-design-works-btn"
+          className="tc-btn tc-btn-primary tc-btn-sm"
+          onClick={() => {}}
+        >Input Design Works</button>
+      </div>
+    )
+  }
+
+  /**
    * Get selected tab content
    */
   getTabContent() {
     const { navs, selectedNav } = this.state
-    const { work,  addNewMilestone, editMilestone } = this.props
+    const { work,  addNewMilestone, editMilestone, timelines } = this.props
+    const timeline = timelines[0] || {}
+    const milestones = timeline.milestones
+    const activeMileStone = _.find(milestones, { 'type': 'design-work', 'status': 'active' })
+
     if (navs[selectedNav].title === 'Details') {
-      return (<WorkTimelineContainer workId={work.id} editMode={false} />)
+      return (
+        <div styleName="content">
+          <WorkTimelineContainer workId={work.id} editMode={false}/>
+          {!_.isEmpty(activeMileStone) && this.getInputDesignWorkContent(activeMileStone)}
+        </div>
+      )
     }
     if (navs[selectedNav].title === 'Delivery Management') {
       return (
-        <WorkTimelineContainer
-          workId={work.id}
-          editMode
-          addNewMilestone={addNewMilestone}
-          editMilestone={editMilestone}
-        />
+        <div styleName="content">
+          <WorkTimelineContainer
+            workId={work.id}
+            editMode
+            addNewMilestone={addNewMilestone}
+            editMilestone={editMilestone}
+          />
+        </div>
       )
     }
     return (
-      <div>
+      <div styleName="content">
         {navs[selectedNav].title + ' tab'}
       </div>
     )
@@ -164,9 +192,7 @@ class WorkView extends React.Component {
                   </div>
                 ))}
               </div>
-              <div styleName="content">
-                {this.getTabContent()}
-              </div>
+              {this.getTabContent()}
             </div>
           )}
           {(isUpdatingWorkInfo || isDeletingWorkInfo) && (<div styleName="loading-wrapper">
@@ -190,7 +216,17 @@ WorkView.propTypes = {
   }).isRequired,
   updateWork: PT.func.isRequired,
   isUpdatingWorkInfo: PT.bool.isRequired,
-  isDeletingWorkInfo: PT.bool.isRequired
+  isDeletingWorkInfo: PT.bool.isRequired,
+  timelines: PT.arrayOf(PT.shape({
+    id: PT.number.isRequired,
+    startDate: PT.string,
+    milestones: PT.arrayOf(PT.shape({
+      id: PT.number,
+      startDate: PT.string,
+      endDate: PT.string,
+      name: PT.string,
+    })),
+  })).isRequired
 }
 
 export default withRouter(WorkView)
