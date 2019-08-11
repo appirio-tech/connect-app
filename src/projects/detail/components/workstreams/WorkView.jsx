@@ -10,6 +10,7 @@ const Formsy = FormsyForm.Formsy
 
 import Section from '../Section'
 import WorkViewEdit from './WorkViewEdit'
+import InputDesignWorks from './InputDesignWorks'
 import WorkTimelineContainer from '../../containers/WorkTimelineContainer'
 import CloseIcon from  '../../../../assets/icons/x-mark-black.svg'
 import EditIcon from  '../../../../assets/icons/icon-edit-black.svg'
@@ -77,23 +78,6 @@ class WorkView extends React.Component {
   }
 
   /**
-   * Get input design work content
-   */
-  getInputDesignWorkContent(milestone) {
-    return (
-      <div styleName="input-design-work-container">
-        <div styleName="title">{milestone.name} milestone reached</div>
-        <div styleName="active-text">{milestone.activeText}</div>
-        <button
-          styleName="input-design-works-btn"
-          className="tc-btn tc-btn-primary tc-btn-sm"
-          onClick={() => {}}
-        >Input Design Works</button>
-      </div>
-    )
-  }
-
-  /**
    * Get selected tab content
    */
   getTabContent() {
@@ -107,7 +91,7 @@ class WorkView extends React.Component {
       return (
         <div styleName="content">
           <WorkTimelineContainer workId={work.id} editMode={false}/>
-          {!_.isEmpty(activeMileStone) && this.getInputDesignWorkContent(activeMileStone)}
+          {!_.isEmpty(activeMileStone) && <InputDesignWorks milestone={activeMileStone} />}
         </div>
       )
     }
