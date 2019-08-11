@@ -17,7 +17,7 @@ const ProjectBudgetReport = ({ budget }) => {
             Expected delivery on-target
           </div>
         </div>
-        <div styleName="budget-part">
+        {work > 0 && <div styleName="budget-part">
           <div styleName="money">
             <div styleName="work circle"/>
             ${formatNumberWithCommas(work)}
@@ -26,6 +26,8 @@ const ProjectBudgetReport = ({ budget }) => {
             WORK
           </div>
         </div>
+        }
+        {fees > 0 &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="fees circle"/>
@@ -34,6 +36,8 @@ const ProjectBudgetReport = ({ budget }) => {
             FEES
           </div>
         </div>
+        }
+        { revenue > 0 &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="revenue circle"/>
@@ -42,6 +46,8 @@ const ProjectBudgetReport = ({ budget }) => {
             REVENUE
           </div>
         </div>
+        }
+        {remaining > 0 &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="remaining circle"/>
@@ -50,6 +56,7 @@ const ProjectBudgetReport = ({ budget }) => {
             REMAINING
           </div>
         </div>
+        }
       </div>
       <div styleName="budget-distribution">
         <div styleName="work budget-distribution-part" style={{ width:  `${(work / total) * 100}%`}} />

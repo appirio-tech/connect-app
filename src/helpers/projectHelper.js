@@ -16,7 +16,7 @@ import {
 import ScopeIcon from '../assets/icons/text-16px_list-bullet.svg'
 import DashboardIcon from '../assets/icons/v.2.5/icon-dashboard.svg'
 import MessagesIcon from '../assets/icons/v.2.5/icon-messages.svg'
-import ReportsIcon from '../assets/icons/v.2.5/icon-reports.svg'
+// import ReportsIcon from '../assets/icons/v.2.5/icon-reports.svg'
 import AssetsLibraryIcon from '../assets/icons/v.2.5/icon-assets-library.svg'
 import InvisibleIcon from '../assets/icons/invisible.svg'
 
