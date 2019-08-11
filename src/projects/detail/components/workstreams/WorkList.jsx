@@ -45,6 +45,19 @@ class WorkList extends React.Component {
     return workstream.works
   }
 
+  /**
+   * show Input Review button when work has active "design-work" milestone
+   *
+   * @return {Boolean} show button or not
+   */
+  showInputReview(workId) {
+    const { timelines } = this.props
+
+    const timeline = _.find(timelines, { 'reference': 'work', 'referenceId': workId }) || {}
+    const milestone = _.find(timeline.milestones, { 'type': 'design-work', 'status': 'active' }) || {}
+    return !_.isEmpty(milestone)
+  }
+
   render() {
     const {workstream, addWorkForWorkstream} = this.props
     const {listType} = this.state
@@ -62,7 +75,7 @@ class WorkList extends React.Component {
         {!workstream.isLoadingWorks && (
           <div styleName="content">
             {this.getWorks().map((work) => (
-              <WorkListCard key={`work-${work.id}`} work={work} workstream={workstream} />
+              <WorkListCard key={`work-${work.id}`} work={work} workstream={workstream} showInputReviewBtn={this.showInputReview(work.id)} />
             ))}
           </div>
         )}
@@ -91,7 +104,8 @@ WorkList.propTypes = {
     })).isRequired,
     isLoadingWorks: PT.bool.isRequired,
   }).isRequired,
-  addWorkForWorkstream: PT.func.isRequired
+  addWorkForWorkstream: PT.func.isRequired,
+  timelines: PT.array.isRequired
 }
 
 export default withRouter(WorkList)

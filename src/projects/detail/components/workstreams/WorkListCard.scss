@@ -11,12 +11,13 @@
   margin-top: 10px;
   width: 100%;
   cursor: pointer;
+  position: relative;
 }
 
 .left {
   display: flex;
   flex-direction: column;
-  width: calc(100% - 50px);
+  width: calc(100% - 120px);
 }
 
 .title-container {
@@ -61,7 +62,11 @@
 
 .right {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  justify-content: space-around;
+  flex-direction: column;
+  min-width: 120px;
+  padding: 10px 0;
 }
 
 .message-counter {
@@ -69,4 +74,13 @@
   font-size: 12px;
   line-height: 20px;
   margin-left: 5px;
+}
+
+.icon-wrapper {
+  display: flex;
+  align-content: center;
+}
+
+.input-review-btn {
+  margin-top: 10px;
 }

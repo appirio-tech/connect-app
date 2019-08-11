@@ -22,10 +22,11 @@ class CreateView extends React.Component {
       isManageUser,
       workstreams,
       addWorkForWorkstream,
+      timelines
     } = this.props
 
     if (workstreams.length) {
-      return  (<WorkstreamsStages workstreams={workstreams} addWorkForWorkstream={addWorkForWorkstream} />)
+      return  (<WorkstreamsStages workstreams={workstreams} addWorkForWorkstream={addWorkForWorkstream} timelines={timelines} />)
     }
     return (<WorkstreamsEmpty isManageUser={isManageUser} />)
   }
@@ -45,6 +46,7 @@ class WorkstreamsContainer extends React.Component {
     if (!workstreams || workstreams.length <= 0) {
       this.props.loadProjectWorkstreams(project)
     }
+
   }
 
   render() {
@@ -70,6 +72,7 @@ WorkstreamsContainer.PropTypes = {
     description: PT.string,
   })).isRequired,
   addWorkForWorkstream: PT.func.isRequired,
+  timelines: PT.array.isRequired
 }
 
 
