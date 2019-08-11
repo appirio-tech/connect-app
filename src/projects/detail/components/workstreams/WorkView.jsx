@@ -83,9 +83,8 @@ class WorkView extends React.Component {
   getTabContent() {
     const { navs, selectedNav } = this.state
     const { work,  addNewMilestone, editMilestone, timelines } = this.props
-    const timeline = timelines[0] || {}
-    const milestones = timeline.milestones
-    const activeMileStone = _.find(milestones, { 'type': 'design-work', 'status': 'active' })
+    const timeline = _.find(timelines, { 'reference': 'work', 'referenceId': work.id }) || {}
+    const activeMileStone = _.find(timeline.milestones, { 'type': 'design-work', 'status': 'active' })
 
     if (navs[selectedNav].title === 'Details') {
       return (
