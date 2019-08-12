@@ -1,6 +1,21 @@
 @import '../../../../styles/includes';
 @import '~tc-ui/src/styles/tc-includes';
 
+.container {
+  display: flex;
+  flex-direction: column;
+  background: $tc-white;
+  width: 100%;
+  min-height: 420px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .left-control {
   display: flex;
   align-items: center;
@@ -17,6 +32,57 @@
   margin-left: 10px;
 }
 
+.title {
+  @include roboto-condensed-bold;
+
+  color: $tc-gray-90;
+  font-size: 20px;
+  line-height: 30px;
+  text-transform: uppercase;
+}
+
+.right-control {
+  display: flex;
+  align-items: center;
+}
+
+.icon-close {
+  margin-left: 41px;
+  cursor: pointer;
+}
+
 .icon {
   cursor: pointer;
+}
+
+.complete-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+}
+
+.complete-message {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.complete-btn {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  width: 100px;
+  margin: 20px auto 0;
+}
+
+.add-design-option-wrapper {
+  border-top: 1px solid lightgrey;
+}
+
+.add-design-option-btn {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  margin: 30px auto;
+  width: 150px;
+
 }
