@@ -101,7 +101,7 @@ function getErrorMessage(action, returnFullStringIfNoMessageFound = false) {
     }
   }
 
-  if (returnFullStringIfNoMessageFound) {
+  if (returnFullStringIfNoMessageFound && action.payload) {
     let errorObject = (action.payload && action.payload.response) ? action.payload.response : action.payload
     if (action.payload && action.payload.response) {
       errorObject = action.payload.response
