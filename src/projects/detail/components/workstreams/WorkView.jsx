@@ -15,6 +15,8 @@ import EditIcon from  '../../../../assets/icons/icon-edit-black.svg'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
 import { PHASE_STATUS } from '../../../../config/constants'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
+import WorkItemsContainer from '../../containers/WorkItemsContainer'
+
 import './WorkView.scss'
 
 const phaseStatuses = PHASE_STATUS.map(ps => ({
@@ -26,6 +28,7 @@ class WorkView extends React.Component {
   constructor(props) {
     super(props)
 
+    const { showAddChallengeTask } = this.props
     this.state = {
       isEditing: false,
       selectedNav: 0,
@@ -40,7 +43,11 @@ class WorkView extends React.Component {
         },
         {
           title: 'Delivery Management',
-          content: (<div>Delivery Management tab</div>),
+          content: (
+            <div styleName="tab-content-container">
+              <WorkItemsContainer showAddChallengeTask={showAddChallengeTask} />
+            </div>
+          ),
         },
         {
           title: 'Assets',
@@ -52,6 +59,13 @@ class WorkView extends React.Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.submitEditForm = this.submitEditForm.bind(this)
+  }
+
+  componentWillMount() {
+    const { work } = this.props
+    if (work.selectedNav) {
+      this.setState({ selectedNav: work.selectedNav })
+    }
   }
 
   /**
@@ -99,7 +113,10 @@ class WorkView extends React.Component {
                 <span styleName="work-name">{work.name}</span>
                 <div styleName="right-control">
                   <i styleName="icon-edit" onClick={() => { this.setState({ isEditing: true }) }} title="edit"><EditIcon /></i>
-                  <Link to={`/projects/${match.params.projectId}`} styleName="icon-close">
+                  <Link
+                    onClick={() => { work.selectedNav = 0 /*reset selected nav when close workview*/ }}
+                    to={`/projects/${match.params.projectId}`} styleName="icon-close"
+                  >
                     <CloseIcon />
                   </Link>
                 </div>
@@ -122,7 +139,10 @@ class WorkView extends React.Component {
                   <div
                     key={nav.title}
                     styleName={cn('nav-item', { 'is-selected': index === this.state.selectedNav })}
-                    onClick={() => { this.setState({ selectedNav: index }) }}
+                    onClick={() => {
+                      work.selectedNav = index
+                      this.setState({ selectedNav: index })
+                    }}
                   >
                     <span styleName="nav-name">{nav.title}</span>
                     {!_.isNil(nav.count) && (<span styleName="nav-count">568</span>)}
@@ -144,6 +164,7 @@ class WorkView extends React.Component {
 }
 
 WorkView.defaultProps = {
+  showAddChallengeTask: () => {},
 }
 
 WorkView.propTypes = {
@@ -153,6 +174,7 @@ WorkView.propTypes = {
     status: PT.string,
     description: PT.string,
   }).isRequired,
+  showAddChallengeTask: PT.func,
   updateWork: PT.func.isRequired,
   isUpdatingWorkInfo: PT.bool.isRequired,
   isDeletingWorkInfo: PT.bool.isRequired

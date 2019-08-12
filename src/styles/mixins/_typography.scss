@@ -9,3 +9,11 @@
   font-family: "RobotoCondensed", Helvetica, Arial, sans-serif;
   font-weight: 300;
 }
+
+/* Layout styles. */
+@mixin ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}

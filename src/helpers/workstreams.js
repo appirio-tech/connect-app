@@ -3,6 +3,7 @@
  */
 import _ from 'lodash'
 import moment from 'moment'
+import { getChallengeStartEndDate } from './challenges'
 
 /**
  * Get number of days to delivery
@@ -50,7 +51,7 @@ export const getDeliveredWorkFilter = (work) => { if (work.status === 'completed
  *
  * @return {Bool} if string is json or not
  */
-const isJson = (str) => {
+export const isJson = (str) => {
   try {
     JSON.parse(str)
   } catch (e) {
@@ -111,4 +112,22 @@ export function getWorkActualData(work, isCreateNew) {
     spentBudget: isCreateNew ? '' : spentBudget,
     budget: isCreateNew ? '' : budget
   }
+}
+
+/**
+ * Get start/end date of workitem
+ *
+ * @param {Object}  workitem    work item
+ *
+ * @returns {{ startDate: moment.Moment, endDate: moment.Moment }} start/end date of challenge
+ *
+ */
+export function getWorkItemStartEndDate(workitem) {
+  if (!workitem.challenge) {
+    return {
+      startDate: '',
+      endDate: '',
+    }
+  }
+  return getChallengeStartEndDate(workitem.challenge)
 }

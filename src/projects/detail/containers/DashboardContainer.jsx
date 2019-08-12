@@ -33,6 +33,7 @@ import PhasesContainer from './PhasesContainer'
 import WorkstreamsContainer from './WorkstreamsContainer'
 import WorkViewContainer from './WorkViewContainer'
 import WorkNewContainer from './WorkNewContainer'
+import AddWorkItemContrainer from './AddWorkItemContrainer'
 import Sticky from '../../../components/Sticky'
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
@@ -74,7 +75,8 @@ class DashboardContainer extends React.Component {
 
     this.state = {
       open: false,
-      showAddWorkForWorkstream: -1
+      showAddWorkForWorkstream: -1,
+      showAddChallengeTask: false,
     }
     this.onNotificationRead = this.onNotificationRead.bind(this)
     this.toggleDrawer = this.toggleDrawer.bind(this)
@@ -103,13 +105,35 @@ class DashboardContainer extends React.Component {
       project,
       match: { params }
     } = this.props
+
     const isWorkstreams = _.get(project, 'details.settings.workstreams', false)
     if (isWorkstreams) {
       if (params.workId) {
-        return (<WorkViewContainer {...this.props} />)
+        const {
+          work,
+        } = this.props
+        const { showAddChallengeTask } = this.state
+        if (showAddChallengeTask) {
+          return (
+            <AddWorkItemContrainer
+              workId={parseInt(params.workId, 10)}
+              onBack={() => this.setState({ showAddChallengeTask: false })}
+              onClose={() => {
+                work.selectedNav = 0
+                this.setState({ showAddChallengeTask: false })
+              }}
+            />
+          )
+        }
+
+        return (
+          <WorkViewContainer
+            {...this.props}
+            showAddChallengeTask={() => { this.setState({ showAddChallengeTask: true }) }}
+          />)
       }
 
-      const { showAddWorkForWorkstream } = this.state
+      const { showAddWorkForWorkstream} = this.state
       if (showAddWorkForWorkstream >= 0) {
         return (
           <WorkNewContainer
@@ -150,7 +174,7 @@ class DashboardContainer extends React.Component {
       estimationQuestion,
       match: { params },
     } = this.props
-    const { showAddWorkForWorkstream } = this.state
+    const { showAddWorkForWorkstream, showAddChallengeTask } = this.state
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
 
     let template
@@ -221,7 +245,7 @@ class DashboardContainer extends React.Component {
             />
           }
           {/* <button type="button" onClick={this.toggleDrawer}>Toggle drawer</button> */}
-          {!!estimationQuestion && !params.workId && (showAddWorkForWorkstream < 0) &&
+          {!!estimationQuestion && !params.workId && (showAddWorkForWorkstream < 0) && !showAddChallengeTask &&
             <ProjectEstimation
               onClick={this.toggleDrawer}
               question={estimationQuestion}
