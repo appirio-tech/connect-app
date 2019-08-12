@@ -68,6 +68,7 @@ class FillProjectDetails extends Component  {
             template={template}
             currentWizardStep={currentWizardStep}
             project={dirtyProject}
+            hidePrice={template.hidePrice}
           />
         )
       }
