@@ -83,7 +83,7 @@ class WorkItemList extends React.Component {
                   </td>
                   <td>
                     {(workItemsIsDeleting[item.id])
-                      ? (<span>Deleting</span>)
+                      ? (<span styleName="text-deleting">Deleting</span>)
                       : (
                         <Dropdown
                           styleName="dropdown"
