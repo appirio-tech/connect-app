@@ -17,7 +17,8 @@ const ProjectBudgetReport = ({ budget }) => {
             Expected delivery on-target
           </div>
         </div>
-        {work > 0 && <div styleName="budget-part">
+        { work !== null && work !== undefined &&
+        <div styleName="budget-part">
           <div styleName="money">
             <div styleName="work circle"/>
             ${formatNumberWithCommas(work)}
@@ -27,7 +28,7 @@ const ProjectBudgetReport = ({ budget }) => {
           </div>
         </div>
         }
-        {fees > 0 &&
+        { fees !== null && fees !== undefined &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="fees circle"/>
@@ -37,7 +38,7 @@ const ProjectBudgetReport = ({ budget }) => {
           </div>
         </div>
         }
-        { revenue > 0 &&
+        { revenue !== null && revenue !== undefined &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="revenue circle"/>
@@ -47,7 +48,7 @@ const ProjectBudgetReport = ({ budget }) => {
           </div>
         </div>
         }
-        {remaining > 0 &&
+        { remaining !== null && remaining !== undefined &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="remaining circle"/>
