@@ -10,7 +10,7 @@
 
 .stats {
     display: flex;
-    div:not(:last-child) {
+    > div:not(:last-child) {
         margin-right: 10px;
     }
 }
