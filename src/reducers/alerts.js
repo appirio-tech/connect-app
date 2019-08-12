@@ -99,14 +99,21 @@ function getErrorMessage(action, returnFullStringIfNoMessageFound = false) {
     if (action.payload.response.statusText) {
       return action.payload.response.statusText
     }
+  }
 
-    if (returnFullStringIfNoMessageFound) {
-      const errorObject = (action.payload && action.payload.response) ? action.payload.response : action.payload
-      if (isJson(errorObject)) {
-        JSON.parse(errorObject)
-      } else if (errorObject) {
-        return errorObject
-      }
+  if (returnFullStringIfNoMessageFound) {
+    let errorObject = (action.payload && action.payload.response) ? action.payload.response : action.payload
+    if (action.payload && action.payload.response) {
+      errorObject = action.payload.response
+    } else if (action.payload && action.payload.message) {
+      errorObject = action.payload.message
+    } else {
+      errorObject = action.payload
+    }
+    if (isJson(errorObject)) {
+      JSON.parse(errorObject)
+    } else if (errorObject) {
+      return errorObject
     }
   }
 
