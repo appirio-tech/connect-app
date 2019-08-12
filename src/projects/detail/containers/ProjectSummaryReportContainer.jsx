@@ -53,7 +53,7 @@ class ProjectSummaryReportContainer extends React.Component {
     } = this.props
 
     const template = _.get(projectTemplate, 'scope')
-    const projectSummary = _.get(projectReports,'projectSummary')
+    const projectSummary = _.get(projectReports, 'projectSummary')
 
     const leftArea = (
       <ProjectInfoContainer
@@ -112,7 +112,6 @@ ProjectSummaryReportContainer.propTypes = {
   phases: PT.array.isRequired,
   productsTimelines: PT.object.isRequired,
   reportsProjectId: PT.number.isRequired,
-  isProcessing: PT.bool.isRequired,
 }
 
 const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates, projectReports }) => {
@@ -127,7 +126,7 @@ const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates,
     feeds: allFeed,
     phasesTopics,
     projectTemplates: templates.projectTemplates,
-    projectReports: projectReports,
+    projectReports,
     isProcessing: projectReports.isLoading,
     reportsProjectId: projectReports.projectId,
   }
