@@ -156,7 +156,7 @@ AssetsLibraryContainer.propTypes = {
   productsTimelines: PT.object.isRequired,
 }
 
-const mapStateToProps = ({ projectState, projectTopics, phasesTopics }) => {
+const mapStateToProps = ({ projectState, projectTopics, topics }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -167,7 +167,7 @@ const mapStateToProps = ({ projectState, projectTopics, phasesTopics }) => {
     phases: projectState.phases,
     feeds: allFeed,
     isFeedsLoading: projectTopics.isLoading,
-    phasesTopics,
+    phasesTopics: topics,
   }
 }
 

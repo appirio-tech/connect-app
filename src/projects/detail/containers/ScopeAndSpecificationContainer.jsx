@@ -234,7 +234,7 @@ SpecificationContainer.propTypes = {
   ])
 }
 
-const mapStateToProps = ({projectState, loadUser, templates, projectTopics, phasesTopics}) => {
+const mapStateToProps = ({projectState, loadUser, templates, projectTopics, topics}) => {
   const { projectTemplates, productTemplates } = templates
 
   // all feeds includes primary as well as private topics if user has access to private topics
@@ -259,7 +259,7 @@ const mapStateToProps = ({projectState, loadUser, templates, projectTopics, phas
     phases: projectState.phases,
     isFeedsLoading: projectTopics.isLoading,
     isProcessing: projectState.processing,
-    phasesTopics,
+    phasesTopics: topics,
     feeds
   }
 }
