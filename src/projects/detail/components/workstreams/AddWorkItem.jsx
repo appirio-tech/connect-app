@@ -266,10 +266,10 @@ class AddWorkItem extends React.Component {
           >
             Show next {numberOfNextLoading} challenges
           </button>)}
-        {!isLoadingChallenge && (numberOfNextLoading === 0 && challenges.length > 0) && (<span styleName="end-of-list">
+        {!isLoadingChallenge && (numberOfNextLoading === 0 && filterChallenges.length > 0) && (<span styleName="end-of-list">
           End of list
         </span>)}
-        {!isLoadingChallenge && (numberOfNextLoading === 0 && challenges.length === 0) && (<span styleName="end-of-list">
+        {!isLoadingChallenge && (numberOfNextLoading === 0 && filterChallenges.length === 0) && (<span styleName="end-of-list">
           No challenges found
         </span>)}
         <div styleName="bottom">
