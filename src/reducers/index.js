@@ -7,7 +7,7 @@ import { projectPlan } from '../projects/reducers/projectPlan'
 import { projectTopics } from '../projects/reducers/projectTopics'
 import { phasesTopics } from '../projects/reducers/phasesTopics'
 import { productsTimelines } from '../projects/reducers/productsTimelines'
-import { projectSummary } from '../projects/reducers/projectSummary'
+import { projectReports } from '../projects/reducers/projectReports'
 import { workstreams } from '../projects/reducers/workstreams'
 import { works } from '../projects/reducers/works'
 import { workTimelines } from '../projects/reducers/workTimelines'
@@ -31,7 +31,7 @@ export default combineReducers({
   projectDashboard,
   projectPlan,
   projectTopics,
-  projectSummary,
+  projectReports,
   phasesTopics,
   alerts,
   notifications,

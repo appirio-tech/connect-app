@@ -3,7 +3,7 @@ import {
 } from '../../config/constants'
 import {
   getProjectSummary
-} from '../../api/projectSummary'
+} from '../../api/projectReports'
 
 export function loadProjectSummary(projectId) {
   return (dispatch) => {

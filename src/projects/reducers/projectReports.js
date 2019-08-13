@@ -11,7 +11,7 @@ const initialState = {
   projectSummary: null
 }
 
-export const projectSummary = function (state=initialState, action) {
+export const projectReports = function (state=initialState, action) {
   const payload = action.payload
 
   switch (action.type) {
