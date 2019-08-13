@@ -21,6 +21,7 @@
 }
 
 .form-container {
+  position: relative;
   width: 100%;
 }
 
@@ -93,13 +94,29 @@
 }
 
 .delete-btn {
-
+  display: block
 }
 
 .cancel-btn {
-
+  display: block
 }
 
 .save-changes-btn {
+  display: block
+}
 
+.edit-btn {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  opacity: 0.5;
+  color: $tc-black;
+  z-index: 1;
+
+  &:hover {
+    opacity: 1;
+  }
 }

@@ -21,7 +21,10 @@ class TextInputWithCounter extends React.Component {
   render() {
     return (
       <div className="text-input-with-counter">
-        <div className="counter"><span>{this.state.count}</span> / {this.props.maxLength}</div>
+        {
+          this.props.showCounter &&
+          <div className="counter"><span>{this.state.count}</span> / {this.props.maxLength}</div>
+        }
         <TCFormFields.TextInput
           {...this.props}
           onChange={(name, value) => {
@@ -38,6 +41,9 @@ class TextInputWithCounter extends React.Component {
     )
   }
 }
+TextInputWithCounter.defaultProps = {
+  showCounter: true
+}
 
 TextInputWithCounter.propTypes = {
   name: PropTypes.string.isRequired,
@@ -47,7 +53,8 @@ TextInputWithCounter.propTypes = {
   value: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
-  maxLength: PropTypes.string.isRequired
+  maxLength: PropTypes.string.isRequired,
+  showCounter: PropTypes.bool
 }
 
 export default TextInputWithCounter

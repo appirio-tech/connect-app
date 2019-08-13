@@ -10,11 +10,34 @@ const TCFormFields = FormsyForm.Fields
 import TextInputWithCounter from '../../../../components/TextInputWithCounter/TextInputWithCounter'
 import LinkList from '../timeline/LinkList'
 import styles from './DesignOption.scss'
+import EditIcon from '../../../../assets/icons/icon-edit-black.svg'
 
 class DesignOption extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      isEditMode: true
+    }
+
+    this.toggleEditMode = this.toggleEditMode.bind(this)
+    this.onCancel = this.onCancel.bind(this)
+  }
+
+  toggleEditMode() {
+    this.setState((prevState) => ({
+      isEditMode: !prevState.isEditMode
+    }))
+  }
+
+  onCancel() {
+    this.toggleEditMode()
+  }
+
   render() {
     const { index, content, onDeleteOption, onUpdateField } = this.props
+    const { isEditMode } = this.state
     const { title, submissionId, previewUrl, links } = content
+
     return (
       <div className={`${styles['container']}`}>
         <div className={`${styles['left-column']}`}>
@@ -32,14 +55,19 @@ class DesignOption extends React.Component {
             // onValidSubmit={() => {}}
             // onChange={() => {}}
           >
+            {
+              !isEditMode &&
+              <i className={`${styles['edit-btn']}`} title="edit" onClick={this.toggleEditMode}><EditIcon /></i>
+            }
             <TextInputWithCounter
               wrapperClass={`${styles['title-input']}`}
               label="Title"
               name="title-input"
               type="text"
               maxLength="64"
-              disabled={false}
+              disabled={!isEditMode}
               value={title}
+              showCounter={isEditMode}
               onChange={(name, value) => {
                 onUpdateField(index, 'title', value)
               }}
@@ -49,7 +77,7 @@ class DesignOption extends React.Component {
               label="Submission Id"
               name="submission-id-input"
               type="number"
-              disabled={false}
+              disabled={!isEditMode}
               value={submissionId}
               onChange={(name, value) => {
                 onUpdateField(index, 'submissionId', value)
@@ -60,7 +88,7 @@ class DesignOption extends React.Component {
               label="Preview URL"
               name="preview-link-input"
               type="text"
-              disabled={false}
+              disabled={!isEditMode}
               value={previewUrl}
               onChange={(name, value) => {
                 onUpdateField(index, 'previewUrl', value)
@@ -74,17 +102,21 @@ class DesignOption extends React.Component {
                   links.splice(linkIndex, 1, values)
                   onUpdateField(index, 'links', links)
                 }}
-                onRemoveLink={(linkIndex) => {
-                  if (!window.confirm('Are you sure you want to remove this link?')) {
-                    return
+                onRemoveLink={isEditMode
+                  ? (linkIndex) => {
+                    if (!window.confirm('Are you sure you want to remove this link?')) {
+                      return
+                    }
+                    links.splice(linkIndex, 1)
+                    onUpdateField(index, 'links', links)
                   }
-                  links.splice(linkIndex, 1)
-                  onUpdateField(index, 'links', links)
-                }}
-                onUpdateLink={(values, linkIndex) => {
-                  links.splice(linkIndex, 1, values)
-                  onUpdateField(index, 'links', links)
-                }}
+                  : undefined}
+                onUpdateLink={isEditMode
+                  ? (values, linkIndex) => {
+                    links.splice(linkIndex, 1, values)
+                    onUpdateField(index, 'links', links)
+                  }
+                  : undefined}
                 fields={[{
                   name: 'title',
                   value: `Design ${links.length + 1}`,
@@ -99,12 +131,12 @@ class DesignOption extends React.Component {
                 formUpdateButtonTitle="Save changes"
                 // isUpdating={milestone.isUpdating}
                 // fakeName={`Design ${links.length + 1}`}
-                canAddLink
+                canAddLink={isEditMode}
               />
             </div>
             <div className={`${styles['button-wrapper']}`}>
               <button className={`${styles['delete-btn']} tc-btn tc-btn-warning tc-btn-sm action-btn`} onClick={() => { onDeleteOption(index) }}>Delete</button>
-              <button className={`${styles['cancel-btn']} tc-btn tc-btn-default tc-btn-sm action-btn`} onClick={() => {}}>Cancel</button>
+              <button className={`${styles['cancel-btn']} tc-btn tc-btn-default tc-btn-sm action-btn`} onClick={this.onCancel}>Cancel</button>
               <button className={`${styles['save-changes-btn']} tc-btn tc-btn-primary tc-btn-sm action-btn`} onClick={() => {}}>Save changes</button>
             </div>
           </Formsy.Form>
@@ -112,9 +144,6 @@ class DesignOption extends React.Component {
       </div>
     )
   }
-}
-
-DesignOption.defaultProps = {
 }
 
 DesignOption.propTypes = {
