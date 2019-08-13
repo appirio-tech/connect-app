@@ -18,7 +18,6 @@ export function getProjectSummary(projectId) {
     const totalRegistrants = _.sumBy(res, c => c['challenge.num_registrations'])
 
     const res1 = _.get(responses[1].data, 'result.content', {})
-    console.log(`$c['project_stream.tc_connect_project_id']`);
     const filterReport = c => `${c['project_stream.tc_connect_project_id']}` === projectId.toString()
     const projectBudget = _.find(res1, filterReport) || {}
 
