@@ -54,7 +54,7 @@ function getData(project, dispatch) {
 
   return dispatch(loadProjectPhasesWithProducts(project.id))
     .then(({ value: phases }) => {
-      loadTopics(projectId, _.map(phases, (phase) => `phase#${phase.id}`), dispatch)
+      loadTopics(project.id, _.map(phases, (phase) => `phase#${phase.id}`), dispatch)
         .then((phaseFeeds) => {
           let phaseUserIds = []
           _.forEach(phaseFeeds, phaseFeed => {
