@@ -58,7 +58,8 @@
 .complete-wrapper {
   display: flex;
   flex-direction: column;
-  margin: 20px 0;
+  align-items: center;
+  margin: 20px 0 50px;
 }
 
 .complete-message {
@@ -71,10 +72,12 @@
   align-content: center;
   justify-content: center;
   width: 100px;
-  margin: 20px auto 0;
+  margin: 20px 10px 0;
 }
 
 .add-design-option-wrapper {
+  display: flex;
+  justify-content: center;
   border-top: 1px solid lightgrey;
 }
 
@@ -82,7 +85,7 @@
   display: flex;
   align-content: center;
   justify-content: center;
-  margin: 30px auto;
+  margin: 30px 10px 0;
   width: 150px;
 
 }

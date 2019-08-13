@@ -1,0 +1,70 @@
+@import '../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  display: block;
+}
+
+.left-column {
+  display: flex;
+  align-items: center;
+  width: 100px;
+}
+
+.right-column {
+  display: flex;
+  align-items: center;
+  width: calc(100% - 100px)
+}
+
+.form-container {
+  width: 100%;
+}
+
+.title-input {
+  margin-bottom: 20px;
+
+  label {
+    @include roboto-bold;
+
+    color: $tc-black;
+    font-size: 14px;
+    text-transform: capitalize;
+  }
+}
+
+.submission-id-input {
+  margin-bottom: 20px;
+
+  label {
+    @include roboto-bold;
+
+    color: $tc-black;
+    font-size: 14px;
+    text-transform: capitalize;
+  }
+}
+
+.preview-link-input {
+  margin-bottom: 20px;
+
+  label {
+    @include roboto-bold;
+
+    color: $tc-black;
+    font-size: 14px;
+    text-transform: capitalize;
+  }
+}
+
+.links-wrapper {
+  margin-bottom: 40px;
+}
+
+.links-title {
+  @include roboto-bold;
+
+  color: $tc-black;
+  font-size: 14px;
+  text-transform: capitalize;
+}

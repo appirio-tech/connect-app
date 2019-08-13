@@ -4,6 +4,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import { withRouter } from 'react-router-dom'
+import DesignOption from './DesignOption'
 import BackIcon from '../../../../assets/icons/arrows-16px-1_tail-left.svg'
 import CloseIcon from '../../../../assets/icons/x-mark-black.svg'
 import './DesignWork.scss'
@@ -46,6 +47,7 @@ class DesignWorks extends React.Component {
           <div styleName="complete-message">Add all the designs for the review. After all the designs are added, click the "Complete" button, so customer may start reviewing them.</div>
           <button styleName="complete-btn" className="tc-btn tc-btn-warning tc-btn-sm action-btn " onClick={() => {}}>Complete</button>
         </div>
+        <DesignOption />
         <div styleName="add-design-option-wrapper">
           <button styleName="add-design-option-btn" className="tc-btn tc-btn-primary tc-btn-sm action-btn " onClick={() => {}}>Add design option</button>
         </div>
