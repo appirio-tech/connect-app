@@ -11,7 +11,7 @@ import FilesGridView from '../../../components/AssetsLibrary/FilesGridView'
 import AssetsStatistics from '../../../components/AssetsLibrary/AssetsStatistics'
 import { updateProject, deleteProject } from '../../actions/project'
 import { loadDashboardFeeds, loadProjectMessages } from '../../actions/projectTopics'
-import { loadPhaseFeed } from '../../actions/phasesTopics'
+import { loadTopic } from '../../../actions/topics'
 import { loadProjectPlan } from '../../actions/projectPlan'
 import { PROJECT_ATTACHMENTS_FOLDER,
   PHASE_STATUS_DRAFT,
@@ -21,6 +21,7 @@ import { PROJECT_ATTACHMENTS_FOLDER,
   FILE_PICKER_CNAME,
   FILE_PICKER_SUBMISSION_CONTAINER_NAME } from '../../../config/constants'
 import AddLink from '../../../components/AssetsLibrary/AddLink'
+import PostsContainer from '../../../components/Posts'
 import PERMISSIONS from '../../../config/permissions'
 import { checkPermission } from '../../../helpers/permissions'
 import {
@@ -71,7 +72,7 @@ class AssetsInfoContainer extends React.Component {
   }
 
   componentWillMount() {
-    const { project, isFeedsLoading, feeds, phases, phasesTopics, loadPhaseFeed, location } = this.props
+    const { project, isFeedsLoading, feeds, phases, phasesTopics, loadTopic, location } = this.props
 
     // load feeds from dashboard if they are not currently loading or loaded yet
     // also it will load feeds, if we already loaded them, but it was 0 feeds before
@@ -82,8 +83,8 @@ class AssetsInfoContainer extends React.Component {
     // load phases feeds if they are not loaded yet
     // note: old projects doesn't have phases, so we check if there are any phases at all first
     phases && phasesTopics && phases.forEach((phase) => {
-      if (!phasesTopics[phase.id]) {
-        loadPhaseFeed(project.id, phase.id)
+      if (!phasesTopics[`phase#${phase.id}`]) {
+        loadTopic(project.id, `phase#${phase.id}`)
       }
     })
 
@@ -104,7 +105,7 @@ class AssetsInfoContainer extends React.Component {
   // this is just to see if the comment/feed/post/phase the url hash is attempting to scroll to is loaded or not
   // if its not loaded then we load the appropriate item
   handleUrlHash(props) {
-    const { project, isFeedsLoading, phases, phasesTopics, feeds, loadProjectPlan, loadPhaseFeed, location } = props
+    const { project, isFeedsLoading, phases, phasesTopics, feeds, loadProjectPlan, loadTopic, location } = props
     const hashParts = _.split(location.hash.substring(1), '-')
     const hashPrimaryId = parseInt(hashParts[1], 10)
 
@@ -132,7 +133,7 @@ class AssetsInfoContainer extends React.Component {
           existingUserIds= _.union(existingUserIds, _.map(project.invites, 'userId'))
           loadProjectPlan(project.id, existingUserIds)
         } else if(postId && !(phasesTopics[hashPrimaryId].topic && phasesTopics[hashPrimaryId].topic.postIds.includes(postId))) {
-          loadPhaseFeed(project.id, hashPrimaryId)
+          loadTopic(project.id, `phase#${hashPrimaryId}`)
         }
       }
       break
@@ -362,7 +363,7 @@ class AssetsInfoContainer extends React.Component {
       feed = feeds.find(feed => feed.id === topicId)
     } else {
       const phaseFeeds = Object.keys(phasesTopics)
-        .map(key => phasesTopics[key].topic)
+        .map(key => phasesTopics[`phase#${key}`].topic)
       feed = phaseFeeds.find(feed => feed.id && feed.id === topicId)
     }
     if (feed) {
@@ -551,64 +552,68 @@ class AssetsInfoContainer extends React.Component {
     const formatFolderTitle = (linkTitle) => linkTitle
 
     return (
-      <div styleName="assets-info-wrapper">
-        {ifModalOpen && (
-          <AddLink
-            onAdd={(link) => {
-              if (link.address.indexOf('http') !== 0)
-                link.address = `http://${link.address}`
-              this.onAddNewLink(link)
-              this.onNewLinkModalChange(false)
-            }}
-            onClose={() => {
-              this.onNewLinkModalChange(false)
-            }}
-          />)}
-        <div>
-          <div styleName="section-title">
-            Assets Library
+      <div>
+        <PostsContainer tag={`${loggedInUser.handle}#2`} postUrlTemplate={`${loggedInUser.handle}-{{postId}}`} />
+        <div styleName="assets-info-wrapper">
+          {ifModalOpen && (
+            <AddLink
+              onAdd={(link) => {
+                if (link.address.indexOf('http') !== 0)
+                  link.address = `http://${link.address}`
+                this.onAddNewLink(link)
+                this.onNewLinkModalChange(false)
+              }}
+              onClose={() => {
+                this.onNewLinkModalChange(false)
+              }}
+            />)}
+          <div>
+            <div styleName="section-title">
+              Assets Library
+            </div>
+            {(showAddNewButton) && (
+              <div styleName="assets-header-button">
+                <button type="button" onClick={newButtonClick} styleName="add-new-button">Add new...</button>
+              </div>)}
           </div>
-          {(showAddNewButton) && (
-            <div styleName="assets-header-button">
-              <button type="button" onClick={newButtonClick} styleName="add-new-button">Add new...</button>
-            </div>)}
+
+          {(assetsData.length > 0) && (
+            <AssetsStatistics
+              assetsData={assetsData}
+              onClickAction={this.activeAssetsTypeChange}
+              activeAssetsType={activeAssetsType}
+            />)}
+          {(enableFileUpload && activeAssetsType === 'Files') &&
+            <FilesGridView
+              links={attachments}
+              title="Files"
+              onDelete={this.removeAttachment}
+              onEdit={this.onEditAttachment}
+              onAddAttachment={addProjectAttachment}
+              onUploadAttachment={this.onUploadAttachment}
+              isSharingAttachment={isSharingAttachment}
+              discardAttachments={discardAttachments}
+              onChangePermissions={changeAttachmentPermission}
+              selectedUsers={attachmentPermissions}
+              projectMembers={projectMembers}
+              pendingAttachments={attachmentsAwaitingPermission}
+              loggedInUser={loggedInUser}
+              attachmentsStorePath={attachmentsStorePath}
+              onDeletePostAttachment={this.deletePostAttachment}
+              formatModifyDate={formatModifyDate}
+              formatFolderTitle={formatFolderTitle}
+            />}
+          {(!hideLinks && activeAssetsType === 'Links') &&
+            <LinksGridView
+              links={links}
+              canDelete={canManageLinks}
+              canEdit={canManageLinks}
+              onDelete={this.onDeleteLink}
+              onEdit={this.onEditLink}
+              formatModifyDate={formatModifyDate}
+              formatFolderTitle={formatFolderTitle}
+            />}
         </div>
-        {(assetsData.length > 0) && (
-          <AssetsStatistics
-            assetsData={assetsData}
-            onClickAction={this.activeAssetsTypeChange}
-            activeAssetsType={activeAssetsType}
-          />)}
-        {(enableFileUpload && activeAssetsType === 'Files') &&
-          <FilesGridView
-            links={attachments}
-            title="Files"
-            onDelete={this.removeAttachment}
-            onEdit={this.onEditAttachment}
-            onAddAttachment={addProjectAttachment}
-            onUploadAttachment={this.onUploadAttachment}
-            isSharingAttachment={isSharingAttachment}
-            discardAttachments={discardAttachments}
-            onChangePermissions={changeAttachmentPermission}
-            selectedUsers={attachmentPermissions}
-            projectMembers={projectMembers}
-            pendingAttachments={attachmentsAwaitingPermission}
-            loggedInUser={loggedInUser}
-            attachmentsStorePath={attachmentsStorePath}
-            onDeletePostAttachment={this.deletePostAttachment}
-            formatModifyDate={formatModifyDate}
-            formatFolderTitle={formatFolderTitle}
-          />}
-        {(!hideLinks && activeAssetsType === 'Links') &&
-          <LinksGridView
-            links={links}
-            canDelete={canManageLinks}
-            canEdit={canManageLinks}
-            onDelete={this.onDeleteLink}
-            onEdit={this.onEditLink}
-            formatModifyDate={formatModifyDate}
-            formatFolderTitle={formatFolderTitle}
-          />}
       </div>
     )
   }
@@ -641,7 +646,7 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
 }
 
 const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
-  loadProjectMessages, discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission,
+  loadProjectMessages, discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadTopic, changeAttachmentPermission,
   removeProjectAttachment, loadProjectPlan, saveFeedComment }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AssetsInfoContainer))

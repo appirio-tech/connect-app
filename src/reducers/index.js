@@ -4,7 +4,7 @@ import loadUser from './loadUser'
 import { projectState } from '../projects/reducers/project'
 import { projectDashboard } from '../projects/reducers/projectDashboard'
 import { projectTopics } from '../projects/reducers/projectTopics'
-import { phasesTopics } from '../projects/reducers/phasesTopics'
+import { topics } from './topics'
 import { productsTimelines } from '../projects/reducers/productsTimelines'
 import navSearch from './navSearch'
 import projectSearch from '../projects/reducers/projectSearch'
@@ -25,7 +25,7 @@ export default combineReducers({
   members,
   projectDashboard,
   projectTopics,
-  phasesTopics,
+  topics,
   alerts,
   notifications,
   settings,

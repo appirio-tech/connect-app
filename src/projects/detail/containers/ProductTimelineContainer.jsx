@@ -8,7 +8,6 @@
  * as timelines data is also needed outside of timeline container.
  *
  * So now this container becomes quite trivial and may be abolished if needed.
- * Or it may be converted to HOC component similar to PhaseFeedHOC and load timeline for the whole phase.
  */
 import React from 'react'
 import PT from 'prop-types'

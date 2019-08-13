@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { loadMembers } from '../../actions/members'
 import { loadProjectPhasesWithProducts } from './project'
-import { loadFeedsForPhases } from './phasesTopics'
+import { loadTopics } from '../../actions/topics'
 import { loadProductTimelineWithMilestones } from './productsTimelines'
 import {
   DISCOURSE_BOT_USERID,
@@ -34,7 +34,7 @@ export function loadProjectPlan(projectId, existingUserIds) {
   return (dispatch) => {
     return dispatch(loadProjectPhasesWithProducts(projectId))
       .then(({ value: phases }) => {
-        loadFeedsForPhases(projectId, phases, dispatch)
+        loadTopics(projectId, _.map(phases, (phase) => `phase#${phase.id}`), dispatch)
           .then((phaseFeeds) => {
             let phaseUserIds = []
             _.forEach(phaseFeeds, phaseFeed => {

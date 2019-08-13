@@ -43,6 +43,7 @@ import PERMISSIONS from '../../../config/permissions'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import ProjectEstimation from '../../create/components/ProjectEstimation'
+import PostsContainer from '../../../components/Posts'
 
 import {
   PHASE_STATUS_ACTIVE,
@@ -144,6 +145,7 @@ class DashboardContainer extends React.Component {
       removeProjectAttachment,
       location,
       estimationQuestion,
+      loggedInUser,
     } = this.props
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
 
@@ -218,6 +220,7 @@ class DashboardContainer extends React.Component {
         </TwoColsLayout.Sidebar>
 
         <TwoColsLayout.Content>
+          <PostsContainer tag={`${loggedInUser.handle}#1`} postUrlTemplate={`${loggedInUser.handle}-{{postId}}`} />
           {unreadProjectUpdate.length > 0 &&
             <SystemFeed
               messages={sortedUnreadProjectUpdates}
@@ -278,7 +281,7 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics }) => {
+const mapStateToProps = ({ notifications, projectState, projectTopics, templates, topics, loadUser }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -297,7 +300,8 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     feeds: allFeed,
     isFeedsLoading: projectTopics.isLoading,
     phasesStates: projectState.phasesStates,
-    phasesTopics,
+    phasesTopics: topics,
+    loggedInUser: loadUser.user
   }
 }
 
