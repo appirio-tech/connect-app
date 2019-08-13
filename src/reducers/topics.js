@@ -1,33 +1,33 @@
 /**
- * Reducer for phasesTopics
+ * Reducer for topics
  */
 import _ from 'lodash'
 import {
-  LOAD_PHASE_FEED_PENDING,
-  LOAD_PHASE_FEED_SUCCESS,
-  LOAD_PHASE_FEED_FAILURE,
-  LOAD_PHASE_FEED_MEMBERS_PENDING,
-  LOAD_PHASE_FEED_MEMBERS_SUCCESS,
-  LOAD_PHASE_FEED_MEMBERS_FAILURE,
-  CREATE_PHASE_FEED_COMMENT_PENDING,
-  CREATE_PHASE_FEED_COMMENT_SUCCESS,
-  CREATE_PHASE_FEED_COMMENT_FAILURE,
-  DELETE_PHASE_FEED_COMMENT_PENDING,
-  DELETE_PHASE_FEED_COMMENT_SUCCESS,
-  DELETE_PHASE_FEED_COMMENT_FAILURE,
-  SAVE_PHASE_FEED_COMMENT_PENDING,
-  SAVE_PHASE_FEED_COMMENT_SUCCESS,
-  SAVE_PHASE_FEED_COMMENT_FAILURE,
-} from '../../config/constants'
+  LOAD_TOPIC_PENDING,
+  LOAD_TOPIC_SUCCESS,
+  LOAD_TOPIC_FAILURE,
+  LOAD_TOPIC_MEMBERS_PENDING,
+  LOAD_TOPIC_MEMBERS_SUCCESS,
+  LOAD_TOPIC_MEMBERS_FAILURE,
+  CREATE_TOPIC_POST_PENDING,
+  CREATE_TOPIC_POST_SUCCESS,
+  CREATE_TOPIC_POST_FAILURE,
+  DELETE_TOPIC_POST_PENDING,
+  DELETE_TOPIC_POST_SUCCESS,
+  DELETE_TOPIC_POST_FAILURE,
+  UPDATE_TOPIC_POST_PENDING,
+  UPDATE_TOPIC_POST_SUCCESS,
+  UPDATE_TOPIC_POST_FAILURE,
+} from '../config/constants'
 import update from 'react-addons-update'
 
 const initialState = {
   /*
-    State has phase.id as keys and an object as values in the next shape:
+    State has tag as keys in format like '<topic>#<id>' and an object as values in the next shape:
 
-    [phase.id]: {
-      isLoading: <Boolean>, // is loading phase feed
-      error: <Boolean>, // if has error during loading phase feed
+    [tag]: {
+      isLoading: <Boolean>, // is loading topic
+      error: <Boolean>, // if has error during loading topic
       topic: {
         ...
         isAddingComment: <Boolean>, // is adding some comment
@@ -47,21 +47,21 @@ const initialState = {
   */
 }
 
-export const phasesTopics = function (state=initialState, action) {
+export const topics = function (state=initialState, action) {
   const payload = action.payload
 
   switch (action.type) {
   /*
-    Loading feed
+    Loading topic
   */
-  case LOAD_PHASE_FEED_MEMBERS_PENDING:
-  case LOAD_PHASE_FEED_PENDING:
-    // if previously feeds were not loaded for the phase
-    // create a phase branch instead of updating
-    if (!state[action.meta.phaseId]) {
+  case LOAD_TOPIC_MEMBERS_PENDING:
+  case LOAD_TOPIC_PENDING:
+    // if previously topics were not loaded
+    // create a topic branch instead of updating
+    if (!state[action.meta.tag]) {
       return {
         ...state,
-        [action.meta.phaseId]: {
+        [action.meta.tag]: {
           isLoading: true,
           error: false,
         }
@@ -69,7 +69,7 @@ export const phasesTopics = function (state=initialState, action) {
     }
 
     return update(state, {
-      [action.meta.phaseId]: {
+      [action.meta.tag]: {
         $merge: {
           isLoading: true,
           error: false,
@@ -77,13 +77,13 @@ export const phasesTopics = function (state=initialState, action) {
       }
     })
 
-  case LOAD_PHASE_FEED_SUCCESS:
+  case LOAD_TOPIC_SUCCESS:
     // DO NOT alter state until we get all members loaded
     return state
 
-  case LOAD_PHASE_FEED_MEMBERS_SUCCESS:
+  case LOAD_TOPIC_MEMBERS_SUCCESS:
     return update(state, {
-      [action.meta.phaseId]: {
+      [action.meta.tag]: {
         $merge: {
           isLoading: false,
           error: false,
@@ -92,10 +92,10 @@ export const phasesTopics = function (state=initialState, action) {
       }
     })
 
-  case LOAD_PHASE_FEED_MEMBERS_FAILURE:
-  case LOAD_PHASE_FEED_FAILURE:
+  case LOAD_TOPIC_MEMBERS_FAILURE:
+  case LOAD_TOPIC_FAILURE:
     return update(state, {
-      [action.meta.phaseId]: {
+      [action.meta.tag]: {
         $merge: {
           isLoading: false,
           error: true,
@@ -104,11 +104,11 @@ export const phasesTopics = function (state=initialState, action) {
     })
 
   /*
-    Creating comments
+    Creating posts
   */
-  case CREATE_PHASE_FEED_COMMENT_PENDING:
+  case CREATE_TOPIC_POST_PENDING:
     return update(state, {
-      [action.meta.phaseId]: {
+      [action.meta.tag]: {
         $merge: {
           isAddingComment: true,
           error: false,
@@ -116,12 +116,12 @@ export const phasesTopics = function (state=initialState, action) {
       }
     })
 
-  case CREATE_PHASE_FEED_COMMENT_SUCCESS: {
+  case CREATE_TOPIC_POST_SUCCESS: {
     const rawContent = _.get(action, 'meta.rawContent', null)
     const comment = payload.comment
     comment.rawContent = rawContent
 
-    const updatedTopic = update(state[action.meta.phaseId].topic, {
+    const updatedTopic = update(state[action.meta.tag].topic, {
       totalPosts: { $apply: n => n + 1 },
       retrievedPosts: { $apply: n => n + 1 },
       postIds: { $push: [ comment.id ] },
@@ -129,7 +129,7 @@ export const phasesTopics = function (state=initialState, action) {
     })
 
     return update(state, {
-      [action.meta.phaseId]: {
+      [action.meta.tag]: {
         isAddingComment: { $set: false },
         error: { $set: false },
         topic: { $merge: updatedTopic },
@@ -137,9 +137,9 @@ export const phasesTopics = function (state=initialState, action) {
     })
   }
 
-  case CREATE_PHASE_FEED_COMMENT_FAILURE:
+  case CREATE_TOPIC_POST_FAILURE:
     return update(state, {
-      [action.meta.phaseId]: {
+      [action.meta.tag]: {
         $merge: {
           isAddingComment: false,
           error: true,
@@ -148,21 +148,21 @@ export const phasesTopics = function (state=initialState, action) {
     })
 
   /*
-    Deleting comments
+    Deleting posts
   */
-  case DELETE_PHASE_FEED_COMMENT_PENDING: {
+  case DELETE_TOPIC_POST_PENDING: {
     const commentIndex = _.findIndex(
-      state[action.meta.phaseId].topic.posts,
+      state[action.meta.tag].topic.posts,
       { id: action.meta.commentId }
     )
 
-    const updatedComment = update(state[action.meta.phaseId].topic.posts[commentIndex], {
+    const updatedComment = update(state[action.meta.tag].topic.posts[commentIndex], {
       isDeletingComment: { $set: true },
       error: { $set: false },
     })
 
     return update(state, {
-      [action.meta.phaseId]: {
+      [action.meta.tag]: {
         topic: {
           posts: { $splice: [[commentIndex, 1, updatedComment]] }
         }
@@ -170,14 +170,14 @@ export const phasesTopics = function (state=initialState, action) {
     })
   }
 
-  case DELETE_PHASE_FEED_COMMENT_SUCCESS: {
+  case DELETE_TOPIC_POST_SUCCESS: {
     const commentIndex = _.findIndex(
-      state[action.meta.phaseId].topic.posts,
+      state[action.meta.tag].topic.posts,
       { id: action.meta.commentId }
     )
 
     return update(state, {
-      [action.meta.phaseId]: {
+      [action.meta.tag]: {
         topic: {
           totalPosts: { $apply: n => n - 1 },
           retrievedPosts: { $apply: n => n - 1 },
@@ -188,19 +188,19 @@ export const phasesTopics = function (state=initialState, action) {
     })
   }
 
-  case DELETE_PHASE_FEED_COMMENT_FAILURE: {
+  case DELETE_TOPIC_POST_FAILURE: {
     const commentIndex = _.findIndex(
-      state[action.meta.phaseId].topic.posts,
+      state[action.meta.tag].topic.posts,
       { id: action.meta.commentId }
     )
 
-    const updatedComment = update(state[action.meta.phaseId].topic.posts[commentIndex], {
+    const updatedComment = update(state[action.meta.tag].topic.posts[commentIndex], {
       isDeletingComment: { $set: false },
       error: { $set: true },
     })
 
     return update(state, {
-      [action.meta.phaseId]: {
+      [action.meta.tag]: {
         topic: {
           posts: { $splice: [[commentIndex, 1, updatedComment]] }
         }
@@ -209,21 +209,21 @@ export const phasesTopics = function (state=initialState, action) {
   }
 
   /*
-    Saving comments
+    Saving posts
    */
-  case SAVE_PHASE_FEED_COMMENT_PENDING: {
+  case UPDATE_TOPIC_POST_PENDING: {
     const commentIndex = _.findIndex(
-      state[action.meta.phaseId].topic.posts,
+      state[action.meta.tag].topic.posts,
       { id: action.meta.commentId }
     )
 
-    const updatedComment = update(state[action.meta.phaseId].topic.posts[commentIndex], {
+    const updatedComment = update(state[action.meta.tag].topic.posts[commentIndex], {
       isSavingComment: { $set: true },
       error: { $set: false },
     })
 
     return update(state, {
-      [action.meta.phaseId]: {
+      [action.meta.tag]: {
         topic: {
           posts: { $splice: [[commentIndex, 1, updatedComment]] }
         }
@@ -231,16 +231,16 @@ export const phasesTopics = function (state=initialState, action) {
     })
   }
 
-  case SAVE_PHASE_FEED_COMMENT_SUCCESS: {
+  case UPDATE_TOPIC_POST_SUCCESS: {
     const rawContent = _.get(action, 'meta.rawContent', null)
     const savedComment = payload.comment
 
     const commentIndex = _.findIndex(
-      state[action.meta.phaseId].topic.posts,
+      state[action.meta.tag].topic.posts,
       { id: action.meta.commentId }
     )
 
-    const updatedComment = update(state[action.meta.phaseId].topic.posts[commentIndex], {
+    const updatedComment = update(state[action.meta.tag].topic.posts[commentIndex], {
       isSavingComment: { $set: false },
       error: { $set: false },
       rawContent: { $set : rawContent },
@@ -251,7 +251,7 @@ export const phasesTopics = function (state=initialState, action) {
     })
 
     return update(state, {
-      [action.meta.phaseId]: {
+      [action.meta.tag]: {
         topic: {
           posts: { $splice: [[commentIndex, 1, updatedComment]] }
         }
@@ -259,19 +259,19 @@ export const phasesTopics = function (state=initialState, action) {
     })
   }
 
-  case SAVE_PHASE_FEED_COMMENT_FAILURE: {
+  case UPDATE_TOPIC_POST_FAILURE: {
     const commentIndex = _.findIndex(
-      state[action.meta.phaseId].topic.posts,
+      state[action.meta.tag].topic.posts,
       { id: action.meta.commentId }
     )
 
-    const updatedComment = update(state[action.meta.phaseId].topic.posts[commentIndex], {
+    const updatedComment = update(state[action.meta.tag].topic.posts[commentIndex], {
       isSavingComment: { $set: false },
       error: { $set: true },
     })
 
     return update(state, {
-      [action.meta.phaseId]: {
+      [action.meta.tag]: {
         topic: {
           posts: { $splice: [[commentIndex, 1, updatedComment]] }
         }

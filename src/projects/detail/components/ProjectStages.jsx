@@ -80,6 +80,7 @@ const ProjectStages = ({
   productCategories,
   productsTimelines,
   currentMemberRole,
+  phasesTopics,
   isProcessing,
   isSuperUser,
   updateProduct,
@@ -94,7 +95,8 @@ const ProjectStages = ({
   collapseProjectPhase,
   feedId,
   commentId,
-  location
+  location,
+  notifications,
 }) => (
   <Section>
 
@@ -107,6 +109,8 @@ const ProjectStages = ({
           phaseState={phasesStates[phase.id]}
           productTemplates={productTemplates}
           productCategories={productCategories}
+          productsTimelines={productsTimelines}
+          phasesTopics={phasesTopics}
           currentMemberRole={currentMemberRole}
           isProcessing={isProcessing}
           isSuperUser={isSuperUser}
@@ -126,7 +130,7 @@ const ProjectStages = ({
           collapseProjectPhase={collapseProjectPhase}
           feedId={feedId}
           commentId={commentId}
-          commentAnchorPrefix={`phase-${phase.id}-posts-`}
+          notifications={notifications}
         />
       ))
     }
@@ -144,6 +148,7 @@ ProjectStages.propTypes = {
   productTemplates: PT.array.isRequired,
   productCategories: PT.array.isRequired,
   productsTimelines: PT.object,
+  phasesTopics: PT.object,
   currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
