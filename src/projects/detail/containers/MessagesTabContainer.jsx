@@ -388,7 +388,7 @@ class MessagesTabContainer extends React.Component {
 
 const mapStateToProps = ({
   projectTopics,
-  phasesTopics,
+  topics,
   projectState,
   notifications,
   loadUser,
@@ -424,7 +424,7 @@ const mapStateToProps = ({
     notificationsState: notifications,
     error: projectTopics.error,
     projectMembers,
-    phasesTopics,
+    phasesTopics: topics,
     allMembers,
     canAccessPrivatePosts,
   }

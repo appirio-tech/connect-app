@@ -201,7 +201,8 @@ class DashboardContainer extends React.Component {
     }
 
     // system notifications
-    const notReadNotifications = filterReadNotifications(notifications)
+    const preRenderedNotifications = preRenderNotifications(notifications)
+    const notReadNotifications = filterReadNotifications(preRenderedNotifications)
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
     const sortedUnreadProjectUpdates = _.orderBy(unreadProjectUpdate, ['date'], ['desc'])
     // if this is true, we will hide other component like estimate section
@@ -304,7 +305,7 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics, projectPlan, workstreams, works }) => {
+const mapStateToProps = ({ notifications, projectState, projectTopics, templates, topics, projectPlan, workstreams, works }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -312,7 +313,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
   }
 
   return {
-    notifications: preRenderNotifications(notifications.notifications),
+    notifications: notifications.notifications,
     productTemplates: templates.productTemplates,
     projectTemplates: templates.projectTemplates,
     productCategories: templates.productCategories,
@@ -329,7 +330,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     isDeletingWorkInfo: works.isDeleting,
     isRequestWorkError: !!works.error,
     phasesStates: projectState.phasesStates,
-    phasesTopics,
+    phasesTopics: topics,
     workstreams: workstreams.workstreams,
     workstreamsError: workstreams.error,
     work: works.work,
