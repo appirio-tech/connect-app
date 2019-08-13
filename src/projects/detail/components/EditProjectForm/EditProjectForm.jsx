@@ -27,7 +27,7 @@ import {
 import { clean } from '../../../../helpers/utils'
 
 import './EditProjectForm.scss'
-import { PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_COMPLETED } from '../../../../config/constants'
+import { PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_COMPLETED, SCOPE_CHANGE_REQ_STATUS_ACTIVATED, SCOPE_CHANGE_REQ_STATUS_PENDING, SCOPE_CHANGE_REQ_STATUS_APPROVED } from '../../../../config/constants'
 
 const FeaturePickerModal = ({ project, isEdittable, showFeaturesDialog, hideFeaturesDialog, saveFeatures, setValue }) => {
   const setFormValue = (features, featureSeeAttached=false) => {
@@ -85,6 +85,7 @@ class EditProjectForm extends Component {
       template,
       hasDependantFields,
       dirtyProject: Object.assign({}, props.project),
+      formsyFormKey: 0
     }
   }
 
@@ -135,12 +136,21 @@ class EditProjectForm extends Component {
           }
         })
       }
+
+      // If a scope change is activated, future resets should revert to the new project state. 
+      // There is no way to reinitialize formsyForm values with pristine flag.
+      // So, remount formsy form with new initial values by updating the key prop on FormsyForm element.
+      const formsyFormKey = this.isScopeChangeActivated(this.props.project, nextProps.project)
+        ? this.state.formsyFormKey + 1 
+        : this.state.formsyFormKey
+
       this.setState({
         project: updatedProject,
         isFeaturesDirty: false, // Since we just saved, features are not dirty anymore.
         isProjectDirty: false,
         canSubmit: false,
-        isSaving: false
+        isSaving: false,
+        formsyFormKey
       })
     }
 
@@ -152,10 +162,10 @@ class EditProjectForm extends Component {
       } = updateNodesByConditions(template, nextProps.project, nextProps.productTemplates)
 
       if (updatedSomeNodes) {
-        this.setState({
+        this.setState(state => ({
           template: updatedTemplate,
-          project: hidedSomeNodes ? nextProps.project : this.state.project,
-        })
+          project: hidedSomeNodes ? nextProps.project : state.project,
+        }))
 
         // re-check again if any hidden values when an option is deselected
         const updatedProject = clean(removeValuesOfHiddenNodes(updatedTemplate, nextProps.project))
@@ -169,6 +179,14 @@ class EditProjectForm extends Component {
         })
       }
     }
+  }
+
+  isScopeChangeActivated(projectState, newProjectState) {
+    const pendingStatuses = [SCOPE_CHANGE_REQ_STATUS_PENDING, SCOPE_CHANGE_REQ_STATUS_APPROVED]
+    const pendingScopeChange = _.find(projectState.scopeChangeRequests, scr => pendingStatuses.indexOf(scr.status) !== -1)
+    const updatedPendingScopeChange = pendingScopeChange && _.find(newProjectState.scopeChangeRequests, scr => scr.id === pendingScopeChange.id)
+
+    return updatedPendingScopeChange && updatedPendingScopeChange.status === SCOPE_CHANGE_REQ_STATUS_ACTIVATED
   }
 
   componentDidMount() {
@@ -366,6 +384,7 @@ class EditProjectForm extends Component {
           message={onLeaveMessage}
         />
         <Formsy.Form
+          key={this.state.formsyFormKey} // to force formsy to remount and reinitialize values
           ref="form"
           disabled={!isEdittable || this.makeDeliveredPhaseReadOnly(project.status)}
           onInvalid={this.disableButton}
