@@ -2,19 +2,22 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 .container {
-  display: block;
+  display: flex;
+  border-bottom: 1px solid $tc-gray-10;
+  padding-top: 30px;
 }
 
 .left-column {
   display: flex;
-  align-items: center;
-  width: 100px;
+  align-items: flex-start;
+  justify-content: center;
+  width: 150px;
 }
 
 .right-column {
   display: flex;
   align-items: center;
-  width: calc(100% - 100px)
+  width: calc(100% - 150px)
 }
 
 .form-container {
@@ -67,4 +70,17 @@
   color: $tc-black;
   font-size: 14px;
   text-transform: capitalize;
+}
+
+.image-container {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.preview-img {
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 110px;
+  border-radius: 15px;
+  background-color: $tc-gray-10;
 }

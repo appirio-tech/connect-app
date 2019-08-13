@@ -14,11 +14,12 @@ import styles from './DesignOption.scss'
 class DesignOption extends React.Component {
   constructor(props) {
     super(props)
+    const { content = {} } = props
     this.state = {
-      title: '',
-      submissionId: '',
-      previewUrl: '',
-      presentLinks: []
+      title: content.title || '',
+      submissionId: content.submissionId || '',
+      previewUrl: content.previewUrl || '',
+      presentLinks: content.links || []
     }
 
     this.updatedUrl = this.updatedUrl.bind(this)
@@ -64,7 +65,9 @@ class DesignOption extends React.Component {
     return (
       <div className={`${styles['container']}`}>
         <div className={`${styles['left-column']}`}>
-
+          <div className={`${styles['image-container']}`}>
+            <img className={`${styles['preview-img']}`} src={previewUrl} />
+          </div>
         </div>
         <div className={`${styles['right-column']}`}>
           <Formsy.Form
@@ -145,6 +148,16 @@ DesignOption.defaultProps = {
 }
 
 DesignOption.propTypes = {
+  content: PT.shape({
+    title: PT.string,
+    submissionId: PT.number,
+    previewUrl: PT.string,
+    attachmentId: PT.number,
+    links: PT.arrayOf(PT.shape({
+      title: PT.string,
+      url: PT.string
+    }))
+  })
 }
 
 export default withRouter(DesignOption)

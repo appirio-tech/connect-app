@@ -12,7 +12,15 @@ import './DesignWork.scss'
 class DesignWorks extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    const { milestone } = props
+    const { details } = milestone || {}
+    const { content } = details || {}
+    const { designs = [] } = content || {}
+    this.state = {
+      designOptions: [...designs]
+    }
+
+    this.addDesignOption = this.addDesignOption.bind(this)
   }
 
   /**
@@ -23,8 +31,24 @@ class DesignWorks extends React.Component {
     return `/projects/${match.params.projectId}`
   }
 
+  /**
+   * Add new Design Option
+   */
+  addDesignOption() {
+    this.setState((prevState) => ({
+      designOptions: [...prevState.designOptions, {
+        title: '',
+        submissionId: '',
+        previewUrl: '',
+        links: []
+      }]
+    }))
+  }
+
   render() {
     const { onBack } = this.props
+    const { designOptions } = this.state
+
     return (
       <div styleName="container">
         <div styleName="header">
@@ -47,21 +71,23 @@ class DesignWorks extends React.Component {
           <div styleName="complete-message">Add all the designs for the review. After all the designs are added, click the "Complete" button, so customer may start reviewing them.</div>
           <button styleName="complete-btn" className="tc-btn tc-btn-warning tc-btn-sm action-btn " onClick={() => {}}>Complete</button>
         </div>
-        <DesignOption />
+        {
+          !_.isEmpty(designOptions) &&
+          designOptions.map((design) => {
+            return <DesignOption content={design} />
+          })
+        }
         <div styleName="add-design-option-wrapper">
-          <button styleName="add-design-option-btn" className="tc-btn tc-btn-primary tc-btn-sm action-btn " onClick={() => {}}>Add design option</button>
+          <button styleName="add-design-option-btn" className="tc-btn tc-btn-primary tc-btn-sm action-btn " onClick={this.addDesignOption}>Add design option</button>
         </div>
       </div>
     )
   }
 }
 
-DesignWorks.defaultProps = {
-  onBack: () => {},
-}
-
 DesignWorks.propTypes = {
-  onBack: PT.func
+  onBack: PT.func,
+  milestone: PT.object
 }
 
 export default withRouter(DesignWorks)
