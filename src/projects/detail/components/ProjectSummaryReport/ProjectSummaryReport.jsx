@@ -8,9 +8,9 @@ import './ProjectSummaryReport.scss'
 
 const ProjectSummaryReport = ({ projectSummary, project, template, estimationQuestion }) => {
   const { work, fees, revenue, remaining } = projectSummary.budget
-  const showBudgetSummary = work + fees + revenue + remaining
+  const showBudgetSummary = work || fees || revenue || remaining
   const { countries, registrants, designs, linesOfCode, hoursSaved, costSavings, valueCreated } = projectSummary.topcoderDifference
-  const showTopcoderDifference = countries + registrants + designs + linesOfCode + hoursSaved + costSavings + valueCreated
+  const showTopcoderDifference = countries || registrants || designs || linesOfCode || hoursSaved || costSavings || valueCreated
   const showEmptyProjectSummary = !showBudgetSummary && !showTopcoderDifference
   return (
     <div styleName="wrapper">
