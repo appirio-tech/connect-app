@@ -6,7 +6,6 @@ import PT from 'prop-types'
 import _ from 'lodash'
 import uncontrollable from 'uncontrollable'
 import { withRouter } from 'react-router-dom'
-import { connect } from 'react-redux'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
@@ -101,16 +100,6 @@ class ProjectStage extends React.Component{
     this.state = {
       isExpanded: false
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
-    return !_.isEqual(nextProps.project, this.props.project) ||
-      !_.isEqual(nextProps.phase, this.props.phase) ||
-      !_.isEqual(nextProps.productsTimelines, this.props.productsTimelines) ||
-      !_.isEqual(nextProps.phasesTopics, this.props.phasesTopics) ||
-      !_.isEqual(nextProps.productTemplates, this.props.productTemplates) ||
-      !_.isEqual(nextProps.phaseState, this.props.phaseState) ||
-      !_.isEqual(nextProps.notifications, this.props.notifications)
   }
 
   removeProductAttachment(attachmentId) {
@@ -306,14 +295,6 @@ ProjectStage.propTypes = {
   deleteProjectPhase: PT.func.isRequired,
 }
 
-const mapStateToProps = ({notifications}) => {
-  return {
-    notifications: notifications.notifications
-  }
-}
-
-const actionCreators = {}
-
-export default uncontrollable(connect(mapStateToProps, actionCreators)(withRouter(ProjectStage)), {
+export default uncontrollable(withRouter(ProjectStage), {
   activeTab: 'onTabClick',
 })

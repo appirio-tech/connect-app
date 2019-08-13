@@ -155,7 +155,8 @@ class DashboardContainer extends React.Component {
     }
 
     // system notifications
-    const notReadNotifications = filterReadNotifications(notifications)
+    const preRenderedNotifications = preRenderNotifications(notifications)
+    const notReadNotifications = filterReadNotifications(preRenderedNotifications)
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
     const sortedUnreadProjectUpdates = _.orderBy(unreadProjectUpdate, ['date'], ['desc'])
 
@@ -286,7 +287,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
   }
 
   return {
-    notifications: preRenderNotifications(notifications.notifications),
+    notifications: notifications.notifications,
     productTemplates: templates.productTemplates,
     projectTemplates: templates.projectTemplates,
     productCategories: templates.productCategories,

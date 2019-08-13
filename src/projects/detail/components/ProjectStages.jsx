@@ -95,7 +95,8 @@ const ProjectStages = ({
   collapseProjectPhase,
   feedId,
   commentId,
-  location
+  location,
+  notifications,
 }) => (
   <Section>
 
@@ -129,6 +130,7 @@ const ProjectStages = ({
           collapseProjectPhase={collapseProjectPhase}
           feedId={feedId}
           commentId={commentId}
+          notifications={notifications}
         />
       ))
     }
