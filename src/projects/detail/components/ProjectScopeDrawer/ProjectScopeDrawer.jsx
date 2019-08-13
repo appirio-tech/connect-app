@@ -159,7 +159,7 @@ ProjectScopeDrawer.propTypes = {
 
   project: PT.object.isRequired,
   processing: PT.bool.isRequired,
-  projectTemplate: PT.object.isRequired,
+  projectTemplate: PT.object,
   productTemplates: PT.array.isRequired,
   productCategories: PT.array.isRequired,
   fireProjectDirty: PT.func.isRequired,
