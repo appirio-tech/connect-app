@@ -21,7 +21,6 @@ import { PROJECT_ATTACHMENTS_FOLDER,
   FILE_PICKER_CNAME,
   FILE_PICKER_SUBMISSION_CONTAINER_NAME } from '../../../config/constants'
 import AddLink from '../../../components/AssetsLibrary/AddLink'
-import PostsContainer from '../../../components/Posts'
 import PERMISSIONS from '../../../config/permissions'
 import { checkPermission } from '../../../helpers/permissions'
 import {
@@ -553,7 +552,6 @@ class AssetsInfoContainer extends React.Component {
 
     return (
       <div>
-        <PostsContainer tag={`${loggedInUser.handle}#2`} postUrlTemplate={`${loggedInUser.handle}-{{postId}}`} />
         <div styleName="assets-info-wrapper">
           {ifModalOpen && (
             <AddLink
