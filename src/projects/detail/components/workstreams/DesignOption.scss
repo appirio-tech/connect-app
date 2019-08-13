@@ -61,7 +61,7 @@
 }
 
 .links-wrapper {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 .links-title {
@@ -83,4 +83,23 @@
   min-height: 110px;
   border-radius: 15px;
   background-color: $tc-gray-10;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.delete-btn {
+
+}
+
+.cancel-btn {
+
+}
+
+.save-changes-btn {
+
 }

@@ -12,56 +12,9 @@ import LinkList from '../timeline/LinkList'
 import styles from './DesignOption.scss'
 
 class DesignOption extends React.Component {
-  constructor(props) {
-    super(props)
-    const { content = {} } = props
-    this.state = {
-      title: content.title || '',
-      submissionId: content.submissionId || '',
-      previewUrl: content.previewUrl || '',
-      presentLinks: content.links || []
-    }
-
-    this.updatedUrl = this.updatedUrl.bind(this)
-    this.removeUrl = this.removeUrl.bind(this)
-  }
-
-  updateTitleInput(title) {
-    this.setState({ title })
-  }
-
-  updateSubmissionId(submissionId) {
-    this.setState({ submissionId })
-  }
-
-  updatePreviewUrl(previewUrl) {
-    this.setState({ previewUrl })
-  }
-
-  updatedUrl(values, linkIndex) {
-    const { presentLinks } = this.state
-
-    if (typeof linkIndex === 'number') {
-      presentLinks.splice(linkIndex, 1, values)
-    } else {
-      presentLinks.push(values)
-    }
-    this.setState({ presentLinks })
-  }
-
-  removeUrl(linkIndex) {
-    if (!window.confirm('Are you sure you want to remove this link?')) {
-      return
-    }
-
-    const { presentLinks } = this.state
-    presentLinks.splice(linkIndex, 1)
-    this.setState({ presentLinks })
-  }
-
   render() {
-    const { title, submissionId, previewUrl, presentLinks } = this.state
-    const {  } = this.props
+    const { index, content, onDeleteOption, onUpdateField } = this.props
+    const { title, submissionId, previewUrl, links } = content
     return (
       <div className={`${styles['container']}`}>
         <div className={`${styles['left-column']}`}>
@@ -88,7 +41,7 @@ class DesignOption extends React.Component {
               disabled={false}
               value={title}
               onChange={(name, value) => {
-                this.updateTitleInput(value)
+                onUpdateField(index, 'title', value)
               }}
             />
             <TCFormFields.TextInput
@@ -99,7 +52,7 @@ class DesignOption extends React.Component {
               disabled={false}
               value={submissionId}
               onChange={(name, value) => {
-                this.updateSubmissionId(value)
+                onUpdateField(index, 'submissionId', value)
               }}
             />
             <TCFormFields.TextInput
@@ -110,19 +63,31 @@ class DesignOption extends React.Component {
               disabled={false}
               value={previewUrl}
               onChange={(name, value) => {
-                this.updatePreviewUrl(value)
+                onUpdateField(index, 'previewUrl', value)
               }}
             />
             <div className={`${styles['links-wrapper']}`}>
               <div className={`${styles['links-title']}`}>Presentation links</div>
               <LinkList
-                links={presentLinks}
-                onAddLink={this.updatedUrl}
-                onRemoveLink={this.removeUrl}
-                onUpdateLink={this.updatedUrl}
+                links={links}
+                onAddLink={(values, linkIndex) => {
+                  links.splice(linkIndex, 1, values)
+                  onUpdateField(index, 'links', links)
+                }}
+                onRemoveLink={(linkIndex) => {
+                  if (!window.confirm('Are you sure you want to remove this link?')) {
+                    return
+                  }
+                  links.splice(linkIndex, 1)
+                  onUpdateField(index, 'links', links)
+                }}
+                onUpdateLink={(values, linkIndex) => {
+                  links.splice(linkIndex, 1, values)
+                  onUpdateField(index, 'links', links)
+                }}
                 fields={[{
                   name: 'title',
-                  value: `Design ${presentLinks.length + 1}`,
+                  value: `Design ${links.length + 1}`,
                   maxLength: 64,
                 }, {
                   name: 'url'
@@ -137,6 +102,11 @@ class DesignOption extends React.Component {
                 canAddLink
               />
             </div>
+            <div className={`${styles['button-wrapper']}`}>
+              <button className={`${styles['delete-btn']} tc-btn tc-btn-warning tc-btn-sm action-btn`} onClick={() => { onDeleteOption(index) }}>Delete</button>
+              <button className={`${styles['cancel-btn']} tc-btn tc-btn-default tc-btn-sm action-btn`} onClick={() => {}}>Cancel</button>
+              <button className={`${styles['save-changes-btn']} tc-btn tc-btn-primary tc-btn-sm action-btn`} onClick={() => {}}>Save changes</button>
+            </div>
           </Formsy.Form>
         </div>
       </div>
@@ -148,16 +118,19 @@ DesignOption.defaultProps = {
 }
 
 DesignOption.propTypes = {
+  index: PT.number.isRequired,
   content: PT.shape({
     title: PT.string,
-    submissionId: PT.number,
+    submissionId: PT.string,
     previewUrl: PT.string,
-    attachmentId: PT.number,
+    attachmentId: PT.string,
     links: PT.arrayOf(PT.shape({
       title: PT.string,
       url: PT.string
     }))
-  })
+  }).isRequired,
+  onDeleteOption: PT.func.isRequired,
+  onUpdateField: PT.func.isRequired
 }
 
 export default withRouter(DesignOption)

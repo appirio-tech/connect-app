@@ -21,6 +21,8 @@ class DesignWorks extends React.Component {
     }
 
     this.addDesignOption = this.addDesignOption.bind(this)
+    this.deleteDesignOption = this.deleteDesignOption.bind(this)
+    this.updateField = this.updateField.bind(this)
   }
 
   /**
@@ -36,13 +38,36 @@ class DesignWorks extends React.Component {
    */
   addDesignOption() {
     this.setState((prevState) => ({
-      designOptions: [...prevState.designOptions, {
-        title: '',
-        submissionId: '',
-        previewUrl: '',
-        links: []
-      }]
+      designOptions: [
+        ...prevState.designOptions,
+        {
+          title: '',
+          submissionId: '',
+          previewUrl: '',
+          links: []
+        }
+      ]
     }))
+  }
+
+  /**
+   * Delete Design Option
+   */
+  deleteDesignOption(index) {
+    this.setState((prevState) => ({
+      designOptions: _.filter(prevState.designOptions, (designOption, order) => {
+        return order !== index
+      })
+    }))
+  }
+
+  updateField(index, field, value) {
+    this.setState((prevState) => {
+      prevState.designOptions[index][field] = value
+      return ({
+        designOptions: prevState.designOptions
+      })
+    })
   }
 
   render() {
@@ -73,8 +98,16 @@ class DesignWorks extends React.Component {
         </div>
         {
           !_.isEmpty(designOptions) &&
-          designOptions.map((design) => {
-            return <DesignOption content={design} />
+          designOptions.map((design, index) => {
+            return (
+              <DesignOption
+                key={index}
+                index={index}
+                content={design}
+                onDeleteOption={this.deleteDesignOption}
+                onUpdateField={this.updateField}
+              />
+            )
           })
         }
         <div styleName="add-design-option-wrapper">
