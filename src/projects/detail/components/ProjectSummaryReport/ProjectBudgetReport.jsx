@@ -1,12 +1,19 @@
 import React from 'react'
 import PT from 'prop-types'
 import { formatNumberWithCommas } from '../../../../helpers/format'
+import PERMISSIONS from '../../../../config/permissions'
+import { checkPermission } from '../../../../helpers/permissions'
 import './ProjectBudgetReport.scss'
 
-const ProjectBudgetReport = ({ budget }) => {
+const ProjectBudgetReport = ({ budget, project }) => {
   const { work, fees, revenue, remaining } = budget
 
-  const total = work + fees + revenue + remaining
+  let total = revenue + remaining
+  const showSpentData = checkPermission(PERMISSIONS.ACCESS_BUDGET_SPENT_REPORT, project)
+  const showInvoiceData = checkPermission(PERMISSIONS.ACCESS_INVOICE_REPORT, project)
+  const workSpentBarWidth = (work / total) * 100
+  const feeBarWidth = (fees / total) * 100
+  const invoicedBarWidth = (revenue / total) * 100
 
   return (
     <div>
@@ -17,7 +24,7 @@ const ProjectBudgetReport = ({ budget }) => {
             Expected delivery on-target
           </div>
         </div>
-        { work !== null && work !== undefined &&
+        { showSpentData && work !== null && work !== undefined &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="work circle"/>
@@ -28,7 +35,7 @@ const ProjectBudgetReport = ({ budget }) => {
           </div>
         </div>
         }
-        { fees !== null && fees !== undefined &&
+        { showSpentData && fees !== null && fees !== undefined &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="fees circle"/>
@@ -38,17 +45,17 @@ const ProjectBudgetReport = ({ budget }) => {
           </div>
         </div>
         }
-        { revenue !== null && revenue !== undefined &&
+        { showInvoiceData && revenue !== null && revenue !== undefined &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="revenue circle"/>
             ${formatNumberWithCommas(revenue)}</div>
           <div styleName="part-of-budget">
-            REVENUE
+            INVOICED
           </div>
         </div>
         }
-        { remaining !== null && remaining !== undefined &&
+        { showInvoiceData && remaining !== null && remaining !== undefined &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="remaining circle"/>
@@ -59,10 +66,14 @@ const ProjectBudgetReport = ({ budget }) => {
         </div>
         }
       </div>
+      { showSpentData &&
+        <div styleName="budget-distribution">
+          <div styleName="work budget-distribution-part" style={{ width:  `${workSpentBarWidth}%`}} />
+          <div styleName="fees budget-distribution-part" style={{ width:  `${feeBarWidth}%`}} />
+        </div>
+      }
       <div styleName="budget-distribution">
-        <div styleName="work budget-distribution-part" style={{ width:  `${(work / total) * 100}%`}} />
-        <div styleName="fees budget-distribution-part" style={{ width:  `${(fees / total) * 100}%`}} />
-        <div styleName="revenue budget-distribution-part" style={{ width:  `${(revenue / total) * 100}%`}} />
+        { showInvoiceData && <div styleName="revenue budget-distribution-part" style={{ width:  `${invoicedBarWidth}%`}} /> }
       </div>
     </div>
   )

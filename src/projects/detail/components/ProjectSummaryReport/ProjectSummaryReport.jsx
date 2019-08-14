@@ -3,12 +3,15 @@ import PT from 'prop-types'
 import ProjectEstimation from '../../../create/components/ProjectEstimation'
 import ProjectBudgetReport from './ProjectBudgetReport'
 import TopcoderDifferenceReport  from './TopcoderDifferenceReport'
+import PERMISSIONS from '../../../../config/permissions'
+import { checkPermission } from '../../../../helpers/permissions'
 
 import './ProjectSummaryReport.scss'
 
 const ProjectSummaryReport = ({ projectSummary, project, template, estimationQuestion }) => {
   const { work, fees, revenue, remaining } = projectSummary.budget
-  const showBudgetSummary = work || fees || revenue || remaining
+  const hasBudgetPermission = checkPermission(PERMISSIONS.ACCESS_BUDGET_REPORT, project)
+  const showBudgetSummary = hasBudgetPermission && (work || fees || revenue || remaining)
   const { countries, registrants, designs, linesOfCode, hoursSaved, costSavings, valueCreated } = projectSummary.topcoderDifference
   const showTopcoderDifference = countries || registrants || designs || linesOfCode || hoursSaved || costSavings || valueCreated
   const showEmptyProjectSummary = !showBudgetSummary && !showTopcoderDifference
@@ -30,7 +33,7 @@ const ProjectSummaryReport = ({ projectSummary, project, template, estimationQue
       }
       { !!showBudgetSummary &&
         <div styleName="budget-report">
-          <ProjectBudgetReport budget={projectSummary.budget}/>
+          <ProjectBudgetReport budget={projectSummary.budget} project={project}/>
         </div>
       }
       { !!showTopcoderDifference && <TopcoderDifferenceReport difference={projectSummary.topcoderDifference}/> }
