@@ -8,7 +8,7 @@ import './ProjectBudgetReport.scss'
 const ProjectBudgetReport = ({ budget, project }) => {
   const { work, fees, revenue, remaining } = budget
 
-  let total = revenue + remaining
+  const total = revenue + remaining
   const showSpentData = checkPermission(PERMISSIONS.ACCESS_BUDGET_SPENT_REPORT, project)
   const showInvoiceData = checkPermission(PERMISSIONS.ACCESS_INVOICE_REPORT, project)
   const workSpentBarWidth = (work / total) * 100
