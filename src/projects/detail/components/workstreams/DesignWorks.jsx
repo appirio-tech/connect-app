@@ -8,6 +8,7 @@ import DesignOption from './DesignOption'
 import BackIcon from '../../../../assets/icons/arrows-16px-1_tail-left.svg'
 import CloseIcon from '../../../../assets/icons/x-mark-black.svg'
 import './DesignWork.scss'
+import {updateMilestone} from '../../../actions/workTimelines'
 
 class DesignWorks extends React.Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class DesignWorks extends React.Component {
     this.addDesignOption = this.addDesignOption.bind(this)
     this.deleteDesignOption = this.deleteDesignOption.bind(this)
     this.updateField = this.updateField.bind(this)
+    this.submitForm = this.submitForm.bind(this)
   }
 
   /**
@@ -70,6 +72,36 @@ class DesignWorks extends React.Component {
     })
   }
 
+  submitForm(data) {
+    const { milestone, updateMilestone, work, timelineId, milestoneId } = this.props
+    const { details } = milestone || {}
+    const { content } = details || {}
+    const { designs = [] } = content || {}
+
+    const existDesignIndex = _.findIndex(designs, { submissionId: data.submissionId })
+    if (existDesignIndex >= 0) {
+      designs[existDesignIndex] = {
+        ...designs[existDesignIndex],
+        ...data
+      }
+    } else {
+      designs.push(data)
+    }
+    let newMilestone = {
+      ...milestone,
+      details: {
+        ...details,
+        content: {
+          ...content,
+          designs
+        }
+      }
+    }
+
+    newMilestone = _.omit(newMilestone, ['startDate', 'endDate', 'timelineId', 'statusHistory'])
+    updateMilestone(work.id, timelineId, milestoneId, newMilestone)
+  }
+
   render() {
     const { onBack } = this.props
     const { designOptions } = this.state
@@ -106,6 +138,7 @@ class DesignWorks extends React.Component {
                 content={design}
                 onDeleteOption={this.deleteDesignOption}
                 onUpdateField={this.updateField}
+                onSubmitForm={this.submitForm}
               />
             )
           })
@@ -120,7 +153,8 @@ class DesignWorks extends React.Component {
 
 DesignWorks.propTypes = {
   onBack: PT.func,
-  milestone: PT.object
+  milestone: PT.object,
+  updateMilestone: PT.func
 }
 
 export default withRouter(DesignWorks)

@@ -12,7 +12,7 @@ import DesignWorks from '../components/workstreams/DesignWorks'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
 import {
-  loadMilestone
+  loadMilestone, updateMilestone
 } from '../../actions/workTimelines'
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import './DesignWorksContainer.scss'
@@ -72,7 +72,8 @@ const mapStateToProps = ({workTimelines, works}) => {
 }
 
 const mapDispatchToProps = {
-  loadMilestone
+  loadMilestone,
+  updateMilestone
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(DesignWorksContainer))

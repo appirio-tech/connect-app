@@ -21,6 +21,7 @@ class DesignOption extends React.Component {
 
     this.toggleEditMode = this.toggleEditMode.bind(this)
     this.onCancel = this.onCancel.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
   toggleEditMode() {
@@ -33,8 +34,14 @@ class DesignOption extends React.Component {
     this.toggleEditMode()
   }
 
+  onSubmit() {
+    const { content, onSubmitForm } = this.props
+    onSubmitForm(content)
+    this.toggleEditMode()
+  }
+
   render() {
-    const { index, content, onDeleteOption, onUpdateField } = this.props
+    const { index, content, onDeleteOption, onUpdateField, onSubmitForm } = this.props
     const { isEditMode } = this.state
     const { title, submissionId, previewUrl, links } = content
 
@@ -49,11 +56,6 @@ class DesignOption extends React.Component {
           <Formsy.Form
             ref="form"
             className={`${styles['form-container']}`}
-            disabled={false}
-            // onInvalid={() => {}}
-            // onValid={() => {}}
-            // onValidSubmit={() => {}}
-            // onChange={() => {}}
           >
             {
               !isEditMode &&
@@ -62,7 +64,7 @@ class DesignOption extends React.Component {
             <TextInputWithCounter
               wrapperClass={`${styles['title-input']}`}
               label="Title"
-              name="title-input"
+              name="title"
               type="text"
               maxLength="64"
               disabled={!isEditMode}
@@ -75,7 +77,7 @@ class DesignOption extends React.Component {
             <TCFormFields.TextInput
               wrapperClass={`${styles['submission-id-input']}`}
               label="Submission Id"
-              name="submission-id-input"
+              name="submissionId"
               type="number"
               disabled={!isEditMode}
               value={submissionId}
@@ -86,7 +88,7 @@ class DesignOption extends React.Component {
             <TCFormFields.TextInput
               wrapperClass={`${styles['preview-link-input']}`}
               label="Preview URL"
-              name="preview-link-input"
+              name="previewUrl"
               type="text"
               disabled={!isEditMode}
               value={previewUrl}
@@ -129,15 +131,28 @@ class DesignOption extends React.Component {
                 formAddButtonTitle="Add link"
                 formUpdateTitle="Editing link"
                 formUpdateButtonTitle="Save changes"
-                // isUpdating={milestone.isUpdating}
-                // fakeName={`Design ${links.length + 1}`}
                 canAddLink={isEditMode}
               />
             </div>
             <div className={`${styles['button-wrapper']}`}>
-              <button className={`${styles['delete-btn']} tc-btn tc-btn-warning tc-btn-sm action-btn`} onClick={() => { onDeleteOption(index) }}>Delete</button>
-              <button className={`${styles['cancel-btn']} tc-btn tc-btn-default tc-btn-sm action-btn`} onClick={this.onCancel}>Cancel</button>
-              <button className={`${styles['save-changes-btn']} tc-btn tc-btn-primary tc-btn-sm action-btn`} onClick={() => {}}>Save changes</button>
+              <button
+                className={`${styles['delete-btn']} tc-btn tc-btn-warning tc-btn-sm action-btn`}
+                onClick={() => { onDeleteOption(index) }}
+              >
+                  Delete
+              </button>
+              <button
+                className={`${styles['cancel-btn']} tc-btn tc-btn-default tc-btn-sm action-btn`}
+                onClick={this.onCancel}
+              >
+                Cancel
+              </button>
+              <button
+                className={`${styles['save-changes-btn']} tc-btn tc-btn-primary tc-btn-sm action-btn`}
+                onClick={this.onSubmit}
+              >
+                Save changes
+              </button>
             </div>
           </Formsy.Form>
         </div>
@@ -159,7 +174,8 @@ DesignOption.propTypes = {
     }))
   }).isRequired,
   onDeleteOption: PT.func.isRequired,
-  onUpdateField: PT.func.isRequired
+  onUpdateField: PT.func.isRequired,
+  onSubmitForm: PT.func.isRequired
 }
 
 export default withRouter(DesignOption)
