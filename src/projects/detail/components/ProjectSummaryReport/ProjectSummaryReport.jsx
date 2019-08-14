@@ -25,6 +25,7 @@ const ProjectSummaryReport = ({ projectSummary, project, template, estimationQue
             template={template}
             project={project}
             theme="dashboard"
+            showPrice={false}
           />
         </div>
       }
