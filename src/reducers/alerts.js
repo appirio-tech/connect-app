@@ -231,7 +231,7 @@ export default function(state = {}, action) {
 
   case UPDATE_PROJECT_FAILURE: {
     const data = _.get(action.payload, 'response.data.result')
-    let message = _.get(data, 'content.message', '')
+    let message = _.get(data, 'content.message', 'Unable to update project')
     message = _.get(data, 'details', message)
     Alert.error(message)
     return state
