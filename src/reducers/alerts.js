@@ -1,5 +1,7 @@
 import _ from 'lodash'
 import Alert from 'react-s-alert'
+import { isJson } from '../helpers/workstreams'
+
 /* eslint-disable no-unused-vars */
 import {
   // Project
@@ -62,6 +64,11 @@ import {
   DELETE_WORK_INFO_FAILURE,
   NEW_WORK_INFO_SUCCESS,
   NEW_WORK_INFO_FAILURE,
+  // work item
+  NEW_WORK_ITEM_SUCCESS,
+  NEW_WORK_ITEM_FAILURE,
+  DELETE_WORK_ITEM_SUCCESS,
+  DELETE_WORK_ITEM_FAILURE,
   // Scope changes
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS,
   CREATE_SCOPE_CHANGE_REQUEST_FAILURE,
@@ -79,10 +86,11 @@ import {
 /**
  * Get error message
  * @param {Object} action request action
+ * @param {Bool} returnFullStringIfNoMessageFound return full response from server if no message found
  *
  * @return {String} meaningful error message
  */
-function getErrorMessage(action) {
+function getErrorMessage(action, returnFullStringIfNoMessageFound = false) {
   if (action.payload && action.payload.response) {
     const rdata = action.payload.response.data
     if (rdata && rdata.result && rdata.result.content && rdata.result.content.message) {
@@ -92,6 +100,23 @@ function getErrorMessage(action) {
       return action.payload.response.statusText
     }
   }
+
+  if (returnFullStringIfNoMessageFound && action.payload) {
+    let errorObject = (action.payload && action.payload.response) ? action.payload.response : action.payload
+    if (action.payload && action.payload.response) {
+      errorObject = action.payload.response
+    } else if (action.payload && action.payload.message) {
+      errorObject = action.payload.message
+    } else {
+      errorObject = action.payload
+    }
+    if (isJson(errorObject)) {
+      JSON.parse(errorObject)
+    } else if (errorObject) {
+      return errorObject
+    }
+  }
+
   return null
 }
 
@@ -292,6 +317,24 @@ export default function(state = {}, action) {
     } else {
       Alert.error('Work creating failed: we ran into a problem.<br/> Please try again later.')
     }
+    return state
+  }
+  // new work item
+  case NEW_WORK_ITEM_SUCCESS:
+    Alert.success('Work item is created')
+    return state
+  case NEW_WORK_ITEM_FAILURE: {
+    const errorMessage = getErrorMessage(action, true)
+    Alert.error(`Work item creating failed: ${errorMessage}`)
+    return state
+  }
+  // delete work item
+  case DELETE_WORK_ITEM_SUCCESS:
+    Alert.success('Work item is deleted')
+    return state
+  case DELETE_WORK_ITEM_FAILURE: {
+    const errorMessage = getErrorMessage(action, true)
+    Alert.error(`Work item deleting failed: ${errorMessage}`)
     return state
   }
 

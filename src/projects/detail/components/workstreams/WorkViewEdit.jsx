@@ -18,7 +18,7 @@ import styles from './WorkViewEdit.scss'
 import { PHASE_STATUS_DRAFT, PHASE_STATUS } from '../../../../config/constants'
 import {getWorkActualData} from '../../../../helpers/workstreams'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
-import DeleteWork from './DeleteWork'
+import DeletePopup from './DeletePopup'
 
 
 const moment = extendMoment(Moment)
@@ -334,7 +334,9 @@ class WorkViewEdit extends React.Component {
           </Formsy.Form>
         </div>
         {showDeletePopup && (
-          <DeleteWork
+          <DeletePopup
+            body="Deleting a work can not be undone. If you proceed you will lose all data. Once a work is active, it can’t be deleted."
+            deleteButton="Delete Work"
             onCancelClick={() => { this.setState({showDeletePopup: false}) }}
             onDeleteClick={() => {
               this.deleteWork()
