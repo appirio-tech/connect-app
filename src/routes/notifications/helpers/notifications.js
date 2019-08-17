@@ -324,16 +324,6 @@ const getNotificationRule = (notification) => {
   const notificationRule = _.find(NOTIFICATION_RULES, (_notificationRule) => {
     let match = _notificationRule.eventType === notification.eventType
 
-    // For supporting old topic name
-    if (!match) {
-      match = notification.eventType.includes('notifications.connect.')
-    }
-
-    // For supporting old topic name
-    if (!match) {
-      match = notification.eventType.includes('connect.action.')
-    }
-
     if (notification.version) {
       match = match && _notificationRule.version === notification.version
     }
