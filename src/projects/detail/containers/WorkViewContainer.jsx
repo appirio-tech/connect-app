@@ -42,6 +42,17 @@ WorkViewContainer.PropTypes = {
   isLoadingWorkInfo: PT.bool.isRequired,
   loadWorkInfo: PT.func.isRequired,
   work: PT.object.isRequired,
+  timelines: PT.arrayOf(PT.shape({
+    id: PT.number.isRequired,
+    startDate: PT.string,
+    milestones: PT.arrayOf(PT.shape({
+      id: PT.number,
+      startDate: PT.string,
+      endDate: PT.string,
+      name: PT.string,
+    })),
+  })).isRequired,
+  inputDesignWorks: PT.func.isRequired
 }
 
 export default withRouter(WorkViewContainer)

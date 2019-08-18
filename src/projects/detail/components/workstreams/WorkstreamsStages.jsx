@@ -11,12 +11,20 @@ import WorkList from './WorkList'
 
 const WorkstreamsStages = ({
   workstreams,
-  addWorkForWorkstream
+  addWorkForWorkstream,
+  timelines,
+  inputDesignWorks
 }) => (
   <Section>
     {
       workstreams.map((workstream) => (
-        <WorkList key={`workstream-${workstream.id}`} workstream={workstream} addWorkForWorkstream={addWorkForWorkstream} />
+        <WorkList
+          key={`workstream-${workstream.id}`}
+          workstream={workstream}
+          addWorkForWorkstream={addWorkForWorkstream}
+          timelines={timelines}
+          inputDesignWorks={inputDesignWorks}
+        />
       ))
     }
   </Section>
@@ -32,7 +40,9 @@ WorkstreamsStages.propTypes = {
     status: PT.string.isRequired,
     description: PT.string,
   })).isRequired,
-  addWorkForWorkstream: PT.func.isRequired
+  addWorkForWorkstream: PT.func.isRequired,
+  timelines: PT.array.isRequired,
+  inputDesignWorks: PT.func.isRequired
 }
 
 export default withRouter(WorkstreamsStages)

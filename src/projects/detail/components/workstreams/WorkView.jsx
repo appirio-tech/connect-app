@@ -10,6 +10,7 @@ const Formsy = FormsyForm.Formsy
 
 import Section from '../Section'
 import WorkViewEdit from './WorkViewEdit'
+import DesignWorksMessage from './DesignWorksMessage'
 import WorkTimelineContainer from '../../containers/WorkTimelineContainer'
 import CloseIcon from  '../../../../assets/icons/x-mark-black.svg'
 import EditIcon from  '../../../../assets/icons/icon-edit-black.svg'
@@ -81,22 +82,32 @@ class WorkView extends React.Component {
    */
   getTabContent() {
     const { navs, selectedNav } = this.state
-    const { work,  addNewMilestone, editMilestone } = this.props
+    const { work,  addNewMilestone, editMilestone, timelines, inputDesignWorks } = this.props
+    const timeline = _.find(timelines, { 'reference': 'work', 'referenceId': work.id }) || {}
+    const activeMileStone = _.find(timeline.milestones, { 'type': 'design-work', 'status': 'active' })
+
     if (navs[selectedNav].title === 'Details') {
-      return (<WorkTimelineContainer workId={work.id} editMode={false} />)
+      return (
+        <div styleName="content">
+          <WorkTimelineContainer workId={work.id} editMode={false}/>
+          {!_.isEmpty(activeMileStone) && <DesignWorksMessage timeline={timeline} milestone={activeMileStone} inputDesignWorks={inputDesignWorks} />}
+        </div>
+      )
     }
     if (navs[selectedNav].title === 'Delivery Management') {
       return (
-        <WorkTimelineContainer
-          workId={work.id}
-          editMode
-          addNewMilestone={addNewMilestone}
-          editMilestone={editMilestone}
-        />
+        <div styleName="content">
+          <WorkTimelineContainer
+            workId={work.id}
+            editMode
+            addNewMilestone={addNewMilestone}
+            editMilestone={editMilestone}
+          />
+        </div>
       )
     }
     return (
-      <div>
+      <div styleName="content">
         {navs[selectedNav].title + ' tab'}
       </div>
     )
@@ -164,9 +175,7 @@ class WorkView extends React.Component {
                   </div>
                 ))}
               </div>
-              <div styleName="content">
-                {this.getTabContent()}
-              </div>
+              {this.getTabContent()}
             </div>
           )}
           {(isUpdatingWorkInfo || isDeletingWorkInfo) && (<div styleName="loading-wrapper">
@@ -190,7 +199,18 @@ WorkView.propTypes = {
   }).isRequired,
   updateWork: PT.func.isRequired,
   isUpdatingWorkInfo: PT.bool.isRequired,
-  isDeletingWorkInfo: PT.bool.isRequired
+  isDeletingWorkInfo: PT.bool.isRequired,
+  timelines: PT.arrayOf(PT.shape({
+    id: PT.number.isRequired,
+    startDate: PT.string,
+    milestones: PT.arrayOf(PT.shape({
+      id: PT.number,
+      startDate: PT.string,
+      endDate: PT.string,
+      name: PT.string,
+    })),
+  })).isRequired,
+  inputDesignWorks: PT.func.isRequired
 }
 
 export default withRouter(WorkView)

@@ -35,6 +35,7 @@ import WorkViewContainer from './WorkViewContainer'
 import WorkNewContainer from './WorkNewContainer'
 import WorkTimelineNewMilestoneContainer from './WorkTimelineNewMilestoneContainer'
 import WorkTimelineEditMilestoneContainer from './WorkTimelineEditMilestoneContainer'
+import DesignWorksContainer from './DesignWorksContainer'
 import Sticky from '../../../components/Sticky'
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
@@ -81,6 +82,10 @@ class DashboardContainer extends React.Component {
       showEditMilestoneForTimeline: {
         timelineId: -1,
         milestoneId: -1,
+      },
+      showDesignWorks: {
+        timelineId: -1,
+        milestoneId: -1,
       }
     }
     this.onNotificationRead = this.onNotificationRead.bind(this)
@@ -115,8 +120,19 @@ class DashboardContainer extends React.Component {
       const {
         showAddWorkForWorkstream,
         showAddMilestoneForTimeline,
-        showEditMilestoneForTimeline
+        showEditMilestoneForTimeline,
+        showDesignWorks
       } = this.state
+      if (showDesignWorks.milestoneId >= 0) {
+        // show input design work page
+        return (
+          <DesignWorksContainer
+            onBack={() => this.setState({ showDesignWorks : {timelineId: -1, milestoneId: -1} })}
+            timelineId={showDesignWorks.timelineId}
+            milestoneId={showDesignWorks.milestoneId}
+          />
+        )
+      }
       if (showAddMilestoneForTimeline >= 0) {
         // show add new milestone for timeline
         return (
@@ -142,6 +158,7 @@ class DashboardContainer extends React.Component {
             {...this.props}
             addNewMilestone={(timelineId) => this.setState({ showAddMilestoneForTimeline: timelineId }) }
             editMilestone={(timelineId, milestoneId) => this.setState({ showEditMilestoneForTimeline: {timelineId, milestoneId} }) }
+            inputDesignWorks={(timelineId, milestoneId) => this.setState({ showDesignWorks: {timelineId, milestoneId} }) }
           />
         )
       }
@@ -155,7 +172,13 @@ class DashboardContainer extends React.Component {
           />
         )
       }
-      return (<WorkstreamsContainer {...this.props} addWorkForWorkstream={(workstreamId) => { this.setState({ showAddWorkForWorkstream: workstreamId }) }} />)
+      return (
+        <WorkstreamsContainer
+          {...this.props}
+          addWorkForWorkstream={(workstreamId) => { this.setState({ showAddWorkForWorkstream: workstreamId }) }}
+          inputDesignWorks={(timelineId, milestoneId) => this.setState({ showDesignWorks: {timelineId, milestoneId} }) }
+        />
+      )
     }
     return (<PhasesContainer {...this.props} />)
   }
@@ -190,6 +213,7 @@ class DashboardContainer extends React.Component {
       showAddWorkForWorkstream,
       showAddMilestoneForTimeline,
       showEditMilestoneForTimeline,
+      showDesignWorks
     } = this.state
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
 
@@ -209,7 +233,8 @@ class DashboardContainer extends React.Component {
       params.workId ||
       (showAddWorkForWorkstream >= 0) ||
       (showAddMilestoneForTimeline >= 0) ||
-      (showEditMilestoneForTimeline.milestoneId >= 0)
+      (showEditMilestoneForTimeline.milestoneId >= 0) ||
+      (showDesignWorks.milestoneId >= 0)
 
     const leftArea = (
       <ProjectInfoContainer
@@ -304,7 +329,7 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics, projectPlan, workstreams, works }) => {
+const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics, projectPlan, workstreams, works, workTimelines }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -333,6 +358,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     workstreams: workstreams.workstreams,
     workstreamsError: workstreams.error,
     work: works.work,
+    timelines: workTimelines.timelines
   }
 }
 

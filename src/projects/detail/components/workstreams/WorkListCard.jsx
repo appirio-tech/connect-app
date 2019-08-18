@@ -11,7 +11,7 @@ import { PHASE_STATUS } from '../../../../config/constants'
 import './WorkListCard.scss'
 
 
-const WorkListCard = ({workstream, work, match}) => (
+const WorkListCard = ({workstream, work, match, showInputReviewBtn, inputDesignWorks, timeline, milestone}) => (
   <Link to={`/projects/${match.params.projectId}/workstreams/${workstream.id}/works/${work.id}`} styleName="container">
     <div styleName="left">
       <div styleName="title-container">
@@ -21,9 +21,19 @@ const WorkListCard = ({workstream, work, match}) => (
       <span styleName="description">{work.description}</span>
     </div>
     <div styleName="right">
-      <ChatIcon />
-      {/* Show the random value of unread messages */}
-      <span styleName="message-counter">45</span>
+      <div styleName="icon-wrapper">
+        <ChatIcon />
+        {/* Show the random value of unread messages */}
+        <span styleName="message-counter">45</span>
+      </div>
+      {
+        showInputReviewBtn &&
+        <button
+          styleName="input-review-btn"
+          className="tc-btn tc-btn-default tc-btn-sm"
+          onClick={() => { inputDesignWorks(timeline.id, milestone.id) }}
+        >Input Review</button>
+      }
     </div>
   </Link>
 )
@@ -41,6 +51,10 @@ WorkListCard.propTypes = {
   workstream: PT.shape({
     id: PT.number.isRequired,
   }).isRequired,
+  showInputReviewBtn: PT.bool.isRequired,
+  inputDesignWorks: PT.func.isRequired,
+  timeline: PT.object.isRequired,
+  milestone: PT.object.isRequired
 }
 
 export default withRouter(WorkListCard)

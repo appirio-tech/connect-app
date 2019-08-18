@@ -1,0 +1,29 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.input-design-work-container {
+  margin-top: 30px;
+}
+
+.title {
+  @include roboto-bold;
+
+  flex: 1;
+  margin-right: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: $tc-gray-90;
+  font-size: 16px;
+  line-height: 30px;
+}
+
+.active-text {
+  margin: 10px 0 20px;
+  font-size: 12px;
+}
+
+.input-design-works-btn {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}

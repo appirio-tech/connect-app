@@ -45,8 +45,25 @@ class WorkList extends React.Component {
     return workstream.works
   }
 
+  /**
+   * get milestone data from work id
+   *
+   * @return {Object} get milestone data object
+   */
+  getMilestoneData(workId) {
+    const { timelines } = this.props
+
+    const timeline = _.find(timelines, { 'reference': 'work', 'referenceId': workId }) || {}
+    const milestone = _.find(timeline.milestones, { 'type': 'design-work', 'status': 'active' }) || {}
+    return {
+      timeline,
+      milestone,
+      showInputReviewBtn: !_.isEmpty(milestone)
+    }
+  }
+
   render() {
-    const {workstream, addWorkForWorkstream} = this.props
+    const {workstream, addWorkForWorkstream, inputDesignWorks} = this.props
     const {listType} = this.state
     return (
       <div styleName="container">
@@ -61,9 +78,20 @@ class WorkList extends React.Component {
         {workstream.isLoadingWorks && (<LoadingIndicator />)}
         {!workstream.isLoadingWorks && (
           <div styleName="content">
-            {this.getWorks().map((work) => (
-              <WorkListCard key={`work-${work.id}`} work={work} workstream={workstream} />
-            ))}
+            {this.getWorks().map((work) => {
+              const milestoneData = this.getMilestoneData(work.id)
+              return (
+                <WorkListCard
+                  key={`work-${work.id}`}
+                  work={work}
+                  workstream={workstream}
+                  timeline={milestoneData.timeline}
+                  milestone={milestoneData.milestone}
+                  showInputReviewBtn={milestoneData.showInputReviewBtn}
+                  inputDesignWorks={inputDesignWorks}
+                />
+              )
+            })}
           </div>
         )}
         {!workstream.isLoadingWorks && (
@@ -91,7 +119,9 @@ WorkList.propTypes = {
     })).isRequired,
     isLoadingWorks: PT.bool.isRequired,
   }).isRequired,
-  addWorkForWorkstream: PT.func.isRequired
+  addWorkForWorkstream: PT.func.isRequired,
+  timelines: PT.array.isRequired,
+  inputDesignWorks: PT.func.isRequired
 }
 
 export default withRouter(WorkList)
