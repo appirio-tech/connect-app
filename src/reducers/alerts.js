@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import Alert from 'react-s-alert'
 import { isJson } from '../helpers/workstreams'
+
 /* eslint-disable no-unused-vars */
 import {
   // Project
@@ -70,6 +71,11 @@ import {
   UPDATE_WORK_TIMELINE_MILESTONE_FAILURE,
   DELETE_WORK_TIMELINE_MILESTONE_SUCCESS,
   DELETE_WORK_TIMELINE_MILESTONE_FAILURE,
+  // work item
+  NEW_WORK_ITEM_SUCCESS,
+  NEW_WORK_ITEM_FAILURE,
+  DELETE_WORK_ITEM_SUCCESS,
+  DELETE_WORK_ITEM_FAILURE,
   // Scope changes
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS,
   CREATE_SCOPE_CHANGE_REQUEST_FAILURE,
@@ -102,15 +108,22 @@ function getErrorMessage(action, returnFullStringIfNoMessageFound = false) {
     }
   }
 
-  if (returnFullStringIfNoMessageFound && action) {
-    const errorObject = (action.payload && action.payload.response) ? action.payload.response : action.payload
+  if (returnFullStringIfNoMessageFound && action.payload) {
+    let errorObject = (action.payload && action.payload.response) ? action.payload.response : action.payload
+    if (action.payload && action.payload.response) {
+      errorObject = action.payload.response
+    } else if (action.payload && action.payload.message) {
+      errorObject = action.payload.message
+    } else {
+      errorObject = action.payload
+    }
     if (isJson(errorObject)) {
       JSON.parse(errorObject)
     } else if (errorObject) {
       return errorObject
     }
-
   }
+
   return null
 }
 
@@ -335,6 +348,25 @@ export default function(state = {}, action) {
     return state
   case DELETE_WORK_TIMELINE_MILESTONE_FAILURE: {
     Alert.error(`Milestone deleting failed: ${getErrorMessage(action, true)}`)
+    return state
+  }
+
+  // new work item
+  case NEW_WORK_ITEM_SUCCESS:
+    Alert.success('Work item is created')
+    return state
+  case NEW_WORK_ITEM_FAILURE: {
+    const errorMessage = getErrorMessage(action, true)
+    Alert.error(`Work item creating failed: ${errorMessage}`)
+    return state
+  }
+  // delete work item
+  case DELETE_WORK_ITEM_SUCCESS:
+    Alert.success('Work item is deleted')
+    return state
+  case DELETE_WORK_ITEM_FAILURE: {
+    const errorMessage = getErrorMessage(action, true)
+    Alert.error(`Work item deleting failed: ${errorMessage}`)
     return state
   }
 

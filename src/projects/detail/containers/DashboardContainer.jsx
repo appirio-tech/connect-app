@@ -35,6 +35,7 @@ import WorkViewContainer from './WorkViewContainer'
 import WorkNewContainer from './WorkNewContainer'
 import WorkTimelineNewMilestoneContainer from './WorkTimelineNewMilestoneContainer'
 import WorkTimelineEditMilestoneContainer from './WorkTimelineEditMilestoneContainer'
+import AddWorkItemContrainer from './AddWorkItemContrainer'
 import Sticky from '../../../components/Sticky'
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
@@ -81,7 +82,8 @@ class DashboardContainer extends React.Component {
       showEditMilestoneForTimeline: {
         timelineId: -1,
         milestoneId: -1,
-      }
+      },
+      showAddChallengeTask: false,
     }
     this.onNotificationRead = this.onNotificationRead.bind(this)
     this.toggleDrawer = this.toggleDrawer.bind(this)
@@ -110,6 +112,7 @@ class DashboardContainer extends React.Component {
       project,
       match: { params }
     } = this.props
+
     const isWorkstreams = _.get(project, 'details.settings.workstreams', false)
     if (isWorkstreams) {
       const {
@@ -137,13 +140,30 @@ class DashboardContainer extends React.Component {
         )
       }
       if (params.workId) {
+        const {
+          work,
+        } = this.props
+        const { showAddChallengeTask } = this.state
+        if (showAddChallengeTask) {
+          return (
+            <AddWorkItemContrainer
+              workId={parseInt(params.workId, 10)}
+              onBack={() => this.setState({ showAddChallengeTask: false })}
+              onClose={() => {
+                work.selectedNav = 0
+                this.setState({ showAddChallengeTask: false })
+              }}
+            />
+          )
+        }
+
         return (
           <WorkViewContainer
             {...this.props}
+            showAddChallengeTask={() => { this.setState({ showAddChallengeTask: true }) }}
             addNewMilestone={(timelineId) => this.setState({ showAddMilestoneForTimeline: timelineId }) }
             editMilestone={(timelineId, milestoneId) => this.setState({ showEditMilestoneForTimeline: {timelineId, milestoneId} }) }
-          />
-        )
+          />)
       }
 
       if (showAddWorkForWorkstream >= 0) {
@@ -190,6 +210,7 @@ class DashboardContainer extends React.Component {
       showAddWorkForWorkstream,
       showAddMilestoneForTimeline,
       showEditMilestoneForTimeline,
+      showAddChallengeTask,
     } = this.state
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
 
@@ -267,7 +288,7 @@ class DashboardContainer extends React.Component {
             />
           }
           {/* <button type="button" onClick={this.toggleDrawer}>Toggle drawer</button> */}
-          {!!estimationQuestion && !onlyShowMainContent &&
+          {!!estimationQuestion && !onlyShowMainContent && !params.workId && (showAddWorkForWorkstream < 0) && !showAddChallengeTask &&
             <ProjectEstimation
               onClick={this.toggleDrawer}
               question={estimationQuestion}

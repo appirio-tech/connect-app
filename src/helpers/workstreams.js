@@ -3,6 +3,8 @@
  */
 import _ from 'lodash'
 import moment from 'moment'
+import { getChallengeStartEndDate } from './challenges'
+
 
 /**
  * Get number of days to delivery
@@ -244,4 +246,22 @@ export function convertTimelineMilestonesToMilestoneProgress(timeline) {
   }
 
   return updatedMilestones
+}
+
+/**
+ * Get start/end date of workitem
+ *
+ * @param {Object}  workitem    work item
+ *
+ * @returns {{ startDate: moment.Moment, endDate: moment.Moment }} start/end date of challenge
+ *
+ */
+export function getWorkItemStartEndDate(workitem) {
+  if (!workitem.challenge) {
+    return {
+      startDate: '',
+      endDate: '',
+    }
+  }
+  return getChallengeStartEndDate(workitem.challenge)
 }

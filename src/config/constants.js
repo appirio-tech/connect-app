@@ -131,7 +131,17 @@ export const LOAD_WORK_INFO_PENDING     = 'LOAD_WORK_INFO_PENDING'
 export const LOAD_WORK_INFO_FAILURE     = 'LOAD_WORK_INFO_FAILURE'
 export const LOAD_WORK_INFO_SUCCESS     = 'LOAD_WORK_INFO_SUCCESS'
 
-// Update Work
+// Work items
+export const LOAD_WORK_ITEM             = 'LOAD_WORK_ITEM'
+export const LOAD_WORK_ITEM_PENDING     = 'LOAD_WORK_ITEM_PENDING'
+export const LOAD_WORK_ITEM_FAILURE     = 'LOAD_WORK_ITEM_FAILURE'
+export const LOAD_WORK_ITEM_SUCCESS     = 'LOAD_WORK_ITEM_SUCCESS'
+
+// Work items Challenges
+export const LOAD_CHALLENGES_WORK_ITEM             = 'LOAD_CHALLENGES_WORK_ITEM'
+export const LOAD_CHALLENGES_WORK_ITEM_SUCCESS     = 'LOAD_CHALLENGES_WORK_ITEM_SUCCESS'
+
+// Work
 export const UPDATE_WORK_INFO             = 'UPDATE_WORK_INFO'
 export const UPDATE_WORK_INFO_PENDING     = 'UPDATE_WORK_INFO_PENDING'
 export const UPDATE_WORK_INFO_FAILURE     = 'UPDATE_WORK_INFO_FAILURE'
@@ -178,6 +188,32 @@ export const DELETE_WORK_TIMELINE_MILESTONE             = 'DELETE_WORK_TIMELINE_
 export const DELETE_WORK_TIMELINE_MILESTONE_PENDING     = 'DELETE_WORK_TIMELINE_MILESTONE_PENDING'
 export const DELETE_WORK_TIMELINE_MILESTONE_FAILURE     = 'DELETE_WORK_TIMELINE_MILESTONE_FAILURE'
 export const DELETE_WORK_TIMELINE_MILESTONE_SUCCESS     = 'DELETE_WORK_TIMELINE_MILESTONE_SUCCESS'
+
+// New Work Item
+export const NEW_WORK_ITEM             = 'NEW_WORK_ITEM'
+export const NEW_WORK_ITEM_PENDING     = 'NEW_WORK_ITEM_PENDING'
+export const NEW_WORK_ITEM_FAILURE     = 'NEW_WORK_ITEM_FAILURE'
+export const NEW_WORK_ITEM_SUCCESS     = 'NEW_WORK_ITEM_SUCCESS'
+
+// Delete Work Item
+export const DELETE_WORK_ITEM             = 'DELETE_WORK_ITEM'
+export const DELETE_WORK_ITEM_PENDING     = 'DELETE_WORK_ITEM_PENDING'
+export const DELETE_WORK_ITEM_FAILURE     = 'DELETE_WORK_ITEM_FAILURE'
+export const DELETE_WORK_ITEM_SUCCESS     = 'DELETE_WORK_ITEM_SUCCESS'
+
+// Delete Work Item
+export const DELETE_WORK_ITEM_START             = 'DELETE_WORK_ITEM_START'
+export const DELETE_WORK_ITEM_START_SUCCESS     = 'DELETE_WORK_ITEM_START_SUCCESS'
+
+// Challenges
+export const LOAD_CHALLENGES             = 'LOAD_CHALLENGES'
+export const LOAD_CHALLENGES_PENDING     = 'LOAD_CHALLENGES_PENDING'
+export const LOAD_CHALLENGES_FAILURE     = 'LOAD_CHALLENGES_FAILURE'
+export const LOAD_CHALLENGES_SUCCESS     = 'LOAD_CHALLENGES_SUCCESS'
+
+// Start Load Challenges
+export const LOAD_CHALLENGES_START             = 'LOAD_CHALLENGES_START'
+export const LOAD_CHALLENGES_START_SUCCESS     = 'LOAD_CHALLENGES_START_SUCCESS'
 
 // Direct Project Data
 export const LOAD_DIRECT_PROJECT             = 'LOAD_DIRECT_PROJECT'
@@ -810,9 +846,11 @@ export const GA_CLIENT_ID = '_gacid'
 // ToolTip
 export const TOOLTIP_DEFAULT_DELAY = 300 // in ms
 
-
 // Projects list
 export const PROJECTS_LIST_PER_PAGE = 20
+
+// Challenge list
+export const CHALLENGE_LIST_PER_PAGE = 50
 
 /*eslint-disable camelcase */
 //Project type to icon name mapping

@@ -1,0 +1,259 @@
+@import '../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  background: $tc-white;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 7px 20px 0 rgba(42, 42, 42, 0.1);
+  padding: 30px 40px;
+  align-items: center;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.left-control {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  min-width: 24px;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.back-icon-text {
+  @include roboto-condensed-light;
+
+  color: $tc-gray-90;
+  font-size: 20px;
+  line-height: 30px;
+  margin-left: 10px;
+}
+
+.title {
+  @include roboto-condensed-bold;
+
+  color: $tc-gray-90;
+  font-size: 20px;
+  line-height: 30px;
+  text-transform: uppercase;
+}
+
+.right-control {
+  display: flex;
+  align-items: center;
+}
+
+.icon-close {
+  margin-left: 41px;
+  cursor: pointer;
+}
+
+.icon-add {
+  @include roboto-bold;
+
+  height: 40px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.8px;
+
+  path {
+    fill: $tc-white;
+    opacity: 0.8;
+  }
+
+  span {
+    margin-left: 5px;
+  }
+
+  &:hover {
+
+    path {
+      opacity: 1;
+    }
+  }
+}
+
+.search-container {
+  width: 100%;
+  height: 40px;
+  border: 1px solid $tc-gray-10;
+  border-radius: 30px;
+  padding-left: 16px;
+  padding-right: 16px;
+  display: flex;
+  align-items: center;
+  margin-top: 41px;
+  overflow: hidden;
+}
+
+.search-field {
+  @include roboto;
+
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  margin: 0 0 0 9px !important;
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-input-placeholder {
+    color: $tc-gray-50;
+    text-transform: none;
+    font-size: 14px !important;
+    line-height: 20px;
+  }
+
+  &::-moz-placeholder {
+    line-height: 20px;
+    color: $tc-gray-50;
+    opacity: 1;
+    text-transform: none;
+  }
+
+  &:-ms-input-placeholder {
+    color: $tc-gray-50;
+    text-transform: none;
+    line-height: 20px;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.row {
+  margin-top: 10px;
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 100%;
+  height: 60px;
+  padding-top: 10px;
+  background: $tc-gray-neutral-light;
+  border-radius: 4px;
+}
+
+.checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $tc-white;
+  border: 1px solid $tc-gray-20;
+  border-radius: 3px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  &.checked {
+    background: $tc-light-blue-110;
+  }
+
+  svg {
+    width: 12px;
+    height: 10px;
+  }
+}
+
+.column-right {
+  @include ellipsis;
+
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.challenge-name {
+  @include roboto-medium;
+  @include ellipsis;
+
+  font-size: 15px;
+  color: $tc-black;
+  margin-bottom: 2px;
+  line-height: 20px;
+}
+
+.start-date {
+  color: $tc-gray-70;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  height: 40px;
+  width: 100%;
+  align-items: center;
+}
+
+.btn-create {
+  @include roboto-bold;
+
+  font-size: 13px;
+  color: $tc-dark-blue-110 !important;
+  line-height: 20px;
+}
+
+.filter {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.load-more {
+  margin-bottom: 20px;
+}
+
+.end-of-list {
+  color: $tc-gray-50;
+  font-weight: 400;
+  line-height: 20px;
+  margin-bottom: 20px;
+}
+
+.is-updating {
+  pointer-events: none;
+
+  * {
+    opacity: 0;
+  }
+
+  .loading-for-creating {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+
+    * {
+      opacity: 1;
+    }
+  }
+}

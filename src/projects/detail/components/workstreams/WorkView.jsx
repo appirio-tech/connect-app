@@ -16,6 +16,8 @@ import EditIcon from  '../../../../assets/icons/icon-edit-black.svg'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
 import { PHASE_STATUS } from '../../../../config/constants'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
+import WorkItemsContainer from '../../containers/WorkItemsContainer'
+
 import './WorkView.scss'
 
 const phaseStatuses = PHASE_STATUS.map(ps => ({
@@ -48,7 +50,7 @@ class WorkView extends React.Component {
 
   componentWillMount() {
     const { work } = this.props
-    // reupdate selected nav  when reshow component
+    // re-update selected nav  when reshow component
     if (work && work.selectedNav) {
       this.setState({ selectedNav: work.selectedNav })
     }
@@ -81,18 +83,21 @@ class WorkView extends React.Component {
    */
   getTabContent() {
     const { navs, selectedNav } = this.state
-    const { work,  addNewMilestone, editMilestone } = this.props
+    const { work,  addNewMilestone, editMilestone, showAddChallengeTask } = this.props
     if (navs[selectedNav].title === 'Details') {
       return (<WorkTimelineContainer workId={work.id} editMode={false} />)
     }
     if (navs[selectedNav].title === 'Delivery Management') {
       return (
-        <WorkTimelineContainer
-          workId={work.id}
-          editMode
-          addNewMilestone={addNewMilestone}
-          editMilestone={editMilestone}
-        />
+        <div>
+          <WorkTimelineContainer
+            workId={work.id}
+            editMode
+            addNewMilestone={addNewMilestone}
+            editMilestone={editMilestone}
+          />
+          <WorkItemsContainer showAddChallengeTask={showAddChallengeTask} />
+        </div>
       )
     }
     return (
@@ -179,6 +184,7 @@ class WorkView extends React.Component {
 }
 
 WorkView.defaultProps = {
+  showAddChallengeTask: () => {},
 }
 
 WorkView.propTypes = {
@@ -188,6 +194,7 @@ WorkView.propTypes = {
     status: PT.string,
     description: PT.string,
   }).isRequired,
+  showAddChallengeTask: PT.func,
   updateWork: PT.func.isRequired,
   isUpdatingWorkInfo: PT.bool.isRequired,
   isDeletingWorkInfo: PT.bool.isRequired
