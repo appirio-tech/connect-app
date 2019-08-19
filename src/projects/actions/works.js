@@ -18,7 +18,6 @@ import {
 } from '../../api/challenges'
 import {
   LOAD_WORKSTREAM_WORKS,
-  LOAD_WORKSTREAM_WORKS_START,
   LOAD_WORK_INFO,
   UPDATE_WORK_INFO,
   NEW_WORK_INFO,
@@ -34,42 +33,22 @@ import {
 
 /**
  * Get works for workstream
- * @param {Function} dispatch     dispatch
+ *
  * @param {String} projectId    project id
  * @param {Object} workstream   workstream object
  *
  * @return {Function} dispatch function
  */
-function getWorksForWorkstream(dispatch, projectId, workstream) {
-  return dispatch({
-    type: LOAD_WORKSTREAM_WORKS,
-    payload:  new Promise((resolve, reject) => {
-      return getWorkstreamWorks(projectId, workstream.id)
-        .then((resp) => {
-          workstream.works = resp
-          resolve(workstream)
-        })
-        .catch(err => reject(err))
-    }),
-  })
-}
-
-/**
- * Start get works for workstream
- * @param {Function} dispatch     dispatch
- * @param {String} projectId    project id
- * @param {Object} workstream   workstream object
- *
- * @return {Function} dispatch function
- */
-function getWorksForWorkstreamStart(dispatch, projectId, workstream) {
-  return dispatch({
-    type: LOAD_WORKSTREAM_WORKS_START,
-    payload:  new Promise((resolve) => {
-      resolve(workstream)
-      return getWorksForWorkstream(dispatch, projectId, workstream)
-    }),
-  })
+function getWorksForWorkstream(projectId, workstream) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_WORKSTREAM_WORKS,
+      payload: getWorkstreamWorks(projectId, workstream.id).then((works) => ({ works })),
+      meta: {
+        workstreamId: workstream.id,
+      }
+    })
+  }
 }
 
 /**
@@ -82,7 +61,7 @@ function getWorksForWorkstreamStart(dispatch, projectId, workstream) {
  */
 export function loadWorkForWorkstreams(projectId, workstreams, dispatch) {
   return Promise.all(
-    workstreams.map((workstream) => getWorksForWorkstreamStart(dispatch, projectId, workstream))
+    workstreams.map((workstream) => dispatch(getWorksForWorkstream(projectId, workstream)))
   )
 }
 

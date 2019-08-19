@@ -5,19 +5,32 @@ import {
   LOAD_WORKSTREAMS_FAILURE,
   CLEAR_LOADED_PROJECT,
   GET_PROJECTS_SUCCESS,
+  LOAD_WORKSTREAM_WORKS_PENDING,
   LOAD_WORKSTREAM_WORKS_SUCCESS,
   LOAD_WORKSTREAM_WORKS_FAILURE,
-  LOAD_WORKSTREAM_WORKS_START_SUCCESS,
   UPDATE_WORK_INFO_SUCCESS,
   DELETE_WORK_INFO_SUCCESS,
   NEW_WORK_INFO_SUCCESS,
 } from '../../config/constants'
+import update from 'react-addons-update'
 import {parseErrorObj} from '../../helpers/workstreams'
 
 const initialState = {
   isLoading: false,
   error: false,
   workstreams: [], // workstreams are pushed directly into it hence need to declare first
+}
+
+function updateWorkstream(state, workstreamId, workstreamUpdateQuery) {
+  const workstreamIndex = _.findIndex(state.workstreams, { id: workstreamId })
+  const updatedWorkstream = update(
+    state.workstreams[workstreamIndex],
+    workstreamUpdateQuery
+  )
+
+  return update(state, {
+    workstreams: { $splice: [[workstreamIndex, 1, updatedWorkstream]] }
+  })
 }
 
 export const workstreams = function (state=initialState, action) {
@@ -28,6 +41,7 @@ export const workstreams = function (state=initialState, action) {
       isLoading: true,
       error: false
     })
+
   case LOAD_WORKSTREAMS_SUCCESS:
     for (const workstream of action.payload) {
       workstream.works = []
@@ -38,24 +52,18 @@ export const workstreams = function (state=initialState, action) {
       error: false,
       workstreams: action.payload,
     })
-  case LOAD_WORKSTREAM_WORKS_START_SUCCESS: {
-    const { workstreams } = state
-    const index = _.findIndex(workstreams, workstream => (workstream.id === action.payload.id))
-    workstreams[index].isLoadingWorks = true
-    workstreams[index].works = []
-    return Object.assign({}, state, {
-      workstreams
+
+  case LOAD_WORKSTREAM_WORKS_PENDING:
+    return updateWorkstream(state, action.meta.workstreamId, {
+      isLoadingWorks: { $set:  true }
     })
-  }
-  case LOAD_WORKSTREAM_WORKS_SUCCESS: {
-    const { workstreams } = state
-    const index = _.findIndex(workstreams, workstream => (workstream.id === action.payload.id))
-    workstreams[index] = action.payload
-    workstreams[index].isLoadingWorks = false
-    return Object.assign({}, state, {
-      workstreams
+
+  case LOAD_WORKSTREAM_WORKS_SUCCESS:
+    return updateWorkstream(state, action.meta.workstreamId, {
+      works: { $set: action.payload.works },
+      isLoadingWorks: { $set:  false }
     })
-  }
+
   case UPDATE_WORK_INFO_SUCCESS: {
     const { workstreams } = state
     const workStreamIndex = _.findIndex(workstreams, workstream => (`${workstream.id}` === `${action.payload.workstreamId}`))
@@ -70,6 +78,7 @@ export const workstreams = function (state=initialState, action) {
     }
     return state
   }
+
   case DELETE_WORK_INFO_SUCCESS: {
     const { workstreams } = state
     const workStreamIndex = _.findIndex(workstreams, workstream => (`${workstream.id}` === `${action.payload.workstreamId}`))
@@ -83,6 +92,7 @@ export const workstreams = function (state=initialState, action) {
     }
     return state
   }
+
   case NEW_WORK_INFO_SUCCESS: {
     const { workstreams } = state
     const workStreamIndex = _.findIndex(workstreams, workstream => (`${workstream.id}` === `${action.payload.workstreamId}`))
@@ -94,6 +104,7 @@ export const workstreams = function (state=initialState, action) {
     }
     return state
   }
+
   case LOAD_WORKSTREAMS_FAILURE:
   case LOAD_WORKSTREAM_WORKS_FAILURE:
     return Object.assign({}, state, {
