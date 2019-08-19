@@ -7,17 +7,18 @@ import { withRouter } from 'react-router-dom'
 
 import Section from '../Section'
 import WorkList from './WorkList'
+import WorkstreamsEmpty from './components/workstreams/WorkstreamsEmpty'
 
-
-const WorkstreamsStages = ({
+const Workstreams = ({
   workstreams,
   addWorkForWorkstream,
   timelines,
-  inputDesignWorks
+  inputDesignWorks,
+  isManageUser,
 }) => (
-  <Section>
-    {
-      workstreams.map((workstream) => (
+  workstreams.length > 0 ? (
+    <Section>
+      {workstreams.map((workstream) => (
         <WorkList
           key={`workstream-${workstream.id}`}
           workstream={workstream}
@@ -25,15 +26,14 @@ const WorkstreamsStages = ({
           timelines={timelines}
           inputDesignWorks={inputDesignWorks}
         />
-      ))
-    }
-  </Section>
+      ))}
+    </Section>
+  ) : (
+    <WorkstreamsEmpty isManageUser={isManageUser} />
+  )
 )
 
-WorkstreamsStages.defaultProps = {
-}
-
-WorkstreamsStages.propTypes = {
+Workstreams.propTypes = {
   workstreams: PT.arrayOf(PT.shape({
     id: PT.number.isRequired,
     name: PT.string.isRequired,
@@ -42,7 +42,8 @@ WorkstreamsStages.propTypes = {
   })).isRequired,
   addWorkForWorkstream: PT.func.isRequired,
   timelines: PT.array.isRequired,
-  inputDesignWorks: PT.func.isRequired
+  inputDesignWorks: PT.func.isRequired,
+  isManageUser: PT.bool,
 }
 
-export default withRouter(WorkstreamsStages)
+export default withRouter(Workstreams)

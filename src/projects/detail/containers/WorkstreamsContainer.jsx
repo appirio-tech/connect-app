@@ -8,58 +8,24 @@ import React from 'react'
 import PT from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
-import WorkstreamsEmpty from '../components/workstreams/WorkstreamsEmpty'
-import WorkstreamsStages from '../components/workstreams/WorkstreamsStages'
+import Workstreams from '../components/workstreams/Workstreams'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
-class CreateView extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
-    const {
-      isManageUser,
-      workstreams,
-      addWorkForWorkstream,
-      timelines,
-      inputDesignWorks
-    } = this.props
-
-    if (workstreams.length) {
-      return  (
-        <WorkstreamsStages
-          workstreams={workstreams}
-          addWorkForWorkstream={addWorkForWorkstream}
-          timelines={timelines}
-          inputDesignWorks={inputDesignWorks}
-        />
-      )
-    }
-    return (<WorkstreamsEmpty isManageUser={isManageUser} />)
-  }
-}
-
 const spinner = spinnerWhileLoading(props => !props.isLoadingWorkstreams)
-const EnhancedCreateView = spinner(CreateView)
+const WorkstreamsWithLoader = spinner(Workstreams)
 
 
 class WorkstreamsContainer extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   componentWillMount() {
     const { project, workstreams } = this.props
     if (!workstreams || workstreams.length <= 0) {
       this.props.loadProjectWorkstreams(project)
     }
-
   }
 
   render() {
     return (
-      <EnhancedCreateView
+      <WorkstreamsWithLoader
         {...this.props}
       />
     )
@@ -81,7 +47,8 @@ WorkstreamsContainer.PropTypes = {
   })).isRequired,
   addWorkForWorkstream: PT.func.isRequired,
   timelines: PT.array.isRequired,
-  inputDesignWorks: PT.func.isRequired
+  inputDesignWorks: PT.func.isRequired,
+  isManageUser: PT.bool,
 }
 
 
