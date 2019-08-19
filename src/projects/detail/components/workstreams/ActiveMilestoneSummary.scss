@@ -1,6 +1,6 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-.input-design-work-container {
+.container {
   margin-top: 30px;
 }
 
@@ -22,8 +22,6 @@
   font-size: 12px;
 }
 
-.input-design-works-btn {
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+.action {
+  text-align: center;
 }

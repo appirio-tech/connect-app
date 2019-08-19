@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom'
 
 import Section from '../Section'
 import WorkList from './WorkList'
-import WorkstreamsEmpty from './components/workstreams/WorkstreamsEmpty'
+import WorkstreamsEmpty from './WorkstreamsEmpty'
 
 const Workstreams = ({
   workstreams,
@@ -41,7 +41,7 @@ Workstreams.propTypes = {
     description: PT.string,
   })).isRequired,
   addWorkForWorkstream: PT.func.isRequired,
-  timelines: PT.array.isRequired,
+  timelines: PT.object.isRequired,
   inputDesignWorks: PT.func.isRequired,
   isManageUser: PT.bool,
 }

@@ -180,7 +180,10 @@ class DashboardContainer extends React.Component {
             addNewMilestone={(timelineId) => this.setState({ showAddMilestoneForTimeline: timelineId }) }
             editMilestone={(timelineId, milestoneId) => this.setState({ showEditMilestoneForTimeline: {timelineId, milestoneId} }) }
             inputDesignWorks={(timelineId, milestoneId) => this.setState({ showDesignWorks: {timelineId, milestoneId} }) }
-          />)
+            startDesignReview={(timelineId, milestoneId) => alert(`Start design review for timeline (${timelineId}) milestone (${milestoneId})`)}
+            markMilestoneAsCompleted={(timelineId, milestoneId) => alert(`Mark as Complete for timeline (${timelineId}) milestone (${milestoneId})`)}
+          />
+        )
       }
 
       if (showAddWorkForWorkstream >= 0) {
@@ -197,6 +200,7 @@ class DashboardContainer extends React.Component {
           {...this.props}
           addWorkForWorkstream={(workstreamId) => { this.setState({ showAddWorkForWorkstream: workstreamId }) }}
           inputDesignWorks={(timelineId, milestoneId) => this.setState({ showDesignWorks: {timelineId, milestoneId} }) }
+          startDesignReview={(timelineId, milestoneId) => alert(`Start design review for timeline (${timelineId}) milestone (${milestoneId})`)}
         />
       )
     }

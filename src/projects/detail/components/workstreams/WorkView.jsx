@@ -10,12 +10,15 @@ const Formsy = FormsyForm.Formsy
 
 import Section from '../Section'
 import WorkViewEdit from './WorkViewEdit'
-import DesignWorksMessage from './DesignWorksMessage'
+import ActiveMilestoneSummary from './ActiveMilestoneSummary'
 import WorkTimelineContainer from '../../containers/WorkTimelineContainer'
 import CloseIcon from  '../../../../assets/icons/x-mark-black.svg'
 import EditIcon from  '../../../../assets/icons/icon-edit-black.svg'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
-import { PHASE_STATUS } from '../../../../config/constants'
+import {
+  PHASE_STATUS,
+  MILESTONE_STATUS,
+} from '../../../../config/constants'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import WorkItemsContainer from '../../containers/WorkItemsContainer'
 
@@ -84,18 +87,34 @@ class WorkView extends React.Component {
    */
   getTabContent() {
     const { navs, selectedNav } = this.state
-    const { work,  addNewMilestone, editMilestone, timelines, inputDesignWorks, showAddChallengeTask } = this.props
+    const {
+      work,
+      addNewMilestone,
+      editMilestone,
+      timelines,
+      showAddChallengeTask,
+      inputDesignWorks,
+      startDesignReview,
+      markMilestoneAsCompleted,
+    } = this.props
     const timeline = _.get(timelines[work.id], 'timeline')
-    const activeDesignWorksMilestone = timeline && _.find(timeline.milestones, {
-      type: 'design-work',
-      status: 'active'
+    const activeMilestone = timeline && _.find(timeline.milestones, {
+      status: MILESTONE_STATUS.ACTIVE,
     })
 
     if (navs[selectedNav].title === 'Details') {
       return (
         <div styleName="content">
           <WorkTimelineContainer workId={work.id} editMode={false}/>
-          {!!activeDesignWorksMilestone && <DesignWorksMessage timeline={timeline} milestone={activeDesignWorksMilestone} inputDesignWorks={inputDesignWorks} />}
+          {!!activeMilestone && (
+            <ActiveMilestoneSummary
+              timeline={timeline}
+              milestone={activeMilestone}
+              inputDesignWorks={inputDesignWorks}
+              startDesignReview={startDesignReview}
+              markMilestoneAsCompleted={markMilestoneAsCompleted}
+            />
+          )}
         </div>
       )
     }
@@ -209,7 +228,9 @@ WorkView.propTypes = {
   isUpdatingWorkInfo: PT.bool.isRequired,
   isDeletingWorkInfo: PT.bool.isRequired,
   timelines: PT.object.isRequired,
-  inputDesignWorks: PT.func.isRequired
+  inputDesignWorks: PT.func,
+  startDesignReview: PT.func,
+  markMilestoneAsCompleted: PT.func,
 }
 
 export default withRouter(WorkView)

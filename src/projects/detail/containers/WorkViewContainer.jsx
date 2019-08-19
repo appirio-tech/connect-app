@@ -43,7 +43,9 @@ WorkViewContainer.PropTypes = {
   loadWorkInfo: PT.func.isRequired,
   work: PT.object.isRequired,
   timelines: PT.object.isRequired,
-  inputDesignWorks: PT.func.isRequired
+  inputDesignWorks: PT.func,
+  startDesignReview: PT.func,
+  markMilestoneAsCompleted: PT.func,
 }
 
 export default withRouter(WorkViewContainer)

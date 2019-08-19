@@ -8,7 +8,9 @@ import { withRouter } from 'react-router-dom'
 import WorkListHeader from './WorkListHeader'
 import WorkListCard from './WorkListCard'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
-import {getActiveWorkFilter, getDeliveredWorkFilter} from '../../../../helpers/workstreams'
+import { getActiveWorkFilter, getDeliveredWorkFilter } from '../../../../helpers/workstreams'
+import { MILESTONE_STATUS } from '../../../../config/constants'
+
 import './WorkList.scss'
 
 
@@ -54,15 +56,13 @@ class WorkList extends React.Component {
     const { timelines } = this.props
 
     const timeline = _.get(timelines[workId], 'timeline')
-    const milestone = timeline && _.find(timeline.milestones, {
-      type: 'design-work',
-      status: 'active'
+    const activeMilestone = timeline && _.find(timeline.milestones, {
+      status: MILESTONE_STATUS.ACTIVE,
     })
 
     return {
       timeline,
-      milestone,
-      showInputReviewBtn: !!milestone
+      activeMilestone,
     }
   }
 
@@ -90,8 +90,7 @@ class WorkList extends React.Component {
                   work={work}
                   workstream={workstream}
                   timeline={milestoneData.timeline}
-                  milestone={milestoneData.milestone}
-                  showInputReviewBtn={milestoneData.showInputReviewBtn}
+                  activeMilestone={milestoneData.activeMilestone}
                   inputDesignWorks={inputDesignWorks}
                 />
               )
@@ -124,7 +123,7 @@ WorkList.propTypes = {
     isLoadingWorks: PT.bool.isRequired,
   }).isRequired,
   addWorkForWorkstream: PT.func.isRequired,
-  timelines: PT.array.isRequired,
+  timelines: PT.object.isRequired,
   inputDesignWorks: PT.func.isRequired
 }
 
