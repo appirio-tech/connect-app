@@ -674,12 +674,14 @@ export const PHASE_STATUS_CANCELLED = 'cancelled'
 export const PHASE_STATUS_PAUSED = 'paused'
 
 
-export const MILESTONE_TYPE_PHASE_SPECIFICATION = 'phase-specification'
-export const MILESTONE_TYPE_COMMUNITY_WORK = 'community-work'
-export const MILESTONE_TYPE_DESIGN_WORK = 'design-work'
-export const MILESTONE_TYPE_CHECKPOINT_REVIEW = 'checkpoint-review'
-export const MILESTONE_TYPE_FINAL_DESIGNS = 'final-designs'
-export const MILESTONE_TYPE_FINAL_FIX = 'final-fix'
+export const MILESTONE_TYPE = {
+  PHASE_SPECIFICATION: 'phase-specification',
+  COMMUNITY_WORK: 'community-work',
+  DESIGN_WORK: 'design-work',
+  CHECKPOINT_REVIEW: 'checkpoint-review',
+  FINAL_DESIGNS: 'final-designs',
+  FINAL_FIX: 'final-fix',
+}
 
 export const PROJECT_STATUS = [
   {color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
@@ -701,13 +703,13 @@ export const PHASE_STATUS = [
   // {color: 'red', name: 'Paused', fullName: 'Phase is paused', value: PHASE_STATUS_PAUSED, order: 7, dropDownOrder: 7 }
 ]
 
-export const MILESTONE_TYPE = [
-  {name: 'Phase Specification', value: MILESTONE_TYPE_PHASE_SPECIFICATION },
-  {name: 'Design Work', value: MILESTONE_TYPE_DESIGN_WORK },
-  {name: 'Community Work', value: MILESTONE_TYPE_COMMUNITY_WORK },
-  {name: 'Checkpoint Review', value: MILESTONE_TYPE_CHECKPOINT_REVIEW },
-  {name: 'Final Designs', value: MILESTONE_TYPE_FINAL_DESIGNS },
-  {name: 'Final Fixes', value: MILESTONE_TYPE_FINAL_FIX },
+export const MILESTONE_TYPE_OPTIONS = [
+  {name: 'Phase Specification', value: MILESTONE_TYPE.PHASE_SPECIFICATION },
+  {name: 'Design Work', value: MILESTONE_TYPE.DESIGN_WORK },
+  {name: 'Community Work', value: MILESTONE_TYPE.COMMUNITY_WORK },
+  {name: 'Checkpoint Review', value: MILESTONE_TYPE.CHECKPOINT_REVIEW },
+  {name: 'Final Designs', value: MILESTONE_TYPE.FINAL_DESIGNS },
+  {name: 'Final Fixes', value: MILESTONE_TYPE.FINAL_FIX },
 ]
 
 // this defines default criteria to filter projects for projects list
@@ -947,10 +949,10 @@ export const MILESTONE_STATUS = {
 }
 
 export const MILESTONE_STATUS_TEXT = [
-  {status: 'reviewed', textValue: 'plannedText' },
-  {status: 'active', textValue: 'activeText' },
-  {status: 'paused', textValue: 'blockedText' },
-  {status: 'completed', textValue: 'completedText' }
+  {status: MILESTONE_STATUS.PLANNED, textValue: 'plannedText' },
+  {status: MILESTONE_STATUS.ACTIVE, textValue: 'activeText' },
+  {status: MILESTONE_STATUS.PAUSED, textValue: 'blockedText' },
+  {status: MILESTONE_STATUS.COMPLETED, textValue: 'completedText' }
 ]
 
 // minimum designs to select during checkpoint type milestone

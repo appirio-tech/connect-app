@@ -15,7 +15,7 @@ import CloseIcon from  '../../../../assets/icons/x-mark-black.svg'
 import TrashIcon from  '../../../../assets/icons/icon-trash-black.svg'
 import BackIcon from  '../../../../assets/icons/arrows-16px-1_tail-left.svg'
 import styles from './WorkTimelineEditMilestone.scss'
-import { MILESTONE_TYPE, MILESTONE_STATUS } from '../../../../config/constants'
+import { MILESTONE_TYPE_OPTIONS, MILESTONE_STATUS } from '../../../../config/constants'
 import {getMilestoneActualData} from '../../../../helpers/workstreams'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
 import DeleteMilestone from './DeleteMilestone'
@@ -23,7 +23,7 @@ import DeleteMilestone from './DeleteMilestone'
 
 const moment = extendMoment(Moment)
 const onLeaveUnSaveMessage = 'You haven’t saved your change. If you leave this page, your update will not be saved. Are you sure you want to leave?'
-const milestoneTypes = MILESTONE_TYPE.map(ps => ({
+const milestoneTypes = MILESTONE_TYPE_OPTIONS.map(ps => ({
   title: ps.name,
   value: ps.value,
 }))
@@ -206,7 +206,7 @@ class WorkTimelineEditMilestone extends React.Component {
     const {showDeletePopup, canLeave} = this.state
     const onLeaveMessage = this.onLeave()
 
-    const type = isNewMilestone ? MILESTONE_TYPE[0].value : milestone.type
+    const type = isNewMilestone ? MILESTONE_TYPE_OPTIONS[0].value : milestone.type
     const milestones = timeline.milestones ? _.orderBy(timeline.milestones, o => moment(o.startDate), ['asc']) : []
     const { startDate, endDate, duration } = getMilestoneActualData(timeline, milestones, milestone, isNewMilestone)
     const description = (milestone && milestone.description) ? milestone.description : ''
