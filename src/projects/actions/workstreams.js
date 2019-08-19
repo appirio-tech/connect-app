@@ -4,6 +4,9 @@ import {
   getWorkstreamWorks,
 } from '../../api/workstreams'
 import {
+  loadWorkTimeline,
+} from './workTimelines'
+import {
   LOAD_WORKSTREAMS,
   LOAD_WORKSTREAM_WORKS,
 } from '../../config/constants'
@@ -20,7 +23,12 @@ function getWorksForWorkstream(projectId, workstream) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_WORKSTREAM_WORKS,
-      payload: getWorkstreamWorks(projectId, workstream.id).then(works => ({ works })),
+      payload: getWorkstreamWorks(projectId, workstream.id).then((works) => {
+        // load timelines for all the works, so we can show special action buttons in the workstream list
+        // TODO: theoretically we can optimize this and load timelines only for action works as most likely
+        // we would only show special button for active works only
+        return Promise.all(works.map((work) => dispatch(loadWorkTimeline(work.id)))).then(() => ({ works }))
+      }),
       meta: {
         workstreamId: workstream.id,
       }
