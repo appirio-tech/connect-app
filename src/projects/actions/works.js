@@ -1,7 +1,6 @@
 import moment from 'moment'
 import _ from 'lodash'
 import {
-  getWorkstreamWorks,
   getWorkInfo,
   updateWorkInfo,
   newWorkInfo,
@@ -17,7 +16,6 @@ import {
   getChallengesByFilter,
 } from '../../api/challenges'
 import {
-  LOAD_WORKSTREAM_WORKS,
   LOAD_WORK_INFO,
   UPDATE_WORK_INFO,
   NEW_WORK_INFO,
@@ -30,40 +28,6 @@ import {
   DELETE_WORK_ITEM_START,
   LOAD_CHALLENGES_WORK_ITEM,
 } from '../../config/constants'
-
-/**
- * Get works for workstream
- *
- * @param {String} projectId    project id
- * @param {Object} workstream   workstream object
- *
- * @return {Function} dispatch function
- */
-function getWorksForWorkstream(projectId, workstream) {
-  return (dispatch) => {
-    return dispatch({
-      type: LOAD_WORKSTREAM_WORKS,
-      payload: getWorkstreamWorks(projectId, workstream.id).then((works) => ({ works })),
-      meta: {
-        workstreamId: workstream.id,
-      }
-    })
-  }
-}
-
-/**
- * Get works for array of workstream
- * @param {String} projectId      project id
- * @param {Array} workstreams     array of workstream
- * @param {Function} dispatch     dispatch
- *
- * @return {Promise} Combine promise of get works for workstream
- */
-export function loadWorkForWorkstreams(projectId, workstreams, dispatch) {
-  return Promise.all(
-    workstreams.map((workstream) => dispatch(getWorksForWorkstream(projectId, workstream)))
-  )
-}
 
 /**
  * Load work info
