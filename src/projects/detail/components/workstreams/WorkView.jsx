@@ -85,14 +85,17 @@ class WorkView extends React.Component {
   getTabContent() {
     const { navs, selectedNav } = this.state
     const { work,  addNewMilestone, editMilestone, timelines, inputDesignWorks, showAddChallengeTask } = this.props
-    const timeline = _.find(timelines, { 'reference': 'work', 'referenceId': work.id }) || {}
-    const activeMileStone = _.find(timeline.milestones, { 'type': 'design-work', 'status': 'active' })
+    const timeline = _.get(timelines[work.id], 'timeline')
+    const activeDesignWorksMilestone = timeline && _.find(timeline.milestones, {
+      type: 'design-work',
+      status: 'active'
+    })
 
     if (navs[selectedNav].title === 'Details') {
       return (
         <div styleName="content">
           <WorkTimelineContainer workId={work.id} editMode={false}/>
-          {!_.isEmpty(activeMileStone) && <DesignWorksMessage timeline={timeline} milestone={activeMileStone} inputDesignWorks={inputDesignWorks} />}
+          {!!activeDesignWorksMilestone && <DesignWorksMessage timeline={timeline} milestone={activeDesignWorksMilestone} inputDesignWorks={inputDesignWorks} />}
         </div>
       )
     }
@@ -205,16 +208,7 @@ WorkView.propTypes = {
   updateWork: PT.func.isRequired,
   isUpdatingWorkInfo: PT.bool.isRequired,
   isDeletingWorkInfo: PT.bool.isRequired,
-  timelines: PT.arrayOf(PT.shape({
-    id: PT.number.isRequired,
-    startDate: PT.string,
-    milestones: PT.arrayOf(PT.shape({
-      id: PT.number,
-      startDate: PT.string,
-      endDate: PT.string,
-      name: PT.string,
-    })),
-  })).isRequired,
+  timelines: PT.object.isRequired,
   inputDesignWorks: PT.func.isRequired
 }
 

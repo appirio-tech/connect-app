@@ -41,7 +41,7 @@ class DesignOption extends React.Component {
   }
 
   render() {
-    const { index, content, onDeleteOption, onUpdateField, onSubmitForm } = this.props
+    const { index, content, onDeleteOption, onUpdateField } = this.props
     const { isEditMode } = this.state
     const { title, submissionId, previewUrl, links } = content
 

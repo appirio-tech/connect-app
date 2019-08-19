@@ -7,14 +7,13 @@
 import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
 
 import WorkTimeline from '../components/work-timeline/WorkTimeline'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import { loadWorkTimelines } from '../../actions/workTimelines'
+import { loadWorkTimeline } from '../../actions/workTimelines'
 
-const spinner = spinnerWhileLoading(props => !props.isLoadingTimelines)
-const EnhancedCreateView = spinner(WorkTimeline)
+const spinner = spinnerWhileLoading(props => props.timelineState && !props.timelineState.isLoading)
+const WorkTimelineWithLoader = spinner(WorkTimeline)
 
 
 class WorkTimelineContainer extends React.Component {
@@ -23,16 +22,16 @@ class WorkTimelineContainer extends React.Component {
   }
 
   componentWillMount() {
-    // load timeline
-    const { loadWorkTimelines, loadedTimelinesWorkId, workId } = this.props
-    if (loadedTimelinesWorkId !== workId) {
-      loadWorkTimelines(workId)
+    // load timeline if we still didn't try to load it
+    const { timelineState, workId, loadWorkTimeline } = this.props
+    if (!timelineState && workId) {
+      loadWorkTimeline(workId)
     }
   }
 
   render() {
     return (
-      <EnhancedCreateView
+      <WorkTimelineWithLoader
         {...this.props}
       />
     )
@@ -42,30 +41,27 @@ class WorkTimelineContainer extends React.Component {
 WorkTimelineContainer.PropTypes = {
   workId: PT.number.isRequired,
   editMode: PT.bool.isRequired,
-  isLoadingTimelines: PT.bool.isRequired,
-  timelines: PT.arrayOf(PT.shape({
-    id: PT.number.isRequired,
-    startDate: PT.string,
-    milestones: PT.arrayOf(PT.shape({
-      id: PT.number,
+  timelineState: PT.shape({
+    isLoading: PT.bool,
+    timeline: PT.shape({
+      id: PT.number.isRequired,
       startDate: PT.string,
-      endDate: PT.string,
-      name: PT.string,
-    })),
-  })).isRequired,
-  loadWorkTimelines: PT.func.isRequired,
+      milestones: PT.arrayOf(PT.shape({
+        id: PT.number.isRequired,
+        startDate: PT.string,
+        endDate: PT.string,
+        name: PT.string.isRequired,
+      })),
+    }).isRequired,
+  }).isRequired,
 }
 
-const mapStateToProps = ({ workTimelines }) => {
-  return {
-    timelines: workTimelines.timelines,
-    loadedTimelinesWorkId: workTimelines.workId, // work id that already loaded timelines
-    isLoadingTimelines: workTimelines.isLoading,
-  }
-}
+const mapStateToProps = ({ workTimelines }, ownProps) => ({
+  timelineState: workTimelines.timelines[ownProps.workId],
+})
 
 const mapDispatchToProps = {
-  loadWorkTimelines
+  loadWorkTimeline
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(WorkTimelineContainer))
+export default connect(mapStateToProps, mapDispatchToProps)(WorkTimelineContainer)

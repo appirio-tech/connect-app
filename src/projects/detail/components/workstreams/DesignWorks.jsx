@@ -8,7 +8,6 @@ import DesignOption from './DesignOption'
 import BackIcon from '../../../../assets/icons/arrows-16px-1_tail-left.svg'
 import CloseIcon from '../../../../assets/icons/x-mark-black.svg'
 import './DesignWork.scss'
-import {updateMilestone} from '../../../actions/workTimelines'
 
 class DesignWorks extends React.Component {
   constructor(props) {
@@ -73,7 +72,7 @@ class DesignWorks extends React.Component {
   }
 
   submitForm(data) {
-    const { milestone, updateMilestone, work, timelineId, milestoneId } = this.props
+    const { milestone, updateWorkMilestone, work, timelineId, milestoneId } = this.props
     const { details } = milestone || {}
     const { content } = details || {}
     const { designs = [] } = content || {}
@@ -99,7 +98,7 @@ class DesignWorks extends React.Component {
     }
 
     newMilestone = _.omit(newMilestone, ['startDate', 'endDate', 'timelineId', 'statusHistory'])
-    updateMilestone(work.id, timelineId, milestoneId, newMilestone)
+    updateWorkMilestone(work.id, timelineId, milestoneId, newMilestone)
   }
 
   render() {
@@ -154,7 +153,7 @@ class DesignWorks extends React.Component {
 DesignWorks.propTypes = {
   onBack: PT.func,
   milestone: PT.object,
-  updateMilestone: PT.func
+  updateWorkMilestone: PT.func
 }
 
 export default withRouter(DesignWorks)

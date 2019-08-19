@@ -14,7 +14,7 @@ import WorkView from '../components/workstreams/WorkView'
 
 // This handles showing a spinner while the state is being loaded async
 const enhance = spinnerWhileLoading(props => !props.isLoadingWorkInfo && !_.isNil(props.work))
-const EnhancedCreateView = enhance(WorkView)
+const WorkViewWithLoader = enhance(WorkView)
 
 
 class WorkViewContainer extends React.Component {
@@ -31,7 +31,7 @@ class WorkViewContainer extends React.Component {
 
   render() {
     return (
-      <EnhancedCreateView
+      <WorkViewWithLoader
         {...this.props}
       />
     )
@@ -42,16 +42,7 @@ WorkViewContainer.PropTypes = {
   isLoadingWorkInfo: PT.bool.isRequired,
   loadWorkInfo: PT.func.isRequired,
   work: PT.object.isRequired,
-  timelines: PT.arrayOf(PT.shape({
-    id: PT.number.isRequired,
-    startDate: PT.string,
-    milestones: PT.arrayOf(PT.shape({
-      id: PT.number,
-      startDate: PT.string,
-      endDate: PT.string,
-      name: PT.string,
-    })),
-  })).isRequired,
+  timelines: PT.object.isRequired,
   inputDesignWorks: PT.func.isRequired
 }
 

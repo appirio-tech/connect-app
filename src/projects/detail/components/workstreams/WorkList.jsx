@@ -53,12 +53,16 @@ class WorkList extends React.Component {
   getMilestoneData(workId) {
     const { timelines } = this.props
 
-    const timeline = _.find(timelines, { 'reference': 'work', 'referenceId': workId }) || {}
-    const milestone = _.find(timeline.milestones, { 'type': 'design-work', 'status': 'active' }) || {}
+    const timeline = _.get(timelines[workId], 'timeline')
+    const milestone = timeline && _.find(timeline.milestones, {
+      type: 'design-work',
+      status: 'active'
+    })
+
     return {
       timeline,
       milestone,
-      showInputReviewBtn: !_.isEmpty(milestone)
+      showInputReviewBtn: !!milestone
     }
   }
 

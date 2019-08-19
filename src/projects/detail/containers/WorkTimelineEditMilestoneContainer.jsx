@@ -12,16 +12,20 @@ import { withRouter } from 'react-router-dom'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import WorkTimelineEditMilestone from '../components/work-timeline/WorkTimelineEditMilestone'
 import {
-  deleteMilestone,
-  updateMilestone,
-  loadMilestone
+  deleteWorkMilestone,
+  updateWorkMilestone,
+  loadWorkMilestone
 } from '../../actions/workTimelines'
-import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import './WorkTimelineEditMilestoneContainer.scss'
 
 // This handles showing a spinner while the state is being loaded async
-const enhance = spinnerWhileLoading(props => !props.isLoadingMilestoneInfo && !!props.milestone)
-const EnhancedCreateView = enhance(WorkTimelineEditMilestone)
+const enhance = spinnerWhileLoading(props =>
+  !!props.milestone &&
+  !props.isLoadingMilestoneInfo &&
+  !props.isUpdatingMilestoneInfo &&
+  !props.isDeletingMilestoneInfo
+)
+const WorkTimelineEditMilestoneWithLoader = enhance(WorkTimelineEditMilestone)
 
 class WorkTimelineEditMilestoneContainer extends React.Component {
   constructor(props) {
@@ -31,9 +35,9 @@ class WorkTimelineEditMilestoneContainer extends React.Component {
   }
 
   componentWillMount() {
-    const { timelineId, milestoneId, milestone, loadMilestone } = this.props
+    const { timelineId, milestoneId, milestone, loadWorkMilestone, work } = this.props
     if (!milestone || (milestone.id !== milestoneId)) {
-      loadMilestone(timelineId, milestoneId)
+      loadWorkMilestone(work.id, timelineId, milestoneId)
     }
   }
 
@@ -43,12 +47,12 @@ class WorkTimelineEditMilestoneContainer extends React.Component {
    */
   submitForm(model) {
     const {
+      work,
       timelineId,
       milestoneId,
-      updateMilestone,
-      work,
+      updateWorkMilestone,
     } = this.props
-    updateMilestone(work.id, timelineId, milestoneId, model)
+    updateWorkMilestone(work.id, timelineId, milestoneId, model)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -57,15 +61,15 @@ class WorkTimelineEditMilestoneContainer extends React.Component {
       onBack,
     } = nextProps
 
-    // backto work view if load milestone fail
-    const previosIsLoadingMilestoneInfo = _.get(this.props, 'isLoadingMilestoneInfo')
+    // back to work view if load milestone fail
+    const prevIsLoadingMilestoneInfo = _.get(this.props, 'isLoadingMilestoneInfo')
     const nextIsLoadingMilestoneInfo = _.get(nextProps, 'isLoadingMilestoneInfo')
-    if (previosIsLoadingMilestoneInfo === true && nextIsLoadingMilestoneInfo === false && isRequestMilestoneError) {
+    if (prevIsLoadingMilestoneInfo === true && nextIsLoadingMilestoneInfo === false && isRequestMilestoneError) {
       // loading milestone fail
       onBack()
     }
 
-    // backto dashboard after delete milestone successfully
+    // back to dashboard after delete milestone successfully
     const prevIsDeletingMilestoneInfo = _.get(this.props, 'isDeletingMilestoneInfo')
     const nextIsDeletingMilestoneInfo = _.get(nextProps, 'isDeletingMilestoneInfo')
     if (prevIsDeletingMilestoneInfo === true && nextIsDeletingMilestoneInfo === false && !isRequestMilestoneError) {
@@ -74,22 +78,13 @@ class WorkTimelineEditMilestoneContainer extends React.Component {
   }
 
   render() {
-    const {
-      isUpdatingMilestoneInfo,
-      isDeletingMilestoneInfo,
-      milestone
-    } = this.props
     return (
       <div styleName="container">
-        <EnhancedCreateView
+        <WorkTimelineEditMilestoneWithLoader
           {...this.props}
           isNewMilestone={false}
-          milestone={milestone}
           submitForm={this.submitForm}
         />
-        {(isUpdatingMilestoneInfo || isDeletingMilestoneInfo) && (<div styleName="loading-wrapper">
-          <LoadingIndicator />
-        </div>)}
       </div>
     )
   }
@@ -101,9 +96,9 @@ WorkTimelineEditMilestoneContainer.PropTypes = {
   onBack: PT.func.isRequired,
 }
 
-const mapStateToProps = ({workTimelines, works}) => {
+const mapStateToProps = ({workTimelines, works}, ownProps) => {
   return {
-    timelines: workTimelines.timelines,
+    timelineState: _.find(workTimelines.timelines, { timeline: { id: ownProps.timelineId }}),
     isUpdatingMilestoneInfo: workTimelines.isUpdatingMilestoneInfo,
     isDeletingMilestoneInfo: workTimelines.isDeletingMilestoneInfo,
     isLoadingMilestoneInfo: workTimelines.isLoadingMilestoneInfo,
@@ -114,9 +109,9 @@ const mapStateToProps = ({workTimelines, works}) => {
 }
 
 const mapDispatchToProps = {
-  deleteMilestone,
-  updateMilestone,
-  loadMilestone
+  deleteWorkMilestone,
+  updateWorkMilestone,
+  loadWorkMilestone
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(WorkTimelineEditMilestoneContainer))

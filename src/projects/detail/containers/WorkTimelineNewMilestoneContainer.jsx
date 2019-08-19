@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import WorkTimelineEditMilestone from '../components/work-timeline/WorkTimelineEditMilestone'
-import { createMilestone } from '../../actions/workTimelines'
+import { createWorkMilestone } from '../../actions/workTimelines'
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import './WorkTimelineNewMilestoneContainer.scss'
 
@@ -26,8 +26,8 @@ class WorkTimelineNewMilestoneContainer extends React.Component {
    * @param {Object} model form value
    */
   submitForm(model) {
-    const { timelineId, createMilestone } = this.props
-    createMilestone(timelineId, model)
+    const { timelineId, createWorkMilestone, work } = this.props
+    createWorkMilestone(work.id, timelineId, model)
   }
 
   render() {
@@ -50,12 +50,12 @@ class WorkTimelineNewMilestoneContainer extends React.Component {
 
 WorkTimelineNewMilestoneContainer.PropTypes = {
   timelineId: PT.number.isRequired,
-  createMilestone: PT.func.isRequired,
+  createWorkMilestone: PT.func.isRequired,
 }
 
-const mapStateToProps = ({workTimelines, works}) => {
+const mapStateToProps = ({workTimelines, works}, ownProps) => {
   return {
-    timelines: workTimelines.timelines,
+    timelineState: _.find(workTimelines.timelines, { timeline: { id: ownProps.timelineId }}),
     isCreatingMilestoneInfo: workTimelines.isCreatingMilestoneInfo,
     isRequestMilestoneError: workTimelines.error,
     work: works.work
@@ -63,7 +63,7 @@ const mapStateToProps = ({workTimelines, works}) => {
 }
 
 const mapDispatchToProps = {
-  createMilestone
+  createWorkMilestone,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(WorkTimelineNewMilestoneContainer))

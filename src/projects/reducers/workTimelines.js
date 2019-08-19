@@ -17,117 +17,179 @@ import {
   CLEAR_LOADED_PROJECT,
   GET_PROJECTS_SUCCESS,
 } from '../../config/constants'
-
+import update from 'react-addons-update'
 import {parseErrorObj} from '../../helpers/workstreams'
 
 const initialState = {
-  isLoading: false,
   isLoadingMilestoneInfo: false,
   isUpdatingMilestoneInfo: false,
   isCreatingMilestoneInfo: false,
   isDeletingMilestoneInfo: false,
-  error: false,
-  timelines: [], // timelines are pushed directly into it hence need to declare first
-  workId: null,
+  timelines: {},
   milestone: null,
+}
+
+const updateTimelineByWorkId = (state, workId, updateTimelineQuery) => {
+  const timelineStateToUpdate = state.timelines[workId] || {}
+
+  return {
+    ...state,
+    timelines: {
+      ...state.timelines,
+      [workId]: update(timelineStateToUpdate, updateTimelineQuery)
+    }
+  }
+}
+
+const updateTimelineByTemplateId = (state, templateId, updateTimelineQuery) => {
+  const workId = _.findKey(state.timelines, { timeline: { id: templateId }})
+  const timelineStateToUpdate = state.timelines[workId]
+
+  return {
+    ...state,
+    timelines: {
+      ...state.timelines,
+      [workId]: update(timelineStateToUpdate, updateTimelineQuery)
+    }
+  }
 }
 
 export const workTimelines = function (state=initialState, action) {
 
   switch (action.type) {
   case LOAD_WORK_TIMELINE_PENDING:
-    return Object.assign({}, state, {
-      isLoading: true,
-      error: false
+    return updateTimelineByWorkId(state, action.meta.workId, {
+      isLoading: { $set: true },
+      error: { $set: false },
     })
-  case LOAD_WORK_TIMELINE_SUCCESS:
-    for(const timeline of action.payload.timelines) {
-      if (!timeline.milestones) {
-        timeline.milestones = []
-      }
+
+  case LOAD_WORK_TIMELINE_SUCCESS: {
+    const timeline = action.payload.timelines[0]
+
+    if (!timeline.milestones) {
+      timeline.milestones = []
     }
-    return Object.assign({}, state, {
-      isLoading: false,
-      error: false,
-      timelines: action.payload.timelines,
-      workId: action.payload.workId
+
+    return updateTimelineByWorkId(state, action.meta.workId, {
+      isLoading: { $set: false },
+      error: { $set: false },
+      timeline: { $set: timeline },
     })
+  }
+
   case LOAD_WORK_TIMELINE_FAILURE:
-    return Object.assign({}, state, {
-      isLoading: false,
-      error: parseErrorObj(action)
+    return updateTimelineByWorkId(state, action.meta.workId, {
+      isLoading: { $set: false },
+      error: { $set: parseErrorObj(action) },
     })
+
   case NEW_WORK_TIMELINE_MILESTONE_PENDING:
     return Object.assign({}, state, {
       isCreatingMilestoneInfo: true,
       error: false
     })
+
   case NEW_WORK_TIMELINE_MILESTONE_SUCCESS: {
-    const { timelines } = state
-    const timelineIndex = _.findIndex(timelines, timeline => (timeline.id === action.payload.timelineId))
-    if (timelineIndex >= 0) {
-      timelines[timelineIndex].milestones.push(action.payload.milestone)
-    }
-    return Object.assign({}, state, {
+    const stateWithUpdatedTimeline = updateTimelineByWorkId(state, action.meta.workId, {
+      timeline: {
+        milestones: { $push: [action.payload.milestone] }
+      }
+    })
+
+    return Object.assign({}, stateWithUpdatedTimeline, {
       isCreatingMilestoneInfo: false,
       error: false,
       milestone: action.payload.milestone,
-      timelines
     })
   }
+
   case NEW_WORK_TIMELINE_MILESTONE_FAILURE:
     return Object.assign({}, state, {
       isCreatingMilestoneInfo: false,
       error: parseErrorObj(action)
     })
+
   case UPDATE_WORK_TIMELINE_MILESTONE_PENDING:
     return Object.assign({}, state, {
       isUpdatingMilestoneInfo: true,
       error: false
     })
+
   case UPDATE_WORK_TIMELINE_MILESTONE_SUCCESS: {
-    return Object.assign({}, state, {
+    const timelineStateToUpdate = state.timelines[action.meta.workId]
+    const milestoneIndexToUpdate = _.findIndex(timelineStateToUpdate.timeline.milestones, { id: action.meta.milestoneId })
+    const stateWithUpdatedTimeline = updateTimelineByWorkId(state, action.meta.workId, {
+      timeline: {
+        milestones: { $splice: [[milestoneIndexToUpdate, 1, action.payload.milestone]] }
+      }
+    })
+
+    return Object.assign({}, stateWithUpdatedTimeline, {
       isUpdatingMilestoneInfo: false,
       error: false,
       milestone: action.payload.milestone,
-      timelines: action.payload.timelines,
     })
   }
+
   case UPDATE_WORK_TIMELINE_MILESTONE_FAILURE:
     return Object.assign({}, state, {
       isUpdatingMilestoneInfo: false,
       error: parseErrorObj(action)
     })
+
   case LOAD_WORK_TIMELINE_MILESTONE_PENDING:
     return Object.assign({}, state, {
       isLoadingMilestoneInfo: true,
       error: false
     })
+
   case LOAD_WORK_TIMELINE_MILESTONE_SUCCESS: {
-    return Object.assign({}, state, {
+    // we reload milestone before editing, actually this reducer is same to UPDATE_WORK_TIMELINE_MILESTONE_SUCCESS
+    // the only difference is that this reducer uses `isLoadingMilestoneInfo` instead of `isUpdatingMilestoneInfo`
+    const workId = _.findKey(state.timelines, { timeline: { id: action.meta.timelineId }})
+    const timelineStateToUpdate = state.timelines[workId]
+    const milestoneIndexToUpdate = _.findIndex(timelineStateToUpdate.timeline.milestones, { id: action.meta.milestoneId })
+    const stateWithUpdatedTimeline = updateTimelineByTemplateId(state, action.meta.timelineId, {
+      timeline: {
+        milestones: { $splice: [[milestoneIndexToUpdate, 1, action.payload.milestone]] }
+      }
+    })
+
+    return Object.assign({}, stateWithUpdatedTimeline, {
       isLoadingMilestoneInfo: false,
       error: false,
-      milestone: action.payload
+      milestone: action.payload.milestone,
     })
   }
+
   case LOAD_WORK_TIMELINE_MILESTONE_FAILURE:
     return Object.assign({}, state, {
       isLoadingMilestoneInfo: false,
       error: parseErrorObj(action)
     })
+
   case DELETE_WORK_TIMELINE_MILESTONE_PENDING:
     return Object.assign({}, state, {
       isDeletingMilestoneInfo: true,
       error: false
     })
+
   case DELETE_WORK_TIMELINE_MILESTONE_SUCCESS: {
-    return Object.assign({}, state, {
+    const timelineStateToUpdate = state.timelines[action.meta.workId]
+    const milestoneIndexToDelete = _.findIndex(timelineStateToUpdate.timeline.milestones, { id: action.meta.milestoneId })
+    const stateWithUpdatedTimeline = updateTimelineByWorkId(state, action.meta.workId, {
+      timeline: {
+        milestones: { $splice: [[milestoneIndexToDelete, 1]] }
+      }
+    })
+
+    return Object.assign({}, stateWithUpdatedTimeline, {
       isDeletingMilestoneInfo: false,
       error: false,
       milestone: null,
-      timelines: action.payload.timelines,
     })
   }
+
   case DELETE_WORK_TIMELINE_MILESTONE_FAILURE:
     return Object.assign({}, state, {
       isDeletingMilestoneInfo: false,

@@ -72,7 +72,7 @@ class WorkTimelineEditMilestone extends React.Component {
       onBack
     } = nextProps
 
-    // backto dashboard after create milestone successfully
+    // back to dashboard after create milestone successfully
     const prevIsCreatingMilestoneInfo = _.get(this.props, 'isCreatingMilestoneInfo')
     const nextIsCreatingMilestoneInfo = _.get(nextProps, 'isCreatingMilestoneInfo')
     if (prevIsCreatingMilestoneInfo === true && nextIsCreatingMilestoneInfo === false && !isRequestMilestoneError) {
@@ -134,7 +134,7 @@ class WorkTimelineEditMilestone extends React.Component {
    * Submit form
    */
   onFormSubmit(model) {
-    const { submitForm, timelines, isNewMilestone } = this.props
+    const { submitForm, timelineState: { timeline }, isNewMilestone } = this.props
     const updatedStartDate = moment.utc(new Date(model.startDate))
     const updatedEndDate = moment.utc(new Date(model.endDate))
     const status = MILESTONE_STATUS.ACTIVE
@@ -146,7 +146,7 @@ class WorkTimelineEditMilestone extends React.Component {
         endDate: updatedEndDate || '',
         status,
         duration: updatedEndDate.diff(updatedStartDate, 'days'),
-        order: timelines[0].milestones.length,
+        order: timeline.milestones.length,
         plannedText: 'empty', // this field is required in backend api but isn't supported by the form, so hardcode this field
         activeText: 'empty', // this field is required in backend api but isn't supported by the form, so hardcode this field
         completedText: 'empty', // this field is required in backend api but isn't supported by the form, so hardcode this field
@@ -169,10 +169,10 @@ class WorkTimelineEditMilestone extends React.Component {
       work,
       timelineId,
       milestone,
-      deleteMilestone
+      deleteWorkMilestone
     } = this.props
 
-    deleteMilestone(work.id, timelineId, milestone.id)
+    deleteWorkMilestone(work.id, timelineId, milestone.id)
   }
 
   /**
@@ -200,15 +200,15 @@ class WorkTimelineEditMilestone extends React.Component {
       isCreatingMilestoneInfo,
       isNewMilestone,
       isDeletingMilestoneInfo,
-      timelines,
+      timelineState: { timeline },
       work
     } = this.props
     const {showDeletePopup, canLeave} = this.state
     const onLeaveMessage = this.onLeave()
 
     const type = isNewMilestone ? MILESTONE_TYPE[0].value : milestone.type
-    const milestones = timelines[0].milestones ? _.orderBy(timelines[0].milestones, o => moment(o.startDate), ['asc']) : []
-    const { startDate, endDate, duration } = getMilestoneActualData(timelines[0], milestones, milestone, isNewMilestone)
+    const milestones = timeline.milestones ? _.orderBy(timeline.milestones, o => moment(o.startDate), ['asc']) : []
+    const { startDate, endDate, duration } = getMilestoneActualData(timeline, milestones, milestone, isNewMilestone)
     const description = (milestone && milestone.description) ? milestone.description : ''
     return (
       <div
@@ -347,7 +347,7 @@ class WorkTimelineEditMilestone extends React.Component {
 WorkTimelineEditMilestone.defaultProps = {
   onBack: () => {},
   submitForm: () => {},
-  deleteMilestone: () => {},
+  deleteWorkMilestone: () => {},
   isNewMilestone: false
 }
 
@@ -361,17 +361,20 @@ WorkTimelineEditMilestone.propTypes = {
     endDate: PT.string,
     name: PT.string,
   }),
-  timelines: PT.arrayOf(PT.shape({
-    id: PT.number.isRequired,
-    startDate: PT.string,
-    milestones: PT.arrayOf(PT.shape({
-      id: PT.number,
+  timelineState: PT.shape({
+    isLoading: PT.bool,
+    timeline: PT.shape({
+      id: PT.number.isRequired,
       startDate: PT.string,
-      endDate: PT.string,
-      name: PT.string,
-    })),
-  })).isRequired,
-  deleteMilestone: PT.func,
+      milestones: PT.arrayOf(PT.shape({
+        id: PT.number.isRequired,
+        startDate: PT.string,
+        endDate: PT.string,
+        name: PT.string.isRequired,
+      })),
+    }).isRequired,
+  }).isRequired,
+  deleteWorkMilestone: PT.func,
   isUpdatingMilestoneInfo: PT.bool,
   isCreatingMilestoneInfo: PT.bool,
   isDeletingMilestoneInfo: PT.bool,

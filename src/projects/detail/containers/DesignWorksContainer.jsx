@@ -12,7 +12,8 @@ import DesignWorks from '../components/workstreams/DesignWorks'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
 import {
-  loadMilestone, updateMilestone
+  loadWorkMilestone,
+  updateWorkMilestone,
 } from '../../actions/workTimelines'
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import './DesignWorksContainer.scss'
@@ -27,9 +28,9 @@ class DesignWorksContainer extends React.Component {
   }
 
   componentWillMount() {
-    const { timelineId, milestoneId, milestone, loadMilestone } = this.props
+    const { timelineId, milestoneId, milestone, loadWorkMilestone, work } = this.props
     if (!milestone || (milestone.id !== milestoneId)) {
-      loadMilestone(timelineId, milestoneId)
+      loadWorkMilestone(work.id, timelineId, milestoneId)
     }
   }
 
@@ -72,8 +73,8 @@ const mapStateToProps = ({workTimelines, works}) => {
 }
 
 const mapDispatchToProps = {
-  loadMilestone,
-  updateMilestone
+  loadWorkMilestone,
+  updateWorkMilestone
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(DesignWorksContainer))

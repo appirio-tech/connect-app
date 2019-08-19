@@ -380,7 +380,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     workstreams: workstreams.workstreams,
     workstreamsError: workstreams.error,
     work: works.work,
-    timelines: workTimelines.timelines
+    timelines: workTimelines.timelines,
   }
 }
 

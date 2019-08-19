@@ -16,16 +16,18 @@ import {
 import _ from 'lodash'
 
 /**
- * Load work timelines
- * @param {String} workId       work id
+ * Load work timeline
  *
- * @return {Function} dispatch function
+ * @param {String} workId work id
+ *
+ * @return {Function} action creator
  */
-export function loadWorkTimelines(workId) {
+export function loadWorkTimeline(workId) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_WORK_TIMELINE,
-      payload: getTimelinesByReference('work', workId).then(timelines => ({ timelines, workId }))
+      payload: getTimelinesByReference('work', workId).then(timelines => ({ timelines })),
+      meta: { workId },
     })
   }
 }
@@ -95,14 +97,15 @@ const demoDetails = {
 }
 
 /**
- * New milestone
+ * Create a new milestone for work timeline
  *
- * @param {Number} timelineId   timeline id
- * @param {Object} milestone milestone
+ * @param {Number} workId     work id
+ * @param {Number} timelineId timeline id
+ * @param {Object} milestone  milestone
  *
- * @return {Function} dispatch function
+ * @return {Function} action creator
  */
-export function createMilestone(timelineId, milestone) {
+export function createWorkMilestone(workId, timelineId, milestone) {
   // START: ADD DEMO DATA
   const milestoneData = {...milestone}
 
@@ -120,74 +123,96 @@ export function createMilestone(timelineId, milestone) {
   return (dispatch) => {
     return dispatch({
       type: NEW_WORK_TIMELINE_MILESTONE,
-      payload: createMilestoneApi(timelineId, milestoneData).then(newMilestone => ({ timelineId, milestone: newMilestone }))
+      payload: createMilestoneApi(timelineId, milestoneData).then(newMilestone => {
+        // reload timeline after creating a milestone,
+        // because backend could make cascading updates to the timeline and other milestones
+        dispatch(loadWorkTimeline(workId))
+
+        return ({ milestone: newMilestone })
+      }),
+      meta: {
+        workId,
+        timelineId,
+      }
     })
   }
 }
 
 /**
- * Update milestone
+ * Update milestone for work timeline
  *
- * @param {Number} workId       work id
- * @param {Number} timelineId   timeline id
- * @param {Number} milestoneId   milestone id
- * @param {Object} updatedProps updated milestone property
+ * @param {Number} workId          work id
+ * @param {Number} timelineId      timeline id
+ * @param {Object} milestoneUpdate milestone data to update
  *
  * @return {Function} dispatch function
  */
-export function updateMilestone(workId, timelineId, milestoneId, updatedProps) {
-  let milestone
+export function updateWorkMilestone(workId, timelineId, milestoneId, milestoneUpdate) {
   return (dispatch) => {
     return dispatch({
       type: UPDATE_WORK_TIMELINE_MILESTONE,
-      payload: updateMilestoneApi(timelineId, milestoneId, updatedProps).then(result => {
-        milestone = result
-        return getTimelinesByReference('work', workId)
-      }).then(timelines => {
-        return {
-          milestone: _.extend(milestone, {timelineId, milestoneId}),
-          timelines
-        }
-      })
+      payload: updateMilestoneApi(timelineId, milestoneId, milestoneUpdate).then(updatedMilestone => {
+        // reload timeline after updating a milestone,
+        // because backend could make cascading updates to the timeline and other milestones
+        dispatch(loadWorkTimeline(workId))
+
+        return ({ milestone: updatedMilestone })
+      }),
+      meta: {
+        workId,
+        timelineId,
+        milestoneId,
+      }
     })
   }
 }
 
 /**
- * Load milestone
+ * Load milestone for work timeline
  *
- * @param {Number} timelineId   timeline id
- * @param {Number} milestoneId   milestone id
+ * @param {Number} workId      work id
+ * @param {Number} timelineId  timeline id
+ * @param {Number} milestoneId milestone id
  *
  * @return {Function} dispatch function
  */
-export function loadMilestone(timelineId, milestoneId) {
+export function loadWorkMilestone(workId, timelineId, milestoneId) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_WORK_TIMELINE_MILESTONE,
-      payload: getMilestone(timelineId, milestoneId).then(milestone => _.extend(milestone, {timelineId}))
+      payload: getMilestone(timelineId, milestoneId).then(milestone => ({ milestone })),
+      meta: {
+        workId,
+        timelineId,
+        milestoneId,
+      }
     })
   }
 }
 
 /**
- * Delete milestone
+ * Delete milestone for work timeline
  *
  * @param {Number} workId       work id
  * @param {Number} timelineId   timeline id
- * @param {Number} milestoneId   milestone id
+ * @param {Number} milestoneId  milestone id
  *
  * @return {Function} dispatch function
  */
-export function deleteMilestone(workId, timelineId, milestoneId) {
+export function deleteWorkMilestone(workId, timelineId, milestoneId) {
   return (dispatch) => {
     return dispatch({
       type: DELETE_WORK_TIMELINE_MILESTONE,
-      payload: deleteMilestoneApi(timelineId, milestoneId).then(() => getTimelinesByReference('work', workId)).then(timelines => {
-        return {
-          timelines
-        }
-      })
+      payload: deleteMilestoneApi(timelineId, milestoneId).then(() => {
+        // reload timeline after deleting a milestone,
+        // because backend could make cascading updates to the timeline and other milestones
+        dispatch(loadWorkTimeline(workId))
+      }),
+      meta: {
+        workId,
+        timelineId,
+        milestoneId,
+      }
     })
   }
 }

@@ -10,8 +10,8 @@ import EditIcon from  '../../../../assets/icons/icon-edit-black.svg'
 import { convertTimelineMilestonesToMilestoneProgress } from  '../../../../helpers/workstreams'
 import './WorkTimeline.scss'
 
-const WorkTimeline = ({ editMode, timelines, addNewMilestone, editMilestone }) => {
-  const milestones = convertTimelineMilestonesToMilestoneProgress(timelines[0])
+const WorkTimeline = ({ editMode, timelineState: { timeline }, addNewMilestone, editMilestone }) => {
+  const milestones = convertTimelineMilestonesToMilestoneProgress(timeline)
   for(const milestone of milestones) {
     if (milestone.progress === 0) {
       if (milestones.length === 1) {
@@ -30,7 +30,7 @@ const WorkTimeline = ({ editMode, timelines, addNewMilestone, editMilestone }) =
           <button
             styleName="add-timeline"
             className="tc-btn tc-btn-primary tc-btn-sm"
-            onClick={() => { addNewMilestone(timelines[0].id) }}
+            onClick={() => { addNewMilestone(timeline.id) }}
           >Add Timeline Event</button>)}
       </div>
       {milestones.length ? (
@@ -45,7 +45,7 @@ const WorkTimeline = ({ editMode, timelines, addNewMilestone, editMilestone }) =
                 'bar-segment-end': index === (milestones.length - 1),
                 'current-milestone': milestone.isCurrentMilestone,
               })}
-              onClick={() => { editMilestone(timelines[0].id, milestone.id) }}
+              onClick={() => { editMilestone(timeline.id, milestone.id) }}
             >
               <span
                 styleName={cn('bar-title', {
@@ -98,16 +98,18 @@ WorkTimeline.defaultProps = {
 
 WorkTimeline.propTypes = {
   editMode: PT.bool.isRequired,
-  timelines: PT.arrayOf(PT.shape({
-    id: PT.number.isRequired,
-    startDate: PT.string,
-    milestones: PT.arrayOf(PT.shape({
+  timelineState: PT.shape({
+    timeline: PT.shape({
       id: PT.number.isRequired,
       startDate: PT.string,
-      endDate: PT.string,
-      name: PT.string.isRequired,
-    })),
-  })).isRequired,
+      milestones: PT.arrayOf(PT.shape({
+        id: PT.number.isRequired,
+        startDate: PT.string,
+        endDate: PT.string,
+        name: PT.string.isRequired,
+      })),
+    }).isRequired,
+  }).isRequired,
   addNewMilestone: PT.func,
   editMilestone: PT.func,
 }
