@@ -2,6 +2,9 @@ import {
   LOAD_WORK_INFO_PENDING,
   LOAD_WORK_INFO_SUCCESS,
   LOAD_WORK_INFO_FAILURE,
+  LOAD_WORK_ITEM_PENDING,
+  LOAD_WORK_ITEM_SUCCESS,
+  LOAD_WORK_ITEM_FAILURE,
   UPDATE_WORK_INFO_PENDING,
   UPDATE_WORK_INFO_SUCCESS,
   UPDATE_WORK_INFO_FAILURE,
@@ -11,6 +14,18 @@ import {
   NEW_WORK_INFO_PENDING,
   NEW_WORK_INFO_SUCCESS,
   NEW_WORK_INFO_FAILURE,
+  NEW_WORK_ITEM_PENDING,
+  NEW_WORK_ITEM_SUCCESS,
+  NEW_WORK_ITEM_FAILURE,
+  DELETE_WORK_ITEM_PENDING,
+  DELETE_WORK_ITEM_SUCCESS,
+  DELETE_WORK_ITEM_FAILURE,
+  DELETE_WORK_ITEM_START_SUCCESS,
+  LOAD_CHALLENGES_PENDING,
+  LOAD_CHALLENGES_SUCCESS,
+  LOAD_CHALLENGES_FAILURE,
+  LOAD_CHALLENGES_START_SUCCESS,
+  LOAD_CHALLENGES_WORK_ITEM_SUCCESS,
   CLEAR_LOADED_PROJECT,
   GET_PROJECTS_SUCCESS,
 } from '../../config/constants'
@@ -19,11 +34,19 @@ import {parseErrorObj} from '../../helpers/workstreams'
 
 const initialState = {
   isLoading: false,
+  isLoadingChallenge: false,
+  isLoadingWorkItem: false,
+  isCreatingWorkItem: false,
+  errorWorkItem: false,
   isUpdating: false,
   isDeleting: false,
   isCreating: false,
   error: false,
-  work: null,
+  work: {}, // work are pushed directly into it hence need to declare first
+  challenges: [], // challenge list are pushed directly into it hence need to declare first
+  challengeMetadata: {},  // challenge metadata are pushed directly into it hence need to declare first
+  workitems: null,
+  workItemsIsDeleting: {}
 }
 
 export const works = function (state=initialState, action) {
@@ -38,12 +61,30 @@ export const works = function (state=initialState, action) {
     return Object.assign({}, state, {
       isLoading: false,
       error: false,
-      work: action.payload
+      work: action.payload,
+      workitems: null,
+      workItemsIsDeleting: {}
     })
   case LOAD_WORK_INFO_FAILURE:
     return Object.assign({}, state, {
       isLoading: false,
       error: parseErrorObj(action)
+    })
+  case LOAD_WORK_ITEM_PENDING:
+    return Object.assign({}, state, {
+      isLoadingWorkItem: true,
+      errorWorkItem: false
+    })
+  case LOAD_WORK_ITEM_SUCCESS:
+    return Object.assign({}, state, {
+      isLoadingWorkItem: false,
+      errorWorkItem: false,
+      workitems: action.payload,
+    })
+  case LOAD_WORK_ITEM_FAILURE:
+    return Object.assign({}, state, {
+      isLoadingWorkItem: false,
+      errorWorkItem: parseErrorObj(action)
     })
   case UPDATE_WORK_INFO_PENDING:
     return Object.assign({}, state, {
@@ -93,6 +134,97 @@ export const works = function (state=initialState, action) {
       isCreating: false,
       error: parseErrorObj(action)
     })
+  case LOAD_CHALLENGES_PENDING:
+    return Object.assign({}, state, {
+      isLoadingChallenge: true,
+      error: false
+    })
+  case LOAD_CHALLENGES_SUCCESS: {
+    const { challenges } = state
+    return Object.assign({}, state, {
+      isLoadingChallenge: false,
+      error: false,
+      challenges: challenges.concat(action.payload.challenges),
+      challengeMetadata: action.payload.metadata,
+    })
+  }
+  case LOAD_CHALLENGES_FAILURE:
+    return Object.assign({}, state, {
+      isLoadingChallenge: false,
+      error: parseErrorObj(action)
+    })
+  case LOAD_CHALLENGES_START_SUCCESS:
+    return Object.assign({}, state, {
+      isLoadingChallenge: true,
+      challenges: []
+    })
+  case NEW_WORK_ITEM_PENDING:
+    return Object.assign({}, state, {
+      isCreatingWorkItem: true,
+      errorWorkItem: false
+    })
+  case NEW_WORK_ITEM_SUCCESS: {
+    const { workitems } = state
+    const newWorkitems = action.payload
+    return Object.assign({}, state, {
+      isCreatingWorkItem: false,
+      errorWorkItem: false,
+      workitems: workitems ? workitems.concat(newWorkitems) : newWorkitems,
+    })
+  }
+  case NEW_WORK_ITEM_FAILURE:
+    return Object.assign({}, state, {
+      isCreatingWorkItem: false,
+      errorWorkItem: parseErrorObj(action)
+    })
+  case LOAD_CHALLENGES_WORK_ITEM_SUCCESS: {
+    const { workitems } = state
+    const challenges = action.payload.challenges
+    for(const workitem of workitems) {
+      const challengeId = _.get(workitem, 'details.challengeId', 0)
+      workitem.challenge = _.find(challenges, { id: challengeId })
+    }
+    return Object.assign({}, state, {
+      workitems: _.cloneDeep(workitems)
+    })
+  }
+  case DELETE_WORK_ITEM_PENDING:
+    return Object.assign({}, state, {
+      errorWorkItem: false
+    })
+  case DELETE_WORK_ITEM_SUCCESS: {
+    const { workitems, workItemsIsDeleting } = state
+    const workItemIndex = _.findIndex(workitems, workitem => (workitem.id === action.payload))
+    if (workItemIndex >= 0) {
+      _.remove(workitems, {
+        id: action.payload
+      })
+    }
+    workItemsIsDeleting[action.payload] = false
+    return Object.assign({}, state, {
+      errorWorkItem: false,
+      workitems,
+      workItemsIsDeleting
+    })
+  }
+  case DELETE_WORK_ITEM_START_SUCCESS: {
+    const { workItemsIsDeleting } = state
+    workItemsIsDeleting[action.payload] = true
+    return Object.assign({}, state, {
+      workItemsIsDeleting
+    })
+  }
+  case DELETE_WORK_ITEM_FAILURE: {
+    const { workItemsIsDeleting } = state
+    const workitemId = _.get(action, 'payload.workitemId', -1)
+    if (workItemsIsDeleting[workitemId]) {
+      delete workItemsIsDeleting[workitemId]
+    }
+    return Object.assign({}, state, {
+      errorWorkItem: parseErrorObj(action),
+      workItemsIsDeleting
+    })
+  }
 
   // when we clear the project we have to put dashboard state to the initial state
   // because the code relies on the initial state

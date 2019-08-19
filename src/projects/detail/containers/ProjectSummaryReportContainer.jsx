@@ -15,18 +15,20 @@ import Sticky from '../../../components/Sticky'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import PERMISSIONS from '../../../config/permissions'
 import { checkPermission } from '../../../helpers/permissions'
-import { loadProjectSummary } from '../../actions/projectSummary'
+import { loadProjectSummary } from '../../actions/projectReports'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectSummaryReport from '../components/ProjectSummaryReport'
 
 const EnhancedProjectSummaryReport = spinnerWhileLoading(props => {
-  return props.project && !props.projectSummary.isLoading && props.projectSummary.projectId === props.project.id
+  return props.project && !props.isLoading && props.reportsProjectId === props.project.id
 })(ProjectSummaryReport)
 
 class ProjectSummaryReportContainer extends React.Component {
 
   componentWillUpdate(nextProps) {
-    if(nextProps.project && nextProps.projectSummary.projectId !== nextProps.project.id) {
+    const nextReportProjectId = _.get(nextProps, 'projectReports.projectId')
+    const nextProjectId = _.get(nextProps, 'project.id')
+    if(nextProps.project && nextReportProjectId !== nextProjectId) {
       nextProps.loadProjectSummary(nextProps.project.id)
     }
   }
@@ -36,7 +38,7 @@ class ProjectSummaryReportContainer extends React.Component {
       project,
       estimationQuestion,
       projectTemplate,
-      projectSummary,
+      projectReports,
       isSuperUser,
       isManageUser,
       currentMemberRole,
@@ -47,9 +49,11 @@ class ProjectSummaryReportContainer extends React.Component {
       phasesTopics,
       isProcessing,
       location,
+      reportsProjectId,
     } = this.props
 
     const template = _.get(projectTemplate, 'scope')
+    const projectSummary = _.get(projectReports, 'projectSummary')
 
     const leftArea = (
       <ProjectInfoContainer
@@ -84,6 +88,8 @@ class ProjectSummaryReportContainer extends React.Component {
         <TwoColsLayout.Content>
           <EnhancedProjectSummaryReport
             projectSummary={projectSummary}
+            isLoading={isProcessing}
+            reportsProjectId={reportsProjectId}
             project={project}
             template={template}
             estimationQuestion={estimationQuestion}
@@ -102,12 +108,13 @@ ProjectSummaryReportContainer.propTypes = {
   isManageUser: PT.bool.isRequired,
   project: PT.object.isRequired,
   estimationQuestion: PT.object.isRequired,
-  projectSummary: PT.object.isRequired,
+  projectReports: PT.object.isRequired,
   phases: PT.array.isRequired,
   productsTimelines: PT.object.isRequired,
+  reportsProjectId: PT.number.isRequired,
 }
 
-const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates, projectSummary }) => {
+const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates, projectReports }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -117,10 +124,11 @@ const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates,
   return {
     phases: projectState.phases,
     feeds: allFeed,
-    isFeedsLoading: projectTopics.isLoading,
     phasesTopics,
     projectTemplates: templates.projectTemplates,
-    projectSummary,
+    projectReports,
+    isProcessing: projectReports.isLoading,
+    reportsProjectId: projectReports.projectId,
   }
 }
 

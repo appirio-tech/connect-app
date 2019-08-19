@@ -35,6 +35,7 @@ import WorkViewContainer from './WorkViewContainer'
 import WorkNewContainer from './WorkNewContainer'
 import WorkTimelineNewMilestoneContainer from './WorkTimelineNewMilestoneContainer'
 import WorkTimelineEditMilestoneContainer from './WorkTimelineEditMilestoneContainer'
+import AddWorkItemContrainer from './AddWorkItemContrainer'
 import DesignWorksContainer from './DesignWorksContainer'
 import Sticky from '../../../components/Sticky'
 import TwoColsLayout from '../../../components/TwoColsLayout'
@@ -83,6 +84,7 @@ class DashboardContainer extends React.Component {
         timelineId: -1,
         milestoneId: -1,
       },
+      showAddChallengeTask: false,
       showDesignWorks: {
         timelineId: -1,
         milestoneId: -1,
@@ -115,6 +117,7 @@ class DashboardContainer extends React.Component {
       project,
       match: { params }
     } = this.props
+
     const isWorkstreams = _.get(project, 'details.settings.workstreams', false)
     if (isWorkstreams) {
       const {
@@ -153,14 +156,31 @@ class DashboardContainer extends React.Component {
         )
       }
       if (params.workId) {
+        const {
+          work,
+        } = this.props
+        const { showAddChallengeTask } = this.state
+        if (showAddChallengeTask) {
+          return (
+            <AddWorkItemContrainer
+              workId={parseInt(params.workId, 10)}
+              onBack={() => this.setState({ showAddChallengeTask: false })}
+              onClose={() => {
+                work.selectedNav = 0
+                this.setState({ showAddChallengeTask: false })
+              }}
+            />
+          )
+        }
+
         return (
           <WorkViewContainer
             {...this.props}
+            showAddChallengeTask={() => { this.setState({ showAddChallengeTask: true }) }}
             addNewMilestone={(timelineId) => this.setState({ showAddMilestoneForTimeline: timelineId }) }
             editMilestone={(timelineId, milestoneId) => this.setState({ showEditMilestoneForTimeline: {timelineId, milestoneId} }) }
             inputDesignWorks={(timelineId, milestoneId) => this.setState({ showDesignWorks: {timelineId, milestoneId} }) }
-          />
-        )
+          />)
       }
 
       if (showAddWorkForWorkstream >= 0) {
@@ -213,7 +233,8 @@ class DashboardContainer extends React.Component {
       showAddWorkForWorkstream,
       showAddMilestoneForTimeline,
       showEditMilestoneForTimeline,
-      showDesignWorks
+      showAddChallengeTask,
+      showDesignWorks,
     } = this.state
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
 
@@ -225,7 +246,8 @@ class DashboardContainer extends React.Component {
     }
 
     // system notifications
-    const notReadNotifications = filterReadNotifications(notifications)
+    const preRenderedNotifications = preRenderNotifications(notifications)
+    const notReadNotifications = filterReadNotifications(preRenderedNotifications)
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
     const sortedUnreadProjectUpdates = _.orderBy(unreadProjectUpdate, ['date'], ['desc'])
     // if this is true, we will hide other component like estimate section
@@ -291,7 +313,7 @@ class DashboardContainer extends React.Component {
             />
           }
           {/* <button type="button" onClick={this.toggleDrawer}>Toggle drawer</button> */}
-          {!!estimationQuestion && !onlyShowMainContent &&
+          {!!estimationQuestion && !onlyShowMainContent && !params.workId && (showAddWorkForWorkstream < 0) && !showAddChallengeTask &&
             <ProjectEstimation
               onClick={this.toggleDrawer}
               question={estimationQuestion}
@@ -329,7 +351,7 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics, projectPlan, workstreams, works, workTimelines }) => {
+const mapStateToProps = ({ notifications, projectState, projectTopics, templates, topics, projectPlan, workstreams, works, workTimelines }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -337,7 +359,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
   }
 
   return {
-    notifications: preRenderNotifications(notifications.notifications),
+    notifications: notifications.notifications,
     productTemplates: templates.productTemplates,
     projectTemplates: templates.projectTemplates,
     productCategories: templates.productCategories,
@@ -354,7 +376,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     isDeletingWorkInfo: works.isDeleting,
     isRequestWorkError: !!works.error,
     phasesStates: projectState.phasesStates,
-    phasesTopics,
+    phasesTopics: topics,
     workstreams: workstreams.workstreams,
     workstreamsError: workstreams.error,
     work: works.work,

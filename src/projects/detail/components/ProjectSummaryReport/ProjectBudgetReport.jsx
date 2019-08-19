@@ -17,6 +17,7 @@ const ProjectBudgetReport = ({ budget }) => {
             Expected delivery on-target
           </div>
         </div>
+        { work !== null && work !== undefined &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="work circle"/>
@@ -26,6 +27,8 @@ const ProjectBudgetReport = ({ budget }) => {
             WORK
           </div>
         </div>
+        }
+        { fees !== null && fees !== undefined &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="fees circle"/>
@@ -34,6 +37,8 @@ const ProjectBudgetReport = ({ budget }) => {
             FEES
           </div>
         </div>
+        }
+        { revenue !== null && revenue !== undefined &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="revenue circle"/>
@@ -42,6 +47,8 @@ const ProjectBudgetReport = ({ budget }) => {
             REVENUE
           </div>
         </div>
+        }
+        { remaining !== null && remaining !== undefined &&
         <div styleName="budget-part">
           <div styleName="money">
             <div styleName="remaining circle"/>
@@ -50,6 +57,7 @@ const ProjectBudgetReport = ({ budget }) => {
             REMAINING
           </div>
         </div>
+        }
       </div>
       <div styleName="budget-distribution">
         <div styleName="work budget-distribution-part" style={{ width:  `${(work / total) * 100}%`}} />

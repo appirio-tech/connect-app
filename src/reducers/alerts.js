@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import Alert from 'react-s-alert'
 import { isJson } from '../helpers/workstreams'
+
 /* eslint-disable no-unused-vars */
 import {
   // Project
@@ -38,9 +39,9 @@ import {
   // Project status
   PROJECT_STATUS_IN_REVIEW,
   // phase comments
-  CREATE_PHASE_FEED_COMMENT_FAILURE,
-  SAVE_PHASE_FEED_COMMENT_FAILURE,
-  DELETE_PHASE_FEED_COMMENT_FAILURE,
+  CREATE_TOPIC_POST_FAILURE,
+  UPDATE_TOPIC_POST_FAILURE,
+  DELETE_TOPIC_POST_FAILURE,
   // products
   UPDATE_PRODUCT_SUCCESS,
   UPDATE_PHASE_FAILURE,
@@ -70,6 +71,11 @@ import {
   UPDATE_WORK_TIMELINE_MILESTONE_FAILURE,
   DELETE_WORK_TIMELINE_MILESTONE_SUCCESS,
   DELETE_WORK_TIMELINE_MILESTONE_FAILURE,
+  // work item
+  NEW_WORK_ITEM_SUCCESS,
+  NEW_WORK_ITEM_FAILURE,
+  DELETE_WORK_ITEM_SUCCESS,
+  DELETE_WORK_ITEM_FAILURE,
   // Scope changes
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS,
   CREATE_SCOPE_CHANGE_REQUEST_FAILURE,
@@ -102,15 +108,22 @@ function getErrorMessage(action, returnFullStringIfNoMessageFound = false) {
     }
   }
 
-  if (returnFullStringIfNoMessageFound && action) {
-    const errorObject = (action.payload && action.payload.response) ? action.payload.response : action.payload
+  if (returnFullStringIfNoMessageFound && action.payload) {
+    let errorObject = (action.payload && action.payload.response) ? action.payload.response : action.payload
+    if (action.payload && action.payload.response) {
+      errorObject = action.payload.response
+    } else if (action.payload && action.payload.message) {
+      errorObject = action.payload.message
+    } else {
+      errorObject = action.payload
+    }
     if (isJson(errorObject)) {
       JSON.parse(errorObject)
     } else if (errorObject) {
       return errorObject
     }
-
   }
+
   return null
 }
 
@@ -338,6 +351,25 @@ export default function(state = {}, action) {
     return state
   }
 
+  // new work item
+  case NEW_WORK_ITEM_SUCCESS:
+    Alert.success('Work item is created')
+    return state
+  case NEW_WORK_ITEM_FAILURE: {
+    const errorMessage = getErrorMessage(action, true)
+    Alert.error(`Work item creating failed: ${errorMessage}`)
+    return state
+  }
+  // delete work item
+  case DELETE_WORK_ITEM_SUCCESS:
+    Alert.success('Work item is deleted')
+    return state
+  case DELETE_WORK_ITEM_FAILURE: {
+    const errorMessage = getErrorMessage(action, true)
+    Alert.error(`Work item deleting failed: ${errorMessage}`)
+    return state
+  }
+
   case UPDATE_PROJECT_FAILURE:
     Alert.error('Please add a name for your project and then try saving again.')
     return state
@@ -357,9 +389,9 @@ export default function(state = {}, action) {
   case CREATE_PROJECT_FEED_FAILURE:
   case SAVE_PROJECT_FEED_FAILURE:
   case DELETE_PROJECT_FEED_FAILURE:
-  case CREATE_PHASE_FEED_COMMENT_FAILURE:
-  case SAVE_PHASE_FEED_COMMENT_FAILURE:
-  case DELETE_PHASE_FEED_COMMENT_FAILURE:
+  case CREATE_TOPIC_POST_FAILURE:
+  case UPDATE_TOPIC_POST_FAILURE:
+  case DELETE_TOPIC_POST_FAILURE:
   case UPDATE_PHASE_FAILURE:
   case LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE:
   case UPDATE_PRODUCT_TIMELINE_FAILURE:
