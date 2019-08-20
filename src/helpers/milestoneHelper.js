@@ -42,3 +42,21 @@ export const getProgressPercent = (totalDays, daysLeft) => {
 
   return progressPercent
 }
+
+/**
+* Get the next milestone in the list, which is not hidden
+*
+* @param {Array}  milestones            list of milestones
+* @param {Number} currentMilestoneIndex index of the current milestone
+*
+* @returns {Object} milestone
+*/
+export function getNextNotHiddenMilestone(milestones, currentMilestoneIndex) {
+  let index = currentMilestoneIndex + 1
+
+  while (milestones[index] && milestones[index].hidden) {
+    index++
+  }
+
+  return milestones[index]
+}

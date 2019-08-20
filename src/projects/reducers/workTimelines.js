@@ -14,6 +14,9 @@ import {
   DELETE_WORK_TIMELINE_MILESTONE_PENDING,
   DELETE_WORK_TIMELINE_MILESTONE_SUCCESS,
   DELETE_WORK_TIMELINE_MILESTONE_FAILURE,
+  COMPLETE_WORK_TIMELINE_MILESTONE_PENDING,
+  COMPLETE_WORK_TIMELINE_MILESTONE_SUCCESS,
+  COMPLETE_WORK_TIMELINE_MILESTONE_FAILURE,
   CLEAR_LOADED_PROJECT,
   GET_PROJECTS_SUCCESS,
 } from '../../config/constants'
@@ -110,12 +113,14 @@ export const workTimelines = function (state=initialState, action) {
     })
 
   case UPDATE_WORK_TIMELINE_MILESTONE_PENDING:
+  case COMPLETE_WORK_TIMELINE_MILESTONE_PENDING:
     return Object.assign({}, state, {
       isUpdatingMilestoneInfo: true,
       error: false
     })
 
-  case UPDATE_WORK_TIMELINE_MILESTONE_SUCCESS: {
+  case UPDATE_WORK_TIMELINE_MILESTONE_SUCCESS:
+  case COMPLETE_WORK_TIMELINE_MILESTONE_SUCCESS: {
     const timelineStateToUpdate = state.timelines[action.meta.workId]
     const milestoneIndexToUpdate = _.findIndex(timelineStateToUpdate.timeline.milestones, { id: action.meta.milestoneId })
     const stateWithUpdatedTimeline = updateTimelineByWorkId(state, action.meta.workId, {
@@ -132,6 +137,7 @@ export const workTimelines = function (state=initialState, action) {
   }
 
   case UPDATE_WORK_TIMELINE_MILESTONE_FAILURE:
+  case COMPLETE_WORK_TIMELINE_MILESTONE_FAILURE:
     return Object.assign({}, state, {
       isUpdatingMilestoneInfo: false,
       error: parseErrorObj(action)

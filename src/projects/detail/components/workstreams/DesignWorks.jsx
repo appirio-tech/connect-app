@@ -5,9 +5,10 @@ import React from 'react'
 import PT from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import DesignOption from './DesignOption'
+import CompleteMilestoneButtonContainer from '../work-timeline/CompleteMilestoneButtonContainer'
 import BackIcon from '../../../../assets/icons/arrows-16px-1_tail-left.svg'
 import CloseIcon from '../../../../assets/icons/x-mark-black.svg'
-import './DesignWork.scss'
+import './DesignWorks.scss'
 
 class DesignWorks extends React.Component {
   constructor(props) {
@@ -72,7 +73,7 @@ class DesignWorks extends React.Component {
   }
 
   submitForm(data) {
-    const { milestone, updateWorkMilestone, work, timelineId, milestoneId } = this.props
+    const { milestone, updateWorkMilestone, workId, timelineId, milestoneId } = this.props
     const { details } = milestone || {}
     const { content } = details || {}
     const { designs = [] } = content || {}
@@ -98,52 +99,66 @@ class DesignWorks extends React.Component {
     }
 
     newMilestone = _.omit(newMilestone, ['startDate', 'endDate', 'timelineId', 'statusHistory'])
-    updateWorkMilestone(work.id, timelineId, milestoneId, newMilestone)
+    updateWorkMilestone(workId, timelineId, milestoneId, newMilestone)
   }
 
   render() {
-    const { onBack } = this.props
+    const {
+      onBack,
+      workId,
+      timelineId,
+      milestoneId,
+    } = this.props
     const { designOptions } = this.state
 
     return (
-      <div styleName="container">
-        <div styleName="header">
-          <div onClick={onBack} styleName="left-control">
-            <i styleName="icon" title="back"><BackIcon /></i>
-            <span styleName="back-icon-text">Back</span>
+      <div styleName="wrapper">
+        <div styleName="container">
+          <div styleName="header">
+            <div onClick={onBack} styleName="left-control">
+              <i styleName="icon" title="back"><BackIcon /></i>
+              <span styleName="back-icon-text">Back</span>
+            </div>
+            <div styleName="title">ADD DESIGN LINKS</div>
+            <div styleName="right-control">
+              <i onClick={() => {
+                this.props.history.push(this.getDashboardUrl())
+                onBack()
+              }} styleName="icon-close"
+              >
+                <CloseIcon />
+              </i>
+            </div>
           </div>
-          <div styleName="title">ADD DESIGN LINKS</div>
-          <div styleName="right-control">
-            <i onClick={() => {
-              this.props.history.push(this.getDashboardUrl())
-              onBack()
-            }} styleName="icon-close"
-            >
-              <CloseIcon />
-            </i>
-          </div>
-        </div>
-        <div styleName="complete-wrapper">
-          <div styleName="complete-message">Add all the designs for the review. After all the designs are added, click the "Complete" button, so customer may start reviewing them.</div>
-          <button styleName="complete-btn" className="tc-btn tc-btn-warning tc-btn-sm action-btn " onClick={() => {}}>Complete</button>
-        </div>
-        {
-          !_.isEmpty(designOptions) &&
-          designOptions.map((design, index) => {
-            return (
-              <DesignOption
-                key={index}
-                index={index}
-                content={design}
-                onDeleteOption={this.deleteDesignOption}
-                onUpdateField={this.updateField}
-                onSubmitForm={this.submitForm}
+          <div styleName="complete-wrapper">
+            <div styleName="complete-message">Add all the designs for the review. After all the designs are added, click the "Complete" button, so customer may start reviewing them.</div>
+            <div styleName="complete-btn">
+              <CompleteMilestoneButtonContainer
+                workId={workId}
+                timelineId={timelineId}
+                milestoneId={milestoneId}
+                onComplete={onBack}
               />
-            )
-          })
-        }
-        <div styleName="add-design-option-wrapper">
-          <button styleName="add-design-option-btn" className="tc-btn tc-btn-primary tc-btn-sm action-btn " onClick={this.addDesignOption}>Add design option</button>
+            </div>
+          </div>
+          {
+            !_.isEmpty(designOptions) &&
+            designOptions.map((design, index) => {
+              return (
+                <DesignOption
+                  key={index}
+                  index={index}
+                  content={design}
+                  onDeleteOption={this.deleteDesignOption}
+                  onUpdateField={this.updateField}
+                  onSubmitForm={this.submitForm}
+                />
+              )
+            })
+          }
+          <div styleName="add-design-option-wrapper">
+            <button styleName="add-design-option-btn" className="tc-btn tc-btn-primary tc-btn-sm action-btn " onClick={this.addDesignOption}>Add design option</button>
+          </div>
         </div>
       </div>
     )
@@ -153,6 +168,7 @@ class DesignWorks extends React.Component {
 DesignWorks.propTypes = {
   onBack: PT.func,
   milestone: PT.object,
+  work: PT.object,
   updateWorkMilestone: PT.func
 }
 

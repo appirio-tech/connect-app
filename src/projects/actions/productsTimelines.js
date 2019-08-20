@@ -19,25 +19,7 @@ import {
   UPDATE_PRODUCT_TIMELINE,
   PHASE_STATUS_COMPLETED
 } from '../../config/constants'
-
-/**
- * Get the next milestone in the list, which is not hidden
- *
- * @param {Array}  milestones            list of milestones
- * @param {Number} currentMilestoneIndex index of the current milestone
- *
- * @returns {Object} milestone
- */
-function getNextNotHiddenMilestone(milestones, currentMilestoneIndex) {
-  let index = currentMilestoneIndex + 1
-
-  while (milestones[index] && milestones[index].hidden) {
-    index++
-  }
-
-  return milestones[index]
-}
-
+import { getNextNotHiddenMilestone } from '../../helpers/milestoneHelper'
 
 /**
  * Check if the milestone is last non-hidden milestone in the timeline or no

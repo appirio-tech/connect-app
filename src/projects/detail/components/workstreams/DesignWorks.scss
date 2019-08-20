@@ -1,6 +1,28 @@
 @import '../../../../styles/includes';
 @import '~tc-ui/src/styles/tc-includes';
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  background: $tc-white;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 7px 20px 0 rgba(42, 42, 42, 0.1);
+  padding: 30px 40px;
+  align-items: flex-start;
+  position: relative;
+  min-height: 461px;
+  justify-content: center;
+  align-items: center;
+
+  :global {
+    .SelectDropdown {
+      margin: 0;
+      margin-bottom: 8px;
+    }
+  }
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -71,7 +93,6 @@
   display: flex;
   align-content: center;
   justify-content: center;
-  width: 100px;
   margin: 20px 10px 0;
 }
 

@@ -8,16 +8,17 @@
 import React from 'react'
 import PT from 'prop-types'
 
+import CompleteMilestoneButtonContainer from '../work-timeline/CompleteMilestoneButtonContainer'
 import { MILESTONE_TYPE } from '../../../../config/constants'
 
 import './ActiveMilestoneSummary.scss'
 
 const ActiveMilestoneSummary = ({
+  work,
   timeline,
   milestone,
   inputDesignWorks,
   startDesignReview,
-  markMilestoneAsCompleted,
 }) => {
   const renderActionButton = () => {
     switch (milestone.type) {
@@ -42,12 +43,11 @@ const ActiveMilestoneSummary = ({
       )
     default:
       return (
-        <button
-          className="tc-btn tc-btn-warning tc-btn-sm"
-          onClick={() => markMilestoneAsCompleted(timeline.id, milestone.id)}
-        >
-            Mark as Completed
-        </button>
+        <CompleteMilestoneButtonContainer
+          workId={work.id}
+          timelineId={timeline.id}
+          milestoneId={milestone.id}
+        />
       )
     }
   }
@@ -65,6 +65,9 @@ const ActiveMilestoneSummary = ({
 }
 
 ActiveMilestoneSummary.propTypes = {
+  work: PT.shape({
+    id: PT.number,
+  }),
   timeline: PT.shape({
     id: PT.number,
   }),

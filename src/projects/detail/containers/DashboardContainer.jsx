@@ -36,7 +36,7 @@ import WorkNewContainer from './WorkNewContainer'
 import WorkTimelineNewMilestoneContainer from './WorkTimelineNewMilestoneContainer'
 import WorkTimelineEditMilestoneContainer from './WorkTimelineEditMilestoneContainer'
 import AddWorkItemContrainer from './AddWorkItemContrainer'
-import DesignWorksContainer from './DesignWorksContainer'
+import DesignWorks from '../components/workstreams/DesignWorks'
 import Sticky from '../../../components/Sticky'
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
@@ -129,8 +129,9 @@ class DashboardContainer extends React.Component {
       if (showDesignWorks.milestoneId >= 0) {
         // show input design work page
         return (
-          <DesignWorksContainer
+          <DesignWorks
             onBack={() => this.setState({ showDesignWorks : {timelineId: -1, milestoneId: -1} })}
+            workId={parseInt(params.workId, 10)}
             timelineId={showDesignWorks.timelineId}
             milestoneId={showDesignWorks.milestoneId}
           />

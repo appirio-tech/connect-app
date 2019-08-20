@@ -108,6 +108,7 @@ class WorkView extends React.Component {
           <WorkTimelineContainer workId={work.id} editMode={false}/>
           {!!activeMilestone && (
             <ActiveMilestoneSummary
+              work={work}
               timeline={timeline}
               milestone={activeMilestone}
               inputDesignWorks={inputDesignWorks}

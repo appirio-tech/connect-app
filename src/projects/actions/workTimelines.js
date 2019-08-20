@@ -1,4 +1,4 @@
-
+import _ from 'lodash'
 import {
   getTimelinesByReference,
   createMilestone as createMilestoneApi,
@@ -11,9 +11,12 @@ import {
   NEW_WORK_TIMELINE_MILESTONE,
   UPDATE_WORK_TIMELINE_MILESTONE,
   DELETE_WORK_TIMELINE_MILESTONE,
-  LOAD_WORK_TIMELINE_MILESTONE
+  LOAD_WORK_TIMELINE_MILESTONE,
+  COMPLETE_WORK_TIMELINE_MILESTONE,
+  MILESTONE_STATUS,
 } from '../../config/constants'
-import _ from 'lodash'
+import { getNextNotHiddenMilestone } from '../../helpers/milestoneHelper'
+
 
 /**
  * Load work timeline
@@ -207,6 +210,74 @@ export function deleteWorkMilestone(workId, timelineId, milestoneId) {
       }
     }).then(() => {
       // reload timeline after creating a milestone,
+      // because backend could make cascading updates to the timeline and other milestones
+      dispatch(loadWorkTimeline(workId))
+    })
+  }
+}
+
+/**
+ * Mark work milestone as completed
+ *
+ * @param {Number} workId         work id
+ * @param {Number} timelineId     timeline id
+ * @param {Number} milestoneId    milestone id
+ * @param {Object} [updatedProps] milestone properties to update
+ *
+ * @return {Function} dispatch function
+ */
+export function completeWorkMilestone(workId, timelineId, milestoneId, updatedProps) {
+  console.warn('completeWorkMilestone', {workId, timelineId, milestoneId, updatedProps})
+  return (dispatch, getState) => {
+    const state = getState()
+    const timeline = _.get(state.workTimelines.timelines[workId], 'timeline')
+    const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
+    const nextMilestone = getNextNotHiddenMilestone(timeline.milestones, milestoneIdx)
+
+    return dispatch({
+      type: COMPLETE_WORK_TIMELINE_MILESTONE,
+      payload: updateMilestoneApi(timelineId, milestoneId, {
+        ...updatedProps,
+        status: MILESTONE_STATUS.COMPLETED,
+      }).then((completedMilestone) => {
+        // When we complete milestone we should copy content of the completed milestone to the next milestone
+        // so the next milestone could use it for its own needs
+        // TODO $TIMELINE_MILESTONE$ updating of the next milestone could be done in parallel
+        // but due to the backend issue https://github.com/topcoder-platform/tc-project-service/issues/162
+        // we do in sequentially for now
+        if (nextMilestone) {
+          // NOTE we wait until the next milestone is also updated before fire COMPLETE_WORK_TIMELINE_MILESTONE_SUCCESS
+          const details = {
+            ...nextMilestone.details,
+            prevMilestoneContent: completedMilestone.details.content,
+            prevMilestoneType: completedMilestone.type,
+          }
+          const isFinishedEnteringDesignForReview = (
+            (nextMilestone.type === 'checkpoint-review' || nextMilestone.type === 'final-designs') &&
+            completedMilestone.type === 'design-works'
+          )
+          if (isFinishedEnteringDesignForReview) {
+            details.metadata = {
+              ..._.get(nextMilestone.details, 'metadata', {}),
+              waitingForCustomer: true
+            }
+          }
+          return updateMilestoneApi(timelineId, nextMilestone.id, {
+            details
+          // always return completedMilestone for COMPLETE_WORK_TIMELINE_MILESTONE
+          }).then(() => ({ milestone: completedMilestone }))
+        } else {
+          // always return completedMilestone for COMPLETE_WORK_TIMELINE_MILESTONE
+          return ({ milestone: completedMilestone })
+        }
+      }),
+      meta: {
+        workId,
+        timelineId,
+        milestoneId,
+      }
+    }).then(() => {
+      // reload timeline after completing a milestone,
       // because backend could make cascading updates to the timeline and other milestones
       dispatch(loadWorkTimeline(workId))
     })
