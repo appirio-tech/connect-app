@@ -28,6 +28,11 @@ const initialState = {
   isUpdatingMilestoneInfo: false,
   isCreatingMilestoneInfo: false,
   isDeletingMilestoneInfo: false,
+  /**
+   * indicates that milestone is currently in the processes ofr being marked as `completed`
+   * this flag is always used together with `isLoadingMilestoneInfo`
+   */
+  isCompletingMilestone: false,
   timelines: {},
   milestone: null,
 }
@@ -132,7 +137,7 @@ export const workTimelines = function (state=initialState, action) {
 
     return Object.assign({}, stateWithUpdatedTimeline, {
       isUpdatingMilestoneInfo: false,
-      isCompletingMilestone: action.type === COMPLETE_WORK_TIMELINE_MILESTONE_PENDING ? false : state.isCompletingMilestone,
+      isCompletingMilestone: action.type === COMPLETE_WORK_TIMELINE_MILESTONE_SUCCESS ? false : state.isCompletingMilestone,
       error: false,
       milestone: action.payload.milestone,
     })
@@ -142,7 +147,7 @@ export const workTimelines = function (state=initialState, action) {
   case COMPLETE_WORK_TIMELINE_MILESTONE_FAILURE:
     return Object.assign({}, state, {
       isUpdatingMilestoneInfo: false,
-      isCompletingMilestone: action.type === COMPLETE_WORK_TIMELINE_MILESTONE_PENDING ? false : state.isCompletingMilestone,
+      isCompletingMilestone: action.type === COMPLETE_WORK_TIMELINE_MILESTONE_FAILURE ? false : state.isCompletingMilestone,
       error: parseErrorObj(action)
     })
 

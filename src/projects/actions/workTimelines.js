@@ -227,7 +227,6 @@ export function deleteWorkMilestone(workId, timelineId, milestoneId) {
  * @return {Function} dispatch function
  */
 export function completeWorkMilestone(workId, timelineId, milestoneId, updatedProps) {
-  console.warn('completeWorkMilestone', {workId, timelineId, milestoneId, updatedProps})
   return (dispatch, getState) => {
     const state = getState()
     const timeline = _.get(state.workTimelines.timelines[workId], 'timeline')
