@@ -81,7 +81,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20px 0 50px;
+  margin: 20px 0 30px;
 }
 
 .complete-message {
@@ -108,5 +108,9 @@
   justify-content: center;
   margin: 30px 10px 0;
   width: 150px;
-
 }
+
+.design-options-container {
+  position: relative;
+}
+

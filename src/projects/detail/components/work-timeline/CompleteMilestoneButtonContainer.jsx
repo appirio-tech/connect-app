@@ -55,11 +55,11 @@ class CompleteMilestoneButtonContainer extends React.Component {
 
   render() {
     const { isConfirmationShown } = this.state
-    const { isUpdating } = this.props
+    const { isCompletingMilestone } = this.props
 
     return (
       <div>
-        {!isUpdating && (
+        {!isCompletingMilestone && (
           <button
             className="tc-btn tc-btn-warning tc-btn-sm"
             onClick={this.showConfirmation}
@@ -68,7 +68,7 @@ class CompleteMilestoneButtonContainer extends React.Component {
           </button>
         )}
 
-        {isUpdating && (
+        {isCompletingMilestone && (
           <LoadingIndicator />
         )}
 
@@ -107,7 +107,7 @@ CompleteMilestoneButtonContainer.propTypes = {
 }
 
 const mapStateToProps = ({ workTimelines }) => ({
-  isUpdating: workTimelines.isUpdatingMilestoneInfo
+  isCompletingMilestone: workTimelines.isCompletingMilestone
 })
 
 const mapDispatchToProps = {

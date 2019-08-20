@@ -2,6 +2,7 @@
  * DesignWorks section
  */
 import React from 'react'
+import _ from 'lodash'
 import PT from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import DesignOption from './DesignOption'
@@ -13,18 +14,67 @@ import './DesignWorks.scss'
 class DesignWorks extends React.Component {
   constructor(props) {
     super(props)
-    const { milestone } = props
-    const { details } = milestone || {}
-    const { content } = details || {}
-    const { designs = [] } = content || {}
+
     this.state = {
-      designOptions: [...designs]
+      /**
+       * design options which are currently saved on the server
+       * with populated utility props
+       */
+      designOptions: this.initDesignOptions(),
+
+      /**
+       * the `__id` of currently updating/deleting design option
+       */
+      processingDesignOptionId: null,
+
+      /**
+       * updated list of design options, which should be applied
+       * if request to the server is successful
+       */
+      updatedDesignOptions: null,
     }
 
     this.addDesignOption = this.addDesignOption.bind(this)
     this.deleteDesignOption = this.deleteDesignOption.bind(this)
-    this.updateField = this.updateField.bind(this)
-    this.submitForm = this.submitForm.bind(this)
+    this.saveDesignOption = this.saveDesignOption.bind(this)
+  }
+
+  initDesignOptions() {
+    const { milestone } = this.props
+
+    return _.get(milestone, 'details.content.designs', []).map((design) => ({
+      ...design,
+      // add unique id to each design so we can properly render the list of them
+      __id: _.uniqueId('design_'),
+    }))
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // if finished processing of update/delete request to the server
+    if (this.props.isUpdatingMilestoneInfo && !nextProps.isUpdatingMilestoneInfo) {
+      // if request is successful, we can update the current data from on the server in
+      // `designOptions` to the new value of `updatedDesignOptions`
+      if (!nextProps.error && this.state.updatedDesignOptions) {
+        const updatedDesignOptions = this.state.updatedDesignOptions.map((designOption) => {
+          // if we saved the new design option, then remove `__isNew` property for it
+          if (designOption.__id === this.state.processingDesignOptionId &&
+            designOption.__isNew
+          ) {
+            return _.omit(designOption, '__isNew')
+          }
+          return designOption
+        })
+        this.setState({
+          designOptions: updatedDesignOptions,
+          updatedDesignOptions: null,
+        })
+      }
+
+      // mark that not design option is processed now
+      this.setState({
+        processingDesignOptionId: null,
+      })
+    }
   }
 
   /**
@@ -39,67 +89,110 @@ class DesignWorks extends React.Component {
    * Add new Design Option
    */
   addDesignOption() {
-    this.setState((prevState) => ({
-      designOptions: [
-        ...prevState.designOptions,
-        {
-          title: '',
-          submissionId: '',
-          previewUrl: '',
-          links: []
-        }
-      ]
-    }))
+    const { designOptions } = this.state
+    const updatedDesignOptions = [
+      ...designOptions,
+      {
+        __id: _.uniqueId('design_'),
+        __isNew: true,
+        title: '',
+        submissionId: '',
+        previewUrl: '',
+        links: []
+      }
+    ]
+
+    this.setState({
+      designOptions: updatedDesignOptions
+    })
   }
 
   /**
    * Delete Design Option
    */
-  deleteDesignOption(index) {
-    this.setState((prevState) => ({
-      designOptions: _.filter(prevState.designOptions, (designOption, order) => {
-        return order !== index
-      })
-    }))
-  }
+  deleteDesignOption(optionId) {
+    const {
+      milestone,
+      updateWorkMilestone,
+      workId,
+      timelineId,
+      milestoneId,
+    } = this.props
+    const { designOptions } = this.state
 
-  updateField(index, field, value) {
-    this.setState((prevState) => {
-      prevState.designOptions[index][field] = value
-      return ({
-        designOptions: prevState.designOptions
-      })
-    })
-  }
+    const optionIndex = _.findIndex(designOptions, { __id: optionId })
+    const optionToDelete = designOptions[optionIndex]
 
-  submitForm(data) {
-    const { milestone, updateWorkMilestone, workId, timelineId, milestoneId } = this.props
-    const { details } = milestone || {}
-    const { content } = details || {}
-    const { designs = [] } = content || {}
+    const updatedDesignOptions = [
+      ...designOptions.slice(0, optionIndex),
+      ...designOptions.slice(optionIndex + 1),
+    ]
 
-    const existDesignIndex = _.findIndex(designs, { submissionId: data.submissionId })
-    if (existDesignIndex >= 0) {
-      designs[existDesignIndex] = {
-        ...designs[existDesignIndex],
-        ...data
+    // only if we delete NOT new option, we should update changes on the server
+    if (!optionToDelete.__isNew) {
+      const updatedProps = {
+        details: {
+          ..._.get(milestone, 'details', {}),
+          content: {
+            ..._.get(milestone, 'details.content', {}),
+            designs: updatedDesignOptions,
+          }
+        }
       }
+
+      this.setState({
+        processingDesignOptionId: optionId,
+        updatedDesignOptions,
+      })
+      updateWorkMilestone(workId, timelineId, milestoneId, updatedProps)
+
+    // if we delete a new option, just remove it from the list
     } else {
-      designs.push(data)
+      this.setState({
+        designOptions: updatedDesignOptions,
+      })
     }
-    let newMilestone = {
-      ...milestone,
+  }
+
+  /**
+   * Save Design Option
+   */
+  saveDesignOption(optionId, data) {
+    const {
+      milestone,
+      updateWorkMilestone,
+      workId,
+      timelineId,
+      milestoneId,
+    } = this.props
+    const { designOptions } = this.state
+
+    const updatedDesignOptions = [...designOptions]
+    const optionIndex = _.findIndex(designOptions, { __id: optionId })
+
+    if (optionIndex !== -1) {
+      updatedDesignOptions.splice(optionIndex, 1, data)
+    }
+
+    const updatedProps = {
       details: {
-        ...details,
+        ..._.get(milestone, 'details', {}),
         content: {
-          ...content,
-          designs
+          ..._.get(milestone, 'details.content', {}),
+          designs: updatedDesignOptions.map((designOption) => (
+            // remove utility properties when saving data to the server
+            _.omit(designOption, ['__isNew', '__id'])
+          )),
         }
       }
     }
 
-    newMilestone = _.omit(newMilestone, ['startDate', 'endDate', 'timelineId', 'statusHistory'])
-    updateWorkMilestone(workId, timelineId, milestoneId, newMilestone)
+    this.setState({
+      processingDesignOptionId: optionId,
+      updatedDesignOptions,
+    })
+
+    updateWorkMilestone(workId, timelineId, milestoneId, updatedProps)
   }
 
   render() {
@@ -108,8 +201,14 @@ class DesignWorks extends React.Component {
       workId,
       timelineId,
       milestoneId,
+      isUpdatingMilestoneInfo,
+      error,
     } = this.props
-    const { designOptions } = this.state
+    const {
+      designOptions,
+      processingDesignOptionId,
+    } = this.state
+    const isAddingNew = _.find(designOptions, { __isNew: true })
 
     return (
       <div styleName="wrapper">
@@ -130,6 +229,7 @@ class DesignWorks extends React.Component {
               </i>
             </div>
           </div>
+
           <div styleName="complete-wrapper">
             <div styleName="complete-message">Add all the designs for the review. After all the designs are added, click the "Complete" button, so customer may start reviewing them.</div>
             <div styleName="complete-btn">
@@ -141,24 +241,31 @@ class DesignWorks extends React.Component {
               />
             </div>
           </div>
-          {
-            !_.isEmpty(designOptions) &&
-            designOptions.map((design, index) => {
-              return (
-                <DesignOption
-                  key={index}
-                  index={index}
-                  content={design}
-                  onDeleteOption={this.deleteDesignOption}
-                  onUpdateField={this.updateField}
-                  onSubmitForm={this.submitForm}
-                />
-              )
-            })
-          }
-          <div styleName="add-design-option-wrapper">
-            <button styleName="add-design-option-btn" className="tc-btn tc-btn-primary tc-btn-sm action-btn " onClick={this.addDesignOption}>Add design option</button>
-          </div>
+
+          {designOptions.map((design) => (
+            <DesignOption
+              key={design.__id}
+              id={design.__id}
+              defaultData={design}
+              onDelete={this.deleteDesignOption}
+              onSave={this.saveDesignOption}
+              isUpdating={isUpdatingMilestoneInfo && processingDesignOptionId === design.__id}
+              isUpdatingAnyOption={isUpdatingMilestoneInfo}
+              error={error}
+            />
+          ))}
+
+          {!isAddingNew && (
+            <div styleName="add-design-option-wrapper">
+              <button
+                styleName="add-design-option-btn"
+                className="tc-btn tc-btn-primary tc-btn-sm action-btn "
+                onClick={this.addDesignOption}
+              >
+                Add design option
+              </button>
+            </div>
+          )}
         </div>
       </div>
     )
@@ -166,10 +273,14 @@ class DesignWorks extends React.Component {
 }
 
 DesignWorks.propTypes = {
-  onBack: PT.func,
-  milestone: PT.object,
-  work: PT.object,
-  updateWorkMilestone: PT.func
+  isUpdatingMilestoneInfo: PT.bool.isRequired,
+  error: PT.any,
+  milestone: PT.object.isRequired,
+  updateWorkMilestone: PT.func.isRequired,
+  onBack: PT.func.isRequired,
+  workId: PT.number.isRequired,
+  timelineId: PT.number.isRequired,
+  milestoneId: PT.number.isRequired,
 }
 
 export default withRouter(DesignWorks)

@@ -116,6 +116,7 @@ export const workTimelines = function (state=initialState, action) {
   case COMPLETE_WORK_TIMELINE_MILESTONE_PENDING:
     return Object.assign({}, state, {
       isUpdatingMilestoneInfo: true,
+      isCompletingMilestone: action.type === COMPLETE_WORK_TIMELINE_MILESTONE_PENDING ?  true : state.isCompletingMilestone,
       error: false
     })
 
@@ -131,6 +132,7 @@ export const workTimelines = function (state=initialState, action) {
 
     return Object.assign({}, stateWithUpdatedTimeline, {
       isUpdatingMilestoneInfo: false,
+      isCompletingMilestone: action.type === COMPLETE_WORK_TIMELINE_MILESTONE_PENDING ? false : state.isCompletingMilestone,
       error: false,
       milestone: action.payload.milestone,
     })
@@ -140,6 +142,7 @@ export const workTimelines = function (state=initialState, action) {
   case COMPLETE_WORK_TIMELINE_MILESTONE_FAILURE:
     return Object.assign({}, state, {
       isUpdatingMilestoneInfo: false,
+      isCompletingMilestone: action.type === COMPLETE_WORK_TIMELINE_MILESTONE_PENDING ? false : state.isCompletingMilestone,
       error: parseErrorObj(action)
     })
 
