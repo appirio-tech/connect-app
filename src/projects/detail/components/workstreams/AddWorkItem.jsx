@@ -280,11 +280,11 @@ class AddWorkItem extends React.Component {
           >CREATE NEW CHALLENGE/TASK</a>
           <button
             styleName="icon-add"
-            className="tc-btn tc-btn-primary tc-btn-sm"
+            className="tc-btn tc-btn-primary tc-btn-md"
             disabled={!this.isSelectedAnyChallenge()}
             onClick={this.createWorkItem}
           >
-            <AddColor /> <span>ADD TO WORK CARD</span>
+            <AddColor /> <span>Add to Work Card</span>
           </button>
         </div>
         {isCreatingWorkItem && (<div styleName="loading-for-creating">

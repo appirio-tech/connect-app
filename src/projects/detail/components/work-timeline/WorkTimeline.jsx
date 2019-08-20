@@ -28,7 +28,6 @@ const WorkTimeline = ({ editMode, timelineState: { timeline }, addNewMilestone, 
         <span styleName="title">Work Timeline</span>
         {editMode && (
           <button
-            styleName="add-timeline"
             className="tc-btn tc-btn-primary tc-btn-sm"
             onClick={() => { addNewMilestone(timeline.id) }}
           >Add Timeline Event</button>)}

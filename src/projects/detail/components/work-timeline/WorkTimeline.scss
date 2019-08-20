@@ -36,17 +36,6 @@
   line-height: 30px;
 }
 
-.add-timeline {
-  @include roboto-bold;
-
-  flex-shrink: 0;
-  font-size: 12px !important;
-  letter-spacing: 0.8px !important;
-  font-weight: 700 !important;
-  text-transform: uppercase;
-  display: none;
-}
-
 .bar {
   display: flex;
   height: 20px;

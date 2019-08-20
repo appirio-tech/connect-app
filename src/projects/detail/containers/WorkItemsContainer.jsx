@@ -44,11 +44,11 @@ class WorkItemsContainer extends React.Component {
         {isLoadingWorkItem && (<LoadingIndicator />)}
         <button
           styleName="icon-add"
-          className="tc-btn tc-btn-primary tc-btn-sm"
+          className="tc-btn tc-btn-primary tc-btn-md"
           onClick={showAddChallengeTask}
           disabled={isLoadingWorkItem || isDeletingWorkItem || !workitems}
         >
-          <AddColor /> <span>ADD CHALLENGE/TASK</span>
+          <AddColor /> <span>Add Challenge/Task</span>
         </button>
       </div>
     )
