@@ -15,7 +15,7 @@ function ProjectEstimation({
   question,
   project,
   template,
-  showDescription,
+  showPrice,
   theme,
   onClick,
 }) {
@@ -67,7 +67,7 @@ function ProjectEstimation({
           return renderBlock({ ...item, duration: duration ? duration : null })
         })}
       </ul>
-      {showDescription && (
+      {showPrice && (
         <h3>Our estimate is from <span>$</span>{numberWithCommas(priceEstimate)}</h3>
       )}
     </div>
@@ -75,7 +75,7 @@ function ProjectEstimation({
 }
 
 ProjectEstimation.defaultProps = {
-  showDescription: true,
+  showPrice: true,
   theme: '',
 }
 
@@ -83,7 +83,7 @@ ProjectEstimation.propTypes = {
   project: PT.object.isRequired,
   question: PT.object.isRequired,
   template: PT.object.isRequired,
-  showDescription: PT.bool.isRequired,
+  showPrice: PT.bool.isRequired,
   theme: PT.string,
   onClick: PT.func,
 }

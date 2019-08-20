@@ -370,9 +370,13 @@ export default function(state = {}, action) {
     return state
   }
 
-  case UPDATE_PROJECT_FAILURE:
-    Alert.error('Please add a name for your project and then try saving again.')
+  case UPDATE_PROJECT_FAILURE: {
+    const data = _.get(action.payload, 'response.data.result')
+    let message = _.get(data, 'content.message', 'Unable to update project')
+    message = _.get(data, 'details', message)
+    Alert.error(message)
     return state
+  }
 
   case CREATE_PROJECT_FAILURE:
   case DELETE_PROJECT_FAILURE:

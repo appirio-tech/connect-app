@@ -77,10 +77,14 @@
     background: #E9E9E9;
 }
 
+.budget-distribution:not(:last-child) {
+    margin-bottom: 20px;
+}
+
 .budget-distribution-part {
     height: 20px;
 }
 
-.revenue.budget-distribution-part {
+.budget-distribution-part:last-child {
     border-radius: 0 10px 10px 0;
 }

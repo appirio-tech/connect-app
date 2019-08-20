@@ -36,8 +36,6 @@ class ProjectSummaryReportContainer extends React.Component {
   render() {
     const {
       project,
-      estimationQuestion,
-      projectTemplate,
       projectReports,
       isSuperUser,
       isManageUser,
@@ -51,8 +49,6 @@ class ProjectSummaryReportContainer extends React.Component {
       location,
       reportsProjectId,
     } = this.props
-
-    const template = _.get(projectTemplate, 'scope')
     const projectSummary = _.get(projectReports, 'projectSummary')
 
     const leftArea = (
@@ -91,8 +87,6 @@ class ProjectSummaryReportContainer extends React.Component {
             isLoading={isProcessing}
             reportsProjectId={reportsProjectId}
             project={project}
-            template={template}
-            estimationQuestion={estimationQuestion}
           />
         </TwoColsLayout.Content>
 
@@ -107,14 +101,13 @@ ProjectSummaryReportContainer.propTypes = {
   isSuperUser: PT.bool.isRequired,
   isManageUser: PT.bool.isRequired,
   project: PT.object.isRequired,
-  estimationQuestion: PT.object.isRequired,
   projectReports: PT.object.isRequired,
   phases: PT.array.isRequired,
   productsTimelines: PT.object.isRequired,
   reportsProjectId: PT.number.isRequired,
 }
 
-const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates, projectReports }) => {
+const mapStateToProps = ({ projectState, projectTopics, phasesTopics, projectReports }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -125,7 +118,6 @@ const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates,
     phases: projectState.phases,
     feeds: allFeed,
     phasesTopics,
-    projectTemplates: templates.projectTemplates,
     projectReports,
     isProcessing: projectReports.isLoading,
     reportsProjectId: projectReports.projectId,
