@@ -123,17 +123,15 @@ export function createWorkMilestone(workId, timelineId, milestone) {
   return (dispatch) => {
     return dispatch({
       type: NEW_WORK_TIMELINE_MILESTONE,
-      payload: createMilestoneApi(timelineId, milestoneData).then(newMilestone => {
-        // reload timeline after creating a milestone,
-        // because backend could make cascading updates to the timeline and other milestones
-        dispatch(loadWorkTimeline(workId))
-
-        return ({ milestone: newMilestone })
-      }),
+      payload: createMilestoneApi(timelineId, milestoneData).then(newMilestone => ({ milestone: newMilestone })),
       meta: {
         workId,
         timelineId,
       }
+    }).then(() => {
+      // reload timeline after creating a milestone,
+      // because backend could make cascading updates to the timeline and other milestones
+      dispatch(loadWorkTimeline(workId))
     })
   }
 }
@@ -151,18 +149,16 @@ export function updateWorkMilestone(workId, timelineId, milestoneId, milestoneUp
   return (dispatch) => {
     return dispatch({
       type: UPDATE_WORK_TIMELINE_MILESTONE,
-      payload: updateMilestoneApi(timelineId, milestoneId, milestoneUpdate).then(updatedMilestone => {
-        // reload timeline after updating a milestone,
-        // because backend could make cascading updates to the timeline and other milestones
-        dispatch(loadWorkTimeline(workId))
-
-        return ({ milestone: updatedMilestone })
-      }),
+      payload: updateMilestoneApi(timelineId, milestoneId, milestoneUpdate).then(updatedMilestone => ({ milestone: updatedMilestone })),
       meta: {
         workId,
         timelineId,
         milestoneId,
       }
+    }).then(() => {
+      // reload timeline after creating a milestone,
+      // because backend could make cascading updates to the timeline and other milestones
+      dispatch(loadWorkTimeline(workId))
     })
   }
 }
@@ -203,16 +199,16 @@ export function deleteWorkMilestone(workId, timelineId, milestoneId) {
   return (dispatch) => {
     return dispatch({
       type: DELETE_WORK_TIMELINE_MILESTONE,
-      payload: deleteMilestoneApi(timelineId, milestoneId).then(() => {
-        // reload timeline after deleting a milestone,
-        // because backend could make cascading updates to the timeline and other milestones
-        dispatch(loadWorkTimeline(workId))
-      }),
+      payload: deleteMilestoneApi(timelineId, milestoneId),
       meta: {
         workId,
         timelineId,
         milestoneId,
       }
+    }).then(() => {
+      // reload timeline after creating a milestone,
+      // because backend could make cascading updates to the timeline and other milestones
+      dispatch(loadWorkTimeline(workId))
     })
   }
 }
