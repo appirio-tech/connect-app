@@ -14,6 +14,7 @@ const Workstreams = ({
   addWorkForWorkstream,
   timelines,
   inputDesignWorks,
+  startDesignReview,
   isManageUser,
 }) => (
   workstreams.length > 0 ? (
@@ -25,6 +26,7 @@ const Workstreams = ({
           addWorkForWorkstream={addWorkForWorkstream}
           timelines={timelines}
           inputDesignWorks={inputDesignWorks}
+          startDesignReview={startDesignReview}
         />
       ))}
     </Section>
@@ -43,6 +45,7 @@ Workstreams.propTypes = {
   addWorkForWorkstream: PT.func.isRequired,
   timelines: PT.object.isRequired,
   inputDesignWorks: PT.func.isRequired,
+  startDesignReview: PT.func.isRequired,
   isManageUser: PT.bool,
 }
 

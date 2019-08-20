@@ -48,6 +48,7 @@ WorkstreamsContainer.PropTypes = {
   addWorkForWorkstream: PT.func.isRequired,
   timelines: PT.array.isRequired,
   inputDesignWorks: PT.func.isRequired,
+  startDesignReview: PT.func.isRequired,
   isManageUser: PT.bool,
 }
 

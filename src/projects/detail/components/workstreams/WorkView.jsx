@@ -228,8 +228,8 @@ WorkView.propTypes = {
   isUpdatingWorkInfo: PT.bool.isRequired,
   isDeletingWorkInfo: PT.bool.isRequired,
   timelines: PT.object.isRequired,
-  inputDesignWorks: PT.func,
-  startDesignReview: PT.func,
+  inputDesignWorks: PT.func.isRequired,
+  startDesignReview: PT.func.isRequired,
   markMilestoneAsCompleted: PT.func,
 }
 

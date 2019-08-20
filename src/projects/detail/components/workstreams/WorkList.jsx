@@ -67,7 +67,12 @@ class WorkList extends React.Component {
   }
 
   render() {
-    const {workstream, addWorkForWorkstream, inputDesignWorks} = this.props
+    const {
+      workstream,
+      addWorkForWorkstream,
+      inputDesignWorks,
+      startDesignReview,
+    } = this.props
     const {listType} = this.state
     return (
       <div styleName="container">
@@ -92,6 +97,7 @@ class WorkList extends React.Component {
                   timeline={milestoneData.timeline}
                   activeMilestone={milestoneData.activeMilestone}
                   inputDesignWorks={inputDesignWorks}
+                  startDesignReview={startDesignReview}
                 />
               )
             })}
@@ -124,7 +130,8 @@ WorkList.propTypes = {
   }).isRequired,
   addWorkForWorkstream: PT.func.isRequired,
   timelines: PT.object.isRequired,
-  inputDesignWorks: PT.func.isRequired
+  inputDesignWorks: PT.func.isRequired,
+  startDesignReview: PT.func.isRequired
 }
 
 export default withRouter(WorkList)

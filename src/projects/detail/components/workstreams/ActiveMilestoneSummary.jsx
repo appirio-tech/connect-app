@@ -73,8 +73,8 @@ ActiveMilestoneSummary.propTypes = {
     name: PT.string,
     activeText: PT.string
   }),
-  inputDesignWorks: PT.func,
-  startDesignReview: PT.func,
+  inputDesignWorks: PT.func.isRequired,
+  startDesignReview: PT.func.isRequired,
   markMilestoneAsCompleted: PT.func,
 }
 

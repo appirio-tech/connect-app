@@ -85,8 +85,8 @@ WorkListCard.propTypes = {
   workstream: PT.shape({
     id: PT.number.isRequired,
   }).isRequired,
-  inputDesignWorks: PT.func,
-  startDesignReview: PT.func,
+  inputDesignWorks: PT.func.isRequired,
+  startDesignReview: PT.func.isRequired,
   timeline: PT.object.isRequired,
   activeMilestone: PT.object,
 }
