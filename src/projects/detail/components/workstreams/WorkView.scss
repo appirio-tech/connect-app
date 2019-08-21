@@ -144,3 +144,19 @@
   display: flex;
   flex-direction: column;
 }
+
+.comments {
+  margin-top: 2 * $base-unit;
+}
+
+.comments-title {
+  @include roboto-bold;
+
+  color: $tc-gray-90;
+  font-size: 16px;
+  line-height: 30px;
+  overflow: hidden;
+  padding: 4 * $base-unit 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

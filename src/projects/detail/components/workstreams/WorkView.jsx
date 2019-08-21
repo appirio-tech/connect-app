@@ -15,6 +15,7 @@ import WorkTimelineContainer from '../../containers/WorkTimelineContainer'
 import CloseIcon from  '../../../../assets/icons/x-mark-black.svg'
 import EditIcon from  '../../../../assets/icons/icon-edit-black.svg'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
+import PostsContainer from '../../../../components/Posts'
 import {
   PHASE_STATUS,
   MILESTONE_STATUS,
@@ -116,6 +117,27 @@ class WorkView extends React.Component {
               markMilestoneAsCompleted={markMilestoneAsCompleted}
             />
           )}
+          <div styleName="comments">
+            <div styleName="comments-title">Comments</div>
+            <PostsContainer
+              tag={`work#${work.id}-details`}
+              postUrlTemplate={`details-comment-{{postId}}`}
+            />
+          </div>
+        </div>
+      )
+    }
+    if (navs[selectedNav].title === 'Requirements') {
+      return (
+        <div styleName="content">
+          [Requirements editor to be done]
+          <div styleName="comments">
+            <div styleName="comments-title">Comments</div>
+            <PostsContainer
+              tag={`work#${work.id}-requirements`}
+              postUrlTemplate={`requirements-comment-{{postId}}`}
+            />
+          </div>
         </div>
       )
     }
