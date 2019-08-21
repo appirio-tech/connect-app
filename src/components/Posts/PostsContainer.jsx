@@ -90,7 +90,8 @@ class PostsContainer extends React.Component {
         date,
         createdAt: p.date,
         edited,
-        author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
+        author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId],
+        attachments: p.attachments || [],
       }
 
       return comment
