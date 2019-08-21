@@ -146,7 +146,8 @@
 }
 
 .comments {
-  margin-top: 2 * $base-unit;
+  border-top: 1px solid $tc-gray-10;
+  margin-top: 8 * $base-unit;
 }
 
 .comments-title {
