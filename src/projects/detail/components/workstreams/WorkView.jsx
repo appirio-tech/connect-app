@@ -121,7 +121,7 @@ class WorkView extends React.Component {
             <div styleName="comments-title">Comments</div>
             <PostsContainer
               tag={`work#${work.id}-details`}
-              postUrlTemplate={`details-comment-{{postId}}`}
+              postUrlTemplate={'details-comment-{{postId}}'}
             />
           </div>
         </div>
@@ -135,7 +135,7 @@ class WorkView extends React.Component {
             <div styleName="comments-title">Comments</div>
             <PostsContainer
               tag={`work#${work.id}-requirements`}
-              postUrlTemplate={`requirements-comment-{{postId}}`}
+              postUrlTemplate={'requirements-comment-{{postId}}'}
             />
           </div>
         </div>
