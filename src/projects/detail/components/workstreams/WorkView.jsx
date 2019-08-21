@@ -3,17 +3,18 @@
  */
 import React from 'react'
 import PT from 'prop-types'
-import { withRouter, Link } from 'react-router-dom'
+import {withRouter, Link} from 'react-router-dom'
 import cn from 'classnames'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+
 const Formsy = FormsyForm.Formsy
 
 import Section from '../Section'
 import WorkViewEdit from './WorkViewEdit'
 import ActiveMilestoneSummary from './ActiveMilestoneSummary'
 import WorkTimelineContainer from '../../containers/WorkTimelineContainer'
-import CloseIcon from  '../../../../assets/icons/x-mark-black.svg'
-import EditIcon from  '../../../../assets/icons/icon-edit-black.svg'
+import CloseIcon from '../../../../assets/icons/x-mark-black.svg'
+import EditIcon from '../../../../assets/icons/icon-edit-black.svg'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
 import PostsContainer from '../../../../components/Posts'
 import {
@@ -24,6 +25,9 @@ import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingInd
 import WorkItemsContainer from '../../containers/WorkItemsContainer'
 
 import './WorkView.scss'
+import WorkAssetsContainer from '../../containers/WorkAssetsContainer'
+import _ from 'lodash'
+import {extractAttachmentLinksFromPosts, extractLinksFromPosts} from '../../../../helpers/posts'
 
 const phaseStatuses = PHASE_STATUS.map(ps => ({
   title: ps.name,
@@ -37,14 +41,11 @@ class WorkView extends React.Component {
     this.state = {
       isEditing: false,
       selectedNav: 0,
-      navs:[
-        { title: 'Details' },
-        { title: 'Requirements' },
-        { title: 'Delivery Management' },
-        {
-          title: 'Assets',
-          count: 568
-        }
+      navs: [
+        {title: 'Details'},
+        {title: 'Requirements'},
+        {title: 'Delivery Management'},
+        {title: 'Assets'}
       ]
     }
 
@@ -54,10 +55,10 @@ class WorkView extends React.Component {
   }
 
   componentWillMount() {
-    const { work } = this.props
+    const {work} = this.props
     // re-update selected nav  when reshow component
     if (work && work.selectedNav) {
-      this.setState({ selectedNav: work.selectedNav })
+      this.setState({selectedNav: work.selectedNav})
     }
   }
 
@@ -69,7 +70,7 @@ class WorkView extends React.Component {
    */
   handleChange(change, isChanged) {
     if (isChanged) {
-      const { match: { params: { projectId, workstreamId, workId } }, updateWork } = this.props
+      const {match: {params: {projectId, workstreamId, workId}}, updateWork} = this.props
       updateWork(projectId, workstreamId, workId, change)
     }
   }
@@ -79,15 +80,40 @@ class WorkView extends React.Component {
    * @param {Object} model form value
    */
   submitEditForm(model) {
-    const { match: { params: { projectId, workstreamId, workId } }, updateWork } = this.props
+    const {match: {params: {projectId, workstreamId, workId}}, updateWork} = this.props
     updateWork(projectId, workstreamId, workId, model)
+  }
+
+  /**
+   * Get feeds
+   * @returns {Array}
+   */
+  getFeeds() {
+    const {topics, work} = this.props
+    const tags = [`work#${work.id}-details`, `work#${work.id}-requirements`]
+    return _.values(
+      _.pick(topics, tags)
+    ).filter(t => t.topic).map(t => t.topic)
+  }
+
+  /**
+   * Get number of assets
+   * @returns {number}
+   */
+  getAssetsCount() {
+    const feeds = this.getFeeds()
+    if (feeds) {
+      const links = extractLinksFromPosts(feeds)
+      const attachments = extractAttachmentLinksFromPosts(feeds)
+      return attachments.length + links.length
+    }
   }
 
   /**
    * Get selected tab content
    */
   getTabContent() {
-    const { navs, selectedNav } = this.state
+    const {navs, selectedNav} = this.state
     const {
       work,
       addNewMilestone,
@@ -102,6 +128,7 @@ class WorkView extends React.Component {
     const activeMilestone = timeline && _.find(timeline.milestones, {
       status: MILESTONE_STATUS.ACTIVE,
     })
+    const feeds = this.getFeeds()
 
     if (navs[selectedNav].title === 'Details') {
       return (
@@ -150,7 +177,16 @@ class WorkView extends React.Component {
             addNewMilestone={addNewMilestone}
             editMilestone={editMilestone}
           />
-          <WorkItemsContainer showAddChallengeTask={showAddChallengeTask} />
+          <WorkItemsContainer showAddChallengeTask={showAddChallengeTask}/>
+        </div>
+      )
+    }
+    if (navs[selectedNav].title === 'Assets') {
+      return (
+        <div styleName="assets-content">
+          <WorkAssetsContainer
+            feeds={feeds}
+          />
         </div>
       )
     }
@@ -168,6 +204,7 @@ class WorkView extends React.Component {
       isUpdatingWorkInfo,
       isDeletingWorkInfo
     } = this.props
+    const assetsCount = this.getAssetsCount()
 
     return (
       <Section>
@@ -175,27 +212,34 @@ class WorkView extends React.Component {
           {this.state.isEditing ? (
             <WorkViewEdit
               {...this.props}
-              onBack={() => { this.setState({ isEditing: false }) }}
+              onBack={() => {
+                this.setState({isEditing: false})
+              }}
               submitForm={this.submitEditForm}
             />
           ) : (
-            <div styleName={cn('wrapper-content', { 'is-updating': isUpdatingWorkInfo })}>
+            <div styleName={cn('wrapper-content', {'is-updating': isUpdatingWorkInfo})}>
               <div styleName="header">
                 <span styleName="work-name">{work.name}</span>
                 <div styleName="right-control">
-                  <i styleName="icon-edit" onClick={() => { this.setState({ isEditing: true }) }} title="edit"><EditIcon /></i>
+                  <i styleName="icon-edit" onClick={() => {
+                    this.setState({isEditing: true})
+                  }} title="edit"
+                  ><EditIcon/></i>
                   <Link
-                    onClick={() => { work.selectedNav = 0 }}
+                    onClick={() => {
+                      work.selectedNav = 0
+                    }}
                     to={`/projects/${match.params.projectId}`}
                     styleName="icon-close"
                   >
-                    <CloseIcon />
+                    <CloseIcon/>
                   </Link>
                 </div>
               </div>
               {!_.isNil(work) && (
                 <Formsy.Form
-                  onChange={ this.handleChange }
+                  onChange={this.handleChange}
                   ref="form"
                 >
                   <div styleName="status-dropdown">
@@ -212,14 +256,14 @@ class WorkView extends React.Component {
                 {this.state.navs.map((nav, index) => (
                   <div
                     key={nav.title}
-                    styleName={cn('nav-item', { 'is-selected': index === this.state.selectedNav })}
+                    styleName={cn('nav-item', {'is-selected': index === this.state.selectedNav})}
                     onClick={() => {
                       work.selectedNav = index
-                      this.setState({ selectedNav: index })
+                      this.setState({selectedNav: index})
                     }}
                   >
                     <span styleName="nav-name">{nav.title}</span>
-                    {!_.isNil(nav.count) && (<span styleName="nav-count">568</span>)}
+                    {nav.title === 'Assets' && (<span styleName="nav-count">{assetsCount}</span>)}
                   </div>
                 ))}
               </div>
@@ -227,7 +271,7 @@ class WorkView extends React.Component {
             </div>
           )}
           {(isUpdatingWorkInfo || isDeletingWorkInfo) && (<div styleName="loading-wrapper">
-            <LoadingIndicator />
+            <LoadingIndicator/>
           </div>)}
         </div>
       </Section>
@@ -236,7 +280,8 @@ class WorkView extends React.Component {
 }
 
 WorkView.defaultProps = {
-  showAddChallengeTask: () => {},
+  showAddChallengeTask: () => {
+  },
 }
 
 WorkView.propTypes = {
@@ -254,6 +299,7 @@ WorkView.propTypes = {
   inputDesignWorks: PT.func.isRequired,
   startDesignReview: PT.func.isRequired,
   markMilestoneAsCompleted: PT.func,
+  topics: PT.object
 }
 
 export default withRouter(WorkView)

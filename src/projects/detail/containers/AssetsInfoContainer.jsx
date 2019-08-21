@@ -23,6 +23,7 @@ import { PROJECT_ATTACHMENTS_FOLDER,
 import AddLink from '../../../components/AssetsLibrary/AddLink'
 import PERMISSIONS from '../../../config/permissions'
 import { checkPermission } from '../../../helpers/permissions'
+import {extractAttachmentLinksFromPosts, extractLinksFromPosts} from '../../../helpers/posts'
 import {
   addProjectAttachment, updateProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission,
   removeProjectAttachment
@@ -46,12 +47,6 @@ class AssetsInfoContainer extends React.Component {
     this.onAddFile = this.onAddFile.bind(this)
     this.onUploadAttachment = this.onUploadAttachment.bind(this)
     this.removeAttachment = this.removeAttachment.bind(this)
-    this.extractLinksFromPosts = this.extractLinksFromPosts.bind(this)
-    this.extractMarkdownLink = this.extractMarkdownLink.bind(this)
-    this.extractHtmlLink = this.extractHtmlLink.bind(this)
-    this.extractRawLink = this.extractRawLink.bind(this)
-    this.getFileAttachmentName = this.getFileAttachmentName.bind(this)
-    this.extractAttachmentLinksFromPosts = this.extractAttachmentLinksFromPosts.bind(this)
     this.deletePostAttachment = this.deletePostAttachment.bind(this)
     this.activeAssetsTypeChange = this.activeAssetsTypeChange.bind(this)
     this.onNewLinkModalChange = this.onNewLinkModalChange.bind(this)
@@ -221,139 +216,6 @@ class AssetsInfoContainer extends React.Component {
     this.props.uploadProjectAttachments(project.id, attachment)
   }
 
-  extractHtmlLink(str) {
-    const links = []
-    const regex = /<a[^>]+href="(.*?)"[^>]*>([\s\S]*?)<\/a>/gm
-    const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm // eslint-disable-line no-useless-escape
-    const rawLinks = regex.exec(str)
-
-    if (Array.isArray(rawLinks)) {
-      let i = 0
-      while (i < rawLinks.length) {
-        const title = rawLinks[i + 2]
-        const address = rawLinks[i + 1]
-
-        if (urlRegex.test(address)) {
-          links.push({
-            title,
-            address
-          })
-        }
-
-        i = i + 3
-      }
-    }
-
-    return links
-  }
-
-  extractMarkdownLink(str) {
-    const links = []
-    const regex = /(?:__|[*#])|\[(.*?)\]\((.*?)\)/gm
-    const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm // eslint-disable-line no-useless-escape
-    const rawLinks = regex.exec(str)
-
-    if (Array.isArray(rawLinks)) {
-      let i = 0
-      while (i < rawLinks.length) {
-        const title = rawLinks[i + 1]
-        const address = rawLinks[i + 2]
-
-        if (urlRegex.test(address)) {
-          links.push({
-            title,
-            address
-          })
-        }
-
-        i = i + 3
-      }
-    }
-
-    return links
-  }
-
-  extractRawLink(str) {
-    let links = []
-    const regex = /(\s|^)(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}[\s])(\s|$)/igm // eslint-disable-line no-useless-escape
-    const rawLinks = str.match(regex)
-
-    if (Array.isArray(rawLinks)) {
-      links = rawLinks
-        .filter(link => !link.includes(']'))
-        .map(link => {
-          const name = link.trim()
-          const url = !/^https?:\/\//i.test(name) ? 'http://' + name : name
-
-          return {
-            title: name,
-            address: url
-          }
-        })
-    }
-
-    return links
-  }
-
-  extractLinksFromPosts(feeds) {
-    const links = []
-    feeds.forEach(feed => {
-      let childrenLinks = []
-      feed.posts.forEach(post => {
-        childrenLinks = childrenLinks.concat([
-          ...this.extractHtmlLink(post.rawContent),
-          ...this.extractMarkdownLink(post.rawContent),
-          ...this.extractRawLink(post.rawContent)
-        ])
-      })
-
-      if (childrenLinks.length > 0) {
-        links.push({
-          title: feed.title,
-          children: childrenLinks
-        })
-      }
-    })
-
-    return links
-  }
-
-  getFileAttachmentName(originalFileName) {
-    return /^.*.\/[^_]+_(.*.)$/.exec(originalFileName)[1]
-  }
-
-  extractAttachmentLinksFromPosts(feeds) {
-    const attachmentLinks = []
-    feeds.forEach(feed => {
-      const attachmentLinksPerFeed = []
-      feed.posts.forEach(post => {
-        post.attachments.forEach(attachment => {
-          attachmentLinksPerFeed.unshift({
-            title: this.getFileAttachmentName(attachment.originalFileName),
-            address: `/projects/messages/attachments/${attachment.id}`,
-            attachmentId: attachment.id,
-            attachment: true,
-            deletable: true,
-            createdBy: attachment.createdBy,
-            postId: post.id,
-            topicId: feed.id,
-            topicTag: feed.tag,
-            updatedAt: feed.updatedDate
-          })
-        })
-      })
-
-      if (attachmentLinksPerFeed.length > 0) {
-        attachmentLinks.push({
-          title: feed.title,
-          children: attachmentLinksPerFeed
-        })
-      }
-    })
-
-    return attachmentLinks
-  }
-
   deletePostAttachment({ topicId, postId, attachmentId, topicTag }) {
     const { feeds, phasesTopics, saveFeedComment } = this.props
 
@@ -453,10 +315,10 @@ class AssetsInfoContainer extends React.Component {
     }
 
     // extract links from posts
-    const topicLinks = this.extractLinksFromPosts(feeds)
+    const topicLinks = extractLinksFromPosts(feeds)
     const publicTopicLinks = topicLinks.filter(link => link.tag !== PROJECT_FEED_TYPE_MESSAGES)
     const privateTopicLinks = topicLinks.filter(link => link.tag === PROJECT_FEED_TYPE_MESSAGES)
-    const phaseLinks = this.extractLinksFromPosts(phaseFeeds)
+    const phaseLinks = extractLinksFromPosts(phaseFeeds)
 
     let links = []
     links = links.concat(project.bookmarks)
@@ -469,8 +331,8 @@ class AssetsInfoContainer extends React.Component {
     // extract attachment from posts
     attachments = [
       ...attachments,
-      ...this.extractAttachmentLinksFromPosts(feeds),
-      ...this.extractAttachmentLinksFromPosts(phaseFeeds)
+      ...extractAttachmentLinksFromPosts(feeds),
+      ...extractAttachmentLinksFromPosts(phaseFeeds)
     ]
 
     const assetsData = []
