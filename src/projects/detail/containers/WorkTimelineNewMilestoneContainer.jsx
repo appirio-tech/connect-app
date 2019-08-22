@@ -34,7 +34,7 @@ class WorkTimelineNewMilestoneContainer extends React.Component {
       createWorkMilestone,
       work,
       timelineState: { timeline },
-     } = this.props
+    } = this.props
 
     const { startDate, endDate } = getPhaseActualData(work, timeline)
     let milestoneStartDate
