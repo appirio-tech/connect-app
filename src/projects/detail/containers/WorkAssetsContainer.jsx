@@ -1,5 +1,6 @@
 import React from 'react'
 import PT from 'prop-types'
+import { connect } from 'react-redux'
 import _ from 'lodash'
 import moment from 'moment'
 import LinksGridView from '../../../components/AssetsLibrary/LinksGridView'
@@ -82,6 +83,13 @@ class WorkAssetsContainer extends React.Component {
 
 WorkAssetsContainer.PropTypes = {
   workTopics: PT.array,
+  loggedInUser: PT.object.isRequired,
 }
 
-export default WorkAssetsContainer
+const mapStateToProps = ({ loadUser }) => ({
+  loggedInUser: loadUser.user
+})
+
+const mapDispatchToProps = {}
+
+export default connect(mapStateToProps, mapDispatchToProps)(WorkAssetsContainer)
