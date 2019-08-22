@@ -234,7 +234,7 @@ export function getPhaseActualData(phase, timeline) {
   let progress
 
   // if phase's product doesn't have timeline get data from phase
-  if (!timeline ||  !timeline.milestones || timeline.milestones.length < 1) {
+  if (!timeline || !timeline.milestones) {
     startDate = phase.startDate && moment.utc(phase.startDate)
     endDate = phase.endDate && moment.utc(phase.endDate)
     duration = phase.duration ? phase.duration : 0
@@ -249,7 +249,15 @@ export function getPhaseActualData(phase, timeline) {
       endDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
     }
 
-  // if phase's product has timeline get data from timeline
+  // if phase has a timeline with no milestones, get data from timeline
+  } else if (timeline.milestones.length === 0) {
+    startDate = timeline.startDate && moment.utc(timeline.startDate)
+    endDate = timeline.endDate && timeline.utc(phase.endDate)
+    // add one day here to include edge days, also makes sense if start/finish the same day
+    duration = startDate && endDate ? (endDate.diff(startDate, 'days') + 1) : 0
+    progress = 0
+
+  // if phase's product has timeline with milestones get data from milestones
   } else {
     const firstMilestone = timeline.milestones[0]
     startDate = moment.utc(firstMilestone.startDate)

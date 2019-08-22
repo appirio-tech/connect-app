@@ -145,7 +145,6 @@ class WorkTimelineEditMilestone extends React.Component {
         startDate: updatedStartDate,
         endDate: updatedEndDate || '',
         status,
-        duration: updatedEndDate.diff(updatedStartDate, 'days'),
         order: timeline.milestones.length,
         plannedText: 'empty', // this field is required in backend api but isn't supported by the form, so hardcode this field
         activeText: 'empty', // this field is required in backend api but isn't supported by the form, so hardcode this field
@@ -155,9 +154,7 @@ class WorkTimelineEditMilestone extends React.Component {
     } else {
       updateParam = _.cloneDeep(model)
     }
-    if (!updateParam.description) {
-      delete updateParam.description
-    }
+
     submitForm(updateParam)
   }
 
@@ -208,7 +205,7 @@ class WorkTimelineEditMilestone extends React.Component {
 
     const type = isNewMilestone ? MILESTONE_TYPE_OPTIONS[0].value : milestone.type
     const milestones = timeline.milestones ? _.orderBy(timeline.milestones, o => moment(o.startDate), ['asc']) : []
-    const { startDate, endDate, duration } = getMilestoneActualData(timeline, milestones, milestone, isNewMilestone)
+    const { duration } = getMilestoneActualData(timeline, milestones, milestone, isNewMilestone)
     const description = (milestone && milestone.description) ? milestone.description : ''
     return (
       <div
@@ -261,60 +258,51 @@ class WorkTimelineEditMilestone extends React.Component {
             onValidSubmit={this.onFormSubmit}
           >
             <div className={styles['form-container']}>
-              {isNewMilestone ? (<div className={styles['two-column']}>
-                <TCFormFields.TextInput
-                  wrapperClass={`${styles['input-row']}`}
-                  label="Start Date"
-                  type="date"
-                  name="startDate"
-                  value={startDate}
-                />
-                <TCFormFields.TextInput
-                  wrapperClass={`${styles['input-row']}`}
-                  label="End Date"
-                  type="date"
-                  name="endDate"
-                  value={endDate}
-                />
-              </div>) : (<div className={styles['one-column']}>
-                <TCFormFields.TextInput
-                  wrapperClass={`${styles['input-row']}`}
-                  label="Duration (days)"
-                  type="number"
-                  name="duration"
-                  value={duration}
-                  minValue={1}
-                />
-              </div>)}
-              <div className={styles['one-column']}>
-                <TCFormFields.TextInput
-                  wrapperClass={`${styles['input-row']}`}
-                  label="Name"
-                  type="text"
-                  name="name"
-                  value={milestone.name}
+              <TCFormFields.TextInput
+                wrapperClass={`${styles['input-row']}`}
+                label="Name"
+                type="text"
+                name="name"
+                value={milestone.name}
+                validations={{
+                  isRequired: true
+                }}
+                validationError="Name is required"
+              />
+              <div className={`${styles['input-row']} ${styles['select-dropdown']}`}>
+                <label className="tc-label">Type</label>
+                <SelectDropdown
+                  name="type"
+                  value={type}
+                  theme="default"
+                  options={milestoneTypes}
                 />
               </div>
-              <div className={styles['one-column']}>
-                <div className={`${styles['input-row']} ${styles['select-dropdown']}`}>
-                  <label className="tc-label">Type</label>
-                  <SelectDropdown
-                    name="type"
-                    value={type}
-                    theme="default"
-                    options={milestoneTypes}
-                  />
-                </div>
-              </div>
-              <div className={styles['one-column']}>
-                <TCFormFields.Textarea
-                  wrapperClass={`${styles['input-row']} ${styles['textarea-row']}`}
-                  label="Description"
-                  name="description"
-                  rows={2}
-                  value={description}
-                />
-              </div>
+              <TCFormFields.TextInput
+                wrapperClass={`${styles['input-row']}`}
+                label="Duration (days)"
+                type="number"
+                name="duration"
+                value={duration}
+                minValue={1}
+                // cannot use this validator because of the issue in `isRequired` validator for numbers
+                // see issue
+                validations={{
+                  isRequired: true
+                }}
+                validationError="Duration is required"
+              />
+              <TCFormFields.Textarea
+                wrapperClass={`${styles['input-row']} ${styles['textarea-row']}`}
+                label="Description"
+                name="description"
+                rows={2}
+                value={description}
+                validations={{
+                  isRequired: true
+                }}
+                validationError="Description is required"
+              />
               <div className={styles['group-bottom']}>
                 <button
                   onClick={onBack}
@@ -381,7 +369,7 @@ WorkTimelineEditMilestone.propTypes = {
   onBack: PT.func,
   submitForm: PT.func,
   isNewMilestone: PT.bool,
-  isRequestMilestoneError: PT.bool,
+  isRequestMilestoneError: PT.any,
   timelineId: PT.number.isRequired,
 }
 

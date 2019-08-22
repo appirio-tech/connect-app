@@ -12,6 +12,9 @@ import { withRouter } from 'react-router-dom'
 import WorkTimelineEditMilestone from '../components/work-timeline/WorkTimelineEditMilestone'
 import { createWorkMilestone } from '../../actions/workTimelines'
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
+import { getPhaseActualData } from '../../../helpers/projectHelper'
+import { MILESTONE_STATUS } from '../../../config/constants'
+
 import './WorkTimelineNewMilestoneContainer.scss'
 
 class WorkTimelineNewMilestoneContainer extends React.Component {
@@ -26,7 +29,29 @@ class WorkTimelineNewMilestoneContainer extends React.Component {
    * @param {Object} model form value
    */
   submitForm(model) {
-    const { timelineId, createWorkMilestone, work } = this.props
+    const {
+      timelineId,
+      createWorkMilestone,
+      work,
+      timelineState: { timeline },
+     } = this.props
+
+    const { startDate, endDate } = getPhaseActualData(work, timeline)
+    let milestoneStartDate
+
+    // if timeline has `endDate` then start the next milestone the next day
+    if (endDate) {
+      milestoneStartDate = endDate.add(1, 'day')
+
+    // if timeline doesn't have `endDate` (means no milestones) use `startDate`
+    } else if (startDate) {
+      milestoneStartDate = startDate
+    }
+
+    model.startDate = milestoneStartDate.format()
+    model.endDate = milestoneStartDate.add(model.duration, 'days').format()
+    model.status = MILESTONE_STATUS.PLANNED
+
     createWorkMilestone(work.id, timelineId, model)
   }
 

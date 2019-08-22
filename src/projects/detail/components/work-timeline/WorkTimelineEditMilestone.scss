@@ -78,8 +78,6 @@
 }
 
 .form-container {
-  display: flex;
-  flex-direction: column;
   margin: 40px 0;
 }
 
@@ -94,6 +92,7 @@
   flex: 1;
   width: auto;
   align-items: center;
+  flex-wrap: wrap;
 
   label {
     width: 150px;
@@ -102,10 +101,18 @@
     flex-shrink: 0;
   }
 
-  input {
+  input,
+  textarea {
     width: 0 !important;
     flex: 1;
     min-width: 0;
+  }
+
+  :global(.error-message) {
+    margin-left: 150px;
+    position: relative;
+    top: -5px;
+    width: 100%;
   }
 }
 
@@ -114,10 +121,6 @@
     align-self: flex-start;
     margin-top: 10px;
   }
-}
-
-.two-column {
-  display: flex;
 }
 
 .group-bottom {
