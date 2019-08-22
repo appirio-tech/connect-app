@@ -85,12 +85,14 @@ class WorkView extends React.Component {
   }
 
   /**
-   * Get feeds
-   * @returns {Array}
+   * Get topics which belong to the work
+   *
+   * @returns {Array} work topics
    */
-  getFeeds() {
-    const {topics, work} = this.props
+  getWorkTopics() {
+    const { topics, work } = this.props
     const tags = [`work#${work.id}-details`, `work#${work.id}-requirements`]
+
     return _.values(
       _.pick(topics, tags)
     ).filter(t => t.topic).map(t => t.topic)
@@ -98,13 +100,15 @@ class WorkView extends React.Component {
 
   /**
    * Get number of assets
-   * @returns {number}
+   *
+   * @returns {Number} number of assets
    */
   getAssetsCount() {
-    const feeds = this.getFeeds()
-    if (feeds) {
-      const links = extractLinksFromPosts(feeds)
-      const attachments = extractAttachmentLinksFromPosts(feeds)
+    const workTopics = this.getWorkTopics()
+
+    if (workTopics) {
+      const links = extractLinksFromPosts(workTopics)
+      const attachments = extractAttachmentLinksFromPosts(workTopics)
       return attachments.length + links.length
     }
   }
@@ -128,7 +132,7 @@ class WorkView extends React.Component {
     const activeMilestone = timeline && _.find(timeline.milestones, {
       status: MILESTONE_STATUS.ACTIVE,
     })
-    const feeds = this.getFeeds()
+    const workTopics = this.getWorkTopics()
 
     if (navs[selectedNav].title === 'Details') {
       return (
@@ -185,7 +189,7 @@ class WorkView extends React.Component {
       return (
         <div styleName="assets-content">
           <WorkAssetsContainer
-            feeds={feeds}
+            workTopics={workTopics}
           />
         </div>
       )

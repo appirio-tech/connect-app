@@ -458,7 +458,6 @@ class AssetsInfoContainer extends React.Component {
               projectMembers={projectMembers}
               pendingAttachments={attachmentsAwaitingPermission}
               loggedInUser={loggedInUser}
-              attachmentsStorePath={attachmentsStorePath}
               onDeletePostAttachment={this.deletePostAttachment}
               formatModifyDate={formatModifyDate}
               formatFolderTitle={formatFolderTitle}
