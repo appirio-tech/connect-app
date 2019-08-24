@@ -11,7 +11,11 @@ import {
 } from '../../api/works'
 import {
   createTimeline,
+  createMilestone,
 } from '../../api/timelines'
+import {
+  loadWorkTimeline,
+} from './workTimelines'
 import {
   getChallengesByFilter,
 } from '../../api/challenges'
@@ -27,6 +31,9 @@ import {
   DELETE_WORK_ITEM,
   DELETE_WORK_ITEM_START,
   LOAD_CHALLENGES_WORK_ITEM,
+  PHASE_STATUS_ACTIVE,
+  PHASE_STATUS_DRAFT,
+  MILESTONE_TYPE,
 } from '../../config/constants'
 
 /**
@@ -47,6 +54,52 @@ export function loadWorkInfo(projectId, workstreamId, workId) {
 }
 
 /**
+ * Create default milestones for work
+ *
+ * Creates 2 milestones:
+ * - Start, with status `active`
+ * - Complete, with status `draft`
+ *
+ * @param {Object} work     work
+ * @param {Object} timeline timeline
+ *
+ * @returns {Promise<Object>} complete milestone
+ */
+function createDefaultMilestones(work, timeline) {
+  const startMilestoneDuration = work.duration > 1 ? work.duration - 1 : 1
+  const completeMilestoneDuration = 1
+  // as we creating the first milestone as active, we set the start day as today
+  const startDate = moment()
+
+  return createMilestone(timeline.id, {
+    name: 'Start',
+    type: MILESTONE_TYPE.COMMUNITY_WORK,
+    duration: startMilestoneDuration,
+    startDate,
+    actualStartDate: startDate,
+    endDate: startDate.clone().add(startMilestoneDuration - 1, 'days'),
+    status: PHASE_STATUS_ACTIVE,
+    order: 1,
+    plannedText: 'empty',
+    activeText: 'empty',
+    completedText: 'empty',
+    blockedText: 'empty',
+  }).then(() => createMilestone(timeline.id, {
+    name: 'Complete',
+    type: MILESTONE_TYPE.COMMUNITY_WORK,
+    duration: completeMilestoneDuration,
+    startDate: startDate.clone().add(startMilestoneDuration, 'days'),
+    endDate: startDate.clone().add(startMilestoneDuration + 1, 'days'),
+    status: PHASE_STATUS_DRAFT,
+    order: 2,
+    plannedText: 'empty',
+    activeText: 'empty',
+    completedText: 'empty',
+    blockedText: 'empty',
+  }))
+}
+
+/**
  * Update work info
  * @param {String} projectId    project id
  * @param {String} workstreamId workstream id
@@ -56,10 +109,27 @@ export function loadWorkInfo(projectId, workstreamId, workId) {
  * @return {Function} dispatch function
  */
 export function updateWork(projectId, workstreamId, workId, updatedProps) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState()
+    const work = state.works.work
+    const workTimeline = _.get(state.workTimelines.timelines[workId], 'timeline')
+
+    const isWorkActivated = work.status !== PHASE_STATUS_ACTIVE &&
+      updatedProps.status === PHASE_STATUS_ACTIVE
+
+    const isWorkHaveMilestones = workTimeline && workTimeline.milestones && workTimeline.milestones.length > 0
+
     return dispatch({
       type: UPDATE_WORK_INFO,
       payload: updateWorkInfo(projectId, workstreamId, workId, updatedProps)
+    }).then(() => {
+      // if milestone has been activated, but doesn't have any milestones yet,
+      // we should created default milestones with the first one active
+      if (isWorkActivated && !isWorkHaveMilestones) {
+        return createDefaultMilestones(work, workTimeline)
+          // after creating milestones we should reload timeline to get updates in Redux store
+          .then(() => dispatch(loadWorkTimeline(work.id)))
+      }
     })
   }
 }
@@ -78,8 +148,22 @@ export function createWork(projectId, workstreamId, newProps) {
       type: NEW_WORK_INFO,
       payload: newWorkInfo(projectId, workstreamId, newProps).then((work) => (
         // we also, create a timeline for work
-        createTimelineForWork(work).then(() => work)
-      ))
+        createTimelineForWork(work)
+          .then((timeline) => {
+            // if we created a work with active status, we should also create default milestones
+            if (work.status === PHASE_STATUS_ACTIVE) {
+              return createDefaultMilestones(work, timeline, dispatch)
+            }
+          })
+          // after we created timeline for work, we should load the timeline to the Redux store
+          // we wait until timeline is loaded before finishing work creating action
+          // as we need milestone to render work card on the workstreams list (though not critical)
+          .then(() => dispatch(loadWorkTimeline(work.id)))
+          .then(() => work)
+      )),
+      meta: {
+        workstreamId,
+      },
     })
   }
 }
