@@ -55,7 +55,7 @@ const ActiveMilestoneSummary = ({
   return (
     <div styleName="container">
       <div styleName="title">{milestone.name} milestone reached</div>
-      <div styleName="active-text">{milestone.activeText}</div>
+      <div styleName="description">{milestone.description}</div>
 
       <div styleName="action">
         {renderActionButton()}
