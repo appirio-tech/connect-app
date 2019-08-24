@@ -71,7 +71,6 @@ class WorkList extends React.Component {
       workstream,
       addWorkForWorkstream,
       inputDesignWorks,
-      startDesignReview,
     } = this.props
     const {listType} = this.state
     return (
@@ -97,7 +96,6 @@ class WorkList extends React.Component {
                   timeline={milestoneData.timeline}
                   activeMilestone={milestoneData.activeMilestone}
                   inputDesignWorks={inputDesignWorks}
-                  startDesignReview={startDesignReview}
                 />
               )
             })}
@@ -131,7 +129,6 @@ WorkList.propTypes = {
   addWorkForWorkstream: PT.func.isRequired,
   timelines: PT.object.isRequired,
   inputDesignWorks: PT.func.isRequired,
-  startDesignReview: PT.func.isRequired
 }
 
 export default withRouter(WorkList)

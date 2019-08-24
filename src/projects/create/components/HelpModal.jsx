@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Modal from 'react-modal'
+import PT from 'prop-types'
 
 import styles from './HelpModal.scss'
 
@@ -19,11 +20,11 @@ export default class HelpModal extends Component {
   }
 
   render() {
-    const { linkTitle, title, content } = this.props
+    const { linkTitle, title, content, className } = this.props
     const { isOpen } = this.state
 
     return (
-      <span>
+      <span className={className}>
         <a styleName="help-link-title" onClick={this.onLinkClick}>{linkTitle}</a>
         <Modal
           isOpen={isOpen}
@@ -44,4 +45,12 @@ export default class HelpModal extends Component {
       </span>
     )
   }
+}
+
+HelpModal.defaultProps = {
+  className: '',
+}
+
+HelpModal.propTypes = {
+  className: PT.string,
 }

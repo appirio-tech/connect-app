@@ -26,6 +26,7 @@ import {parseErrorObj} from '../../helpers/workstreams'
 const initialState = {
   isLoadingMilestoneInfo: false,
   isUpdatingMilestoneInfo: false,
+  isUpdatingMilestoneInfoWithProcessId: {},
   isCreatingMilestoneInfo: false,
   isDeletingMilestoneInfo: false,
   /**
@@ -47,6 +48,22 @@ const updateTimelineByWorkId = (state, workId, updateTimelineQuery) => {
       [workId]: update(timelineStateToUpdate, updateTimelineQuery)
     }
   }
+}
+
+/**
+ * Update updating value by progress id
+ * @param {Object} oldState state object
+ * @param {Object} changingState update state value
+ * @param {Array} progressIds array of progress id
+ * @param {Boolean} updating is updating
+ */
+const updateUpdatingByProgress = (state, changingState, progressIds, updating) => {
+  const { isUpdatingMilestoneInfoWithProcessId } = state
+  _.forEach(progressIds, (progressId) => {
+    const oldValue = isUpdatingMilestoneInfoWithProcessId[progressId]
+    isUpdatingMilestoneInfoWithProcessId[progressId] = update(oldValue, { $set: updating })
+  })
+  changingState.isUpdatingMilestoneInfoWithProcessId = isUpdatingMilestoneInfoWithProcessId
 }
 
 const updateTimelineByTemplateId = (state, templateId, updateTimelineQuery) => {
@@ -118,38 +135,55 @@ export const workTimelines = function (state=initialState, action) {
     })
 
   case UPDATE_WORK_TIMELINE_MILESTONE_PENDING:
-  case COMPLETE_WORK_TIMELINE_MILESTONE_PENDING:
-    return Object.assign({}, state, {
+  case COMPLETE_WORK_TIMELINE_MILESTONE_PENDING: {
+    const mergeObject = {
       isUpdatingMilestoneInfo: true,
       isCompletingMilestone: action.type === COMPLETE_WORK_TIMELINE_MILESTONE_PENDING ?  true : state.isCompletingMilestone,
       error: false
-    })
-
+    }
+    if (!_.isNil(action.meta.progressIds)) {
+      updateUpdatingByProgress(state, mergeObject, action.meta.progressIds, true)
+    }
+    return Object.assign({}, state, mergeObject)
+  }
   case UPDATE_WORK_TIMELINE_MILESTONE_SUCCESS:
   case COMPLETE_WORK_TIMELINE_MILESTONE_SUCCESS: {
     const timelineStateToUpdate = state.timelines[action.meta.workId]
-    const milestoneIndexToUpdate = _.findIndex(timelineStateToUpdate.timeline.milestones, { id: action.meta.milestoneId })
-    const stateWithUpdatedTimeline = updateTimelineByWorkId(state, action.meta.workId, {
-      timeline: {
-        milestones: { $splice: [[milestoneIndexToUpdate, 1, action.payload.milestone]] }
-      }
-    })
+    let stateWithUpdatedTimeline = state
 
-    return Object.assign({}, stateWithUpdatedTimeline, {
+    if (timelineStateToUpdate) {
+      const milestoneIndexToUpdate = _.findIndex(timelineStateToUpdate.timeline.milestones, { id: action.meta.milestoneId })
+      stateWithUpdatedTimeline = updateTimelineByWorkId(state, action.meta.workId, {
+        timeline: {
+          milestones: { $splice: [[milestoneIndexToUpdate, 1, action.payload.milestone]] }
+        }
+      })
+    }
+
+    const mergeObject = {
       isUpdatingMilestoneInfo: false,
       isCompletingMilestone: action.type === COMPLETE_WORK_TIMELINE_MILESTONE_SUCCESS ? false : state.isCompletingMilestone,
       error: false,
       milestone: action.payload.milestone,
-    })
+    }
+    if (!_.isNil(action.meta.progressIds)) {
+      updateUpdatingByProgress(state, mergeObject, action.meta.progressIds, false)
+    }
+    return Object.assign({}, stateWithUpdatedTimeline, mergeObject)
   }
 
   case UPDATE_WORK_TIMELINE_MILESTONE_FAILURE:
-  case COMPLETE_WORK_TIMELINE_MILESTONE_FAILURE:
-    return Object.assign({}, state, {
+  case COMPLETE_WORK_TIMELINE_MILESTONE_FAILURE: {
+    const mergeObject = {
       isUpdatingMilestoneInfo: false,
       isCompletingMilestone: action.type === COMPLETE_WORK_TIMELINE_MILESTONE_FAILURE ? false : state.isCompletingMilestone,
       error: parseErrorObj(action)
-    })
+    }
+    if (!_.isNil(action.meta.progressIds)) {
+      updateUpdatingByProgress(state, mergeObject, action.meta.progressIds, false)
+    }
+    return Object.assign({}, state, mergeObject)
+  }
 
   case LOAD_WORK_TIMELINE_MILESTONE_PENDING:
     return Object.assign({}, state, {
@@ -162,12 +196,16 @@ export const workTimelines = function (state=initialState, action) {
     // the only difference is that this reducer uses `isLoadingMilestoneInfo` instead of `isUpdatingMilestoneInfo`
     const workId = _.findKey(state.timelines, { timeline: { id: action.meta.timelineId }})
     const timelineStateToUpdate = state.timelines[workId]
-    const milestoneIndexToUpdate = _.findIndex(timelineStateToUpdate.timeline.milestones, { id: action.meta.milestoneId })
-    const stateWithUpdatedTimeline = updateTimelineByTemplateId(state, action.meta.timelineId, {
-      timeline: {
-        milestones: { $splice: [[milestoneIndexToUpdate, 1, action.payload.milestone]] }
-      }
-    })
+    let stateWithUpdatedTimeline = state
+
+    if (timelineStateToUpdate) {
+      const milestoneIndexToUpdate = _.findIndex(timelineStateToUpdate.timeline.milestones, { id: action.meta.milestoneId })
+      stateWithUpdatedTimeline = updateTimelineByTemplateId(state, action.meta.timelineId, {
+        timeline: {
+          milestones: { $splice: [[milestoneIndexToUpdate, 1, action.payload.milestone]] }
+        }
+      })
+    }
 
     return Object.assign({}, stateWithUpdatedTimeline, {
       isLoadingMilestoneInfo: false,

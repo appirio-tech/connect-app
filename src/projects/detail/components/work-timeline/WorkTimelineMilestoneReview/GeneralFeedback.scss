@@ -1,0 +1,67 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+$link-color: $tc-dark-blue-110;
+
+.section-general-feedback-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+  padding: 12px 15px;
+  position: relative;
+  margin-left: -15px;
+  width: calc(100% + 30px);
+  border-radius: 8px;
+
+  &.is-editing {
+    background-color: $tc-gray-neutral-light;
+    margin-bottom: 25px;
+
+    &::after {
+      bottom: -20px;
+    }
+  }
+}
+
+.section-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.section-title {
+  @include roboto-bold;
+
+  font-size: 16px;
+  margin-bottom: 3px;
+  min-height: 20px;
+}
+
+.section-sub-title {
+  margin-bottom: 9px;
+  color: $tc-gray-30;
+  font-size: 13px;
+  min-height: 20px;
+}
+
+.general-feedback-container {
+  width: 100%;
+  color: $tc-gray-80;
+  font-size: 14px;
+  padding-bottom: 5px;
+  line-height: 20px;
+  position: relative;
+}
+
+.loading-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 1;
+}

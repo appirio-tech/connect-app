@@ -145,10 +145,11 @@ export function createWorkMilestone(workId, timelineId, milestone) {
  * @param {Number} workId          work id
  * @param {Number} timelineId      timeline id
  * @param {Object} milestoneUpdate milestone data to update
+ * @param {Array} progressIds   array of progress id
  *
  * @return {Function} dispatch function
  */
-export function updateWorkMilestone(workId, timelineId, milestoneId, milestoneUpdate) {
+export function updateWorkMilestone(workId, timelineId, milestoneId, milestoneUpdate, progressIds) {
   return (dispatch) => {
     return dispatch({
       type: UPDATE_WORK_TIMELINE_MILESTONE,
@@ -157,6 +158,7 @@ export function updateWorkMilestone(workId, timelineId, milestoneId, milestoneUp
         workId,
         timelineId,
         milestoneId,
+        progressIds
       }
     }).then(() => {
       // reload timeline after creating a milestone,

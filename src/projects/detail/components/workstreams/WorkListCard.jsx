@@ -3,8 +3,7 @@
  */
 import React from 'react'
 import PT from 'prop-types'
-import { withRouter } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 
 import ChatIcon from '../../../../assets/icons/icon-chat-pastel-crimson.svg'
 import {
@@ -14,15 +13,16 @@ import {
 
 import './WorkListCard.scss'
 
-const WorkListCard = ({
-  workstream,
-  work,
-  match,
-  inputDesignWorks,
-  startDesignReview,
-  timeline,
-  activeMilestone,
-}) => {
+const WorkListCard = (props) => {
+  const {
+    workstream,
+    work,
+    match,
+    inputDesignWorks,
+    timeline,
+    activeMilestone,
+  } = props
+  const workDashboardUrl = `/projects/${match.params.projectId}/workstreams/${workstream.id}/works/${work.id}`
   const renderActionButton = () => {
     if (!activeMilestone) {
       return null
@@ -43,9 +43,13 @@ const WorkListCard = ({
       return (
         <button
           className="tc-btn tc-btn-primary tc-btn-sm"
-          onClick={() => startDesignReview(timeline.id, activeMilestone.id)}
+          onClick={(e) => {
+            e.preventDefault()
+            // Start design review for timeline
+            props.history.push(`${workDashboardUrl}/timelines/${timeline.id}/milestones/${activeMilestone.id}/review`)
+          }}
         >
-            Design Review
+          Design Review
         </button>
       )
     default:
@@ -55,7 +59,7 @@ const WorkListCard = ({
   const actionButton = renderActionButton()
 
   return (
-    <Link to={`/projects/${match.params.projectId}/workstreams/${workstream.id}/works/${work.id}`} styleName="container">
+    <Link to={workDashboardUrl} styleName="container">
       <div styleName="left">
         <div styleName="title-container">
           <span styleName="title">{work.name}</span>
@@ -86,7 +90,6 @@ WorkListCard.propTypes = {
     id: PT.number.isRequired,
   }).isRequired,
   inputDesignWorks: PT.func.isRequired,
-  startDesignReview: PT.func.isRequired,
   timeline: PT.object.isRequired,
   activeMilestone: PT.object,
 }
