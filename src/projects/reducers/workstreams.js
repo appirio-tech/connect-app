@@ -95,7 +95,7 @@ export const workstreams = function (state=initialState, action) {
 
   case NEW_WORK_INFO_SUCCESS: {
     const { workstreams } = state
-    const workStreamIndex = _.findIndex(workstreams, workstream => (`${workstream.id}` === `${action.payload.workstreamId}`))
+    const workStreamIndex = _.findIndex(workstreams, workstream => (`${workstream.id}` === `${action.meta.workstreamId}`))
     if (workStreamIndex >= 0) {
       workstreams[workStreamIndex].works.push(action.payload)
       return Object.assign({}, state, {

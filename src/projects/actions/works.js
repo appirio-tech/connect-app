@@ -12,10 +12,14 @@ import {
 import {
   createTimeline,
   createMilestone,
+  updateMilestone,
 } from '../../api/timelines'
 import {
   loadWorkTimeline,
 } from './workTimelines'
+import {
+  syncProjectStatus,
+} from './workPhaseCommon'
 import {
   getChallengesByFilter,
 } from '../../api/challenges'
@@ -32,7 +36,7 @@ import {
   DELETE_WORK_ITEM_START,
   LOAD_CHALLENGES_WORK_ITEM,
   PHASE_STATUS_ACTIVE,
-  PHASE_STATUS_DRAFT,
+  MILESTONE_STATUS,
   MILESTONE_TYPE,
 } from '../../config/constants'
 
@@ -78,7 +82,7 @@ function createDefaultMilestones(work, timeline) {
     startDate,
     actualStartDate: startDate,
     endDate: startDate.clone().add(startMilestoneDuration - 1, 'days'),
-    status: PHASE_STATUS_ACTIVE,
+    status: MILESTONE_STATUS.ACTIVE,
     order: 1,
     plannedText: 'empty',
     activeText: 'empty',
@@ -90,7 +94,7 @@ function createDefaultMilestones(work, timeline) {
     duration: completeMilestoneDuration,
     startDate: startDate.clone().add(startMilestoneDuration, 'days'),
     endDate: startDate.clone().add(startMilestoneDuration + 1, 'days'),
-    status: PHASE_STATUS_DRAFT,
+    status: MILESTONE_STATUS.PLANNED,
     order: 2,
     plannedText: 'empty',
     activeText: 'empty',
@@ -116,20 +120,39 @@ export function updateWork(projectId, workstreamId, workId, updatedProps) {
 
     const isWorkActivated = work.status !== PHASE_STATUS_ACTIVE &&
       updatedProps.status === PHASE_STATUS_ACTIVE
-
-    const isWorkHaveMilestones = workTimeline && workTimeline.milestones && workTimeline.milestones.length > 0
+    const hasMilestones = workTimeline && workTimeline.milestones && workTimeline.milestones.length > 0
+    const hasActiveMilestone = _.find(workTimeline.milestones, { status: MILESTONE_STATUS.ACTIVE })
+    let isTimelineChanged
 
     return dispatch({
       type: UPDATE_WORK_INFO,
       payload: updateWorkInfo(projectId, workstreamId, workId, updatedProps)
     }).then(() => {
-      // if milestone has been activated, but doesn't have any milestones yet,
-      // we should created default milestones with the first one active
-      if (isWorkActivated && !isWorkHaveMilestones) {
-        return createDefaultMilestones(work, workTimeline)
-          // after creating milestones we should reload timeline to get updates in Redux store
-          .then(() => dispatch(loadWorkTimeline(work.id)))
+      if (isWorkActivated) {
+        // if work has been activated, but doesn't have any milestones yet,
+        // we should created default milestones with the first one active
+        if (!hasMilestones) {
+          isTimelineChanged = true
+          return createDefaultMilestones(work, workTimeline)
+        }
+
+        // if work has been activated but don't have yet any active milestone,
+        // than activate the first milestone
+        if (!hasActiveMilestone) {
+          isTimelineChanged = true
+          return updateMilestone(workTimeline.id, workTimeline.milestones[0].id, {
+            status: MILESTONE_STATUS.ACTIVE,
+          })
+        }
       }
+    }).then(() => {
+      // if timeline has been changed by any reason, we should reload timeline to get updates in Redux store
+      if (isTimelineChanged) {
+        dispatch(loadWorkTimeline(work.id))
+      }
+
+      // update project caused by work updates
+      syncProjectStatus(state.projectState.project, work, updatedProps, dispatch)
     })
   }
 }
@@ -143,7 +166,9 @@ export function updateWork(projectId, workstreamId, workId, updatedProps) {
  * @return {Function} dispatch function
  */
 export function createWork(projectId, workstreamId, newProps) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState()
+
     return dispatch({
       type: NEW_WORK_INFO,
       payload: newWorkInfo(projectId, workstreamId, newProps).then((work) => (
@@ -158,12 +183,20 @@ export function createWork(projectId, workstreamId, newProps) {
           // after we created timeline for work, we should load the timeline to the Redux store
           // we wait until timeline is loaded before finishing work creating action
           // as we need milestone to render work card on the workstreams list (though not critical)
-          .then(() => dispatch(loadWorkTimeline(work.id)))
-          .then(() => work)
+          .then(() =>
+            // actually we have to wait until the timeline is created, so we can show the work card using timeline
+            // but sometimes after we create timeline and load it immediately, we cannot find it due to ES indexing issue
+            // so we are catching the error for such cases, as failing to load timeline shouldn't fail work creation
+            dispatch(loadWorkTimeline(work.id)).catch(() => {})
+          )
+          .then(() => work )
       )),
       meta: {
         workstreamId,
       },
+    }).then(() => {
+      // update project caused by work creation
+      syncProjectStatus(state.projectState.project, {}, newProps, dispatch)
     })
   }
 }
