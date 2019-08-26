@@ -71,19 +71,12 @@ export const workTimelines = function (state=initialState, action) {
       error: { $set: false },
     })
 
-  case LOAD_WORK_TIMELINE_SUCCESS: {
-    const timeline = action.payload.timelines[0]
-
-    if (!timeline.milestones) {
-      timeline.milestones = []
-    }
-
+  case LOAD_WORK_TIMELINE_SUCCESS:
     return updateTimelineByWorkId(state, action.meta.workId, {
       isLoading: { $set: false },
       error: { $set: false },
-      timeline: { $set: timeline },
+      timeline: { $set: action.payload.timeline },
     })
-  }
 
   case LOAD_WORK_TIMELINE_FAILURE:
     return updateTimelineByWorkId(state, action.meta.workId, {

@@ -29,7 +29,26 @@ export function loadWorkTimeline(workId) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_WORK_TIMELINE,
-      payload: getTimelinesByReference('work', workId).then(timelines => ({ timelines })),
+      payload: getTimelinesByReference('work', workId)
+        .then(timelines => {
+          const timeline = timelines[0]
+
+          if (!timeline) {
+            const err = new Error('Timeline for work is not found.')
+            _.set(err, 'response.data.result.content.message', 'Timeline for work is not found.')
+            _.set(err, 'response.status', 404)
+
+            throw err
+          }
+
+          if (!timeline.milestones) {
+            timeline.milestones = []
+          }
+
+          return {
+            timeline,
+          }
+        }),
       meta: { workId },
     })
   }
