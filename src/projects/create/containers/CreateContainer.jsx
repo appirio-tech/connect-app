@@ -84,10 +84,11 @@ class CreateContainer extends React.Component {
     this.onLeave = this.onLeave.bind(this)
     this.closeWizard = this.closeWizard.bind(this)
     this.prepareProjectForCreation = this.prepareProjectForCreation.bind(this)
-    this.createContainerView = this.createContainerView.bind(this)
     this.addProjectAttachment = this.addProjectAttachment.bind(this)
     this.removeProjectAttachment = this.removeProjectAttachment.bind(this)
     this.updatePendingAttachment = this.updatePendingAttachment.bind(this)
+    this.handleProjectUpdate = this.handleProjectUpdate.bind(this)
+    this.handleWizardStepChange = this.handleWizardStepChange.bind(this)
 
     if (!props.userRoles || props.userRoles.length <= 0) {
       window.location = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.href}`
@@ -295,90 +296,59 @@ class CreateContainer extends React.Component {
     }
   }
 
-  createContainerView() {
+  handleWizardStepChange(wizardStep, updatedProject) {
     const { templates: { projectTemplates, projectTypes }, orgConfig } = this.props
+    const projectTypeKey = _.get(updatedProject, 'type', null)
 
-    return (
-      <EnhancedCreateView
-        {...this.props}
-        createProject={ this.createProject }
-        processing={ this.state.creatingProject}
-        createdProject={ this.state.createdProject }
-        projectId={ this.state.projectId }
-        showModal
-        closeModal={ this.closeWizard }
-        onStepChange={ (wizardStep, updatedProject) => {
-          const projectTypeKey = _.get(updatedProject, 'type', null)
-          let projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
-          if (!projectType) {
-            projectType = getProjectTypeByAlias(projectTypes, projectTypeKey)
-          }
+    let projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
+    if (!projectType) {
+      projectType = getProjectTypeByAlias(projectTypes, projectTypeKey)
+    }
 
-          const typeAlias = _.get(projectType, 'aliases[0]')
+    const typeAlias = _.get(projectType, 'aliases[0]')
 
-          const projectTemplateId = _.get(updatedProject, 'templateId', null)
-          const projectTemplate = _.find(projectTemplates, pt => pt.id === projectTemplateId)
-          const templateAlias = _.get(projectTemplate, 'aliases[0]')
+    const projectTemplateId = _.get(updatedProject, 'templateId', null)
+    const projectTemplate = _.find(projectTemplates, pt => pt.id === projectTemplateId)
+    const templateAlias = _.get(projectTemplate, 'aliases[0]')
 
-          let link
-          if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
-            let productUrl = templateAlias ? ('/' + templateAlias) : ''
-            productUrl = !templateAlias && typeAlias ? ('/' + typeAlias) : productUrl
-            this.props.history.push(NEW_PROJECT_PATH + productUrl + '/incomplete' + window.location.search)
-          }
+    let link
+    if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
+      let productUrl = templateAlias ? ('/' + templateAlias) : ''
+      productUrl = !templateAlias && typeAlias ? ('/' + typeAlias) : productUrl
+      this.props.history.push(NEW_PROJECT_PATH + productUrl + '/incomplete' + window.location.search)
+    }
 
-          if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
-            link = getNewProjectLink(orgConfig)
-            if(/^https?:\/\//.test(link)) {
-              window.location = link
-            } else {
-              this.props.history.push(link + '/' + window.location.search)
-            }
-          }
+    if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
+      link = getNewProjectLink(orgConfig)
+      if(/^https?:\/\//.test(link)) {
+        window.location = link
+      } else {
+        this.props.history.push(link + '/' + window.location.search)
+      }
+    }
 
-          if (typeAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TEMPLATE) {
-            this.props.history.push(NEW_PROJECT_PATH + '/' + typeAlias + window.location.search)
-          }
+    if (typeAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TEMPLATE) {
+      this.props.history.push(NEW_PROJECT_PATH + '/' + typeAlias + window.location.search)
+    }
 
-          if (typeAlias && templateAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
-            this.props.history.push(NEW_PROJECT_PATH + '/' + templateAlias + window.location.search)
-          }
+    if (typeAlias && templateAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
+      this.props.history.push(NEW_PROJECT_PATH + '/' + templateAlias + window.location.search)
+    }
 
-          if (typeAlias && templateAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_PROJECT_SUBMITTED) {
-            this.props.history.push(NEW_PROJECT_PATH + '/' + 'submitted' + window.location.search)
-          }
+    if (typeAlias && templateAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_PROJECT_SUBMITTED) {
+      this.props.history.push(NEW_PROJECT_PATH + '/' + 'submitted' + window.location.search)
+    }
 
-          this.setState({
-            wizardStep,
-          })
-        }
-        }
-        onProjectUpdate={ (updatedProject, dirty=true) => {
-          // const projectType = _.get(this.state.updatedProject, 'type', null)
-          const prevProduct = _.get(this.state.updatedProject, 'templateId', null)
-          const product = _.get(updatedProject, 'templateId', null)
-          // compares updated product with previous product to know if user has updated the product
-          if (prevProduct !== product) {
-            if (product) {
-              // intentionally commented because now it should not be require as we handling all URL changes in onStepChange
-              // earlier we were not getting updated project in onStepChange handler, hence it was required here
-              // still leaving it here for next few release, in case we find any issue because of commenting this line
-              // this.props.history.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
-            }
-          }
-          this.setState({
-            isProjectDirty: dirty,
-            updatedProject
-          })
-        }
-        }
-        projectTemplates={this.props.templates.projectTemplates}
-        projectTypes={this.props.templates.projectTypes}
-        addAttachment={this.addProjectAttachment}
-        updateAttachment={this.updatePendingAttachment}
-        removeAttachment={this.removeProjectAttachment}
-      />
-    )
+    this.setState({
+      wizardStep,
+    })
+  }
+
+  handleProjectUpdate(updatedProject, dirty=true) {
+    this.setState({
+      isProjectDirty: dirty,
+      updatedProject
+    })
   }
 
   addProjectAttachment(attachment) {
@@ -412,7 +382,22 @@ class CreateContainer extends React.Component {
 
     return (
       <WizardWrapper className="WizardCreateProject" type={type}>
-        { this.createContainerView() }
+        <EnhancedCreateView
+          {...this.props}
+          createProject={this.createProject}
+          processing={this.state.creatingProject}
+          createdProject={this.state.createdProject}
+          projectId={this.state.projectId}
+          showModal
+          closeModal={this.closeWizard}
+          onStepChange={this.handleWizardStepChange}
+          onProjectUpdate={this.handleProjectUpdate}
+          projectTemplates={this.props.templates.projectTemplates}
+          projectTypes={this.props.templates.projectTypes}
+          addAttachment={this.addProjectAttachment}
+          updateAttachment={this.updatePendingAttachment}
+          removeAttachment={this.removeProjectAttachment}
+        />
       </WizardWrapper>
     )
   }
