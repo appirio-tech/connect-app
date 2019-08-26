@@ -231,9 +231,12 @@ export function deleteWorkMilestone(workId, timelineId, milestoneId) {
 export function completeWorkMilestone(workId, timelineId, milestoneId, updatedProps) {
   return (dispatch, getState) => {
     const state = getState()
+    let nextMilestone
     const timeline = _.get(state.workTimelines.timelines[workId], 'timeline')
-    const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
-    const nextMilestone = getNextNotHiddenMilestone(timeline.milestones, milestoneIdx)
+    if (timeline) {
+      const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
+      nextMilestone = getNextNotHiddenMilestone(timeline.milestones, milestoneIdx)
+    }
 
     return dispatch({
       type: COMPLETE_WORK_TIMELINE_MILESTONE,

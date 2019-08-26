@@ -188,6 +188,7 @@ class IndividualFeedbackRow extends React.Component {
       alreadySelected2Place,
       alreadySelected3Place,
       progressIdForSelectingWorkPlace,
+      totalDesign,
     } = this.props
     const isFinalDesign = milestoneType === MILESTONE_TYPE.FINAL_DESIGNS
     const {
@@ -249,33 +250,39 @@ class IndividualFeedbackRow extends React.Component {
                     href="javascript:;"
                     onClick={() => { this.updateFinalPlaceSelected(1, indexOfDesign) }}
                   ><span>1</span></a>
-                  <a
-                    className={cn(
-                      styles['mulitple-works-option'],
-                      {
-                        [styles['is-disabled']]: alreadySelected2Place,
-                        [styles['is-selected']]: (place === 2),
-                      }
-                    )}
-                    href="javascript:;"
-                    onClick={() => { this.updateFinalPlaceSelected(2, indexOfDesign) }}
-                  ><span>2</span></a>
-                  <a
-                    className={cn(
-                      styles['mulitple-works-option'],
-                      {
-                        [styles['is-disabled']]: alreadySelected3Place,
-                        [styles['is-selected']]: (place === 3),
-                      }
-                    )}
-                    href="javascript:;"
-                    onClick={() => { this.updateFinalPlaceSelected(3, indexOfDesign) }}
-                  ><span>3</span></a>
-                  <a
-                    className={`${styles['mulitple-works-option']} ${styles['mulitple-works-add']} ${(place === '+') ? styles['is-selected'] : ''}`}
-                    href="javascript:;"
-                    onClick={() => { this.updateFinalPlaceSelected('+', indexOfDesign) }}
-                  ><span>+</span></a>
+                  {(totalDesign > 1) && (
+                    <a
+                      className={cn(
+                        styles['mulitple-works-option'],
+                        {
+                          [styles['is-disabled']]: alreadySelected2Place,
+                          [styles['is-selected']]: (place === 2),
+                        }
+                      )}
+                      href="javascript:;"
+                      onClick={() => { this.updateFinalPlaceSelected(2, indexOfDesign) }}
+                    ><span>2</span></a>
+                  )}
+                  {(totalDesign > 2) && (
+                    <a
+                      className={cn(
+                        styles['mulitple-works-option'],
+                        {
+                          [styles['is-disabled']]: alreadySelected3Place,
+                          [styles['is-selected']]: (place === 3),
+                        }
+                      )}
+                      href="javascript:;"
+                      onClick={() => { this.updateFinalPlaceSelected(3, indexOfDesign) }}
+                    ><span>3</span></a>
+                  )}
+                  {(totalDesign > 3) && (
+                    <a
+                      className={`${styles['mulitple-works-option']} ${styles['mulitple-works-add']} ${(place === '+') ? styles['is-selected'] : ''}`}
+                      href="javascript:;"
+                      onClick={() => { this.updateFinalPlaceSelected('+', indexOfDesign) }}
+                    ><span>+</span></a>
+                  )}
                 </div>
               )}
             </div>
@@ -387,6 +394,7 @@ IndividualFeedbackRow.propTypes = {
       title: PT.string,
     }))
   }).isRequired,
+  totalDesign: PT.number.isRequired,
   designCheckpointReview: PT.shape({
     feedback: PT.string,
     isSelected: PT.bool,

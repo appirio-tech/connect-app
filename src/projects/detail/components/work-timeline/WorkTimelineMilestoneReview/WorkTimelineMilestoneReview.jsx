@@ -167,6 +167,7 @@ export function WorkTimelineMilestoneReview(props) {
         workId={parseInt(workId)}
         timelineId={parseInt(timelineId)}
         milestoneId={parseInt(milestoneId)}
+        onBack={() => {  this.props.history.push(`${workDashboardUrl}/workstreams/${workstreamId}/works/${workId}`) }}
       />
       <span className={styles['section-title']}>Individual Feedback</span>
       <span className={styles['section-sub-title']}>Please provide specific feedback for each submission and select the top 5 designs</span>
@@ -190,6 +191,7 @@ export function WorkTimelineMilestoneReview(props) {
               progressIdForSelectingWorkPlace={designs.length + 1}
               progressIdForGeneralFeedback={designs.length}
               milestone={milestone}
+              totalDesign={designs.length}
             />
           )
         })}
