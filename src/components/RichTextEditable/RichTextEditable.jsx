@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
 
 import RichTextArea from '../RichTextArea/RichTextArea'
 import styles from './RichTextEditable.scss'
@@ -53,4 +52,4 @@ RichTextEditable.propTypes = {
   textAreaOnly: PropTypes.bool
 }
 
-export default withRouter(RichTextEditable)
+export default RichTextEditable

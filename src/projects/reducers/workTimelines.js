@@ -59,11 +59,11 @@ const updateTimelineByWorkId = (state, workId, updateTimelineQuery) => {
  */
 const updateUpdatingByProgress = (state, changingState, progressIds, updating) => {
   const { isUpdatingMilestoneInfoWithProcessId } = state
+  const setQuery = {}
   _.forEach(progressIds, (progressId) => {
-    const oldValue = isUpdatingMilestoneInfoWithProcessId[progressId]
-    isUpdatingMilestoneInfoWithProcessId[progressId] = update(oldValue, { $set: updating })
+    setQuery[progressId] = updating
   })
-  changingState.isUpdatingMilestoneInfoWithProcessId = isUpdatingMilestoneInfoWithProcessId
+  changingState.isUpdatingMilestoneInfoWithProcessId = update(isUpdatingMilestoneInfoWithProcessId, { $set: setQuery })
 }
 
 const updateTimelineByTemplateId = (state, templateId, updateTimelineQuery) => {

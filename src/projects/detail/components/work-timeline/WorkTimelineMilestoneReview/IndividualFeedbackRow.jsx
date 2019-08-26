@@ -1,5 +1,5 @@
 /**
- * Indivudual feedback view section
+ * Individual feedback view section
  */
 import React from 'react'
 import PT from 'prop-types'
@@ -92,8 +92,14 @@ class IndividualFeedbackRow extends React.Component {
     const checkpointReviewDesigns = _.get(milestone, 'details.content.checkpointReview.designs')
     let data
     if (!checkpointReviewDesigns && !this.isUpdatingAnotherFeedback()) {
+      // if index = 3 this will create `data` object with designs field: [null, null, { feedback: feedback.content }]
+      // this use to init designs as array in backend
       data = _.set({}, `details.content.checkpointReview.designs.${index}.feedback`, feedback.content)
     } else {
+      // if index = 3 this will create `data` object with designs field: { 3: { feedback: feedback.content } }
+      // this use to update only design at index in backend api, if the designs field doesn't exist in
+      // backend this will create designs as object not array so we have to call above if block first
+      // to init designs field as array first
       data = { details: { content : { checkpointReview : { designs : { [index] : { feedback: feedback.content } } } } } }
     }
 
@@ -114,8 +120,14 @@ class IndividualFeedbackRow extends React.Component {
     const checkpointReviewDesigns = _.get(milestone, 'details.content.checkpointReview.designs')
     let data
     if (!checkpointReviewDesigns && !this.isUpdatingAnotherFeedback()) {
+      // if index = 3 this will create `data` object with designs field: [null, null, { isSelected: isSelected }]
+      // this use to init designs as array in backend
       data = _.set({}, `details.content.checkpointReview.designs.${index}.isSelected`, isSelected)
     } else {
+      // if index = 3 this will create `data` object with designs field: { 3: { isSelected: isSelected } }
+      // this use to update only design at index in backend api, if the designs field doesn't exist in
+      // backend this will create designs as object not array so we have to call above if block first
+      // to init designs field as array first
       data = { details: { content : { checkpointReview : { designs : { [index] : { isSelected } } } } } }
     }
 
@@ -149,9 +161,15 @@ class IndividualFeedbackRow extends React.Component {
     let data
 
     if (!finalDesignsDesigns) {
+      // if index = 3 this will create `data` object with designs field: [null, null, { isSelected: expectedSelected, place: expectedPlace }]
+      // this use to init designs as array in backend
       data = _.set({}, `details.content.finalDesigns.designs.${index}.isSelected`, expectedSelected)
       data = _.set(data, `details.content.finalDesigns.designs.${index}.place`, expectedPlace)
     } else {
+      // if index = 3 this will create `data` object with designs field: { 3: { isSelected: expectedSelected, place: expectedPlace } }
+      // this use to update only design at index in backend api, if the designs field doesn't exist in
+      // backend this will create designs as object not array so we have to call above if block first
+      // to init designs field as array first
       data = { details: { content : { finalDesigns : { designs : { [index] : { isSelected: expectedSelected, place: expectedPlace } } } } } }
     }
 
