@@ -12,6 +12,9 @@ import IndividualFeedbackRow from './IndividualFeedbackRow'
 import GeneralFeedback from './GeneralFeedback'
 import CloseIcon from  '../../../../../assets/icons/x-mark-black.svg'
 import BackIcon from  '../../../../../assets/icons/arrows-16px-1_tail-left.svg'
+import {
+  MILESTONE_TYPE,
+} from '../../../../../config/constants'
 import styles from './WorkTimelineMilestoneReview.scss'
 
 const helperContent = `
@@ -101,7 +104,8 @@ export function WorkTimelineMilestoneReview(props) {
   } = props
   const workDashboardUrl = `/projects/${projectId}`
 
-  const generalFeedback = _.get(milestone, 'details.content.checkpointReview.generalFeedback', '')
+  const isFinalDesign = milestone.type === MILESTONE_TYPE.FINAL_DESIGNS
+  const generalFeedback = _.get(milestone, `details.content.${isFinalDesign ? 'finalDesigns' : 'checkpointReview'}.generalFeedback`, '')
   const designs = _.get(milestone, 'details.prevMilestoneContent.designs', [])
   const designsCheckpointReview = _.get(milestone, 'details.content.checkpointReview.designs', designs.map(() => ({feedback: '', isSelected: false}) ))
   const designsFinalReview = _.get(milestone, 'details.content.finalDesigns.designs', designs.map(() => ({place: null, isSelected: false}) ))
@@ -160,6 +164,7 @@ export function WorkTimelineMilestoneReview(props) {
         generalFeedback={generalFeedback}
         progressId={designs.length}
         updateWorkMilestone={updateWorkMilestone}
+        milestoneType={milestone.type}
       />
 
       <CompleteMilestoneButtonContainer
@@ -167,7 +172,7 @@ export function WorkTimelineMilestoneReview(props) {
         workId={parseInt(workId)}
         timelineId={parseInt(timelineId)}
         milestoneId={parseInt(milestoneId)}
-        onBack={() => {  this.props.history.push(`${workDashboardUrl}/workstreams/${workstreamId}/works/${workId}`) }}
+        onComplete={() => {  props.history.push(`${workDashboardUrl}/workstreams/${workstreamId}/works/${workId}`) }}
       />
       <span className={styles['section-title']}>Individual Feedback</span>
       <span className={styles['section-sub-title']}>Please provide specific feedback for each submission and select the top 5 designs</span>

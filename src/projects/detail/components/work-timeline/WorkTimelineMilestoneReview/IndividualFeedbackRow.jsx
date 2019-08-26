@@ -35,6 +35,26 @@ class IndividualFeedbackRow extends React.Component {
     this.handleClickOutside = this.handleClickOutside.bind(this)
   }
 
+  componentWillReceiveProps(nextProps) {
+    const {
+      indexOfDesign,
+      progressIdForSelectingWorkPlace
+    } = nextProps
+
+    // close edit feedback form
+    const prevIsUpdatingDesign = _.get(this.props, `isUpdatingMilestoneInfoWithProcessId.${indexOfDesign}`)
+    const nextIsUpdatingDesign = _.get(nextProps, `isUpdatingMilestoneInfoWithProcessId.${indexOfDesign}`)
+    const prevIsUpdatingDesignWorkPlace = _.get(this.props, `isUpdatingMilestoneInfoWithProcessId.${progressIdForSelectingWorkPlace}`)
+    const nextIsUpdatingDesignWorkPlace = _.get(nextProps, `isUpdatingMilestoneInfoWithProcessId.${progressIdForSelectingWorkPlace}`)
+    if (prevIsUpdatingDesign === true && nextIsUpdatingDesign === false) {
+      if (prevIsUpdatingDesignWorkPlace === true && nextIsUpdatingDesignWorkPlace === false) {
+        this.setState({ isShowWorkPopup: false })
+      } else {
+        this.setState({ isShowFeedbackForm: false })
+      }
+    }
+  }
+
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside)
   }
@@ -88,19 +108,22 @@ class IndividualFeedbackRow extends React.Component {
       updateWorkMilestone,
       match: { params: { workId, timelineId, milestoneId } },
       milestone,
+      milestoneType,
     } = this.props
-    const checkpointReviewDesigns = _.get(milestone, 'details.content.checkpointReview.designs')
+
+    const isFinalDesign = milestoneType === MILESTONE_TYPE.FINAL_DESIGNS
+    const reviewDesigns = _.get(milestone, `details.content.${isFinalDesign ? 'finalDesigns' : 'checkpointReview'}.designs`)
     let data
-    if (!checkpointReviewDesigns && !this.isUpdatingAnotherFeedback()) {
+    if (!reviewDesigns && !this.isUpdatingAnotherFeedback()) {
       // if index = 3 this will create `data` object with designs field: [null, null, { feedback: feedback.content }]
       // this use to init designs as array in backend
-      data = _.set({}, `details.content.checkpointReview.designs.${index}.feedback`, feedback.content)
+      data = _.set({}, `details.content.${isFinalDesign ? 'finalDesigns' : 'checkpointReview'}.designs.${index}.feedback`, feedback.content)
     } else {
       // if index = 3 this will create `data` object with designs field: { 3: { feedback: feedback.content } }
       // this use to update only design at index in backend api, if the designs field doesn't exist in
       // backend this will create designs as object not array so we have to call above if block first
       // to init designs field as array first
-      data = { details: { content : { checkpointReview : { designs : { [index] : { feedback: feedback.content } } } } } }
+      data = { details: { content : { [isFinalDesign ? 'finalDesigns' : 'checkpointReview'] : { designs : { [index] : { feedback: feedback.content } } } } } }
     }
 
     updateWorkMilestone(parseInt(workId), parseInt(timelineId), parseInt(milestoneId), data, [index])
@@ -199,7 +222,7 @@ class IndividualFeedbackRow extends React.Component {
     const avatar = _.get(design, 'previewUrl', '')
     const title = _.get(design, 'title', '')
     const links = _.get(design, 'links', [])
-    const feedback = _.get(designCheckpointReview, 'feedback', '')
+    const feedback = _.get(isFinalDesign ? designFinalReview : designCheckpointReview, 'feedback', '')
     const isCheckpointSelected = _.get(designCheckpointReview, 'isSelected', false)
     let place = _.get(designFinalReview, 'place', 0)
     const isFinalSelected = _.get(designFinalReview, 'isSelected', false)

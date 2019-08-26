@@ -9,6 +9,9 @@ import RichTextEditable from '../../../../../components/RichTextEditable/RichTex
 import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
 import EditIcon from  '../../../../../assets/icons/icon-edit-black.svg'
 import { markdownToHTML } from '../../../../../helpers/markdownToState'
+import {
+  MILESTONE_TYPE,
+} from '../../../../../config/constants'
 import styles from './GeneralFeedback.scss'
 
 class GeneralFeedback extends React.Component {
@@ -22,6 +25,19 @@ class GeneralFeedback extends React.Component {
     this.updateGeneralFeedback = this.updateGeneralFeedback.bind(this)
   }
 
+  componentWillReceiveProps(nextProps) {
+    const {
+      progressId,
+    } = nextProps
+
+    // close edit feedback form
+    const prevIsUpdatingMilestone = _.get(this.props, `isUpdatingMilestoneInfoWithProcessId.${progressId}`)
+    const nextIsUpdatingMilestone = _.get(nextProps, `isUpdatingMilestoneInfoWithProcessId.${progressId}`)
+    if (prevIsUpdatingMilestone === true && nextIsUpdatingMilestone === false) {
+      this.setState({ showEditGeneralFeedbackForm: false })
+    }
+  }
+
   /**
    * update general feedback
    * @param {Object} feedback feedback content
@@ -30,10 +46,22 @@ class GeneralFeedback extends React.Component {
     const {
       updateWorkMilestone,
       progressId,
+      milestoneType,
       match: { params: { workId, timelineId, milestoneId } },
     } = this.props
 
-    updateWorkMilestone(parseInt(workId), parseInt(timelineId), parseInt(milestoneId), _.set({}, 'details.content.checkpointReview.generalFeedback', feedback.content), [progressId])
+    const isFinalDesign = milestoneType === MILESTONE_TYPE.FINAL_DESIGNS
+    updateWorkMilestone(
+      parseInt(workId),
+      parseInt(timelineId),
+      parseInt(milestoneId),
+      _.set(
+        {},
+        `details.content.${isFinalDesign ? 'finalDesigns' : 'checkpointReview'}.generalFeedback`,
+        feedback.content
+      ),
+      [progressId]
+    )
   }
 
   render() {
@@ -92,6 +120,7 @@ GeneralFeedback.propTypes = {
   generalFeedback: PT.string.isRequired,
   progressId: PT.number.isRequired,
   updateWorkMilestone: PT.func.isRequired,
+  milestoneType: PT.string.isRequired,
 }
 
 export default withRouter(GeneralFeedback)
