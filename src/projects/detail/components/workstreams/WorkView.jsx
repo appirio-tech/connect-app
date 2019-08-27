@@ -94,8 +94,8 @@ class WorkView extends React.Component {
       timelines,
       showAddChallengeTask,
       inputDesignWorks,
-      startDesignReview,
       markMilestoneAsCompleted,
+      match
     } = this.props
     const timeline = _.get(timelines[work.id], 'timeline')
     const activeMilestone = timeline && _.find(timeline.milestones, {
@@ -112,8 +112,8 @@ class WorkView extends React.Component {
               timeline={timeline}
               milestone={activeMilestone}
               inputDesignWorks={inputDesignWorks}
-              startDesignReview={startDesignReview}
               markMilestoneAsCompleted={markMilestoneAsCompleted}
+              match={match}
             />
           )}
         </div>
@@ -230,7 +230,6 @@ WorkView.propTypes = {
   isDeletingWorkInfo: PT.bool.isRequired,
   timelines: PT.object.isRequired,
   inputDesignWorks: PT.func.isRequired,
-  startDesignReview: PT.func.isRequired,
   markMilestoneAsCompleted: PT.func,
 }
 

@@ -145,10 +145,11 @@ export function createWorkMilestone(workId, timelineId, milestone) {
  * @param {Number} workId          work id
  * @param {Number} timelineId      timeline id
  * @param {Object} milestoneUpdate milestone data to update
+ * @param {Array} progressIds   array of progress id
  *
  * @return {Function} dispatch function
  */
-export function updateWorkMilestone(workId, timelineId, milestoneId, milestoneUpdate) {
+export function updateWorkMilestone(workId, timelineId, milestoneId, milestoneUpdate, progressIds) {
   return (dispatch) => {
     return dispatch({
       type: UPDATE_WORK_TIMELINE_MILESTONE,
@@ -157,6 +158,7 @@ export function updateWorkMilestone(workId, timelineId, milestoneId, milestoneUp
         workId,
         timelineId,
         milestoneId,
+        progressIds
       }
     }).then(() => {
       // reload timeline after creating a milestone,
@@ -229,9 +231,12 @@ export function deleteWorkMilestone(workId, timelineId, milestoneId) {
 export function completeWorkMilestone(workId, timelineId, milestoneId, updatedProps) {
   return (dispatch, getState) => {
     const state = getState()
+    let nextMilestone
     const timeline = _.get(state.workTimelines.timelines[workId], 'timeline')
-    const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
-    const nextMilestone = getNextNotHiddenMilestone(timeline.milestones, milestoneIdx)
+    if (timeline) {
+      const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
+      nextMilestone = getNextNotHiddenMilestone(timeline.milestones, milestoneIdx)
+    }
 
     return dispatch({
       type: COMPLETE_WORK_TIMELINE_MILESTONE,
