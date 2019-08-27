@@ -7,6 +7,7 @@
  */
 import React from 'react'
 import PT from 'prop-types'
+import { Link } from 'react-router-dom'
 
 import CompleteMilestoneButtonContainer from '../work-timeline/CompleteMilestoneButtonContainer'
 import { MILESTONE_TYPE } from '../../../../config/constants'
@@ -18,7 +19,7 @@ const ActiveMilestoneSummary = ({
   timeline,
   milestone,
   inputDesignWorks,
-  startDesignReview,
+  match
 }) => {
   const renderActionButton = () => {
     switch (milestone.type) {
@@ -33,13 +34,14 @@ const ActiveMilestoneSummary = ({
       )
     case MILESTONE_TYPE.CHECKPOINT_REVIEW:
     case MILESTONE_TYPE.FINAL_DESIGNS:
+      // Button for Start design review for timeline
       return (
-        <button
+        <Link
+          to={`/projects/${match.params.projectId}/workstreams/${match.params.workstreamId}/works/${work.id}/timelines/${timeline.id}/milestones/${milestone.id}/review`}
           className="tc-btn tc-btn-primary tc-btn-sm"
-          onClick={() => startDesignReview(timeline.id, milestone.id)}
         >
             Start Design Review
-        </button>
+        </Link>
       )
     default:
       return (
@@ -77,7 +79,6 @@ ActiveMilestoneSummary.propTypes = {
     activeText: PT.string
   }),
   inputDesignWorks: PT.func.isRequired,
-  startDesignReview: PT.func.isRequired,
   markMilestoneAsCompleted: PT.func,
 }
 

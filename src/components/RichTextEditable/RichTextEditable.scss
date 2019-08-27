@@ -1,0 +1,9 @@
+.rich-text-editable {
+  width: 100%;
+
+  :global {
+    .modal-row {
+      padding: 0;
+    }
+  }
+}

@@ -60,7 +60,6 @@ WorkViewContainer.PropTypes = {
   work: PT.object.isRequired,
   timelines: PT.object.isRequired,
   inputDesignWorks: PT.func.isRequired,
-  startDesignReview: PT.func.isRequired,
   markMilestoneAsCompleted: PT.func,
   topics: PT.array,
   loadTopic: PT.func.isRequired,

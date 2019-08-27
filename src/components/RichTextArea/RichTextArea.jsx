@@ -273,7 +273,7 @@ class RichTextArea extends React.Component {
     }
   }
   onPost() {
-    const { isCreating, disableTitle, disableContent, onPost, canUploadAttachment } = this.props
+    const { isCreating, hideTitle, disableTitle, disableContent, onPost, canUploadAttachment } = this.props
     const { titleValue: title, currentMDContent: content, isPrivate, rawFiles, files } = this.state
     // if post creation is already in progress
     if (isCreating) {
@@ -295,7 +295,7 @@ class RichTextArea extends React.Component {
           }
         })
     } else {
-      if ((disableTitle || title) && (disableContent || content)) {
+      if ((hideTitle || disableTitle || title) && (disableContent || content)) {
         onPost({ title, content, isPrivate, attachmentIds: files.map(f => f.id) })
       }
     }
@@ -390,10 +390,10 @@ class RichTextArea extends React.Component {
   }
   render() {
     const {MentionSuggestions} = this.mentionPlugin
-    const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating,
-      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic, hasPrivateSwitch, canUploadAttachment, attachments, textAreaOnly } = this.props
+    const { className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating,
+      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic, hasPrivateSwitch, canUploadAttachment, attachments, textAreaOnly, hideTitle, okButtonText, cancelButtonText } = this.props
     const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading, isPrivate, isAddLinkOpen, rawFiles, files} = this.state
-    let canSubmit = (disableTitle || titleValue.trim())
+    let canSubmit = (hideTitle || disableTitle || titleValue.trim())
       && (disableContent || editorState.getCurrentContent().hasText())
     if (editMode && canSubmit) {
       canSubmit = (!disableTitle && titleValue !== this.props.oldTitle) || (!disableContent && oldMDContent !== currentMDContent)
@@ -404,7 +404,10 @@ class RichTextArea extends React.Component {
     const currentEntity = getCurrentEntity(editorState)
     const selectionState = editorState.getSelection()
     const disableForCodeBlock = blockType === 'code-block'
-    const editButtonText = editingTopic ? 'Update title' : 'Update post'
+    let editButtonText = okButtonText
+    if (!editButtonText) {
+      editButtonText = editingTopic ? 'Update title' : 'Update post'
+    }
 
     const Entry = (props) => {
       const {
@@ -448,7 +451,7 @@ class RichTextArea extends React.Component {
           <div className={cn('object', { comment: disableTitle }, 'commentEdit')}>
             <input
               ref="title" value={titleValue}
-              className={cn('new-post-title', { 'hide-title': disableTitle })}
+              className={cn('new-post-title', { 'hide-title': disableTitle || hideTitle })}
               type="text"
               onChange={this.onTitleChange}
               placeholder={editorExpanded ? expandedTitlePlaceholder : titlePlaceholder || 'Title of the post'}
@@ -561,7 +564,7 @@ class RichTextArea extends React.Component {
                       }
                       {editMode && !isCreating &&
                         <button className="tc-btn tc-btn-default tc-btn-sm" onClick={this.cancelEdit}>
-                          Cancel
+                          {cancelButtonText ? cancelButtonText: 'Cancel'}
                         </button>
                       }
                       {editMode &&
@@ -618,6 +621,10 @@ class RichTextArea extends React.Component {
   }
 }
 
+RichTextArea.defaultProps = {
+  hideTitle: false,
+}
+
 RichTextArea.propTypes = {
   expandedTitlePlaceholder: PropTypes.string,
   onPost: PropTypes.func.isRequired,
@@ -625,6 +632,7 @@ RichTextArea.propTypes = {
   cancelEdit: PropTypes.func,
   isCreating: PropTypes.bool,
   disableTitle: PropTypes.bool,
+  hideTitle: PropTypes.bool,
   disableContent: PropTypes.bool,
   editMode: PropTypes.bool,
   hasError: PropTypes.bool,
@@ -643,7 +651,9 @@ RichTextArea.propTypes = {
   hasPrivateSwitch: PropTypes.bool,
   canUploadAttachment: PropTypes.bool,
   attachments: PropTypes.array,
-  textAreaOnly: PropTypes.bool
+  textAreaOnly: PropTypes.bool,
+  okButtonText: PropTypes.string,
+  cancelButtonText: PropTypes.string,
 }
 
 export default withRouter(RichTextArea)

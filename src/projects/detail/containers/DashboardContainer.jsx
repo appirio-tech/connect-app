@@ -35,6 +35,7 @@ import WorkViewContainer from './WorkViewContainer'
 import WorkNewContainer from './WorkNewContainer'
 import WorkTimelineNewMilestoneContainer from './WorkTimelineNewMilestoneContainer'
 import WorkTimelineEditMilestoneContainer from './WorkTimelineEditMilestoneContainer'
+import WorkTimelineMilestoneReviewContainer from './WorkTimelineMilestoneReviewContainer'
 import AddWorkItemContrainer from './AddWorkItemContrainer'
 import DesignWorksContainer from './DesignWorksContainer'
 import Sticky from '../../../components/Sticky'
@@ -173,7 +174,18 @@ class DashboardContainer extends React.Component {
             />
           )
         }
+        if (params.milestoneId) {
+          const href = window.location.href
+          const lastSectionOfUrl = href.substring(href.lastIndexOf('/') + 1)
+          if (lastSectionOfUrl === 'review') {
+            return (
+              <WorkTimelineMilestoneReviewContainer
+                {...this.props}
+              />
+            )
+          }
 
+        }
         return (
           <WorkViewContainer
             {...this.props}
@@ -181,7 +193,6 @@ class DashboardContainer extends React.Component {
             addNewMilestone={(timelineId) => this.setState({ showAddMilestoneForTimeline: timelineId }) }
             editMilestone={(timelineId, milestoneId) => this.setState({ showEditMilestoneForTimeline: {timelineId, milestoneId} }) }
             inputDesignWorks={(timelineId, milestoneId) => this.setState({ showDesignWorks: {timelineId, milestoneId} }) }
-            startDesignReview={(timelineId, milestoneId) => alert(`Start design review for timeline (${timelineId}) milestone (${milestoneId})`)}
             markMilestoneAsCompleted={(timelineId, milestoneId) => alert(`Mark as Complete for timeline (${timelineId}) milestone (${milestoneId})`)}
           />
         )
@@ -201,7 +212,6 @@ class DashboardContainer extends React.Component {
           {...this.props}
           addWorkForWorkstream={(workstreamId) => { this.setState({ showAddWorkForWorkstream: workstreamId }) }}
           inputDesignWorks={(timelineId, milestoneId) => this.setState({ showDesignWorks: {timelineId, milestoneId} }) }
-          startDesignReview={(timelineId, milestoneId) => alert(`Start design review for timeline (${timelineId}) milestone (${milestoneId})`)}
         />
       )
     }

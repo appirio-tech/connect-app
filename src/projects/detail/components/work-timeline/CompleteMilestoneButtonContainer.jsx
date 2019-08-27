@@ -55,10 +55,10 @@ class CompleteMilestoneButtonContainer extends React.Component {
 
   render() {
     const { isConfirmationShown } = this.state
-    const { isCompletingMilestone } = this.props
+    const { isCompletingMilestone, className } = this.props
 
     return (
-      <div>
+      <div className={className}>
         {!isCompletingMilestone && (
           <button
             className="tc-btn tc-btn-warning tc-btn-sm"
@@ -98,12 +98,17 @@ class CompleteMilestoneButtonContainer extends React.Component {
   }
 }
 
+CompleteMilestoneButtonContainer.defaultProps = {
+  className: ''
+}
+
 CompleteMilestoneButtonContainer.propTypes = {
   workId: PT.number.isRequired,
   timelineId: PT.number.isRequired,
   milestoneId: PT.number.isRequired,
   onComplete: PT.func,
   completeWorkMilestone: PT.func.isRequired,
+  className: PT.string,
 }
 
 const mapStateToProps = ({ workTimelines }) => ({
