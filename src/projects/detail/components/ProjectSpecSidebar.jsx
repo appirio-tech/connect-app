@@ -9,9 +9,7 @@ import MediaQuery from 'react-responsive'
 import SidebarNav from './SidebarNav'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER, SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import { updateProject } from '../../actions/project'
-import { isProjectEstimationPresent } from '../../../helpers/projectHelper'
 import ReviewProjectButton from './ReviewProjectButton'
-import ProjectEstimationSection from './ProjectEstimationSection'
 import './ProjectSpecSidebar.scss'
 
 const calcProgress = (project, subSection) => {
@@ -119,16 +117,12 @@ class ProjectSpecSidebar extends Component {
     const showReviewBtn = project.status === 'draft' &&
       _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
 
-    const hasEstimation = isProjectEstimationPresent(project)
-
     return (
       <div className={cn('projectSpecSidebar', { 'has-review-btn': showReviewBtn })}>
         <h4 className="titles gray-font">Sections</h4>
         <div className="list-group">
           <SidebarNav items={navItems} />
         </div>
-
-        {hasEstimation && <ProjectEstimationSection project={project} />}
 
         { showReviewBtn &&
         <div>
@@ -146,17 +140,6 @@ class ProjectSpecSidebar extends Component {
             onClick={this.onSubmitForReview}
           />
         </div>
-        }
-        {!showReviewBtn && hasEstimation &&
-          <MediaQuery maxWidth={SCREEN_BREAKPOINT_MD - 1}>
-            <div className="sticky-estimation-only">
-              <Sticky top={0}>
-                <div className="btn-boxs">
-                  <ProjectEstimationSection project={project} />
-                </div>
-              </Sticky>
-            </div>
-          </MediaQuery>
         }
       </div>
     )
