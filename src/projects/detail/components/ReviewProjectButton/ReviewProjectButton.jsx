@@ -10,7 +10,7 @@ import cn from 'classnames'
 
 import './ReviewProjectButton.scss'
 
-const ReviewProjectButton = ({ project, disabled, onClick, wrapperClass }) => {
+const ReviewProjectButton = ({ disabled, onClick, wrapperClass }) => {
   const submitButton = (
     <button className="tc-btn tc-btn-primary tc-btn-md"
       onClick={onClick}
@@ -33,7 +33,7 @@ ReviewProjectButton.defaultProps =  {
 
 ReviewProjectButton.propTypes = {
   disabled: PT.bool,
-  project: PT.object.isRequired,
+  project: PT.object,
   onClick: PT.func.isRequired,
   wrapperClass: PT.string
 }

@@ -20,9 +20,7 @@ function HeaderWithProgress({project, template, currentWizardStep, hidePrice}) {
       <div styleName="content">
         <div styleName="title-estimate">
           <h3>{currentStep.title}</h3>
-          { false && !hidePrice ?
-            <div>From ${numberWithCommas(priceEstimate)}</div> : ''
-          }
+          { false && !hidePrice && (<div>From ${numberWithCommas(priceEstimate)}</div>) }
         </div>
         <div styleName="progress-bar">
           <div styleName="progress" style={{width: (progress*100)+'%'}} />
