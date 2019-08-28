@@ -38,7 +38,7 @@ class WorkItemsContainer extends React.Component {
 
     return (
       <div styleName="container">
-        <span styleName="title">CHALLENGES & TASKS</span>
+        <span styleName="title">Challenges &amp; Tasks</span>
         {!isLoadingWorkItem && workitems && (
           <WorkItemList {...this.props} />)}
         {isLoadingWorkItem && (<LoadingIndicator />)}

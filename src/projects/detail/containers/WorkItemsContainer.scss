@@ -5,11 +5,17 @@
   flex-direction: column;
   color: $tc-gray-90;
   align-items: center;
+
+  &:not(:first-child) {
+    margin-top: 6 * $base-unit;
+  }
 }
 
 .title {
   @include roboto-bold;
 
+  white-space: nowrap;
+  color: $tc-gray-90;
   font-size: 16px;
   line-height: 30px;
   width: 100%;

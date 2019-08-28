@@ -74,12 +74,10 @@ class WorkItemList extends React.Component {
                   <td>
                     <a
                       href={`${DIRECT_PROJECT_URL}${_.get(item, 'details.challengeId', 0)}`}
-                      styleName="icon-mange"
-                      className="tc-btn tc-btn-primary tc-btn-sm"
-                      onClick={() => {}}
+                      className="tc-btn tc-btn-default tc-btn-sm"
                       disabled={workItemsIsDeleting[item.id]}
                       target="_blank"
-                    >MANAGE DETAILS</a>
+                    >Manage Details</a>
                   </td>
                   <td>
                     {(workItemsIsDeleting[item.id])
