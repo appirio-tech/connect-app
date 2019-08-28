@@ -105,6 +105,7 @@ const ProjectDetailView = (props) => {
     location: props.location,
     estimationQuestion,
     projectTemplate: props.projectTemplate,
+    permissions: props.permissions,
   }
   return <Component {...componentProps} />
 }
@@ -230,7 +231,8 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
     productsTimelines,
     allProductTemplates: templates.productTemplates,
     currentUserRoles: loadUser.user.roles,
-    showUserInvited: projectState.showUserInvited
+    showUserInvited: projectState.showUserInvited,
+    permissions: projectState.permissions,
   }
 }
 
@@ -243,7 +245,11 @@ ProjectDetail.propTypes = {
     PropTypes.bool,
     PropTypes.object
   ]).isRequired,
-  isLoading: PropTypes.bool.isRequired
+  isLoading: PropTypes.bool.isRequired,
+  /**
+   * Permissions of the current user to perform actions for the current project
+   */
+  permissions: PropTypes.object.isRequired,
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectDetail))

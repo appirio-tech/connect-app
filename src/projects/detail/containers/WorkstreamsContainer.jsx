@@ -49,6 +49,7 @@ WorkstreamsContainer.PropTypes = {
   timelines: PT.array.isRequired,
   inputDesignWorks: PT.func.isRequired,
   isManageUser: PT.bool,
+  permissions: PT.object.isRequired,
 }
 
 

@@ -20,6 +20,7 @@ import PostsContainer from '../../../../components/Posts'
 import {
   PHASE_STATUS,
   MILESTONE_STATUS,
+  POLICIES,
 } from '../../../../config/constants'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import WorkItemsContainer from '../../containers/WorkItemsContainer'
@@ -206,7 +207,8 @@ class WorkView extends React.Component {
       work,
       match,
       isUpdatingWorkInfo,
-      isDeletingWorkInfo
+      isDeletingWorkInfo,
+      permissions,
     } = this.props
     const assetsCount = this.getAssetsCount()
 
@@ -220,16 +222,21 @@ class WorkView extends React.Component {
                 this.setState({isEditing: false})
               }}
               submitForm={this.submitEditForm}
+              permissions={permissions}
             />
           ) : (
             <div styleName={cn('wrapper-content', {'is-updating': isUpdatingWorkInfo})}>
               <div styleName="header">
                 <span styleName="work-name">{work.name}</span>
                 <div styleName="right-control">
-                  <i styleName="icon-edit" onClick={() => {
-                    this.setState({isEditing: true})
-                  }} title="edit"
-                  ><EditIcon/></i>
+                  {permissions[POLICIES.WORKITEM_EDIT] && (
+                    <i styleName="icon-edit" onClick={() => {
+                      this.setState({isEditing: true})
+                    }} title="edit"
+                    >
+                      <EditIcon/>
+                    </i>
+                  )}
                   <Link
                     onClick={() => {
                       work.selectedNav = 0
@@ -252,6 +259,7 @@ class WorkView extends React.Component {
                       value={work.status}
                       theme="default"
                       options={phaseStatuses}
+                      disabled={!permissions[POLICIES.WORKITEM_EDIT]}
                     />
                   </div>
                 </Formsy.Form>
@@ -302,7 +310,8 @@ WorkView.propTypes = {
   timelines: PT.object.isRequired,
   inputDesignWorks: PT.func.isRequired,
   markMilestoneAsCompleted: PT.func,
-  topics: PT.object
+  topics: PT.object,
+  permissions: PT.object.isRequired,
 }
 
 export default withRouter(WorkView)

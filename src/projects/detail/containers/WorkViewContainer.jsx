@@ -63,6 +63,7 @@ WorkViewContainer.PropTypes = {
   markMilestoneAsCompleted: PT.func,
   topics: PT.array,
   loadTopic: PT.func.isRequired,
+  permissions: PT.object.isRequired,
 }
 
 const mapStateToProps = ({ topics }) => ({

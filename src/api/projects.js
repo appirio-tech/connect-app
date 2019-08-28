@@ -251,3 +251,17 @@ export function deleteProjectPhase(projectId, phaseId) {
   return axios.delete(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}`)
     .then(() => ({ projectId, phaseId }))
 }
+
+/**
+ * Get project permissions
+ *
+ * @param {Number} projectId project id
+ *
+ * @returns {Promise<Object>} project permissions
+ */
+export function getProjectPermissions(projectId) {
+  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/permissions`)
+    .then(resp => (
+      _.get(resp.data, 'result.content', {})
+    ))
+}

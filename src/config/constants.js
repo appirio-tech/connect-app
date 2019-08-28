@@ -107,6 +107,12 @@ export const LOAD_PROJECT_PLAN_PENDING     = 'LOAD_PROJECT_PLAN_PENDING'
 export const LOAD_PROJECT_PLAN_FAILURE     = 'LOAD_PROJECT_PLAN_FAILURE'
 export const LOAD_PROJECT_PLAN_SUCCESS     = 'LOAD_PROJECT_PLAN_SUCCESS'
 
+// Project Permissions
+export const LOAD_PROJECT_PERMISSIONS             = 'LOAD_PROJECT_PERMISSIONS'
+export const LOAD_PROJECT_PERMISSIONS_PENDING     = 'LOAD_PROJECT_PERMISSIONS_PENDING'
+export const LOAD_PROJECT_PERMISSIONS_FAILURE     = 'LOAD_PROJECT_PERMISSIONS_FAILURE'
+export const LOAD_PROJECT_PERMISSIONS_SUCCESS     = 'LOAD_PROJECT_PERMISSIONS_SUCCESS'
+
 // Workstreams
 export const LOAD_WORKSTREAMS             = 'LOAD_WORKSTREAMS'
 export const LOAD_WORKSTREAMS_PENDING     = 'LOAD_WORKSTREAMS_PENDING'
@@ -983,6 +989,24 @@ export const MILESTONE_LINK_SUPPORTED_TYPES = [
   { title: 'Heroku link', value: 'heroku' },
   { title: 'Invoice', value: 'invoice' }
 ]
+
+/**
+ * Possible permissions returned by the `/projects/{id}/permissions` endpoint of Project Service.
+ * Inside Redux Store we keep these permissions in `projectState.permissions`.
+ * Call them `POLICIES` instead of `PERMISSIONS` to avoid confusions with permission rules, defined in `./permissions.js`
+ */
+export const POLICIES = {
+  WORK_CREATE: 'work.create',
+  WORK_EDIT: 'work.edit',
+  WORK_DELETE: 'work.delete',
+  WORKITEM_CREATE: 'workItem.create',
+  WORKITEM_EDIT: 'workItem.edit',
+  WORKITEM_DELETE: 'workItem.delete',
+  WORKSTREAM_EDIT: 'workStream.edit',
+  // the next policies are not in use as only admins can perform these operations server-side
+  // WORKSTREAM_CREATE: 'workStream.create',
+  // WORKSTREAM_DELETE: 'workStream.delete',
+}
 
 // Notifications event types
 export const EVENT_TYPE = {

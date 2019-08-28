@@ -10,7 +10,10 @@ import DropdownItem from 'appirio-tech-react-components/components/Dropdown/Drop
 import DeletePopup from './DeletePopup'
 import { getSubtrackAbbreviation } from '../../../../helpers'
 import { getWorkItemStartEndDate } from '../../../../helpers/workstreams'
-import { DIRECT_PROJECT_URL } from '../../../../config/constants'
+import {
+  DIRECT_PROJECT_URL,
+  POLICIES,
+} from '../../../../config/constants'
 import './WorkItemList.scss'
 
 
@@ -42,7 +45,11 @@ class WorkItemList extends React.Component {
 
   render() {
     const { showDeletePopup } = this.state
-    const { workitems, workItemsIsDeleting } = this.props
+    const {
+      workitems,
+      workItemsIsDeleting,
+      permissions,
+    } = this.props
     return (
       <div styleName="container">
         {workitems.length ? (<table styleName="table">
@@ -51,8 +58,8 @@ class WorkItemList extends React.Component {
               <th>Challenge</th>
               <th>Start</th>
               <th>End</th>
-              <th />
-              <th />
+              {permissions[POLICIES.WORKITEM_EDIT] && <th />}
+              {permissions[POLICIES.WORKITEM_DELETE] && <th />}
             </tr>
           </thead>
           <tbody>
@@ -71,18 +78,21 @@ class WorkItemList extends React.Component {
                   </td>
                   <td>{startDate ? startDate.format('MMM D') : ''}</td>
                   <td>{endDate ? endDate.format('MMM D') : ''}</td>
-                  <td>
-                    <a
-                      href={`${DIRECT_PROJECT_URL}${_.get(item, 'details.challengeId', 0)}`}
-                      className="tc-btn tc-btn-default tc-btn-sm"
-                      disabled={workItemsIsDeleting[item.id]}
-                      target="_blank"
-                    >Manage Details</a>
-                  </td>
-                  <td>
-                    {(workItemsIsDeleting[item.id])
-                      ? (<span styleName="text-deleting">Deleting</span>)
-                      : (
+                  {permissions[POLICIES.WORKITEM_EDIT] && (
+                    <td>
+                      <a
+                        href={`${DIRECT_PROJECT_URL}${_.get(item, 'details.challengeId', 0)}`}
+                        className="tc-btn tc-btn-default tc-btn-sm"
+                        disabled={workItemsIsDeleting[item.id]}
+                        target="_blank"
+                      >Manage Details</a>
+                    </td>
+                  )}
+                  {permissions[POLICIES.WORKITEM_DELETE] && (
+                    <td>
+                      {workItemsIsDeleting[item.id] ? (
+                        <span styleName="text-deleting">Deleting</span>
+                      ) : (
                         <Dropdown
                           styleName="dropdown"
                           pointerShadow className="drop-down edit-toggle-container"
@@ -99,8 +109,10 @@ class WorkItemList extends React.Component {
                               /> }
                             </ul>
                           </div>
-                        </Dropdown>)}
-                  </td>
+                        </Dropdown>
+                      )}
+                    </td>
+                  )}
                 </tr>
               )
             })}
@@ -138,6 +150,7 @@ WorkItemList.propTypes = {
   workItemsIsDeleting: PT.object.isRequired, // object that contain deleting workitem with format {[workitemid]: false/true}
   deleteWorkitem: PT.func.isRequired,
   startDeleteWorkitem: PT.func.isRequired,
+  permissions: PT.object.isRequired,
 }
 
 export default withRouter(WorkItemList)

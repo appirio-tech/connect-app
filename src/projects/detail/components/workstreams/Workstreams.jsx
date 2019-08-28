@@ -15,6 +15,7 @@ const Workstreams = ({
   timelines,
   inputDesignWorks,
   isManageUser,
+  permissions,
 }) => (
   workstreams.length > 0 ? (
     <Section>
@@ -25,6 +26,7 @@ const Workstreams = ({
           addWorkForWorkstream={addWorkForWorkstream}
           timelines={timelines}
           inputDesignWorks={inputDesignWorks}
+          permissions={permissions}
         />
       ))}
     </Section>
@@ -44,6 +46,7 @@ Workstreams.propTypes = {
   timelines: PT.object.isRequired,
   inputDesignWorks: PT.func.isRequired,
   isManageUser: PT.bool,
+  permissions: PT.object.isRequired,
 }
 
 export default withRouter(Workstreams)

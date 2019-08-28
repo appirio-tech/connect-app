@@ -15,7 +15,11 @@ import CloseIcon from  '../../../../assets/icons/x-mark-black.svg'
 import TrashIcon from  '../../../../assets/icons/icon-trash-black.svg'
 import BackIcon from  '../../../../assets/icons/arrows-16px-1_tail-left.svg'
 import styles from './WorkViewEdit.scss'
-import { PHASE_STATUS_DRAFT, PHASE_STATUS } from '../../../../config/constants'
+import {
+  PHASE_STATUS_DRAFT,
+  PHASE_STATUS,
+  POLICIES,
+} from '../../../../config/constants'
 import {getWorkActualData} from '../../../../helpers/workstreams'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
 import DeletePopup from './DeletePopup'
@@ -182,6 +186,7 @@ class WorkViewEdit extends React.Component {
       isNewWork,
       isDeletingWorkInfo,
       onClose,
+      permissions,
     } = this.props
 
     const {showDeletePopup, canLeave} = this.state
@@ -217,7 +222,15 @@ class WorkViewEdit extends React.Component {
           </div>
           <span className={styles['title']}>{isNewWork ? 'Add Work' : 'Edit Work'}</span>
           <div className={styles['right-control']}>
-            {!isNewWork && (<i className={styles['icon']} title="delete" onClick={() => { this.setState({showDeletePopup: true}) }}><TrashIcon /></i>)}
+            {permissions[POLICIES.WORK_DELETE] && !isNewWork && (
+              <i
+                className={styles['icon']}
+                title="delete"
+                onClick={() => { this.setState({showDeletePopup: true}) }}
+              >
+                <TrashIcon />
+              </i>
+            )}
             <i onClick={() => {
               if (isNewWork) {
                 this.checkCanLeave(onClose)
@@ -376,6 +389,7 @@ WorkViewEdit.propTypes = {
   submitForm: PT.func,
   isNewWork: PT.bool,
   isRequestWorkError: PT.bool,
+  permissions: PT.object.isRequired,
 }
 
 export default withRouter(WorkViewEdit)

@@ -9,7 +9,10 @@ import WorkListHeader from './WorkListHeader'
 import WorkListCard from './WorkListCard'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import { getActiveWorkFilter, getDeliveredWorkFilter } from '../../../../helpers/workstreams'
-import { MILESTONE_STATUS } from '../../../../config/constants'
+import {
+  MILESTONE_STATUS,
+  POLICIES,
+} from '../../../../config/constants'
 
 import './WorkList.scss'
 
@@ -71,6 +74,7 @@ class WorkList extends React.Component {
       workstream,
       addWorkForWorkstream,
       inputDesignWorks,
+      permissions,
     } = this.props
     const {listType} = this.state
     return (
@@ -101,7 +105,7 @@ class WorkList extends React.Component {
             })}
           </div>
         )}
-        {!workstream.isLoadingWorks && (
+        {permissions[POLICIES.WORKITEM_CREATE] && !workstream.isLoadingWorks && (
           <button
             styleName="add-work"
             className="tc-btn tc-btn-primary tc-btn-sm"
@@ -129,6 +133,7 @@ WorkList.propTypes = {
   addWorkForWorkstream: PT.func.isRequired,
   timelines: PT.object.isRequired,
   inputDesignWorks: PT.func.isRequired,
+  permissions: PT.object.isRequired,
 }
 
 export default withRouter(WorkList)

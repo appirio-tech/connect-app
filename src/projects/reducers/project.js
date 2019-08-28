@@ -23,6 +23,7 @@ import {
   ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, RELOAD_PROJECT_MEMBERS_SUCCESS,
   UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION,
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS, APPROVE_SCOPE_CHANGE_SUCCESS, REJECT_SCOPE_CHANGE_SUCCESS, CANCEL_SCOPE_CHANGE_SUCCESS, ACTIVATE_SCOPE_CHANGE_SUCCESS,
+  LOAD_PROJECT_PERMISSIONS_SUCCESS,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -46,7 +47,8 @@ const initialState = {
   phasesNonDirty: null,
   isLoadingPhases: false,
   showUserInvited: false,
-  phasesStates: {} // controls opened phases and tabs of the phases
+  phasesStates: {}, // controls opened phases and tabs of the phases
+  permissions: {}, // no permissions by default
 }
 
 // NOTE: We should always update projectNonDirty state whenever we update the project state
@@ -214,6 +216,12 @@ export const projectState = function (state=initialState, action) {
       projectNonDirty: _.cloneDeep(action.payload),
       lastUpdated: new Date()
     })
+
+  case LOAD_PROJECT_PERMISSIONS_SUCCESS:
+    return {
+      ...state,
+      permissions: action.payload,
+    }
 
   case LOAD_PROJECT_MEMBER_INVITES_SUCCESS: {
     return Object.assign({}, state, {

@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { loadMembers } from '../../actions/members'
-import { loadProject, loadProjectInvite, loadDirectProjectData } from './project'
+import { loadProject, loadProjectInvite, loadDirectProjectData, loadProjectPermissions } from './project'
 import { loadProjectsMetadata } from '../../actions/templates'
 import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
 
@@ -38,6 +38,9 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
       if (!productTemplates) {
         promises.push(dispatch(loadProjectsMetadata()))
       }
+
+      // load project permissions for the current user
+      promises.push(dispatch(loadProjectPermissions(projectId)))
 
       return dispatch({
         type: LOAD_ADDITIONAL_PROJECT_DATA,

@@ -14,6 +14,9 @@ import WorkItemList from '../components/workstreams/WorkItemList'
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import { loadWorkitems, deleteWorkitem, startDeleteWorkitem } from '../../actions/works'
 import { updateTemplateForWorkItem } from '../../../helpers/challenges'
+import {
+  POLICIES,
+} from '../../../config/constants'
 import './WorkItemsContainer.scss'
 
 class WorkItemsContainer extends React.Component {
@@ -34,22 +37,26 @@ class WorkItemsContainer extends React.Component {
       workitems,
       isLoadingWorkItem,
       isDeletingWorkItem,
+      permissions,
     } = this.props
 
     return (
       <div styleName="container">
         <span styleName="title">Challenges &amp; Tasks</span>
         {!isLoadingWorkItem && workitems && (
-          <WorkItemList {...this.props} />)}
+          <WorkItemList {...this.props} />
+        )}
         {isLoadingWorkItem && (<LoadingIndicator />)}
-        <button
-          styleName="icon-add"
-          className="tc-btn tc-btn-primary tc-btn-md"
-          onClick={showAddChallengeTask}
-          disabled={isLoadingWorkItem || isDeletingWorkItem || !workitems}
-        >
-          <AddColor /> <span>Add Challenge/Task</span>
-        </button>
+        {permissions[POLICIES.WORKITEM_CREATE] && (
+          <button
+            styleName="icon-add"
+            className="tc-btn tc-btn-primary tc-btn-md"
+            onClick={showAddChallengeTask}
+            disabled={isLoadingWorkItem || isDeletingWorkItem || !workitems}
+          >
+            <AddColor /> <span>Add Challenge/Task</span>
+          </button>
+        )}
       </div>
     )
   }
@@ -65,7 +72,7 @@ WorkItemsContainer.PropTypes = {
   isDeletingWorkItem: PT.bool.isRequired,
 }
 
-const mapStateToProps = ({works, templates}) => {
+const mapStateToProps = ({ works, templates, projectState }) => {
   const workitems = works.workitems
   if (workitems) {
     const productTemplates = _.get(templates, 'productTemplates', [])
@@ -83,7 +90,8 @@ const mapStateToProps = ({works, templates}) => {
     workitems,
     workItemsIsDeleting: works.workItemsIsDeleting,
     isLoadingWorkItem: works.isLoadingWorkItem,
-    isDeletingWorkItem
+    isDeletingWorkItem,
+    permissions: projectState.permissions,
   }
 }
 

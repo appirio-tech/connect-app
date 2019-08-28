@@ -1,7 +1,9 @@
 import _ from 'lodash'
 import moment from 'moment'
 import { flatten, unflatten } from 'flat'
-import { getProjectById,
+import {
+  getProjectById,
+  getProjectPermissions,
   createProject as createProjectAPI,
   createProjectWithStatus as createProjectWithStatusAPI,
   updateProject as updateProjectAPI,
@@ -56,6 +58,7 @@ import {
   SCOPE_CHANGE_REQ_STATUS_APPROVED,
   SCOPE_CHANGE_REQ_STATUS_REJECTED,
   SCOPE_CHANGE_REQ_STATUS_CANCELED,
+  LOAD_PROJECT_PERMISSIONS,
 } from '../../config/constants'
 import {
   updateProductMilestone,
@@ -574,6 +577,25 @@ export function fireProductDirtyUndo() {
   return (dispatch) => {
     return dispatch({
       type: PRODUCT_DIRTY_UNDO
+    })
+  }
+}
+
+/**
+ * Load project permissions
+ *
+ * @param {Number} projectId project id
+ *
+ * @returns {Function} action creator
+ */
+export function loadProjectPermissions(projectId) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_PROJECT_PERMISSIONS,
+      payload: getProjectPermissions(projectId),
+      meta: {
+        projectId,
+      }
     })
   }
 }
