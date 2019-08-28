@@ -19,7 +19,7 @@ MenuList.propTypes = {
     PT.shape({
       label: PT.string.isRequired,
       to: PT.string.isRequired,
-      Icon: PT.func.isRequired,
+      Icon: PT.func,
       exact: PT.bool,
       isActive: PT.func
     })
