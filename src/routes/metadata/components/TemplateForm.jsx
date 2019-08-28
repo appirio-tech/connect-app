@@ -165,7 +165,7 @@ class TemplateForm extends Component {
                 theme="default max-height"
                 onSelect={(option) => {
                   this.props.dropdownChange(label, option)
-                  this.onChangeDropdown(option)
+                  this.onChangeDropdown(label, option)
                 }}
                 value={value}
                 required
@@ -312,10 +312,10 @@ class TemplateForm extends Component {
     }
   }
 
-  onChangeDropdown(option) {
+  onChangeDropdown(key, option) {
     const { values } = this.state
     this.setState({
-      values: _.assign({}, values, {category: option.value})
+      values: _.assign({}, values, {[key]: option.value})
     })
   }
 

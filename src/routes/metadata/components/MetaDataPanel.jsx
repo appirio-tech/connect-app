@@ -335,7 +335,7 @@ class MetaDataPanel extends React.Component {
   getVersionOptions(versionOptions) {
     return _.map(versionOptions, (versionOption) => {
       return {
-        value: _.toString(versionOption.version),
+        value: versionOption.version,
         title: _.toString(versionOption.version)
       }
     })
@@ -350,8 +350,8 @@ class MetaDataPanel extends React.Component {
     const metadata = this.getMetadata(props)
     if (metadataType === 'productTemplate') {
       const prodCatOptions = this.getProductCategoryOptions(templates.productCategories)
-      const categoryValue = metadata && metadata.category ? metadata.category : prodCatOptions[0].value
-      const subCategoryValue = metadata && metadata.subCategory ? metadata.subCategory : prodCatOptions[0].value
+      const categoryValue = metadata && metadata.category
+      const subCategoryValue = metadata && metadata.subCategory
       fields = fields.concat([
         { key: 'id', type: 'number' },
         { key: 'name', type: 'text' },
@@ -368,7 +368,7 @@ class MetaDataPanel extends React.Component {
       ])
     } else if (metadataType === 'projectTemplate') {
       const projectTypeOptions = this.getProductCategoryOptions(templates.projectTypes)
-      const value = metadata && metadata.category ? metadata.category : projectTypeOptions[0].value
+      const value = metadata && metadata.category
       fields = fields.concat([
         { key: 'id', type: 'number' },
         { key: 'name', type: 'text' },
@@ -402,7 +402,7 @@ class MetaDataPanel extends React.Component {
         ])
       } else {
         const projectVersionOptions = this.getVersionOptions(templates.versionOptions)
-        const value = metadata && metadata.version ? metadata.version : ''
+        const value = metadata && metadata.version
         fields = fields.concat([
           { key: 'key', type: 'text' },
           { key: 'version', type: 'dropdown', options: projectVersionOptions, value },
@@ -428,6 +428,7 @@ class MetaDataPanel extends React.Component {
           title: `(${item.id}) ${item.name}`
         }
       })
+      const productTemplateValue = metadata && metadata.referenceId
 
       fields = fields.concat([
         { key: 'name', type: 'text' },
@@ -440,7 +441,7 @@ class MetaDataPanel extends React.Component {
         { key: 'completedText', type: 'textarea' },
         { key: 'blockedText', type: 'textarea' },
         { key: 'reference', type: 'text', readonly: true, value: 'productTemplate' },
-        { key: 'referenceId', type: 'dropdown', options: productTemplateOptions, value: String(productTemplateOptions[0].value) },
+        { key: 'referenceId', type: 'dropdown', options: productTemplateOptions, value: productTemplateValue },
         { key: 'metadata', type: 'json' },
         { key: 'hidden', type: 'checkbox' },
       ])

@@ -25,15 +25,15 @@ class SelectDropdown extends Component {
   }
 
   componentWillMount() {
-    this.updateSelectedOptionValue(_.toString(this.props.value))
+    this.updateSelectedOptionValue(this.props.value)
   }
 
   updateSelectedOptionValue(value) {
-    const { options } = this.props
+    const { options, placeholder } = this.props
 
     let selectedOption = _.find(options, (o) => o.value === value)
     if (!selectedOption) {
-      selectedOption = options[0]
+      selectedOption = { title: placeholder }
     }
     this.setState({
       selectedOption
@@ -159,17 +159,27 @@ class SelectDropdown extends Component {
   }
 }
 
+const valuePropType = PT.oneOfType([PT.string, PT.number])
+
+SelectDropdown.defaultProps = {
+  placeholder: ' - Select - '
+}
+
 SelectDropdown.propTypes = {
   onSelect       : PT.func,
   options        : PT.arrayOf(PT.shape({
     title: PT.string.isRequired,
-    value: PT.string.isRequired,
+    value: valuePropType.isRequired,
     disabled: PT.bool,
     confirm: PT.oneOfType([PT.string, PT.bool]),
     toolTipMessage: PT.string,
   })).isRequired,
   theme          : PT.string,
-  selectedOption : PT.object
+  value          : valuePropType,
+  /**
+   * Placeholder to show when no option is selected
+   */
+  placeholder: PT.string,
 }
 
 export default hoc(SelectDropdown)
