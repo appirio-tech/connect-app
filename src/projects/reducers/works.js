@@ -1,3 +1,5 @@
+import update from 'react-addons-update'
+
 import {
   LOAD_WORK_INFO_PENDING,
   LOAD_WORK_INFO_SUCCESS,
@@ -39,6 +41,7 @@ const initialState = {
   isCreatingWorkItem: false,
   errorWorkItem: false,
   isUpdating: false,
+  isUpdatingWithProgressId: {},
   isDeleting: false,
   isCreating: false,
   error: false,
@@ -47,6 +50,22 @@ const initialState = {
   challengeMetadata: {},  // challenge metadata are pushed directly into it hence need to declare first
   workitems: null,
   workItemsIsDeleting: {}
+}
+
+/**
+ * Update updating value by progress id
+ * @param {Object} oldState state object
+ * @param {Object} changingState update state value
+ * @param {Array} progressIds array of progress id
+ * @param {Boolean} updating is updating
+ */
+const updateUpdatingByProgress = (state, changingState, progressIds, updating) => {
+  const { isUpdatingWithProgressId } = state
+  const setQuery = {}
+  _.forEach(progressIds, (progressId) => {
+    setQuery[progressId] = { $set: updating }
+  })
+  changingState.isUpdatingWithProgressId = update(isUpdatingWithProgressId, setQuery)
 }
 
 export const works = function (state=initialState, action) {
@@ -86,22 +105,40 @@ export const works = function (state=initialState, action) {
       isLoadingWorkItem: false,
       errorWorkItem: parseErrorObj(action)
     })
-  case UPDATE_WORK_INFO_PENDING:
-    return Object.assign({}, state, {
-      isUpdating: true,
+  case UPDATE_WORK_INFO_PENDING: {
+    const mergeObject = {
       error: false
-    })
-  case UPDATE_WORK_INFO_SUCCESS:
-    return Object.assign({}, state, {
-      isUpdating: false,
+    }
+    if (!_.isNil(action.meta.progressIds)) {
+      updateUpdatingByProgress(state, mergeObject, action.meta.progressIds, true)
+    } else {
+      mergeObject.isUpdating = true
+    }
+    return Object.assign({}, state, mergeObject)
+  }
+  case UPDATE_WORK_INFO_SUCCESS: {
+    const mergeObject = {
       error: false,
       work: action.payload
-    })
-  case UPDATE_WORK_INFO_FAILURE:
-    return Object.assign({}, state, {
-      isUpdating: false,
+    }
+    if (!_.isNil(action.meta.progressIds)) {
+      updateUpdatingByProgress(state, mergeObject, action.meta.progressIds, false)
+    } else {
+      mergeObject.isUpdating = false
+    }
+    return Object.assign({}, state, mergeObject)
+  }
+  case UPDATE_WORK_INFO_FAILURE: {
+    const mergeObject = {
       error: parseErrorObj(action)
-    })
+    }
+    if (!_.isNil(action.meta.progressIds)) {
+      updateUpdatingByProgress(state, mergeObject, action.meta.progressIds, false)
+    } else {
+      mergeObject.isUpdating = false
+    }
+    return Object.assign({}, state, mergeObject)
+  }
   case DELETE_WORK_INFO_PENDING:
     return Object.assign({}, state, {
       isDeleting: true,

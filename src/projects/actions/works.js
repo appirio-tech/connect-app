@@ -109,10 +109,11 @@ function createDefaultMilestones(work, timeline) {
  * @param {String} workstreamId workstream id
  * @param {String} workId       work id
  * @param {Object} updatedProps param need to update
+ * @param {Array} progressIds   array of progress id
  *
  * @return {Function} dispatch function
  */
-export function updateWork(projectId, workstreamId, workId, updatedProps) {
+export function updateWork(projectId, workstreamId, workId, updatedProps, progressIds) {
   return (dispatch, getState) => {
     const state = getState()
     const work = state.works.work
@@ -126,7 +127,10 @@ export function updateWork(projectId, workstreamId, workId, updatedProps) {
 
     return dispatch({
       type: UPDATE_WORK_INFO,
-      payload: updateWorkInfo(projectId, workstreamId, workId, updatedProps)
+      payload: updateWorkInfo(projectId, workstreamId, workId, updatedProps),
+      meta: {
+        progressIds
+      }
     }).then(() => {
       if (isWorkActivated) {
         // if work has been activated, but doesn't have any milestones yet,

@@ -361,6 +361,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     isLoadingWorkstreams: workstreams.isLoading,
     isLoadingWorkInfo: works.isLoading,
     isUpdatingWorkInfo: works.isUpdating,
+    isUpdatingWorkInfoWithProgressId: works.isUpdatingWithProgressId,
     isCreatingWorkInfo: works.isCreating,
     isDeletingWorkInfo: works.isDeleting,
     isRequestWorkError: !!works.error,
