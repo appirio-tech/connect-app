@@ -252,7 +252,7 @@ export function getPhaseActualData(phase, timeline) {
   // if phase has a timeline with no milestones, get data from timeline
   } else if (timeline.milestones.length === 0) {
     startDate = timeline.startDate && moment.utc(timeline.startDate)
-    endDate = timeline.endDate && timeline.utc(phase.endDate)
+    endDate = timeline.endDate && timeline.utc(timeline.endDate)
     // add one day here to include edge days, also makes sense if start/finish the same day
     duration = startDate && endDate ? (endDate.diff(startDate, 'days') + 1) : 0
     progress = 0
