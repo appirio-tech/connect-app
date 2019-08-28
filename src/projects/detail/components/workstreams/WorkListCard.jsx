@@ -18,8 +18,6 @@ const WorkListCard = (props) => {
     workstream,
     work,
     match,
-    inputDesignWorks,
-    timeline,
     activeMilestone,
   } = props
   const workDashboardUrl = `/projects/${match.params.projectId}/workstreams/${workstream.id}/works/${work.id}`
@@ -33,7 +31,11 @@ const WorkListCard = (props) => {
       return (
         <button
           className="tc-btn tc-btn-primary tc-btn-sm"
-          onClick={() => inputDesignWorks(timeline.id, activeMilestone.id)}
+          onClick={(e) => {
+            e.preventDefault()
+            // Start input design works for timeline
+            props.history.push(`${workDashboardUrl}/milestones/${activeMilestone.id}`)
+          }}
         >
             Input Designs
         </button>
@@ -46,7 +48,7 @@ const WorkListCard = (props) => {
           onClick={(e) => {
             e.preventDefault()
             // Start design review for timeline
-            props.history.push(`${workDashboardUrl}/timelines/${timeline.id}/milestones/${activeMilestone.id}/review`)
+            props.history.push(`${workDashboardUrl}/milestones/${activeMilestone.id}`)
           }}
         >
           Design Review
@@ -89,7 +91,6 @@ WorkListCard.propTypes = {
   workstream: PT.shape({
     id: PT.number.isRequired,
   }).isRequired,
-  inputDesignWorks: PT.func.isRequired,
   timeline: PT.object.isRequired,
   activeMilestone: PT.object,
 }

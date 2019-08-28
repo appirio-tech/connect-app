@@ -99,8 +99,9 @@ export function WorkTimelineMilestoneReview(props) {
   const {
     milestone,
     isUpdatingMilestoneInfoWithProcessId,
-    match: { params: { projectId, workstreamId, workId, timelineId, milestoneId } },
+    match: { params: { projectId, workstreamId, workId, milestoneId } },
     updateWorkMilestone,
+    timeline,
   } = props
   const workDashboardUrl = `/projects/${projectId}`
 
@@ -170,7 +171,7 @@ export function WorkTimelineMilestoneReview(props) {
       <CompleteMilestoneButtonContainer
         className={styles['complete-milestone']}
         workId={parseInt(workId)}
-        timelineId={parseInt(timelineId)}
+        timelineId={timeline.id}
         milestoneId={parseInt(milestoneId)}
         onComplete={() => {  props.history.push(`${workDashboardUrl}/workstreams/${workstreamId}/works/${workId}`) }}
       />
@@ -230,6 +231,16 @@ WorkTimelineMilestoneReview.propTypes = {
   }).isRequired,
   isUpdatingMilestoneInfoWithProcessId: PT.object.isRequired,
   updateWorkMilestone: PT.func.isRequired,
+  timeline: PT.shape({
+    id: PT.number.isRequired,
+    startDate: PT.string,
+    milestones: PT.arrayOf(PT.shape({
+      id: PT.number.isRequired,
+      startDate: PT.string,
+      endDate: PT.string,
+      name: PT.string.isRequired,
+    })),
+  }).isRequired,
 }
 
 export default withRouter(WorkTimelineMilestoneReview)

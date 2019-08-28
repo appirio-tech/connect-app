@@ -29,6 +29,7 @@ import {
   removeProjectAttachment
 } from '../../actions/projectAttachment'
 import { saveFeedComment } from '../../actions/projectTopics'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 
 import './AssetsInfoContainer.scss'
 
@@ -39,6 +40,7 @@ class AssetsInfoContainer extends React.Component {
     this.state = {
       activeAssetsType: null,
       ifModalOpen: false,
+      isThisFolderAllowAddNew: true,
     }
     this.onAddNewLink = this.onAddNewLink.bind(this)
     this.onDeleteLink = this.onDeleteLink.bind(this)
@@ -50,23 +52,25 @@ class AssetsInfoContainer extends React.Component {
     this.deletePostAttachment = this.deletePostAttachment.bind(this)
     this.activeAssetsTypeChange = this.activeAssetsTypeChange.bind(this)
     this.onNewLinkModalChange = this.onNewLinkModalChange.bind(this)
+    this.isThisFolderAllowAddNewChange = this.isThisFolderAllowAddNewChange.bind(this)
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
     return !_.isEqual(nextProps.project, this.props.project) ||
       !_.isEqual(nextProps.feeds, this.props.feeds) ||
       !_.isEqual(nextProps.phases, this.props.phases) ||
-      !_.isEqual(nextProps.phasesTopics, this.props.phasesTopics) ||
+      !_.isEqual(nextProps.allTopics, this.props.allTopics) ||
       !_.isEqual(nextProps.isFeedsLoading, this.props.isFeedsLoading) ||
       !_.isEqual(nextProps.attachmentsAwaitingPermission, this.props.attachmentsAwaitingPermission) ||
       !_.isEqual(nextProps.attachmentPermissions, this.props.attachmentPermissions) ||
       !_.isEqual(nextProps.isSharingAttachment, this.props.isSharingAttachment) ||
       !_.isEqual(nextState.activeAssetsType, this.state.activeAssetsType) ||
-      !_.isEqual(nextState.ifModalOpen, this.state.ifModalOpen)
+      !_.isEqual(nextState.ifModalOpen, this.state.ifModalOpen) ||
+      !_.isEqual(nextState.isThisFolderAllowAddNew, this.state.isThisFolderAllowAddNew)
   }
 
   componentWillMount() {
-    const { project, isFeedsLoading, feeds, phases, phasesTopics, loadTopic, location } = this.props
+    const { project, isFeedsLoading, feeds, phases, allTopics, loadTopic, location, loadProjectPlan } = this.props
 
     // load feeds from dashboard if they are not currently loading or loaded yet
     // also it will load feeds, if we already loaded them, but it was 0 feeds before
@@ -76,8 +80,8 @@ class AssetsInfoContainer extends React.Component {
 
     // load phases feeds if they are not loaded yet
     // note: old projects doesn't have phases, so we check if there are any phases at all first
-    phases && phasesTopics && phases.forEach((phase) => {
-      if (!phasesTopics[`phase#${phase.id}`]) {
+    phases && allTopics && phases.forEach((phase) => {
+      if (!allTopics[`phase#${phase.id}`]) {
         loadTopic(project.id, `phase#${phase.id}`)
       }
     })
@@ -85,6 +89,12 @@ class AssetsInfoContainer extends React.Component {
     // handle url hash
     if (!_.isEmpty(location.hash)) {
       this.handleUrlHash(this.props)
+    }
+
+    if (!phases) {
+      let existingUserIds = _.map(project.members, 'userId')
+      existingUserIds= _.union(existingUserIds, _.map(project.invites, 'userId'))
+      loadProjectPlan(project, existingUserIds)
     }
   }
 
@@ -99,7 +109,7 @@ class AssetsInfoContainer extends React.Component {
   // this is just to see if the comment/feed/post/phase the url hash is attempting to scroll to is loaded or not
   // if its not loaded then we load the appropriate item
   handleUrlHash(props) {
-    const { project, isFeedsLoading, phases, phasesTopics, feeds, loadProjectPlan, loadTopic, location } = props
+    const { project, isFeedsLoading, phases, allTopics, feeds, loadTopic, location } = props
     const hashParts = _.split(location.hash.substring(1), '-')
     const hashPrimaryId = parseInt(hashParts[1], 10)
 
@@ -121,12 +131,11 @@ class AssetsInfoContainer extends React.Component {
     case 'phase': {
       const postId = parseInt(hashParts[3], 10)
 
-      if (phases && phasesTopics) {
-        if (!_.some(phases, { id: hashPrimaryId})) {
-          let existingUserIds = _.map(project.members, 'userId')
-          existingUserIds= _.union(existingUserIds, _.map(project.invites, 'userId'))
-          loadProjectPlan(project.id, existingUserIds)
-        } else if(postId && !(phasesTopics[hashPrimaryId].topic && phasesTopics[hashPrimaryId].topic.postIds.includes(postId))) {
+      if (phases && allTopics) {
+        if (
+          _.some(phases, { id: hashPrimaryId}) &&
+          postId &&
+          !(allTopics[hashPrimaryId].topic && allTopics[hashPrimaryId].topic.postIds.includes(postId))) {
           loadTopic(project.id, `phase#${hashPrimaryId}`)
         }
       }
@@ -136,7 +145,23 @@ class AssetsInfoContainer extends React.Component {
   }
 
   activeAssetsTypeChange(assetsType) {
-    this.setState({activeAssetsType: assetsType})
+    this.setState({activeAssetsType: assetsType, isThisFolderAllowAddNew: true})
+  }
+
+  /**
+   * update isThisFolderAllowAddNew in state
+   * @param {Object} folder folder object
+   */
+  isThisFolderAllowAddNewChange(folder) {
+
+    let expectedAllowAddNew = true
+    if (folder && folder.canAddNew === false) {
+      expectedAllowAddNew = false
+    }
+
+    if (expectedAllowAddNew !== this.state.isThisFolderAllowAddNew) {
+      this.setState({ isThisFolderAllowAddNew : expectedAllowAddNew })
+    }
   }
 
   loadAllFeeds() {
@@ -217,14 +242,14 @@ class AssetsInfoContainer extends React.Component {
   }
 
   deletePostAttachment({ topicId, postId, attachmentId, topicTag }) {
-    const { feeds, phasesTopics, saveFeedComment } = this.props
+    const { feeds, allTopics, saveFeedComment } = this.props
 
     let feed
     if (topicTag === 'PRIMARY') {
       feed = feeds.find(feed => feed.id === topicId)
     } else {
-      const phaseFeeds = Object.keys(phasesTopics)
-        .map(key => phasesTopics[`phase#${key}`].topic)
+      const phaseFeeds = Object.keys(allTopics)
+        .map(key => allTopics[`phase#${key}`].topic)
       feed = phaseFeeds.find(feed => feed.id && feed.id === topicId)
     }
     if (feed) {
@@ -244,10 +269,13 @@ class AssetsInfoContainer extends React.Component {
 
   render() {
     const { project, currentMemberRole, isSuperUser, phases, feeds,
-      isManageUser, phasesTopics, projectTemplates, hideLinks,
+      isManageUser, allTopics, projectTemplates, hideLinks,
       attachmentsAwaitingPermission, addProjectAttachment, discardAttachments, attachmentPermissions,
-      changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment, canAccessPrivatePosts } = this.props
-    const { ifModalOpen } = this.state
+      changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment, canAccessPrivatePosts,
+      isFeedsLoading, workTopics } = this.props
+
+    const isLoadingFilesAndLinks = isFeedsLoading || !phases || !workTopics
+    const { ifModalOpen, isThisFolderAllowAddNew } = this.state
 
     const canManageLinks = !!currentMemberRole || isSuperUser
 
@@ -290,7 +318,7 @@ class AssetsInfoContainer extends React.Component {
 
     const phaseFeeds = _.compact(
       visiblePhases.map((phase) => {
-        const topic = _.get(phasesTopics, `[${phase.id}].topic`)
+        const topic = _.get(allTopics, `[phase#${phase.id}].topic`)
 
         if (!topic) {
           return null
@@ -319,6 +347,7 @@ class AssetsInfoContainer extends React.Component {
     const publicTopicLinks = topicLinks.filter(link => link.tag !== PROJECT_FEED_TYPE_MESSAGES)
     const privateTopicLinks = topicLinks.filter(link => link.tag === PROJECT_FEED_TYPE_MESSAGES)
     const phaseLinks = extractLinksFromPosts(phaseFeeds)
+    const workLinks = extractLinksFromPosts(workTopics ? workTopics : [])
 
     let links = []
     links = links.concat(project.bookmarks)
@@ -327,12 +356,14 @@ class AssetsInfoContainer extends React.Component {
       links = links.concat(privateTopicLinks)
     }
     links = links.concat(phaseLinks)
+    links = links.concat(workLinks.map((workLink) => ({...workLink, canAddNew: false})))
 
     // extract attachment from posts
     attachments = [
       ...attachments,
       ...extractAttachmentLinksFromPosts(feeds),
-      ...extractAttachmentLinksFromPosts(phaseFeeds)
+      ...extractAttachmentLinksFromPosts(phaseFeeds),
+      ...extractAttachmentLinksFromPosts(workTopics ? workTopics : []).map((workFile) => ({...workFile, canAddNew: false})),
     ]
 
     const assetsData = []
@@ -431,7 +462,7 @@ class AssetsInfoContainer extends React.Component {
             <div styleName="section-title">
               Assets Library
             </div>
-            {(showAddNewButton) && (
+            {(!isLoadingFilesAndLinks && showAddNewButton && isThisFolderAllowAddNew) && (
               <div styleName="assets-header-button">
                 <button type="button" onClick={newButtonClick} styleName="add-new-button">Add new...</button>
               </div>)}
@@ -443,7 +474,8 @@ class AssetsInfoContainer extends React.Component {
               onClickAction={this.activeAssetsTypeChange}
               activeAssetsType={activeAssetsType}
             />)}
-          {(enableFileUpload && activeAssetsType === 'Files') &&
+          {isLoadingFilesAndLinks && (<LoadingIndicator />)}
+          {(!isLoadingFilesAndLinks && enableFileUpload && activeAssetsType === 'Files') &&
             <FilesGridView
               links={attachments}
               title="Files"
@@ -461,8 +493,9 @@ class AssetsInfoContainer extends React.Component {
               onDeletePostAttachment={this.deletePostAttachment}
               formatModifyDate={formatModifyDate}
               formatFolderTitle={formatFolderTitle}
+              onSelectedItem={this.isThisFolderAllowAddNewChange}
             />}
-          {(!hideLinks && activeAssetsType === 'Links') &&
+          {(!isLoadingFilesAndLinks && !hideLinks && activeAssetsType === 'Links') &&
             <LinksGridView
               links={links}
               canDelete={canManageLinks}
@@ -471,6 +504,7 @@ class AssetsInfoContainer extends React.Component {
               onEdit={this.onEditLink}
               formatModifyDate={formatModifyDate}
               formatFolderTitle={formatFolderTitle}
+              onSelectedItem={this.isThisFolderAllowAddNewChange}
             />}
         </div>
       </div>
@@ -482,8 +516,10 @@ AssetsInfoContainer.PropTypes = {
   currentMemberRole: PropTypes.string,
   phases: PropTypes.array,
   feeds: PropTypes.array,
-  phasesTopics: PropTypes.array,
+  workTopics: PropTypes.array,
+  allTopics: PropTypes.array,
   project: PropTypes.object.isRequired,
+  isPhaseTopicLoading: PropTypes.bool.isRequired,
   isSuperUser: PropTypes.bool,
   isManageUser: PropTypes.bool,
   canAccessPrivatePosts: PropTypes.bool.isRequired,

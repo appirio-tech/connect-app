@@ -125,7 +125,6 @@ class WorkView extends React.Component {
       editMilestone,
       timelines,
       showAddChallengeTask,
-      inputDesignWorks,
       markMilestoneAsCompleted,
       match
     } = this.props
@@ -144,7 +143,6 @@ class WorkView extends React.Component {
               work={work}
               timeline={timeline}
               milestone={activeMilestone}
-              inputDesignWorks={inputDesignWorks}
               markMilestoneAsCompleted={markMilestoneAsCompleted}
               match={match}
             />
@@ -308,7 +306,6 @@ WorkView.propTypes = {
   isUpdatingWorkInfo: PT.bool.isRequired,
   isDeletingWorkInfo: PT.bool.isRequired,
   timelines: PT.object.isRequired,
-  inputDesignWorks: PT.func.isRequired,
   markMilestoneAsCompleted: PT.func,
   topics: PT.object,
   permissions: PT.object.isRequired,

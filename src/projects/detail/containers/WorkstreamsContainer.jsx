@@ -11,15 +11,15 @@ import { withRouter } from 'react-router-dom'
 import Workstreams from '../components/workstreams/Workstreams'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
-const spinner = spinnerWhileLoading(props => !props.isLoadingWorkstreams)
+const spinner = spinnerWhileLoading(props => props.workstreams && !props.isLoadingWorkstreams)
 const WorkstreamsWithLoader = spinner(Workstreams)
 
 
 class WorkstreamsContainer extends React.Component {
   componentWillMount() {
-    const { project, workstreams } = this.props
-    if (!workstreams || workstreams.length <= 0) {
-      this.props.loadProjectWorkstreams(project)
+    const { project, workstreams, loadProjectWorkstreams } = this.props
+    if (!workstreams) {
+      loadProjectWorkstreams(project)
     }
   }
 
@@ -44,10 +44,9 @@ WorkstreamsContainer.PropTypes = {
     name: PT.string.isRequired,
     status: PT.string.isRequired,
     description: PT.string,
-  })).isRequired,
+  })),
   addWorkForWorkstream: PT.func.isRequired,
   timelines: PT.array.isRequired,
-  inputDesignWorks: PT.func.isRequired,
   isManageUser: PT.bool,
   permissions: PT.object.isRequired,
 }

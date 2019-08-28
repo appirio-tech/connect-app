@@ -28,6 +28,7 @@ const LinksGridView = ({
   title,
   formatModifyDate,
   formatFolderTitle,
+  onSelectedItem,
 }) => {
   const renderLink = (link) => {
     if (link.onClick) {
@@ -50,7 +51,10 @@ const LinksGridView = ({
       return <a href={link.address} target="_blank" rel="noopener noreferrer">{link.title}</a>
     }
   }
-  const goBack = () => onChangeSubFolder(null)
+  const goBack = () => {
+    onSelectedItem(null)
+    onChangeSubFolder(null)
+  }
   return (
     <div styleName="assets-gridview-container">
       {(subFolderContent) && (
@@ -86,7 +90,10 @@ const LinksGridView = ({
               }
               const onEditCancel = () => onEditIntent(-1)
               const handleEditClick = () => onEditIntent(idx)
-              const changeSubFolder = () => onChangeSubFolder(link)
+              const changeSubFolder = () => {
+                onSelectedItem(link)
+                onChangeSubFolder(link)
+              }
 
               if (Array.isArray(link.children) && link.children.length > 0) {
                 return (
@@ -147,11 +154,13 @@ LinksGridView.propTypes = {
   title: PropTypes.string,
   formatModifyDate: PropTypes.func.isRequired,
   formatFolderTitle: PropTypes.func.isRequired,
+  onSelectedItem: PropTypes.func,
 }
 
 LinksGridView.defaultProps = {
   title: 'Links',
   subFolderContent: null,
+  onSelectedItem: () => {},
 }
 
 export default uncontrollable(LinksGridView, {

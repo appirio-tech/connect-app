@@ -35,9 +35,8 @@ import WorkViewContainer from './WorkViewContainer'
 import WorkNewContainer from './WorkNewContainer'
 import WorkTimelineNewMilestoneContainer from './WorkTimelineNewMilestoneContainer'
 import WorkTimelineEditMilestoneContainer from './WorkTimelineEditMilestoneContainer'
-import WorkTimelineMilestoneReviewContainer from './WorkTimelineMilestoneReviewContainer'
+import WorkTimelineMilestoneContainer from './WorkTimelineMilestoneContainer'
 import AddWorkItemContrainer from './AddWorkItemContrainer'
-import DesignWorksContainer from './DesignWorksContainer'
 import Sticky from '../../../components/Sticky'
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
@@ -86,10 +85,6 @@ class DashboardContainer extends React.Component {
         milestoneId: -1,
       },
       showAddChallengeTask: false,
-      showDesignWorks: {
-        timelineId: -1,
-        milestoneId: -1,
-      }
     }
     this.onNotificationRead = this.onNotificationRead.bind(this)
     this.toggleDrawer = this.toggleDrawer.bind(this)
@@ -125,19 +120,7 @@ class DashboardContainer extends React.Component {
         showAddWorkForWorkstream,
         showAddMilestoneForTimeline,
         showEditMilestoneForTimeline,
-        showDesignWorks
       } = this.state
-      if (showDesignWorks.milestoneId >= 0) {
-        // show input design work page
-        return (
-          <DesignWorksContainer
-            onBack={() => this.setState({ showDesignWorks : {timelineId: -1, milestoneId: -1} })}
-            workId={parseInt(params.workId, 10)}
-            timelineId={showDesignWorks.timelineId}
-            milestoneId={showDesignWorks.milestoneId}
-          />
-        )
-      }
       if (showAddMilestoneForTimeline >= 0) {
         // show add new milestone for timeline
         return (
@@ -175,16 +158,11 @@ class DashboardContainer extends React.Component {
           )
         }
         if (params.milestoneId) {
-          const href = window.location.href
-          const lastSectionOfUrl = href.substring(href.lastIndexOf('/') + 1)
-          if (lastSectionOfUrl === 'review') {
-            return (
-              <WorkTimelineMilestoneReviewContainer
-                {...this.props}
-              />
-            )
-          }
-
+          return (
+            <WorkTimelineMilestoneContainer
+              {...this.props}
+            />
+          )
         }
         return (
           <WorkViewContainer
@@ -192,7 +170,6 @@ class DashboardContainer extends React.Component {
             showAddChallengeTask={() => { this.setState({ showAddChallengeTask: true }) }}
             addNewMilestone={(timelineId) => this.setState({ showAddMilestoneForTimeline: timelineId }) }
             editMilestone={(timelineId, milestoneId) => this.setState({ showEditMilestoneForTimeline: {timelineId, milestoneId} }) }
-            inputDesignWorks={(timelineId, milestoneId) => this.setState({ showDesignWorks: {timelineId, milestoneId} }) }
             markMilestoneAsCompleted={(timelineId, milestoneId) => alert(`Mark as Complete for timeline (${timelineId}) milestone (${milestoneId})`)}
           />
         )
@@ -211,7 +188,6 @@ class DashboardContainer extends React.Component {
         <WorkstreamsContainer
           {...this.props}
           addWorkForWorkstream={(workstreamId) => { this.setState({ showAddWorkForWorkstream: workstreamId }) }}
-          inputDesignWorks={(timelineId, milestoneId) => this.setState({ showDesignWorks: {timelineId, milestoneId} }) }
         />
       )
     }
@@ -249,7 +225,6 @@ class DashboardContainer extends React.Component {
       showAddMilestoneForTimeline,
       showEditMilestoneForTimeline,
       showAddChallengeTask,
-      showDesignWorks,
     } = this.state
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
 
@@ -270,8 +245,7 @@ class DashboardContainer extends React.Component {
       params.workId ||
       (showAddWorkForWorkstream >= 0) ||
       (showAddMilestoneForTimeline >= 0) ||
-      (showEditMilestoneForTimeline.milestoneId >= 0) ||
-      (showDesignWorks.milestoneId >= 0)
+      (showEditMilestoneForTimeline.milestoneId >= 0)
 
     const leftArea = (
       <ProjectInfoContainer

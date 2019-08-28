@@ -303,7 +303,9 @@ export function loadWorkitems(projectId, workstreamId, workId) {
       type: LOAD_WORK_ITEM,
       payload: getWorkitems(projectId, workstreamId, workId)
         .then((results) => {
-          Promise.all([loadChallengesForWorkItems(results, dispatch)])
+          if (results.length > 0) {
+            Promise.all([loadChallengesForWorkItems(results, dispatch)])
+          }
           return results
         })
     })

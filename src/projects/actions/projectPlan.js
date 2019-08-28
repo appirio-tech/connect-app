@@ -41,6 +41,7 @@ function loadTimelinesForPhasesProducts(phases, dispatch) {
  * @return {Function} dispatch function
  */
 function getData(project, dispatch) {
+
   if (project.version !== 'v3') {
     // returns empty resolved promise to avoid error when we call then on this action
     return Promise.resolve()
@@ -54,7 +55,10 @@ function getData(project, dispatch) {
 
   return dispatch(loadProjectPhasesWithProducts(project.id))
     .then(({ value: phases }) => {
-      loadTopics(project.id, _.map(phases, (phase) => `phase#${phase.id}`), dispatch)
+      // load timelines for phase products here together with all dashboard data
+      // as we need to know timeline data not only inside timeline container
+      loadTimelinesForPhasesProducts(phases, dispatch)
+      return loadTopics(project.id, _.map(phases, (phase) => `phase#${phase.id}`), dispatch)
         .then((phaseFeeds) => {
           let phaseUserIds = []
           _.forEach(phaseFeeds, phaseFeed => {
@@ -70,9 +74,6 @@ function getData(project, dispatch) {
 
           dispatch(loadMembers(phaseUserIds))
         })
-      // load timelines for phase products here together with all dashboard data
-      // as we need to know timeline data not only inside timeline container
-      loadTimelinesForPhasesProducts(phases, dispatch)
     })
 }
 

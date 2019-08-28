@@ -197,12 +197,12 @@ class DesignWorks extends React.Component {
 
   render() {
     const {
-      onBack,
       workId,
       timelineId,
       milestoneId,
       isUpdatingMilestoneInfo,
       error,
+      match: { params: { workstreamId } },
     } = this.props
     const {
       designOptions,
@@ -210,6 +210,9 @@ class DesignWorks extends React.Component {
     } = this.state
     const isAddingNew = _.find(designOptions, { __isNew: true })
 
+    const onBack = () => {
+      this.props.history.push(`${this.getDashboardUrl()}/workstreams/${workstreamId}/works/${workId}`)
+    }
     return (
       <div styleName="wrapper">
         <div styleName="container">
@@ -222,7 +225,6 @@ class DesignWorks extends React.Component {
             <div styleName="right-control">
               <i onClick={() => {
                 this.props.history.push(this.getDashboardUrl())
-                onBack()
               }} styleName="icon-close"
               >
                 <CloseIcon />
@@ -277,7 +279,6 @@ DesignWorks.propTypes = {
   error: PT.any,
   milestone: PT.object.isRequired,
   updateWorkMilestone: PT.func.isRequired,
-  onBack: PT.func.isRequired,
   workId: PT.number.isRequired,
   timelineId: PT.number.isRequired,
   milestoneId: PT.number.isRequired,

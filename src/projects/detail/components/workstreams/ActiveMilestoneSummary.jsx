@@ -18,26 +18,25 @@ const ActiveMilestoneSummary = ({
   work,
   timeline,
   milestone,
-  inputDesignWorks,
   match
 }) => {
   const renderActionButton = () => {
     switch (milestone.type) {
     case MILESTONE_TYPE.DESIGN_WORK:
       return (
-        <button
+        <Link
+          to={`/projects/${match.params.projectId}/workstreams/${match.params.workstreamId}/works/${work.id}/milestones/${milestone.id}`}
           className="tc-btn tc-btn-primary tc-btn-sm"
-          onClick={() => inputDesignWorks(timeline.id, milestone.id)}
         >
-            Input Design Works
-        </button>
+          Input Design Works
+        </Link>
       )
     case MILESTONE_TYPE.CHECKPOINT_REVIEW:
     case MILESTONE_TYPE.FINAL_DESIGNS:
       // Button for Start design review for timeline
       return (
         <Link
-          to={`/projects/${match.params.projectId}/workstreams/${match.params.workstreamId}/works/${work.id}/timelines/${timeline.id}/milestones/${milestone.id}/review`}
+          to={`/projects/${match.params.projectId}/workstreams/${match.params.workstreamId}/works/${work.id}/milestones/${milestone.id}`}
           className="tc-btn tc-btn-primary tc-btn-sm"
         >
             Start Design Review
@@ -78,7 +77,6 @@ ActiveMilestoneSummary.propTypes = {
     name: PT.string,
     activeText: PT.string
   }),
-  inputDesignWorks: PT.func.isRequired,
   markMilestoneAsCompleted: PT.func,
 }
 
