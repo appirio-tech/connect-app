@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import {
-  getTimelinesByReference,
+  getSingleTimelineByReference,
+  getTimelineById,
   createMilestone as createMilestoneApi,
   updateMilestone as updateMilestoneApi,
   deleteMilestone as deleteMilestoneApi,
@@ -26,21 +27,21 @@ import { getNextNotHiddenMilestone } from '../../helpers/milestoneHelper'
  * @return {Function} action creator
  */
 export function loadWorkTimeline(workId) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState()
+    const timeline = _.get(state.workTimelines.timelines[workId], 'timeline')
+
     return dispatch({
       type: LOAD_WORK_TIMELINE,
-      payload: getTimelinesByReference('work', workId)
-        .then(timelines => {
-          const timeline = timelines[0]
-
-          if (!timeline) {
-            const err = new Error('Timeline for work is not found.')
-            _.set(err, 'response.data.result.content.message', 'Timeline for work is not found.')
-            _.set(err, 'response.status', 404)
-
-            throw err
-          }
-
+      payload: (timeline ?
+        // prefer loading timeline by id because such method would load timeline from DB
+        getTimelineById(timeline.id) :
+        // otherwise loading timeline by reference using ES index
+        // Warning: when we perform some actions and after reload timeline immediately,
+        // it could be not yet reflected in ES
+        getSingleTimelineByReference('work', workId)
+      )
+        .then(timeline => {
           if (!timeline.milestones) {
             timeline.milestones = []
           }

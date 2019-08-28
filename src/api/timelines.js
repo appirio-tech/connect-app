@@ -18,6 +18,31 @@ export function getTimelinesByReference(reference, referenceId) {
 }
 
 /**
+ * Get a single timeline or throw error.
+ *
+ * @param {String} reference   reference, i. g. 'work', 'product'
+ * @param {Number} referenceId reference id i. e. <work.id>, <product.id>
+ *
+ * @returns {Promise<Object>} timeline
+ */
+export function getSingleTimelineByReference(reference, referenceId) {
+  return getTimelinesByReference(reference, referenceId)
+    .then(timelines => {
+      const timeline = timelines[0]
+
+      if (!timeline) {
+        const err = new Error('Timeline for work is not found.')
+        _.set(err, 'response.data.result.content.message', 'Timeline for work is not found.')
+        _.set(err, 'response.status', 404)
+
+        throw err
+      }
+
+      return timeline
+    })
+}
+
+/**
  * Get timeline by id
  *
  * @return {Promise} one timeline
