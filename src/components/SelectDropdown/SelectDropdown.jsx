@@ -29,12 +29,10 @@ class SelectDropdown extends Component {
   }
 
   updateSelectedOptionValue(value) {
-    const { options, placeholder } = this.props
+    const { options } = this.props
 
-    let selectedOption = _.find(options, (o) => o.value === value)
-    if (!selectedOption) {
-      selectedOption = { title: placeholder }
-    }
+    const selectedOption = _.find(options, { value }) || null
+
     this.setState({
       selectedOption
     }/*, function() {
@@ -90,9 +88,9 @@ class SelectDropdown extends Component {
   }
 
   render() {
-    const { options, theme, disabled } = this.props
+    const { options, theme, disabled, placeholder } = this.props
     const { selectedOption, confirmOption } = this.state
-    const selectedValue = selectedOption.title
+    const selectedValue = selectedOption ? selectedOption.title : placeholder
 
     const renderOption = (option, optIdx) => {
       const handleOptionClick = this.handleClick.bind(this, option)
