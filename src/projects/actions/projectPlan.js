@@ -37,10 +37,11 @@ function loadTimelinesForPhasesProducts(phases, dispatch) {
  * Load project plan data
  * @param {Object} project project object
  * @param {Function} dispatch  dispatches redux actions
+ * @param {Boolean} shouldWaitForLoadingTopics  should we wait until all topics are loaded
  *
  * @return {Function} dispatch function
  */
-function getData(project, dispatch) {
+function getData(project, dispatch, shouldWaitForLoadingTopics = false) {
 
   if (project.version !== 'v3') {
     // returns empty resolved promise to avoid error when we call then on this action
@@ -53,7 +54,7 @@ function getData(project, dispatch) {
   // this is to remove any nulls from the list (dev had some bad data)
   _.remove(existingUserIds, i => !i)
 
-  return dispatch(loadProjectPhasesWithProducts(project.id))
+  const loadTopicsRequest = dispatch(loadProjectPhasesWithProducts(project.id))
     .then(({ value: phases }) => {
       // load timelines for phase products here together with all dashboard data
       // as we need to know timeline data not only inside timeline container
@@ -75,19 +76,23 @@ function getData(project, dispatch) {
           dispatch(loadMembers(phaseUserIds))
         })
     })
+  if (shouldWaitForLoadingTopics === true) {
+    return loadTopicsRequest
+  }
 }
 
 /**
  * Load project plan
  * @param {Object} project project object
+ * @param {Boolean} shouldWaitForLoadingTopics  should we wait until all topics are loaded
  *
  * @return {Function} dispatch function
  */
-export function loadProjectPlan(project) {
+export function loadProjectPlan(project, shouldWaitForLoadingTopics) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_PROJECT_PLAN,
-      payload: Promise.all([getData(project, dispatch)])
+      payload: Promise.all([getData(project, dispatch, shouldWaitForLoadingTopics)])
     })
   }
 }

@@ -166,6 +166,7 @@ export function WorkTimelineMilestoneReview(props) {
         progressId={designs.length}
         updateWorkMilestone={updateWorkMilestone}
         milestoneType={milestone.type}
+        timelineId={timeline.id}
       />
 
       <CompleteMilestoneButtonContainer
@@ -198,6 +199,7 @@ export function WorkTimelineMilestoneReview(props) {
               progressIdForGeneralFeedback={designs.length}
               milestone={milestone}
               totalDesign={designs.length}
+              timelineId={timeline.id}
             />
           )
         })}

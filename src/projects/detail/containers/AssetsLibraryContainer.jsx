@@ -191,17 +191,7 @@ AssetsLibraryContainer.propTypes = {
 }
 
 const mapStateToProps = ({ projectState, projectTopics, topics, projectPlan, workstreams }) => {
-  let isLoadingTopic = false
-  for (const key in topics) {
-    // check also if property is not inherited from prototype
-    if (topics.hasOwnProperty(key)) {
-      const topic = topics[key]
-      if (topic.isLoading) {
-        isLoadingTopic = true
-        break
-      }
-    }
-  }
+  const isLoadingTopic = _.some(_.values(topics), { isLoading: true })
 
   let works = []
   if (workstreams.workstreams) {

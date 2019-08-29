@@ -92,9 +92,7 @@ class AssetsInfoContainer extends React.Component {
     }
 
     if (!phases) {
-      let existingUserIds = _.map(project.members, 'userId')
-      existingUserIds= _.union(existingUserIds, _.map(project.invites, 'userId'))
-      loadProjectPlan(project, existingUserIds)
+      loadProjectPlan(project, true)
     }
   }
 

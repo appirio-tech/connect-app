@@ -110,7 +110,10 @@ export const works = function (state=initialState, action) {
       error: false
     }
     if (!_.isNil(action.meta.progressIds)) {
-      updateUpdatingByProgress(state, mergeObject, action.meta.progressIds, true)
+      updateUpdatingByProgress(state, mergeObject, action.meta.progressIds, {
+        isLoading: true,
+        error: false
+      })
     } else {
       mergeObject.isUpdating = true
     }
@@ -122,7 +125,10 @@ export const works = function (state=initialState, action) {
       work: action.payload
     }
     if (!_.isNil(action.meta.progressIds)) {
-      updateUpdatingByProgress(state, mergeObject, action.meta.progressIds, false)
+      updateUpdatingByProgress(state, mergeObject, action.meta.progressIds, {
+        isLoading: false,
+        error: false
+      })
     } else {
       mergeObject.isUpdating = false
     }
@@ -133,7 +139,10 @@ export const works = function (state=initialState, action) {
       error: parseErrorObj(action)
     }
     if (!_.isNil(action.meta.progressIds)) {
-      updateUpdatingByProgress(state, mergeObject, action.meta.progressIds, false)
+      updateUpdatingByProgress(state, mergeObject, action.meta.progressIds, {
+        isLoading: false,
+        error: parseErrorObj(action)
+      })
     } else {
       mergeObject.isUpdating = false
     }

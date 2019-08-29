@@ -1,5 +1,5 @@
 /**
- * WorkListCard section
+ * WorkViewRequirements section
  */
 import React from 'react'
 import PT from 'prop-types'
@@ -35,7 +35,12 @@ class WorkViewRequirements extends React.Component {
     // close edit feedback form
     const prevIsUpdatingWorkInfoWithProgressId = _.get(this.props, `isUpdatingWorkInfoWithProgressId.${progressId}`)
     const nextIsUpdatingWorkInfoWithProgressId = _.get(nextProps, `isUpdatingWorkInfoWithProgressId.${progressId}`)
-    if (prevIsUpdatingWorkInfoWithProgressId === true && nextIsUpdatingWorkInfoWithProgressId === false) {
+    if (
+      prevIsUpdatingWorkInfoWithProgressId &&
+      nextIsUpdatingWorkInfoWithProgressId &&
+      prevIsUpdatingWorkInfoWithProgressId.isLoading === true &&
+      nextIsUpdatingWorkInfoWithProgressId.isLoading === false &&
+      !nextIsUpdatingWorkInfoWithProgressId.error) {
       this.setState({ showEditForm: false })
     }
   }
@@ -96,7 +101,7 @@ class WorkViewRequirements extends React.Component {
             dangerouslySetInnerHTML={{__html: markdownToHTML(requirements ? requirements : 'No requirements')}}
           />
         )}
-        {isUpdatingWorkInfoWithProgressId[progressId] && (<div styleName="loading-container">
+        {isUpdatingWorkInfoWithProgressId[progressId] && isUpdatingWorkInfoWithProgressId[progressId].isLoading && (<div styleName="loading-container">
           <LoadingIndicator />
         </div>)}
       </div>

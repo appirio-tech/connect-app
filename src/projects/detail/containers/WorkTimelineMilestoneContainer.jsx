@@ -58,7 +58,6 @@ class WorkTimelineMilestoneContainer extends React.Component {
     case MILESTONE_TYPE.DESIGN_WORK:
       return (
         <DesignWorksContainer
-          onBack={() => this.setState({ showDesignWorks : {timelineId: -1, milestoneId: -1} })}
           workId={parseInt(workId, 10)}
           timelineId={timeline.id}
           milestoneId={parseInt(milestoneId, 10)}
