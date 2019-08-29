@@ -15,7 +15,7 @@ import CloseIcon from  '../../../../assets/icons/x-mark-black.svg'
 import TrashIcon from  '../../../../assets/icons/icon-trash-black.svg'
 import BackIcon from  '../../../../assets/icons/arrows-16px-1_tail-left.svg'
 import styles from './WorkTimelineEditMilestone.scss'
-import { MILESTONE_TYPE_OPTIONS, MILESTONE_STATUS } from '../../../../config/constants'
+import { MILESTONE_TYPE_OPTIONS } from '../../../../config/constants'
 import {getMilestoneActualData} from '../../../../helpers/workstreams'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
 import DeleteMilestone from './DeleteMilestone'
@@ -134,28 +134,9 @@ class WorkTimelineEditMilestone extends React.Component {
    * Submit form
    */
   onFormSubmit(model) {
-    const { submitForm, timelineState: { timeline }, isNewMilestone } = this.props
-    const updatedStartDate = moment.utc(new Date(model.startDate))
-    const updatedEndDate = moment.utc(new Date(model.endDate))
-    const status = MILESTONE_STATUS.ACTIVE
-    let updateParam
+    const { submitForm } = this.props
 
-    if (isNewMilestone) {
-      updateParam = _.assign({}, model, {
-        startDate: updatedStartDate,
-        endDate: updatedEndDate || '',
-        status,
-        order: timeline.milestones.length,
-        plannedText: 'empty', // this field is required in backend api but isn't supported by the form, so hardcode this field
-        activeText: 'empty', // this field is required in backend api but isn't supported by the form, so hardcode this field
-        completedText: 'empty', // this field is required in backend api but isn't supported by the form, so hardcode this field
-        blockedText: 'empty', // this field is required in backend api but isn't supported by the form, so hardcode this field
-      })
-    } else {
-      updateParam = _.cloneDeep(model)
-    }
-
-    submitForm(updateParam)
+    submitForm(_.cloneDeep(model))
   }
 
   /**

@@ -4,6 +4,8 @@
 import _ from 'lodash'
 import moment from 'moment'
 import { getChallengeStartEndDate } from './challenges'
+import { getPhaseActualData } from './projectHelper'
+import { MILESTONE_STATUS } from '../config/constants'
 
 
 /**
@@ -164,88 +166,70 @@ export function convertTimelineMilestonesToMilestoneProgress(timeline) {
   if (!timeline || !timeline.milestones || !timeline.milestones.length) {
     return []
   }
-  const milestones = _.orderBy(timeline.milestones, o => moment(o.startDate), ['asc'])
-  const updatedMilestones = []
-  const startTimelineTS = moment(milestones[0].startDate).unix()
-  const endTimelineTS = moment(milestones[milestones.length - 1].endDate).unix()
-  const durationTimeline = endTimelineTS - startTimelineTS
-  let isPassToday = false
-  for (let index = 0; index < milestones.length; index++) {
-    const milestone = milestones[index]
-    const startDate = moment(milestone.startDate)
-    let endDate = moment(milestone.endDate)
-    const startDateTS = startDate.unix()
-    let endDateTS = endDate.unix()
-    let duration = endDateTS - startDateTS
-    let durationOfTodayInCurrentMilestone = 0
-    const updatedMilestone = {
-      isEnd: false,
-      isStart: false,
-      startDateString: startDate.format('MMM DD'),
-      endDateString: endDate.format('MMM DD'),
-      isPast: false,
-      isCurrentMilestone: false,
-      isFuture: false,
-      progress: 0,
-      progressWidth: '0%',
-      currentProgressWidth: '0%',
-      name: milestone.name,
-      daysRemaining: '',
-      id: milestone.id,
+
+  const {
+    startDate: globalStartDate,
+    endDate: globalEndDate,
+    duration: timelineDurationDays,
+  } = getPhaseActualData({}, timeline)
+
+  console.warn('global', {
+    globalStartDate,
+    globalEndDate,
+    timelineDurationDays,
+  })
+
+  const today = moment()
+  const milestones = _.orderBy(timeline.milestones, 'order', ['asc'])
+
+  return milestones.map((milestone, index) => {
+    const startDate = moment.utc(milestone.actualStartDate || milestone.startDate)
+    const endDate = moment.utc(milestone.completionDate || milestone.endDate)
+    // count the last day as remaining
+    const daysLeft = endDate.diff(today, 'days') + 1
+    const daysWord = Math.abs(daysLeft) === 1 ? 'day' : 'days'
+    const isLate = daysLeft < 0
+    // we show progress with day granularity, because we keep all the dates with rounding to the day
+    const progress = isLate ? 1 : (milestone.duration - daysLeft) / milestone.duration
+    let width = 0
+    let isStart = false
+    let isEnd = false
+
+    if (timelineDurationDays > 0) {
+      width = `${milestone.duration * 100 / timelineDurationDays}%`
+    } else {
+      width = `${100 / milestones.length}%`
+    }
+
+    if (index === 0) {
+      isStart = true
     }
 
     if (index === milestones.length - 1) {
       // last milestone
-      updatedMilestone.isEnd = true
-      updatedMilestone.progressWidth = 'auto'
+      isEnd = true
     }
 
-    if (index < milestones.length - 1 || index === 0) {
-      updatedMilestone.isStart = true
-    }
+    return {
+      name: milestone.name,
+      id: milestone.id,
 
-    if (!isPassToday) {
-      if (index < milestones.length - 1) {
-        const nextMilestone = milestones[index + 1]
-        endDate = moment(nextMilestone.startDate)
-        endDateTS = endDate.unix()
-        duration = endDateTS - startDateTS
-      }
-      const today = moment()
-      if (startDate <= today && today <= endDate) {
-        isPassToday = true
-        updatedMilestone.isCurrentMilestone = true
-        if (duration) {
-          durationOfTodayInCurrentMilestone = (today.unix() - startDate.unix()) * 100 / duration
-          updatedMilestone.currentProgressWidth = `${durationOfTodayInCurrentMilestone}%`
-        } else {
-          updatedMilestone.currentProgressWidth = '100%'
-        }
-        const daysRemaining = endDate.diff(today, 'days')
-        updatedMilestone.daysRemaining = `${daysRemaining} day${daysRemaining > 1 ? 's' : ''} remaining`
-      }
+      isStart,
+      isEnd,
 
-      if (today >= endDate) {
-        updatedMilestone.isPast = true
-      } else {
-        isPassToday = true
-      }
-    } else {
-      updatedMilestone.isFuture = true
-    }
+      startDateString: startDate.format('MMM DD'),
+      endDateString: endDate.format('MMM DD'),
 
-    if (durationTimeline) {
-      updatedMilestone.progress = duration * 100 / durationTimeline
-      updatedMilestone.progressWidth = `${updatedMilestone.progress}%`
-    }
-    if (!duration) {
-      updatedMilestone.progress = 0
-      updatedMilestone.progressWidth = `${updatedMilestone.progress}%`
-    }
-    updatedMilestones.push(updatedMilestone)
-  }
+      isPast: milestone.status === MILESTONE_STATUS.COMPLETED,
+      isCurrentMilestone: milestone.status === MILESTONE_STATUS.ACTIVE,
+      isFuture: !_.includes([MILESTONE_STATUS.COMPLETED, MILESTONE_STATUS.ACTIVE], milestone.status),
 
-  return updatedMilestones
+      currentProgressWidth: `${progress * 100}%`,
+      daysRemaining: daysLeft < 0 ? `${-daysLeft} ${daysWord} delayed` : `${daysLeft} ${daysWord} remaining`,
+      isLate,
+      width,
+    }
+  })
 }
 
 /**

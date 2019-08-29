@@ -37,7 +37,7 @@ const WorkTimeline = ({ editMode, timelineState: { timeline }, addNewMilestone, 
           {milestones.map((milestone, index) => (
             <div
               key={`milestone-${milestone.id}`}
-              style={{ width: milestone.progressWidth }}
+              style={{ width: milestone.width }}
               styleName={cn('bar-segment', {
                 'bar-segment-start': index === 0,
                 'past-milestone': milestone.isPast,
@@ -55,14 +55,14 @@ const WorkTimeline = ({ editMode, timelineState: { timeline }, addNewMilestone, 
               {!milestone.isCurrentMilestone && (
                 <span styleName="bar-content">{milestone.startDateString}</span>
               )}
-              {milestone.isEnd && !milestone.isCurrentMilestone && !milestone.isStart && (
-                <span styleName="bar-content" />
-              )}
               {milestone.isCurrentMilestone && (
                 <span styleName="bar-content">{milestone.daysRemaining}</span>
               )}
               {milestone.isCurrentMilestone && (
-                <div style={{ width: milestone.currentProgressWidth }} styleName="past-days">
+                <div
+                  style={{ width: milestone.currentProgressWidth }}
+                  styleName={cn('past-days', { 'is-late': milestone.isLate })}
+                >
                   <span styleName="past-days-title">{milestone.daysRemaining}</span>
                 </div>
               )}
