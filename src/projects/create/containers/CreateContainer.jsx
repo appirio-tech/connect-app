@@ -24,6 +24,8 @@ import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
   LS_INCOMPLETE_WIZARD,
+  LS_INCOMPLETE_PROJECT_QUERY_PARAMS,
+  SPECIAL_QUERY_PARAMS,
   PROJECT_STATUS_IN_REVIEW,
   ACCOUNTS_APP_REGISTER_URL,
   NEW_PROJECT_PATH,
@@ -332,7 +334,18 @@ class CreateContainer extends React.Component {
     }
 
     if (typeAlias && templateAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
-      this.props.history.push(NEW_PROJECT_PATH + '/' + templateAlias + window.location.search)
+      const incompleteProjectQueryParamsStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT_QUERY_PARAMS)
+      const incompleteQueryParams = incompleteProjectQueryParamsStr ? JSON.parse(incompleteProjectQueryParamsStr) : {}
+      const queryParams = qs.parse(window.location.search)
+      const isQueryParamsChanged = !_.isEqual(
+        _.omit(queryParams, SPECIAL_QUERY_PARAMS),
+        _.omit(incompleteQueryParams, SPECIAL_QUERY_PARAMS)
+      )
+      // if we are coming to the details step and we see that query params has been changed
+      // since we left incomplete project, this mean that we chose continue incomplete project
+      // when we changed URL and started again, so we should restore the query params of incomplete project
+      const queryParamsToApply = isQueryParamsChanged ? '?' + qs.stringify(incompleteQueryParams) : window.location.search
+      this.props.history.push(NEW_PROJECT_PATH + '/' + templateAlias + queryParamsToApply)
     }
 
     if (typeAlias && templateAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_PROJECT_SUBMITTED) {

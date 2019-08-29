@@ -14,7 +14,12 @@ import ProjectSubmitted from './ProjectSubmitted'
 
 import update from 'react-addons-update'
 import {
-  LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH, LS_INCOMPLETE_WIZARD, PROJECT_ATTACHMENTS_FOLDER
+  LS_INCOMPLETE_PROJECT,
+  LS_INCOMPLETE_WIZARD,
+  LS_INCOMPLETE_PROJECT_QUERY_PARAMS,
+  SPECIAL_QUERY_PARAMS,
+  PROJECT_REF_CODE_MAX_LENGTH,
+  PROJECT_ATTACHMENTS_FOLDER,
 } from '../../../config/constants'
 import {
   buildProjectUpdateQueryByQueryParamSelectCondition,
@@ -81,8 +86,20 @@ class ProjectWizard extends Component {
         const projectTemplate = getProjectTemplateByAlias(projectTemplates, params.project)
 
         if (projectTemplate) {
-          // load project details page directly
-          if (projectTemplate.key === incompleteProjectTemplate.key) {
+          const incompleteProjectQueryParamsStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT_QUERY_PARAMS)
+          const incompleteQueryParams = incompleteProjectQueryParamsStr ? JSON.parse(incompleteProjectQueryParamsStr) : {}
+          const queryParams = qs.parse(window.location.search)
+          // find out if the query params are different in the saved incomplete project and now
+          // if query params are different, then we would treat such form as different and wouldn't
+          // continue editing, we would propose user to start from scratch or continue with old query params
+          const isQueryParamsChanged = !_.isEqual(
+            _.omit(queryParams, SPECIAL_QUERY_PARAMS),
+            _.omit(incompleteQueryParams, SPECIAL_QUERY_PARAMS)
+          )
+
+          // load incomplete project if the current URL is for the same Project Template
+          // and query params which could be used to prefill project data are not changed
+          if (projectTemplate.key === incompleteProjectTemplate.key && !isQueryParamsChanged) {
             console.info(`Creating project (restored from local storage) using Project Template (id: "${incompleteProjectTemplate.id}", key: "${incompleteProjectTemplate.key}", alias: "${incompleteProjectTemplate.aliases[0]}").`)
             wizardStep = WZ_STEP_FILL_PROJ_DETAILS
             updateQuery = {$merge : incompleteProject}
@@ -127,13 +144,18 @@ class ProjectWizard extends Component {
       // get `templateId` from update query which has been updated above by calling `this.loadProjectFromURL`
       const templateId = _.get(updateQuery, 'templateId.$set')
       const projectTemplate = _.find(projectTemplates, { id: templateId })
-      const queryParams = _.omit(qs.parse(window.location.search), 'refCode')
-      if (projectTemplate && projectTemplate.scope) {
+      // during evaluation we do use `SPECIAL_QUERY_PARAMS`, and we don't store special params
+      const queryParams = _.omit(qs.parse(window.location.search), SPECIAL_QUERY_PARAMS)
+      // always store query params in local storage
+      // if later they are changed for incomplete project we would know that probably user open another link and we have to reset project
+      window.localStorage.setItem(LS_INCOMPLETE_PROJECT_QUERY_PARAMS, JSON.stringify(queryParams))
+      if (projectTemplate) {
         console.info(`Creating project (from scratch) using Project Template (id: "${projectTemplate.id}", key: "${projectTemplate.key}", alias: "${projectTemplate.aliases[0]}").`)
         // if we already know project template, and there are some query params,
         // then pre-populate project data using `queryParamSelectCondition` from template
-        if (!_.isEmpty(queryParams)) {
-          const prefillProjectQuery = buildProjectUpdateQueryByQueryParamSelectCondition(projectTemplate.scope, queryParams)
+        if (!_.isEmpty(queryParams) && projectTemplate.scope) {
+          // during evaluation we do use `SPECIAL_QUERY_PARAMS`
+          const prefillProjectQuery = buildProjectUpdateQueryByQueryParamSelectCondition(projectTemplate.scope, _.omit(queryParams, SPECIAL_QUERY_PARAMS))
           projectState = update(projectState, prefillProjectQuery)
           dirtyProjectState = update(dirtyProjectState, prefillProjectQuery)
         }
@@ -242,6 +264,7 @@ class ProjectWizard extends Component {
       if (projectTemplate) {
         console.info(`Creating project (confirmed: restored from local storage) using Project Template (id: "${projectTemplate.id}", key: "${projectTemplate.key}", alias: "${projectTemplate.aliases[0]}").`)
       }
+
       this.setState({
         project: update(this.state.project, { $merge : incompleteProject }),
         dirtyProject: update(this.state.dirtyProject, { $merge : incompleteProject }),
@@ -270,12 +293,23 @@ class ProjectWizard extends Component {
     const projectTemplateId = _.get(this.state.project, 'templateId')
     let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
     let project = null
+    // during evaluation we do use `SPECIAL_QUERY_PARAMS`, and we don't store special params
+    const queryParams = _.omit(qs.parse(window.location.search), SPECIAL_QUERY_PARAMS)
+    // always store query params in local storage
+    // if later they are changed for incomplete project we would know that probably user open another link and we have to reset project
+    window.localStorage.setItem(LS_INCOMPLETE_PROJECT_QUERY_PARAMS, JSON.stringify(queryParams))
     if (projectTemplateId) {
       project = { type: projectType, templateId: projectTemplateId, details: {} }
       wizardStep = WZ_STEP_FILL_PROJ_DETAILS
       const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
       if (projectTemplate) {
         console.info(`Creating project (confirmed: from scratch) using Project Template (id: "${projectTemplate.id}", key: "${projectTemplate.key}", alias: "${projectTemplate.aliases[0]}").`)
+        // if we already know project template, and there are some query params,
+        // then pre-populate project data using `queryParamSelectCondition` from template
+        if (!_.isEmpty(queryParams) && projectTemplate.scope) {
+          const prefillProjectQuery = buildProjectUpdateQueryByQueryParamSelectCondition(projectTemplate.scope, queryParams)
+          project = update(project, prefillProjectQuery)
+        }
       }
     }
     const refCode = this.getRefCodeFromURL()

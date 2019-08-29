@@ -701,7 +701,13 @@ export const MAINTENANCE_MODE = process.env.MAINTENANCE_MODE
 
 export const LS_INCOMPLETE_PROJECT = 'incompleteProject'
 export const LS_INCOMPLETE_WIZARD = 'incompleteWizard'
+export const LS_INCOMPLETE_PROJECT_QUERY_PARAMS = 'incompleteProjectQueryParams'
 
+/**
+ * These query params are special during project creating wizard.
+ * They have some special code to handle them.
+ */
+export const SPECIAL_QUERY_PARAMS = ['returnUrl', 'refCode']
 
 export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
 export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL
