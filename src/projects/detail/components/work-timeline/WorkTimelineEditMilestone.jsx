@@ -264,7 +264,7 @@ class WorkTimelineEditMilestone extends React.Component {
                 label="Duration (days)"
                 type="number"
                 name="duration"
-                value={duration}
+                value={`${duration}`}
                 minValue={1}
                 // cannot use this validator because of the issue in `isRequired` validator for numbers
                 // see issue
