@@ -90,8 +90,8 @@ class ProjectWizard extends Component {
           const incompleteQueryParams = incompleteProjectQueryParamsStr ? JSON.parse(incompleteProjectQueryParamsStr) : {}
           const queryParams = qs.parse(window.location.search)
           // find out if the query params are different in the saved incomplete project and now
-          // if query params are different, then we would treat such form as different and wouldn't
-          // continue editing, we would propose user to start from scratch or continue with old query params
+          // if query params are different, then we would treat such form as different and wouldn't continue editing,
+          // we would propose user to start from scratch or continue with old query params
           const isQueryParamsChanged = !_.isEqual(
             _.omit(queryParams, SPECIAL_QUERY_PARAMS),
             _.omit(incompleteQueryParams, SPECIAL_QUERY_PARAMS)
@@ -144,7 +144,7 @@ class ProjectWizard extends Component {
       // get `templateId` from update query which has been updated above by calling `this.loadProjectFromURL`
       const templateId = _.get(updateQuery, 'templateId.$set')
       const projectTemplate = _.find(projectTemplates, { id: templateId })
-      // during evaluation we do use `SPECIAL_QUERY_PARAMS`, and we don't store special params
+      // during evaluation we do not use `SPECIAL_QUERY_PARAMS`, and we don't store them
       const queryParams = _.omit(qs.parse(window.location.search), SPECIAL_QUERY_PARAMS)
       // always store query params in local storage
       // if later they are changed for incomplete project we would know that probably user open another link and we have to reset project
@@ -293,7 +293,7 @@ class ProjectWizard extends Component {
     const projectTemplateId = _.get(this.state.project, 'templateId')
     let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
     let project = null
-    // during evaluation we do use `SPECIAL_QUERY_PARAMS`, and we don't store special params
+    // during evaluation we do not use `SPECIAL_QUERY_PARAMS`, and we don't store them
     const queryParams = _.omit(qs.parse(window.location.search), SPECIAL_QUERY_PARAMS)
     // always store query params in local storage
     // if later they are changed for incomplete project we would know that probably user open another link and we have to reset project
