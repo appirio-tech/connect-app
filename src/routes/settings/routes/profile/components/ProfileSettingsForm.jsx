@@ -53,10 +53,10 @@ class ProfileSettingsForm extends Component {
   }
 
   onBusinessPhoneCountryChange({ country, externalChange }) {
-    const { businessPhoneValid } = this.state
+    const { businessPhoneValid, countrySelected: previousSelectedCountry } = this.state
 
     if (country && country.code) {
-      if (this.state.countrySelected !== country.name && country.name) {
+      if (previousSelectedCountry !== country.name && country.name) {
         // when country code of business phone changes, the country selection should change automatically
         this.refs.countrySelect.setValue(country.name)
         this.setState({
@@ -78,7 +78,9 @@ class ProfileSettingsForm extends Component {
     // external change means, the user didn't change the phone number field.
     // But it was automatically changed due to country selection change. In such case, we should show
     // the alert under country selection only.
-    if (!externalChange) {
+    const countryName = country && country.name
+    const countryCodeChanged = countryName && previousSelectedCountry && countryName !== previousSelectedCountry
+    if (!externalChange && countryCodeChanged) {
       this.setState({
         businessPhoneDirty: true
       })
