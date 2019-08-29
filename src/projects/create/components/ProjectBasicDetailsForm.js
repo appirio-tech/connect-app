@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import qs from 'query-string'
 import cn from 'classnames'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
@@ -108,20 +107,11 @@ class ProjectBasicDetailsForm extends Component {
     }
 
     if (hasDependantFields && !_.isEqual(nextProps.dirtyProject, this.props.dirtyProject)) {
-      // get URL query params as an object
-      const indexOfQueryStart = window.location.href.indexOf('?')
-      const queryParams = indexOfQueryStart > -1 ? qs.parse(window.location.href.substring(indexOfQueryStart + 1)) : {}
-      // use values from query params during conditions evaluations
-      // so we can control for by the URL params
-      const evaluationData = {
-        ...queryParams,
-        ...nextProps.dirtyProject
-      }
       const {
         updatedTemplate,
         hidedSomeNodes,
         updatedSomeNodes,
-      } = updateNodesByConditions(template, evaluationData, nextProps.productTemplates)
+      } = updateNodesByConditions(template, nextProps.dirtyProject, nextProps.productTemplates)
 
       if (updatedSomeNodes) {
         this.setState({
