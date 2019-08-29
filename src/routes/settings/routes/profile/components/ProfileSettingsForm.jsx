@@ -37,6 +37,9 @@ class ProfileSettingsForm extends Component {
     this.onChange = this.onChange.bind(this)
     this.onBusinessPhoneCountryChange = this.onBusinessPhoneCountryChange.bind(this)
     this.onCountryChange = this.onCountryChange.bind(this)
+
+    this.hideCountrySelectAlert = this.hideCountrySelectAlert.bind(this)
+    this.hideBusinessPhoneAlert = this.hideBusinessPhoneAlert.bind(this)
   }
 
   onCountryChange(country) {
@@ -80,6 +83,18 @@ class ProfileSettingsForm extends Component {
         businessPhoneDirty: true
       })
     }
+  }
+
+  hideCountrySelectAlert() {
+    this.setState({
+      countrySelectionDirty: false
+    })
+  }
+
+  hideBusinessPhoneAlert () {
+    this.setState({
+      businessPhoneDirty: false
+    })
   }
 
   getField(label, name, isRequired=false) {
@@ -183,6 +198,7 @@ class ProfileSettingsForm extends Component {
               forceCountry={this.state.countrySelected}
               value={this.props.values.settings.businessPhone}
               onChangeCountry={this.onBusinessPhoneCountryChange}
+              onOutsideClick={this.hideBusinessPhoneAlert}
             />
             {
               this.state.businessPhoneDirty &&
@@ -238,6 +254,7 @@ class ProfileSettingsForm extends Component {
               placeholder="- Select country -"
               showDropdownIndicator
               setValueOnly
+              onBlur={this.hideCountrySelectAlert}
             />
             {
               this.state.countrySelectionDirty &&
