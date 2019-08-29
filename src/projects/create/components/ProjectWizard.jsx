@@ -83,6 +83,7 @@ class ProjectWizard extends Component {
         if (projectTemplate) {
           // load project details page directly
           if (projectTemplate.key === incompleteProjectTemplate.key) {
+            console.info(`Creating project (restored from local storage) using Project Template (id: "${incompleteProjectTemplate.id}", key: "${incompleteProjectTemplate.key}", alias: "${incompleteProjectTemplate.aliases[0]}").`)
             wizardStep = WZ_STEP_FILL_PROJ_DETAILS
             updateQuery = {$merge : incompleteProject}
           } else {
@@ -127,12 +128,15 @@ class ProjectWizard extends Component {
       const templateId = _.get(updateQuery, 'templateId.$set')
       const projectTemplate = _.find(projectTemplates, { id: templateId })
       const queryParams = _.omit(qs.parse(window.location.search), 'refCode')
-      // if we already know project template, and there are some query params,
-      // then pre-populate project data using `queryParamSelectCondition` from template
-      if (projectTemplate && projectTemplate.scope && !_.isEmpty(queryParams)) {
-        const prefillProjectQuery = buildProjectUpdateQueryByQueryParamSelectCondition(projectTemplate.scope, queryParams)
-        projectState = update(projectState, prefillProjectQuery)
-        dirtyProjectState = update(dirtyProjectState, prefillProjectQuery)
+      if (projectTemplate && projectTemplate.scope) {
+        console.info(`Creating project (from scratch) using Project Template (id: "${projectTemplate.id}", key: "${projectTemplate.key}", alias: "${projectTemplate.aliases[0]}").`)
+        // if we already know project template, and there are some query params,
+        // then pre-populate project data using `queryParamSelectCondition` from template
+        if (!_.isEmpty(queryParams)) {
+          const prefillProjectQuery = buildProjectUpdateQueryByQueryParamSelectCondition(projectTemplate.scope, queryParams)
+          projectState = update(projectState, prefillProjectQuery)
+          dirtyProjectState = update(dirtyProjectState, prefillProjectQuery)
+        }
       }
 
       this.setState({
@@ -229,10 +233,15 @@ class ProjectWizard extends Component {
    * It also moves the wizard to the project details step if there exists an incomplete project.
    */
   loadIncompleteProject() {
-    const { onStepChange, onProjectUpdate } = this.props
+    const { onStepChange, onProjectUpdate, projectTemplates } = this.props
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
       const incompleteProject = JSON.parse(incompleteProjectStr)
+      const templateId = _.get(incompleteProject, 'templateId')
+      const projectTemplate = _.find(projectTemplates, { id: templateId })
+      if (projectTemplate) {
+        console.info(`Creating project (confirmed: restored from local storage) using Project Template (id: "${projectTemplate.id}", key: "${projectTemplate.key}", alias: "${projectTemplate.aliases[0]}").`)
+      }
       this.setState({
         project: update(this.state.project, { $merge : incompleteProject }),
         dirtyProject: update(this.state.dirtyProject, { $merge : incompleteProject }),
@@ -252,7 +261,7 @@ class ProjectWizard extends Component {
    * Removed incomplete project from the local storage and resets the state. Also, moves wizard to the first step.
    */
   removeIncompleteProject() {
-    const { onStepChange } = this.props
+    const { onStepChange, projectTemplates } = this.props
     // remove incomplete project from local storage
     window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
     window.localStorage.removeItem(LS_INCOMPLETE_WIZARD)
@@ -264,6 +273,10 @@ class ProjectWizard extends Component {
     if (projectTemplateId) {
       project = { type: projectType, templateId: projectTemplateId, details: {} }
       wizardStep = WZ_STEP_FILL_PROJ_DETAILS
+      const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
+      if (projectTemplate) {
+        console.info(`Creating project (confirmed: from scratch) using Project Template (id: "${projectTemplate.id}", key: "${projectTemplate.key}", alias: "${projectTemplate.aliases[0]}").`)
+      }
     }
     const refCode = this.getRefCodeFromURL()
     if (refCode) {
