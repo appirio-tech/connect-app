@@ -1,6 +1,6 @@
 /**
  * WorkTimelineMilestoneContainer container
- * displays content of the work milestone review section
+ * displays content of any work milestone
  *
  * NOTE data is loaded by the parent ProjectDetail component
  */
