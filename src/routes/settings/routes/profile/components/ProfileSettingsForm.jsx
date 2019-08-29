@@ -28,6 +28,8 @@ class ProfileSettingsForm extends Component {
       dirty: false,
       businessPhoneValid: true,
       countrySelected: null,
+      businessPhoneDirty: false,
+      countrySelectionDirty: false
     }
     this.onSubmit = this.onSubmit.bind(this)
     this.onValid = this.onValid.bind(this)
@@ -42,11 +44,12 @@ class ProfileSettingsForm extends Component {
     if (country && country.value && this.state.countrySelected !== country.value) {
       this.setState({
         countrySelected: country.value,
+        countrySelectionDirty: true
       })
     }
   }
 
-  onBusinessPhoneCountryChange({ country }) {
+  onBusinessPhoneCountryChange({ country, externalChange }) {
     const { businessPhoneValid } = this.state
 
     if (country && country.code) {
@@ -66,6 +69,15 @@ class ProfileSettingsForm extends Component {
     } else if (businessPhoneValid) {
       this.setState({
         businessPhoneValid: false
+      })
+    }
+
+    // external change means, the user didn't change the phone number field.
+    // But it was automatically changed due to country selection change. In such case, we should show
+    // the alert under country selection only.
+    if (!externalChange) {
+      this.setState({
+        businessPhoneDirty: true
       })
     }
   }
@@ -108,6 +120,11 @@ class ProfileSettingsForm extends Component {
       ...data,
     }
     this.props.saveSettings(updatedData)
+
+    this.setState({
+      businessPhoneDirty: false,
+      countrySelectionDirty: false
+    })
   }
 
   onValid() {
@@ -167,7 +184,10 @@ class ProfileSettingsForm extends Component {
               value={this.props.values.settings.businessPhone}
               onChangeCountry={this.onBusinessPhoneCountryChange}
             />
-            <div styleName="warningText">Note: Changing the country code also updates your country selection</div>
+            {
+              this.state.businessPhoneDirty &&
+              <div styleName="warningText">Note: Changing the country code also updates your country selection</div>
+            }
           </div>
         </div>
         {this.getField('Company name', 'companyName', true)}
@@ -219,7 +239,10 @@ class ProfileSettingsForm extends Component {
               showDropdownIndicator
               setValueOnly
             />
-            <div styleName="warningText">Note: Changing the country also updates the country code of business phone.</div>
+            {
+              this.state.countrySelectionDirty &&
+              <div styleName="warningText">Note: Changing the country also updates the country code of business phone.</div>
+            }
           </div>
         </div>
         <div className="controls">
