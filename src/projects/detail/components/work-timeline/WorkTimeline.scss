@@ -70,7 +70,6 @@
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
   }
-
 }
 
 .bar-segment-end {
@@ -164,6 +163,10 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+
+  &.is-late {
+    background: $tc-red
+  }
 }
 
 .past-days-title {

@@ -36,7 +36,11 @@ class WorkTimelineNewMilestoneContainer extends React.Component {
       timelineState: { timeline },
     } = this.props
 
-    const { startDate, endDate } = getPhaseActualData(work, timeline)
+    const { startDate, endDate } = timeline.milestones.length > 0
+      // if have milestones, then calculate start/end date based on milestones
+      ? getPhaseActualData(work, timeline)
+      // otherwise just take them from the `timeline`
+      : timeline
     let milestoneStartDate
 
     // if timeline has `endDate` then start the next milestone the next day
@@ -49,8 +53,15 @@ class WorkTimelineNewMilestoneContainer extends React.Component {
     }
 
     model.startDate = milestoneStartDate.format()
-    model.endDate = milestoneStartDate.add(model.duration, 'days').format()
+    model.endDate = milestoneStartDate.clone().add(model.duration - 1, 'days').format()
     model.status = MILESTONE_STATUS.PLANNED
+    const maxOrder = timeline.milestones.length > 0 ? _.maxBy(timeline.milestones, 'order').order : 0
+    model.order = maxOrder + 1
+
+    model.plannedText = 'empty'
+    model.activeText = 'empty'
+    model.completedText = 'empty'
+    model.blockedText = 'empty'
 
     createWorkMilestone(work.id, timelineId, model)
   }

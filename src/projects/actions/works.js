@@ -93,7 +93,7 @@ function createDefaultMilestones(work, timeline) {
     type: MILESTONE_TYPE.COMMUNITY_WORK,
     duration: completeMilestoneDuration,
     startDate: startDate.clone().add(startMilestoneDuration, 'days'),
-    endDate: startDate.clone().add(startMilestoneDuration + 1, 'days'),
+    endDate: startDate.clone().add(startMilestoneDuration + completeMilestoneDuration - 1, 'days'),
     status: MILESTONE_STATUS.PLANNED,
     order: 2,
     plannedText: 'empty',
