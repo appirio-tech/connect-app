@@ -5,7 +5,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import { getChallengeStartEndDate } from './challenges'
 import { getPhaseActualData } from './projectHelper'
-import { MILESTONE_STATUS } from '../config/constants';
+import { MILESTONE_STATUS } from '../config/constants'
 
 
 /**
