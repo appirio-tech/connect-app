@@ -13,9 +13,12 @@ import FillProjectDetails from './FillProjectDetails'
 import ProjectSubmitted from './ProjectSubmitted'
 
 import update from 'react-addons-update'
-import { 
+import {
   LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH, LS_INCOMPLETE_WIZARD, PROJECT_ATTACHMENTS_FOLDER
 } from '../../../config/constants'
+import {
+  buildProjectUpdateQueryByQueryParamSelectCondition,
+} from '../../../helpers/wizardHelper'
 import './ProjectWizard.scss'
 
 const WZ_STEP_INCOMP_PROJ_CONF = 0
@@ -116,9 +119,25 @@ class ProjectWizard extends Component {
           updateQuery['details'] = { utm : { $set : { code : refCode }}}
         }
       }
+
+      let projectState = this.state.project
+      let dirtyProjectState = this.state.dirtyProject
+
+      // get `templateId` from update query which has been updated above by calling `this.loadProjectFromURL`
+      const templateId = _.get(updateQuery, 'templateId.$set')
+      const projectTemplate = _.find(projectTemplates, { id: templateId })
+      const queryParams = _.omit(qs.parse(window.location.search), 'refCode')
+      // if we already know project template, and there are some query params,
+      // then pre-populate project data using `queryParamSelectCondition` from template
+      if (projectTemplate && projectTemplate.scope && !_.isEmpty(queryParams)) {
+        const prefillProjectQuery = buildProjectUpdateQueryByQueryParamSelectCondition(projectTemplate.scope, queryParams)
+        projectState = update(projectState, prefillProjectQuery)
+        dirtyProjectState = update(dirtyProjectState, prefillProjectQuery)
+      }
+
       this.setState({
-        project: update(this.state.project, updateQuery),
-        dirtyProject: update(this.state.dirtyProject, updateQuery),
+        project: update(projectState, updateQuery),
+        dirtyProject: update(dirtyProjectState, updateQuery),
         wizardStep,
         isProjectDirty: false
       }, () => {
