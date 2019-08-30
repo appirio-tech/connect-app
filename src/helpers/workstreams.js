@@ -173,12 +173,6 @@ export function convertTimelineMilestonesToMilestoneProgress(timeline) {
     duration: timelineDurationDays,
   } = getPhaseActualData({}, timeline)
 
-  console.warn('global', {
-    globalStartDate,
-    globalEndDate,
-    timelineDurationDays,
-  })
-
   const today = moment()
   const milestones = _.orderBy(timeline.milestones, 'order', ['asc'])
 
