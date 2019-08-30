@@ -18,7 +18,7 @@ import {parseErrorObj} from '../../helpers/workstreams'
 const initialState = {
   isLoading: false,
   error: false,
-  workstreams: [], // workstreams are pushed directly into it hence need to declare first
+  workstreams: null,
 }
 
 function updateWorkstream(state, workstreamId, workstreamUpdateQuery) {

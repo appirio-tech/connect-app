@@ -18,8 +18,6 @@ const WorkListCard = (props) => {
     workstream,
     work,
     match,
-    inputDesignWorks,
-    timeline,
     activeMilestone,
   } = props
   const workDashboardUrl = `/projects/${match.params.projectId}/workstreams/${workstream.id}/works/${work.id}`
@@ -31,26 +29,22 @@ const WorkListCard = (props) => {
     switch (activeMilestone.type) {
     case MILESTONE_TYPE.DESIGN_WORK:
       return (
-        <button
+        <Link
+          to={`${workDashboardUrl}/milestones/${activeMilestone.id}`}
           className="tc-btn tc-btn-primary tc-btn-sm"
-          onClick={() => inputDesignWorks(timeline.id, activeMilestone.id)}
         >
             Input Designs
-        </button>
+        </Link>
       )
     case MILESTONE_TYPE.CHECKPOINT_REVIEW:
     case MILESTONE_TYPE.FINAL_DESIGNS:
       return (
-        <button
+        <Link
+          to={`${workDashboardUrl}/milestones/${activeMilestone.id}`}
           className="tc-btn tc-btn-primary tc-btn-sm"
-          onClick={(e) => {
-            e.preventDefault()
-            // Start design review for timeline
-            props.history.push(`${workDashboardUrl}/timelines/${timeline.id}/milestones/${activeMilestone.id}/review`)
-          }}
         >
           Design Review
-        </button>
+        </Link>
       )
     default:
       return null
@@ -89,7 +83,6 @@ WorkListCard.propTypes = {
   workstream: PT.shape({
     id: PT.number.isRequired,
   }).isRequired,
-  inputDesignWorks: PT.func.isRequired,
   timeline: PT.object.isRequired,
   activeMilestone: PT.object,
 }

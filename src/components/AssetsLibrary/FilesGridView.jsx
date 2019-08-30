@@ -36,7 +36,8 @@ const FilesGridView = ({
   loggedInUser,
   onDeletePostAttachment,
   formatModifyDate,
-  formatFolderTitle
+  formatFolderTitle,
+  onSelectedItem
 }) => {
   const renderLink = (link) => {
     if (link.onClick) {
@@ -69,7 +70,10 @@ const FilesGridView = ({
       onAddAttachment(projectId, attachment)
     })
   }
-  const goBack = () => onChangeSubFolder(null)
+  const goBack = () => {
+    onSelectedItem(null)
+    onChangeSubFolder(null)
+  }
 
   return (
     <div styleName="assets-gridview-container">
@@ -118,7 +122,10 @@ const FilesGridView = ({
               const handleEditClick = () => onEditIntent(idx)
               const canEdit = `${link.createdBy}` === `${loggedInUser.userId}`
 
-              const changeSubFolder = () => onChangeSubFolder(link)
+              const changeSubFolder = () => {
+                onSelectedItem(link)
+                onChangeSubFolder(link)
+              }
 
               if (Array.isArray(link.children) && link.children.length > 0) {
                 return (
@@ -196,11 +203,13 @@ FilesGridView.propTypes = {
   onDeletePostAttachment: PropTypes.func,
   formatModifyDate: PropTypes.func.isRequired,
   formatFolderTitle: PropTypes.func.isRequired,
+  onSelectedItem: PropTypes.func,
 }
 
 FilesGridView.defaultProps = {
   title: 'Links',
   subFolderContent: null,
+  onSelectedItem: () => {}
 }
 
 export default uncontrollable(FilesGridView, {

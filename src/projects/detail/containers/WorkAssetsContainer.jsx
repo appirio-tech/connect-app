@@ -10,6 +10,7 @@ import {
   extractAttachmentLinksFromPosts,
   extractLinksFromPosts,
 } from '../../../helpers/posts'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 
 import './WorkAssetsContainer.scss'
 
@@ -36,6 +37,7 @@ class WorkAssetsContainer extends React.Component {
     const {
       workTopics,
       loggedInUser,
+      isLoadingTopic,
     } = this.props
     const {
       activeAssetsType,
@@ -59,7 +61,8 @@ class WorkAssetsContainer extends React.Component {
             onClickAction={this.activeAssetsTypeChange}
             activeAssetsType={activeAssetsType}
           />
-          {activeAssetsType === 'Files' && (
+          {isLoadingTopic && (<LoadingIndicator />)}
+          {activeAssetsType === 'Files' && !isLoadingTopic && (
             <FilesGridView
               links={attachments}
               title="Files"
@@ -68,7 +71,7 @@ class WorkAssetsContainer extends React.Component {
               formatFolderTitle={formatFolderTitle}
             />
           )}
-          {activeAssetsType === 'Links' && (
+          {activeAssetsType === 'Links' && !isLoadingTopic && (
             <LinksGridView
               links={links}
               formatModifyDate={formatModifyDate}
@@ -84,11 +87,17 @@ class WorkAssetsContainer extends React.Component {
 WorkAssetsContainer.PropTypes = {
   workTopics: PT.array,
   loggedInUser: PT.object.isRequired,
+  isLoadingTopic: PT.bool.isRequired,
 }
 
-const mapStateToProps = ({ loadUser }) => ({
-  loggedInUser: loadUser.user
-})
+const mapStateToProps = ({ loadUser, topics }) => {
+  const isLoadingTopic = _.some(_.values(topics), { isLoading: true })
+
+  return ({
+    loggedInUser: loadUser.user,
+    isLoadingTopic,
+  })
+}
 
 const mapDispatchToProps = {}
 

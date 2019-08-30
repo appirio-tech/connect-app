@@ -1,0 +1,67 @@
+@import '../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+  padding: 12px 15px;
+  position: relative;
+  margin-left: -15px;
+  margin-top: -12px;
+  width: calc(100% + 30px);
+  border-radius: 8px;
+
+  &.is-editing {
+    background-color: $tc-gray-neutral-light;
+    margin-bottom: 25px;
+
+    &::after {
+      bottom: -20px;
+    }
+  }
+
+  :global {
+    .rich-editor .tc-textarea .public-DraftEditor-content {
+      min-height: 500px ;
+    }
+  }
+
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  height: 30px;
+  align-items: center;
+}
+
+.title {
+  @include roboto-bold;
+
+  font-size: 16px;
+  min-height: 20px;
+}
+
+.requirements-text-container {
+  width: 100%;
+  color: $tc-gray-80;
+  font-size: 14px;
+  padding-bottom: 5px;
+  line-height: 20px;
+  position: relative;
+}
+
+.loading-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 1;
+}

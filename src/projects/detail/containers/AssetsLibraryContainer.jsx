@@ -31,6 +31,8 @@ import {
 import Sticky from '../../../components/Sticky'
 import PERMISSIONS from '../../../config/permissions'
 import { checkPermission } from '../../../helpers/permissions'
+import { loadProjectWorkstreams } from '../../actions/workstreams'
+import { loadTopic } from '../../../actions/topics'
 
 import './AssetsLibraryContainer.scss'
 
@@ -53,6 +55,33 @@ class AssetsLibraryContainer extends React.Component {
     expandProjectPhase(phaseId, 'posts')
   }
 
+  componentWillMount() {
+    const { project, workstreams, loadProjectWorkstreams, isLoadingWorkstreams } = this.props
+
+    if (!workstreams && !isLoadingWorkstreams) {
+      loadProjectWorkstreams(project)
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {
+      works,
+      loadTopic,
+      allTopics,
+      match: { params: { projectId } },
+    } = nextProps
+
+    works.forEach((work) => {
+      // start loading all the comments for work if not yet loaded or started loading
+      [`work#${work.id}-details`, `work#${work.id}-requirements`].forEach((topicTag) => {
+        if (!allTopics[topicTag]) {
+          loadTopic(projectId, topicTag)
+        }
+      })
+    })
+
+  }
+
   componentDidMount() {
     const { expandProjectPhase, location } = this.props
 
@@ -69,7 +98,6 @@ class AssetsLibraryContainer extends React.Component {
 
   componentWillUnmount() {
     const { collapseAllProjectPhases } = this.props
-
     collapseAllProjectPhases()
   }
 
@@ -83,9 +111,10 @@ class AssetsLibraryContainer extends React.Component {
       isFeedsLoading,
       phases,
       productsTimelines,
-      phasesTopics,
+      allTopics,
       isProcessing,
       location,
+      workTopics
     } = this.props
 
     const isProjectPlan = true
@@ -101,7 +130,7 @@ class AssetsLibraryContainer extends React.Component {
         feeds={feeds}
         isFeedsLoading={isFeedsLoading}
         productsTimelines={productsTimelines}
-        phasesTopics={phasesTopics}
+        phasesTopics={allTopics}
         onChannelClick={this.onChannelClick}
         isProjectPlan={isProjectPlan}
         isProjectProcessing={isProcessing}
@@ -137,7 +166,9 @@ class AssetsLibraryContainer extends React.Component {
             isSuperUser={isSuperUser}
             isManageUser={isManageUser}
             feeds={feeds}
-            phasesTopics={phasesTopics}
+            allTopics={allTopics}
+            isFeedsLoading={isFeedsLoading}
+            workTopics={workTopics}
           />
         </TwoColsLayout.Content>
 
@@ -151,12 +182,33 @@ AssetsLibraryContainer.propTypes = {
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
   isManageUser: PT.bool.isRequired,
+  isLoadingWorkstreams: PT.bool.isRequired,
   project: PT.object.isRequired,
-  phases: PT.array.isRequired,
+  phases: PT.array,
   productsTimelines: PT.object.isRequired,
+  loadProjectWorkstreams: PT.func.isRequired,
+  loadTopic: PT.func.isRequired,
 }
 
-const mapStateToProps = ({ projectState, projectTopics, topics }) => {
+const mapStateToProps = ({ projectState, projectTopics, topics, projectPlan, workstreams }) => {
+  const isLoadingTopic = _.some(_.values(topics), { isLoading: true })
+
+  let works = []
+  if (workstreams.workstreams) {
+    workstreams.workstreams.forEach((workstream) => {
+      works = works.concat(workstream.works)
+    })
+  }
+
+  let workTopics = []
+  works.forEach((work) => {
+    const tags = [`work#${work.id}-details`, `work#${work.id}-requirements`]
+    const workTopicsTmp =  _.values(
+      _.pick(topics, tags)
+    ).filter(t => t.topic).map(t => t.topic)
+    workTopics = workTopics.concat(workTopicsTmp)
+  })
+
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -164,16 +216,22 @@ const mapStateToProps = ({ projectState, projectTopics, topics }) => {
   }
 
   return {
-    phases: projectState.phases,
+    phases: projectPlan.isLoading ? null : projectState.phases, // is loading phase and phase topic
     feeds: allFeed,
     isFeedsLoading: projectTopics.isLoading,
-    phasesTopics: topics,
+    allTopics: topics,
+    workstreams: workstreams.workstreams,
+    works,
+    workTopics: isLoadingTopic ? null : workTopics,
+    isLoadingWorkstreams: workstreams.isLoading,
   }
 }
 
 const mapDispatchToProps = {
   expandProjectPhase,
   collapseAllProjectPhases,
+  loadProjectWorkstreams,
+  loadTopic
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AssetsLibraryContainer))

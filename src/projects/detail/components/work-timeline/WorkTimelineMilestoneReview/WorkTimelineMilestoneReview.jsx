@@ -99,8 +99,9 @@ export function WorkTimelineMilestoneReview(props) {
   const {
     milestone,
     isUpdatingMilestoneInfoWithProcessId,
-    match: { params: { projectId, workstreamId, workId, timelineId, milestoneId } },
+    match: { params: { projectId, workstreamId, workId, milestoneId } },
     updateWorkMilestone,
+    timeline,
   } = props
   const workDashboardUrl = `/projects/${projectId}`
 
@@ -165,12 +166,13 @@ export function WorkTimelineMilestoneReview(props) {
         progressId={designs.length}
         updateWorkMilestone={updateWorkMilestone}
         milestoneType={milestone.type}
+        timelineId={timeline.id}
       />
 
       <CompleteMilestoneButtonContainer
         className={styles['complete-milestone']}
         workId={parseInt(workId)}
-        timelineId={parseInt(timelineId)}
+        timelineId={timeline.id}
         milestoneId={parseInt(milestoneId)}
         onComplete={() => {  props.history.push(`${workDashboardUrl}/workstreams/${workstreamId}/works/${workId}`) }}
       />
@@ -197,6 +199,7 @@ export function WorkTimelineMilestoneReview(props) {
               progressIdForGeneralFeedback={designs.length}
               milestone={milestone}
               totalDesign={designs.length}
+              timelineId={timeline.id}
             />
           )
         })}
@@ -230,6 +233,16 @@ WorkTimelineMilestoneReview.propTypes = {
   }).isRequired,
   isUpdatingMilestoneInfoWithProcessId: PT.object.isRequired,
   updateWorkMilestone: PT.func.isRequired,
+  timeline: PT.shape({
+    id: PT.number.isRequired,
+    startDate: PT.string,
+    milestones: PT.arrayOf(PT.shape({
+      id: PT.number.isRequired,
+      startDate: PT.string,
+      endDate: PT.string,
+      name: PT.string.isRequired,
+    })),
+  }).isRequired,
 }
 
 export default withRouter(WorkTimelineMilestoneReview)

@@ -106,7 +106,8 @@ class IndividualFeedbackRow extends React.Component {
   updateFeedback(feedback, index) {
     const {
       updateWorkMilestone,
-      match: { params: { workId, timelineId, milestoneId } },
+      timelineId,
+      match: { params: { workId, milestoneId } },
       milestone,
       milestoneType,
     } = this.props
@@ -126,7 +127,7 @@ class IndividualFeedbackRow extends React.Component {
       data = { details: { content : { [isFinalDesign ? 'finalDesigns' : 'checkpointReview'] : { designs : { [index] : { feedback: feedback.content } } } } } }
     }
 
-    updateWorkMilestone(parseInt(workId), parseInt(timelineId), parseInt(milestoneId), data, [index])
+    updateWorkMilestone(parseInt(workId), timelineId, parseInt(milestoneId), data, [index])
   }
 
   /**
@@ -137,7 +138,8 @@ class IndividualFeedbackRow extends React.Component {
   updateCheckpointSelected(isSelected, index) {
     const {
       updateWorkMilestone,
-      match: { params: { workId, timelineId, milestoneId } },
+      timelineId,
+      match: { params: { workId, milestoneId } },
       milestone,
     } = this.props
     const checkpointReviewDesigns = _.get(milestone, 'details.content.checkpointReview.designs')
@@ -154,7 +156,7 @@ class IndividualFeedbackRow extends React.Component {
       data = { details: { content : { checkpointReview : { designs : { [index] : { isSelected } } } } } }
     }
 
-    updateWorkMilestone(parseInt(workId), parseInt(timelineId), parseInt(milestoneId), data, [index])
+    updateWorkMilestone(parseInt(workId), timelineId, parseInt(milestoneId), data, [index])
   }
 
   /**
@@ -165,7 +167,8 @@ class IndividualFeedbackRow extends React.Component {
   updateFinalPlaceSelected(newPlace, index) {
     const {
       updateWorkMilestone,
-      match: { params: { workId, timelineId, milestoneId } },
+      timelineId,
+      match: { params: { workId, milestoneId } },
       milestone,
       designFinalReview,
       progressIdForSelectingWorkPlace,
@@ -196,7 +199,7 @@ class IndividualFeedbackRow extends React.Component {
       data = { details: { content : { finalDesigns : { designs : { [index] : { isSelected: expectedSelected, place: expectedPlace } } } } } }
     }
 
-    updateWorkMilestone(parseInt(workId), parseInt(timelineId), parseInt(milestoneId), data, [index, progressIdForSelectingWorkPlace])
+    updateWorkMilestone(parseInt(workId), timelineId, parseInt(milestoneId), data, [index, progressIdForSelectingWorkPlace])
   }
 
   render() {
@@ -432,6 +435,7 @@ IndividualFeedbackRow.propTypes = {
   isUpdatingMilestoneInfoWithProcessId: PT.object.isRequired,
   updateWorkMilestone: PT.func.isRequired,
   indexOfDesign: PT.number.isRequired,
+  timelineId: PT.number.isRequired,
   milestoneType: PT.string.isRequired,
   alreadySelected1Place: PT.bool.isRequired,
   alreadySelected2Place: PT.bool.isRequired,

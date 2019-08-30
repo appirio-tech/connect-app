@@ -13,7 +13,6 @@ const Workstreams = ({
   workstreams,
   addWorkForWorkstream,
   timelines,
-  inputDesignWorks,
   isManageUser,
   permissions,
 }) => (
@@ -25,7 +24,6 @@ const Workstreams = ({
           workstream={workstream}
           addWorkForWorkstream={addWorkForWorkstream}
           timelines={timelines}
-          inputDesignWorks={inputDesignWorks}
           permissions={permissions}
         />
       ))}
@@ -44,7 +42,6 @@ Workstreams.propTypes = {
   })).isRequired,
   addWorkForWorkstream: PT.func.isRequired,
   timelines: PT.object.isRequired,
-  inputDesignWorks: PT.func.isRequired,
   isManageUser: PT.bool,
   permissions: PT.object.isRequired,
 }

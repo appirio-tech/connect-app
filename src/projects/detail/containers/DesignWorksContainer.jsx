@@ -25,7 +25,6 @@ DesignWorksContainer.PropTypes = {
   error: PT.any,
   milestone: PT.object.isRequired,
   updateWorkMilestone: PT.func.isRequired,
-  onBack: PT.func.isRequired,
   workId: PT.number.isRequired,
   timelineId: PT.number.isRequired,
   milestoneId: PT.number.isRequired,

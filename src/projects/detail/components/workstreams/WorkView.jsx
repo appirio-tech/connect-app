@@ -17,6 +17,7 @@ import CloseIcon from '../../../../assets/icons/x-mark-black.svg'
 import EditIcon from '../../../../assets/icons/icon-edit-black.svg'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
 import PostsContainer from '../../../../components/Posts'
+import WorkViewRequirements from './WorkViewRequirements'
 import {
   PHASE_STATUS,
   MILESTONE_STATUS,
@@ -70,7 +71,8 @@ class WorkView extends React.Component {
    * @param isChanged flag that indicates if form actually changed from initial model values
    */
   handleChange(change, isChanged) {
-    if (isChanged) {
+    const { work } = this.props
+    if (isChanged || (work.status !== change.status)) {
       const {match: {params: {projectId, workstreamId, workId}}, updateWork} = this.props
       updateWork(projectId, workstreamId, workId, change)
     }
@@ -125,9 +127,11 @@ class WorkView extends React.Component {
       editMilestone,
       timelines,
       showAddChallengeTask,
-      inputDesignWorks,
       markMilestoneAsCompleted,
-      match
+      match,
+      updateWork,
+      isUpdatingWorkInfoWithProgressId,
+      permissions
     } = this.props
     const timeline = _.get(timelines[work.id], 'timeline')
     const activeMilestone = timeline && _.find(timeline.milestones, {
@@ -144,7 +148,6 @@ class WorkView extends React.Component {
               work={work}
               timeline={timeline}
               milestone={activeMilestone}
-              inputDesignWorks={inputDesignWorks}
               markMilestoneAsCompleted={markMilestoneAsCompleted}
               match={match}
             />
@@ -162,7 +165,14 @@ class WorkView extends React.Component {
     if (navs[selectedNav].title === 'Requirements') {
       return (
         <div styleName="content">
-          [Requirements editor to be done]
+          <WorkViewRequirements
+            progressId={1}
+            work={work}
+            updateWork={updateWork}
+            isUpdatingWorkInfoWithProgressId={isUpdatingWorkInfoWithProgressId}
+            match={match}
+            permissions={permissions}
+          />
           <div styleName="comments">
             <div styleName="comments-title">Comments</div>
             <PostsContainer
@@ -306,9 +316,9 @@ WorkView.propTypes = {
   showAddChallengeTask: PT.func,
   updateWork: PT.func.isRequired,
   isUpdatingWorkInfo: PT.bool.isRequired,
+  isUpdatingWorkInfoWithProgressId: PT.object.isRequired,
   isDeletingWorkInfo: PT.bool.isRequired,
   timelines: PT.object.isRequired,
-  inputDesignWorks: PT.func.isRequired,
   markMilestoneAsCompleted: PT.func,
   topics: PT.object,
   permissions: PT.object.isRequired,

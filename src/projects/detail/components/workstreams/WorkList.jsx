@@ -73,7 +73,6 @@ class WorkList extends React.Component {
     const {
       workstream,
       addWorkForWorkstream,
-      inputDesignWorks,
       permissions,
     } = this.props
     const {listType} = this.state
@@ -99,7 +98,6 @@ class WorkList extends React.Component {
                   workstream={workstream}
                   timeline={milestoneData.timeline}
                   activeMilestone={milestoneData.activeMilestone}
-                  inputDesignWorks={inputDesignWorks}
                 />
               )
             })}
@@ -132,7 +130,6 @@ WorkList.propTypes = {
   }).isRequired,
   addWorkForWorkstream: PT.func.isRequired,
   timelines: PT.object.isRequired,
-  inputDesignWorks: PT.func.isRequired,
   permissions: PT.object.isRequired,
 }
 

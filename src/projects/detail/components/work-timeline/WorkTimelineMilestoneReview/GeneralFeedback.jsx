@@ -47,13 +47,14 @@ class GeneralFeedback extends React.Component {
       updateWorkMilestone,
       progressId,
       milestoneType,
-      match: { params: { workId, timelineId, milestoneId } },
+      timelineId,
+      match: { params: { workId, milestoneId } },
     } = this.props
 
     const isFinalDesign = milestoneType === MILESTONE_TYPE.FINAL_DESIGNS
     updateWorkMilestone(
       parseInt(workId),
-      parseInt(timelineId),
+      timelineId,
       parseInt(milestoneId),
       _.set(
         {},
@@ -119,6 +120,7 @@ GeneralFeedback.propTypes = {
   isUpdatingMilestoneInfoWithProcessId: PT.object.isRequired,
   generalFeedback: PT.string.isRequired,
   progressId: PT.number.isRequired,
+  timelineId: PT.number.isRequired,
   updateWorkMilestone: PT.func.isRequired,
   milestoneType: PT.string.isRequired,
 }
