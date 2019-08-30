@@ -25,6 +25,19 @@ import { evaluate, getFieldNamesFromExpression, populatePreparedConditions } fro
 import { flatten, unflatten } from 'flat'
 
 /**
+ * @typedef {Object} NodeObject
+ * @property {String} condition node would be only shown if condition evaluates to `true`
+ */
+
+/**
+ * @typedef {Object} Node
+ * @property {Number} sectionIndex    index of node section or -1
+ * @property {Number} subSectionIndex index of node subSection or -1
+ * @property {Number} questionIndex   index of node question or -1
+ * @property {Number} optionIndex     index of node option or -1
+ */
+
+/**
  * Defines possible ways of displaying steps
  */
 export const STEP_VISIBILITY = {
@@ -231,13 +244,20 @@ export const isNextStep = (step, currentStep) => (
 )
 
 /**
+ * @typedef {function(NodeObject, Node)} NodeIteratee
+ * @param {NodeObject} nodeObject node object of template tree like section, subSection, question or option
+ * @param {Node}       node       node of template tree like section, subSection, question or option
+ * @returns {Any} if return `false` iteration would stop
+ */
+
+/**
  * Iterates through all the nodes of the template: sections, subSections, questions, options.
  *
  * If iteratee returns `false` iteration will be stopped.
  *
- * @param {Object}   template template
- * @param {Function} iteratee function which is called for each node with signature (nodeObject, node)
- * @param {Function} [iterateSublevelCondition] if returns false, we don't iterate through the nodes of the child level
+ * @param {Object}       template template
+ * @param {NodeIteratee} iteratee function which is called for each node with signature (nodeObject, node)
+ * @param {Function}     [iterateSublevelCondition] if returns false, we don't iterate through the nodes of the child level
  */
 export const forEachNode = (template, iteratee, iterateSublevelCondition) => {
   let iterateeResult
@@ -1109,4 +1129,69 @@ const getNodeWhichMustBeUpdatedByCondition = (template, flatProjectData) => {
   })
 
   return result
+}
+
+/**
+ * Builds an update query for `update` method which would update project data the next way:
+ * - select options with `queryParamSelectCondition` which is satisfied when evaluated
+ *   with `queryParams` values
+ *
+ * @param {Object} template    template
+ * @param {Object} queryParams query params
+ *
+ * @returns {Object} update query object for `update` method
+ */
+export const buildProjectUpdateQueryByQueryParamSelectCondition = (template, queryParams) => {
+  /**
+   * Supported types of questions
+   */
+  const TYPE = {
+    CHECKBOX_GROUP: 'checkbox-group',
+    RADIO_GROUP: 'radio-group',
+  }
+  const prefillData = {}
+  const updateQuery = { $merge: prefillData }
+  const flatQueryParams = flatten(queryParams, { safe: true })
+
+  forEachNode(template, (nodeObject, node) => {
+    if (
+      // if condition is defined
+      nodeObject.queryParamSelectCondition &&
+      // support only for `options` nodes
+      isNodeLevel(node, LEVEL.OPTION) &&
+      // if condition is satisfied
+      evaluate(nodeObject.queryParamSelectCondition, flatQueryParams)
+    ) {
+      const questionNode = getParentNode(node)
+      const questionNodeObject = getNodeObject(template, questionNode)
+
+      if (!questionNodeObject.fieldName) {
+        console.error('Question of the option with "queryParamSelectCondition" doesn\'t have "fieldName". So we cannot pre-fill data.')
+        return
+      }
+
+      switch (questionNodeObject.type) {
+      case TYPE.CHECKBOX_GROUP: {
+        const currentValue = _.get(prefillData, questionNodeObject.fieldName, [])
+        _.set(prefillData, questionNodeObject.fieldName, [...currentValue, nodeObject.value])
+        break
+      }
+
+      case TYPE.RADIO_GROUP: {
+        const currentValue = _.get(prefillData, questionNodeObject.fieldName, null)
+        if (currentValue) {
+          console.error(`Cannot select several options for question with type "${TYPE.RADIO_GROUP}". It already has selected value "${currentValue}".`)
+        } else {
+          _.set(prefillData, questionNodeObject.fieldName, nodeObject.value)
+        }
+        break
+      }
+
+      default:
+        console.error(`Question type "${questionNodeObject.type}" is not supported by "queryParamSelectCondition".`)
+      }
+    }
+  })
+
+  return updateQuery
 }

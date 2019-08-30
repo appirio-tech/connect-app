@@ -9,11 +9,13 @@
   flex-grow: 1;
   margin: auto;
   margin-top: 20px;
+  margin-bottom: 260px; // gives space to show country selection list
 
   @media screen and (max-width: $screen-md - 1px) {
     padding: 0;
     margin: 0;
     max-width: none;
+    margin-bottom: 260px; // gives space to show country selection list in mobile view
   }
 }
 

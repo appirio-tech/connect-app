@@ -27,7 +27,7 @@ import {
 import { clean } from '../../../../helpers/utils'
 
 import './EditProjectForm.scss'
-import { PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_COMPLETED, SCOPE_CHANGE_REQ_STATUS_ACTIVATED, SCOPE_CHANGE_REQ_STATUS_PENDING, SCOPE_CHANGE_REQ_STATUS_APPROVED } from '../../../../config/constants'
+import { PROJECT_STATUS_COMPLETED, SCOPE_CHANGE_REQ_STATUS_ACTIVATED, SCOPE_CHANGE_REQ_STATUS_PENDING, SCOPE_CHANGE_REQ_STATUS_APPROVED } from '../../../../config/constants'
 
 const FeaturePickerModal = ({ project, isEdittable, showFeaturesDialog, hideFeaturesDialog, saveFeatures, setValue }) => {
   const setFormValue = (features, featureSeeAttached=false) => {
@@ -281,7 +281,9 @@ class EditProjectForm extends Component {
   }
 
   isScopeFreezed() {
-    return [PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW].indexOf(this.props.project.status) === -1
+    return false
+    // TODO commented to disable the scope change flow for immediate release
+    // return [PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW].indexOf(this.props.project.status) === -1
   }
 
   submit(model) {

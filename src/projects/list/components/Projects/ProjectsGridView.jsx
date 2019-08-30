@@ -84,7 +84,8 @@ const ProjectsGridView = props => {
         // project notifications
         const notReadNotifications = filterReadNotifications(notifications)
         const unreadProjectUpdate = filterNotificationsByProjectId(notReadNotifications, item.id)
-        const unreadPosts = filterTopicAndPostChangedNotifications(unreadProjectUpdate)
+        // count unread posts for Messages tab and Phases
+        const unreadPosts = filterTopicAndPostChangedNotifications(unreadProjectUpdate, /^(?:MESSAGES|PRIMARY|phase#\d+)$/)
         const unreadPostsCount = unreadPosts.length
         const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
