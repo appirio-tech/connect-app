@@ -168,8 +168,6 @@ export function convertTimelineMilestonesToMilestoneProgress(timeline) {
   }
 
   const {
-    startDate: globalStartDate,
-    endDate: globalEndDate,
     duration: timelineDurationDays,
   } = getPhaseActualData({}, timeline)
 
