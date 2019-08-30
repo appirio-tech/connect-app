@@ -55,70 +55,6 @@ export function loadWorkTimeline(workId) {
   }
 }
 
-const demoDetails = {
-  prevMilestoneContent: {
-    designs: [
-      {
-        title: 'Option 1 - Creative Freedom',
-        submissionId: '273645',
-        previewUrl: 'https://topcoder-dev-media.s3.amazonaws.com/member/profile/pshah_manager-1565325063054.jpeg',
-        links: [
-          {
-            title: '001 Puppy Mobile',
-            url: 'https://marvelapp.com/54cf844/screen/59214040'
-          },
-          {
-            title: '001 Puppy Desktop',
-            url: 'https://marvelapp.com/54cf844/screen/59214021'
-          },
-          {
-            title: 'GDrive',
-            url: 'https://marvelapp.com/54cf844/screen/59214017'
-          }
-        ]
-      },
-      {
-        title: 'Option 2 - Nature',
-        submissionId: '273646',
-        previewUrl: 'https://topcoder-dev-media.s3.amazonaws.com/member/profile/pshah_customer-1552561016111.png',
-        links: [
-          {
-            title: '001 Puppy Mobile',
-            url: 'https://marvelapp.com/54cf844/screen/59214040'
-          },
-          {
-            title: '001 Puppy Desktop',
-            url: 'https://marvelapp.com/54cf844/screen/59214067'
-          },
-          {
-            title: 'GDrive',
-            url: 'https://marvelapp.com/54cf844/screen/59214068'
-          }
-        ]
-      },
-      {
-        title: 'Option 3 - Zen/Nature',
-        submissionId: '273647',
-        previewUrl: 'https://topcoder-dev-media.s3.amazonaws.com/member/profile/pshah_customer-1552561016111.png',
-        links: [
-          {
-            title: '001 Puppy Mobile',
-            url: 'https://marvelapp.com/54cf844/screen/59214040'
-          },
-          {
-            title: '001 Puppy Desktop',
-            url: 'https://marvelapp.com/54cf844/screen/59214067'
-          },
-          {
-            title: 'GDrive',
-            url: 'https://marvelapp.com/54cf844/screen/59214068'
-          }
-        ]
-      }
-    ]
-  }
-}
-
 /**
  * Create a new milestone for work timeline
  *
@@ -129,24 +65,10 @@ const demoDetails = {
  * @return {Function} action creator
  */
 export function createWorkMilestone(workId, timelineId, milestone) {
-  // START: ADD DEMO DATA
-  const milestoneData = {...milestone}
-
-  if (milestone.type === 'checkpoint-review') {
-    milestoneData.details = demoDetails
-  }
-
-  if (milestone.type === 'final-designs') {
-    const demoDetailsFinal = _.cloneDeep(demoDetails)
-    demoDetailsFinal.prevMilestoneContent.designs.reverse()
-    milestoneData.details = demoDetailsFinal
-  }
-  // END: ADD DEMO DATA
-
   return (dispatch) => {
     return dispatch({
       type: NEW_WORK_TIMELINE_MILESTONE,
-      payload: createMilestoneApi(timelineId, milestoneData).then(newMilestone => ({ milestone: newMilestone })),
+      payload: createMilestoneApi(timelineId, milestone).then(newMilestone => ({ milestone: newMilestone })),
       meta: {
         workId,
         timelineId,
