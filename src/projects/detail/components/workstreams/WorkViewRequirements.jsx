@@ -74,7 +74,7 @@ class WorkViewRequirements extends React.Component {
       <div styleName={`container ${showEditForm ? 'is-editing' : ''}`}>
         <div styleName="header">
           <span styleName="title">Requirements</span>
-          {(permissions[POLICIES.WORKITEM_EDIT] === true) && !showEditForm && (
+          {permissions[POLICIES.WORK_EDIT] && !showEditForm && (
             <a
               href="javascript:;"
               onClick={() => { this.setState({ showEditForm: true }) }}
@@ -84,7 +84,7 @@ class WorkViewRequirements extends React.Component {
             </a>
           )}
         </div>
-        {((permissions[POLICIES.WORKITEM_EDIT] === true) && showEditForm) ? (
+        {showEditForm ? (
           <RichTextEditable
             contentPlaceholder={'New requirements...'}
             content={requirements ? requirements.trim() : ''}
