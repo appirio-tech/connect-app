@@ -8,8 +8,8 @@ function RichTextEditable(props) {
 
   return (
     <RichTextArea
-      cancelButtonText="CANCEL"
-      okButtonText="DONE"
+      cancelButtonText="Cancel"
+      okButtonText="Done"
       {...props}
       className={`${props.className} ${styles['rich-text-editable']}`}
       hideTitle
