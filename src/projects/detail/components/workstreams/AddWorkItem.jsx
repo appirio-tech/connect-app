@@ -172,7 +172,7 @@ class AddWorkItem extends React.Component {
         challengeList.push(selectedChallenges[challengeId])
       }
     }
-    createWorkitem(projectId, workstreamId, workId, challengeList)
+    createWorkitem(parseInt(projectId, 10), parseInt(workstreamId, 10), parseInt(workId, 10), challengeList)
   }
 
   render() {

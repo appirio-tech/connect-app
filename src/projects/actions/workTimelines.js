@@ -17,6 +17,7 @@ import {
   MILESTONE_STATUS,
 } from '../../config/constants'
 import { getNextNotHiddenMilestone } from '../../helpers/milestoneHelper'
+import { buildMilestoneToCreate } from '../../helpers/workstreams'
 
 
 /**
@@ -228,4 +229,63 @@ export function completeWorkMilestone(workId, timelineId, milestoneId, updatedPr
       dispatch(loadWorkTimeline(workId))
     })
   }
+}
+
+/**
+ * Create several milestones in work timeline
+ *
+ * @param {Number}        timelineId      timeline id
+ * @param {Array<Object>} milestonesToAdd milestones to add
+ *
+ * @returns {Promise<void>}
+ */
+function createSeveralMilestones(timelineId, milestonesToAdd) {
+  if (milestonesToAdd.length === 0) {
+    return Promise.resolve()
+  }
+
+  // create milestones one by one
+  return createMilestoneApi(timelineId, milestonesToAdd[0]).then(() =>
+    createSeveralMilestones(timelineId, milestonesToAdd.slice(1))
+  )
+}
+
+/**
+ * Create several milestones in work timeline using milestone templates.
+ *
+ * After creating trigger timeline reloading.
+ *
+ * @param {Function}      dispatch           dispatch
+ * @param {Object}        work               work
+ * @param {Object}        timeline           timeline
+ * @param {Array<Object>} milestoneTemplates list of milestone templates
+ *
+ * @returns {Promise<void>}
+ */
+export function createSeveralMilestonesByTemplates(dispatch, work, timeline, milestoneTemplates) {
+  const tmpTimeline = _.cloneDeep(timeline)
+
+  const milestonesToAdd = _.sortBy(milestoneTemplates, 'order').map((milestoneTemplate) => {
+    const basicProps = _.pick(milestoneTemplate, [
+      'name',
+      'description',
+      'duration',
+      'type',
+      'plannedText',
+      'activeText',
+      'completedText',
+      'blockedText',
+    ])
+
+    const milestoneToAdd = buildMilestoneToCreate(work, tmpTimeline, basicProps)
+    // add milestone into temporary timeline, so we can build data for the next milestone as if we already added the previous one
+    tmpTimeline.milestones.push(milestoneToAdd)
+
+    return milestoneToAdd
+  })
+
+  return createSeveralMilestones(timeline.id, milestonesToAdd).then(() => {
+    // reload timeline after creating milestones
+    dispatch(loadWorkTimeline(work.id))
+  })
 }

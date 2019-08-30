@@ -241,3 +241,79 @@ export function getWorkItemStartEndDate(workitem) {
   }
   return getChallengeStartEndDate(workitem.challenge)
 }
+
+export const select = {
+  /**
+   * Get work timeline by `workId`
+   *
+   * @param {Object} state  Redux state
+   * @param {Number} workId work id
+   *
+   * @returns {Object} timeline
+   */
+  workTimeline: (state, workId) => _.get(state, `workTimelines.timelines[${workId}].timeline`),
+
+  /**
+   * Get work
+   *
+   * @param {Object} state        Redux state
+   * @param {Number} workId       work id
+   *
+   * @returns {Object} work
+   */
+  work: (state, workId) => {
+    const work = _.get(state, 'works.work')
+
+    return work && work.id === workId ? work : undefined
+  },
+}
+
+/**
+ * Build milestone object to create based on the `basicProps`
+ *
+ * Determine correct start/end dates, order and other mandatory
+ * default properties for a new milestone.
+ *
+ * @param {Object} work       work
+ * @param {Object} timeline   timeline
+ * @param {Object} basicProps basic milestone properties
+ *
+ * @returns {Object} milestone object ready for creating
+ */
+export function buildMilestoneToCreate(work, timeline, basicProps) {
+  const maxOrder = timeline.milestones.length > 0 ? _.maxBy(timeline.milestones, 'order').order : 0
+
+  const defaultProps = {
+    duration: 1,
+    status: MILESTONE_STATUS.PLANNED,
+    order: maxOrder + 1,
+  }
+
+  const newMilestone = {
+    ...defaultProps,
+    ...basicProps,
+  }
+
+  const { startDate, endDate } = timeline.milestones.length > 0
+    // if have milestones, then calculate start/end date based on milestones
+    ? getPhaseActualData(work, timeline)
+    // otherwise just take them from the `timeline`
+    : timeline
+  let milestoneStartDate
+
+  // if timeline has `endDate` then start the next milestone the next day
+  if (endDate) {
+    milestoneStartDate = moment.utc(endDate).add(1, 'day')
+
+  // if timeline doesn't have `endDate` (means no milestones) use `startDate`
+  } else if (startDate) {
+    milestoneStartDate = moment.utc(startDate)
+  }
+
+  // overwrite the start/end date for new milestone
+  newMilestone.startDate = milestoneStartDate.format()
+  newMilestone.endDate = milestoneStartDate.clone().add(newMilestone.duration - 1, 'days').format()
+
+
+  return newMilestone
+}

@@ -1014,6 +1014,13 @@ export const POLICIES = {
   // WORKSTREAM_DELETE: 'workStream.delete',
 }
 
+/**
+ * Possible values for `milestoneTemplate.reference`
+ */
+export const MILESTONE_TEMPLATE_REFERENCES = {
+  PRODUCT_TEMPLATE: 'productTemplate',
+}
+
 // Notifications event types
 export const EVENT_TYPE = {
   POST: {

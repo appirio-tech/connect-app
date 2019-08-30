@@ -16,6 +16,7 @@ import {
 } from '../../api/timelines'
 import {
   loadWorkTimeline,
+  createSeveralMilestonesByTemplates,
 } from './workTimelines'
 import {
   syncProjectStatus,
@@ -38,7 +39,11 @@ import {
   PHASE_STATUS_ACTIVE,
   MILESTONE_STATUS,
   MILESTONE_TYPE,
+  MILESTONE_TEMPLATE_REFERENCES,
 } from '../../config/constants'
+import {
+  select,
+} from '../../helpers/workstreams'
 
 /**
  * Load work info
@@ -348,10 +353,27 @@ function createWorkitemForChallenge(projectId, workstreamId, workId, challenge) 
  * @return {Function} dispatch function
  */
 export function createWorkitem(projectId, workstreamId, workId, challenges) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState()
+
     return dispatch({
       type: NEW_WORK_ITEM,
-      payload: Promise.all(challenges.map(challenge => createWorkitemForChallenge(projectId, workstreamId, workId, challenge)))
+      payload: Promise.all(challenges.map(challenge => {
+        const milestoneTemplates = _.filter(state.templates.milestoneTemplates, {
+          reference: MILESTONE_TEMPLATE_REFERENCES.PRODUCT_TEMPLATE,
+          referenceId: challenge.templateId,
+        })
+        const timeline = select.workTimeline(state, workId)
+        const work = select.work(state, workId)
+
+        return createWorkitemForChallenge(projectId, workstreamId, workId, challenge).then((workItem) => {
+          if (milestoneTemplates.length > 0) {
+            return createSeveralMilestonesByTemplates(dispatch, work, timeline, milestoneTemplates).then(() => workItem)
+          }
+
+          return workItem
+        })
+      }))
         .then((results) => {
           results.forEach((workitem) => {
             const challengeId = _.get(workitem, 'details.challengeId', 0)
