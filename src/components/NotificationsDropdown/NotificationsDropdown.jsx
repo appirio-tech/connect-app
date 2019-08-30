@@ -22,10 +22,14 @@ class NotificationsDropdown extends React.Component {
 
   toggle(isOpen) {
     if (typeof isOpen === 'object') {
-      this.props.onToggle(!this.state.isOpen)
+      if (this.props.onToggle) {
+        this.props.onToggle(!this.state.isOpen)
+      }
       this.setState({ isOpen: !this.state.isOpen})
     } else {
-      this.props.onToggle(isOpen)
+      if (this.props.onToggle) {
+        this.props.onToggle(isOpen)
+      }
       this.setState({ isOpen })
     }
   }

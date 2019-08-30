@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
+import Handlebars from 'handlebars'
 import UserTooltip from '../User/UserTooltip'
 import RichTextArea from '../RichTextArea/RichTextArea'
 import { Link, withRouter } from 'react-router-dom'
@@ -76,7 +77,8 @@ class Comment extends React.Component {
 
   render() {
     const {message, author, date, edited, children, noInfo, self, isSaving, hasError, readonly, allMembers, canDelete, projectMembers, commentAnchorPrefix} = this.props
-    const messageAnchor = commentAnchorPrefix + message.id
+    const template = Handlebars.compile(commentAnchorPrefix)
+    const messageAnchor = template({ postId: message.id })
     const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#${messageAnchor}`
     const authorName = author ? (author.firstName + ' ' + author.lastName) : 'Connect user'
     const avatarUrl = _.get(author, 'photoURL', null)
@@ -174,7 +176,7 @@ class Comment extends React.Component {
 }
 
 Comment.defaultProps = {
-  commentAnchorPrefix: 'comment-',
+  commentAnchorPrefix: 'comment-{{postId}}',
 }
 
 Comment.propTypes = {

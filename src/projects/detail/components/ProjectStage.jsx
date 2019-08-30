@@ -18,10 +18,9 @@ import { buildPhaseTimelineNotificationsCriteria, buildPhaseSpecifiationNotifica
 import PhaseCard from './PhaseCard'
 import ProjectStageTabs from './ProjectStageTabs'
 import EditProjectForm from './EditProjectForm'
-import PhaseFeed from './PhaseFeed'
 import ProductTimelineContainer from '../containers/ProductTimelineContainer'
+import PostsContainer from '../../../components/Posts'
 import NotificationsReader from '../../../components/NotificationsReader'
-import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
 const enhance = spinnerWhileLoading(props => !props.processing)
@@ -173,20 +172,8 @@ class ProjectStage extends React.Component{
       phaseState,
       collapseProjectPhase,
       expandProjectPhase,
-      commentAnchorPrefix,
-      isLoading,
-
-      // comes from phaseFeedHOC
-      currentUser,
-      feed,
-      onLoadMoreComments,
-      onAddNewComment,
-      isAddingComment,
-      onDeleteMessage,
-      allMembers,
-      projectMembers,
-      onSaveMessage,
-      timeline,
+      productsTimelines,
+      phasesTopics,
       notifications,
     } = this.props
 
@@ -200,11 +187,14 @@ class ProjectStage extends React.Component{
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
 
+    const timeline = _.get(productsTimelines[product.id], 'timeline')
     const hasTimeline = !!timeline
     const defaultActiveTab = hasTimeline ? 'timeline' : 'posts'
     const currentActiveTab = _.get(phaseState, 'tab', defaultActiveTab)
     const unreadNotification = filterReadNotifications(notifications)
-    const unreadPostNotifications = filterNotificationsByPosts(unreadNotification, _.get(feed, 'posts', []))
+    const tag = `phase#${phase.id}`
+    const posts = _.get(phasesTopics[tag], 'topic.posts', [])
+    const unreadPostNotifications = filterNotificationsByPosts(unreadNotification, posts)
     const unreadTimelineNotifications = timeline ? filterNotificationsByCriteria(unreadNotification, buildPhaseTimelineNotificationsCriteria(timeline)) : []
     const unreadSpecificationNotifications = filterNotificationsByCriteria(unreadNotification, buildPhaseSpecifiationNotificationsCriteria(phase))
 
@@ -218,7 +208,7 @@ class ProjectStage extends React.Component{
 
     return (
       <PhaseCard
-        attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline)}
+        attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, _.get(phasesTopics[tag], 'topic', {}), timeline)}
         projectStatus={project.status}
         isManageUser={isManageUser}
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
@@ -245,21 +235,7 @@ class ProjectStage extends React.Component{
           }
 
           {currentActiveTab === 'posts' && (
-            <PhaseFeed
-              user={currentUser}
-              currentUser={currentUser}
-              feed={feed}
-              onLoadMoreComments={onLoadMoreComments}
-              onAddNewComment={onAddNewComment}
-              isAddingComment={isAddingComment}
-              onDeleteMessage={onDeleteMessage}
-              allMembers={allMembers}
-              projectMembers={projectMembers}
-              onSaveMessage={onSaveMessage}
-              commentAnchorPrefix={commentAnchorPrefix}
-              phaseId={phase.id}
-              isLoading={isLoading}
-            />
+            <PostsContainer tag={tag} postUrlTemplate={`phase-${phase.id}-posts-{{postId}}`} />
           )}
 
           {currentActiveTab === 'specification' &&
@@ -305,6 +281,8 @@ ProjectStage.propTypes = {
   project: PT.object.isRequired,
   productTemplates: PT.array.isRequired,
   productCategories: PT.array.isRequired,
+  productsTimelines: PT.object,
+  phasesTopics: PT.object,
   currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
@@ -315,11 +293,8 @@ ProjectStage.propTypes = {
   updateProductAttachment: PT.func.isRequired,
   removeProductAttachment: PT.func.isRequired,
   deleteProjectPhase: PT.func.isRequired,
-  commentAnchorPrefix: PT.string,
 }
 
-const ProjectStageUncontrollable = uncontrollable(withRouter(ProjectStage), {
+export default uncontrollable(withRouter(ProjectStage), {
   activeTab: 'onTabClick',
 })
-
-export default phaseFeedHOC(ProjectStageUncontrollable)

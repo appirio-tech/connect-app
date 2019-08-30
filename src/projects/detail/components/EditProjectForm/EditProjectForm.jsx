@@ -24,8 +24,10 @@ import {
   STEP_VISIBILITY,
   STEP_STATE,
 } from '../../../../helpers/wizardHelper'
+import { clean } from '../../../../helpers/utils'
 
 import './EditProjectForm.scss'
+import { PROJECT_STATUS_COMPLETED, SCOPE_CHANGE_REQ_STATUS_ACTIVATED, SCOPE_CHANGE_REQ_STATUS_PENDING, SCOPE_CHANGE_REQ_STATUS_APPROVED } from '../../../../config/constants'
 
 const FeaturePickerModal = ({ project, isEdittable, showFeaturesDialog, hideFeaturesDialog, saveFeatures, setValue }) => {
   const setFormValue = (features, featureSeeAttached=false) => {
@@ -71,6 +73,7 @@ class EditProjectForm extends Component {
     this.onLeave = this.onLeave.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.makeDeliveredPhaseReadOnly = this.makeDeliveredPhaseReadOnly.bind(this)
+    this.isScopeFreezed = this.isScopeFreezed.bind(this)
 
     // init wizard to support dependant questions
     const {
@@ -82,6 +85,7 @@ class EditProjectForm extends Component {
       template,
       hasDependantFields,
       dirtyProject: Object.assign({}, props.project),
+      formsyFormKey: 0
     }
   }
 
@@ -132,12 +136,21 @@ class EditProjectForm extends Component {
           }
         })
       }
+
+      // If a scope change is activated, future resets should revert to the new project state. 
+      // There is no way to reinitialize formsyForm values with pristine flag.
+      // So, remount formsy form with new initial values by updating the key prop on FormsyForm element.
+      const formsyFormKey = this.isScopeChangeActivated(this.props.project, nextProps.project)
+        ? this.state.formsyFormKey + 1 
+        : this.state.formsyFormKey
+
       this.setState({
         project: updatedProject,
         isFeaturesDirty: false, // Since we just saved, features are not dirty anymore.
         isProjectDirty: false,
         canSubmit: false,
-        isSaving: false
+        isSaving: false,
+        formsyFormKey
       })
     }
 
@@ -149,12 +162,31 @@ class EditProjectForm extends Component {
       } = updateNodesByConditions(template, nextProps.project, nextProps.productTemplates)
 
       if (updatedSomeNodes) {
-        this.setState({
+        this.setState(state => ({
           template: updatedTemplate,
-          project: hidedSomeNodes ? nextProps.project : this.state.project,
+          project: hidedSomeNodes ? nextProps.project : state.project,
+        }))
+
+        // re-check again if any hidden values when an option is deselected
+        const updatedProject = clean(removeValuesOfHiddenNodes(updatedTemplate, nextProps.project))
+        const skipProperties = ['members', 'invites']
+        const clearUpdatedProject = clean(_.omit(updatedProject, [...skipProperties, 'isDirty']))
+        const clearUpdatedNonDirtyProject = clean(_.omit(nextProps.projectNonDirty, skipProperties))
+        const isDirty = !_.isEqual(clearUpdatedProject, clearUpdatedNonDirtyProject)
+        // update the state, always use this flag to check if changed
+        this.setState({
+          isProjectDirty: isDirty,
         })
       }
     }
+  }
+
+  isScopeChangeActivated(projectState, newProjectState) {
+    const pendingStatuses = [SCOPE_CHANGE_REQ_STATUS_PENDING, SCOPE_CHANGE_REQ_STATUS_APPROVED]
+    const pendingScopeChange = _.find(projectState.scopeChangeRequests, scr => pendingStatuses.indexOf(scr.status) !== -1)
+    const updatedPendingScopeChange = pendingScopeChange && _.find(newProjectState.scopeChangeRequests, scr => scr.id === pendingScopeChange.id)
+
+    return updatedPendingScopeChange && updatedPendingScopeChange.status === SCOPE_CHANGE_REQ_STATUS_ACTIVATED
   }
 
   componentDidMount() {
@@ -208,7 +240,7 @@ class EditProjectForm extends Component {
   }
 
   isChanged() {
-    return !!this.props.project.isDirty
+    return !!this.state.isProjectDirty
   }
 
   enableButton() {
@@ -248,10 +280,21 @@ class EditProjectForm extends Component {
     // this.props.submitHandler({ details })
   }
 
+  isScopeFreezed() {
+    return false
+    // TODO commented to disable the scope change flow for immediate release
+    // return [PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW].indexOf(this.props.project.status) === -1
+  }
+
   submit(model) {
     this.setState({isSaving: true })
     const modelWithoutHiddenValues = removeValuesOfHiddenNodes(this.state.template, model)
-    this.props.submitHandler(modelWithoutHiddenValues)
+    const scopeFreezed = this.isScopeFreezed()
+    this.props.submitHandler(modelWithoutHiddenValues, scopeFreezed)
+
+    if (scopeFreezed) {
+      this.refs.form.reset()
+    }
   }
 
   /**
@@ -265,7 +308,7 @@ class EditProjectForm extends Component {
   }
 
   makeDeliveredPhaseReadOnly(projectStatus) {
-    return projectStatus === 'completed'
+    return projectStatus === PROJECT_STATUS_COMPLETED
   }
 
   render() {
@@ -274,6 +317,7 @@ class EditProjectForm extends Component {
       showHidden,
       productTemplates,
       productCategories,
+      pendingScopeChange,
       isInsideDrawer,
       disableAutoScrolling,
       currentWizardStep,
@@ -317,10 +361,12 @@ class EditProjectForm extends Component {
             currentWizardStep={currentWizardStep}
           />
           <div className="section-footer section-footer-spec">
-            <button className="tc-btn tc-btn-primary tc-btn-md"
-              type="submit"
-              disabled={(!this.isChanged() || this.state.isSaving) || anySectionInvalid || !this.state.canSubmit || this.makeDeliveredPhaseReadOnly(project.status)}
-            >Save Changes</button>
+            { !pendingScopeChange &&
+              <button className="tc-btn tc-btn-primary tc-btn-md"
+                type="submit"
+                disabled={(!this.isChanged() || this.state.isSaving) || anySectionInvalid || !this.state.canSubmit || this.makeDeliveredPhaseReadOnly(project.status)}
+              >{ this.isScopeFreezed() ? 'Submit Change Request' : 'Save Changes'}</button>
+            }
           </div>
         </div>
       )
@@ -340,6 +386,7 @@ class EditProjectForm extends Component {
           message={onLeaveMessage}
         />
         <Formsy.Form
+          key={this.state.formsyFormKey} // to force formsy to remount and reinitialize values
           ref="form"
           disabled={!isEdittable || this.makeDeliveredPhaseReadOnly(project.status)}
           onInvalid={this.disableButton}
@@ -404,6 +451,7 @@ EditProjectForm.propTypes = {
   shouldUpdateTemplate: PropTypes.bool,
   isInsideDrawer: PropTypes.bool,
   disableAutoScrolling: PropTypes.bool,
+  pendingScopeChange: PropTypes.object,
   /**
    * If `currentWizardStep` is defined, then edit form shows form in the wizard mode
    * with this step as current, instead of showing all the sections.

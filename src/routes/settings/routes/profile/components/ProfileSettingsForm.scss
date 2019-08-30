@@ -111,6 +111,26 @@
       .zip-input {
         max-width: 80px;
       }
+
+      .phone-input-container .tc-label {
+        display: none;
+      }
+
+      .phone-input-container .dropdown-wrap {
+        height: 38px;
+      }
+
+      .phone-input-container .check-success-icon {
+        position: absolute;
+        top: 14px;
+        right: -20px;
+        width: 10px;
+        height: 10px;
+      }
+
+      .phone-input-container > .input-container > input {
+        margin-bottom: 0;
+      }
     }
 
     .section-heading {
@@ -140,4 +160,28 @@
       text-align: center;
     }
   }
+}
+
+.requiredMarker {
+  color: $tc-red-100;
+  vertical-align: super;
+  font-size: 11px;
+}
+
+.fieldLabelText {
+  vertical-align: top;
+}
+
+.warningText {
+  margin: 5px auto;
+  @include roboto;
+
+  font-size: 13px;
+  line-height:20px;
+  font-style:italic;
+  border: 1px solid $tc-orange-30;
+  background: $tc-red-10;
+  color: $tc-orange-70;
+  padding:10px;
+  border-radius: 2px;
 }

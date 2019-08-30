@@ -10,6 +10,7 @@ import ProjectDetail from './detail/ProjectDetail'
 import Dashboard from './detail/containers/DashboardContainer'
 import MessagesTabContainer from './detail/containers/MessagesTabContainer'
 import Scope from './detail/containers/ScopeContainer'
+import ProjectSummaryReport from './detail/containers/ProjectSummaryReportContainer'
 import AssetsLibrary from './detail/containers/AssetsLibraryContainer'
 import ProjectAddPhaseContainer from './detail/containers/ProjectAddPhaseContainer'
 import ProjectMessages from './detail/Messages'
@@ -53,6 +54,7 @@ const ProjectDetailWithAuth = requiresAuthentication(() =>
         return <Redirect to={`/projects/${match.params.projectId}${_.get(location, 'hash', '')}`} />
       }}
     />
+    <Route path="/projects/:projectId/reports" render={() => <ProjectDetail component={ProjectSummaryReport} />} />
     <Route path="/projects/:projectId/assets" render={() => <ProjectDetail component={AssetsLibrary} />} />
     <Route path="/projects/:projectId/add-phase" render={() => <ProjectDetail component={ProjectAddPhaseContainer} />} />
     <Route path="/projects/:projectId/discussions/:discussionId?" render={() => <ProjectDetail component={ProjectMessages} />} />

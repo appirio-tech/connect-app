@@ -7,7 +7,7 @@ import _ from 'lodash'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
 import { loadDashboardFeeds, loadProjectMessages } from '../../actions/projectTopics'
-import { loadPhaseFeed } from '../../actions/phasesTopics'
+import { loadTopic } from '../../../actions/topics'
 import { loadProjectPlan } from '../../actions/projectPlan'
 import { setDuration, getProjectNavLinks } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
@@ -88,7 +88,7 @@ class ProjectInfoContainer extends React.Component {
   }
 
   componentWillMount() {
-    const { project, isFeedsLoading, feeds, phases, phasesTopics, loadPhaseFeed, location } = this.props
+    const { project, isFeedsLoading, feeds, phases, phasesTopics, loadTopic, location } = this.props
 
     this.setDuration(project)
 
@@ -101,8 +101,8 @@ class ProjectInfoContainer extends React.Component {
     // load phases feeds if they are not loaded yet
     // note: old projects doesn't have phases, so we check if there are any phases at all first
     phases && phasesTopics && phases.forEach((phase) => {
-      if (!phasesTopics[phase.id]) {
-        loadPhaseFeed(project.id, phase.id)
+      if (!phasesTopics[`phase#${phase.id}`]) {
+        loadTopic(project.id, `phase#${phase.id}`)
       }
     })
 
@@ -133,7 +133,7 @@ class ProjectInfoContainer extends React.Component {
   // this is just to see if the comment/feed/post/phase the url hash is attempting to scroll to is loaded or not
   // if its not loaded then we load the appropriate item
   handleUrlHash(props) {
-    const { project, isFeedsLoading, phases, phasesTopics, feeds, loadProjectPlan, loadPhaseFeed, location } = props
+    const { project, isFeedsLoading, phases, phasesTopics, feeds, loadProjectPlan, loadTopic, location } = props
     const hashParts = _.split(location.hash.substring(1), '-')
     const hashPrimaryId = parseInt(hashParts[1], 10)
 
@@ -154,14 +154,13 @@ class ProjectInfoContainer extends React.Component {
 
     case 'phase': {
       const postId = parseInt(hashParts[3], 10)
-
       if (phases && phasesTopics) {
         if (!_.some(phases, { id: hashPrimaryId})) {
           let existingUserIds = _.map(project.members, 'userId')
           existingUserIds= _.union(existingUserIds, _.map(project.invites, 'userId'))
           loadProjectPlan(project.id, existingUserIds)
-        } else if(postId && !(phasesTopics[hashPrimaryId].topic && phasesTopics[hashPrimaryId].topic.postIds.includes(postId))) {
-          loadPhaseFeed(project.id, hashPrimaryId)
+        } else if(postId && !(phasesTopics[`phase#${hashPrimaryId}`].topic && phasesTopics[`phase#${hashPrimaryId}`].topic.postIds.includes(postId))) {
+          loadTopic(project.id, `phase#${hashPrimaryId}`)
         }
       }
       break
@@ -400,7 +399,7 @@ class ProjectInfoContainer extends React.Component {
       feed = feeds.find(feed => feed.id === topicId)
     } else {
       const phaseFeeds = Object.keys(phasesTopics)
-        .map(key => phasesTopics[key].topic)
+        .map(key => phasesTopics[`phase#${key}`].topic)
       feed = phaseFeeds.find(feed => feed.id && feed.id === topicId)
     }
     if (feed) {
@@ -571,7 +570,7 @@ const mapStateToProps = ({ templates, notifications }) => {
 }
 
 const mapDispatchToProps = { updateProject, deleteProject, updateProjectAttachment,
-  loadProjectMessages, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed,
+  loadProjectMessages, uploadProjectAttachments, loadDashboardFeeds, loadTopic,
   removeProjectAttachment, loadProjectPlan, saveFeedComment }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProjectInfoContainer))

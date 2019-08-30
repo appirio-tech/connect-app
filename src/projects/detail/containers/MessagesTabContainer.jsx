@@ -61,6 +61,7 @@ class MessagesTabContainer extends React.Component {
     this.onNewPost = this.onNewPost.bind(this)
     this.onNewPostChange = this.onNewPostChange.bind(this)
     this.isChanged = this.isChanged.bind(this)
+    this.onLeave = this.onLeave.bind(this)
     this.onRefreshFeeds = this.onRefreshFeeds.bind(this)
   }
 
@@ -387,7 +388,7 @@ class MessagesTabContainer extends React.Component {
 
 const mapStateToProps = ({
   projectTopics,
-  phasesTopics,
+  topics,
   projectState,
   notifications,
   loadUser,
@@ -423,7 +424,7 @@ const mapStateToProps = ({
     notificationsState: notifications,
     error: projectTopics.error,
     projectMembers,
-    phasesTopics,
+    phasesTopics: topics,
     allMembers,
     canAccessPrivatePosts,
   }

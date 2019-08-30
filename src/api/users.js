@@ -122,7 +122,7 @@ export const getPreSignedUrl = (handle, file) => {
  * @returns {Promise<Object>} response body
  */
 export const checkEmailValidity = (email) => {
-  return axios.get(`${TC_API_URL}/v3/users/validateEmail?email=${email}`)
+  return axios.get(`${TC_API_URL}/v3/users/validateEmail?email=${encodeURIComponent(email)}`)
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
 

@@ -13,7 +13,8 @@ export const getMilestoneStatusText = (milestone) => {
 
 export const getDaysLeft = (milestone) => {
   const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
-  const endDate = moment(milestone.startDate).add(milestone.duration - 1, 'days')
+  const milestoneStartDate = milestone.actualStartDate ? milestone.actualStartDate : milestone.startDate
+  const endDate = moment(milestoneStartDate).add(milestone.duration - 1, 'days')
   const daysLeft = endDate.diff(today, 'days')
 
   return daysLeft

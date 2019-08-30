@@ -155,7 +155,8 @@ class DashboardContainer extends React.Component {
     }
 
     // system notifications
-    const notReadNotifications = filterReadNotifications(notifications)
+    const preRenderedNotifications = preRenderNotifications(notifications)
+    const notReadNotifications = filterReadNotifications(preRenderedNotifications)
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
     const sortedUnreadProjectUpdates = _.orderBy(unreadProjectUpdate, ['date'], ['desc'])
 
@@ -278,7 +279,7 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics }) => {
+const mapStateToProps = ({ notifications, projectState, projectTopics, templates, topics }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -286,7 +287,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
   }
 
   return {
-    notifications: preRenderNotifications(notifications.notifications),
+    notifications: notifications.notifications,
     productTemplates: templates.productTemplates,
     projectTemplates: templates.projectTemplates,
     productCategories: templates.productCategories,
@@ -297,7 +298,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     feeds: allFeed,
     isFeedsLoading: projectTopics.isLoading,
     phasesStates: projectState.phasesStates,
-    phasesTopics,
+    phasesTopics: topics,
   }
 }
 
