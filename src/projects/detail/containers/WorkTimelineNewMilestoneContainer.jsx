@@ -6,6 +6,7 @@
  */
 import React from 'react'
 import PT from 'prop-types'
+import moment from 'moment'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
@@ -45,11 +46,11 @@ class WorkTimelineNewMilestoneContainer extends React.Component {
 
     // if timeline has `endDate` then start the next milestone the next day
     if (endDate) {
-      milestoneStartDate = endDate.add(1, 'day')
+      milestoneStartDate = moment.utc(endDate).add(1, 'day')
 
     // if timeline doesn't have `endDate` (means no milestones) use `startDate`
     } else if (startDate) {
-      milestoneStartDate = startDate
+      milestoneStartDate = moment.utc(startDate)
     }
 
     model.startDate = milestoneStartDate.format()
