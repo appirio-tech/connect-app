@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
 import uncontrollable from 'uncontrollable'
@@ -10,6 +9,7 @@ import AddIcon from  '../../assets/icons/icon-ui-bold-add.svg'
 import Dialog from './Dialog'
 import PERMISSIONS from '../../config/permissions'
 import {checkPermission} from '../../helpers/permissions'
+import { getFullNameWithFallback } from '../../helpers/tcHelpers'
 
 const userShape = PropTypes.shape({
   userId: PropTypes.number.isRequired,
@@ -248,10 +248,7 @@ class TeamManagement extends React.Component {
           const onClickConfirm = () => {
             onMemberDeleteConfirm(deletingMember)
           }
-          const firstName = _.get(deletingMember, 'firstName', '')
-          const lastName = _.get(deletingMember, 'lastName', '')
-          let userFullName = `${firstName} ${lastName}`
-          userFullName = userFullName.trim().length > 0 ? userFullName : 'Connect user'
+          const userFullName = getFullNameWithFallback(deletingMember)
           const isCurrentUser = (currentUser.userId === deletingMember.userId)
           const title = isCurrentUser ? LEAVE_TITLE : REMOVE_TITLE
           const content = isCurrentUser ? LEAVE_MESSAGE : REMOVE_USER_MESSAGE.replace('USERNAME', userFullName)

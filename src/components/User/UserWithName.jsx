@@ -2,15 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { DOMAIN } from '../../config/constants'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
-import { getAvatarResized } from '../../helpers/tcHelpers'
+import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpers'
 import './UserWithName.scss'
 
 const UserWithName = ({ handle, firstName, lastName, photoURL, photoSize, theme, isLink }) => {
   const url = handle ? `//www.${DOMAIN}/members/${handle}/` : null
+  const userFullName = getFullNameWithFallback({ handle, firstName, lastName })
   const avatar = (
     <Avatar
       avatarUrl={getAvatarResized(photoURL, photoSize)}
-      userName={firstName + ' ' + lastName}
+      userName={userFullName}
       size={photoSize}
     />
   )
@@ -23,8 +24,8 @@ const UserWithName = ({ handle, firstName, lastName, photoURL, photoSize, theme,
       }
       <span styleName="info">
         {url && isLink ?
-          <a styleName="name" href={url} target="_blank" rel="noopener noreferrer">{firstName} {lastName}</a> :
-          <span styleName="name">{firstName} {lastName}</span>
+          <a styleName="name" href={url} target="_blank" rel="noopener noreferrer">{userFullName}</a> :
+          <span styleName="name">{userFullName}</span>
         }
         {handle && <span styleName="handle">{handle}</span>}
       </span>

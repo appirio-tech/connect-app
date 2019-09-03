@@ -34,3 +34,14 @@ export const getAvatarResized = (avatarUrl, size) => {
 
   return avatarUrl
 }
+
+export const getFullNameWithFallback = (user) => {
+  if (!user) return ''
+  let userFullName = user.firstName
+  if (userFullName && user.lastName) {
+    userFullName += ' ' + user.lastName
+  }
+  userFullName = userFullName && userFullName.trim().length > 0 ? userFullName : user.handle
+  userFullName = userFullName && userFullName.trim().length > 0 ? userFullName : 'Connect user'
+  return userFullName
+}

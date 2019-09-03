@@ -112,7 +112,7 @@ class RichTextArea extends React.Component {
   }
 
   componentWillMount() {
-    const suggestions = _.map(_.values(this.props.projectMembers), (e) => { return { name: e.firstName + ' ' + e.lastName, handle: e.handle, userId: e.userId, link: '/users/' + e.handle } })
+    const suggestions = _.map(_.values(this.props.projectMembers), (e) => { return { name: e.handle, userId: e.userId, link: '/users/' + e.handle } })
     const projectId = this.props.match.params.projectId
     this.setState({
       editorExpanded: this.props.editMode,
@@ -420,7 +420,7 @@ class RichTextArea extends React.Component {
           <div className={theme.mentionSuggestionsEntryContainer}>
             <div className={theme.mentionSuggestionsEntryContainerRight}>
               <div className={theme.mentionSuggestionsEntryText}>
-                {mention.get('name') + ' - ' + mention.get('handle')}
+                {mention.get('name')}
               </div>
             </div>
           </div>

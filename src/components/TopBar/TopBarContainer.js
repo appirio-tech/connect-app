@@ -14,7 +14,7 @@ import {
   DOMAIN
 } from '../../config/constants'
 import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
-import { getAvatarResized } from '../../helpers/tcHelpers.js'
+import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpers.js'
 require('./TopBarContainer.scss')
 
 
@@ -65,12 +65,7 @@ class TopBarContainer extends React.Component {
     const userHandle  = _.get(user, 'handle')
     const bigPhotoURL = _.get(user, 'photoURL')
     const userImage = getAvatarResized(bigPhotoURL, 40)
-    const userFirstName = _.get(user, 'firstName')
-    const userLastName = _.get(user, 'lastName')
-    let userName = userFirstName
-    if (userName && userLastName) {
-      userName += ' ' + userLastName
-    }
+    const userName = getFullNameWithFallback(user)
     const homePageUrl = `${window.location.protocol}//${window.location.host}/`
     const logoutLink = `https://accounts.${DOMAIN}/#!/logout?retUrl=${homePageUrl}`
     const isHomePage = this.props.match.path === '/'
