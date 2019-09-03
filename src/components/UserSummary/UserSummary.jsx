@@ -4,6 +4,7 @@ import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import moment from 'moment'
 
 import './UserSummary.scss'
+import { getFullNameWithFallback } from '../../helpers/tcHelpers'
 
 const UserSummary = ({user}) => {
   // TODO: Replace hardcoded values with real data
@@ -12,7 +13,7 @@ const UserSummary = ({user}) => {
     drafts: 7,
     delivered: 5
   } */
-  const userName = (user.firstName && user.lastName) && `${user.firstName} ${user.lastName}`
+  const userName = getFullNameWithFallback(user)
   const memberSince = moment(user.createdAt).format('MMM YYYY')
   return (
     <div styleName="container">

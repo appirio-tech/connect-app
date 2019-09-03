@@ -5,6 +5,7 @@ import './draftjs.scss'
 import RichTextArea from '../RichTextArea/RichTextArea'
 
 import './NewPost.scss'
+import { getFullNameWithFallback } from '../../helpers/tcHelpers'
 
 class NewPost extends React.Component {
 
@@ -14,10 +15,7 @@ class NewPost extends React.Component {
 
   render() {
     const {currentUser, allMembers, titlePlaceholder, contentPlaceholder, isCreating, hasError, expandedTitlePlaceholder, projectMembers, canAccessPrivatePosts} = this.props
-    let authorName = currentUser.firstName
-    if (authorName && currentUser.lastName) {
-      authorName += ' ' + currentUser.lastName
-    }
+    const authorName = getFullNameWithFallback(currentUser)
 
     const composerClasses = cn(
       'modal',

@@ -6,7 +6,7 @@ import moment from 'moment'
 import Modal from 'react-modal'
 import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
-import { getAvatarResized } from '../../helpers/tcHelpers'
+import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpers'
 import SelectDropdown from '../SelectDropdown/SelectDropdown'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import AutocompleteInputContainer from './AutocompleteInputContainer'
@@ -170,10 +170,7 @@ class TopcoderManagementDialog extends React.Component {
               const remove = () => {
                 removeMember(member)
               }
-              const firstName = _.get(member, 'firstName', '')
-              const lastName = _.get(member, 'lastName', '')
-              let userFullName = `${firstName} ${lastName}`
-              userFullName = userFullName.trim().length > 0 ? userFullName : 'Connect user'
+              const userFullName = getFullNameWithFallback(member)
               const role = _.get(_.find(this.roles, r => r.value === member.role), 'title')
               return (
                 <div
@@ -269,10 +266,7 @@ class TopcoderManagementDialog extends React.Component {
                   status: 'request_rejected'
                 })
               }
-              const firstName = _.get(invite.member, 'firstName', '')
-              const lastName = _.get(invite.member, 'lastName', '')
-              let userFullName = `${firstName} ${lastName}`
-              userFullName = userFullName.trim().length > 0 ? userFullName : 'Connect user'
+              const userFullName = getFullNameWithFallback(invite.member)
               i++
               return (
                 <div

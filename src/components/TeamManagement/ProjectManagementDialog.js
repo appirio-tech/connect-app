@@ -5,7 +5,7 @@ import moment from 'moment'
 import Modal from 'react-modal'
 import XMarkIcon from '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
-import {getAvatarResized} from '../../helpers/tcHelpers'
+import {getAvatarResized, getFullNameWithFallback} from '../../helpers/tcHelpers'
 import { compareEmail, compareHandles } from '../../helpers/utils'
 import AutocompleteInputContainer from './AutocompleteInputContainer'
 
@@ -125,10 +125,7 @@ class ProjectManagementDialog extends React.Component {
               const remove = () => {
                 removeMember(member)
               }
-              const firstName = _.get(member, 'firstName', '')
-              const lastName = _.get(member, 'lastName', '')
-              let userFullName = `${firstName} ${lastName}`
-              userFullName = userFullName.trim().length > 0 ? userFullName : 'Connect user'
+              const userFullName = getFullNameWithFallback(member)
               return (
                 <div
                   key={i}
@@ -160,10 +157,7 @@ class ProjectManagementDialog extends React.Component {
               }
               i++
               const handle = invite.member ? invite.member.handle : null
-              const firstName = _.get(invite.member, 'firstName', '')
-              const lastName = _.get(invite.member, 'lastName', '')
-              let userFullName = `${firstName} ${lastName}`
-              userFullName = userFullName.trim().length > 0 ? userFullName : null
+              const userFullName = getFullNameWithFallback(invite.member)
               return (
                 <div
                   key={i}

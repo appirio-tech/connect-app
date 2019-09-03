@@ -7,6 +7,7 @@ import { markdownToHTML } from '../../helpers/markdownToState'
 import BtnSeparator from '../ActionCard/BtnSeparator'
 import Comment from '../ActionCard/Comment'
 import AddComment from '../ActionCard/AddComment'
+import { getFullNameWithFallback } from '../../helpers/tcHelpers'
 
 class MessageDetails extends React.Component {
 
@@ -41,10 +42,7 @@ class MessageDetails extends React.Component {
       isAddingComment,
       error,
       allowAddingComment} = this.props
-    let authorName = currentUser.firstName
-    if (authorName && currentUser.lastName) {
-      authorName += ' ' + currentUser.lastName
-    }
+    const authorName = getFullNameWithFallback(currentUser)
     return (
       <ActionCard className="main-messaging">
         <ActionCard.Header {...this.props}

@@ -16,6 +16,7 @@ import {
 
 import './Comment.scss'
 import { PROJECT_ATTACHMENTS_FOLDER } from '../../config/constants'
+import { getFullNameWithFallback } from '../../helpers/tcHelpers'
 
 class Comment extends React.Component {
 
@@ -80,7 +81,7 @@ class Comment extends React.Component {
     const template = Handlebars.compile(commentAnchorPrefix)
     const messageAnchor = template({ postId: message.id })
     const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#${messageAnchor}`
-    const authorName = author ? (author.firstName + ' ' + author.lastName) : 'Connect user'
+    const authorName = getFullNameWithFallback(author)
     const avatarUrl = _.get(author, 'photoURL', null)
     const isDeleting = message && message.isDeletingComment
 

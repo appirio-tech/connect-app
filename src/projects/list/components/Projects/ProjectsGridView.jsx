@@ -26,6 +26,7 @@ import IconProjectStatusTitle from '../../../../assets/icons/status-ico.svg'
 
 import './ProjectsGridView.scss'
 import NotificationBadge from '../../../../components/NotificationBadge/NotificationBadge'
+import { getFullNameWithFallback } from '../../../../helpers/tcHelpers'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
@@ -130,13 +131,14 @@ const ProjectsGridView = props => {
         const sortMetric = _.find(SORT_OPTIONS, o => currentSortField === o.val) || SORT_OPTIONS[0]
         const lastAction = DATE_TO_USER_FIELD_MAP[sortMetric.field]
         const lastEditor = members[item[lastAction]]
+        const lastEditorName = getFullNameWithFallback(lastEditor)
         const time = moment(item[sortMetric.field])
         return (
           <div className="spacing time-container">
             <div className="txt-normal">{time.year() === moment().year() ? time.format('MMM D, h:mm a') : time.format('MMM D YYYY, h:mm a')}</div>
             <div className="project-last-editor">
               {
-                lastEditor ? `${lastEditor.firstName} ${lastEditor.lastName}` : 'Unknown'
+                lastEditor ? lastEditorName : 'Unknown'
               }
             </div>
           </div>
