@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { DOMAIN } from '../../config/constants'
-import { getAvatarResized } from '../../helpers/tcHelpers'
+import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpers'
 import IconDirectArrow from '../../assets/icons/icon-direct-arrow.svg'
 
 require('./UserTooltip.scss')
@@ -14,10 +14,7 @@ const UserTooltip = ({ usr, id, previewAvatar, size, invitedLabel, showEmailOnly
   const tooltipMargin = previewAvatar ? -(100 + (id * 20)) : 0
   const userHandle = _.get(usr, 'handle')
   const userEmail = _.get(usr, 'email')
-  const firstName = _.get(usr, 'firstName', '')
-  const lastName = _.get(usr, 'lastName', '')
-  let userFullName = `${firstName} ${lastName}`
-  userFullName = userFullName.trim().length > 0 ? userFullName : 'Connect user'
+  const userFullName = getFullNameWithFallback(usr)
   const avatar =
     (
       <Avatar

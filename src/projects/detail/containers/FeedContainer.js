@@ -13,6 +13,7 @@ import {
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
   CONNECT_USER,
+  CODER_BOT_USERID,
 } from '../../../config/constants'
 import { connect } from 'react-redux'
 import update from 'react-addons-update'
@@ -38,6 +39,7 @@ import PERMISSIONS from '../../../config/permissions'
 import './FeedContainer.scss'
 
 const SYSTEM_USER = {
+  handle: CODER_BOT_USERID,
   firstName: CODER_BOT_USER_FNAME,
   lastName: CODER_BOT_USER_LNAME,
   photoURL: require('../../../assets/images/avatar-coder.svg')
