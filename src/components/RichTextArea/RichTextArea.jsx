@@ -27,9 +27,11 @@ import TitleSaveIcon from '../../assets/icons/icon-save.svg'
 
 import {
   FILE_PICKER_API_KEY,
-  FILE_PICKER_CNAME, FILE_PICKER_FROM_SOURCES,
+  FILE_PICKER_CNAME,
+  FILE_PICKER_FROM_SOURCES,
   FILE_PICKER_SUBMISSION_CONTAINER_NAME,
-  PROJECT_ATTACHMENTS_FOLDER
+  PROJECT_ATTACHMENTS_FOLDER,
+  FILE_PICKER_ACCEPT,
 } from '../../config/constants'
 import * as filepicker from 'filestack-js'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
@@ -339,6 +341,7 @@ class RichTextArea extends React.Component {
         },
         maxFiles: 4,
         fromSources: FILE_PICKER_FROM_SOURCES,
+        accept: FILE_PICKER_ACCEPT,
         uploadInBackground: false,
         onFileUploadFinished: (files) => {
           this.processUploadedFiles(files)

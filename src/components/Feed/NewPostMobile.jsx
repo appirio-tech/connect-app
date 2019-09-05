@@ -21,7 +21,9 @@ import {
   FILE_PICKER_API_KEY,
   FILE_PICKER_CNAME,
   FILE_PICKER_FROM_SOURCES,
-  FILE_PICKER_SUBMISSION_CONTAINER_NAME, PROJECT_ATTACHMENTS_FOLDER
+  FILE_PICKER_SUBMISSION_CONTAINER_NAME,
+  PROJECT_ATTACHMENTS_FOLDER,
+  FILE_PICKER_ACCEPT,
 } from '../../config/constants'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
 import _ from 'lodash'
@@ -114,6 +116,7 @@ class NewPostMobile extends React.Component {
         },
         maxFiles: 4,
         fromSources: FILE_PICKER_FROM_SOURCES,
+        accept: FILE_PICKER_ACCEPT,
         uploadInBackground: false,
         onFileUploadFinished: (files) => {
           this.processUploadedFiles(files)

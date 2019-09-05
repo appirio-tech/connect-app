@@ -35,6 +35,7 @@ module.exports = {
 
   FILE_PICKER_API_KEY: process.env.FILE_PICKER_API_KEY_QA,
   FILE_PICKER_SUBMISSION_CONTAINER_NAME: 'submission-staging-qa',
+  FILE_PICKER_ACCEPT: process.env.FILE_PICKER_ACCEPT_QA,
 
   SALESFORCE_PROJECT_LEAD_LINK: 'https://c.cs18.visual.force.com/apex/ConnectLead?connectProjectId=',
   CONNECT_SEGMENT_KEY: process.env.QA_SEGMENT_KEY,
