@@ -21,7 +21,8 @@ import {
   FILE_PICKER_API_KEY,
   FILE_PICKER_FROM_SOURCES,
   FILE_PICKER_CNAME,
-  FILE_PICKER_SUBMISSION_CONTAINER_NAME
+  FILE_PICKER_SUBMISSION_CONTAINER_NAME,
+  FILE_PICKER_ACCEPT,
 } from '../../config/constants'
 
 const FileLinksMenu = ({
@@ -119,6 +120,7 @@ const FileLinksMenu = ({
         },
         maxFiles: 4,
         fromSources: FILE_PICKER_FROM_SOURCES,
+        accept: FILE_PICKER_ACCEPT,
         uploadInBackground: false,
         onFileUploadFinished: (files) => {
           processUploadedFiles(files, category)
