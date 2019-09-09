@@ -82,12 +82,12 @@ export const clean = obj => _.isObject(obj) ? deepClean(obj) : obj
  * @param {String} eventName name of the event to be created
  */
 export const createEvent = (eventName) => {
-  var event;
+  let event
   if(typeof(Event) === 'function') {
-      event = new Event(eventName);
+    event = new Event(eventName)
   } else {
-      event = document.createEvent('Event');
-      event.initEvent(eventName, true, true);
+    event = document.createEvent('Event')
+    event.initEvent(eventName, true, true)
   }
   return event
 }
