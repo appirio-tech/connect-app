@@ -35,6 +35,7 @@ module.exports = {
 
   FILE_PICKER_API_KEY: process.env.FILE_PICKER_API_KEY_DEV,
   FILE_PICKER_SUBMISSION_CONTAINER_NAME: 'submission-staging-dev',
+  FILE_PICKER_ACCEPT: process.env.FILE_PICKER_ACCEPT_DEV,
 
   SALESFORCE_PROJECT_LEAD_LINK: 'https://c.cs18.visual.force.com/apex/ConnectLead?connectProjectId=',
 

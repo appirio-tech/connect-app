@@ -36,6 +36,7 @@ module.exports = {
 
   FILE_PICKER_API_KEY: process.env.FILE_PICKER_API_KEY_PROD,
   FILE_PICKER_SUBMISSION_CONTAINER_NAME: 'submission-staging-prod',
+  FILE_PICKER_ACCEPT: process.env.FILE_PICKER_ACCEPT_PROD,
 
   SALESFORCE_PROJECT_LEAD_LINK: 'https://topcoder.my.salesforce.com/apex/ConnectLead?connectProjectId=',
   CONNECT_SEGMENT_KEY: process.env.PROD_SEGMENT_KEY,
