@@ -74,3 +74,20 @@ const deepClean = obj => _.transform(obj, (result, value, key) => {
  * @param {Object} obj    the object to clean
  */
 export const clean = obj => _.isObject(obj) ? deepClean(obj) : obj
+
+
+/**
+ * Creates a DOM event in browser independent way to be complaint
+ * 
+ * @param {String} eventName name of the event to be created
+ */
+export const createEvent = (eventName) => {
+  let event
+  if(typeof(Event) === 'function') {
+    event = new Event(eventName)
+  } else {
+    event = document.createEvent('Event')
+    event.initEvent(eventName, true, true)
+  }
+  return event
+}

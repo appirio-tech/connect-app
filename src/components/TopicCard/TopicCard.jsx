@@ -10,8 +10,9 @@ import NotificationBellAvatar from './NotificationBellAvatar'
 import {
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
+  CODER_BOT_USERID,
 } from '../../config/constants'
-import { isSystemUser } from '../../helpers/tcHelpers'
+import { isSystemUser, getFullNameWithFallback } from '../../helpers/tcHelpers'
 
 import FileIcon from '../../assets/icons/file-12.svg'
 import LinkIcon from '../../assets/icons/link-12.svg'
@@ -20,6 +21,7 @@ import InvisibleIcon from '../../assets/icons/invisible-12.svg'
 import styles from './TopicCard.scss'
 
 const SYSTEM_USER = {
+  handle: CODER_BOT_USERID,
   firstName: CODER_BOT_USER_FNAME,
   lastName: CODER_BOT_USER_LNAME,
   photoURL: require('../../assets/images/avatar-coder.svg')
@@ -45,6 +47,7 @@ const TopicCard = ({
 
   const lastMessageUserId = last(posts).userId
   const lastMessageAuthor = isSystemUser(lastMessageUserId) ? SYSTEM_USER : get(allMembers, lastMessageUserId)
+  const lastMessageAuthorName = getFullNameWithFallback(lastMessageAuthor)
   const lastMessageDate = formatDate(lastActivityAt)
   const numNewMessages = get(notifications, 'length')
   const newMessagesFromDate = formatDate(get(notifications, '0.date'))
@@ -86,9 +89,7 @@ const TopicCard = ({
                 Last message {lastMessageDate} by{' '}
                 <span className={styles.lastAuthorName}>
                   {lastMessageAuthor
-                    ? `${lastMessageAuthor.firstName} ${
-                      lastMessageAuthor.lastName
-                    }`
+                    ? lastMessageAuthorName
                     : lastMessageUserId}
                 </span>
               </span>

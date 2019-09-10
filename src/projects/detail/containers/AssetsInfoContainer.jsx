@@ -19,7 +19,9 @@ import { PROJECT_ATTACHMENTS_FOLDER,
   FILE_PICKER_API_KEY,
   FILE_PICKER_FROM_SOURCES,
   FILE_PICKER_CNAME,
-  FILE_PICKER_SUBMISSION_CONTAINER_NAME } from '../../../config/constants'
+  FILE_PICKER_SUBMISSION_CONTAINER_NAME, 
+  FILE_PICKER_ACCEPT,
+} from '../../../config/constants'
 import AddLink from '../../../components/AssetsLibrary/AddLink'
 import PERMISSIONS from '../../../config/permissions'
 import { checkPermission } from '../../../helpers/permissions'
@@ -408,6 +410,7 @@ class AssetsInfoContainer extends React.Component {
           },
           maxFiles: 4,
           fromSources: FILE_PICKER_FROM_SOURCES,
+          accept: FILE_PICKER_ACCEPT,
           uploadInBackground: false,
           onFileUploadFinished: (files) => {
             processUploadedFiles(files, category)

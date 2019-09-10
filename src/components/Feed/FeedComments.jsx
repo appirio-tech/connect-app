@@ -11,6 +11,7 @@ import NewPostMobile, { NEW_POST_STEP } from './NewPostMobile'
 import { SCREEN_BREAKPOINT_MD, POSTS_BUNDLE_TIME_DIFF } from '../../config/constants'
 
 import './FeedComments.scss'
+import { getFullNameWithFallback } from '../../helpers/tcHelpers'
 
 function formatCommentDate(date) {
   const today = moment()
@@ -185,10 +186,7 @@ class FeedComments extends React.Component {
     comments = _.sortBy(comments, 'createdBy')
     comments = comments.reverse()
     const { isNewCommentMobileOpen, stickyRowNext, stickyRowPrev } = this.state
-    let authorName = currentUser.firstName
-    if (authorName && currentUser.lastName) {
-      authorName += ' ' + currentUser.lastName
-    }
+    const authorName = getFullNameWithFallback(currentUser)
     const handleLoadMoreClick = () => {
       this.setState({showAll: true}, () => {
         this.updateStickyRow()

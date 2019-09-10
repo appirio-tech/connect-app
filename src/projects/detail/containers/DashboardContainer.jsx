@@ -64,9 +64,11 @@ import {
   PROJECT_FEED_TYPE_MESSAGES,
   EVENT_TYPE,
   SCREEN_BREAKPOINT_MD,
+  CODER_BOT_USERID,
 } from '../../../config/constants'
 
 const SYSTEM_USER = {
+  handle: CODER_BOT_USERID,
   firstName: CODER_BOT_USER_FNAME,
   lastName: CODER_BOT_USER_LNAME,
   photoURL: require('../../../assets/images/avatar-coder.svg')

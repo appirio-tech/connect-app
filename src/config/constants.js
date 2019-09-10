@@ -783,11 +783,12 @@ export const ROLE_ADMINISTRATOR = 'administrator'
 export const ROLE_CONNECT_COPILOT_MANAGER = 'Connect Copilot Manager'
 
 // FIXME .. remove defaults
-export const FILE_PICKER_API_KEY = process.env.FILE_PICKER_API_KEY || 'AzFINuQoqTmqw0QEoaw9az'
+export const FILE_PICKER_API_KEY = process.env.FILE_PICKER_API_KEY || ''
 export const FILE_PICKER_SUBMISSION_CONTAINER_NAME = process.env.FILE_PICKER_SUBMISSION_CONTAINER_NAME || 'submission-staging-dev'
 export const FILE_PICKER_CNAME = process.env.FILE_PICKER_CNAME || 'fs.topcoder.com'
 export const FILE_PICKER_FROM_SOURCES = process.env.FILE_PICKER_FROM_SOURCES || ['local_file_system', 'googledrive', 'dropbox']
 export const PROJECT_ATTACHMENTS_FOLDER = process.env.PROJECT_ATTACHMENTS_FOLDER || 'PROJECT_ATTACHMENTS'
+export const FILE_PICKER_ACCEPT = process.env.FILE_PICKER_ACCEPT || ['.bmp', '.gif', '.jpg', '.tex', '.xls', '.xlsx', '.doc', '.docx', '.zip', '.txt', '.pdf', '.png', '.ppt', '.pptx', '.rtf']
 
 export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
 /*
