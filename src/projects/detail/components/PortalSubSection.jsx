@@ -29,7 +29,7 @@ const PortalSubSection = ({
 }) => (
   <div>
     {content.map(({ sectionIndex }) => {
-      if (sectionIndex && sectionIndex !== -1 && template && template.sections[sectionIndex]) {
+      if (sectionIndex !== -1 && template && template.sections[sectionIndex]) {
         const section = template.sections[sectionIndex]
         return (
           <SpecSection
