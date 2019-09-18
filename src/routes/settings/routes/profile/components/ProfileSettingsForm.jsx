@@ -13,8 +13,6 @@ import ISOCountries from '../../../../../helpers/ISOCountries'
 
 import './ProfileSettingsForm.scss'
 
-const companySizeRadioOptions = ['1-15', '16-50', '51-500', '500+']
-
 const countries = _.orderBy(ISOCountries, ['name'], ['asc']).map(country => ({
   label: country.name,
   value: country.name,
@@ -99,7 +97,7 @@ class ProfileSettingsForm extends Component {
     })
   }
 
-  getField(label, name, isRequired=false) {
+  getField(label, name, isRequired=false, isDisabled=false) {
     let validations = null
     if (name === 'businessPhone') {
       validations = {
@@ -122,6 +120,7 @@ class ProfileSettingsForm extends Component {
           value={this.props.values.settings[name] || ''}
           validationError={`Please enter ${label}`}
           required={isRequired}
+          disabled={isDisabled}
         />
       </div>
     )
@@ -159,6 +158,7 @@ class ProfileSettingsForm extends Component {
   }
 
   render() {
+    const { isCopilot, isCustomer, isManager } = this.props
     return (
       <Formsy.Form
         className="profile-settings-form"
@@ -176,13 +176,12 @@ class ProfileSettingsForm extends Component {
             uploadPhoto={this.props.uploadPhoto}
           />
         </div>
-        {this.getField('First Name', 'firstName', true)}
-        {this.getField('Last Name', 'lastName', true)}
+        {this.getField('First Name', 'firstName', false)}
+        {this.getField('Last Name', 'lastName', false)}
         {this.getField('Title', 'title', true)}
         <div className="field">
           <div className="label">
-            <span styleName="fieldLabelText">Business Phone</span>&nbsp;
-            <sup styleName="requiredMarker">*</sup>
+            <span styleName="fieldLabelText">Business Phone</span>
           </div>
           <div className="input-field">
             <PhoneInput
@@ -195,12 +194,12 @@ class ProfileSettingsForm extends Component {
               type="phone"
               validationError="Invalid business phone"
               showCheckMark
-              required
               listCountry={ISOCountries}
               forceCountry={this.state.countrySelected}
               value={this.props.values.settings.businessPhone}
               onChangeCountry={this.onBusinessPhoneCountryChange}
               onOutsideClick={this.hideBusinessPhoneAlert}
+              disabled={isCopilot && !isManager}
             />
             {
               this.state.businessPhoneDirty &&
@@ -208,42 +207,10 @@ class ProfileSettingsForm extends Component {
             }
           </div>
         </div>
-        {this.getField('Company name', 'companyName', true)}
-        <div className="field">
-          <div className="label">Company size</div>
-          <TCFormFields.RadioGroup
-            wrapperClass="input-field"
-            type="text"
-            name="companySize"
-            value={this.props.values.settings.companySize}
-            onChange={this.onFieldUpdate}
-            options={companySizeRadioOptions.map((label) => ({option: label, label, value: label}))}
-          />
-        </div>
-        <div className="section-heading">Business address</div>
-        {this.getField('Address', 'address')}
-        {this.getField('City', 'city')}
-        <div className="field">
-          <div className="label">State</div>
-          <div className="zip-container">
-            <TCFormFields.TextInput
-              wrapperClass="input-field"
-              type="text"
-              name="state"
-              onChange={this.onFieldUpdate}
-              value={this.props.values.settings.state || ''}
-            />
-            <div className="zip label">ZIP</div>
-            <TCFormFields.TextInput wrapperClass="input-field zip-input"
-              type="text" maxLength={5} name="zip" value={this.props.values.settings.zip || ''}
-              onChange={this.onFieldUpdate}
-            />
-          </div>
-        </div>
+        {this.getField('Company name', 'companyName', false, (isCustomer || isCopilot) && !isManager)}
         <div className="field">
           <div className="label">
-            <span styleName="fieldLabelText">Country</span>&nbsp;
-            <sup styleName="requiredMarker">*</sup>
+            <span styleName="fieldLabelText">Country</span>
           </div>
           <div className="input-field">
             <FormsySelect
@@ -252,7 +219,6 @@ class ProfileSettingsForm extends Component {
               value={this.props.values.settings.country ? this.props.values.settings.country : ''}
               options={countries}
               onChange={this.onCountryChange}
-              required
               placeholder="- Select country -"
               showDropdownIndicator
               setValueOnly
@@ -281,7 +247,10 @@ class ProfileSettingsForm extends Component {
 ProfileSettingsForm.propTypes = {
   values: PropTypes.object.isRequired,
   saveSettings: PropTypes.func.isRequired,
-  uploadPhoto: PropTypes.func.isRequired
+  uploadPhoto: PropTypes.func.isRequired,
+  isCustomer: PropTypes.bool.isRequired,
+  isManager: PropTypes.bool.isRequired,
+  isCopilot: PropTypes.bool.isRequired
 }
 
 export default ProfileSettingsForm
