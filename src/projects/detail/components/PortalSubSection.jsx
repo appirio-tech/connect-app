@@ -26,11 +26,22 @@ const PortalSubSection = ({
   removeAttachment,
   canManageAttachments,
   attachmentsStorePath,
+  isCreation,
 }) => (
   <div>
     {content.map(({ sectionIndex }) => {
       if (sectionIndex !== -1 && template && template.sections[sectionIndex]) {
         const section = template.sections[sectionIndex]
+
+        if (
+          // hide if section is hidden by condition
+          _.get(section, '__wizard.hiddenByCondition') ||
+          // hide section in edit mode, if it should be hidden on edit
+          !isCreation && section.hiddenOnEdit
+        ) {
+          return null
+        }
+
         return (
           <SpecSection
             key={'portal-' + (section.id || `section-${sectionIndex}`)}
