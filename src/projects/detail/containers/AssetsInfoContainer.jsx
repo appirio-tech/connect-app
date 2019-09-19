@@ -223,7 +223,7 @@ class AssetsInfoContainer extends React.Component {
     this.props.uploadProjectAttachments(project.id, attachment)
   }
 
-  extractHtmlLink(str) {
+  extractHtmlLink(str, userId) {
     const links = []
     const regex = /<a[^>]+href="(.*?)"[^>]*>([\s\S]*?)<\/a>/gm
     const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm // eslint-disable-line no-useless-escape
@@ -238,7 +238,8 @@ class AssetsInfoContainer extends React.Component {
         if (urlRegex.test(address)) {
           links.push({
             title,
-            address
+            address,
+            createdBy: userId
           })
         }
 
@@ -249,7 +250,7 @@ class AssetsInfoContainer extends React.Component {
     return links
   }
 
-  extractMarkdownLink(str) {
+  extractMarkdownLink(str, userId) {
     const links = []
     const regex = /(?:__|[*#])|\[(.*?)\]\((.*?)\)/gm
     const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm // eslint-disable-line no-useless-escape
@@ -264,7 +265,8 @@ class AssetsInfoContainer extends React.Component {
         if (urlRegex.test(address)) {
           links.push({
             title,
-            address
+            address,
+            createdBy: userId
           })
         }
 
@@ -275,7 +277,7 @@ class AssetsInfoContainer extends React.Component {
     return links
   }
 
-  extractRawLink(str) {
+  extractRawLink(str, userId) {
     let links = []
     const regex = /(\s|^)(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}[\s])(\s|$)/igm // eslint-disable-line no-useless-escape
     const rawLinks = str.match(regex)
@@ -289,7 +291,8 @@ class AssetsInfoContainer extends React.Component {
 
           return {
             title: name,
-            address: url
+            address: url,
+            createdBy: userId
           }
         })
     }
@@ -303,9 +306,9 @@ class AssetsInfoContainer extends React.Component {
       let childrenLinks = []
       feed.posts.forEach(post => {
         childrenLinks = childrenLinks.concat([
-          ...this.extractHtmlLink(post.rawContent),
-          ...this.extractMarkdownLink(post.rawContent),
-          ...this.extractRawLink(post.rawContent)
+          ...this.extractHtmlLink(post.rawContent, post.userId),
+          ...this.extractMarkdownLink(post.rawContent, post.userId),
+          ...this.extractRawLink(post.rawContent, post.userId)
         ])
       })
 
@@ -460,8 +463,22 @@ class AssetsInfoContainer extends React.Component {
     const privateTopicLinks = topicLinks.filter(link => link.tag === PROJECT_FEED_TYPE_MESSAGES)
     const phaseLinks = this.extractLinksFromPosts(phaseFeeds)
 
+    const bookmarks = []
+    _.forEach(project.bookmarks, (b, index) => {
+      const bookmark = {
+        id: index,
+        title: b.title,
+        address: b.address,
+        createdAt: project.createdAt,
+        createdBy: project.createdBy,
+        updatedAt: project.updatedAt,
+        updatedBy: project.updatedBy
+      }
+      bookmarks.push(bookmark)
+    })    
+
     let links = []
-    links = links.concat(project.bookmarks)
+    links = links.concat(bookmarks)
     links = links.concat(publicTopicLinks)
     if (canAccessPrivatePosts) {
       links = links.concat(privateTopicLinks)
@@ -607,6 +624,7 @@ class AssetsInfoContainer extends React.Component {
           {(!hideLinks && activeAssetsType === 'Links') &&
             <LinksGridView
               links={links}
+              projectMembers={projectMembers}
               canDelete={canManageLinks}
               canEdit={canManageLinks}
               onDelete={this.onDeleteLink}
