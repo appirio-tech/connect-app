@@ -1,5 +1,29 @@
 @import "../../styles/includes";
 
+.menuItem.withChildren {
+  .arrowUpIcon {
+    transform: rotate(180deg);
+    opacity: 0.6;
+    height: 10px;
+  }
+
+  &.open .arrowUpIcon {
+    transform: rotate(0deg);
+  }
+
+  &.open > div > .navItem {
+    box-shadow: 0 4px 4px -4px #777;
+    position: relative;
+    z-index: 1;
+  }
+
+  &.open+li {
+    box-shadow: 0 -4px 4px -4px #777;
+    position: relative;
+    z-index: 1;
+  }
+}
+
 .navItem {
   @include roboto;
 
@@ -10,12 +34,20 @@
   margin-right: -1px;
   position: relative;
   font-size: 14px;
+  cursor: pointer;
 
   &,
   &:avtive,
   &:visited,
   &:hover {
     color: $tc-gray-80;
+  }
+}
+
+.childNavItem {
+  a {
+    padding-left: 40px;
+    font-size: 12px;
   }
 }
 
@@ -48,7 +80,11 @@
   fill: #0AB88A;
 }
 
-.active {
+.arrowUpIcon {
+  float: right;
+}
+
+.active:not(.activeParent) {
   @include roboto-bold;
   background-color: $tc-gray-neutral-dark;
   color: $tc-gray-90;
