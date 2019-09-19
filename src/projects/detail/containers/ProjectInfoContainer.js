@@ -34,6 +34,7 @@ import {
   filterNotificationsByProjectId,
   filterReadNotifications,
   filterTopicAndPostChangedNotifications,
+  filterFileAndLinkChangedNotifications,
 } from '../../../routes/notifications/helpers/notifications'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
@@ -437,8 +438,10 @@ class ProjectInfoContainer extends React.Component {
     const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER && project.status === 'draft'
 
     const projectNotReadNotifications = filterReadNotifications(filterNotificationsByProjectId(notifications, project.id))
+    console.log('totest projectNotReadNotifications', projectNotReadNotifications)
     const notReadMessageNotifications = filterTopicAndPostChangedNotifications(projectNotReadNotifications, /^(?:MESSAGES|PRIMARY)$/)
     const notReadPhaseNotifications = filterTopicAndPostChangedNotifications(projectNotReadNotifications, /^phase#\d+$/)
+    const notReadAssetsNotifications = filterFileAndLinkChangedNotifications(projectNotReadNotifications)
 
     const navLinks = getProjectNavLinks(project, project.id).map((navLink) => {
       if (navLink.label === 'Messages') {
@@ -446,6 +449,9 @@ class ProjectInfoContainer extends React.Component {
       }
       if (navLink.label === 'Dashboard') {
         navLink.count = notReadPhaseNotifications.length
+      }
+      if (navLink.label === 'Assets Library') {
+        navLink.count = notReadAssetsNotifications.length
       }
 
       return navLink
