@@ -74,7 +74,7 @@ class SubFolder extends React.Component {
             <div styleName="flex-item item-action"/>
           </li>
           {
-            link.children.map((childLink, i) => {
+            link.children && link.children.map((childLink, i) => {
               if (linkToDelete === i) {
                 return (
                   <li styleName="delete-confirmation-modal" key={'delete-confirmation-post-attachment-' + i}>
