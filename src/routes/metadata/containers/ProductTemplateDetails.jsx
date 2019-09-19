@@ -43,7 +43,7 @@ class ProductTemplateDetails extends React.Component {
       createProductTemplate,
       updateProjectsMetadata,
       templates,
-      // isLoading,
+      isLoading,
       isAdmin,
       match,
     } = this.props
@@ -52,7 +52,7 @@ class ProductTemplateDetails extends React.Component {
     templateId = templateId ? parseInt(templateId) : null
     const productTemplate = _.find(productTemplates, t => t.id === templateId)
     return (
-      <div>
+      <div className={isLoading ? 'hide' : ''}>
         <MetaDataPanel
           templates={templates}
           isAdmin={isAdmin}
@@ -106,7 +106,13 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.errorTemp)
-const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving)
+const enhance = spinnerWhileLoading(
+  props =>
+    (!props.isLoading ||
+      // avoid resetting state of child when saving
+      (props.templates && props.templates.productTemplates)) &&
+    !props.isRemoving
+)
 const ProductTemplateDetailsWithLoaderEnhanced = enhance(errorHandler(ProductTemplateDetails))
 const ProductTemplateDetailsWithLoaderAndAuth = requiresAuthentication(ProductTemplateDetailsWithLoaderEnhanced)
 

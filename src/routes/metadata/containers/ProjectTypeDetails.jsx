@@ -43,7 +43,7 @@ class ProjectTypeDetails extends React.Component {
       createProjectType,
       updateProjectsMetadata,
       templates,
-      // isLoading,
+      isLoading,
       isAdmin,
       match,
     } = this.props
@@ -51,7 +51,7 @@ class ProjectTypeDetails extends React.Component {
     const key = match.params.key
     const projectType = _.find(projectTypes, t => t.key === key)
     return (
-      <div>
+      <div className={isLoading ? 'hide' : ''}>
         <MetaDataPanel
           templates={templates}
           isAdmin={isAdmin}
@@ -104,7 +104,13 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.error)
-const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving)
+const enhance = spinnerWhileLoading(
+  props =>
+    (!props.isLoading ||
+      // avoid resetting state of child when saving
+      (props.templates && props.templates.projectTypes)) &&
+    !props.isRemoving
+)
 const ProjectTypeDetailsWithLoaderEnhanced = enhance(errorHandler(ProjectTypeDetails))
 const ProjectTypeDetailsWithLoaderAndAuth = requiresAuthentication(ProjectTypeDetailsWithLoaderEnhanced)
 

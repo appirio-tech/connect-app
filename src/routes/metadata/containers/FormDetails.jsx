@@ -68,6 +68,7 @@ class FormDetails extends React.Component {
       templates,
       isAdmin,
       match,
+      isLoading
     } = this.props
     const key = match.params.key
     let form
@@ -75,7 +76,7 @@ class FormDetails extends React.Component {
       form = templates.versionMetadata
     }
     return (
-      <div>
+      <div className={isLoading ? 'hide' : ''}>
         <MetaDataPanel
           templates={templates}
           isAdmin={isAdmin}
@@ -138,7 +139,14 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.error)
-const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving && !props.versionOptionsLoading)
+const enhance = spinnerWhileLoading(
+  props =>
+    (!props.isLoading ||
+      // avoid resetting state of child when saving
+      (props.templates && props.templates.versionMetadata)) &&
+    !props.isRemoving &&
+    !props.versionOptionsLoading
+)
 const FormDetailsWithLoaderEnhanced = enhance(errorHandler(FormDetails))
 const FormDetailsWithLoaderAndAuth = requiresAuthentication(FormDetailsWithLoaderEnhanced)
 
