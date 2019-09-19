@@ -80,9 +80,9 @@ class TeamManagement extends React.Component {
         <div className="projects-team">
           <div className="title">
             <span styleName="title-text">Team</span>
-            {(customerTeamManageAction || customerTeamViewAction) &&
+            {customerTeamViewAction &&
               <span className="title-action" onClick={() => onShowProjectDialog(true)}>
-                {customerTeamViewAction ? 'View' : 'Manage'}
+                View
               </span>
             }
           </div>
@@ -113,7 +113,7 @@ class TeamManagement extends React.Component {
             { (canShowInvite) &&
               <div className="join-btn" onClick={() => onShowProjectDialog(true)}>
                 <AddIcon />
-                Invite people
+                Manage Invitations
               </div>
             }
           </div>
