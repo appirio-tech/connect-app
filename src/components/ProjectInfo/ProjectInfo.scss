@@ -77,9 +77,10 @@
       margin-top: $base-unit;
       white-space: nowrap;
       float: right;
+      flex: 1;
+      width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 100%;
     }
 
     .project-card-body {
@@ -119,10 +120,4 @@
 
 .project-status-bottom {
   display: flex;
-  justify-content: space-between;
-}
-
-.tooltip-target-container {
-  flex: 1;
-  width: 0;
 }

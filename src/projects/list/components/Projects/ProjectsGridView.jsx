@@ -118,7 +118,7 @@ const ProjectsGridView = props => {
         const code = _.get(item, 'details.utm.code', '')
         return (
           <div className="spacing time-container">
-            <span className="txt-gray-md">{code}</span>
+            <span title={code} className="txt-gray-md">{code}</span>
           </div>
         )
       }

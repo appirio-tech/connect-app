@@ -9,8 +9,6 @@ import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import MediaQuery from 'react-responsive'
 import { SCREEN_BREAKPOINT_MD, PROJECT_STATUS_ACTIVE, PHASE_STATUS_ACTIVE, PHASE_STATUS_REVIEWED, PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 import ReviewProjectButton from '../../projects/detail/components/ReviewProjectButton'
-import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
-import { TOOLTIP_DEFAULT_DELAY } from '../../config/constants'
 
 import './ProjectInfo.scss'
 
@@ -56,29 +54,28 @@ class ProjectInfo extends Component {
           <div styleName="project-name">{_.unescape(project.name)}</div>
 
           <div styleName="project-status-bottom">
-            <div className="project-status-time">Created {moment(project.createdAt).format('MMM DD, YYYY')}</div>
-            {!!code && <Tooltip styleName="tooltip-target-container" theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
-              <div className="tooltip-target">
-                <div className="project-status-ref">{_.unescape(code)}</div>
-              </div>
-              <div className="tooltip-body">
+            <div className="project-status-time">
+              Created {moment(project.createdAt).format('MMM DD, YYYY')}
+            </div>
+            {!!code && (
+              <div title={_.unescape(code)} className="project-status-ref">
                 {_.unescape(code)}
               </div>
-            </Tooltip>}
+            )}
           </div>
         </div>
-        {showDeleteConfirm &&
+        {showDeleteConfirm && (
           <DeleteProjectModal
             onCancel={toggleProjectDelete}
             onConfirm={onConfirmDelete}
           />
-        }
+        )}
         {showReviewBtn ? (
           reviewButtonSection
         ) : (
           <MobileExpandable title="DESCRIPTION" defaultOpen>
             <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
-              {(matches) => (
+              {matches => (
                 <ProjectCardBody
                   project={project}
                   projectCanBeActive={projectCanBeActive}
