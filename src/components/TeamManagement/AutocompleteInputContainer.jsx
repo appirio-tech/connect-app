@@ -14,6 +14,7 @@ class AutocompleteInputContainer extends React.Component {
   }
 
   onInputChange(inputValue) {
+    const { currentUser } = this.props
     const indexOfSpace = inputValue.indexOf(' ')
     const indexOfSemiColon = inputValue.indexOf(';')
 
@@ -31,7 +32,10 @@ class AutocompleteInputContainer extends React.Component {
     }
 
     if (inputValue.length >= AUTOCOMPLETE_TRIGGER_LENGTH) {
-      this.props.onLoadUserSuggestions(inputValue)
+      // When customer user is typing a user handle to invite we should not try to show suggestions as we always get error 403
+      if (!currentUser.isCustomer) {
+        this.props.onLoadUserSuggestions(inputValue)
+      }
     } else {
       this.props.onClearUserSuggestions()
     }
