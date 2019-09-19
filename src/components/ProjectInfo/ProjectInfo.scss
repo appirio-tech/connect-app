@@ -40,6 +40,8 @@
       margin-bottom: 10px;
       padding-left: 4 * $base_unit;
       padding-right: 4 * $base_unit;
+      display: flex;
+      flex-direction: column;
     }
 
     .project-status-header {
@@ -60,6 +62,7 @@
       text-transform: uppercase;
       white-space: nowrap;
       float: left;
+      margin-right: 10px;
     }
 
     .project-status-ref {
@@ -74,6 +77,9 @@
       margin-top: $base-unit;
       white-space: nowrap;
       float: right;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
 
     .project-card-body {
@@ -109,4 +115,14 @@
   margin-top: 20px;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.project-status-bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tooltip-target-container {
+  flex: 1;
+  width: 0;
 }
