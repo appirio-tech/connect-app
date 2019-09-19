@@ -118,7 +118,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'dev-msinteg']
+              only: ['dev', 'dev-msinteg', 'feature/registration_and_profile_page_improvements']
 
       - deployProd:
           context : org-global
