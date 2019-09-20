@@ -1,6 +1,10 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
+  .sticky-inner-wrapper {
+    z-index: 1;
+  }
+
   .project-info {
     display: flex;
     flex-direction: column;
@@ -77,10 +81,9 @@
       margin-top: $base-unit;
       white-space: nowrap;
       float: right;
-      flex: 1;
-      width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
+      max-width: 100%;
     }
 
     .project-card-body {
@@ -120,4 +123,16 @@
 
 .project-status-bottom {
   display: flex;
+  justify-content: space-between;
+}
+
+.tooltip-target-container {
+  flex: 1;
+  width: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tooltip {
+  max-width: 100%;
 }

@@ -32,12 +32,23 @@ $screen-one-column: 720px;
           width: 100%;
           padding-right: 10px;
 
+          .code-tooltip-container {
+            display: flex;
+            width: 100%;
+
+            .Tooltip {
+              max-width: 100%;
+
+              .tooltip-target {
+                display: flex;
+              }
+            }
+          }
+
           span {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            width: 0;
-            flex: 1;
           }
         }
       }
