@@ -66,7 +66,7 @@ class ProjectInfo extends Component {
                   <div className="project-status-ref">{_.unescape(code)}</div>
                 </div>
                 <div className="tooltip-body">
-                  {_.unescape(code)}
+                  <span>{_.unescape(code)}</span>
                 </div>
               </Tooltip>
             </div>

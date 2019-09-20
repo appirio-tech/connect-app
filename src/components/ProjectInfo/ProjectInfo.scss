@@ -131,8 +131,39 @@
   width: 0;
   display: flex;
   justify-content: flex-end;
+
+  :global {
+    .tooltip-target {
+      height: 100%;
+    }
+
+    .tooltip-body {
+      display: flex;
+
+      span {
+        width: 200px;
+        white-space: normal;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
 }
 
 .tooltip {
   max-width: 100%;
+  height: 100%;
+}
+
+
+
+.tooltip-body {
+  display: flex;
+
+  span {
+    width: 200px;
+    white-space: normal;
+    display: flex;
+    justify-content: center;
+  }
 }

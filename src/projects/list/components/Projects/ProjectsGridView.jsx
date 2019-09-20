@@ -125,7 +125,7 @@ const ProjectsGridView = props => {
                   <span className="txt-gray-md">{code}</span>
                 </div>
                 <div className="tooltip-body">
-                  {code}
+                  <span>{code}</span>
                 </div>
               </Tooltip>
             </div>

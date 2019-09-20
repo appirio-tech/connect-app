@@ -42,6 +42,17 @@ $screen-one-column: 720px;
               .tooltip-target {
                 display: flex;
               }
+
+              .tooltip-body {
+                display: flex;
+
+                span {
+                  width: 200px;
+                  white-space: normal;
+                  display: flex;
+                  justify-content: center;
+                }
+              }
             }
           }
 
