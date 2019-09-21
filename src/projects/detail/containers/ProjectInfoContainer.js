@@ -438,7 +438,6 @@ class ProjectInfoContainer extends React.Component {
     const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER && project.status === 'draft'
 
     const projectNotReadNotifications = filterReadNotifications(filterNotificationsByProjectId(notifications, project.id))
-    console.log('totest projectNotReadNotifications', projectNotReadNotifications)
     const notReadMessageNotifications = filterTopicAndPostChangedNotifications(projectNotReadNotifications, /^(?:MESSAGES|PRIMARY)$/)
     const notReadPhaseNotifications = filterTopicAndPostChangedNotifications(projectNotReadNotifications, /^phase#\d+$/)
     const notReadAssetsNotifications = filterFileAndLinkChangedNotifications(projectNotReadNotifications)

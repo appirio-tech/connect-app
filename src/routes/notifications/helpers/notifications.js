@@ -271,10 +271,8 @@ export const filterTopicAndPostChangedNotifications = (notifications, tagRegExp)
  */
 export const filterFileAndLinkChangedNotifications = (notifications) => {
   return _.filter(notifications, (notification) => (
-    notification.eventType === EVENT_TYPE.TOPIC.CREATED ||
-    notification.eventType === EVENT_TYPE.POST.CREATED ||
-    notification.eventType === EVENT_TYPE.POST.UPDATED ||
-    notification.eventType === EVENT_TYPE.POST.MENTION
+    notification.eventType === EVENT_TYPE.PROJECT.FILE_UPLOADED ||
+    notification.eventType === EVENT_TYPE.PROJECT.LINK_CREATED
   ))
 }
 
