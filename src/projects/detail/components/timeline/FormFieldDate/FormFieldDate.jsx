@@ -13,24 +13,15 @@ const TCFormFields = FormsyForm.Fields
 
 import styles from './FormFieldDate.scss'
 
-const FormFieldDate = ({ startDate, endDate, theme }) => {
-  const startDateProps = _.omit(startDate, 'label')
-  startDateProps.type = 'date'
-  startDateProps.wrapperClass = styles['field-wrapper']
-
-  const endDateProps = _.omit(endDate, 'label')
-  endDateProps.type = 'date'
-  endDateProps.wrapperClass = styles['field-wrapper']
+const FormFieldDate = (props) => {
 
   return (
-    <div styleName={cn('milestone-post', theme)}>
+    <div styleName="milestone-post">
       <div styleName="col-left">
-        <label styleName="label-title">{startDate.label}</label>
+        <label styleName="label-title">{props.label}</label>
       </div>
       <div styleName="col-right">
-        <TCFormFields.TextInput {...startDateProps} />
-        <label styleName="label-title">{endDate.label}</label>
-        <TCFormFields.TextInput {...endDateProps} />
+        <TCFormFields.TextInput {...props} />
       </div>
     </div>
   )

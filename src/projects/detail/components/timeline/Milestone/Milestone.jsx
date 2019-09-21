@@ -102,9 +102,22 @@ class Milestone extends React.Component {
     this.setState({ isMobileEditing: true })
   }
 
+  isActualStartDateEditable() {
+    const { milestone, currentUser } = this.props
+    const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
+    const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+    return (isActive || isCompleted) && currentUser.isAdmin;
+
+  }
+
+  isCompletionDateEditable() {
+    const { milestone, currentUser } = this.props
+    const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+    return isCompleted && currentUser.isAdmin;
+  }
+
   updateMilestoneWithData(values) {
     const { milestone, updateMilestone } = this.props
-
     updateMilestone(milestone.id, values)
   }
 
@@ -211,6 +224,8 @@ class Milestone extends React.Component {
     const date = startDate.format('D')
     const title = milestone.name
     const isUpdating = milestone.isUpdating
+    const isActualDateEditable = this.isActualStartDateEditable();
+    const isCompletionDateEditable = this.isCompletionDateEditable();
     const editForm = (
       <Form
         fields={[{
@@ -245,7 +260,27 @@ class Milestone extends React.Component {
             isRequired: true
           },
           validationError: 'Planned text is required',
-        }, {
+        }, ...( isActualDateEditable && [{
+          label: 'Actual Start date',
+          placeholder: 'Actual Start date',
+          name: 'actualStartDate',
+          value: moment.utc(milestone.actualStartDate).format('YYYY-MM-DD'),
+          type: 'date',
+          validations: {
+            isRequired: true
+          },
+          validationError: 'Actual Start date is required',
+        }]), ...( isCompletionDateEditable && [{
+          label: 'Completion date',
+          placeholder: 'Completion date',
+          name: 'completionDate',
+          value: moment.utc(milestone.completionDate).format('YYYY-MM-DD'),
+          type: 'date',
+          validations: {
+            isRequired: true
+          },
+          validationError: 'Completion date is required',
+        }]), {
           label: 'Active text',
           placeholder: 'Active text',
           name: 'activeText',
