@@ -17,8 +17,7 @@ const ProjectPlanEmpty = ({ isManageUser }) => {
   ) : ( 
     <div styleName="container">
       <h2>Welcome to your project plan</h2>
-      <p>Thank you for submitting your project requirements. In the next 24h someone from our team will reach out to you to discuss the project details with you so we can build the detailed project plan. Until then stand back and relax, we're working hard on your information.</p>
-      <p>If you feel like you have more things to send over, or want to reach out to us, please drop us a line at support@topcoder.com. Thanks!</p>
+      <p>We are reviewing your request. Within the next 24 hours, Topcoder will contact you to discuss next steps, including finalizing your sale and preparing our crowd to meet your needs. Once delivery is mobilized, your project plan will be updated to reflect your detailed delivery plan and will serve as your resource for engaging in key milestones and monitoring progress.</p>
     </div>
   )
 }

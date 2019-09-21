@@ -23,6 +23,7 @@ import _ from 'lodash'
 import update from 'react-addons-update'
 import { evaluate, getFieldNamesFromExpression, populatePreparedConditions } from 'expression-evaluator'
 import { flatten, unflatten } from 'flat'
+import { checkPermission } from './permissions'
 
 /**
  * @typedef {Object} NodeObject
@@ -392,6 +393,13 @@ export const initWizard = (template, project, productTemplates, incompleteWizard
       node
     }
 
+    // precalculate the result for `userPermissionCondition`
+    if (nodeObject.userPermissionCondition && !checkPermission(nodeObject.userPermissionCondition)) {
+      // we calculate this value once as user permissions cannot be changed
+      // and we would use this value to calculate value of `hiddenByCondition`
+      nodeObject.__wizard.hiddenByPermission = true
+    }
+
     // add all found variables from condition to the list of dependant fields of the template
     if (nodeObject.condition) {
       wizardTemplate.__wizard.dependantFields = _.uniq([
@@ -426,6 +434,11 @@ export const initWizard = (template, project, productTemplates, incompleteWizard
       prevWizardStep = getPrevStepToShow(wizardTemplate, lastWizardStep)
     }
 
+    // if the first step we found is hidden, then search for the next step which is not hidden
+    if (!isNodeVisible(wizardTemplate, currentWizardStep)) {
+      currentWizardStep = getStepToShowByDir(wizardTemplate, currentWizardStep, NODE_DIR.NEXT)
+    }
+    // use provided `lastWizardStep` or use the first non-hidden step
     currentWizardStep = lastWizardStep || currentWizardStep
   }
 
@@ -880,7 +893,9 @@ const getParentNode = (node) => {
       ...node,
       subSectionIndex: -1
     }
-  } else if (node.sectionIndex !== -1) {
+  // we shouldn't return parent node with all indexes as `-1`
+  // that's why if we reach this point and `node.sectionIndex === 0` we should also return `null`
+  } else if (node.sectionIndex !== -1 && node.sectionIndex !== 0) {
     return {
       ...node,
       sectionIndex: -1
@@ -1095,8 +1110,10 @@ const getNodeWhichMustBeUpdatedByCondition = (template, flatProjectData) => {
   }
 
   forEachNode(template, (nodeObject, node) => {
-    if (nodeObject.condition) {
-      const hiddenByCondition = !evaluate(nodeObject.condition, flatProjectData)
+    if (nodeObject.condition || nodeObject.userPermissionCondition) {
+      // take into account the result of `userPermissionCondition` which we keep in `hiddenByPermission`
+      const hiddenByCondition = nodeObject.__wizard.hiddenByPermission
+        || nodeObject.condition && !evaluate(nodeObject.condition, flatProjectData)
 
       // only update if the condition result has changed
       if (hiddenByCondition !== nodeObject.__wizard.hiddenByCondition) {
@@ -1194,4 +1211,24 @@ export const buildProjectUpdateQueryByQueryParamSelectCondition = (template, que
   })
 
   return updateQuery
+}
+
+/**
+ * Check if node is visible taking into account parent nodes.
+ * If any parent node or node itself is hidden, then the node is treated as hidden.
+ *
+ * @param {Object} template template
+ * @param {Node} node node
+ *
+ * @returns {Boolean} true if node is visible
+ */
+const isNodeVisible = (template, node) => {
+  let isVisible = !_.get(getNodeObject(template, node), '__wizard.hiddenByCondition')
+
+  let tempNode = node
+  while (isVisible && (tempNode = getParentNode(tempNode))) {
+    isVisible = isVisible && !_.get(getNodeObject(template, tempNode), '__wizard.hiddenByCondition')
+  }
+
+  return isVisible
 }
