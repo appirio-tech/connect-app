@@ -6,7 +6,8 @@ import moment from 'moment'
 import {
   filterReadNotifications,
   filterNotificationsByProjectId,
-  filterTopicAndPostChangedNotifications
+  filterTopicAndPostChangedNotifications,
+  filterFileAndLinkChangedNotifications,
 } from '../../../../routes/notifications/helpers/notifications'
 import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 import ProjectListFilterColHeader from './ProjectListFilterColHeader'
@@ -14,7 +15,7 @@ import GridView from '../../../../components/Grid/GridView'
 import UserTooltip from '../../../../components/User/UserTooltip'
 import {
   PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED, DATE_TO_USER_FIELD_MAP, PHASE_STATUS_REVIEWED,
-  PHASE_STATUS_ACTIVE, PROJECT_STATUS_ACTIVE
+  PHASE_STATUS_ACTIVE, PROJECT_STATUS_ACTIVE, TOOLTIP_DEFAULT_DELAY
 } from '../../../../config/constants'
 import { getProjectTemplateByKey } from '../../../../helpers/templates'
 import TextTruncate from 'react-text-truncate'
@@ -23,6 +24,7 @@ import editableProjectStatus from '../../../../components/ProjectStatus/editable
 import ProjectManagerAvatars from './ProjectManagerAvatars'
 import ProjectTypeIcon from '../../../../components/ProjectTypeIcon'
 import IconProjectStatusTitle from '../../../../assets/icons/status-ico.svg'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 
 import './ProjectsGridView.scss'
 import NotificationBadge from '../../../../components/NotificationBadge/NotificationBadge'
@@ -87,7 +89,8 @@ const ProjectsGridView = props => {
         const unreadProjectUpdate = filterNotificationsByProjectId(notReadNotifications, item.id)
         // count unread posts for Messages tab and Phases
         const unreadPosts = filterTopicAndPostChangedNotifications(unreadProjectUpdate, /^(?:MESSAGES|PRIMARY|phase#\d+)$/)
-        const unreadPostsCount = unreadPosts.length
+        const unreadAssets = filterFileAndLinkChangedNotifications(unreadProjectUpdate)
+        const unreadCount = unreadPosts.length + unreadAssets.length
         const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
           <div className="spacing project-container">
@@ -95,7 +98,7 @@ const ProjectsGridView = props => {
             <div className="project-title">
               <Link to={url} className="link-title">{_.unescape(item.name)}</Link>
               <span className="badge-wrapper">
-                { unreadPostsCount > 0 && <NotificationBadge count={unreadPostsCount} /> }
+                { unreadCount > 0 && <NotificationBadge count={unreadCount} /> }
               </span>
             </div>
             <Link to={url}>
@@ -118,7 +121,16 @@ const ProjectsGridView = props => {
         const code = _.get(item, 'details.utm.code', '')
         return (
           <div className="spacing time-container">
-            <span className="txt-gray-md">{code}</span>
+            <div className="code-tooltip-container">
+              <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+                <div className="tooltip-target">
+                  <span className="txt-gray-md">{code}</span>
+                </div>
+                <div className="tooltip-body">
+                  <span>{code}</span>
+                </div>
+              </Tooltip>
+            </div>
           </div>
         )
       }
