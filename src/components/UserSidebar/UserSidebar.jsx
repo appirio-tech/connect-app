@@ -44,9 +44,6 @@ const UserSidebar = ({user}) => {
       <div className="sideAreaWrapper">
         <UserSummary user={user}/>
         <hr styleName="separator"/>
-        <div styleName="section-title">
-          SYSTEM
-        </div>
         <MenuList navLinks={navLinks}/>
       </div>
     </div>
