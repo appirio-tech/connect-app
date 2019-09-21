@@ -11,6 +11,7 @@
 
     &.modal{
       position: absolute;
+      top: 30px;
     }
 
     .cancellation-reason {
@@ -34,11 +35,6 @@
       .tc-error-messages {
         width: 100%;
       }
-    }
-  
-    &.dropdown-up {
-      top: auto;
-      bottom: 320px;
     }
   }
 }
