@@ -127,11 +127,16 @@ class ProfileSettingsForm extends Component {
   }
 
   onSubmit(data) {
+    // hardcoding company size for now as it's required in the backend
+    const defaultValues = {
+      companySize: '16-50'
+    }
     // we have to use initial data as a base for updated data
     // as form could update not all fields, thus they won't be included in `data`
     // for example user avatar is not included in `data` thus will be removed if don't use
     // this.props.values.settings as a base
     const updatedData = {
+      ...defaultValues,
       ...this.props.values.settings,
       ...data,
     }
@@ -176,12 +181,13 @@ class ProfileSettingsForm extends Component {
             uploadPhoto={this.props.uploadPhoto}
           />
         </div>
-        {this.getField('First Name', 'firstName', false)}
-        {this.getField('Last Name', 'lastName', false)}
+        {this.getField('First Name', 'firstName', true)}
+        {this.getField('Last Name', 'lastName', true)}
         {this.getField('Title', 'title', true)}
         <div className="field">
           <div className="label">
-            <span styleName="fieldLabelText">Business Phone</span>
+            <span styleName="fieldLabelText">Business Phone</span>&nbsp;
+            <sup styleName="requiredMarker">*</sup>
           </div>
           <div className="input-field">
             <PhoneInput
@@ -194,6 +200,7 @@ class ProfileSettingsForm extends Component {
               type="phone"
               validationError="Invalid business phone"
               showCheckMark
+              required
               listCountry={ISOCountries}
               forceCountry={this.state.countrySelected}
               value={this.props.values.settings.businessPhone}
@@ -207,7 +214,7 @@ class ProfileSettingsForm extends Component {
             }
           </div>
         </div>
-        {this.getField('Company name', 'companyName', false, (isCustomer || isCopilot) && !isManager)}
+        {this.getField('Company name', 'companyName', true, (isCustomer || isCopilot) && !isManager)}
         <div className="field">
           <div className="label">
             <span styleName="fieldLabelText">Country</span>
