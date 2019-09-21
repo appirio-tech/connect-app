@@ -369,7 +369,8 @@ const SpecSection = props => {
             dirtyProject,
             currentWizardStep,
             productTemplates,
-            productCategories
+            productCategories,
+            isCreation
           }}
         />
       )
