@@ -167,7 +167,11 @@ class AssetsInfoContainer extends React.Component {
   }
 
   onAddNewLink(link) {
-    const { updateProject, project } = this.props
+    const { updateProject, project, loggedInUser } = this.props
+    link.createdAt = moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    link.createdBy = loggedInUser.userId
+    link.updatedAt = moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    link.updatedBy = loggedInUser.userId
     updateProject(project.id, {
       bookmarks: update(project.bookmarks || [], { $push: [link] })
     })
@@ -181,10 +185,14 @@ class AssetsInfoContainer extends React.Component {
   }
 
   onEditLink(idx, title, address) {
-    const { updateProject, project } = this.props
+    const { updateProject, project, loggedInUser } = this.props
+    const updatedAt = moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    const updatedBy = loggedInUser.userId
     const updatedLink = {
       title,
-      address
+      address,
+      updatedAt,
+      updatedBy
     }
     updateProject(project.id, {
       bookmarks: update(project.bookmarks, { $splice: [[idx, 1, updatedLink]] })
@@ -463,22 +471,8 @@ class AssetsInfoContainer extends React.Component {
     const privateTopicLinks = topicLinks.filter(link => link.tag === PROJECT_FEED_TYPE_MESSAGES)
     const phaseLinks = this.extractLinksFromPosts(phaseFeeds)
 
-    const bookmarks = []
-    _.forEach(project.bookmarks, (b, index) => {
-      const bookmark = {
-        id: index,
-        title: b.title,
-        address: b.address,
-        createdAt: project.createdAt,
-        createdBy: project.createdBy,
-        updatedAt: project.updatedAt,
-        updatedBy: project.updatedBy
-      }
-      bookmarks.push(bookmark)
-    })    
-
     let links = []
-    links = links.concat(bookmarks)
+    links = links.concat(project.bookmarks)
     links = links.concat(publicTopicLinks)
     if (canAccessPrivatePosts) {
       links = links.concat(privateTopicLinks)

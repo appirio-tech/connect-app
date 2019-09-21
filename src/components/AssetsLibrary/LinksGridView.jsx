@@ -126,7 +126,8 @@ const LinksGridView = ({
                     <div styleName="flex-item item-type"><LinkIcon/></div>
                     <div styleName="flex-item item-name"><p>{renderLink(link)}</p></div>
                     <div styleName="flex-item item-created-by">
-                      {!owner && (<div className="user-block txt-italic">Unknown</div>)}
+                      {!owner && !link.createdBy && (<div className="user-block">—</div>)}
+                      {!owner && link.createdBy && (<div className="user-block txt-italic">Unknown</div>)}
                       {owner && (
                         <div className="spacing">
                           <div className="user-block">
