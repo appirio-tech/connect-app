@@ -4,6 +4,7 @@ import cn from 'classnames'
 
 import DeleteFileLinkModal from '../LinksMenu/DeleteFileLinkModal'
 import ItemOperations from './ItemOperations'
+import FileIcon from '../../components/FileIcon'
 import FolderIcon from '../../assets/icons/v.2.5/icon-folder-small.svg'
 
 import './GridView.scss'
@@ -86,19 +87,18 @@ class SubFolder extends React.Component {
                   </li>
                 )
               }
-              let iconPath
-              try {
-                if (isLinkSubFolder) {
-                  //Link Icon here
-                  iconPath = require('../../assets/icons/link-12.svg')
-                } else {
-                  iconPath = require('../../assets/icons/' + childLink.title.split('.')[1] +'.svg')
-                }
-              } catch(err) {
-                iconPath = require('../../assets/icons/default.svg')
+              let iconKey
+
+              if (isLinkSubFolder) {
+                // Key Icon here
+                iconKey = 'link-12'
+              } else {
+                iconKey = childLink.title.split('.')[1]
               }
               return (<li styleName="assets-gridview-row" key={`childlink-${childLink.address}-${i}`}>
-                <div styleName="flex-item item-type"><img width={42} height={42} src={ iconPath } /></div>
+                <div styleName="flex-item item-type" className={iconKey}>
+                  <FileIcon type={iconKey} />
+                </div>
                 <div styleName="flex-item item-name"><p>{renderLink(childLink)}</p></div>
                 <div styleName="flex-item item-modified">{formatModifyDate(childLink)}</div>
                 <div styleName="flex-item item-action">
