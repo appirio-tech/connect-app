@@ -13,6 +13,7 @@ import {
   createProductTemplate,
 } from '../../../actions/templates'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
@@ -52,18 +53,21 @@ class ProductTemplateDetails extends React.Component {
     templateId = templateId ? parseInt(templateId) : null
     const productTemplate = _.find(productTemplates, t => t.id === templateId)
     return (
-      <div className={isLoading ? 'hide' : ''}>
-        <MetaDataPanel
-          templates={templates}
-          isAdmin={isAdmin}
-          metadataType="productTemplate"
-          metadata={productTemplate}
-          loadProjectsMetadata={loadProjectsMetadata}
-          deleteProjectsMetadata={deleteProductTemplate}
-          createProjectsMetadata={createProductTemplate}
-          updateProjectsMetadata={updateProjectsMetadata}
-          isNew={!templateId}
-        />
+      <div>
+        {isLoading && (<LoadingIndicator />)}
+        <div className={isLoading ? 'hide' : ''}>
+          <MetaDataPanel
+            templates={templates}
+            isAdmin={isAdmin}
+            metadataType="productTemplate"
+            metadata={productTemplate}
+            loadProjectsMetadata={loadProjectsMetadata}
+            deleteProjectsMetadata={deleteProductTemplate}
+            createProjectsMetadata={createProductTemplate}
+            updateProjectsMetadata={updateProjectsMetadata}
+            isNew={!templateId}
+          />
+        </div>
       </div>
     )
   }

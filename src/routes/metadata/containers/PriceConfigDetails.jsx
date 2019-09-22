@@ -16,6 +16,7 @@ import {
   getRevisionList,
 } from '../../../actions/templates'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
@@ -76,21 +77,24 @@ class PriceConfigDetails extends React.Component {
       priceConfig = templates.versionMetadata
     }
     return (
-      <div className={isLoading ? 'hide' : ''}>
-        <MetaDataPanel
-          templates={templates}
-          isAdmin={isAdmin}
-          metadataType="priceConfig"
-          metadata={priceConfig}
-          getRevisionList={getRevisionList}
-          loadProjectsMetadata={loadProjectsMetadata}
-          getProjectMetadataWithVersion={getProjectMetadataWithVersion}
-          deleteProjectsMetadata={deleteProjectsMetadataSpecial}
-          createProjectsMetadata={createPriceConfig}
-          updateProjectsMetadata={updateProjectsMetadata}
-          routerParams={match.params}
-          isNew={!key}
-        />
+      <div>
+        {isLoading && (<LoadingIndicator />)}
+        <div className={isLoading ? 'hide' : ''}>
+          <MetaDataPanel
+            templates={templates}
+            isAdmin={isAdmin}
+            metadataType="priceConfig"
+            metadata={priceConfig}
+            getRevisionList={getRevisionList}
+            loadProjectsMetadata={loadProjectsMetadata}
+            getProjectMetadataWithVersion={getProjectMetadataWithVersion}
+            deleteProjectsMetadata={deleteProjectsMetadataSpecial}
+            createProjectsMetadata={createPriceConfig}
+            updateProjectsMetadata={updateProjectsMetadata}
+            routerParams={match.params}
+            isNew={!key}
+          />
+        </div>
       </div>
     )
   }

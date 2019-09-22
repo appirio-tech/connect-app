@@ -14,6 +14,7 @@ import {
 } from '../../../actions/templates'
 import { fireProjectDirty } from '../../../projects/actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
@@ -55,20 +56,23 @@ class ProjectTemplateDetails extends React.Component {
     templateId = templateId ? parseInt(templateId) : null
     const projectTemplate = _.find(projectTemplates, t => t.id === templateId)
     return (
-      <div className={isLoading ? 'hide' : ''}>
-        <MetaDataPanel
-          templates={templates}
-          isAdmin={isAdmin}
-          metadataType="projectTemplate"
-          metadata={projectTemplate}
-          loadProjectsMetadata={loadProjectsMetadata}
-          deleteProjectsMetadata={deleteProjectTemplate}
-          createProjectsMetadata={createProjectTemplate}
-          updateProjectsMetadata={updateProjectsMetadata}
-          isNew={!templateId}
-          previewProject={previewProject}
-          firePreviewProjectDirty={firePreviewProjectDirty}
-        />
+      <div>
+        {isLoading && (<LoadingIndicator />)}
+        <div className={isLoading ? 'hide' : ''}>
+          <MetaDataPanel
+            templates={templates}
+            isAdmin={isAdmin}
+            metadataType="projectTemplate"
+            metadata={projectTemplate}
+            loadProjectsMetadata={loadProjectsMetadata}
+            deleteProjectsMetadata={deleteProjectTemplate}
+            createProjectsMetadata={createProjectTemplate}
+            updateProjectsMetadata={updateProjectsMetadata}
+            isNew={!templateId}
+            previewProject={previewProject}
+            firePreviewProjectDirty={firePreviewProjectDirty}
+          />
+        </div>
       </div>
     )
   }

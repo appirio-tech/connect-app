@@ -13,6 +13,7 @@ import {
   updateProjectsMetadata,
 } from '../../../actions/templates'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
@@ -51,18 +52,21 @@ class ProductCategoryDetails extends React.Component {
     const key = match.params.key
     const productCategory = _.find(productCategories, t => t.key === key)
     return (
-      <div className={isLoading ? 'hide' : ''}>
-        <MetaDataPanel
-          templates={templates}
-          isAdmin={isAdmin}
-          metadataType="productCategory"
-          metadata={productCategory}
-          loadProjectsMetadata={loadProjectsMetadata}
-          deleteProjectsMetadata={deleteProductCategory}
-          createProjectsMetadata={createProductCategory}
-          updateProjectsMetadata={updateProjectsMetadata}
-          isNew={!key}
-        />
+      <div>
+        {isLoading && (<LoadingIndicator />)}
+        <div className={isLoading ? 'hide' : ''}>
+          <MetaDataPanel
+            templates={templates}
+            isAdmin={isAdmin}
+            metadataType="productCategory"
+            metadata={productCategory}
+            loadProjectsMetadata={loadProjectsMetadata}
+            deleteProjectsMetadata={deleteProductCategory}
+            createProjectsMetadata={createProductCategory}
+            updateProjectsMetadata={updateProjectsMetadata}
+            isNew={!key}
+          />
+        </div>
       </div>
     )
   }

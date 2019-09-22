@@ -13,6 +13,7 @@ import {
   updateProjectsMetadata,
 } from '../../../actions/templates'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
@@ -51,18 +52,21 @@ class MilestoneTemplateDetails extends React.Component {
     const id = match.params.id
     const milestoneTemplate = _.find(milestoneTemplates, t => String(t.id) === id)
     return (
-      <div className={isLoading ? 'hide' : ''}>
-        <MetaDataPanel
-          templates={templates}
-          isAdmin={isAdmin}
-          metadataType="milestoneTemplate"
-          metadata={milestoneTemplate}
-          loadProjectsMetadata={loadProjectsMetadata}
-          deleteProjectsMetadata={deleteProjectsMetadata}
-          createProjectsMetadata={createMilestoneTemplate}
-          updateProjectsMetadata={updateProjectsMetadata}
-          isNew={!id}
-        />
+      <div>
+        {isLoading && (<LoadingIndicator />)}
+        <div className={isLoading ? 'hide' : ''}>
+          <MetaDataPanel
+            templates={templates}
+            isAdmin={isAdmin}
+            metadataType="milestoneTemplate"
+            metadata={milestoneTemplate}
+            loadProjectsMetadata={loadProjectsMetadata}
+            deleteProjectsMetadata={deleteProjectsMetadata}
+            createProjectsMetadata={createMilestoneTemplate}
+            updateProjectsMetadata={updateProjectsMetadata}
+            isNew={!id}
+          />
+        </div>
       </div>
     )
   }
