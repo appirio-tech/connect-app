@@ -157,14 +157,8 @@ class ProjectsToolBar extends Component {
         link: '/projects'
       },
       {
-        text: 'Getting Started',
-        link: 'https://www.topcoder.com/about-topcoder/connect/',
-        target: '_blank',
-        absolute: true
-      },
-      {
-        text: 'Help',
-        link: 'https://help.topcoder.com/hc/en-us/articles/225540188-Topcoder-Connect-FAQs',
+        text: 'Our Process',
+        link: 'https://www.topcoder.com/solutions/how-it-works/',
         target: '_blank',
         absolute: true
       }

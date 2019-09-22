@@ -10,9 +10,9 @@ require('./Footer.scss')
 const Footer = () => {
   const currentYear = moment().format('YYYY')
   const otherNavigationItems = [
-    {img: '', text: 'About', link: 'https://www.topcoder.com/about/', target: '_blank'},
-    {img: '', text: 'Contact us', link: 'https://www.topcoder.com/contact/', target: '_blank'},
-    {img: '', text: 'Privacy', link: 'https://www.topcoder.com/community/how-it-works/privacy-policy/', target: '_blank'},
+    {img: '', text: 'About', link: 'https://www.topcoder.com/company/', target: '_blank'},
+    {img: '', text: 'Contact us', link: 'https://www.topcoder.com/contact-us/', target: '_blank'},
+    {img: '', text: 'Privacy', link: 'https://www.topcoder.com/privacy-policy/', target: '_blank'},
     {img: '', text: 'Terms', link: 'https://connect.topcoder.com/terms', target: '_blank'}
   ]
   const isProjectDetails = /projects\/\d+/.test(window.location.pathname)
