@@ -19,7 +19,7 @@ import { PROJECT_ATTACHMENTS_FOLDER,
   FILE_PICKER_API_KEY,
   FILE_PICKER_FROM_SOURCES,
   FILE_PICKER_CNAME,
-  FILE_PICKER_SUBMISSION_CONTAINER_NAME,
+  FILE_PICKER_SUBMISSION_CONTAINER_NAME, 
   FILE_PICKER_ACCEPT,
 } from '../../../config/constants'
 import AddLink from '../../../components/AssetsLibrary/AddLink'
@@ -584,7 +584,7 @@ class AssetsInfoContainer extends React.Component {
               onClickAction={this.activeAssetsTypeChange}
               activeAssetsType={activeAssetsType}
             />)}
-          <div styleName={(!(enableFileUpload && activeAssetsType === 'Files') ? 'hide': '')}>
+          {(enableFileUpload && activeAssetsType === 'Files') &&
             <FilesGridView
               links={attachments}
               title="Files"
@@ -603,8 +603,7 @@ class AssetsInfoContainer extends React.Component {
               onDeletePostAttachment={this.deletePostAttachment}
               formatModifyDate={formatModifyDate}
               formatFolderTitle={formatFolderTitle}
-            />
-          </div>
+            />}
           {(!hideLinks && activeAssetsType === 'Links') &&
             <LinksGridView
               links={links}

@@ -4,8 +4,8 @@ import cn from 'classnames'
 
 import DeleteFileLinkModal from '../LinksMenu/DeleteFileLinkModal'
 import ItemOperations from './ItemOperations'
-import FileIcon from '../../components/FileIcon'
 import FolderIcon from '../../assets/icons/v.2.5/icon-folder-small.svg'
+import FileIcon from '../../components/FileIcon'
 
 import './GridView.scss'
 class SubFolder extends React.Component {
@@ -75,7 +75,7 @@ class SubFolder extends React.Component {
             <div styleName="flex-item item-action"/>
           </li>
           {
-            link.children && link.children.map((childLink, i) => {
+            link.children.map((childLink, i) => {
               if (linkToDelete === i) {
                 return (
                   <li styleName="delete-confirmation-modal" key={'delete-confirmation-post-attachment-' + i}>
@@ -88,7 +88,6 @@ class SubFolder extends React.Component {
                 )
               }
               let iconKey
-
               if (isLinkSubFolder) {
                 // Key Icon here
                 iconKey = 'link-12'
@@ -96,7 +95,7 @@ class SubFolder extends React.Component {
                 iconKey = childLink.title.split('.')[1]
               }
               return (<li styleName="assets-gridview-row" key={`childlink-${childLink.address}-${i}`}>
-                <div styleName="flex-item item-type" className={iconKey}>
+                <div styleName="flex-item item-type">
                   <FileIcon type={iconKey} />
                 </div>
                 <div styleName="flex-item item-name"><p>{renderLink(childLink)}</p></div>

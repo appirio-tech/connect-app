@@ -74,107 +74,102 @@ const FilesGridView = ({
 
   return (
     <div styleName="assets-gridview-container">
-      <div styleName={(!subFolderContent) ? 'hide' : ''}>
+      {(subFolderContent) && (
         <SubFolder
-          link={ subFolderContent ? subFolderContent : {} }
+          link={ subFolderContent }
           renderLink={ renderLink }
           goBack={goBack}
           onDeletePostAttachment={onDeletePostAttachment}
           loggedInUser={loggedInUser}
           formatModifyDate={formatModifyDate}
-        />
-      </div>
-      <div
-        styleName={cn({
-          'assets-gridview-container-active': (linkToEdit >= 0  || linkToDelete >= 0),
-          hide: (subFolderContent)
-        }, '')}
-      >
-        {(linkToEdit >= 0 || linkToDelete >= 0) && <div styleName="assets-gridview-modal-overlay"/>}
-        <div styleName="assets-gridview-title">{`All ${title}`}</div>
-        {pendingAttachments &&
-          <AddFilePermission onCancel={discardAttachments}
-            onSubmit={onAddingAttachmentPermissions}
-            onChange={onChangePermissions}
-            selectedUsers={selectedUsers}
-            projectMembers={projectMembers}
-            loggedInUser={loggedInUser}
-            isSharingAttachment={isSharingAttachment}
-          />}
-        <ul>
-          <li styleName="assets-gridview-header" key="assets-gridview-header">
-            <div styleName="flex-item-title item-type">Type</div>
-            <div styleName="flex-item-title item-name">Name</div>
-            <div styleName="flex-item-title item-modified">Modified</div>
-            <div styleName="flex-item-title item-action"/>
-          </li>
-          {links.map((link, idx) => {
-            const onDeleteConfirm = () => {
-              onDelete(link.id)
-              onDeleteIntent(-1)
-            }
-            const onDeleteCancel = () => onDeleteIntent(-1)
-            const handleDeleteClick = () => onDeleteIntent(idx)
+        />)}
+      {(!subFolderContent) && (
+        <div styleName={cn({'assets-gridview-container-active': (linkToEdit >= 0  || linkToDelete >= 0)}, '')}>
+          {(linkToEdit >= 0 || linkToDelete >= 0) && <div styleName="assets-gridview-modal-overlay"/>}
+          <div styleName="assets-gridview-title">{`All ${title}`}</div>
+          {pendingAttachments &&
+            <AddFilePermission onCancel={discardAttachments}
+              onSubmit={onAddingAttachmentPermissions}
+              onChange={onChangePermissions}
+              selectedUsers={selectedUsers}
+              projectMembers={projectMembers}
+              loggedInUser={loggedInUser}
+              isSharingAttachment={isSharingAttachment}
+            />}
+          <ul>
+            <li styleName="assets-gridview-header" key="assets-gridview-header">
+              <div styleName="flex-item-title item-type">Type</div>
+              <div styleName="flex-item-title item-name">Name</div>
+              <div styleName="flex-item-title item-modified">Modified</div>
+              <div styleName="flex-item-title item-action"/>
+            </li>
+            {links.map((link, idx) => {
+              const onDeleteConfirm = () => {
+                onDelete(link.id)
+                onDeleteIntent(-1)
+              }
+              const onDeleteCancel = () => onDeleteIntent(-1)
+              const handleDeleteClick = () => onDeleteIntent(idx)
 
-            const onEditConfirm = (title, allowedUsers) => {
-              onEdit(link.id, title, allowedUsers)
-              onEditIntent(-1)
-            }
-            const onEditCancel = () => onEditIntent(-1)
-            const handleEditClick = () => onEditIntent(idx)
-            const canEdit = `${link.createdBy}` === `${loggedInUser.userId}`
+              const onEditConfirm = (title, allowedUsers) => {
+                onEdit(link.id, title, allowedUsers)
+                onEditIntent(-1)
+              }
+              const onEditCancel = () => onEditIntent(-1)
+              const handleEditClick = () => onEditIntent(idx)
+              const canEdit = `${link.createdBy}` === `${loggedInUser.userId}`
 
-            const changeSubFolder = () => onChangeSubFolder(link)
+              const changeSubFolder = () => onChangeSubFolder(link)
 
-            if (Array.isArray(link.children) && link.children.length > 0) {
-              return (
-                <li styleName="assets-gridview-row" onClick={changeSubFolder} key={'assets-gridview-folder-' + idx}>
-                  <div styleName="flex-item item-type"><FolderIcon /></div>
-                  <div styleName="flex-item item-name hand"><p>{formatFolderTitle(link.title)}</p></div>
-                  <div styleName="flex-item item-modified">{formatModifyDate(link)}</div>
-                  <div styleName="flex-item item-action"/>
-                </li>)
-            } else if(linkToDelete === idx) {
-              return (
-                <li styleName="delete-confirmation-modal" key={'delete-confirmation-' + idx}>
-                  <DeleteFileLinkModal
-                    link={link}
-                    onCancel={onDeleteCancel}
-                    onConfirm={onDeleteConfirm}
-                  />
-                </li>)
-            } else if (linkToEdit === idx) {
-              return (
-                <li styleName="delete-confirmation-modal" key={'delete-confirmation-' + idx}>
-                  <EditFileAttachment
-                    attachment={link}
-                    projectMembers={projectMembers}
-                    loggedInUser={loggedInUser}
-                    onCancel={onEditCancel}
-                    onConfirm={onEditConfirm}
-                  />
-                </li>)
-            } else {
-              return (
-                <li styleName="assets-gridview-row" key={'assets-gridview-item-' +idx}>
-                  <div styleName="flex-item item-type">
-                    <FileIcon type={link.title.split('.')[1]} />
-                  </div>
-                  <div styleName="flex-item item-name"><p>{renderLink(link)}</p></div>
-                  <div styleName="flex-item item-modified">{formatModifyDate(link)}</div>
-                  <div styleName="flex-item item-action">
-                    {canEdit && (
-                      <ItemOperations
-                        canEdit={canEdit}
-                        canDelete={canEdit}
-                        handleEditClick={handleEditClick}
-                        handleDeleteClick={handleDeleteClick}
-                      />)}
-                  </div>
-                </li>)}
-          })}
-        </ul>
-      </div>
+              if (Array.isArray(link.children) && link.children.length > 0) {
+                return (
+                  <li styleName="assets-gridview-row" onClick={changeSubFolder} key={'assets-gridview-folder-' + idx}>
+                    <div styleName="flex-item item-type"><FolderIcon /></div>
+                    <div styleName="flex-item item-name hand"><p>{formatFolderTitle(link.title)}</p></div>
+                    <div styleName="flex-item item-modified">{formatModifyDate(link)}</div>
+                    <div styleName="flex-item item-action"/>
+                  </li>)
+              } else if(linkToDelete === idx) {
+                return (
+                  <li styleName="delete-confirmation-modal" key={'delete-confirmation-' + idx}>
+                    <DeleteFileLinkModal
+                      link={link}
+                      onCancel={onDeleteCancel}
+                      onConfirm={onDeleteConfirm}
+                    />
+                  </li>)
+              } else if (linkToEdit === idx) {
+                return (
+                  <li styleName="delete-confirmation-modal" key={'delete-confirmation-' + idx}>
+                    <EditFileAttachment
+                      attachment={link}
+                      projectMembers={projectMembers}
+                      loggedInUser={loggedInUser}
+                      onCancel={onEditCancel}
+                      onConfirm={onEditConfirm}
+                    />
+                  </li>)
+              } else {
+                return (
+                  <li styleName="assets-gridview-row" key={'assets-gridview-item-' +idx}>
+                    <div styleName="flex-item item-type">
+                      <FileIcon type={link.title.split('.')[1]} />
+                    </div>
+                    <div styleName="flex-item item-name"><p>{renderLink(link)}</p></div>
+                    <div styleName="flex-item item-modified">{formatModifyDate(link)}</div>
+                    <div styleName="flex-item item-action">
+                      {canEdit && (
+                        <ItemOperations
+                          canEdit={canEdit}
+                          canDelete={canEdit}
+                          handleEditClick={handleEditClick}
+                          handleDeleteClick={handleDeleteClick}
+                        />)}
+                    </div>
+                  </li>)}
+            })}
+          </ul>
+        </div>)}
     </div>
   )
 }
