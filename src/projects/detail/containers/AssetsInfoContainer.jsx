@@ -9,7 +9,7 @@ import moment from 'moment'
 import LinksGridView from '../../../components/AssetsLibrary/LinksGridView'
 import FilesGridView from '../../../components/AssetsLibrary/FilesGridView'
 import AssetsStatistics from '../../../components/AssetsLibrary/AssetsStatistics'
-import { updateProject, deleteProject } from '../../actions/project'
+import { updateProject, deleteProject, loadAssetsMembers } from '../../actions/project'
 import { loadDashboardFeeds, loadProjectMessages } from '../../actions/projectTopics'
 import { loadTopic } from '../../../actions/topics'
 import { loadProjectPlan } from '../../actions/projectPlan'
@@ -397,7 +397,7 @@ class AssetsInfoContainer extends React.Component {
     const { project, currentMemberRole, isSuperUser, phases, feeds,
       isManageUser, phasesTopics, projectTemplates, hideLinks,
       attachmentsAwaitingPermission, addProjectAttachment, discardAttachments, attachmentPermissions,
-      changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment, canAccessPrivatePosts } = this.props
+      changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment, canAccessPrivatePosts, loadAssetsMembers, assetsMembers } = this.props
     const { ifModalOpen } = this.state
 
     const canManageLinks = !!currentMemberRole || isSuperUser
@@ -485,6 +485,25 @@ class AssetsInfoContainer extends React.Component {
       ...this.extractAttachmentLinksFromPosts(feeds),
       ...this.extractAttachmentLinksFromPosts(phaseFeeds)
     ]
+
+    let tmpUserIds = []
+    let userIds = []
+    _.forEach(links, link => {
+      tmpUserIds = _.union(tmpUserIds, _.map(link.children, 'createdBy'))
+      tmpUserIds = _.union(tmpUserIds, [link.createdBy])
+      tmpUserIds = _.union(tmpUserIds, [link.updatedBy])
+    })
+
+    _.forEach(attachments, attachment => {
+      tmpUserIds = _.union(tmpUserIds, _.map(attachment.children, 'createdBy'))
+      tmpUserIds = _.union(tmpUserIds, [attachment.createdBy])
+    })
+
+    _.forEach(tmpUserIds, userId => {
+      userIds = _.union(userIds, [_.parseInt(userId)])
+    })
+    _.remove(userIds, i => !i)
+    loadAssetsMembers(userIds)
 
     const assetsData = []
     enableFileUpload && assetsData.push({name: 'Files', total: _.toString(attachments.length)})
@@ -608,6 +627,7 @@ class AssetsInfoContainer extends React.Component {
               onChangePermissions={changeAttachmentPermission}
               selectedUsers={attachmentPermissions}
               projectMembers={projectMembers}
+              assetsMembers={assetsMembers}
               pendingAttachments={attachmentsAwaitingPermission}
               loggedInUser={loggedInUser}
               attachmentsStorePath={attachmentsStorePath}
@@ -618,7 +638,7 @@ class AssetsInfoContainer extends React.Component {
           {(!hideLinks && activeAssetsType === 'Links') &&
             <LinksGridView
               links={links}
-              projectMembers={projectMembers}
+              assetsMembers={assetsMembers}
               canDelete={canManageLinks}
               canEdit={canManageLinks}
               onDelete={this.onDeleteLink}
@@ -653,12 +673,13 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
     attachmentPermissions: projectState.attachmentPermissions,
     isSharingAttachment: projectState.processingAttachments,
     projectMembers:  _.keyBy(projectMembers, 'userId'),
+    assetsMembers: _.keyBy(projectState.assetsMembers, 'userId'),
     loggedInUser: loadUser.user,
     canAccessPrivatePosts
   })
 }
 
-const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
+const mapDispatchToProps = { updateProject, deleteProject, loadAssetsMembers, addProjectAttachment, updateProjectAttachment,
   loadProjectMessages, discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadTopic, changeAttachmentPermission,
   removeProjectAttachment, loadProjectPlan, saveFeedComment }
 

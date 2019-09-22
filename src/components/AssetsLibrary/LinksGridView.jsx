@@ -29,7 +29,7 @@ const LinksGridView = ({
   title,
   formatModifyDate,
   formatFolderTitle,
-  projectMembers,
+  assetsMembers,
 }) => {
   const renderLink = (link) => {
     if (link.onClick) {
@@ -61,7 +61,7 @@ const LinksGridView = ({
           renderLink={ renderLink }
           goBack={goBack}
           formatModifyDate={formatModifyDate}
-          projectMembers={projectMembers}
+          assetsMembers={assetsMembers}
           isLinkSubFolder
         />)}
       {(!subFolderContent) && (
@@ -91,7 +91,7 @@ const LinksGridView = ({
               const onEditCancel = () => onEditIntent(-1)
               const handleEditClick = () => onEditIntent(idx)
               const changeSubFolder = () => onChangeSubFolder(link)
-              const owner = _.find(projectMembers, m => m.userId === _.parseInt(link.createdBy))
+              const owner = _.find(assetsMembers, m => m.userId === _.parseInt(link.createdBy))
 
               if (Array.isArray(link.children) && link.children.length > 0) {
                 return (

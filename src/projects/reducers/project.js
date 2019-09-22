@@ -23,6 +23,7 @@ import {
   ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, RELOAD_PROJECT_MEMBERS_SUCCESS,
   UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION,
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS, APPROVE_SCOPE_CHANGE_SUCCESS, REJECT_SCOPE_CHANGE_SUCCESS, CANCEL_SCOPE_CHANGE_SUCCESS, ACTIVATE_SCOPE_CHANGE_SUCCESS,
+  LOAD_ASSETS_MEMBERS_SUCCESS, LOAD_ASSETS_MEMBERS_PENDING, LOAD_ASSETS_MEMBERS_FAILURE, CONNECT_USER, CONNECT_USER_HANDLE
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -40,6 +41,7 @@ const initialState = {
   project: {
     invites: [] // invites are pushed directly into it hence need to declare first
   },
+  assetsMembers: {},
   projectNonDirty: {},
   updateExisting: false,
   phases: null,
@@ -438,6 +440,25 @@ export const projectState = function (state=initialState, action) {
       attachmentsAwaitingPermission: null
     })
   }
+
+  case LOAD_ASSETS_MEMBERS_SUCCESS: {
+    const _members = _.map(_.filter(action.payload, m => m.userId), m => {
+      if (m.handle) {
+        return m
+      }
+      return { userId: m.userId, ...CONNECT_USER, handle: CONNECT_USER_HANDLE }
+    })
+    const userMap = _.keyBy(_members, 'userId')
+    // merge the 2 data sets
+    return Object.assign({}, state, {
+      processing: false,
+      assetsMembers: update(state.assetsMembers, {$merge: userMap}),
+    })
+  }
+
+  case LOAD_ASSETS_MEMBERS_PENDING:
+  case LOAD_ASSETS_MEMBERS_FAILURE:
+    return state
 
   case DELETE_PROJECT_PHASE_SUCCESS: {
     const { phaseId } = action.payload

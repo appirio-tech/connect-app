@@ -56,7 +56,7 @@ class SubFolder extends React.Component {
   }
 
   render() {
-    const { link, renderLink, goBack, formatModifyDate, isLinkSubFolder, projectMembers } = this.props
+    const { link, renderLink, goBack, formatModifyDate, isLinkSubFolder, assetsMembers } = this.props
     const { linkToDelete } = this.state
     return (
       <div styleName={cn({'assets-gridview-container-active': (linkToDelete >= 0)}, '')}>
@@ -79,7 +79,7 @@ class SubFolder extends React.Component {
           </li>
           {
             link.children.map((childLink, i) => {
-              const owner = _.find(projectMembers, m => m.userId === _.parseInt(childLink.createdBy))
+              const owner = _.find(assetsMembers, m => m.userId === _.parseInt(childLink.createdBy))
               if (linkToDelete === i) {
                 return (
                   <li styleName="delete-confirmation-modal" key={'delete-confirmation-post-attachment-' + i}>

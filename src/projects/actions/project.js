@@ -21,6 +21,7 @@ import {
 import {
   createTimeline,
 } from '../../api/timelines'
+import { getMembersById } from '../../api/projectMembers'
 // import { loadProductTimelineWithMilestones } from './productsTimelines'
 import {
   LOAD_PROJECT,
@@ -44,6 +45,7 @@ import {
   PHASE_STATUS_ACTIVE,
   PHASE_DIRTY,
   PHASE_DIRTY_UNDO,
+  LOAD_ASSETS_MEMBERS,
   PROJECT_STATUS_IN_REVIEW,
   PHASE_STATUS_REVIEWED,
   PROJECT_STATUS_REVIEWED,
@@ -328,6 +330,25 @@ export function updateProject(projectId, updatedProps, updateExisting = false) {
       type: UPDATE_PROJECT,
       payload: updateProjectAPI(projectId, updatedProps, updateExisting)
     })
+  }
+}
+
+export function loadAssetsMembers(userIds) {
+  return (dispatch, getState) => {
+    // check if we need to request data from server
+    const assetsMembers = getState().projectState.assetsMembers
+    // this returns ids from userIds that are not in store (members)
+    const missingUsers = _.difference(userIds, _.keys(assetsMembers))
+    // dispatch request to load members if we are missing data
+    if (missingUsers.length) {
+      return dispatch({
+        type: LOAD_ASSETS_MEMBERS,
+        payload: getMembersById(userIds)
+      })
+    } else {
+      // returns empty resolved promise to avoid error when we call then on this action
+      return Promise.resolve()
+    }
   }
 }
 
