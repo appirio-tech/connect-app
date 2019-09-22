@@ -1,7 +1,7 @@
 /**
  * FileIcon component
  *
- * Renders proper project type icon depend on the project type
+ * Renders file icon depend on the file type
  */
 import React from 'react'
 import PT from 'prop-types'
