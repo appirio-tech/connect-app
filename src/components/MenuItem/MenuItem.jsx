@@ -3,6 +3,8 @@ import React from 'react'
 import PT from 'prop-types'
 import cn from 'classnames'
 import NotificationBadge from '../NotificationBadge/NotificationBadge'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
+import { TOOLTIP_DEFAULT_DELAY } from '../../../config/constants'
 
 import styles from './MenuItem.scss'
 
@@ -14,6 +16,7 @@ const MenuItem = ({
   exact,
   isActive,
   count,
+  toolTipText
 }) => (
   <li>
     <NavLink
@@ -28,7 +31,16 @@ const MenuItem = ({
         {label}
       </span>
       <span styleName="right">
-        {!!count && <NotificationBadge count={count} />}
+        {!!count && (
+          <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+            <div className="tooltip-target">
+              <NotificationBadge count={count} />
+            </div>
+            <div className="tooltip-body">
+              {toolTipText}
+            </div>
+          </Tooltip>
+        )}
       </span>
     </NavLink>
   </li>
@@ -46,6 +58,7 @@ MenuItem.propTypes = {
   exact: PT.bool,
   isActive: PT.func,
   count: PT.number,
+  toolTipText: PT.string
 }
 
 export default MenuItem
