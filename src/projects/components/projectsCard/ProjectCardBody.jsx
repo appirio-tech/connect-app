@@ -5,7 +5,13 @@ import { Link } from 'react-router-dom'
 import ProjectProgress from '../../../components/ProjectProgress/ProjectProgress'
 import ProjectStatus from '../../../components/ProjectStatus/ProjectStatus'
 import editableProjectStatus from '../../../components/ProjectStatus/editableProjectStatus'
-import { PROJECT_STATUS_ACTIVE, PROJECT_STATUS_COMPLETED, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } from '../../../config/constants'
+import {
+  PROJECT_STATUS_ACTIVE,
+  PROJECT_STATUS_COMPLETED,
+  PROJECT_ROLE_COPILOT,
+  PROJECT_ROLE_MANAGER,
+  PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER
+} from '../../../config/constants'
 import './ProjectCardBody.scss'
 import _ from 'lodash'
 
@@ -17,7 +23,13 @@ function ProjectCardBody({ project, projectCanBeActive, duration, currentMemberR
 
   const canEdit = canEditStatus && (
     project.status !== PROJECT_STATUS_COMPLETED && (isSuperUser || (currentMemberRole
-    && (_.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1)))
+    && (_.indexOf([
+      PROJECT_ROLE_COPILOT,
+      PROJECT_ROLE_MANAGER,
+      PROJECT_ROLE_PROGRAM_MANAGER,
+      PROJECT_ROLE_PROJECT_MANAGER,
+      PROJECT_ROLE_SOLUTION_ARCHITECT,
+    ], currentMemberRole) > -1)))
   )
 
   const progress = _.get(process, 'percent', 0)

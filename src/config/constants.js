@@ -626,7 +626,10 @@ export const PROJECT_ROLE_ACCOUNT_MANAGER = 'account_manager'
 export const PROJECT_ROLE_CUSTOMER = 'customer'
 export const PROJECT_ROLE_OWNER = 'owner'
 export const PROJECT_ROLE_MEMBER = 'member' // this is need for notifications
-
+export const PROJECT_ROLE_ACCOUNT_EXECUTIVE = 'account_executive'
+export const PROJECT_ROLE_PROGRAM_MANAGER = 'program_manager'
+export const PROJECT_ROLE_SOLUTION_ARCHITECT = 'solution_architect'
+export const PROJECT_ROLE_PROJECT_MANAGER = 'project_manager'
 /*
  * Events
  */
@@ -642,6 +645,12 @@ export const ROLE_CONNECT_ACCOUNT_MANAGER = 'Connect Account Manager'
 export const ROLE_CONNECT_ADMIN = 'Connect Admin'
 export const ROLE_ADMINISTRATOR = 'administrator'
 export const ROLE_CONNECT_COPILOT_MANAGER = 'Connect Copilot Manager'
+export const ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE = 'Business Development Representative'
+export const ROLE_PRESALES = 'Presales'
+export const ROLE_ACCOUNT_EXECUTIVE = 'Account Executive'
+export const ROLE_PROGRAM_MANAGER = 'Program Manager'
+export const ROLE_SOLUTION_ARCHITECT = 'Solution Architect'
+export const ROLE_PROJECT_MANAGER = 'Project Manager'
 
 // FIXME .. remove defaults
 export const FILE_PICKER_API_KEY = process.env.FILE_PICKER_API_KEY || ''

@@ -24,7 +24,11 @@ import {
   PROJECT_ROLE_MANAGER,
   PROJECT_ROLE_ACCOUNT_MANAGER,
   PROJECT_FEED_TYPE_PRIMARY,
-  PROJECT_FEED_TYPE_MESSAGES
+  PROJECT_FEED_TYPE_MESSAGES,
+  PROJECT_ROLE_ACCOUNT_EXECUTIVE,
+  PROJECT_ROLE_PROJECT_MANAGER,
+  PROJECT_ROLE_PROGRAM_MANAGER,
+  PROJECT_ROLE_SOLUTION_ARCHITECT
 } from '../../../config/constants'
 import {
   updateProject,
@@ -134,7 +138,14 @@ class SpecificationContainer extends Component {
     } = this.props
     const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
     const isCustomer = _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
-    const isManager = currentMemberRole && [PROJECT_ROLE_MANAGER, PROJECT_ROLE_ACCOUNT_MANAGER].indexOf(currentMemberRole) > -1
+    const isManager = currentMemberRole && [
+      PROJECT_ROLE_MANAGER,
+      PROJECT_ROLE_ACCOUNT_MANAGER,
+      PROJECT_ROLE_ACCOUNT_EXECUTIVE,
+      PROJECT_ROLE_PROJECT_MANAGER,
+      PROJECT_ROLE_PROGRAM_MANAGER,
+      PROJECT_ROLE_SOLUTION_ARCHITECT
+    ].indexOf(currentMemberRole) > -1
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
 
