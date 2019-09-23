@@ -40,12 +40,19 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
       <div className="card-footer">
         <ProjectManagerAvatars managers={project.members} maxShownNum={10} />
         <div>
-          {(!isMember && isInvited) &&
-            <Link to={`/projects/${project.id}`} className="spacing">
-              <div className="join-btn" style={{margin: '5px'}}>
-                Join project
-              </div>
-            </Link>
+          {(!isMember && isInvited && !processingJoinDeclineWorkflow) &&
+            <div>
+              <Link className="spacing">
+                <div className="join-btn" style={{margin: '5px'}}>
+                  Join project
+                </div>
+              </Link>
+              <Link className="spacing">
+                <div className="join-btn" style={{margin: '5px'}}>
+                  Decline
+                </div>
+              </Link>
+            </div>
           }
         </div>
       </div>
