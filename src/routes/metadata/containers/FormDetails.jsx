@@ -16,6 +16,7 @@ import {
   getRevisionList,
 } from '../../../actions/templates'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
@@ -68,6 +69,7 @@ class FormDetails extends React.Component {
       templates,
       isAdmin,
       match,
+      isLoading
     } = this.props
     const key = match.params.key
     let form
@@ -76,20 +78,23 @@ class FormDetails extends React.Component {
     }
     return (
       <div>
-        <MetaDataPanel
-          templates={templates}
-          isAdmin={isAdmin}
-          metadataType="form"
-          metadata={form}
-          getRevisionList={getRevisionList}
-          loadProjectsMetadata={loadProjectsMetadata}
-          getProjectMetadataWithVersion={getProjectMetadataWithVersion}
-          deleteProjectsMetadata={deleteProjectsMetadataSpecial}
-          createProjectsMetadata={createForm}
-          updateProjectsMetadata={updateProjectsMetadata}
-          routerParams={match.params}
-          isNew={!key}
-        />
+        {isLoading && (<LoadingIndicator />)}
+        <div className={isLoading ? 'hide' : ''}>
+          <MetaDataPanel
+            templates={templates}
+            isAdmin={isAdmin}
+            metadataType="form"
+            metadata={form}
+            getRevisionList={getRevisionList}
+            loadProjectsMetadata={loadProjectsMetadata}
+            getProjectMetadataWithVersion={getProjectMetadataWithVersion}
+            deleteProjectsMetadata={deleteProjectsMetadataSpecial}
+            createProjectsMetadata={createForm}
+            updateProjectsMetadata={updateProjectsMetadata}
+            routerParams={match.params}
+            isNew={!key}
+          />
+        </div>
       </div>
     )
   }
@@ -138,7 +143,14 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.error)
-const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving && !props.versionOptionsLoading)
+const enhance = spinnerWhileLoading(
+  props =>
+    (!props.isLoading ||
+      // avoid resetting state of child when saving
+      (props.templates && props.templates.versionMetadata)) &&
+    !props.isRemoving &&
+    !props.versionOptionsLoading
+)
 const FormDetailsWithLoaderEnhanced = enhance(errorHandler(FormDetails))
 const FormDetailsWithLoaderAndAuth = requiresAuthentication(FormDetailsWithLoaderEnhanced)
 

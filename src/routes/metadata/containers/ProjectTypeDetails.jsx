@@ -13,6 +13,7 @@ import {
   updateProjectsMetadata,
 } from '../../../actions/templates'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
@@ -43,7 +44,7 @@ class ProjectTypeDetails extends React.Component {
       createProjectType,
       updateProjectsMetadata,
       templates,
-      // isLoading,
+      isLoading,
       isAdmin,
       match,
     } = this.props
@@ -52,17 +53,20 @@ class ProjectTypeDetails extends React.Component {
     const projectType = _.find(projectTypes, t => t.key === key)
     return (
       <div>
-        <MetaDataPanel
-          templates={templates}
-          isAdmin={isAdmin}
-          metadataType="projectType"
-          metadata={projectType}
-          loadProjectsMetadata={loadProjectsMetadata}
-          deleteProjectsMetadata={deleteProjectsMetadata}
-          createProjectsMetadata={createProjectType}
-          updateProjectsMetadata={updateProjectsMetadata}
-          isNew={!key}
-        />
+        {isLoading && (<LoadingIndicator />)}
+        <div className={isLoading ? 'hide' : ''}>
+          <MetaDataPanel
+            templates={templates}
+            isAdmin={isAdmin}
+            metadataType="projectType"
+            metadata={projectType}
+            loadProjectsMetadata={loadProjectsMetadata}
+            deleteProjectsMetadata={deleteProjectsMetadata}
+            createProjectsMetadata={createProjectType}
+            updateProjectsMetadata={updateProjectsMetadata}
+            isNew={!key}
+          />
+        </div>
       </div>
     )
   }
@@ -104,7 +108,13 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.error)
-const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving)
+const enhance = spinnerWhileLoading(
+  props =>
+    (!props.isLoading ||
+      // avoid resetting state of child when saving
+      (props.templates && props.templates.projectTypes)) &&
+    !props.isRemoving
+)
 const ProjectTypeDetailsWithLoaderEnhanced = enhance(errorHandler(ProjectTypeDetails))
 const ProjectTypeDetailsWithLoaderAndAuth = requiresAuthentication(ProjectTypeDetailsWithLoaderEnhanced)
 

@@ -13,6 +13,7 @@ import {
   updateProjectsMetadata,
 } from '../../../actions/templates'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
@@ -43,7 +44,7 @@ class MilestoneTemplateDetails extends React.Component {
       createMilestoneTemplate,
       updateProjectsMetadata,
       templates,
-      // isLoading,
+      isLoading,
       isAdmin,
       match,
     } = this.props
@@ -52,17 +53,20 @@ class MilestoneTemplateDetails extends React.Component {
     const milestoneTemplate = _.find(milestoneTemplates, t => String(t.id) === id)
     return (
       <div>
-        <MetaDataPanel
-          templates={templates}
-          isAdmin={isAdmin}
-          metadataType="milestoneTemplate"
-          metadata={milestoneTemplate}
-          loadProjectsMetadata={loadProjectsMetadata}
-          deleteProjectsMetadata={deleteProjectsMetadata}
-          createProjectsMetadata={createMilestoneTemplate}
-          updateProjectsMetadata={updateProjectsMetadata}
-          isNew={!id}
-        />
+        {isLoading && (<LoadingIndicator />)}
+        <div className={isLoading ? 'hide' : ''}>
+          <MetaDataPanel
+            templates={templates}
+            isAdmin={isAdmin}
+            metadataType="milestoneTemplate"
+            metadata={milestoneTemplate}
+            loadProjectsMetadata={loadProjectsMetadata}
+            deleteProjectsMetadata={deleteProjectsMetadata}
+            createProjectsMetadata={createMilestoneTemplate}
+            updateProjectsMetadata={updateProjectsMetadata}
+            isNew={!id}
+          />
+        </div>
       </div>
     )
   }
@@ -104,7 +108,13 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.error)
-const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving)
+const enhance = spinnerWhileLoading(
+  props =>
+    (!props.isLoading ||
+      // avoid resetting state of child when saving
+      (props.templates && props.templates.milestoneTemplates)) &&
+    !props.isRemoving
+)
 const MilestoneTemplateDetailsWithLoaderEnhanced = enhance(errorHandler(MilestoneTemplateDetails))
 const MilestoneTemplateDetailsWithLoaderAndAuth = requiresAuthentication(MilestoneTemplateDetailsWithLoaderEnhanced)
 
