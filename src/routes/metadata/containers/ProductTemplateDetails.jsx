@@ -13,6 +13,7 @@ import {
   createProductTemplate,
 } from '../../../actions/templates'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
@@ -43,7 +44,7 @@ class ProductTemplateDetails extends React.Component {
       createProductTemplate,
       updateProjectsMetadata,
       templates,
-      // isLoading,
+      isLoading,
       isAdmin,
       match,
     } = this.props
@@ -53,17 +54,20 @@ class ProductTemplateDetails extends React.Component {
     const productTemplate = _.find(productTemplates, t => t.id === templateId)
     return (
       <div>
-        <MetaDataPanel
-          templates={templates}
-          isAdmin={isAdmin}
-          metadataType="productTemplate"
-          metadata={productTemplate}
-          loadProjectsMetadata={loadProjectsMetadata}
-          deleteProjectsMetadata={deleteProductTemplate}
-          createProjectsMetadata={createProductTemplate}
-          updateProjectsMetadata={updateProjectsMetadata}
-          isNew={!templateId}
-        />
+        {isLoading && (<LoadingIndicator />)}
+        <div className={isLoading ? 'hide' : ''}>
+          <MetaDataPanel
+            templates={templates}
+            isAdmin={isAdmin}
+            metadataType="productTemplate"
+            metadata={productTemplate}
+            loadProjectsMetadata={loadProjectsMetadata}
+            deleteProjectsMetadata={deleteProductTemplate}
+            createProjectsMetadata={createProductTemplate}
+            updateProjectsMetadata={updateProjectsMetadata}
+            isNew={!templateId}
+          />
+        </div>
       </div>
     )
   }
@@ -106,7 +110,13 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.errorTemp)
-const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving)
+const enhance = spinnerWhileLoading(
+  props =>
+    (!props.isLoading ||
+      // avoid resetting state of child when saving
+      (props.templates && props.templates.productTemplates)) &&
+    !props.isRemoving
+)
 const ProductTemplateDetailsWithLoaderEnhanced = enhance(errorHandler(ProductTemplateDetails))
 const ProductTemplateDetailsWithLoaderAndAuth = requiresAuthentication(ProductTemplateDetailsWithLoaderEnhanced)
 
