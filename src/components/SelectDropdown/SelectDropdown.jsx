@@ -113,7 +113,7 @@ class SelectDropdown extends Component {
         </li>
       )
       return option.toolTipMessage ? (
-        <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY} key={optIdx}>
+        <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY} key={optIdx} usePortal={true}>
           <div className="tooltip-target">
             {selectItem}
           </div>
