@@ -4,6 +4,8 @@ import Drawer from 'appirio-tech-react-components/components/Drawer/Drawer'
 
 import FeedContainer from '../../projects/detail/containers/FeedContainer'
 
+import './TopicDrawer.scss'
+
 /**
  * A drawer that shows the posts under the selected topic
  */
@@ -18,6 +20,7 @@ const TopicDrawer = ({
   return (
     <Drawer
       open={open}
+      styleName="drawer-container"
       containerStyle={{
         top: '60px',
         height: 'calc(100% - 60px)',

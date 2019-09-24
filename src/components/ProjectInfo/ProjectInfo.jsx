@@ -9,6 +9,8 @@ import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import MediaQuery from 'react-responsive'
 import { SCREEN_BREAKPOINT_MD, PROJECT_STATUS_ACTIVE, PHASE_STATUS_ACTIVE, PHASE_STATUS_REVIEWED, PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 import ReviewProjectButton from '../../projects/detail/components/ReviewProjectButton'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
+import { TOOLTIP_DEFAULT_DELAY } from '../../config/constants'
 
 import './ProjectInfo.scss'
 
@@ -51,24 +53,39 @@ class ProjectInfo extends Component {
     return (
       <div className="project-info">
         <div className="project-status">
-          <div>
-            <div styleName="project-name">{_.unescape(project.name)}</div>
-            <div className="project-status-time">Created {moment(project.createdAt).format('MMM DD, YYYY')}</div>
-            {!!code && <div className="project-status-ref">{_.unescape(code)}</div>}
+          <div styleName="project-name">{_.unescape(project.name)}</div>
+
+          <div styleName="project-status-bottom">
+            <div className="project-status-time">
+              Created {moment(project.createdAt).format('MMM DD, YYYY')}
+            </div>
+            {!!code &&
+            <div styleName="tooltip-target-container">
+              <Tooltip styleName="tooltip" theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+                <div className="tooltip-target">
+                  <div className="project-status-ref">{_.unescape(code)}</div>
+                </div>
+                <div className="tooltip-body">
+                  <span>{_.unescape(code)}</span>
+                </div>
+              </Tooltip>
+            </div>
+
+            }
           </div>
         </div>
-        {showDeleteConfirm &&
+        {showDeleteConfirm && (
           <DeleteProjectModal
             onCancel={toggleProjectDelete}
             onConfirm={onConfirmDelete}
           />
-        }
+        )}
         {showReviewBtn ? (
           reviewButtonSection
         ) : (
           <MobileExpandable title="DESCRIPTION" defaultOpen>
             <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
-              {(matches) => (
+              {matches => (
                 <ProjectCardBody
                   project={project}
                   projectCanBeActive={projectCanBeActive}

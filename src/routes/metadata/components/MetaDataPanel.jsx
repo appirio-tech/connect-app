@@ -871,27 +871,29 @@ class MetaDataPanel extends React.Component {
             </div>
           )
           }
-          { !isFullScreen && !templates.isLoading && !templates.metadataRevisionsLoading && (!!metadata || isNew ) && (
-            <TemplateForm
-              metadata={metadata}
-              metadataType={metadataType}
-              deleteTemplate={this.onDeleteTemplate}
-              changeTemplate={this.onChangeTemplate}
-              saveTemplate={this.onSaveTemplate}
-              createTemplate={this.onCreateTemplate}
-              createNewVersion={this.onCreateNewVersion}
-              dropdownChange={this.onChangeDropdown}
-              enterFullScreen={this.enterFullScreen}
-              changeJSONEdit={this.onJSONEdit}
-              toggleModalOpen={this.toggleModalOpen}
-              setJsonEditorRef={this.setJsonEditorRef}
-              isNew={isNew}
-              metadataWithVersion={metadataWithVersion}
-              fields={fields}
-              loadProjectMetadata={this.props.loadProjectsMetadata}
-              productCategories={templates['productCategories']}
-              projectTypes={templates['projectTypes']}
-            />)
+          { !isFullScreen && !templates.metadataRevisionsLoading && (!!metadata || isNew ) && (
+            <div className={templates.isLoading ? 'hide' : ''}>
+              <TemplateForm
+                metadata={metadata}
+                metadataType={metadataType}
+                deleteTemplate={this.onDeleteTemplate}
+                changeTemplate={this.onChangeTemplate}
+                saveTemplate={this.onSaveTemplate}
+                createTemplate={this.onCreateTemplate}
+                createNewVersion={this.onCreateNewVersion}
+                dropdownChange={this.onChangeDropdown}
+                enterFullScreen={this.enterFullScreen}
+                changeJSONEdit={this.onJSONEdit}
+                toggleModalOpen={this.toggleModalOpen}
+                setJsonEditorRef={this.setJsonEditorRef}
+                isNew={isNew}
+                metadataWithVersion={metadataWithVersion}
+                fields={fields}
+                loadProjectMetadata={this.props.loadProjectsMetadata}
+                productCategories={templates['productCategories']}
+                projectTypes={templates['projectTypes']}
+              />
+            </div>)
           }
         </aside>
       </div>

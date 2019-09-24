@@ -14,6 +14,7 @@ import {
 } from '../../../actions/templates'
 import { fireProjectDirty } from '../../../projects/actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
@@ -44,7 +45,7 @@ class ProjectTemplateDetails extends React.Component {
       createProjectTemplate,
       updateProjectsMetadata,
       templates,
-      // isLoading,
+      isLoading,
       isAdmin,
       match,
       previewProject,
@@ -56,19 +57,22 @@ class ProjectTemplateDetails extends React.Component {
     const projectTemplate = _.find(projectTemplates, t => t.id === templateId)
     return (
       <div>
-        <MetaDataPanel
-          templates={templates}
-          isAdmin={isAdmin}
-          metadataType="projectTemplate"
-          metadata={projectTemplate}
-          loadProjectsMetadata={loadProjectsMetadata}
-          deleteProjectsMetadata={deleteProjectTemplate}
-          createProjectsMetadata={createProjectTemplate}
-          updateProjectsMetadata={updateProjectsMetadata}
-          isNew={!templateId}
-          previewProject={previewProject}
-          firePreviewProjectDirty={firePreviewProjectDirty}
-        />
+        {isLoading && (<LoadingIndicator />)}
+        <div className={isLoading ? 'hide' : ''}>
+          <MetaDataPanel
+            templates={templates}
+            isAdmin={isAdmin}
+            metadataType="projectTemplate"
+            metadata={projectTemplate}
+            loadProjectsMetadata={loadProjectsMetadata}
+            deleteProjectsMetadata={deleteProjectTemplate}
+            createProjectsMetadata={createProjectTemplate}
+            updateProjectsMetadata={updateProjectsMetadata}
+            isNew={!templateId}
+            previewProject={previewProject}
+            firePreviewProjectDirty={firePreviewProjectDirty}
+          />
+        </div>
       </div>
     )
   }
@@ -115,7 +119,13 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.errorTemp)
-const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving)
+const enhance = spinnerWhileLoading(
+  props =>
+    (!props.isLoading ||
+      // avoid resetting state of child when saving
+      (props.templates && props.templates.projectTemplates)) &&
+    !props.isRemoving
+)
 const ProjectTemplateDetailsWithLoaderEnhanced = enhance(errorHandler(ProjectTemplateDetails))
 const ProjectTemplateDetailsWithLoaderAndAuth = requiresAuthentication(ProjectTemplateDetailsWithLoaderEnhanced)
 
