@@ -59,7 +59,7 @@ const mapStateToProps = ({ settings, loadUser  }) => {
     },
     user: loadUser.user,
     isCustomer: _.intersection(loadUser.user.roles, powerUserRoles).length === 0,
-    isManager: _.intersection(loadUser.user.roles, managerRoles).length === 0,
+    isManager: _.intersection(loadUser.user.roles, managerRoles).length > 0,
     isCopilot: _.some(loadUser.user.roles, role => role === ROLE_CONNECT_COPILOT)
   })
 }
