@@ -98,16 +98,7 @@ const ProjectsGridView = props => {
             <div className="project-title">
               <Link to={url} className="link-title">{_.unescape(item.name)}</Link>
               <span className="badge-wrapper">
-                {unreadCount > 0 && (
-                  <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
-                    <div className="tooltip-target">
-                      <NotificationBadge count={456} />
-                    </div>
-                    <div className="tooltip-body">
-                      <span>New comments, messages, files & links</span>
-                    </div>
-                  </Tooltip>
-                )}
+                { unreadCount > 0 && <NotificationBadge count={unreadCount} text={`New comments, messages, files & links`} /> }
               </span>
             </div>
             <Link to={url}>
