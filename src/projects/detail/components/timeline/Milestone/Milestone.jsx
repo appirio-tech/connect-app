@@ -106,14 +106,14 @@ class Milestone extends React.Component {
     const { milestone, currentUser } = this.props
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
-    return (isActive || isCompleted) && currentUser.isAdmin;
+    return (isActive || isCompleted) && currentUser.isAdmin
 
   }
 
   isCompletionDateEditable() {
     const { milestone, currentUser } = this.props
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
-    return isCompleted && currentUser.isAdmin;
+    return isCompleted && currentUser.isAdmin
   }
 
   updateMilestoneWithData(values) {
@@ -224,8 +224,8 @@ class Milestone extends React.Component {
     const date = startDate.format('D')
     const title = milestone.name
     const isUpdating = milestone.isUpdating
-    const isActualDateEditable = this.isActualStartDateEditable();
-    const isCompletionDateEditable = this.isCompletionDateEditable();
+    const isActualDateEditable = this.isActualStartDateEditable()
+    const isCompletionDateEditable = this.isCompletionDateEditable()
     const editForm = (
       <Form
         fields={[{

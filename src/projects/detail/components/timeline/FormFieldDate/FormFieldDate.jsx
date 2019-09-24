@@ -5,13 +5,10 @@
  */
 import React from 'react'
 import PT from 'prop-types'
-import _ from 'lodash'
-import cn from 'classnames'
 
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
 
-import styles from './FormFieldDate.scss'
 
 const FormFieldDate = (props) => {
 
