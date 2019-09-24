@@ -34,6 +34,7 @@ const initialState = {
   processingMembers: false,
   processingInvites: false,
   processingAttachments: false,
+  processingProjectMemberInvite: false,
   attachmentsAwaitingPermission: null,
   attachmentPermissions: null,
   error: false,
@@ -207,12 +208,14 @@ export const projectState = function (state=initialState, action) {
 
   case ACCEPT_OR_REFUSE_INVITE_PENDING:
     return Object.assign({}, state, {
-      showUserInvited: true
+      showUserInvited: true,
+      processingProjectMemberInvite: true
     })
 
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
     return Object.assign({}, state, {
       showUserInvited: false,
+      processingProjectMemberInvite: false
     })
   }
 
@@ -834,6 +837,7 @@ export const projectState = function (state=initialState, action) {
       processingMembers: false,
       processingAttachments: false,
       processingInvites: false,
+      processingProjectMemberInvite: false,
       error: parseErrorObj(action)
     })
 

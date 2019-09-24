@@ -18,9 +18,11 @@ import { updateProject } from '../../../actions/project'
 import { getNewProjectLink } from '../../../../helpers/projectHelper'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
-  PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE, SCREEN_BREAKPOINT_MD } from '../../../../config/constants'
+  PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE, SCREEN_BREAKPOINT_MD,
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED } from '../../../../config/constants'
 import TwoColsLayout from '../../../../components/TwoColsLayout'
 import UserSidebar from '../../../../components/UserSidebar/UserSidebar'
+import { acceptOrRefuseInvite } from '../../../actions/projectMember'
 
 const page500 = compose(
   withProps({code:500})
@@ -40,6 +42,7 @@ class Projects extends Component {
     this.state = {}
     this.sortHandler = this.sortHandler.bind(this)
     this.onChangeStatus = this.onChangeStatus.bind(this)
+    this.onUserInviteAction = this.onUserInviteAction.bind(this)
     this.onPageChange = this.onPageChange.bind(this)
     this.applyFilters = this.applyFilters.bind(this)
     this.applySearchFilter = this.applySearchFilter.bind(this)
@@ -73,6 +76,18 @@ class Projects extends Component {
       delta.cancelReason = reason
     }
     updateProject(pId, delta, true)
+  }
+
+  onUserInviteAction(isJoining, projectId) {
+    console.log(isJoining)
+    console.log(projectId)
+    this.props.acceptOrRefuseInvite(projectId, {
+      userId: this.props.currentUser.userId,
+      email: this.props.currentUser.email,
+      status: isJoining ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
+    }).then(() => {
+      
+    })
   }
 
   componentWillMount() {
@@ -193,7 +208,7 @@ class Projects extends Component {
 
   render() {
     const { isPowerUser, isCustomer, isLoading, totalCount, criteria, projectsListView, setProjectsListView,
-      setInfiniteAutoload, loadProjects, history, orgConfig, allProjectsCount, user } = this.props
+      setInfiniteAutoload, loadProjects, history, orgConfig, allProjectsCount, user, processingProjectMemberInvite } = this.props
     // show walk through if user is customer and no projects were returned
     // for default filters
     const showWalkThrough = !isLoading && !isPowerUser && totalCount === 0 && allProjectsCount === 0 &&
@@ -224,6 +239,8 @@ class Projects extends Component {
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
         newProjectLink={getNewProjectLink(orgConfig)}
+        onUserInviteAction={this.onUserInviteAction}
+        processingProjectMemberInvite={processingProjectMemberInvite}
       />
     )
     let projectsView
@@ -304,6 +321,7 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
       email: loadUser.user.email
     },
     user: loadUser.user,
+    processingProjectMemberInvite: projectState.processingProjectMemberInvite,
     orgConfig   : loadUser.orgConfig,
     isLoading   : projectSearch.isLoading,
     error       : projectSearch.error,
@@ -324,6 +342,6 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
   }
 }
 
-const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject, setProjectsListView, sortProjects, loadProjectsMetadata }
+const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject, setProjectsListView, sortProjects, loadProjectsMetadata, acceptOrRefuseInvite }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(Projects))

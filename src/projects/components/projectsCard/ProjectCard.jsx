@@ -1,14 +1,15 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { getProjectRoleForCurrentUser } from '../../../helpers/projectHelper'
 import ProjectCardHeader from './ProjectCardHeader'
 import ProjectCardBody from './ProjectCardBody'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import ProjectManagerAvatars from '../../list/components/Projects/ProjectManagerAvatars'
 import './ProjectCard.scss'
 
-function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus, projectTemplates, unreadMentionsCount }) {
+function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus, projectTemplates, unreadMentionsCount, onUserInviteAction, processingProjectMemberInvite }) {
   const className = `ProjectCard ${ disabled ? 'disabled' : 'enabled'}`
   if (!project) return null
   const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
@@ -40,13 +41,31 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
       <div className="card-footer">
         <ProjectManagerAvatars managers={project.members} maxShownNum={10} />
         <div>
-          {(!isMember && isInvited) &&
-            <Link to={`/projects/${project.id}`} className="spacing">
-              <div className="join-btn" style={{margin: '5px'}}>
+          {(!isMember && isInvited && !processingProjectMemberInvite) &&
+            <div>
+              <div 
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onUserInviteAction(false, project.id)
+                }}
+                className="join-btn" style={{margin: '5px'}}
+              >
+                Decline
+              </div>
+              <div 
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onUserInviteAction(true, project.id)
+                }}
+                className="join-btn" style={{margin: '5px'}}
+              >
                 Join project
               </div>
-            </Link>
+            </div>
           }
+          {processingProjectMemberInvite && (
+            <LoadingIndicator />
+          )}
         </div>
       </div>
     </div>
@@ -60,7 +79,9 @@ ProjectCard.propTypes = {
   project: PT.object.isRequired,
   currentMemberRole: PT.string,
   projectTemplates: PT.array.isRequired,
-  unreadMentionsCount: PT.number.isRequired
+  unreadMentionsCount: PT.number.isRequired,
+  onChangeStatus: PT.func,
+  processingProjectMemberInvite: PT.bool
   // duration: PT.object.isRequired,
 }
 
