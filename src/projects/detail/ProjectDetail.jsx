@@ -4,16 +4,18 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
+import qs from 'query-string'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { loadProjectDashboard } from '../actions/projectDashboard'
 import { clearLoadedProject } from '../actions/project'
-import { acceptOrRefuseInvite } from '../actions/projectMember'
+import { acceptOrRefuseInvite, acceptOrRefuseInviteFail } from '../actions/projectMember'
 import { loadProjects } from '../actions/loadProjects'
+import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator'
 
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
   ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER,
-  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED, ACCEPT_OR_REFUSE_INVITE_FAILURE
 } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
@@ -48,13 +50,13 @@ const showCoderBotIfError = (hasError) => {
     t => t
   )
 }
-const errorHandler = showCoderBotIfError(props => props.error && props.error.type === LOAD_PROJECT_FAILURE)
+const errorHandler = showCoderBotIfError(props => props.error && (props.error.type === LOAD_PROJECT_FAILURE || props.error.type === ACCEPT_OR_REFUSE_INVITE_FAILURE))
 
 // This handles showing a spinner while the state is being loaded async
 const spinner = spinnerWhileLoading(props =>
   !props.isLoading && (
     // first check that there are no error, before checking project properties
-    props.error && props.error.type === LOAD_PROJECT_FAILURE ||
+    props.error && props.error.type === LOAD_PROJECT_FAILURE || props.error.type === ACCEPT_OR_REFUSE_INVITE_FAILURE ||
     // old project or has projectTemplate loaded
     ((props.project && props.project.version !== 'v3') || props.projectTemplate)
     // has all product templates loaded (earlier it was checking project specific product templates only
@@ -112,6 +114,9 @@ const EnhancedProjectDetailView = spinner(errorHandler(ProjectDetailView))
 class ProjectDetail extends Component {
   constructor(props) {
     super(props)
+
+    this.onUserInviteAction = this.onUserInviteAction.bind(this)
+    this.shouldForceCallAcceptRefuseRequest = this.shouldForceCallAcceptRefuseRequest.bind(this)
   }
 
   componentWillMount() {
@@ -123,7 +128,8 @@ class ProjectDetail extends Component {
     this.props.clearLoadedProject()
   }
 
-  componentWillReceiveProps({isProcessing, isLoading, error, project, match}) {
+  componentWillReceiveProps(nextProps) {
+    const {isProcessing, isLoading, error, project, match, showUserInvited} = nextProps
     // handle just deleted projects
     if (! (error || isLoading || isProcessing) && _.isEmpty(project))
       this.props.history.push('/projects/')
@@ -144,6 +150,12 @@ class ProjectDetail extends Component {
     if (this.props.match.params.projectId !== match.params.projectId) {
       this.props.loadProjectDashboard(match.params.projectId)
     }
+
+    const { previousShowUserInvited } = this.props
+    if (showUserInvited === true && !previousShowUserInvited && this.shouldForceCallAcceptRefuseRequest()) {
+      const queryUrlParams = qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
+      this.onUserInviteAction(queryUrlParams.invitation === 'accept')
+    }
   }
 
   getProjectRoleForCurrentUser({currentUserId, project}) {
@@ -160,20 +172,44 @@ class ProjectDetail extends Component {
   }
 
   onUserInviteAction(isJoining) {
-    this.props.acceptOrRefuseInvite(this.props.match.params.projectId, {
+    if (this.isCallingInviteAction) {
+      return
+    }
+    const { acceptOrRefuseInvite, acceptOrRefuseInviteFail } = this.props
+    this.isCallingInviteAction = true
+    acceptOrRefuseInvite(this.props.match.params.projectId, {
       userId: this.props.currentUserId,
       email: this.props.currentUserEmail,
       status: isJoining ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
     }).then(() => {
+      this.isCallingInviteAction = false
       if(!isJoining) {
         // navigate to project listing and reload projects
         this.props.loadProjects({ sort: 'updatedAt desc' })
         this.props.history.push('/projects/')
       } else {
+        if (this.shouldForceCallAcceptRefuseRequest(this.props)) {
+          // remove query param
+          this.props.history.push(`/projects/${this.props.match.params.projectId}`)
+        }
         this.props.loadProjectDashboard(this.props.match.params.projectId)
       }
+    }).catch(err => {
+      this.isCallingInviteAction = false
+      // show code bot error if invite fail
+      acceptOrRefuseInviteFail(err)
     })
+  }
 
+  /**
+   * Check if we should force call accept or refuse invite request
+   */
+  shouldForceCallAcceptRefuseRequest() {
+    const queryUrlParams = qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
+    if (queryUrlParams.invitation && _.includes(['accept', 'decline'], queryUrlParams.invitation) ) {
+      return true
+    }
+    return false
   }
 
   render() {
@@ -184,6 +220,9 @@ class ProjectDetail extends Component {
     const isManageUser = this.props.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
     const isCustomerUser = !(isManageUser || isSuperUser)
     const showUserInvited = this.props.showUserInvited
+    if (showUserInvited && this.shouldForceCallAcceptRefuseRequest(this.props)) {
+      return (<LoadingIndicator />)
+    }
     return (
       !showUserInvited?
         <EnhancedProjectDetailView
@@ -234,7 +273,7 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
   }
 }
 
-const mapDispatchToProps = { loadProjectDashboard, clearLoadedProject, acceptOrRefuseInvite, loadProjects }
+const mapDispatchToProps = { loadProjectDashboard, clearLoadedProject, acceptOrRefuseInvite, loadProjects, acceptOrRefuseInviteFail }
 
 ProjectDetail.propTypes = {
   project: PropTypes.object,

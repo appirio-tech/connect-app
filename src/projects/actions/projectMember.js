@@ -167,6 +167,23 @@ export function acceptOrRefuseInvite(projectId, item) {
   }
 }
 
+/**
+ * Accept or refuse invite request fail
+ * @param {Object} error error object
+ */
+export function acceptOrRefuseInviteFail(error) {
+  const errorPromise = new Promise(() => {
+    throw new Error(error)
+  })
+
+  return (dispatch) => {
+    return dispatch({
+      type: ACCEPT_OR_REFUSE_INVITE,
+      payload: errorPromise
+    })
+  }
+}
+
 export function reloadProjectMembers(projectId) {
   return (dispatch) => {
     return dispatch({
