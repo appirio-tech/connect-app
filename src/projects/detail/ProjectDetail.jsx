@@ -15,7 +15,7 @@ import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
   ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER,
-  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED, ACCEPT_OR_REFUSE_INVITE_FAILURE
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED, ACCEPT_OR_REFUSE_INVITE_FAIL_FAILURE
 } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
@@ -50,13 +50,13 @@ const showCoderBotIfError = (hasError) => {
     t => t
   )
 }
-const errorHandler = showCoderBotIfError(props => props.error && (props.error.type === LOAD_PROJECT_FAILURE || props.error.type === ACCEPT_OR_REFUSE_INVITE_FAILURE))
+const errorHandler = showCoderBotIfError(props => props.error && (props.error.type === LOAD_PROJECT_FAILURE || props.error.type === ACCEPT_OR_REFUSE_INVITE_FAIL_FAILURE))
 
 // This handles showing a spinner while the state is being loaded async
 const spinner = spinnerWhileLoading(props =>
   !props.isLoading && (
     // first check that there are no error, before checking project properties
-    props.error && props.error.type === LOAD_PROJECT_FAILURE || props.error.type === ACCEPT_OR_REFUSE_INVITE_FAILURE ||
+    props.error && props.error.type === LOAD_PROJECT_FAILURE || props.error.type === ACCEPT_OR_REFUSE_INVITE_FAIL_FAILURE ||
     // old project or has projectTemplate loaded
     ((props.project && props.project.version !== 'v3') || props.projectTemplate)
     // has all product templates loaded (earlier it was checking project specific product templates only
@@ -122,6 +122,10 @@ class ProjectDetail extends Component {
   componentWillMount() {
     const projectId = this.props.match.params.projectId
     this.props.loadProjectDashboard(projectId)
+
+    setTimeout(() => {
+      this.props.acceptOrRefuseInviteFail({code:403, message: 'messageGenerator'})
+    }, 10000)
   }
 
   componentWillUnmount() {
