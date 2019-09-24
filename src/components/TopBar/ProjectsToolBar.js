@@ -7,7 +7,6 @@ import { withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import SearchBar from 'appirio-tech-react-components/components/SearchBar/SearchBar'
-import MenuBar from 'appirio-tech-react-components/components/MenuBar/MenuBar'
 import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
 import MobileMenu from '../MobileMenu/MobileMenu'
@@ -151,20 +150,6 @@ class ProjectsToolBar extends Component {
 
     const onLeaveMessage = this.onLeave() || ''
 
-    const primaryNavigationItems = [
-      {
-        text: 'My Projects',
-        link: '/projects'
-      },
-      {
-        text: 'Our Process',
-        link: 'https://www.topcoder.com/solutions/how-it-works/',
-        target: '_blank',
-        absolute: true
-      }
-    ]
-    const menuBar = isLoggedIn && !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />
-
     return (
       <div className="ProjectsToolBar">
         <Prompt
@@ -172,7 +157,7 @@ class ProjectsToolBar extends Component {
           message={onLeaveMessage}
         />
         <div className="primary-toolbar">
-          { renderLogoSection(menuBar) }
+          { renderLogoSection() }
           { isLoggedIn && !isPowerUser && <div className="projects-title-mobile">MY PROJECTS</div> }
           {
             isLoggedIn && !!isPowerUser &&

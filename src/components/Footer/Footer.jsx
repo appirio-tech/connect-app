@@ -13,7 +13,8 @@ const Footer = () => {
     {img: '', text: 'About', link: 'https://www.topcoder.com/company/', target: '_blank'},
     {img: '', text: 'Contact us', link: 'https://www.topcoder.com/contact-us/', target: '_blank'},
     {img: '', text: 'Privacy', link: 'https://www.topcoder.com/privacy-policy/', target: '_blank'},
-    {img: '', text: 'Terms', link: 'https://connect.topcoder.com/terms', target: '_blank'}
+    {img: '', text: 'Terms', link: 'https://connect.topcoder.com/terms', target: '_blank'},
+    {img: '', text: 'Our Process', link: 'https://www.topcoder.com/solutions/how-it-works/', target: '_blank'}
   ]
   const isProjectDetails = /projects\/\d+/.test(window.location.pathname)
   const isCreateProject = window.location.pathname.startsWith(NEW_PROJECT_PATH)

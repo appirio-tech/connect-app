@@ -87,9 +87,6 @@ class TopBarContainer extends React.Component {
         { label: 'Notification settings', link: '/settings/notifications' },
       ],
       [
-        { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true, id: 0 }
-      ],
-      [
         { label: 'Log out', onClick: logoutClick, absolute: true, id: 0 }
       ]
     ]
@@ -102,7 +99,6 @@ class TopBarContainer extends React.Component {
           { label: 'My profile', link: '/settings/profile' },
           { label: 'Account and security', link: '/settings/account' },
           { label: 'Notification settings', link: '/settings/notifications' },
-          { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true },
         ]
       }, {
         items: [
