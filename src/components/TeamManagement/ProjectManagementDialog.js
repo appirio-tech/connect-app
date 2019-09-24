@@ -189,7 +189,7 @@ class ProjectManagementDialog extends React.Component {
           <div className="input-container">
             <div className="hint">invite more people</div>
             <AutocompleteInputContainer
-              placeholder="Enter one or more emails or user handles"
+              placeholder="Enter email address(es) or user handles"
               onUpdate={this.onChange}
               currentUser={currentUser}
               selectedMembers={selectedMembers}

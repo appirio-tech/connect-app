@@ -542,6 +542,7 @@ export const projectState = function (state=initialState, action) {
       phasesNonDirty: updateProductInPhases(state.phasesNonDirty, phaseId, productId, {
         attachments: { $push: [_.cloneDeep(attachment)] }
       }),
+      attachmentsAwaitingPermission: null
     }
   }
 

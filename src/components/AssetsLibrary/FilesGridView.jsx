@@ -10,7 +10,6 @@ import DeleteFileLinkModal from '../LinksMenu/DeleteFileLinkModal'
 import EditFileAttachment from '../LinksMenu/EditFileAttachment'
 import SubFolder from './SubFolder'
 import ItemOperations from './ItemOperations'
-import FileIcon from '../../components/FileIcon'
 
 import FolderIcon from '../../assets/icons/v.2.5/icon-folder-small.svg'
 
@@ -150,10 +149,16 @@ const FilesGridView = ({
                     />
                   </li>)
               } else {
+                let iconPath
+                try {
+                  iconPath = require('../../assets/icons/' + link.title.split('.')[1] +'.svg')
+                } catch(err) {
+                  iconPath = require('../../assets/icons/default.svg')
+                }
                 return (
                   <li styleName="assets-gridview-row" key={'assets-gridview-item-' +idx}>
                     <div styleName="flex-item item-type">
-                      <FileIcon type={link.title.split('.')[1]} />
+                      <img width={42} height={42} src={iconPath} />
                     </div>
                     <div styleName="flex-item item-name"><p>{renderLink(link)}</p></div>
                     <div styleName="flex-item item-modified">{formatModifyDate(link)}</div>

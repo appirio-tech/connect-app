@@ -445,12 +445,15 @@ class ProjectInfoContainer extends React.Component {
     const navLinks = getProjectNavLinks(project, project.id).map((navLink) => {
       if (navLink.label === 'Messages') {
         navLink.count = notReadMessageNotifications.length
+        navLink.toolTipText = 'New messages'
       }
       if (navLink.label === 'Dashboard') {
         navLink.count = notReadPhaseNotifications.length
+        navLink.toolTipText = 'New comments'
       }
       if (navLink.label === 'Assets Library') {
         navLink.count = notReadAssetsNotifications.length
+        navLink.toolTipText = 'New files and links'
       }
 
       return navLink

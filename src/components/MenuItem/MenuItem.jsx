@@ -14,6 +14,7 @@ const MenuItem = ({
   exact,
   isActive,
   count,
+  toolTipText
 }) => (
   <li>
     <NavLink
@@ -28,7 +29,7 @@ const MenuItem = ({
         {label}
       </span>
       <span styleName="right">
-        {!!count && <NotificationBadge count={count} />}
+        {!!count && <NotificationBadge count={count} text={toolTipText} />}
       </span>
     </NavLink>
   </li>
@@ -46,6 +47,7 @@ MenuItem.propTypes = {
   exact: PT.bool,
   isActive: PT.func,
   count: PT.number,
+  toolTipText: PT.string
 }
 
 export default MenuItem
