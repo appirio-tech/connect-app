@@ -7,6 +7,7 @@ import React from 'react'
 import PT from 'prop-types'
 
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+import './FormFieldDate.scss'
 const TCFormFields = FormsyForm.Fields
 
 
