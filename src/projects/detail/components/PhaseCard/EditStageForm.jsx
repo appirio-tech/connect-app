@@ -20,6 +20,10 @@ import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import { TOOLTIP_DEFAULT_DELAY } from '../../../../config/constants'
 import { getPhaseActualData } from '../../../../helpers/projectHelper'
 import DeletePhase from './DeletePhase'
+import {
+  ROLE_CONNECT_ADMIN,
+  ROLE_ADMINISTRATOR,
+} from '../../../../../config/constants'
 
 const moment = extendMoment(Moment)
 const phaseStatuses = PHASE_STATUS.map(ps => ({
@@ -33,7 +37,7 @@ class EditStageForm extends React.Component {
 
     this.state = {
       isUpdating: false,
-      isEdittable: _.get(props, 'phase.status') !== PHASE_STATUS_COMPLETED,
+      isEdittable: (_.get(props, 'phase.status') !== PHASE_STATUS_COMPLETED) || (_.get(props, 'isAdmin')),
       disableActiveStatusFields: _.get(props, 'phase.status') !== PHASE_STATUS_ACTIVE,
       showPhaseOverlapWarning: false,
       phaseIsdirty: false,
@@ -399,11 +403,18 @@ EditStageForm.propTypes = {
   phaseIndex: PT.number
 }
 
-const mapStateToProps = ({projectState, productsTimelines}) => ({
-  isUpdating: projectState.processing,
-  phases: projectState.phases,
-  productsTimelines
-})
+const mapStateToProps = ({projectState, productsTimelines, loadUser}) => {
+  const adminRoles = [
+    ROLE_ADMINISTRATOR,
+    ROLE_CONNECT_ADMIN,
+  ]
+  return {
+    isUpdating: projectState.processing,
+    phases: projectState.phases,
+    productsTimelines,
+    isAdmin: _.intersection(loadUser.user.roles, adminRoles).length > 0
+  }
+}
 
 const actionCreators = {
   updatePhaseAction,

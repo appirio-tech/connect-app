@@ -260,27 +260,7 @@ class Milestone extends React.Component {
             isRequired: true
           },
           validationError: 'Planned text is required',
-        }, ...( isActualDateEditable && [{
-          label: 'Actual Start date',
-          placeholder: 'Actual Start date',
-          name: 'actualStartDate',
-          value: moment.utc(milestone.actualStartDate).format('YYYY-MM-DD'),
-          type: 'date',
-          validations: {
-            isRequired: true
-          },
-          validationError: 'Actual Start date is required',
-        }]), ...( isCompletionDateEditable && [{
-          label: 'Completion date',
-          placeholder: 'Completion date',
-          name: 'completionDate',
-          value: moment.utc(milestone.completionDate).format('YYYY-MM-DD'),
-          type: 'date',
-          validations: {
-            isRequired: true
-          },
-          validationError: 'Completion date is required',
-        }]), {
+        }, {
           label: 'Active text',
           placeholder: 'Active text',
           name: 'activeText',
@@ -313,7 +293,27 @@ class Milestone extends React.Component {
             isRequired: true
           },
           validationError: 'Completed text is required',
-        }]}
+        }, ...( isActualDateEditable && [{
+          label: 'Actual Start date',
+          placeholder: 'Actual Start date',
+          name: 'actualStartDate',
+          value: moment.utc(milestone.actualStartDate).format('YYYY-MM-DD'),
+          type: 'date',
+          validations: {
+            isRequired: true
+          },
+          validationError: 'Actual Start date is required',
+        }]), ...( isCompletionDateEditable && [{
+          label: 'Completion date',
+          placeholder: 'Completion date',
+          name: 'completionDate',
+          value: moment.utc(milestone.completionDate).format('YYYY-MM-DD'),
+          type: 'date',
+          validations: {
+            isRequired: true
+          },
+          validationError: 'Completion date is required',
+        }])]}
         onCancelClick={this.closeEditForm}
         onSubmit={this.updateMilestoneWithData}
         onChange={this.milestoneEditorChanged}
