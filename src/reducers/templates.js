@@ -164,15 +164,13 @@ export default function(state = initialState, action) {
     Alert.error(`PROJECT METADATA CREATE FAILED: ${action.payload.response.data.result.content.message}`)
     return {
       ...state,
-      isLoading: false,
-      error: action.payload.response.data.result.content.message
+      isLoading: false
     }
   case UPDATE_PROJECTS_METADATA_FAILURE:
     Alert.error(`PROJECT METADATA UPDATE FAILED: ${action.payload.response.data.result.content.message}`)
     return {
       ...state,
-      isLoading: false,
-      error: action.payload.response.data.result.content.message
+      isLoading: false
     }
   case REMOVE_PROJECTS_METADATA_FAILURE:
   case REMOVE_PRODUCT_CATEGORY_FAILURE:
@@ -182,8 +180,7 @@ export default function(state = initialState, action) {
     Alert.error(`PROJECT METADATA DELETE FAILED: ${action.payload.response.data.result.content.message}`)
     return {
       ...state,
-      isRemoving: false,
-      error: action.payload.response.data.result.content.message
+      isRemoving: false
     }
   case ADD_PROJECTS_METADATA_SUCCESS:
   case CREATE_PROJECT_TEMPLATE_SUCCESS:
