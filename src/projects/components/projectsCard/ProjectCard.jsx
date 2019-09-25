@@ -43,15 +43,15 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
         <div>
           {(!isMember && isInvited && !processingProjectMemberInvite) &&
             <div>
-              <div 
+              <button 
                 onClick={(e) => {
                   e.stopPropagation()
                   onUserInviteAction(false, project.id)
                 }}
-                className="join-btn" style={{margin: '5px'}}
+                className="join-btn tc-btn tc-btn-primary tc-btn-md" style={{margin: '5px'}}
               >
                 Decline
-              </div>
+              </button>
               <div 
                 onClick={(e) => {
                   e.stopPropagation()
