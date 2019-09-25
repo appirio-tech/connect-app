@@ -54,10 +54,15 @@ export const compareEmail = (email1, email2, options = { UNIQUE_GMAIL_VALIDATION
  * @returns {Boolean} true if two user handles are same
  */
 export const compareHandles = (handle1, handle2) => {
+  let h1 = handle1
+  let h2 = handle2
   if (handle2.indexOf('@') === 0) {
-    return (handle1 || '').toLowerCase() === (handle2.substring(1) || '').toLowerCase()
+    h2 = (handle2 || '').substring(1)
   }
-  return (handle1 || '').toLowerCase() === (handle2 || '').toLowerCase()
+  if (handle1.indexOf('@') === 0) {
+    h1 = (handle1 || '').substring(1)
+  }
+  return h1.toLowerCase() === h2.toLowerCase()
 }
 
 // remove empty object, null/undefined value and empty string recursively from passed obj
