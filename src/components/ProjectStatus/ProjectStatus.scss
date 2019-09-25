@@ -47,8 +47,12 @@
 
     .dropdown-wrap {
       .status-header {
-        display: flex;
-        justify-content: center;
+        &.status-active {
+          &.editable {
+            display: flex;
+            justify-content: center;
+          }
+        }
       }
     }
 
