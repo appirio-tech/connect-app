@@ -10,9 +10,21 @@ import { loadDashboardFeeds, loadProjectMessages } from '../../actions/projectTo
 import { loadTopic } from '../../../actions/topics'
 import { loadProjectPlan } from '../../actions/projectPlan'
 import { setDuration, getProjectNavLinks } from '../../../helpers/projectHelper'
-import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
-  DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED,  PROJECT_STATUS_ACTIVE,
-  PROJECT_STATUS_COMPLETED, PHASE_STATUS_REVIEWED, PHASE_STATUS_ACTIVE } from '../../../config/constants'
+import {
+  PROJECT_ROLE_OWNER,
+  PROJECT_ROLE_COPILOT,
+  PROJECT_ROLE_MANAGER,
+  DIRECT_PROJECT_URL,
+  SALESFORCE_PROJECT_LEAD_LINK,
+  PROJECT_STATUS_CANCELLED,
+  PROJECT_STATUS_ACTIVE,
+  PROJECT_STATUS_COMPLETED,
+  PHASE_STATUS_REVIEWED,
+  PHASE_STATUS_ACTIVE,
+  PROJECT_ROLE_PROJECT_MANAGER,
+  PROJECT_ROLE_PROGRAM_MANAGER,
+  PROJECT_ROLE_SOLUTION_ARCHITECT,
+} from '../../../config/constants'
 import PERMISSIONS from '../../../config/permissions'
 import { checkPermission } from '../../../helpers/permissions'
 import Panel from '../../../components/Panel/Panel'
@@ -423,7 +435,13 @@ class ProjectInfoContainer extends React.Component {
       productsTimelines, isProjectProcessing, notifications } = this.props
     let directLinks = null
     // check if direct links need to be added
-    const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
+    const isMemberOrCopilot = _.indexOf([
+      PROJECT_ROLE_COPILOT,
+      PROJECT_ROLE_MANAGER,
+      PROJECT_ROLE_PROJECT_MANAGER,
+      PROJECT_ROLE_PROGRAM_MANAGER,
+      PROJECT_ROLE_SOLUTION_ARCHITECT
+    ], currentMemberRole) > -1
     if (isMemberOrCopilot || isSuperUser) {
       directLinks = []
       if (project.directProjectId) {
@@ -453,7 +471,13 @@ class ProjectInfoContainer extends React.Component {
 
     const canEdit = (
       project.status !== PROJECT_STATUS_COMPLETED && (isSuperUser || (currentMemberRole
-      && (_.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1)))
+      && (_.indexOf([
+        PROJECT_ROLE_COPILOT,
+        PROJECT_ROLE_MANAGER,
+        PROJECT_ROLE_PROJECT_MANAGER,
+        PROJECT_ROLE_PROGRAM_MANAGER,
+        PROJECT_ROLE_SOLUTION_ARCHITECT
+      ], currentMemberRole) > -1)))
     )
 
     const progress = _.get(process, 'percent', 0)

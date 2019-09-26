@@ -11,7 +11,12 @@ import {
   ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN,
   ROLE_CONNECT_ACCOUNT_MANAGER,
-  DOMAIN
+  DOMAIN,
+  ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
+  ROLE_PRESALES,
+  ROLE_ACCOUNT_EXECUTIVE,
+  ROLE_PROJECT_MANAGER,
+  ROLE_PROGRAM_MANAGER, ROLE_SOLUTION_ARCHITECT
 } from '../../config/constants'
 import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
 import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpers.js'
@@ -165,7 +170,20 @@ class TopBarContainer extends React.Component {
 
 const mapStateToProps = ({ loadUser }) => {
   let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
+  const roles = [
+    ROLE_CONNECT_COPILOT,
+    ROLE_CONNECT_MANAGER,
+    ROLE_CONNECT_ACCOUNT_MANAGER,
+    ROLE_ADMINISTRATOR,
+    ROLE_CONNECT_ADMIN,
+    
+    ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
+    ROLE_PRESALES,
+    ROLE_ACCOUNT_EXECUTIVE,
+    ROLE_PROJECT_MANAGER,
+    ROLE_PROGRAM_MANAGER,
+    ROLE_SOLUTION_ARCHITECT,
+  ]
   if (loadUser.user) {
     isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
   }

@@ -6,8 +6,8 @@
  */
 import {
   NOTIFICATION_TYPE,
-  ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT_MANAGER, ROLE_ADMINISTRATOR,
-  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER,
+  ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_PROGRAM_MANAGER, ROLE_SOLUTION_ARCHITECT, ROLE_PROJECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE, ROLE_PRESALES, ROLE_ACCOUNT_EXECUTIVE, ROLE_CONNECT_COPILOT_MANAGER, ROLE_ADMINISTRATOR,
+  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER,
   EVENT_TYPE,
 } from '../../../config/constants'
 
@@ -38,7 +38,7 @@ export const NOTIFICATIONS = [
     },
     {
       text: 'New project is created',
-      topcoderRoles: [ROLE_CONNECT_ACCOUNT_MANAGER],
+      topcoderRoles: [ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE, ROLE_PRESALES, ROLE_ACCOUNT_EXECUTIVE],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
@@ -48,11 +48,11 @@ export const NOTIFICATIONS = [
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Your project is now active',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'A project has been set to active',
-      topcoderRoles: [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR],
+      topcoderRoles: [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_PROGRAM_MANAGER, ROLE_SOLUTION_ARCHITECT, ROLE_PROJECT_MANAGER, ROLE_ADMINISTRATOR],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
@@ -66,7 +66,7 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'Project is available for review',
-      topcoderRoles: [ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_ADMINISTRATOR],
+      topcoderRoles: [ROLE_CONNECT_MANAGER, ROLE_PROGRAM_MANAGER, ROLE_SOLUTION_ARCHITECT, ROLE_PROJECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE, ROLE_PRESALES, ROLE_ACCOUNT_EXECUTIVE, ROLE_ADMINISTRATOR],
       goTo: GOTO.PROJECT_SPECIFICATION
     }]
   },
@@ -84,7 +84,7 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'Project was approved',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
@@ -94,7 +94,7 @@ export const NOTIFICATIONS = [
     type: NOTIFICATION_TYPE.REVIEW_PENDING,
     rules: [{
       text: 'Your project was paused',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'A project was paused',
@@ -108,7 +108,7 @@ export const NOTIFICATIONS = [
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Your project completed successfully!',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'A project was completed',
@@ -135,7 +135,7 @@ export const NOTIFICATIONS = [
       text: 'A new team member joined your project',
       shouldBundle: true,
       bundledText: '{{bundledCount}} new team members joined your project',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
@@ -147,7 +147,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userHandle}}</strong> left a project',
       shouldBundle: true,
       bundledText: '{{bundledCount}} team members left your project',
-      projectRoles: [PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   }, {
@@ -158,7 +158,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userFullName}}</strong> left a project',
       shouldBundle: true,
       bundledText: '{{bundledCount}} team members left your project',
-      projectRoles: [PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
@@ -170,7 +170,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userHandle}}</strong> was removed from project',
       shouldBundle: true,
       bundledText: '{{bundledCount}} team members were removed from your project',
-      projectRoles: [PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'You were removed from a project',
@@ -184,7 +184,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userFullName}}</strong> was removed from project',
       shouldBundle: true,
       bundledText: '{{bundledCount}} team members were removed from your project',
-      projectRoles: [PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'You were removed from a project',
@@ -201,7 +201,7 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'Project owner was changed to <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   }, {
@@ -214,7 +214,7 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'Project owner was changed to <strong>{{userFullName}}</strong>',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
@@ -260,7 +260,7 @@ export const NOTIFICATIONS = [
       text: 'A  copilot joined your project team',
       shouldBundle: true,
       bundledText: '{{bundledCount}} copilots joined your project team',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
@@ -272,7 +272,7 @@ export const NOTIFICATIONS = [
       text: 'A manager joined your project team',
       shouldBundle: true,
       bundledText: '{{bundledCount}} managers joined your project team',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
@@ -282,7 +282,7 @@ export const NOTIFICATIONS = [
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userHandle}}</strong> created a new post ',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.TOPIC
     }]
   }, {
@@ -291,7 +291,7 @@ export const NOTIFICATIONS = [
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userFullName}}</strong> created a new post ',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.TOPIC
     }]
   },
@@ -312,7 +312,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userHandle}}</strong> responded to a post',
       shouldBundle: true,
       bundledText: '{{#showMore __history__ 3}}<strong>{{userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: [
         { goTo: GOTO.POST, condition: (contents) => !contents.phaseId },
         { goTo: GOTO.PHASE_POST, condition: (contents) => !!contents.phaseId }
@@ -335,7 +335,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userFullName}}</strong> responded to a post',
       shouldBundle: true,
       bundledText: '{{#showMore __history__ 3}}<strong>{{fallback userFullName userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: [
         { goTo: GOTO.POST, condition: (contents) => !contents.phaseId },
         { goTo: GOTO.PHASE_POST, condition: (contents) => !!contents.phaseId }
@@ -351,7 +351,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userFullName}}</strong> edited post',
       shouldBundle: true,
       bundledText: '{{#showMore __history__ 3}}<strong>{{fallback userFullName userHandle}}</strong>{{/showMore}} edited {{bundledCount}} posts',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_MEMBER],
       toTopicStarter: true,
       goTo: GOTO.POST
     }]
@@ -376,7 +376,7 @@ export const NOTIFICATIONS = [
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userHandle}}</strong> added a link to your project',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   }, {
@@ -385,7 +385,7 @@ export const NOTIFICATIONS = [
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userFullName}}</strong> added a link to your project',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
@@ -397,7 +397,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userHandle}}</strong> added a new file',
       shouldBundle: true,
       bundledText: '{{bundledCount}} new files were added',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.FILE_LIST
     }]
   }, {
@@ -408,7 +408,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userFullName}}</strong> added a new file',
       shouldBundle: true,
       bundledText: '{{bundledCount}} new files were added',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.FILE_LIST
     }]
   },
@@ -420,7 +420,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userHandle}}</strong> updated the project specification',
       shouldBundle: true,
       bundledText: 'Project specification has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_SPECIFICATION
     }]
   }, {
@@ -431,7 +431,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userFullName}}</strong> updated the project specification',
       shouldBundle: true,
       bundledText: 'Project specification has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_SPECIFICATION
     }]
   },
@@ -449,7 +449,7 @@ export const NOTIFICATIONS = [
       text: 'Project plan is ready for <strong>{{projectName}}</strong>',
       shouldBundle: true,
       bundledText: 'Project plan is ready. Last modified by: <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_PLAN
     }]
   },
@@ -467,7 +467,7 @@ export const NOTIFICATIONS = [
       text: 'Project plan is modified for <strong>{{projectName}}</strong>',
       shouldBundle: true,
       bundledText: 'Project plan is modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_PLAN
     }]
   },
@@ -485,7 +485,7 @@ export const NOTIFICATIONS = [
       text: 'Phase <strong>{{updatedPhase.name}}</strong> is activated',
       shouldBundle: true,
       bundledText: '{{bundledCount}} phases are activated. Last modified by: <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PHASE
     }]
   },
@@ -503,7 +503,7 @@ export const NOTIFICATIONS = [
       text: 'Phase <strong>{{updatedPhase.name}}</strong> is completed',
       shouldBundle: true,
       bundledText: '{{bundledCount}} phases are completed. Last modified by: <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PHASE
     }]
   },
@@ -521,7 +521,7 @@ export const NOTIFICATIONS = [
       text: 'Payments for <strong>{{updatedPhase.name}}</strong> updated',
       shouldBundle: true,
       bundledText: 'Payments updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PHASE
     }]
   },
@@ -539,7 +539,7 @@ export const NOTIFICATIONS = [
       text: 'Phase <strong>{{updatedPhase.name}}</strong> is progressed',
       shouldBundle: true,
       bundledText: 'Progress updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PHASE
     }]
   },
@@ -558,7 +558,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userHandle}}</strong> updated the phase specification',
       shouldBundle: true,
       bundledText: 'Phase specification has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PHASE
     }]
   },
@@ -576,7 +576,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userHandle}}</strong> updated the project progress',
       shouldBundle: true,
       bundledText: 'Project progress has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PROJECT_PLAN
     }]
   },
@@ -594,7 +594,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userHandle}}</strong> updated the phase timeline',
       shouldBundle: true,
       bundledText: 'Phase timeline has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PHASE
     }]
   },
@@ -612,7 +612,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userHandle}}</strong> activated a milestone in the phase',
       shouldBundle: true,
       bundledText: 'Milestones activated {{bundledCount}} times. Last activated by: <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PHASE
     }]
   },
@@ -630,7 +630,7 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userHandle}}</strong> completed a milestone in the phase',
       shouldBundle: true,
       bundledText: 'Milestones completed {{bundledCount}} times. Last completed by: <strong>{{userHandle}}</strong>',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PHASE
     }]
   },
@@ -644,7 +644,7 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PHASE
     }, {
       text: 'Waiting for customer on a milestone in the project {{projectName}}',
-      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER],
       goTo: GOTO.PHASE
     }]
   }
