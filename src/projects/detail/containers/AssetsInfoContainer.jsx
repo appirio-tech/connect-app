@@ -504,7 +504,10 @@ class AssetsInfoContainer extends React.Component {
       userIds = _.union(userIds, [_.parseInt(userId)])
     })
     _.remove(userIds, i => !i)
-    loadMembers(userIds)
+    const missingUsers = _.filter(userIds, userId => !_.find(assetsMembers, am => am.userId === userId))
+    if (missingUsers.length) {
+      loadMembers(missingUsers)
+    }
 
     const assetsData = []
     enableFileUpload && assetsData.push({name: 'Files', total: _.toString(attachments.length)})

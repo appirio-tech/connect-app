@@ -131,7 +131,7 @@ const LinksGridView = ({
                       {owner && (
                         <div className="spacing">
                           <div className="user-block">
-                            <UserTooltip usr={owner} id={link.id} size={35} />
+                            <UserTooltip usr={owner} id={idx} size={35} />
                           </div>
                         </div>)}
                     </div>
