@@ -135,3 +135,10 @@
 .assets-gridview-container-active {
   position: relative;
 }
+
+:global {
+  .user-block .tooltip-container {
+    text-align: left;
+    line-height: 20px;
+  }
+}

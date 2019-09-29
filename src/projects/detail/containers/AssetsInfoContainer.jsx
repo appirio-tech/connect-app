@@ -9,7 +9,8 @@ import moment from 'moment'
 import LinksGridView from '../../../components/AssetsLibrary/LinksGridView'
 import FilesGridView from '../../../components/AssetsLibrary/FilesGridView'
 import AssetsStatistics from '../../../components/AssetsLibrary/AssetsStatistics'
-import { updateProject, deleteProject, loadAssetsMembers } from '../../actions/project'
+import { updateProject, deleteProject } from '../../actions/project'
+import { loadMembers } from '../../../actions/members'
 import { loadDashboardFeeds, loadProjectMessages } from '../../actions/projectTopics'
 import { loadTopic } from '../../../actions/topics'
 import { loadProjectPlan } from '../../actions/projectPlan'
@@ -397,7 +398,7 @@ class AssetsInfoContainer extends React.Component {
     const { project, currentMemberRole, isSuperUser, phases, feeds,
       isManageUser, phasesTopics, projectTemplates, hideLinks,
       attachmentsAwaitingPermission, addProjectAttachment, discardAttachments, attachmentPermissions,
-      changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment, canAccessPrivatePosts, loadAssetsMembers, assetsMembers } = this.props
+      changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment, canAccessPrivatePosts, loadMembers, assetsMembers } = this.props
     const { ifModalOpen } = this.state
 
     const canManageLinks = !!currentMemberRole || isSuperUser
@@ -503,7 +504,7 @@ class AssetsInfoContainer extends React.Component {
       userIds = _.union(userIds, [_.parseInt(userId)])
     })
     _.remove(userIds, i => !i)
-    loadAssetsMembers(userIds)
+    loadMembers(userIds)
 
     const assetsData = []
     enableFileUpload && assetsData.push({name: 'Files', total: _.toString(attachments.length)})
@@ -673,13 +674,13 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
     attachmentPermissions: projectState.attachmentPermissions,
     isSharingAttachment: projectState.processingAttachments,
     projectMembers:  _.keyBy(projectMembers, 'userId'),
-    assetsMembers: _.keyBy(projectState.assetsMembers, 'userId'),
+    assetsMembers: _.keyBy(members.members, 'userId'),
     loggedInUser: loadUser.user,
     canAccessPrivatePosts
   })
 }
 
-const mapDispatchToProps = { updateProject, deleteProject, loadAssetsMembers, addProjectAttachment, updateProjectAttachment,
+const mapDispatchToProps = { updateProject, deleteProject, loadMembers, addProjectAttachment, updateProjectAttachment,
   loadProjectMessages, discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadTopic, changeAttachmentPermission,
   removeProjectAttachment, loadProjectPlan, saveFeedComment }
 
