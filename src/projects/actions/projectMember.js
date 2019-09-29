@@ -20,7 +20,7 @@ import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   PROJECT_MEMBER_INVITE_STATUS_CANCELED,
   RELOAD_PROJECT_MEMBERS,
   CLEAR_MEMBER_SUGGESTIONS,
-  ACCEPT_OR_REFUSE_INVITE_FAIL
+  ACCEPT_OR_REFUSE_INVITE_FAILURE
 } from '../../config/constants'
 
 
@@ -173,15 +173,8 @@ export function acceptOrRefuseInvite(projectId, item) {
  * @param {Object} error error object
  */
 export function acceptOrRefuseInviteFail(error) {
-  const errorPromise = new Promise(() => {
-    throw new Error(error)
-  })
-
   return (dispatch) => {
-    return dispatch({
-      type: ACCEPT_OR_REFUSE_INVITE_FAIL,
-      payload: errorPromise
-    })
+    return dispatch({ type: ACCEPT_OR_REFUSE_INVITE_FAILURE, payload: error })
   }
 }
 
