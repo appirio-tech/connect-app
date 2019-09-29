@@ -122,10 +122,6 @@ class ProjectDetail extends Component {
   componentWillMount() {
     const projectId = this.props.match.params.projectId
     this.props.loadProjectDashboard(projectId)
-
-    setTimeout(() => {
-      this.props.acceptOrRefuseInviteFail({code:403, message: 'messageGenerator'})
-    }, 10000)
   }
 
   componentWillUnmount() {
@@ -159,6 +155,11 @@ class ProjectDetail extends Component {
     if (showUserInvited === true && !previousShowUserInvited && this.shouldForceCallAcceptRefuseRequest()) {
       const queryUrlParams = qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
       this.onUserInviteAction(queryUrlParams.invitation === 'accept')
+    }
+
+    if (project && project.invites.length > 0 && this.shouldForceCallAcceptRefuseRequest()) {
+      // remove invitation query param
+      this.props.history.replace(`/projects/${this.props.match.params.projectId}`)
     }
   }
 
@@ -194,7 +195,7 @@ class ProjectDetail extends Component {
       } else {
         if (this.shouldForceCallAcceptRefuseRequest(this.props)) {
           // remove query param
-          this.props.history.push(`/projects/${this.props.match.params.projectId}`)
+          this.props.history.replace(`/projects/${this.props.match.params.projectId}`)
         }
         this.props.loadProjectDashboard(this.props.match.params.projectId)
       }
