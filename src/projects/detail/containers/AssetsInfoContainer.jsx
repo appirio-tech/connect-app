@@ -69,6 +69,7 @@ class AssetsInfoContainer extends React.Component {
       !_.isEqual(nextProps.attachmentsAwaitingPermission, this.props.attachmentsAwaitingPermission) ||
       !_.isEqual(nextProps.attachmentPermissions, this.props.attachmentPermissions) ||
       !_.isEqual(nextProps.isSharingAttachment, this.props.isSharingAttachment) ||
+      !_.isEqual(nextProps.assetsMembers, this.props.assetsMembers) ||
       !_.isEqual(nextState.activeAssetsType, this.state.activeAssetsType) ||
       !_.isEqual(nextState.ifModalOpen, this.state.ifModalOpen)
   }
@@ -394,22 +395,9 @@ class AssetsInfoContainer extends React.Component {
     }
   }
 
-  render() {
-    const { project, currentMemberRole, isSuperUser, phases, feeds,
-      isManageUser, phasesTopics, projectTemplates, hideLinks,
-      attachmentsAwaitingPermission, addProjectAttachment, discardAttachments, attachmentPermissions,
-      changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment, canAccessPrivatePosts, loadMembers, assetsMembers } = this.props
-    const { ifModalOpen } = this.state
-
-    const canManageLinks = !!currentMemberRole || isSuperUser
-
-    let devices = []
-    const primaryTarget = _.get(project, 'details.appDefinition.primaryTarget')
-    if (primaryTarget && !primaryTarget.seeAttached) {
-      devices.push(primaryTarget.value)
-    } else {
-      devices = _.get(project, 'details.devices', [])
-    }
+  getLinksAndAttachments() {
+    const { project, isSuperUser, phases, feeds,
+      isManageUser, phasesTopics, canAccessPrivatePosts } = this.props
 
     let attachments = project.attachments
     // merges the product attachments to show in the links menu
@@ -456,16 +444,6 @@ class AssetsInfoContainer extends React.Component {
       })
     )
 
-    const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
-    let enableFileUpload = true
-    if(project.version !== 'v2') {
-      const templateId = _.get(project, 'templateId')
-      const projectTemplate = _.find(projectTemplates, template => template.id === templateId)
-      enableFileUpload = _.some(projectTemplate.scope.sections, section => {
-        return _.some(section.subSections, subSection => subSection.id === 'files')
-      })
-    }
-
     // extract links from posts
     const topicLinks = this.extractLinksFromPosts(feeds)
     const publicTopicLinks = topicLinks.filter(link => link.tag !== PROJECT_FEED_TYPE_MESSAGES)
@@ -487,6 +465,16 @@ class AssetsInfoContainer extends React.Component {
       ...this.extractAttachmentLinksFromPosts(phaseFeeds)
     ]
 
+    return ({
+      links,
+      attachments,
+    })
+  }
+
+  componentDidMount() {
+    const {loadMembers } = this.props
+    const {links, attachments} = this.getLinksAndAttachments()
+
     let tmpUserIds = []
     let userIds = []
     _.forEach(links, link => {
@@ -504,9 +492,36 @@ class AssetsInfoContainer extends React.Component {
       userIds = _.union(userIds, [_.parseInt(userId)])
     })
     _.remove(userIds, i => !i)
-    const missingUsers = _.filter(userIds, userId => !_.find(assetsMembers, am => am.userId === userId))
-    if (missingUsers.length) {
-      loadMembers(missingUsers)
+
+    loadMembers(userIds)
+  }
+
+  render() {
+    const { project, currentMemberRole, isSuperUser, projectTemplates, hideLinks,
+      attachmentsAwaitingPermission, addProjectAttachment, discardAttachments, attachmentPermissions,
+      changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment, assetsMembers } = this.props
+    const { ifModalOpen } = this.state
+
+    const canManageLinks = !!currentMemberRole || isSuperUser
+
+    let devices = []
+    const primaryTarget = _.get(project, 'details.appDefinition.primaryTarget')
+    if (primaryTarget && !primaryTarget.seeAttached) {
+      devices.push(primaryTarget.value)
+    } else {
+      devices = _.get(project, 'details.devices', [])
+    }
+
+    const {links, attachments} = this.getLinksAndAttachments()
+
+    const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
+    let enableFileUpload = true
+    if(project.version !== 'v2') {
+      const templateId = _.get(project, 'templateId')
+      const projectTemplate = _.find(projectTemplates, template => template.id === templateId)
+      enableFileUpload = _.some(projectTemplate.scope.sections, section => {
+        return _.some(section.subSections, subSection => subSection.id === 'files')
+      })
     }
 
     const assetsData = []
