@@ -40,6 +40,7 @@ const initialState = {
   project: {
     invites: [] // invites are pushed directly into it hence need to declare first
   },
+  assetsMembers: {},
   projectNonDirty: {},
   updateExisting: false,
   phases: null,

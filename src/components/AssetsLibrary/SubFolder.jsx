@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 import cn from 'classnames'
 
 import DeleteFileLinkModal from '../LinksMenu/DeleteFileLinkModal'
 import ItemOperations from './ItemOperations'
+import UserTooltip from '../User/UserTooltip'
 import FolderIcon from '../../assets/icons/v.2.5/icon-folder-small.svg'
 
 import './GridView.scss'
@@ -54,7 +56,7 @@ class SubFolder extends React.Component {
   }
 
   render() {
-    const { link, renderLink, goBack, formatModifyDate, isLinkSubFolder } = this.props
+    const { link, renderLink, goBack, formatModifyDate, isLinkSubFolder, assetsMembers } = this.props
     const { linkToDelete } = this.state
     return (
       <div styleName={cn({'assets-gridview-container-active': (linkToDelete >= 0)}, '')}>
@@ -64,17 +66,20 @@ class SubFolder extends React.Component {
           <li styleName="assets-gridview-header" key="assets-gridview-header">
             <div styleName="flex-item-title item-type">Type</div>
             <div styleName="flex-item-title item-name">Name</div>
+            <div styleName="flex-item-title item-created-by">Created By</div>
             <div styleName="flex-item-title item-modified">Modified</div>
             <div styleName="flex-item-title item-action"/>
           </li>
           <li styleName="assets-gridview-row" key="assets-gridview-subfolder" onClick={goBack}>
             <div styleName="flex-item item-type"><FolderIcon /></div>
             <div styleName="flex-item item-name hand">..</div>
+            <div styleName="flex-item item-created-by"/>
             <div styleName="flex-item item-modified"/>
             <div styleName="flex-item item-action"/>
           </li>
           {
             link.children.map((childLink, i) => {
+              const owner = _.find(assetsMembers, m => m.userId === _.parseInt(childLink.createdBy))
               if (linkToDelete === i) {
                 return (
                   <li styleName="delete-confirmation-modal" key={'delete-confirmation-post-attachment-' + i}>
@@ -100,6 +105,16 @@ class SubFolder extends React.Component {
               return (<li styleName="assets-gridview-row" key={`childlink-${childLink.address}-${i}`}>
                 <div styleName="flex-item item-type"><img width={42} height={42} src={ iconPath } /></div>
                 <div styleName="flex-item item-name"><p>{renderLink(childLink)}</p></div>
+                <div styleName="flex-item item-created-by">
+                  {!owner && childLink.createdBy !== 'CoderBot' && (<div className="user-block txt-italic">Unknown</div>)}
+                  {!owner && childLink.createdBy === 'CoderBot' && (<div className="user-block">CoderBot</div>)}
+                  {owner && (
+                    <div className="spacing">
+                      <div className="user-block">
+                        <UserTooltip usr={owner} id={i} size={35} />
+                      </div>
+                    </div>)}
+                </div>
                 <div styleName="flex-item item-modified">{formatModifyDate(childLink)}</div>
                 <div styleName="flex-item item-action">
                   {childLink.deletable && this.hasAccess(childLink.createdBy) && (

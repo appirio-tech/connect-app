@@ -10,6 +10,7 @@ import DeleteFileLinkModal from '../LinksMenu/DeleteFileLinkModal'
 import EditFileAttachment from '../LinksMenu/EditFileAttachment'
 import SubFolder from './SubFolder'
 import ItemOperations from './ItemOperations'
+import UserTooltip from '../User/UserTooltip'
 
 import FolderIcon from '../../assets/icons/v.2.5/icon-folder-small.svg'
 
@@ -28,6 +29,7 @@ const FilesGridView = ({
   title,
   selectedUsers,
   onAddAttachment,
+  assetsMembers,
   isSharingAttachment,
   discardAttachments,
   onChangePermissions,
@@ -78,6 +80,7 @@ const FilesGridView = ({
           link={ subFolderContent }
           renderLink={ renderLink }
           goBack={goBack}
+          assetsMembers={assetsMembers}
           onDeletePostAttachment={onDeletePostAttachment}
           loggedInUser={loggedInUser}
           formatModifyDate={formatModifyDate}
@@ -99,6 +102,7 @@ const FilesGridView = ({
             <li styleName="assets-gridview-header" key="assets-gridview-header">
               <div styleName="flex-item-title item-type">Type</div>
               <div styleName="flex-item-title item-name">Name</div>
+              <div styleName="flex-item-title item-created-by">Created By</div>
               <div styleName="flex-item-title item-modified">Modified</div>
               <div styleName="flex-item-title item-action"/>
             </li>
@@ -119,12 +123,14 @@ const FilesGridView = ({
               const canEdit = `${link.createdBy}` === `${loggedInUser.userId}`
 
               const changeSubFolder = () => onChangeSubFolder(link)
+              const owner = _.find(assetsMembers, m => m.userId === _.parseInt(link.createdBy))
 
               if (Array.isArray(link.children) && link.children.length > 0) {
                 return (
                   <li styleName="assets-gridview-row" onClick={changeSubFolder} key={'assets-gridview-folder-' + idx}>
                     <div styleName="flex-item item-type"><FolderIcon /></div>
                     <div styleName="flex-item item-name hand"><p>{formatFolderTitle(link.title)}</p></div>
+                    <div styleName="flex-item item-created-by">—</div>
                     <div styleName="flex-item item-modified">{formatModifyDate(link)}</div>
                     <div styleName="flex-item item-action"/>
                   </li>)
@@ -161,6 +167,15 @@ const FilesGridView = ({
                       <img width={42} height={42} src={iconPath} />
                     </div>
                     <div styleName="flex-item item-name"><p>{renderLink(link)}</p></div>
+                    <div styleName="flex-item item-created-by">
+                      {!owner && (<div className="user-block txt-italic">Unknown</div>)}
+                      {owner && (
+                        <div className="spacing">
+                          <div className="user-block">
+                            <UserTooltip usr={owner} id={idx} size={35} />
+                          </div>
+                        </div>)}
+                    </div>
                     <div styleName="flex-item item-modified">{formatModifyDate(link)}</div>
                     <div styleName="flex-item item-action">
                       {canEdit && (
