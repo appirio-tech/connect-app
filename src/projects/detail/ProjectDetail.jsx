@@ -152,7 +152,7 @@ class ProjectDetail extends Component {
     }
 
     const { previousShowUserInvited } = this.props
-    if ((!error) && showUserInvited === true && !previousShowUserInvited && this.shouldForceCallAcceptRefuseRequest()) {
+    if (showUserInvited === true && !previousShowUserInvited && this.shouldForceCallAcceptRefuseRequest()) {
       const queryUrlParams = qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
       this.onUserInviteAction(queryUrlParams.invitation === 'accept')
     }
@@ -218,7 +218,6 @@ class ProjectDetail extends Component {
   }
 
   render() {
-    const { error } = this.props
     const currentMemberRole = this.getProjectRoleForCurrentUser(this.props)
     const adminRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
     const isSuperUser = this.props.currentUserRoles.some((role) => adminRoles.indexOf(role) !== -1)
@@ -227,10 +226,6 @@ class ProjectDetail extends Component {
     const isCustomerUser = !(isManageUser || isSuperUser)
     const showUserInvited = this.props.showUserInvited
     if (showUserInvited && this.shouldForceCallAcceptRefuseRequest(this.props)) {
-      if (error) {
-        // show codebbot error
-        return (<EnhancedProjectDetailView {...this.props}/>)
-      }
       return (<LoadingIndicator />)
     }
     return (
