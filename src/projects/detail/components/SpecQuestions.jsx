@@ -401,7 +401,7 @@ class SpecQuestions extends React.Component {
           (isCreation || !question.hiddenOnEdit)
         ).map((q, index) => {
           return  (
-            _.includes(['checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills', 'slide-radiogroup', 'slider-standard', 'select-dropdown'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
+            _.includes(['checkbox', 'checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills', 'slide-radiogroup', 'slider-standard', 'select-dropdown'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
               <Accordion
                 key={q.fieldName || `accordion-${index}`}
                 title={q.summaryTitle || q.title}

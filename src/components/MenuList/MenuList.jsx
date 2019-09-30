@@ -5,11 +5,11 @@ import MenuItem from '../MenuItem/MenuItem'
 
 import styles from './MenuList.scss'
 
-const MenuList = ({ navLinks }) => (
+const MenuList = ({ navLinks, onAccordionToggle }) => (
   <nav className={styles.container}>
     <ul>
       {!!navLinks &&
-        navLinks.map((link, i) => <MenuItem key={i} {...link} />)}
+        navLinks.map((link, i) => <MenuItem key={i} {...link} onAccordionToggle={(open) => onAccordionToggle(i, open)} />)}
     </ul>
   </nav>
 )
@@ -24,7 +24,8 @@ MenuList.propTypes = {
       isActive: PT.func,
       toolTipText: PT.string
     })
-  )
+  ),
+  onAccordionToggle: PT.func.isRequired
 }
 
 export default MenuList
