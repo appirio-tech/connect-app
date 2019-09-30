@@ -118,7 +118,16 @@ class Milestone extends React.Component {
 
   updateMilestoneWithData(values) {
     const { milestone, updateMilestone } = this.props
-    updateMilestone(milestone.id, values)
+    let milestoneData = {
+      ...values
+    };
+    if (values.actualStartDate) {
+      milestoneData.actualStartDate = moment.utc(new Date(values.actualStartDate))
+    }
+    if (values.completionDate) {
+      milestoneData.completionDate = moment.utc(new Date(values.completionDate))
+    }
+    updateMilestone(milestone.id, milestoneData)
   }
 
   milestoneEditorChanged(values) {

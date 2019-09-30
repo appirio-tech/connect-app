@@ -23,7 +23,7 @@ import DeletePhase from './DeletePhase'
 import {
   ROLE_CONNECT_ADMIN,
   ROLE_ADMINISTRATOR,
-} from '../../../../../config/constants'
+} from '../../../../config/constants'
 
 const moment = extendMoment(Moment)
 const phaseStatuses = PHASE_STATUS.map(ps => ({
@@ -87,7 +87,7 @@ class EditStageForm extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       isUpdating: nextProps.isUpdating,
-      isEdittable: nextProps.phase.status !== PHASE_STATUS_COMPLETED,
+      isEdittable: nextProps.phase.status !== PHASE_STATUS_COMPLETED || nextProps.isAdmin,
       disableActiveStatusFields: nextProps.phase.status !== PHASE_STATUS_ACTIVE,
     })
 
