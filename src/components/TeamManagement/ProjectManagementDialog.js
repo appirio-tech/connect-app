@@ -26,7 +26,6 @@ class ProjectManagementDialog extends React.Component {
     if (processingInvites && !nextProps.processingInvites ) {
       const notInvitedSelectedMembers = _.reject(selectedMembers, (selectedMember) => (
         this.isSelectedMemberAlreadyInvited(nextProps.projectTeamInvites, selectedMember)
-        || this.isSelectedMemberAlreadyInvited(nextProps.topcoderTeamInvites, selectedMember)
       ))
 
       this.props.onSelectedMembersUpdate(notInvitedSelectedMembers)

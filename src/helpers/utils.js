@@ -54,6 +54,9 @@ export const compareEmail = (email1, email2, options = { UNIQUE_GMAIL_VALIDATION
  * @returns {Boolean} true if two user handles are same
  */
 export const compareHandles = (handle1, handle2) => {
+  if (handle1 === undefined || handle2 === undefined) {
+    return false;
+  }
   let h1 = handle1
   let h2 = handle2
   if (handle2.indexOf('@') === 0) {
