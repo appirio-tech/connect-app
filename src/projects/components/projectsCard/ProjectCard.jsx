@@ -9,67 +9,92 @@ import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndica
 import ProjectManagerAvatars from '../../list/components/Projects/ProjectManagerAvatars'
 import './ProjectCard.scss'
 
-function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus, projectTemplates, unreadMentionsCount, onUserInviteAction, processingProjectMemberInvite }) {
-  const className = `ProjectCard ${ disabled ? 'disabled' : 'enabled'}`
-  if (!project) return null
-  const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
-  // check whether is the project's member
-  const isMember = _.some(project.members, m => (m.userId === currentUser.userId && m.deletedAt === null))
-  // check whether has pending invition
-  const isInvited = _.some(project.invites, m => ((m.userId === currentUser.userId || m.email === currentUser.email) && !m.deletedAt && m.status === 'pending'))
-  return (
-    <div
-      className={className}
-      onClick={() => {
-        history.push(`/projects/${project.id}/`)
-      }}
-    >
-      <div className="card-header">
-        <ProjectCardHeader unreadMentionsCount={unreadMentionsCount} project={project} projectTemplates={projectTemplates} />
-      </div>
-      <div className="card-body">
-        <ProjectCardBody
-          project={project}
-          currentMemberRole={currentMemberRole}
-          duration={duration}
-          onChangeStatus={onChangeStatus}
-          showLink
-          showLinkURL={`/projects/${project.id}/specification`}
-          canEditStatus={false}
-        />
-      </div>
-      <div className="card-footer">
-        <ProjectManagerAvatars managers={project.members} maxShownNum={10} />
-        <div>
-          {(!isMember && isInvited && !processingProjectMemberInvite) &&
-            <div>
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onUserInviteAction(false, project.id)
-                }}
-                className="join-btn tc-btn tc-btn-primary tc-btn-md" style={{margin: '5px'}}
-              >
-                Decline
-              </button>
-              <div 
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onUserInviteAction(true, project.id)
-                }}
-                className="join-btn" style={{margin: '5px'}}
-              >
-                Join project
+class ProjectCard extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      showLoader: false
+    }
+    this.inviteAction = this.inviteAction.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { processingProjectMemberInvite } = this.props
+    if(processingProjectMemberInvite && !nextProps.processingProjectMemberInvite) {
+      this.setState({ showLoader: false })
+    }
+  }
+
+  inviteAction(join, projectId) {
+    this.setState({ showLoader: true })
+    this.props.onUserInviteAction(join, projectId)
+  }
+
+  render() {
+    const { project, duration, disabled, currentUser, history, onChangeStatus, projectTemplates, unreadMentionsCount, onUserInviteAction, processingProjectMemberInvite } = this.props
+    const { showLoader } = this.state;
+    const className = `ProjectCard ${ disabled ? 'disabled' : 'enabled'}`
+    if (!project) return null
+    const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
+    // check whether is the project's member
+    const isMember = _.some(project.members, m => (m.userId === currentUser.userId && m.deletedAt === null))
+    // check whether has pending invition
+    const isInvited = _.some(project.invites, m => ((m.userId === currentUser.userId || m.email === currentUser.email) && !m.deletedAt && m.status === 'pending'))
+    return (
+      <div
+        className={className}
+        onClick={() => {
+          history.push(`/projects/${project.id}/`)
+        }}
+        >
+        <div className="card-header">
+          <ProjectCardHeader unreadMentionsCount={unreadMentionsCount} project={project} projectTemplates={projectTemplates} />
+        </div>
+        <div className="card-body">
+          <ProjectCardBody
+            project={project}
+            currentMemberRole={currentMemberRole}
+            duration={duration}
+            onChangeStatus={onChangeStatus}
+            showLink
+            showLinkURL={`/projects/${project.id}/specification`}
+            canEditStatus={false}
+            />
+        </div>
+        <div className="card-footer">
+          <ProjectManagerAvatars managers={project.members} maxShownNum={10} />
+          <div>
+            {(!isMember && isInvited && !processingProjectMemberInvite) &&
+              <div>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    this.inviteAction(false, project.id)
+                  }}
+                  className="join-btn" style={{margin: '5px'}}
+                  >
+                  Decline
+                </button>
+                <div 
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    this.inviteAction(true, project.id)
+                  }}
+                  className="join-btn tc-btn tc-btn-primary tc-btn-md" style={{margin: '5px'}}
+                  >
+                  Join project
+                </div>
               </div>
-            </div>
-          }
-          {processingProjectMemberInvite && (
-            <LoadingIndicator />
-          )}
+            }
+            {processingProjectMemberInvite && showLoader && (
+              <LoadingIndicator />
+              )}
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
 
 ProjectCard.defaultTypes = {
