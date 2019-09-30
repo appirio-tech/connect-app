@@ -118,9 +118,9 @@ class Milestone extends React.Component {
 
   updateMilestoneWithData(values) {
     const { milestone, updateMilestone } = this.props
-    let milestoneData = {
+    const milestoneData = {
       ...values
-    };
+    }
     if (values.actualStartDate) {
       milestoneData.actualStartDate = moment.utc(new Date(values.actualStartDate))
     }
