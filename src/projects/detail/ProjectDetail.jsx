@@ -43,6 +43,10 @@ const showCoderBotIfError = (hasError) => {
         component = compose(
           withProps({code:403, message: messageGenerator})
         )
+      } else if (props.error && props.error.code  && props.error.msg) {
+        component = compose(
+          withProps({code:props.error.code, message: props.error.msg})
+        )
       }
       return hasError(props)
     },
@@ -257,13 +261,12 @@ class ProjectDetail extends Component {
 const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines, templates}) => {
   const templateId = (projectState.project || {}).templateId
   const { projectTemplates, productTemplates } = templates
-
   return {
     currentUserId: parseInt(loadUser.user.id),
     currentUserEmail: loadUser.user.email,
     isLoading: projectDashboard.isLoading,
     isProcessing: projectState.processing,
-    error: projectState.error,
+    error: projectState.inviteError ? projectState.inviteError : projectState.error,
     project: projectState.project,
     projectNonDirty: projectState.projectNonDirty,
     projectTemplate: (templateId && projectTemplates) ? (
