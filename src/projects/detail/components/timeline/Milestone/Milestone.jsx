@@ -102,10 +102,32 @@ class Milestone extends React.Component {
     this.setState({ isMobileEditing: true })
   }
 
+  isActualStartDateEditable() {
+    const { milestone, currentUser } = this.props
+    const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
+    const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+    return (isActive || isCompleted) && currentUser.isAdmin
+
+  }
+
+  isCompletionDateEditable() {
+    const { milestone, currentUser } = this.props
+    const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+    return isCompleted && currentUser.isAdmin
+  }
+
   updateMilestoneWithData(values) {
     const { milestone, updateMilestone } = this.props
-
-    updateMilestone(milestone.id, values)
+    let milestoneData = {
+      ...values
+    };
+    if (values.actualStartDate) {
+      milestoneData.actualStartDate = moment.utc(new Date(values.actualStartDate))
+    }
+    if (values.completionDate) {
+      milestoneData.completionDate = moment.utc(new Date(values.completionDate))
+    }
+    updateMilestone(milestone.id, milestoneData)
   }
 
   milestoneEditorChanged(values) {
@@ -211,6 +233,8 @@ class Milestone extends React.Component {
     const date = startDate.format('D')
     const title = milestone.name
     const isUpdating = milestone.isUpdating
+    const isActualDateEditable = this.isActualStartDateEditable()
+    const isCompletionDateEditable = this.isCompletionDateEditable()
     const editForm = (
       <Form
         fields={[{
@@ -278,7 +302,27 @@ class Milestone extends React.Component {
             isRequired: true
           },
           validationError: 'Completed text is required',
-        }]}
+        }, ...( isActualDateEditable && [{
+          label: 'Actual Start date',
+          placeholder: 'Actual Start date',
+          name: 'actualStartDate',
+          value: moment.utc(milestone.actualStartDate).format('YYYY-MM-DD'),
+          type: 'date',
+          validations: {
+            isRequired: true
+          },
+          validationError: 'Actual Start date is required',
+        }]), ...( isCompletionDateEditable && [{
+          label: 'Completion date',
+          placeholder: 'Completion date',
+          name: 'completionDate',
+          value: moment.utc(milestone.completionDate).format('YYYY-MM-DD'),
+          type: 'date',
+          validations: {
+            isRequired: true
+          },
+          validationError: 'Completion date is required',
+        }])]}
         onCancelClick={this.closeEditForm}
         onSubmit={this.updateMilestoneWithData}
         onChange={this.milestoneEditorChanged}
