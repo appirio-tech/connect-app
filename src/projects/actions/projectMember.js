@@ -90,7 +90,9 @@ export function removeProjectMember(projectId, memberId, isUserLeaving) {
 
 function inviteMembersWithData(dispatch, projectId, emailIds, handles, role) {
   return new Promise((resolve, reject) => {
-    return dispatch(loadMembersByHandle(handles))
+    // remove `@` from handles before making a request to the server as server may not support format with `@`
+    const clearedHandles = handles ? handles.map(handle => handle.replace(/^@/, '')) : []
+    return dispatch(loadMembersByHandle(clearedHandles))
       .then(({ value }) => {
         const req = {}
         if(value && value.length > 0) {
