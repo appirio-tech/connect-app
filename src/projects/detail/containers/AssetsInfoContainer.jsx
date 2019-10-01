@@ -233,11 +233,11 @@ class AssetsInfoContainer extends React.Component {
     this.props.uploadProjectAttachments(project.id, attachment)
   }
 
-  extractHtmlLink(str, userId) {
+  extractHtmlLink(post) {
     const links = []
     const regex = /<a[^>]+href="(.*?)"[^>]*>([\s\S]*?)<\/a>/gm
     const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm // eslint-disable-line no-useless-escape
-    const rawLinks = regex.exec(str)
+    const rawLinks = regex.exec(post.rawContent)
 
     if (Array.isArray(rawLinks)) {
       let i = 0
@@ -249,7 +249,8 @@ class AssetsInfoContainer extends React.Component {
           links.push({
             title,
             address,
-            createdBy: userId
+            createdAt: post.date,
+            createdBy: post.userId
           })
         }
 
@@ -260,11 +261,11 @@ class AssetsInfoContainer extends React.Component {
     return links
   }
 
-  extractMarkdownLink(str, userId) {
+  extractMarkdownLink(post) {
     const links = []
     const regex = /(?:__|[*#])|\[(.*?)\]\((.*?)\)/gm
     const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm // eslint-disable-line no-useless-escape
-    const rawLinks = regex.exec(str)
+    const rawLinks = regex.exec(post.rawContent)
 
     if (Array.isArray(rawLinks)) {
       let i = 0
@@ -276,7 +277,8 @@ class AssetsInfoContainer extends React.Component {
           links.push({
             title,
             address,
-            createdBy: userId
+            createdAt: post.date,
+            createdBy: post.userId
           })
         }
 
@@ -287,10 +289,10 @@ class AssetsInfoContainer extends React.Component {
     return links
   }
 
-  extractRawLink(str, userId) {
+  extractRawLink(post) {
     let links = []
     const regex = /(\s|^)(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}[\s])(\s|$)/igm // eslint-disable-line no-useless-escape
-    const rawLinks = str.match(regex)
+    const rawLinks = post.rawContent.match(regex)
 
     if (Array.isArray(rawLinks)) {
       links = rawLinks
@@ -302,7 +304,8 @@ class AssetsInfoContainer extends React.Component {
           return {
             title: name,
             address: url,
-            createdBy: userId
+            createdAt: post.date,
+            createdBy: post.userId
           }
         })
     }
@@ -316,15 +319,16 @@ class AssetsInfoContainer extends React.Component {
       let childrenLinks = []
       feed.posts.forEach(post => {
         childrenLinks = childrenLinks.concat([
-          ...this.extractHtmlLink(post.rawContent, post.userId),
-          ...this.extractMarkdownLink(post.rawContent, post.userId),
-          ...this.extractRawLink(post.rawContent, post.userId)
+          ...this.extractHtmlLink(post),
+          ...this.extractMarkdownLink(post),
+          ...this.extractRawLink(post)
         ])
       })
 
       if (childrenLinks.length > 0) {
         links.push({
           title: feed.title,
+          createdBy: feed.userId,
           children: childrenLinks
         })
       }
@@ -349,6 +353,7 @@ class AssetsInfoContainer extends React.Component {
             attachmentId: attachment.id,
             attachment: true,
             deletable: true,
+            createdAt: post.date,
             createdBy: attachment.createdBy,
             postId: post.id,
             topicId: feed.id,
@@ -361,6 +366,7 @@ class AssetsInfoContainer extends React.Component {
       if (attachmentLinksPerFeed.length > 0) {
         attachmentLinks.push({
           title: feed.title,
+          createdBy: feed.userId,
           children: attachmentLinksPerFeed
         })
       }

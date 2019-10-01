@@ -83,7 +83,6 @@ const FilesGridView = ({
           assetsMembers={assetsMembers}
           onDeletePostAttachment={onDeletePostAttachment}
           loggedInUser={loggedInUser}
-          formatModifyDate={formatModifyDate}
         />)}
       {(!subFolderContent) && (
         <div styleName={cn({'assets-gridview-container-active': (linkToEdit >= 0  || linkToDelete >= 0)}, '')}>
@@ -130,7 +129,15 @@ const FilesGridView = ({
                   <li styleName="assets-gridview-row" onClick={changeSubFolder} key={'assets-gridview-folder-' + idx}>
                     <div styleName="flex-item item-type"><FolderIcon /></div>
                     <div styleName="flex-item item-name hand"><p>{formatFolderTitle(link.title)}</p></div>
-                    <div styleName="flex-item item-created-by">—</div>
+                    <div styleName="flex-item item-created-by">
+                      {!owner && (<div className="user-block txt-italic">Unknown</div>)}
+                      {owner && (
+                        <div className="spacing">
+                          <div className="user-block">
+                            <UserTooltip usr={owner} id={idx} size={35} />
+                          </div>
+                        </div>)}
+                    </div>
                     <div styleName="flex-item item-modified">{formatModifyDate(link)}</div>
                     <div styleName="flex-item item-action"/>
                   </li>)

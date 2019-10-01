@@ -60,7 +60,6 @@ const LinksGridView = ({
           link={ subFolderContent }
           renderLink={ renderLink }
           goBack={goBack}
-          formatModifyDate={formatModifyDate}
           assetsMembers={assetsMembers}
           isLinkSubFolder
         />)}
@@ -98,7 +97,17 @@ const LinksGridView = ({
                   <li styleName="assets-gridview-row" onClick={changeSubFolder} key={'assets-gridview-folder-' + idx}>
                     <div styleName="flex-item item-type"><FolderIcon /></div>
                     <div styleName="flex-item item-name hand"><p>{formatFolderTitle(link.title)}</p></div>
-                    <div styleName="flex-item item-created-by">—</div>
+                    <div styleName="flex-item item-created-by">
+                      {!owner && !link.createdBy && (<div className="user-block">—</div>)}
+                      {!owner && link.createdBy !== 'CoderBot' && (<div className="user-block txt-italic">Unknown</div>)}
+                      {!owner && link.createdBy === 'CoderBot' && (<div className="user-block">CoderBot</div>)}
+                      {owner && (
+                        <div className="spacing">
+                          <div className="user-block">
+                            <UserTooltip usr={owner} id={idx} size={35} />
+                          </div>
+                        </div>)}
+                    </div>
                     <div styleName="flex-item item-modified">{formatModifyDate(link)}</div>
                     <div styleName="flex-item item-action"/>
                   </li>)
