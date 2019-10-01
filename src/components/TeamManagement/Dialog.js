@@ -21,6 +21,18 @@ class Dialog extends React.Component {
     }, {
       title: 'Account Manager',
       value: 'account_manager',
+    }, {
+      title: 'Account Executive',
+      value: 'account_executive',
+    }, {
+      title: 'Program Manager',
+      value: 'program_manager',
+    }, {
+      title: 'Solution Architect',
+      value: 'solution_architect',
+    }, {
+      title: 'Project Manager',
+      value: 'project_manager',
     }]
 
     this.handleRoles = this.handleRoles.bind(this)
