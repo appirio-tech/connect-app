@@ -7,6 +7,7 @@ import DeleteFileLinkModal from '../LinksMenu/DeleteFileLinkModal'
 import ItemOperations from './ItemOperations'
 import UserTooltip from '../User/UserTooltip'
 import FolderIcon from '../../assets/icons/v.2.5/icon-folder-small.svg'
+import FileIcon from '../../components/FileIcon'
 
 import './GridView.scss'
 class SubFolder extends React.Component {
@@ -92,19 +93,17 @@ class SubFolder extends React.Component {
                   </li>
                 )
               }
-              let iconPath
-              try {
-                if (isLinkSubFolder) {
-                  //Link Icon here
-                  iconPath = require('../../assets/icons/link-12.svg')
-                } else {
-                  iconPath = require('../../assets/icons/' + childLink.title.split('.')[1] +'.svg')
-                }
-              } catch(err) {
-                iconPath = require('../../assets/icons/default.svg')
+              let iconKey
+              if (isLinkSubFolder) {
+                // Key Icon here
+                iconKey = 'link-12'
+              } else {
+                iconKey = childLink.title.split('.')[1]
               }
               return (<li styleName="assets-gridview-row" key={`childlink-${childLink.address}-${i}`}>
-                <div styleName="flex-item item-type"><img width={42} height={42} src={ iconPath } /></div>
+                <div styleName="flex-item item-type">
+                  <FileIcon type={iconKey} />
+                </div>
                 <div styleName="flex-item item-name"><p>{renderLink(childLink)}</p></div>
                 <div styleName="flex-item item-created-by">
                   {!owner && childLink.createdBy !== 'CoderBot' && (<div className="user-block txt-italic">Unknown</div>)}
