@@ -10,7 +10,6 @@
     z-index: 20;
 
     &.modal{
-      position: absolute;
     }
 
     .cancellation-reason {
@@ -35,7 +34,7 @@
         width: 100%;
       }
     }
-  
+
     &.dropdown-up {
       top: auto;
       bottom: 320px;

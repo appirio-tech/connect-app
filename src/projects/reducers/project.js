@@ -40,6 +40,7 @@ const initialState = {
   project: {
     invites: [] // invites are pushed directly into it hence need to declare first
   },
+  assetsMembers: {},
   projectNonDirty: {},
   updateExisting: false,
   phases: null,
@@ -542,6 +543,7 @@ export const projectState = function (state=initialState, action) {
       phasesNonDirty: updateProductInPhases(state.phasesNonDirty, phaseId, productId, {
         attachments: { $push: [_.cloneDeep(attachment)] }
       }),
+      attachmentsAwaitingPermission: null
     }
   }
 

@@ -21,7 +21,8 @@ const MenuItem = ({
   isAccordionOpen,
   onAccordionToggle,
   match,
-  wrapperClass
+  wrapperClass,
+  toolTipText,
 }) => {
   const matchedPath = match && match.path
   const isChildActive = children && some(children, c => c.to === matchedPath)
@@ -47,7 +48,7 @@ const MenuItem = ({
             {label}
           </span>
           <span styleName="right">
-            {!!count && <NotificationBadge count={count} />}
+            {!!count && <NotificationBadge count={count} text={toolTipText} />}
           </span>
         </NavLink>
       )}
@@ -68,7 +69,7 @@ const MenuItem = ({
               {label}
             </span>
             <span styleName="right">
-              {!!count && <NotificationBadge count={count} />}
+              {!!count && <NotificationBadge count={count} text={toolTipText} />}
             </span>
 
             <ArrowUpIcon className={styles.arrowUpIcon} />
@@ -100,7 +101,8 @@ MenuItem.propTypes = {
   children: PT.array,
   isAccordionOpen: PT.bool,
   onAccordionToggle: PT.func,
-  wrapperClass: PT.string
+  wrapperClass: PT.string,
+  toolTipText: PT.string,
 }
 
 export default withRouter(MenuItem)

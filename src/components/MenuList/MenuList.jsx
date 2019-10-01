@@ -21,7 +21,8 @@ MenuList.propTypes = {
       to: PT.string.isRequired,
       Icon: PT.func.isRequired,
       exact: PT.bool,
-      isActive: PT.func
+      isActive: PT.func,
+      toolTipText: PT.string
     })
   ),
   onAccordionToggle: PT.func.isRequired

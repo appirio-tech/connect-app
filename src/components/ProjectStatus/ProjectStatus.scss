@@ -45,6 +45,17 @@
       }
     }
 
+    .dropdown-wrap {
+      .status-header {
+        &.status-active {
+          &.editable {
+            display: flex;
+            justify-content: center;
+          }
+        }
+      }
+    }
+
     .status-label {
       vertical-align: top;
     }

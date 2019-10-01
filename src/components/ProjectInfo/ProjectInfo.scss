@@ -1,6 +1,10 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
+  .sticky-inner-wrapper {
+    z-index: 1;
+  }
+
   .project-info {
     display: flex;
     flex-direction: column;
@@ -40,6 +44,8 @@
       margin-bottom: 10px;
       padding-left: 4 * $base_unit;
       padding-right: 4 * $base_unit;
+      display: flex;
+      flex-direction: column;
     }
 
     .project-status-header {
@@ -60,6 +66,7 @@
       text-transform: uppercase;
       white-space: nowrap;
       float: left;
+      margin-right: 10px;
     }
 
     .project-status-ref {
@@ -74,6 +81,9 @@
       margin-top: $base-unit;
       white-space: nowrap;
       float: right;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
 
     .project-card-body {
@@ -109,4 +119,38 @@
   margin-top: 20px;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.project-status-bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tooltip-target-container {
+  flex: 1;
+  width: 0;
+  display: flex;
+  justify-content: flex-end;
+
+  :global {
+    .tooltip-target {
+      height: 100%;
+    }
+
+    .tooltip-body {
+      display: flex;
+
+      span {
+        width: 200px;
+        white-space: normal;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.tooltip {
+  max-width: 100%;
+  height: 100%;
 }

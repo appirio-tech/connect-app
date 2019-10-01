@@ -10,6 +10,7 @@ import LinksGridView from '../../../components/AssetsLibrary/LinksGridView'
 import FilesGridView from '../../../components/AssetsLibrary/FilesGridView'
 import AssetsStatistics from '../../../components/AssetsLibrary/AssetsStatistics'
 import { updateProject, deleteProject } from '../../actions/project'
+import { loadMembers } from '../../../actions/members'
 import { loadDashboardFeeds, loadProjectMessages } from '../../actions/projectTopics'
 import { loadTopic } from '../../../actions/topics'
 import { loadProjectPlan } from '../../actions/projectPlan'
@@ -19,7 +20,7 @@ import { PROJECT_ATTACHMENTS_FOLDER,
   FILE_PICKER_API_KEY,
   FILE_PICKER_FROM_SOURCES,
   FILE_PICKER_CNAME,
-  FILE_PICKER_SUBMISSION_CONTAINER_NAME, 
+  FILE_PICKER_SUBMISSION_CONTAINER_NAME,
   FILE_PICKER_ACCEPT,
 } from '../../../config/constants'
 import AddLink from '../../../components/AssetsLibrary/AddLink'
@@ -68,6 +69,7 @@ class AssetsInfoContainer extends React.Component {
       !_.isEqual(nextProps.attachmentsAwaitingPermission, this.props.attachmentsAwaitingPermission) ||
       !_.isEqual(nextProps.attachmentPermissions, this.props.attachmentPermissions) ||
       !_.isEqual(nextProps.isSharingAttachment, this.props.isSharingAttachment) ||
+      !_.isEqual(nextProps.assetsMembers, this.props.assetsMembers) ||
       !_.isEqual(nextState.activeAssetsType, this.state.activeAssetsType) ||
       !_.isEqual(nextState.ifModalOpen, this.state.ifModalOpen)
   }
@@ -167,7 +169,11 @@ class AssetsInfoContainer extends React.Component {
   }
 
   onAddNewLink(link) {
-    const { updateProject, project } = this.props
+    const { updateProject, project, loggedInUser } = this.props
+    link.createdAt = moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    link.createdBy = loggedInUser.userId
+    link.updatedAt = moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    link.updatedBy = loggedInUser.userId
     updateProject(project.id, {
       bookmarks: update(project.bookmarks || [], { $push: [link] })
     })
@@ -181,10 +187,14 @@ class AssetsInfoContainer extends React.Component {
   }
 
   onEditLink(idx, title, address) {
-    const { updateProject, project } = this.props
+    const { updateProject, project, loggedInUser } = this.props
+    const updatedAt = moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    const updatedBy = loggedInUser.userId
     const updatedLink = {
       title,
-      address
+      address,
+      updatedAt,
+      updatedBy
     }
     updateProject(project.id, {
       bookmarks: update(project.bookmarks, { $splice: [[idx, 1, updatedLink]] })
@@ -223,11 +233,11 @@ class AssetsInfoContainer extends React.Component {
     this.props.uploadProjectAttachments(project.id, attachment)
   }
 
-  extractHtmlLink(str) {
+  extractHtmlLink(post) {
     const links = []
     const regex = /<a[^>]+href="(.*?)"[^>]*>([\s\S]*?)<\/a>/gm
     const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm // eslint-disable-line no-useless-escape
-    const rawLinks = regex.exec(str)
+    const rawLinks = regex.exec(post.rawContent)
 
     if (Array.isArray(rawLinks)) {
       let i = 0
@@ -238,7 +248,10 @@ class AssetsInfoContainer extends React.Component {
         if (urlRegex.test(address)) {
           links.push({
             title,
-            address
+            address,
+            // use created at `date` to show as modified time for links inside folders
+            updatedAt: post.date,
+            createdBy: post.userId
           })
         }
 
@@ -249,11 +262,11 @@ class AssetsInfoContainer extends React.Component {
     return links
   }
 
-  extractMarkdownLink(str) {
+  extractMarkdownLink(post) {
     const links = []
     const regex = /(?:__|[*#])|\[(.*?)\]\((.*?)\)/gm
     const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm // eslint-disable-line no-useless-escape
-    const rawLinks = regex.exec(str)
+    const rawLinks = regex.exec(post.rawContent)
 
     if (Array.isArray(rawLinks)) {
       let i = 0
@@ -264,7 +277,10 @@ class AssetsInfoContainer extends React.Component {
         if (urlRegex.test(address)) {
           links.push({
             title,
-            address
+            address,
+            // use created at `date` to show as modified time for links inside folders
+            updatedAt: post.date,
+            createdBy: post.userId
           })
         }
 
@@ -275,10 +291,10 @@ class AssetsInfoContainer extends React.Component {
     return links
   }
 
-  extractRawLink(str) {
+  extractRawLink(post) {
     let links = []
     const regex = /(\s|^)(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}[\s])(\s|$)/igm // eslint-disable-line no-useless-escape
-    const rawLinks = str.match(regex)
+    const rawLinks = post.rawContent.match(regex)
 
     if (Array.isArray(rawLinks)) {
       links = rawLinks
@@ -289,7 +305,10 @@ class AssetsInfoContainer extends React.Component {
 
           return {
             title: name,
-            address: url
+            address: url,
+            // use created at `date` to show as modified time for links inside folders
+            updatedAt: post.date,
+            createdBy: post.userId
           }
         })
     }
@@ -303,15 +322,18 @@ class AssetsInfoContainer extends React.Component {
       let childrenLinks = []
       feed.posts.forEach(post => {
         childrenLinks = childrenLinks.concat([
-          ...this.extractHtmlLink(post.rawContent),
-          ...this.extractMarkdownLink(post.rawContent),
-          ...this.extractRawLink(post.rawContent)
+          ...this.extractHtmlLink(post),
+          ...this.extractMarkdownLink(post),
+          ...this.extractRawLink(post)
         ])
       })
 
       if (childrenLinks.length > 0) {
         links.push({
           title: feed.title,
+          createdBy: feed.userId,
+          // use created at `date` to show as modified time for folders
+          updatedAt: feed.date,
           children: childrenLinks
         })
       }
@@ -336,6 +358,7 @@ class AssetsInfoContainer extends React.Component {
             attachmentId: attachment.id,
             attachment: true,
             deletable: true,
+            createdAt: post.date,
             createdBy: attachment.createdBy,
             postId: post.id,
             topicId: feed.id,
@@ -348,6 +371,9 @@ class AssetsInfoContainer extends React.Component {
       if (attachmentLinksPerFeed.length > 0) {
         attachmentLinks.push({
           title: feed.title,
+          createdBy: feed.userId,
+          // use created at `date` to show as modified time for folders
+          updatedAt: feed.date,
           children: attachmentLinksPerFeed
         })
       }
@@ -382,22 +408,9 @@ class AssetsInfoContainer extends React.Component {
     }
   }
 
-  render() {
-    const { project, currentMemberRole, isSuperUser, phases, feeds,
-      isManageUser, phasesTopics, projectTemplates, hideLinks,
-      attachmentsAwaitingPermission, addProjectAttachment, discardAttachments, attachmentPermissions,
-      changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment, canAccessPrivatePosts } = this.props
-    const { ifModalOpen } = this.state
-
-    const canManageLinks = !!currentMemberRole || isSuperUser
-
-    let devices = []
-    const primaryTarget = _.get(project, 'details.appDefinition.primaryTarget')
-    if (primaryTarget && !primaryTarget.seeAttached) {
-      devices.push(primaryTarget.value)
-    } else {
-      devices = _.get(project, 'details.devices', [])
-    }
+  getLinksAndAttachments() {
+    const { project, isSuperUser, phases, feeds,
+      isManageUser, phasesTopics, canAccessPrivatePosts } = this.props
 
     let attachments = project.attachments
     // merges the product attachments to show in the links menu
@@ -444,16 +457,6 @@ class AssetsInfoContainer extends React.Component {
       })
     )
 
-    const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
-    let enableFileUpload = true
-    if(project.version !== 'v2') {
-      const templateId = _.get(project, 'templateId')
-      const projectTemplate = _.find(projectTemplates, template => template.id === templateId)
-      enableFileUpload = _.some(projectTemplate.scope.sections, section => {
-        return _.some(section.subSections, subSection => subSection.id === 'files')
-      })
-    }
-
     // extract links from posts
     const topicLinks = this.extractLinksFromPosts(feeds)
     const publicTopicLinks = topicLinks.filter(link => link.tag !== PROJECT_FEED_TYPE_MESSAGES)
@@ -474,6 +477,65 @@ class AssetsInfoContainer extends React.Component {
       ...this.extractAttachmentLinksFromPosts(feeds),
       ...this.extractAttachmentLinksFromPosts(phaseFeeds)
     ]
+
+    return ({
+      links,
+      attachments,
+    })
+  }
+
+  componentDidMount() {
+    const {loadMembers } = this.props
+    const {links, attachments} = this.getLinksAndAttachments()
+
+    let tmpUserIds = []
+    let userIds = []
+    _.forEach(links, link => {
+      tmpUserIds = _.union(tmpUserIds, _.map(link.children, 'createdBy'))
+      tmpUserIds = _.union(tmpUserIds, [link.createdBy])
+      tmpUserIds = _.union(tmpUserIds, [link.updatedBy])
+    })
+
+    _.forEach(attachments, attachment => {
+      tmpUserIds = _.union(tmpUserIds, _.map(attachment.children, 'createdBy'))
+      tmpUserIds = _.union(tmpUserIds, [attachment.createdBy])
+    })
+
+    _.forEach(tmpUserIds, userId => {
+      userIds = _.union(userIds, [_.parseInt(userId)])
+    })
+    _.remove(userIds, i => !i)
+
+    loadMembers(userIds)
+  }
+
+  render() {
+    const { project, currentMemberRole, isSuperUser, projectTemplates, hideLinks,
+      attachmentsAwaitingPermission, addProjectAttachment, discardAttachments, attachmentPermissions,
+      changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment, assetsMembers } = this.props
+    const { ifModalOpen } = this.state
+
+    const canManageLinks = !!currentMemberRole || isSuperUser
+
+    let devices = []
+    const primaryTarget = _.get(project, 'details.appDefinition.primaryTarget')
+    if (primaryTarget && !primaryTarget.seeAttached) {
+      devices.push(primaryTarget.value)
+    } else {
+      devices = _.get(project, 'details.devices', [])
+    }
+
+    const {links, attachments} = this.getLinksAndAttachments()
+
+    const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
+    let enableFileUpload = true
+    if(project.version !== 'v2') {
+      const templateId = _.get(project, 'templateId')
+      const projectTemplate = _.find(projectTemplates, template => template.id === templateId)
+      enableFileUpload = _.some(projectTemplate.scope.sections, section => {
+        return _.some(section.subSections, subSection => subSection.id === 'files')
+      })
+    }
 
     const assetsData = []
     enableFileUpload && assetsData.push({name: 'Files', total: _.toString(attachments.length)})
@@ -597,6 +659,7 @@ class AssetsInfoContainer extends React.Component {
               onChangePermissions={changeAttachmentPermission}
               selectedUsers={attachmentPermissions}
               projectMembers={projectMembers}
+              assetsMembers={assetsMembers}
               pendingAttachments={attachmentsAwaitingPermission}
               loggedInUser={loggedInUser}
               attachmentsStorePath={attachmentsStorePath}
@@ -607,6 +670,7 @@ class AssetsInfoContainer extends React.Component {
           {(!hideLinks && activeAssetsType === 'Links') &&
             <LinksGridView
               links={links}
+              assetsMembers={assetsMembers}
               canDelete={canManageLinks}
               canEdit={canManageLinks}
               onDelete={this.onDeleteLink}
@@ -641,12 +705,13 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
     attachmentPermissions: projectState.attachmentPermissions,
     isSharingAttachment: projectState.processingAttachments,
     projectMembers:  _.keyBy(projectMembers, 'userId'),
+    assetsMembers: _.keyBy(members.members, 'userId'),
     loggedInUser: loadUser.user,
     canAccessPrivatePosts
   })
 }
 
-const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
+const mapDispatchToProps = { updateProject, deleteProject, loadMembers, addProjectAttachment, updateProjectAttachment,
   loadProjectMessages, discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadTopic, changeAttachmentPermission,
   removeProjectAttachment, loadProjectPlan, saveFeedComment }
 
