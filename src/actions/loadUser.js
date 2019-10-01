@@ -9,7 +9,11 @@ import {
   ROLE_CONNECT_COPILOT,
   ROLE_TOPCODER_USER,
   ROLE_CONNECT_MANAGER,
-  ROLE_CONNECT_ADMIN
+  ROLE_CONNECT_ADMIN,
+  ROLE_ACCOUNT_EXECUTIVE,
+  ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
+  ROLE_PROGRAM_MANAGER,
+  ROLE_PRESALES, ROLE_PROJECT_MANAGER, ROLE_SOLUTION_ARCHITECT
 } from '../config/constants'
 import { getFreshToken, configureConnector, decodeToken } from 'tc-accounts'
 import { getUserProfile } from '../api/users'
@@ -55,7 +59,19 @@ export function loadUserSuccess(dispatch, token) {
       currentUser = _.assign(currentUser, profile)
       // determine user role
       let userRole
-      if (_.indexOf(currentUser.roles, ROLE_ADMINISTRATOR) > -1) {
+      if (_.indexOf(currentUser.roles, ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE) > -1) {
+        userRole = ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE
+      } else if (_.indexOf(currentUser.roles, ROLE_PRESALES) > -1) {
+        userRole = ROLE_PRESALES
+      } else if (_.indexOf(currentUser.roles, ROLE_ACCOUNT_EXECUTIVE) > -1) {
+        userRole = ROLE_ACCOUNT_EXECUTIVE
+      } else if (_.indexOf(currentUser.roles, ROLE_PROGRAM_MANAGER) > -1) {
+        userRole = ROLE_PROGRAM_MANAGER
+      } else if (_.indexOf(currentUser.roles, ROLE_PROJECT_MANAGER) > -1) {
+        userRole = ROLE_PROJECT_MANAGER
+      } else if (_.indexOf(currentUser.roles, ROLE_SOLUTION_ARCHITECT) > -1) {
+        userRole = ROLE_SOLUTION_ARCHITECT
+      } else if (_.indexOf(currentUser.roles, ROLE_ADMINISTRATOR) > -1) {
         userRole = ROLE_ADMINISTRATOR
       } else if (_.indexOf(currentUser.roles, ROLE_CONNECT_ADMIN) > -1) {
         userRole = ROLE_CONNECT_ADMIN
