@@ -144,6 +144,7 @@
         }
 
         .project-member-layout {
+          flex-wrap: wrap;
           min-height: 60px;
           padding: $base-unit*2 $base-unit*4;
           display: flex;
@@ -247,7 +248,8 @@
           }
 
           .member-role-container {
-            margin-left: $base-unit*3;
+            margin-left: $base-unit*12;
+            width: 100%;
             display: flex;
             padding: 1px;
             border-radius: 5px;
