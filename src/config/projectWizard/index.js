@@ -590,7 +590,7 @@ export function getProductEstimate(projectTemplate, projectData) {
     _.forOwn(preparedConditions, (cond, placeholder) => {
       preparedConditions[placeholder] = evaluate(cond, flatProjectData) === true ? '1 == 1' : '1 == 2'
     })
-    const baseBlocks = getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditions, flatProjectData)
+    const baseBlocks = getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditions, flatProjectData, true)
     const addonBlocks = getFilteredBuildingBlocks(addonPriceConfig, buildingBlocks, preparedConditions, flatProjectData, true)
     // for each addon block, check if user has specified quantity for the selected addons
     addonBlocks.forEach((addonBlock) => {

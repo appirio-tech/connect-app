@@ -11,14 +11,6 @@
     overflow: hidden;
     overflow-y: scroll;
   }
-
-  .mobile-page-gateway {
-    z-index: 10000;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
 }
 
 .container {
@@ -29,7 +21,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  z-index: 1000;
+  z-index: 2000;
 
   &.keep-toolbar {
     padding-top: 60px;
