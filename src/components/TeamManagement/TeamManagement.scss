@@ -257,12 +257,20 @@
             background: white;
             min-width: 300px;
 
+            .Tooltip {
+              align-items: center;
+              display: flex;
+            }
+
             .member-role {
+              align-items: center;
+              display: flex;
               padding: $base-unit $base-unit*2;
               @include roboto;
               color: $tc-gray-70;
               font-size: $tc-label-xs;
               cursor: pointer;
+              text-align: center;
             }
 
             .member-role.active {
