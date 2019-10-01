@@ -13,7 +13,15 @@ import {
   ROLE_CONNECT_COPILOT_MANAGER,
   ROLE_CONNECT_MANAGER,
   ROLE_CONNECT_ACCOUNT_MANAGER,
-  PROJECT_ROLE_ACCOUNT_MANAGER
+  PROJECT_ROLE_ACCOUNT_MANAGER,
+  ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
+  ROLE_PRESALES,
+  ROLE_ACCOUNT_EXECUTIVE,
+  ROLE_PROGRAM_MANAGER,
+  ROLE_PROJECT_MANAGER,
+  ROLE_SOLUTION_ARCHITECT,
+  PROJECT_ROLE_PROJECT_MANAGER,
+  PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_ACCOUNT_EXECUTIVE
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import {
@@ -124,20 +132,20 @@ class TeamManagementContainer extends Component {
     return _.map(members, m => {
       if (!m.userId && !m.role) return m
       // map role
-      switch (m.role) {
-      case PROJECT_ROLE_COPILOT:
+      if (m.role === PROJECT_ROLE_COPILOT) {
         m.isCopilot = true
-        break
-      case PROJECT_ROLE_CUSTOMER:
+      } else if (m.role === PROJECT_ROLE_CUSTOMER) {
         m.isCustomer = true
         m.isPrimary = m.isPrimary || false
-        break
-      case PROJECT_ROLE_MANAGER:
+      } else if ([
+        PROJECT_ROLE_MANAGER,
+        PROJECT_ROLE_ACCOUNT_MANAGER,
+        PROJECT_ROLE_ACCOUNT_EXECUTIVE,
+        PROJECT_ROLE_PROJECT_MANAGER,
+        PROJECT_ROLE_PROGRAM_MANAGER,
+        PROJECT_ROLE_SOLUTION_ARCHITECT
+      ].includes(m.role)) {
         m.isManager = true
-        break
-      case PROJECT_ROLE_ACCOUNT_MANAGER:
-        m.isManager = true
-        break
       }
       return _.assign({}, m, {
         photoURL: ''
@@ -223,7 +231,8 @@ class TeamManagementContainer extends Component {
 const mapStateToProps = ({loadUser, members, projectState}) => {
   const adminRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   const powerUserRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-  const managerRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_MANAGER]
+  const managerRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_MANAGER, ROLE_PROGRAM_MANAGER, ROLE_PROJECT_MANAGER, ROLE_SOLUTION_ARCHITECT]
+  const accountManagerRoles = [ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE, ROLE_PRESALES, ROLE_ACCOUNT_EXECUTIVE]
   return {
     currentUser: {
       userId: parseInt(loadUser.user.id),
@@ -232,7 +241,7 @@ const mapStateToProps = ({loadUser, members, projectState}) => {
       isManager: loadUser.user.roles.some((role) => managerRoles.indexOf(role) !== -1),
       isCustomer: !loadUser.user.roles.some((role) => powerUserRoles.indexOf(role) !== -1),
       isCopilotManager: _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT_MANAGER) > -1,
-      isAccountManager: _.indexOf(loadUser.user.roles, ROLE_CONNECT_ACCOUNT_MANAGER) > -1,
+      isAccountManager: loadUser.user.roles.some((role) => accountManagerRoles.indexOf(role) !== -1),
     },
     allMembers: _.values(members.members),
     processingInvites: projectState.processingInvites,
