@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
-import moment from 'moment'
 
 import DeleteFileLinkModal from '../LinksMenu/DeleteFileLinkModal'
 import ItemOperations from './ItemOperations'
