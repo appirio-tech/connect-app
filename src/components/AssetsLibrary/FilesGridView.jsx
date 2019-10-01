@@ -83,6 +83,7 @@ const FilesGridView = ({
           assetsMembers={assetsMembers}
           onDeletePostAttachment={onDeletePostAttachment}
           loggedInUser={loggedInUser}
+          formatModifyDate={formatModifyDate}
         />)}
       {(!subFolderContent) && (
         <div styleName={cn({'assets-gridview-container-active': (linkToEdit >= 0  || linkToDelete >= 0)}, '')}>

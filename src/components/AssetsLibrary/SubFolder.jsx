@@ -57,10 +57,9 @@ class SubFolder extends React.Component {
   }
 
   render() {
-    const { link, renderLink, goBack, isLinkSubFolder, assetsMembers } = this.props
+    const { link, renderLink, goBack, formatModifyDate, isLinkSubFolder, assetsMembers } = this.props
     const { linkToDelete } = this.state
 
-    const formatCreateDate = (link) => ((link.createdAt) ? moment(link.createdAt).format('MM/DD/YYYY h:mm A') : '—')
     return (
       <div styleName={cn({'assets-gridview-container-active': (linkToDelete >= 0)}, '')}>
         {(linkToDelete >= 0) && <div styleName="assets-gridview-modal-overlay"/>}
@@ -70,7 +69,7 @@ class SubFolder extends React.Component {
             <div styleName="flex-item-title item-type">Type</div>
             <div styleName="flex-item-title item-name">Name</div>
             <div styleName="flex-item-title item-created-by">Created By</div>
-            <div styleName="flex-item-title item-modified">Created At</div>
+            <div styleName="flex-item-title item-modified">Modified</div>
             <div styleName="flex-item-title item-action"/>
           </li>
           <li styleName="assets-gridview-row" key="assets-gridview-subfolder" onClick={goBack}>
@@ -118,7 +117,7 @@ class SubFolder extends React.Component {
                       </div>
                     </div>)}
                 </div>
-                <div styleName="flex-item item-modified">{formatCreateDate(childLink)}</div>
+                <div styleName="flex-item item-modified">{formatModifyDate(childLink)}</div>
                 <div styleName="flex-item item-action">
                   {childLink.deletable && this.hasAccess(childLink.createdBy) && (
                     <ItemOperations

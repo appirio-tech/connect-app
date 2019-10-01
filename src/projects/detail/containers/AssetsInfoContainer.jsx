@@ -20,7 +20,7 @@ import { PROJECT_ATTACHMENTS_FOLDER,
   FILE_PICKER_API_KEY,
   FILE_PICKER_FROM_SOURCES,
   FILE_PICKER_CNAME,
-  FILE_PICKER_SUBMISSION_CONTAINER_NAME, 
+  FILE_PICKER_SUBMISSION_CONTAINER_NAME,
   FILE_PICKER_ACCEPT,
 } from '../../../config/constants'
 import AddLink from '../../../components/AssetsLibrary/AddLink'
@@ -249,7 +249,8 @@ class AssetsInfoContainer extends React.Component {
           links.push({
             title,
             address,
-            createdAt: post.date,
+            // use created at `date` to show as modified time for links inside folders
+            updatedAt: post.date,
             createdBy: post.userId
           })
         }
@@ -277,7 +278,8 @@ class AssetsInfoContainer extends React.Component {
           links.push({
             title,
             address,
-            createdAt: post.date,
+            // use created at `date` to show as modified time for links inside folders
+            updatedAt: post.date,
             createdBy: post.userId
           })
         }
@@ -304,7 +306,8 @@ class AssetsInfoContainer extends React.Component {
           return {
             title: name,
             address: url,
-            createdAt: post.date,
+            // use created at `date` to show as modified time for links inside folders
+            updatedAt: post.date,
             createdBy: post.userId
           }
         })
@@ -329,6 +332,8 @@ class AssetsInfoContainer extends React.Component {
         links.push({
           title: feed.title,
           createdBy: feed.userId,
+          // use created at `date` to show as modified time for folders
+          updatedAt: feed.date,
           children: childrenLinks
         })
       }
@@ -367,6 +372,8 @@ class AssetsInfoContainer extends React.Component {
         attachmentLinks.push({
           title: feed.title,
           createdBy: feed.userId,
+          // use created at `date` to show as modified time for folders
+          updatedAt: feed.date,
           children: attachmentLinksPerFeed
         })
       }
