@@ -44,6 +44,18 @@ class TopcoderManagementDialog extends React.Component {
     }, {
       title: 'Account Manager',
       value: 'account_manager',
+    }, {
+      title: 'Account Executive',
+      value: 'account_executive',
+    }, {
+      title: 'Program Manager',
+      value: 'program_manager',
+    }, {
+      title: 'Solution Architect',
+      value: 'solution_architect',
+    }, {
+      title: 'Project Manager',
+      value: 'project_manager',
     }]
   }
 
@@ -208,7 +220,7 @@ class TopcoderManagementDialog extends React.Component {
                         </div>
                       )
                     }
-                    const types = ['Observer', 'Copilot', 'Manager', 'Account Manager']
+                    const types = ['Observer', 'Copilot', 'Manager', 'Account Manager', 'Account Executive', 'Program Manager', 'Solution Architect', 'Project Manager']
                     const currentType = role
                     const onClick = (type) => {
                       this.onUserRoleChange(member.userId, member.id, type)

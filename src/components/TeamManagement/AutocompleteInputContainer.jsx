@@ -11,9 +11,25 @@ class AutocompleteInputContainer extends React.Component {
   constructor(props) {
     super(props)
     this.debounceTimer = null
+
+    this.clearUserSuggestions = this.clearUserSuggestions.bind(this)
+  }
+
+  /**
+   * Clear user suggestion list
+   */
+  clearUserSuggestions() {
+    const { currentUser } = this.props
+
+    if (!currentUser.isCustomer) {
+      // When customer user is typing a user handle to invite we should not try to clear suggestions,
+      // because we don't show suggestions for customer
+      this.props.onClearUserSuggestions()
+    }
   }
 
   onInputChange(inputValue) {
+    const { currentUser } = this.props
     const indexOfSpace = inputValue.indexOf(' ')
     const indexOfSemiColon = inputValue.indexOf(';')
 
@@ -25,15 +41,18 @@ class AutocompleteInputContainer extends React.Component {
     if (indexOfSpace >= 1 || indexOfSemiColon >= 1 ) {
       inputValue = inputValue.substring(0, inputValue.length -1 )
       this.onUpdate([...this.props.selectedMembers, {label: inputValue, value: inputValue}])
-      this.props.onClearUserSuggestions()
+      this.clearUserSuggestions()
       // this is return empty to nullify inputValue post processing
       return ''
     }
 
     if (inputValue.length >= AUTOCOMPLETE_TRIGGER_LENGTH) {
-      this.props.onLoadUserSuggestions(inputValue)
+      // When customer user is typing a user handle to invite we should not try to show suggestions as we always get error 403
+      if (!currentUser.isCustomer) {
+        this.props.onLoadUserSuggestions(inputValue)
+      }
     } else {
-      this.props.onClearUserSuggestions()
+      this.clearUserSuggestions()
     }
   }
 
@@ -46,7 +65,7 @@ class AutocompleteInputContainer extends React.Component {
     if (this.props.onUpdate) {
       this.props.onUpdate(inputValueNormalized)
     }
-    this.props.onClearUserSuggestions()
+    this.clearUserSuggestions()
   }
 
   render() {

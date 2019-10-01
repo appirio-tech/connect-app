@@ -11,6 +11,14 @@
     overflow: hidden;
     overflow-y: scroll;
   }
+
+  .mobile-page-gateway {
+    z-index: 10000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
 }
 
 .container {

@@ -20,6 +20,7 @@ import './Accordion.scss'
  * Supported types of questions
  */
 const TYPE = {
+  CHECKBOX: 'checkbox',
   CHECKBOX_GROUP: 'checkbox-group',
   RADIO_GROUP: 'radio-group',
   ADD_ONS: 'add-ons',
@@ -150,6 +151,7 @@ class Accordion extends React.Component {
     }
 
     switch (type) {
+    case TYPE.CHECKBOX: return value ? 'Yes' : 'No'
     case TYPE.CHECKBOX_GROUP: return value.map(mapValue).join(', ')
     case TYPE.RADIO_GROUP: return mapValue(value)
     case TYPE.ADD_ONS: return `${value.length} selected`

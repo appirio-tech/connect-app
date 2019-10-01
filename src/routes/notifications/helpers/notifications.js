@@ -263,6 +263,20 @@ export const filterTopicAndPostChangedNotifications = (notifications, tagRegExp)
 }
 
 /**
+ * Filter notifications about Link and File changed
+ *
+ * @param  {Array}  notifications list of notifications
+ *
+ * @return {Array}                notifications list filtered of notifications
+ */
+export const filterFileAndLinkChangedNotifications = (notifications) => {
+  return _.filter(notifications, (notification) => (
+    notification.eventType === EVENT_TYPE.PROJECT.FILE_UPLOADED ||
+    notification.eventType === EVENT_TYPE.PROJECT.LINK_CREATED
+  ))
+}
+
+/**
  * Filter notification about post mentions
  * @param {Array} notifications list of notifications
  *

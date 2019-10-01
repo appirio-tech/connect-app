@@ -71,6 +71,12 @@
 
         > input {
           margin-bottom: 0px;
+
+          &[disabled] {
+            border: 1px solid $tc-gray-neutral-dark;
+            border-radius: 4px;
+            background-color: $tc-gray-neutral-light;
+          }
         }
 
         :global(.dropdown-wrap) {

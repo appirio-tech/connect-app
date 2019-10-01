@@ -626,7 +626,10 @@ export const PROJECT_ROLE_ACCOUNT_MANAGER = 'account_manager'
 export const PROJECT_ROLE_CUSTOMER = 'customer'
 export const PROJECT_ROLE_OWNER = 'owner'
 export const PROJECT_ROLE_MEMBER = 'member' // this is need for notifications
-
+export const PROJECT_ROLE_ACCOUNT_EXECUTIVE = 'account_executive'
+export const PROJECT_ROLE_PROGRAM_MANAGER = 'program_manager'
+export const PROJECT_ROLE_SOLUTION_ARCHITECT = 'solution_architect'
+export const PROJECT_ROLE_PROJECT_MANAGER = 'project_manager'
 /*
  * Events
  */
@@ -642,14 +645,22 @@ export const ROLE_CONNECT_ACCOUNT_MANAGER = 'Connect Account Manager'
 export const ROLE_CONNECT_ADMIN = 'Connect Admin'
 export const ROLE_ADMINISTRATOR = 'administrator'
 export const ROLE_CONNECT_COPILOT_MANAGER = 'Connect Copilot Manager'
+export const ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE = 'Business Development Representative'
+export const ROLE_PRESALES = 'Presales'
+export const ROLE_ACCOUNT_EXECUTIVE = 'Account Executive'
+export const ROLE_PROGRAM_MANAGER = 'Program Manager'
+export const ROLE_SOLUTION_ARCHITECT = 'Solution Architect'
+export const ROLE_PROJECT_MANAGER = 'Project Manager'
 
+// to be able to start the Connect App we should pass at least the dummy value for `FILE_PICKER_API_KEY`
+// but if we want to test file uploading we should provide the real value in `FILE_PICKER_API_KEY` env variable
+export const FILE_PICKER_API_KEY = process.env.FILE_PICKER_API_KEY || 'DUMMY'
 // FIXME .. remove defaults
-export const FILE_PICKER_API_KEY = process.env.FILE_PICKER_API_KEY || ''
 export const FILE_PICKER_SUBMISSION_CONTAINER_NAME = process.env.FILE_PICKER_SUBMISSION_CONTAINER_NAME || 'submission-staging-dev'
 export const FILE_PICKER_CNAME = process.env.FILE_PICKER_CNAME || 'fs.topcoder.com'
 export const FILE_PICKER_FROM_SOURCES = process.env.FILE_PICKER_FROM_SOURCES || ['local_file_system', 'googledrive', 'dropbox']
 export const PROJECT_ATTACHMENTS_FOLDER = process.env.PROJECT_ATTACHMENTS_FOLDER || 'PROJECT_ATTACHMENTS'
-export const FILE_PICKER_ACCEPT = process.env.FILE_PICKER_ACCEPT || ['.bmp', '.gif', '.jpg', '.tex', '.xls', '.xlsx', '.doc', '.docx', '.zip', '.txt', '.pdf', '.png', '.ppt', '.pptx', '.rtf']
+export const FILE_PICKER_ACCEPT = process.env.FILE_PICKER_ACCEPT || ['.bmp', '.gif', '.jpg', '.tex', '.xls', '.xlsx', '.doc', '.docx', '.zip', '.txt', '.pdf', '.png', '.ppt', '.pptx', '.rtf', '.csv']
 
 export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
 /*

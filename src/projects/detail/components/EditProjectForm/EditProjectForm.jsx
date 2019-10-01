@@ -24,7 +24,7 @@ import {
   STEP_VISIBILITY,
   STEP_STATE,
 } from '../../../../helpers/wizardHelper'
-import { clean } from '../../../../helpers/utils'
+import { clean, createEvent } from '../../../../helpers/utils'
 
 import './EditProjectForm.scss'
 import { PROJECT_STATUS_COMPLETED, SCOPE_CHANGE_REQ_STATUS_ACTIVATED, SCOPE_CHANGE_REQ_STATUS_PENDING, SCOPE_CHANGE_REQ_STATUS_APPROVED } from '../../../../config/constants'
@@ -212,7 +212,8 @@ class EditProjectForm extends Component {
     if (self.autoResizeSet === true) { return }
     self.autoResizeSet = true
     setTimeout(() => {
-      window.dispatchEvent(new Event('resize'))
+      const event = createEvent('resize')
+      window.dispatchEvent(event)
     }, 1000)
   }
 
