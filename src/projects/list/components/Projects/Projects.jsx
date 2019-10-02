@@ -85,8 +85,6 @@ class Projects extends Component {
       userId: this.props.currentUser.userId,
       email: this.props.currentUser.email,
       status: isJoining ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
-    }).then(() => {
-      
     })
   }
 
@@ -226,6 +224,7 @@ class Projects extends Component {
         newProjectLink={getNewProjectLink(orgConfig)}
         setFilter={this.setFilter}
         criteria={criteria}
+        onUserInviteAction={this.onUserInviteAction}
         isCustomer={isCustomer}
       />
     )

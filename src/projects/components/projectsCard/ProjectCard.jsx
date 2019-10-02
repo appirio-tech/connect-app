@@ -76,7 +76,7 @@ class ProjectCard extends React.Component {
                   >
                   Decline
                 </button>
-                <div 
+                <button 
                   onClick={(e) => {
                     e.stopPropagation()
                     this.inviteAction(true, project.id)
@@ -84,7 +84,7 @@ class ProjectCard extends React.Component {
                   className="join-btn tc-btn tc-btn-primary tc-btn-md" style={{margin: '5px'}}
                   >
                   Join project
-                </div>
+                </button>
               </div>
             }
             {processingProjectMemberInvite && showLoader && (

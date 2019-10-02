@@ -86,6 +86,10 @@ $screen-one-column: 720px;
         max-width: 125px;
         width: 125px;
         padding-right: 10px;
+        .tc-btn-md {
+          border-radius: 20px;
+          line-height: 20px;
+        }
       }
 
       .item-status {

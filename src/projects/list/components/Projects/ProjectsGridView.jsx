@@ -35,7 +35,7 @@ const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 const ProjectsGridView = props => {
   const { projects, members, totalCount, criteria, pageNum, sortHandler, currentUser, onPageChange,
     error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus,
-    applyFilters, projectTemplates, notifications, newProjectLink, setFilter, isCustomer } = props
+    applyFilters, projectTemplates, notifications, newProjectLink, setFilter, isCustomer, onUserInviteAction } = props
 
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
@@ -194,11 +194,26 @@ const ProjectsGridView = props => {
         const isInvited = _.some(item.invites, m => ((m.userId === currentUser.userId || m.email === currentUser.email ) && !m.deletedAt && m.status === 'pending'))
         if(!isInvited) return
         return (
-          <Link to={url} className="spacing">
-            <div className="join-btn" style={{margin: '5px'}}>
-              Join project
+            <div>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onUserInviteAction(true, item.id)
+                }}
+                className="join-btn tc-btn tc-btn-primary tc-btn-md" style={{margin: '5px'}}
+                >
+                Join project
+              </button>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onUserInviteAction(false, item.id)
+                }}
+                className="join-btn" style={{margin: '5px'}}
+                >
+                Decline
+              </button>
             </div>
-          </Link>
         )
       }
     }, {
@@ -299,6 +314,7 @@ ProjectsGridView.propTypes = {
   criteria: PropTypes.object.isRequired,
   projectTemplates: PropTypes.array.isRequired,
   setFilter: PropTypes.func,
+  onUserInviteAction: PropTypes.func,
   isCustomer: PropTypes.bool.isRequired
 }
 
