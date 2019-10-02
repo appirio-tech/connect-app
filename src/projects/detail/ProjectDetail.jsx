@@ -43,9 +43,11 @@ const showCoderBotIfError = (hasError) => {
         component = compose(
           withProps({code:403, message: messageGenerator})
         )
-      } else if (props.error && props.error.code  && props.error.msg) {
+      // server always returns 403 when page is not found or user doesn't have access,
+      // so 403 errors we don't customize and show `page404` instead
+      } else if (props.error && props.error.code && props.error.code !== 403) {
         component = compose(
-          withProps({code:props.error.code, message: props.error.msg})
+          withProps({ code:props.error.code })
         )
       }
       return hasError(props)
