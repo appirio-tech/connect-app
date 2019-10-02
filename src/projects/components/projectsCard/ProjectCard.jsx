@@ -32,8 +32,8 @@ class ProjectCard extends React.Component {
   }
 
   render() {
-    const { project, duration, disabled, currentUser, history, onChangeStatus, projectTemplates, unreadMentionsCount, onUserInviteAction, processingProjectMemberInvite } = this.props
-    const { showLoader } = this.state;
+    const { project, duration, disabled, currentUser, history, onChangeStatus, projectTemplates, unreadMentionsCount, processingProjectMemberInvite } = this.props
+    const { showLoader } = this.state
     const className = `ProjectCard ${ disabled ? 'disabled' : 'enabled'}`
     if (!project) return null
     const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
@@ -47,7 +47,7 @@ class ProjectCard extends React.Component {
         onClick={() => {
           history.push(`/projects/${project.id}/`)
         }}
-        >
+      >
         <div className="card-header">
           <ProjectCardHeader unreadMentionsCount={unreadMentionsCount} project={project} projectTemplates={projectTemplates} />
         </div>
@@ -60,7 +60,7 @@ class ProjectCard extends React.Component {
             showLink
             showLinkURL={`/projects/${project.id}/specification`}
             canEditStatus={false}
-            />
+          />
         </div>
         <div className="card-footer">
           <ProjectManagerAvatars managers={project.members} maxShownNum={10} />
@@ -73,7 +73,7 @@ class ProjectCard extends React.Component {
                     this.inviteAction(false, project.id)
                   }}
                   className="join-btn" style={{margin: '5px'}}
-                  >
+                >
                   Decline
                 </button>
                 <button 
@@ -82,14 +82,14 @@ class ProjectCard extends React.Component {
                     this.inviteAction(true, project.id)
                   }}
                   className="join-btn tc-btn tc-btn-primary tc-btn-md" style={{margin: '5px'}}
-                  >
+                >
                   Join project
                 </button>
               </div>
             }
             {processingProjectMemberInvite && showLoader && (
               <LoadingIndicator />
-              )}
+            )}
           </div>
         </div>
       </div>

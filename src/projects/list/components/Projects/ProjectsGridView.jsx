@@ -186,7 +186,6 @@ const ProjectsGridView = props => {
       classes: 'item-join',
       sortable: false,
       renderText: item => {
-        const url = `/projects/${item.id}`
         // check whether is the project's member
         const isMember = _.some(item.members, m => (m.userId === currentUser.userId && m.deletedAt === null))
         if(isMember) return
@@ -194,26 +193,26 @@ const ProjectsGridView = props => {
         const isInvited = _.some(item.invites, m => ((m.userId === currentUser.userId || m.email === currentUser.email ) && !m.deletedAt && m.status === 'pending'))
         if(!isInvited) return
         return (
-            <div>
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onUserInviteAction(true, item.id)
-                }}
-                className="join-btn tc-btn tc-btn-primary tc-btn-md" style={{margin: '5px'}}
-                >
-                Join project
-              </button>
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onUserInviteAction(false, item.id)
-                }}
-                className="join-btn" style={{margin: '5px'}}
-                >
-                Decline
-              </button>
-            </div>
+          <div>
+            <button 
+              onClick={(e) => {
+                e.stopPropagation()
+                onUserInviteAction(true, item.id)
+              }}
+              className="join-btn tc-btn tc-btn-primary tc-btn-md" style={{margin: '5px'}}
+            >
+              Join project
+            </button>
+            <button 
+              onClick={(e) => {
+                e.stopPropagation()
+                onUserInviteAction(false, item.id)
+              }}
+              className="join-btn" style={{margin: '5px'}}
+            >
+              Decline
+            </button>
+          </div>
         )
       }
     }, {

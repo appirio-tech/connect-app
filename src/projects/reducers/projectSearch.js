@@ -8,7 +8,8 @@ import {
   PROJECT_SORT,
   DELETE_PROJECT_SUCCESS,
   ACCEPT_OR_REFUSE_INVITE_SUCCESS,
-  PROJECT_MEMBER_INVITE_STATUS_REFUSED
+  PROJECT_MEMBER_INVITE_STATUS_REFUSED,
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -97,20 +98,20 @@ export default function(state = initialState, action) {
   }
 
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS:
-    if (action.payload.status == PROJECT_MEMBER_INVITE_STATUS_REFUSED) {
+    if (action.payload.status === PROJECT_MEMBER_INVITE_STATUS_REFUSED) {
       // remove the particular project
       const projects = state.projects.filter(project => project.id !== action.payload.projectId)
       return Object.assign({}, state, {
-        projects: projects
+        projects
       })
     } else {
       // take out the project, change the status and merge it back along with remaining
       const project = state.projects.filter(project => project.id === action.payload.projectId)[0]
       project.invites.forEach(element => {
         if (element.userId === action.payload.userId) {
-          element.status = "accepted"
+          element.status = PROJECT_MEMBER_INVITE_STATUS_ACCEPTED
         }
-      });
+      })
       const remainProjects = state.projects.filter(project => project.id !== action.payload.projectId)
       return Object.assign({}, state, {
         projects: [
