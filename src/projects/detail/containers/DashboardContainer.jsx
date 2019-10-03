@@ -229,7 +229,7 @@ class DashboardContainer extends React.Component {
             />
           }
           {/* <button type="button" onClick={this.toggleDrawer}>Toggle drawer</button> */}
-          {!!estimationQuestion &&
+          {false &&
             <ProjectEstimation
               onClick={this.toggleDrawer}
               question={estimationQuestion}
