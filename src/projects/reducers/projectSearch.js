@@ -6,7 +6,8 @@ import {
   SET_PROJECTS_LIST_VIEW,
   PROJECT_LIST_DEFAULT_CRITERIA,
   PROJECT_SORT,
-  DELETE_PROJECT_SUCCESS
+  DELETE_PROJECT_SUCCESS,
+  ACCEPT_OR_REFUSE_INVITE_SUCCESS
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -57,6 +58,21 @@ export default function(state = initialState, action) {
       ? { projects : { $push : action.payload.projects }, totalCount: { $set : action.payload.totalCount}, allProjectsCount: { $set : action.payload.allProjectsCount} }
       : { projects : { $set : action.payload.projects }, totalCount: { $set : action.payload.totalCount}, allProjectsCount: { $set : action.payload.allProjectsCount} }
     return update(state, updatedProjects)
+  }
+
+  case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
+    if (action.payload.status !== 'refused') {
+      return state
+    }
+    const { projects } = state
+    const projectIndex = _.findIndex(projects, {id: action.payload.projectId})
+    if (!_.isNil(projectIndex)) {
+      return update(state, {
+        projects: {$splice: [[projectIndex, 1]]},
+      })
+    } else {
+      return state
+    }
   }
 
   case PROJECT_SORT: {

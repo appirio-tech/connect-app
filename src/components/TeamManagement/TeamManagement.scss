@@ -443,7 +443,7 @@
     }
   }
 
-  .join-btn {
+  .decline-btn {
     @include roboto;
     cursor: pointer;
     padding: $base-unit*2 $base-unit*3;
@@ -451,15 +451,30 @@
     align-items: center;
     height: 40px;
     border: 1px solid $tc-gray-10;
-    border-radius: 20px;
+    border-radius: 20px !important;
     margin: $base-unit*2 0 $base-unit 0;
     color: $tc-gray-70;
     font-size: $tc-label-md;
+    text-align: center;
+    justify-content: center;
+    width: 130px;
 
     svg {
       margin-right: $base-unit * 0.5;
       transform: scale(.6);
       fill: $tc-gray-90;
+    }
+
+    &.in-grid {
+      width: 103px;
+    }
+  }
+  .join-btn {
+    border-radius: 20px !important;
+    white-space: nowrap;
+
+    &.in-grid {
+      padding: 0px 11px !important;
     }
   }
 }

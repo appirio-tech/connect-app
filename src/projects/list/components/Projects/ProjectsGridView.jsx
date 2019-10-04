@@ -29,13 +29,15 @@ import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import './ProjectsGridView.scss'
 import NotificationBadge from '../../../../components/NotificationBadge/NotificationBadge'
 import { getFullNameWithFallback } from '../../../../helpers/tcHelpers'
+import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
 const ProjectsGridView = props => {
   const { projects, members, totalCount, criteria, pageNum, sortHandler, currentUser, onPageChange,
     error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus,
-    applyFilters, projectTemplates, notifications, newProjectLink, setFilter, isCustomer } = props
+    applyFilters, projectTemplates, notifications, newProjectLink, setFilter, isCustomer, callInviteRequest,
+    isAcceptingInvite } = props
 
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
@@ -186,7 +188,6 @@ const ProjectsGridView = props => {
       classes: 'item-join',
       sortable: false,
       renderText: item => {
-        const url = `/projects/${item.id}`
         // check whether is the project's member
         const isMember = _.some(item.members, m => (m.userId === currentUser.userId && m.deletedAt === null))
         if(isMember) return
@@ -194,11 +195,29 @@ const ProjectsGridView = props => {
         const isInvited = _.some(item.invites, m => ((m.userId === currentUser.userId || m.email === currentUser.email ) && !m.deletedAt && m.status === 'pending'))
         if(!isInvited) return
         return (
-          <Link to={url} className="spacing">
-            <div className="join-btn" style={{margin: '5px'}}>
-              Join project
-            </div>
-          </Link>
+          <div className="spacing">
+            {(!isAcceptingInvite[item.id]) && (
+              <button
+                onClick={(event) => {
+                  event.stopPropagation()
+                  callInviteRequest(item, true)
+                }}
+                style={{margin: '5px'}}
+                className={'tc-btn tc-btn-primary tc-btn-md blue join-btn in-grid'}
+              >
+                Join project
+              </button>)}
+            {(!isAcceptingInvite[item.id]) && (
+              <button
+                onClick={(event) => {
+                  event.stopPropagation()
+                  callInviteRequest(item, false)
+                }}
+                style={{margin: '0 5px 5px 5px'}}
+                className="decline-btn in-grid"
+              >Decline</button>)}
+            {isAcceptingInvite[item.id] && (<LoadingIndicator isSmall />)}
+          </div>
         )
       }
     }, {
@@ -284,6 +303,10 @@ const ProjectsGridView = props => {
   )
 }
 
+ProjectsGridView.defaultProps = {
+  callInviteRequest: () => {},
+  isAcceptingInvite: false,
+}
 
 ProjectsGridView.propTypes = {
   currentUser: PropTypes.object.isRequired,
@@ -299,7 +322,9 @@ ProjectsGridView.propTypes = {
   criteria: PropTypes.object.isRequired,
   projectTemplates: PropTypes.array.isRequired,
   setFilter: PropTypes.func,
-  isCustomer: PropTypes.bool.isRequired
+  isCustomer: PropTypes.bool.isRequired,
+  callInviteRequest: PropTypes.func,
+  isAcceptingInvite: PropTypes.object,
 }
 
 export default ProjectsGridView
