@@ -202,8 +202,7 @@ const ProjectsGridView = props => {
                   event.stopPropagation()
                   callInviteRequest(item, true)
                 }}
-                style={{margin: '5px'}}
-                className={'tc-btn tc-btn-primary tc-btn-md blue join-btn in-grid'}
+                className={'tc-btn tc-btn-primary tc-btn-md blue accept-btn in-grid'}
               >
                 Join project
               </button>)}
@@ -213,7 +212,6 @@ const ProjectsGridView = props => {
                   event.stopPropagation()
                   callInviteRequest(item, false)
                 }}
-                style={{margin: '0 5px 5px 5px'}}
                 className="decline-btn in-grid"
               >Decline</button>)}
             {isAcceptingInvite[item.id] && (<LoadingIndicator isSmall />)}

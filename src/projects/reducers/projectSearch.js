@@ -7,7 +7,8 @@ import {
   PROJECT_LIST_DEFAULT_CRITERIA,
   PROJECT_SORT,
   DELETE_PROJECT_SUCCESS,
-  ACCEPT_OR_REFUSE_INVITE_SUCCESS
+  RELOAD_PROJECT_SEARCH_MEMBERS_FAILURE,
+  RELOAD_PROJECT_SEARCH_MEMBERS_SUCCESS
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -60,15 +61,28 @@ export default function(state = initialState, action) {
     return update(state, updatedProjects)
   }
 
-  case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
-    if (action.payload.status !== 'refused') {
-      return state
-    }
+  case RELOAD_PROJECT_SEARCH_MEMBERS_FAILURE: {
     const { projects } = state
-    const projectIndex = _.findIndex(projects, {id: action.payload.projectId})
+    const projectIndex = _.findIndex(projects, {id: action.meta.projectId})
     if (!_.isNil(projectIndex)) {
       return update(state, {
         projects: {$splice: [[projectIndex, 1]]},
+      })
+    } else {
+      return state
+    }
+  }
+
+  case RELOAD_PROJECT_SEARCH_MEMBERS_SUCCESS: {
+    const { projects } = state
+    const projectIndex = _.findIndex(projects, {id: action.payload.id})
+    if (!_.isNil(projectIndex)) {
+      const updatedProject = update(projects[projectIndex], {
+        members: { $set: action.payload.members },
+        invites: { $set: action.payload.invites },
+      })
+      return update(state, {
+        projects: { $splice: [[projectIndex, 1, updatedProject]] }
       })
     } else {
       return state

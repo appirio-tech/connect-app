@@ -49,8 +49,7 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
                     event.stopPropagation()
                     callInviteRequest(project, true)
                   }}
-                  className={'tc-btn tc-btn-primary tc-btn-md blue join-btn'}
-                  style={{margin: '5px'}}
+                  className={'tc-btn tc-btn-primary tc-btn-md blue accept-btn'}
                 >
                   Join project
                 </button>)}
@@ -61,7 +60,6 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
                     callInviteRequest(project, false)
                   }}
                   className="decline-btn"
-                  style={{margin: '5px'}}
                 >Decline</button>)}
               {isAcceptingInvite && (<LoadingIndicator isSmall />)}
             </div>

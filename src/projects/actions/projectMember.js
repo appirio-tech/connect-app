@@ -19,7 +19,8 @@ import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   PROJECT_ROLE_CUSTOMER,
   PROJECT_MEMBER_INVITE_STATUS_CANCELED,
   RELOAD_PROJECT_MEMBERS,
-  CLEAR_MEMBER_SUGGESTIONS
+  CLEAR_MEMBER_SUGGESTIONS,
+  RELOAD_PROJECT_SEARCH_MEMBERS,
 } from '../../config/constants'
 
 
@@ -172,6 +173,16 @@ export function reloadProjectMembers(projectId) {
     return dispatch({
       type: RELOAD_PROJECT_MEMBERS,
       payload: getProjectById(projectId)
+    })
+  }
+}
+
+export function reloadProjectSearchMembers(projectId) {
+  return (dispatch) => {
+    return dispatch({
+      type: RELOAD_PROJECT_SEARCH_MEMBERS,
+      payload: getProjectById(projectId),
+      meta: { projectId },
     })
   }
 }
