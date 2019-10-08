@@ -486,6 +486,7 @@
     @include roboto;
     cursor: pointer;
     padding: $base-unit*2 $base-unit*3;
+    display: flex;
     align-items: center;
     height: 40px;
     border: 1px solid $tc-gray-10;

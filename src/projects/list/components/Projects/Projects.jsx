@@ -9,7 +9,7 @@ import CoderBot from '../../../../components/CoderBot/CoderBot'
 import ProjectListNavHeader from './ProjectListNavHeader'
 import ProjectsGridView from './ProjectsGridView'
 import ProjectsCardView from '../../../components/projectsCard/ProjectsCardView'
-import { acceptOrRefuseInvite, reloadProjectSearchMembers } from '../../../actions/projectMember'
+import { acceptOrRefuseInvite } from '../../../actions/projectMember'
 import { loadProjects, setInfiniteAutoload, setProjectsListView } from '../../../actions/loadProjects'
 import { loadProjectsMetadata } from '../../../../actions/templates'
 import { sortProjects } from '../../../actions/sortProjects'
@@ -215,8 +215,8 @@ class Projects extends Component {
       userId: this.props.currentUser.userId,
       email: this.props.currentUser.email,
       status: isAccept ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
-    }).then(() => {
-      this.props.reloadProjectSearchMembers(project.id)
+    }, this.props.currentUser).then(() => {
+      isAcceptingInvite(false)
     }) .catch((err) => {
       // if we fail to accept invite
       console.log(err)
@@ -369,8 +369,7 @@ const actionsToBind = {
   setProjectsListView,
   sortProjects,
   loadProjectsMetadata,
-  acceptOrRefuseInvite,
-  reloadProjectSearchMembers
+  acceptOrRefuseInvite
 }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(Projects))

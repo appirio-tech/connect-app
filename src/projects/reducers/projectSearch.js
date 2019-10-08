@@ -7,8 +7,9 @@ import {
   PROJECT_LIST_DEFAULT_CRITERIA,
   PROJECT_SORT,
   DELETE_PROJECT_SUCCESS,
-  RELOAD_PROJECT_SEARCH_MEMBERS_FAILURE,
-  RELOAD_PROJECT_SEARCH_MEMBERS_SUCCESS
+  ACCEPT_OR_REFUSE_INVITE_SUCCESS,
+  ADMIN_ROLES,
+  MANAGER_ROLES,
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -61,32 +62,53 @@ export default function(state = initialState, action) {
     return update(state, updatedProjects)
   }
 
-  case RELOAD_PROJECT_SEARCH_MEMBERS_FAILURE: {
-    const { projects } = state
-    const projectIndex = _.findIndex(projects, {id: action.meta.projectId})
-    if (!_.isNil(projectIndex)) {
-      return update(state, {
-        projects: {$splice: [[projectIndex, 1]]},
-      })
-    } else {
+  case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
+    console.log('totest ACCEPT_OR_REFUSE_INVITE_SUCCESS', action)
+    if (!action.meta.currentUser) {
       return state
     }
-  }
+    if (action.payload.status === 'refused') {
+      // user refuse invite
+      const { projects } = state
+      const { roles } = action.meta.currentUser
+      const bigRoles = _.intersectionWith(roles, ADMIN_ROLES.concat(MANAGER_ROLES), _.isEqual)
 
-  case RELOAD_PROJECT_SEARCH_MEMBERS_SUCCESS: {
-    const { projects } = state
-    const projectIndex = _.findIndex(projects, {id: action.payload.id})
-    if (!_.isNil(projectIndex)) {
-      const updatedProject = update(projects[projectIndex], {
-        members: { $set: action.payload.members },
-        invites: { $set: action.payload.invites },
-      })
-      return update(state, {
-        projects: { $splice: [[projectIndex, 1, updatedProject]] }
-      })
+      const projectIndex = _.findIndex(projects, {id: action.meta.projectId})
+      if (!_.isNil(projectIndex)) {
+        if (bigRoles.length === 0) {
+          // remove project from the search list if normal user refuse invite
+          return update(state, {
+            projects: {$splice: [[projectIndex, 1]]},
+          })
+        } else {
+          // remove user from invites list
+          const userIndex = _.findIndex(projects[projectIndex].invites, {userId: action.meta.currentUser.userId})
+          if (!_.isNil(userIndex)) {
+            const updatedProject = update(projects[projectIndex], {
+              invites: { $splice: [[userIndex, 1]] },
+            })
+            return update(state, {
+              projects: { $splice: [[projectIndex, 1, updatedProject]] }
+            })
+          }
+        }
+      }
     } else {
-      return state
+      // user accept invite
+      const { projects } = state
+      const projectIndex = _.findIndex(projects, {id: action.meta.projectId})
+      if (!_.isNil(projectIndex)) {
+        const user = _.cloneDeep(action.meta.currentUser)
+        user.deletedAt = null
+        const updatedProject = update(projects[projectIndex], {
+          members: { $push: [user] },
+        })
+        return update(state, {
+          projects: { $splice: [[projectIndex, 1, updatedProject]] }
+        })
+      }
     }
+    return state
   }
 
   case PROJECT_SORT: {
