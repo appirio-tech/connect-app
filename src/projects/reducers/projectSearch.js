@@ -63,7 +63,6 @@ export default function(state = initialState, action) {
   }
 
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
-    console.log('totest ACCEPT_OR_REFUSE_INVITE_SUCCESS', action)
     if (!action.meta.currentUser) {
       return state
     }
