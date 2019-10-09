@@ -580,13 +580,13 @@ export function getProductEstimate(projectTemplate, projectData) {
   let minTime = 0
   let maxTime = 0
   let matchedBlocks = []
-  const flatProjectData = flatten(removeValuesOfHiddenNodes(projectTemplate, projectData), { safe: true })
   if (projectTemplate) {
     const sections = _.get(projectTemplate, 'scope.sections')
     const addonPriceConfig = _.get(projectTemplate, 'scope.addonPriceConfig', {})
     const priceConfig = _.get(projectTemplate, 'scope.priceConfig', {})
     const buildingBlocks = _.get(projectTemplate, 'scope.buildingBlocks', {})
     const preparedConditions = _.cloneDeep(_.get(projectTemplate, 'scope.preparedConditions', {}))
+    const flatProjectData = flatten(removeValuesOfHiddenNodes(projectTemplate.scope, projectData), { safe: true })
     _.forOwn(preparedConditions, (cond, placeholder) => {
       preparedConditions[placeholder] = evaluate(cond, flatProjectData) === true ? '1 == 1' : '1 == 2'
     })
