@@ -97,7 +97,10 @@ export default function(state = initialState, action) {
       const { projects } = state
       const projectIndex = _.findIndex(projects, {id: action.meta.projectId})
       if (!_.isNil(projectIndex)) {
-        const user = _.cloneDeep(action.meta.currentUser)
+        const user = _.cloneDeep(_.pick(action.meta.currentUser, [
+          'userId', 'projectId', 'photoURL', 'handle',
+        ]))
+        user.role = action.payload.role
         user.deletedAt = null
         const updatedProject = update(projects[projectIndex], {
           members: { $push: [user] },
