@@ -19,7 +19,7 @@ import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   PROJECT_ROLE_CUSTOMER,
   PROJECT_MEMBER_INVITE_STATUS_CANCELED,
   RELOAD_PROJECT_MEMBERS,
-  CLEAR_MEMBER_SUGGESTIONS
+  CLEAR_MEMBER_SUGGESTIONS,
 } from '../../config/constants'
 
 
@@ -158,11 +158,18 @@ export function inviteProjectMembers(projectId, emailIds, handles) {
   }
 }
 
-export function acceptOrRefuseInvite(projectId, item) {
+/**
+ * Accept or refuse invite
+ * @param {Number} projectId project id
+ * @param {Object} item accept or refuse invite info
+ * @param {Object} currentUser current user info
+ */
+export function acceptOrRefuseInvite(projectId, item, currentUser) {
   return (dispatch) => {
     return dispatch({
       type: ACCEPT_OR_REFUSE_INVITE,
-      payload: updateProjectMemberInvite(projectId, item)
+      payload: updateProjectMemberInvite(projectId, item),
+      meta: { projectId, currentUser },
     })
   }
 }

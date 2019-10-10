@@ -1,14 +1,15 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { getProjectRoleForCurrentUser } from '../../../helpers/projectHelper'
 import ProjectCardHeader from './ProjectCardHeader'
 import ProjectCardBody from './ProjectCardBody'
 import ProjectManagerAvatars from '../../list/components/Projects/ProjectManagerAvatars'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import './ProjectCard.scss'
 
-function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus, projectTemplates, unreadMentionsCount }) {
+function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus, projectTemplates, unreadMentionsCount, callInviteRequest, isAcceptingInvite }) {
   const className = `ProjectCard ${ disabled ? 'disabled' : 'enabled'}`
   if (!project) return null
   const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
@@ -41,11 +42,27 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
         <ProjectManagerAvatars managers={project.members} maxShownNum={10} />
         <div>
           {(!isMember && isInvited) &&
-            <Link to={`/projects/${project.id}`} className="spacing">
-              <div className="join-btn" style={{margin: '5px'}}>
-                Join project
-              </div>
-            </Link>
+            <div className="spacing join-btn-container">
+              {(!isAcceptingInvite) && (
+                <button
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    callInviteRequest(project, true)
+                  }}
+                  className={'tc-btn tc-btn-primary tc-btn-md blue accept-btn'}
+                >
+                  Join project
+                </button>)}
+              {(!isAcceptingInvite) && (
+                <button
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    callInviteRequest(project, false)
+                  }}
+                  className="decline-btn"
+                >Decline</button>)}
+              {isAcceptingInvite && (<LoadingIndicator isSmall />)}
+            </div>
           }
         </div>
       </div>
@@ -54,13 +71,17 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
 }
 
 ProjectCard.defaultTypes = {
+  callInviteRequest: () => {},
+  isAcceptingInvite: false,
 }
 
 ProjectCard.propTypes = {
   project: PT.object.isRequired,
   currentMemberRole: PT.string,
   projectTemplates: PT.array.isRequired,
-  unreadMentionsCount: PT.number.isRequired
+  unreadMentionsCount: PT.number.isRequired,
+  callInviteRequest: PT.func,
+  isAcceptingInvite: PT.bool
   // duration: PT.object.isRequired,
 }
 

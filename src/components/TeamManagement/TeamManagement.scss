@@ -443,6 +443,45 @@
     }
   }
 
+  .decline-btn {
+    @include roboto;
+    cursor: pointer;
+    padding: $base-unit*2 $base-unit*3;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    border: 1px solid $tc-gray-10;
+    border-radius: 20px !important;
+    margin: $base-unit*2 0 $base-unit 0;
+    color: $tc-gray-70;
+    font-size: $tc-label-md;
+    text-align: center;
+    justify-content: center;
+    width: 130px;
+    margin: 5px;
+
+    svg {
+      margin-right: $base-unit * 0.5;
+      transform: scale(.6);
+      fill: $tc-gray-90;
+    }
+
+    &.in-grid {
+      width: 103px;
+      margin: 0 5px 5px 5px;
+    }
+  }
+
+  .accept-btn {
+    border-radius: 20px !important;
+    white-space: nowrap;
+    margin: 5px;
+
+    &.in-grid {
+      padding: 0px 11px !important;
+    }
+  }
+
   .join-btn {
     @include roboto;
     cursor: pointer;
@@ -462,6 +501,7 @@
       fill: $tc-gray-90;
     }
   }
+
 }
 
 .separator {
