@@ -84,10 +84,15 @@
 
     .card-footer {
       // padding-top: 4 * $base_unit;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
     }
 
-    .join-btn {
-      float: right;
+    .join-btn-container {
+      display: flex;
+      align-items: flex-end;
+      flex-direction: column;
     }
   }
 }
