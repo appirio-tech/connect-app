@@ -206,7 +206,8 @@ class Projects extends Component {
     const setIsAcceptingInvite = (isAccepting) => {
       const { isAcceptingInvite } = this.state
 
-      this.setState({ isAcceptingInvite: {
+      this.setState({
+        isAcceptingInvite: {
           ...isAcceptingInvite,
           [project.id]: isAccepting
         }
