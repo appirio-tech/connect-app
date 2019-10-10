@@ -9,6 +9,7 @@ import CoderBot from '../../../../components/CoderBot/CoderBot'
 import ProjectListNavHeader from './ProjectListNavHeader'
 import ProjectsGridView from './ProjectsGridView'
 import ProjectsCardView from '../../../components/projectsCard/ProjectsCardView'
+import { acceptOrRefuseInvite } from '../../../actions/projectMember'
 import { loadProjects, setInfiniteAutoload, setProjectsListView } from '../../../actions/loadProjects'
 import { loadProjectsMetadata } from '../../../../actions/templates'
 import { sortProjects } from '../../../actions/sortProjects'
@@ -18,7 +19,9 @@ import { updateProject } from '../../../actions/project'
 import { getNewProjectLink } from '../../../../helpers/projectHelper'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
-  PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE, SCREEN_BREAKPOINT_MD } from '../../../../config/constants'
+  PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE, SCREEN_BREAKPOINT_MD,
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED,
+} from '../../../../config/constants'
 import TwoColsLayout from '../../../../components/TwoColsLayout'
 import UserSidebar from '../../../../components/UserSidebar/UserSidebar'
 
@@ -37,7 +40,9 @@ const EnhancedCards = dataLoadHandler(errorHandler(ProjectsCardView))
 class Projects extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      isAcceptingInvite: {}
+    }
     this.sortHandler = this.sortHandler.bind(this)
     this.onChangeStatus = this.onChangeStatus.bind(this)
     this.onPageChange = this.onPageChange.bind(this)
@@ -47,6 +52,7 @@ class Projects extends Component {
     this.changeView = this.changeView.bind(this)
     this.init = this.init.bind(this)
     this.removeScrollPosition = this.removeScrollPosition.bind(this)
+    this.callInviteRequest = this.callInviteRequest.bind(this)
   }
 
   componentWillUnmount(){
@@ -191,9 +197,37 @@ class Projects extends Component {
     this.props.loadProjects(criteria)
   }
 
+  /**
+   * Call request to accept or decline invite
+   * @param {Object} project project info
+   * @param {Bool} isAccept is accept invite
+   */
+  callInviteRequest(project, isAccept) {
+    const isAcceptingInvite = (isAcception) => {
+      const { isAcceptingInvite } = this.state
+      isAcceptingInvite[project.id] = isAcception
+      this.setState({ isAcceptingInvite })
+    }
+
+    isAcceptingInvite(true)
+
+    this.props.acceptOrRefuseInvite(project.id, {
+      userId: this.props.currentUser.userId,
+      email: this.props.currentUser.email,
+      status: isAccept ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
+    }, this.props.currentUser).then(() => {
+      isAcceptingInvite(false)
+    }) .catch((err) => {
+      // if we fail to accept invite
+      console.log(err)
+      isAcceptingInvite(false)
+    })
+  }
+
   render() {
     const { isPowerUser, isCustomer, isLoading, totalCount, criteria, projectsListView, setProjectsListView,
       setInfiniteAutoload, loadProjects, history, orgConfig, allProjectsCount, user } = this.props
+    const { isAcceptingInvite } = this.state
     // show walk through if user is customer and no projects were returned
     // for default filters
     const showWalkThrough = !isLoading && !isPowerUser && totalCount === 0 && allProjectsCount === 0 &&
@@ -212,6 +246,8 @@ class Projects extends Component {
         setFilter={this.setFilter}
         criteria={criteria}
         isCustomer={isCustomer}
+        callInviteRequest={this.callInviteRequest}
+        isAcceptingInvite={isAcceptingInvite}
       />
     )
     const cardView = (
@@ -224,6 +260,8 @@ class Projects extends Component {
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
         newProjectLink={getNewProjectLink(orgConfig)}
+        callInviteRequest={this.callInviteRequest}
+        isAcceptingInvite={isAcceptingInvite}
       />
     )
     let projectsView
@@ -324,6 +362,14 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
   }
 }
 
-const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject, setProjectsListView, sortProjects, loadProjectsMetadata }
+const actionsToBind = {
+  loadProjects,
+  setInfiniteAutoload,
+  updateProject,
+  setProjectsListView,
+  sortProjects,
+  loadProjectsMetadata,
+  acceptOrRefuseInvite
+}
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(Projects))

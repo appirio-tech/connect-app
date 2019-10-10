@@ -161,11 +161,18 @@ export function inviteProjectMembers(projectId, emailIds, handles) {
   }
 }
 
-export function acceptOrRefuseInvite(projectId, item) {
+/**
+ * Accept or refuse invite
+ * @param {Number} projectId project id
+ * @param {Object} item accept or refuse invite info
+ * @param {Object} currentUser current user info
+ */
+export function acceptOrRefuseInvite(projectId, item, currentUser) {
   return (dispatch) => {
     return dispatch({
       type: ACCEPT_OR_REFUSE_INVITE,
-      payload: updateProjectMemberInvite(projectId, item)
+      payload: updateProjectMemberInvite(projectId, item),
+      meta: { projectId, currentUser },
     })
   }
 }
