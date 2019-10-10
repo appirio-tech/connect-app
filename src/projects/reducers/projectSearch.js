@@ -73,7 +73,7 @@ export default function(state = initialState, action) {
       const bigRoles = _.intersectionWith(roles, ADMIN_ROLES.concat(MANAGER_ROLES), _.isEqual)
 
       const projectIndex = _.findIndex(projects, {id: action.meta.projectId})
-      if (!_.isNil(projectIndex)) {
+      if (projectIndex > -1) {
         if (bigRoles.length === 0) {
           // remove project from the search list if normal user refuse invite
           return update(state, {
@@ -82,7 +82,7 @@ export default function(state = initialState, action) {
         } else {
           // remove user from invites list
           const userIndex = _.findIndex(projects[projectIndex].invites, {userId: action.meta.currentUser.userId})
-          if (!_.isNil(userIndex)) {
+          if (userIndex > -1) {
             const updatedProject = update(projects[projectIndex], {
               invites: { $splice: [[userIndex, 1]] },
             })
@@ -96,15 +96,29 @@ export default function(state = initialState, action) {
       // user accept invite
       const { projects } = state
       const projectIndex = _.findIndex(projects, {id: action.meta.projectId})
-      if (!_.isNil(projectIndex)) {
-        const user = _.cloneDeep(_.pick(action.meta.currentUser, [
-          'userId', 'projectId', 'photoURL', 'handle',
-        ]))
-        user.role = action.payload.role
-        user.deletedAt = null
-        const updatedProject = update(projects[projectIndex], {
-          members: { $push: [user] },
+
+      if (projectIndex > -1) {
+        // construct member for the project member list
+        const member = _.pick(action.meta.currentUser, [
+          'userId', 'photoURL', 'handle',
+        ])
+        member.role = action.payload.role
+        member.projectId = action.meta.projectId
+
+        // add new member to member list
+        let updatedProject = update(projects[projectIndex], {
+          members: { $push: [member] },
         })
+
+        // remove user from invites list
+        const userIndex = _.findIndex(projects[projectIndex].invites, {userId: action.meta.currentUser.userId})
+        if (userIndex > -1) {
+          updatedProject = update(updatedProject, {
+            invites: { $splice: [[userIndex, 1]] },
+          })
+        }
+
+        // update project
         return update(state, {
           projects: { $splice: [[projectIndex, 1, updatedProject]] }
         })

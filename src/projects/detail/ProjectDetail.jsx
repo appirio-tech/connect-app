@@ -163,7 +163,7 @@ class ProjectDetail extends Component {
       this.onUserInviteAction(queryUrlParams.invitation === 'accept')
     }
 
-    if (project && project.invites.length > 0 && this.shouldForceCallAcceptRefuseRequest()) {
+    if (project && project.invites && project.invites.length > 0 && this.shouldForceCallAcceptRefuseRequest()) {
       // remove invitation query param
       this.props.history.replace(`/projects/${this.props.match.params.projectId}`)
     }

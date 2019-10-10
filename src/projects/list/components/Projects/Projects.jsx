@@ -203,24 +203,28 @@ class Projects extends Component {
    * @param {Bool} isAccept is accept invite
    */
   callInviteRequest(project, isAccept) {
-    const isAcceptingInvite = (isAcception) => {
+    const setIsAcceptingInvite = (isAccepting) => {
       const { isAcceptingInvite } = this.state
-      isAcceptingInvite[project.id] = isAcception
-      this.setState({ isAcceptingInvite })
+
+      this.setState({ isAcceptingInvite: {
+          ...isAcceptingInvite,
+          [project.id]: isAccepting
+        }
+      })
     }
 
-    isAcceptingInvite(true)
+    setIsAcceptingInvite(true)
 
     this.props.acceptOrRefuseInvite(project.id, {
       userId: this.props.currentUser.userId,
       email: this.props.currentUser.email,
       status: isAccept ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
     }, this.props.currentUser).then(() => {
-      isAcceptingInvite(false)
+      setIsAcceptingInvite(false)
     }) .catch((err) => {
       // if we fail to accept invite
       console.log(err)
-      isAcceptingInvite(false)
+      setIsAcceptingInvite(false)
     })
   }
 
