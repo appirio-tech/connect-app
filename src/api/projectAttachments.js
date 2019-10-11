@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
 import { PROJECTS_API_URL, FILE_PICKER_SUBMISSION_CONTAINER_NAME } from '../config/constants'
 

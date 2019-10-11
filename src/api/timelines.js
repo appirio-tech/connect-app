@@ -1,7 +1,6 @@
 /**
  * Timelines and milestones API
  */
-import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL } from '../config/constants'
 
