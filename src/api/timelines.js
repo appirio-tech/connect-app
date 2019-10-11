@@ -13,8 +13,8 @@ import { TC_API_URL } from '../config/constants'
 export function getTimelinesByReference(reference, referenceId) {
   const filterQuery = encodeURIComponent(`reference=${reference}&referenceId=${referenceId}`)
 
-  return axios.get(`${TC_API_URL}/v4/timelines?filter=${filterQuery}`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.get(`${TC_API_URL}/v5/timelines?filter=${filterQuery}`)
+    .then(resp => resp.data)
 }
 
 /**
@@ -24,8 +24,8 @@ export function getTimelinesByReference(reference, referenceId) {
  */
 export function getTimelineById(id) {
 
-  return axios.get(`${TC_API_URL}/v4/timelines/${id}`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.get(`${TC_API_URL}/v5/timelines/${id}`)
+    .then(resp => resp.data)
 }
 
 /**
@@ -38,10 +38,10 @@ export function getTimelineById(id) {
  * @returns {Promise} milestone
  */
 export function updateMilestone(timelineId, milestoneId, updatedProps) {
-  return axios.patch(`${TC_API_URL}/v4/timelines/${timelineId}/milestones/${milestoneId}`, {
-    param: updatedProps,
+  return axios.patch(`${TC_API_URL}/v5/timelines/${timelineId}/milestones/${milestoneId}`, {
+    ...updatedProps,
   })
-    .then(resp => _.get(resp.data, 'result.content'))
+    .then(resp => resp.data)
 }
 
 /**
@@ -52,8 +52,8 @@ export function updateMilestone(timelineId, milestoneId, updatedProps) {
  * @returns {Promise<[]>} list of milestone templates
  */
 export function getMilestoneTemplates(productTemplateId) {
-  return axios.get(`${TC_API_URL}/v4/productTemplates/${productTemplateId}/milestones`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.get(`${TC_API_URL}/v5/productTemplates/${productTemplateId}/milestones`)
+    .then(resp => resp.data)
 }
 
 /**
@@ -64,10 +64,10 @@ export function getMilestoneTemplates(productTemplateId) {
  * @returns {Promise} timeline
  */
 export function createTimeline(timeline) {
-  return axios.post(`${TC_API_URL}/v4/timelines`, {
-    param: timeline
+  return axios.post(`${TC_API_URL}/v5/timelines`, {
+    ...timeline
   })
-    .then(resp => _.get(resp.data, 'result.content', {}))
+    .then(resp => resp.data)
 }
 
 /**
@@ -79,8 +79,8 @@ export function createTimeline(timeline) {
  * @returns {Promise} timeline
  */
 export function updateTimeline(timelineId, updatedProps) {
-  return axios.patch(`${TC_API_URL}/v4/timelines/${timelineId}`, {
-    param: updatedProps,
+  return axios.patch(`${TC_API_URL}/v5/timelines/${timelineId}`, {
+    ...updatedProps,
   })
-    .then(resp => _.get(resp.data, 'result.content'))
+    .then(resp => resp.data)
 }
