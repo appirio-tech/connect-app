@@ -104,6 +104,7 @@ export default function(state = initialState, action) {
         ])
         member.role = action.payload.role
         member.projectId = action.meta.projectId
+        member.deletedAt = null // explicitly set `null` as non-deleted members have this value
 
         // add new member to member list
         let updatedProject = update(projects[projectIndex], {
