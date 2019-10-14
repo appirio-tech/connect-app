@@ -61,9 +61,7 @@ export function getMilestoneTemplates(productTemplateId) {
  * @returns {Promise} timeline
  */
 export function createTimeline(timeline) {
-  return axios.post(`${TC_API_URL}/v5/timelines`, {
-    ...timeline
-  })
+  return axios.post(`${TC_API_URL}/v5/timelines`, timeline)
     .then(resp => resp.data)
 }
 

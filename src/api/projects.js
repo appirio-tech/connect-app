@@ -155,7 +155,7 @@ export function createProject(projectProps) {
   // have the discussions tab enabled
   projectProps.details.hideDiscussions = true
 
-  return axios.post(`${PROJECTS_API_URL}/v5/projects/`, { ...projectProps })
+  return axios.post(`${PROJECTS_API_URL}/v5/projects/`, projectProps)
     .then( resp => resp.data)
 }
 
@@ -182,7 +182,7 @@ export function createProjectPhase(projectId, phase) {
  * @return {Promise} resolves to new product
  */
 export function createPhaseProduct(projectId, phaseId, product) {
-  return axios.post(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}/products`, { ...product })
+  return axios.post(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}/products`, product)
     .then( resp => resp.data)
 }
 
@@ -192,7 +192,7 @@ export function createProjectWithStatus(projectProps, status) {
   // have the discussions tab enabled
   projectProps.details.hideDiscussions = true
 
-  return axios.post(`${PROJECTS_API_URL}/v5/projects/`, { ...projectProps })
+  return axios.post(`${PROJECTS_API_URL}/v5/projects/`, projectProps)
     .then( resp => resp.data)
     .then(project => {
       const updatedProps = { status }
