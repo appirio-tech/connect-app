@@ -9,7 +9,7 @@ import { PROJECTS_API_URL } from '../config/constants'
  */
 export function updateProjectMemberInvite(projectId, member) {
   const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/invite/`
-  return axios.put(url, { ...member })
+  return axios.put(url, member)
     .then(resp => resp.data)
 }
 

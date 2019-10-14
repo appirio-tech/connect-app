@@ -4,7 +4,7 @@ import { PROJECTS_API_URL, FILE_PICKER_SUBMISSION_CONTAINER_NAME } from '../conf
 export function addProjectAttachment(projectId, fileData) {
   // add s3 bucket prop
   fileData.s3Bucket = FILE_PICKER_SUBMISSION_CONTAINER_NAME
-  return axios.post(`${PROJECTS_API_URL}/v5/projects/${projectId}/attachments`, { ...fileData })
+  return axios.post(`${PROJECTS_API_URL}/v5/projects/${projectId}/attachments`, fileData)
     .then( resp => {
       resp.data.downloadUrl = `/projects/${projectId}/attachments/${resp.data.id}`
       return resp.data
@@ -20,8 +20,7 @@ export function updateProjectAttachment(projectId, attachmentId, attachment) {
   }
 
   return axios.patch(
-    `${PROJECTS_API_URL}/v5/projects/${projectId}/attachments/${attachmentId}`,
-    { ...attachment })
+    `${PROJECTS_API_URL}/v5/projects/${projectId}/attachments/${attachmentId}`, attachment)
     .then ( resp => {
       resp.data.downloadUrl = `/projects/${projectId}/attachments/${attachmentId}`
       return resp.data
@@ -43,7 +42,7 @@ export function getProjectAttachment(projectId, attachmentId) {
 export function addProductAttachment(projectId, phaseId, productId, fileData) {
   // add s3 bucket prop
   fileData.s3Bucket = FILE_PICKER_SUBMISSION_CONTAINER_NAME
-  return axios.post(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}/products/${productId}/attachments`, { ...fileData })
+  return axios.post(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}/products/${productId}/attachments`, fileData)
     .then( resp => {
       resp.data.downloadUrl = `/projects/${projectId}/phases/${phaseId}/products/${productId}/attachments/${resp.data.id}`
       return resp.data
@@ -52,8 +51,7 @@ export function addProductAttachment(projectId, phaseId, productId, fileData) {
 
 export function updateProductAttachment(projectId, phaseId, productId, attachmentId, attachment) {
   return axios.patch(
-    `${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}/products/${productId}/attachments/${attachmentId}`,
-    { ...attachment })
+    `${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}/products/${productId}/attachments/${attachmentId}`, attachment)
     .then ( resp => {
       resp.data.downloadUrl = `/projects/${projectId}/phases/${phaseId}/products/${productId}/attachments/${attachmentId}`
       return resp.data

@@ -50,7 +50,7 @@ export function addProjectMember(projectId, newMember) {
 
 export function updateProjectMember(projectId, memberId, updatedProps) {
   const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/${memberId}/`
-  return axios.patch(url, { ...updatedProps })
+  return axios.patch(url, updatedProps)
     .then(resp => resp.data)
 }
 
