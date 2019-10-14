@@ -4,36 +4,31 @@ import { TC_API_URL, PROJECTS_API_URL, PROJECTS_LIST_PER_PAGE } from '../config/
 
 export function getProjects(criteria, pageNum) {
   // add default params
-  const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', 'details', 'lastActivityAt', 'lastActivityUserId', 'version', 'templateId']
   const params = {
-    limit: PROJECTS_LIST_PER_PAGE,
-    offset: (pageNum - 1) * PROJECTS_LIST_PER_PAGE,
-    fields: includeFields.join(',')
+    perPage: PROJECTS_LIST_PER_PAGE,
+    page: (pageNum - 1) * PROJECTS_LIST_PER_PAGE,
+    ..._.pick(criteria, ['id', 'status', 'type', 'memberOnly', 'keyword', 'name', 'code', 'customer', 'manager', 'members', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', 'details', 'lastActivityAt', 'lastActivityUserId', 'version', 'templateId', 'description', 'sort' ])
   }
   // filters
   const filter = _.omit(criteria, ['sort'])
   if (!_.isEmpty(filter)) {
     // support for multiple comma separated types
     if (filter.type && filter.type.indexOf(',') > -1) {
-      filter.type = `in(${filter.type})`
+      params.type = `in(${filter.type})`
+    } else if (filter.type) {
+      params.type = filter.type
     }
     // support for multiple comma separated segments
     if (filter.segment && filter.segment.indexOf(',') > -1) {
       filter.segment = `in(${filter.segment})`
     }
-    // convert filter object to string
-    const filterStr = _.map(filter, (v, k) => `${k}=${encodeURIComponent(v)}`)
-    params.filter = filterStr.join('&')
   }
-  // sort fields
-  const sort = _.get(criteria, 'sort', null)
-  if (sort) params.sort = sort
 
-  return axios.get(`${PROJECTS_API_URL}/v4/projects/`, { params })
+  return axios.get(`${PROJECTS_API_URL}/v5/projects/`, { ...params })
     .then( resp => {
       return {
-        totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
-        projects: _.get(resp.data, 'result.content', [])
+        totalCount: _.get(resp.header, 'x-total', 0),
+        projects: resp.data,
       }
     })
 }
