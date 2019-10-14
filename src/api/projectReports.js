@@ -9,15 +9,15 @@ import { PROJECTS_API_URL } from '../config/constants'
  */
 export function getProjectSummary(projectId) {
 
-  const summaryPromise = axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/reports?reportName=summary`)
-  const budgetPromise = axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/reports?reportName=projectBudget`)
+  const summaryPromise = axios.get(`${PROJECTS_API_URL}/v5/projects/${projectId}/reports?reportName=summary`)
+  const budgetPromise = axios.get(`${PROJECTS_API_URL}/v5/projects/${projectId}/reports?reportName=projectBudget`)
 
   return Promise.all([summaryPromise, budgetPromise]).then(responses => {
-    const res = _.get(responses[0].data, 'result.content', {})
+    const res = responses[0].data
     const designMetrics = _.find(res, c => c['challenge.track'] === 'Design') || {}
     const totalRegistrants = _.sumBy(res, c => c['challenge.num_registrations'])
 
-    const res1 = _.get(responses[1].data, 'result.content', {})
+    const res1 = responses[1].data
     const filterReport = c => `${c['project_stream.tc_connect_project_id']}` === projectId.toString()
     const projectBudget = _.find(res1, filterReport) || {}
 
@@ -29,7 +29,7 @@ export function getProjectSummary(projectId) {
         revenue: parseFloat(projectBudget['project_stream.total_invoiced_amount'] || 0),
         remaining: parseFloat(projectBudget['project_stream.remaining_invoiced_budget'] || 0)
       },
-      // null values will be filled in as back-end implementation/integration is done. 
+      // null values will be filled in as back-end implementation/integration is done.
       topcoderDifference: {
         countries: null,
         registrants: totalRegistrants,

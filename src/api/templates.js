@@ -65,7 +65,7 @@ export function createProjectsMetadata(type, data) {
     const key = data.key
     const tmpdata = _.omit(data, ['key', 'version', 'id', 'revision'])
     return axios.post(`${PROJECTS_API_URL}/v5/projects/metadata/${type}/${key}/versions`, tmpdata)
-      .then(resp => _.get(resp.data, 'result.content', {}))
+      .then(resp => resp.data)
   } else {
     const path = type !== 'milestoneTemplates' ? 'projects' : 'timelines'
     return axios.post(`${PROJECTS_API_URL}/v5/${path}/metadata/${type}`, data)
