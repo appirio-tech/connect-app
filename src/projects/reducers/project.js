@@ -37,6 +37,7 @@ const initialState = {
   attachmentsAwaitingPermission: null,
   attachmentPermissions: null,
   error: false,
+  inviteError: false,
   project: {
     invites: [] // invites are pushed directly into it hence need to declare first
   },
@@ -208,12 +209,14 @@ export const projectState = function (state=initialState, action) {
 
   case ACCEPT_OR_REFUSE_INVITE_PENDING:
     return Object.assign({}, state, {
-      showUserInvited: true
+      showUserInvited: true,
+      inviteError: false,
     })
 
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
     return Object.assign({}, state, {
       showUserInvited: false,
+      inviteError: false,
     })
   }
 
@@ -828,7 +831,6 @@ export const projectState = function (state=initialState, action) {
   case REMOVE_PRODUCT_ATTACHMENT_FAILURE:
   case DELETE_PROJECT_PHASE_FAILURE:
   case LOAD_PROJECT_MEMBER_INVITES_FAILURE:
-  case ACCEPT_OR_REFUSE_INVITE_FAILURE:
     return Object.assign({}, state, {
       isLoading: false,
       processing: false,
@@ -836,6 +838,16 @@ export const projectState = function (state=initialState, action) {
       processingAttachments: false,
       processingInvites: false,
       error: parseErrorObj(action)
+    })
+  case ACCEPT_OR_REFUSE_INVITE_FAILURE:
+    return Object.assign({}, state, {
+      isLoading: false,
+      processing: false,
+      processingMembers: false,
+      processingAttachments: false,
+      processingInvites: false,
+      error: parseErrorObj(action),
+      inviteError: parseErrorObj(action)
     })
 
   default:

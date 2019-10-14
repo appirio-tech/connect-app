@@ -20,7 +20,8 @@ const ProjectsCardView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
   const { projects, members, currentUser, onPageChange, pageNum, totalCount, infiniteAutoload, newProjectLink,
-    setInfiniteAutoload, isLoading, onChangeStatus, projectsStatus, projectTemplates, applyFilters, notifications } = props
+    setInfiniteAutoload, isLoading, onChangeStatus, projectsStatus, projectTemplates, applyFilters, notifications,
+    callInviteRequest, isAcceptingInvite } = props
   // const currentSortField = _.get(criteria, 'sort', '')
 
   // annotate projects with member data
@@ -50,6 +51,8 @@ const ProjectsCardView = props => {
         onChangeStatus={onChangeStatus}
         projectTemplates={projectTemplates}
         unreadMentionsCount={unreadMentionsCount}
+        callInviteRequest={callInviteRequest}
+        isAcceptingInvite={isAcceptingInvite[project.id]}
       />
     </div>)
   }
@@ -97,7 +100,7 @@ const ProjectsCardView = props => {
         hasMore={hasMore}
         threshold={500}
       >
-        { [...projects, ...placeholders].map(renderProject)}
+        { [...projects, ...placeholders].map((project) => renderProject(project))}
         {moreProject(true)}
         <div className="project-card project-card-new">
           <NewProjectCard link={newProjectLink} />
@@ -129,6 +132,8 @@ ProjectsCardView.propTypes = {
   applyFilters: PropTypes.func,
   isLoading: PropTypes.bool,
   projectTemplates: PropTypes.array.isRequired,
+  callInviteRequest: PropTypes.func,
+  isAcceptingInvite: PropTypes.object,
 }
 
 

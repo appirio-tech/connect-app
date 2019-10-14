@@ -652,6 +652,21 @@ export const ROLE_PROGRAM_MANAGER = 'Program Manager'
 export const ROLE_SOLUTION_ARCHITECT = 'Solution Architect'
 export const ROLE_PROJECT_MANAGER = 'Project Manager'
 
+export const ADMIN_ROLES = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
+
+export const MANAGER_ROLES = [
+  ...ADMIN_ROLES,
+  ROLE_CONNECT_MANAGER,
+  ROLE_CONNECT_ACCOUNT_MANAGER,
+  ROLE_CONNECT_COPILOT_MANAGER,
+  ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
+  ROLE_PRESALES,
+  ROLE_ACCOUNT_EXECUTIVE,
+  ROLE_PROGRAM_MANAGER,
+  ROLE_SOLUTION_ARCHITECT,
+  ROLE_PROJECT_MANAGER,
+]
+
 // to be able to start the Connect App we should pass at least the dummy value for `FILE_PICKER_API_KEY`
 // but if we want to test file uploading we should provide the real value in `FILE_PICKER_API_KEY` env variable
 export const FILE_PICKER_API_KEY = process.env.FILE_PICKER_API_KEY || 'DUMMY'
