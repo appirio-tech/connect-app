@@ -43,7 +43,7 @@ export function loadMemberSuggestions(value) {
 
 export function addProjectMember(projectId, newMember) {
   const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/`
-  return axios.post(url, { ...newMember})
+  return axios.post(url, newMember)
     .then(resp => resp.data)
 }
 

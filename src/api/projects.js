@@ -5,7 +5,6 @@ import { TC_API_URL, PROJECTS_API_URL, PROJECTS_LIST_PER_PAGE } from '../config/
 export function getProjects(criteria, pageNum) {
 
   const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', 'details', 'lastActivityAt', 'lastActivityUserId', 'version', 'templateId']
-  // add default params
   const params = {
     fields: includeFields.join(','),
     sort: 'updatedAt+desc', // default sort value
@@ -145,9 +144,7 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
  * @return {Promise}             updated product
  */
 export function updateProduct(projectId, phaseId, productId, updatedProps) {
-  return axios.patch(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}/products/${productId}`, {
-    ...updatedProps,
-  })
+  return axios.patch(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}/products/${productId}`, updatedProps)
     .then(resp => resp.data)
 }
 

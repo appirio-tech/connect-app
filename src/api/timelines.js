@@ -37,9 +37,7 @@ export function getTimelineById(id) {
  * @returns {Promise} milestone
  */
 export function updateMilestone(timelineId, milestoneId, updatedProps) {
-  return axios.patch(`${TC_API_URL}/v5/timelines/${timelineId}/milestones/${milestoneId}`, {
-    ...updatedProps,
-  })
+  return axios.patch(`${TC_API_URL}/v5/timelines/${timelineId}/milestones/${milestoneId}`, updatedProps)
     .then(resp => resp.data)
 }
 
@@ -78,8 +76,6 @@ export function createTimeline(timeline) {
  * @returns {Promise} timeline
  */
 export function updateTimeline(timelineId, updatedProps) {
-  return axios.patch(`${TC_API_URL}/v5/timelines/${timelineId}`, {
-    ...updatedProps,
-  })
+  return axios.patch(`${TC_API_URL}/v5/timelines/${timelineId}`, updatedProps)
     .then(resp => resp.data)
 }
