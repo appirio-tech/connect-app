@@ -18,8 +18,6 @@ export function getProjects(criteria, pageNum) {
     // support for multiple comma separated types
     if (filter.type && filter.type.indexOf(',') > -1) {
       params.type = `in(${filter.type})`
-    } else if (filter.type) {
-      params.type = filter.type
     }
   }
 
