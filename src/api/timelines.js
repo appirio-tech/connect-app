@@ -10,9 +10,7 @@ import { TC_API_URL } from '../config/constants'
  * @return {Promise<[]>} list of timelines
  */
 export function getTimelinesByReference(reference, referenceId) {
-  const filterQuery = encodeURIComponent(`reference=${reference}&referenceId=${referenceId}`)
-
-  return axios.get(`${TC_API_URL}/v5/timelines?filter=${filterQuery}`)
+  return axios.get(`${TC_API_URL}/v5/timelines?reference=${reference}&referenceId=${referenceId}`)
     .then(resp => resp.data)
 }
 
