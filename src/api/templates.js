@@ -93,13 +93,19 @@ export function updateProjectsMetadata(metadataId, type, data) {
     return axios.patch(`${PROJECTS_API_URL}/v4/projects/metadata/${type}/${key}/versions/${version}`, {
       param: tmpdata
     })
-      .then(resp => _.get(resp.data, 'result.content', {}))
+      .then(resp => {
+        const versionMetadata = _.get(resp.data, 'result.content', {})
+        return { type, versionMetadata }
+      })
   } else {
     const path = type !== 'milestoneTemplates' ? 'projects' : 'timelines'
     return axios.patch(`${PROJECTS_API_URL}/v4/${path}/metadata/${type}/${metadataId}`, {
       param: data
     })
-      .then(resp => _.get(resp.data, 'result.content', {}))
+      .then(resp => {
+        const metadata = _.get(resp.data, 'result.content', {})
+        return { type, metadata }
+      })
   }
 }
 
