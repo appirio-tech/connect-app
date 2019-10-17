@@ -197,14 +197,35 @@ export default function(state = initialState, action) {
       metadata: action.payload,
       error: false,
     }
-  case UPDATE_PROJECTS_METADATA_SUCCESS:
+  case UPDATE_PROJECTS_METADATA_SUCCESS: {
     Alert.success('PROJECT METADATA UPDATE SUCCESS')
-    return {
-      ...state,
-      isLoading: false,
-      metadata: action.payload,
-      error: false,
+    const type = action.payload.type
+    const keys = ['form', 'planConfig', 'priceConfig']
+    if (keys.includes(type)) {
+      return {
+        ...state,
+        isLoading: false,
+        metadataRevisions: _.orderBy([...state.metadataRevisions, action.payload.versionMetadata], ['updatedAt'], ['desc']),
+        versionMetadata: action.payload.versionMetadata,
+        planConfigs: type === 'planConfig' ? _.orderBy(_.concat(_.differenceBy(state.planConfigs, [action.payload.versionMetadata], 'key'), action.payload.versionMetadata), ['updatedAt'], ['desc']) : state.planConfigs,
+        forms: type === 'form' ? _.orderBy(_.concat(_.differenceBy(state.forms, [action.payload.versionMetadata], 'key'), action.payload.versionMetadata), ['updatedAt'], ['desc']) : state.forms,
+        priceConfigs: type === 'priceConfig' ? _.orderBy(_.concat(_.differenceBy(state.priceConfigs, [action.payload.versionMetadata], 'key'), action.payload.versionMetadata), ['updatedAt'], ['desc']) : state.priceConfigs,
+        error: false,
+      }
+    } else {
+      return {
+        ...state,
+        isLoading: false,
+        metadata: action.payload.metadata,
+        error: false,
+        projectTemplates: type === 'projectTemplates' ? _.orderBy(_.concat(_.differenceBy(state.projectTemplates, [action.payload.metadata], 'key'), action.payload.metadata), ['updatedAt'], ['desc']) : state.projectTemplates,
+        projectTypes: type === 'projectTypes' ? _.orderBy(_.concat(_.differenceBy(state.projectTypes, [action.payload.metadata], 'key'), action.payload.metadata), ['updatedAt'], ['desc']) : state.projectTypes,
+        productTemplates: type === 'productTemplates' ? _.orderBy(_.concat(_.differenceBy(state.productTemplates, [action.payload.metadata], 'id'), action.payload.metadata), ['updatedAt'], ['desc']) : state.productTemplates,
+        productCategories: type === 'productCategories' ? _.orderBy(_.concat(_.differenceBy(state.productCategories, [action.payload.metadata], 'key'), action.payload.metadata), ['updatedAt'], ['desc']) : state.productCategories,
+        milestoneTemplates: type === 'milestoneTemplates' ? _.orderBy(_.concat(_.differenceBy(state.milestoneTemplates, [action.payload.metadata], 'id'), action.payload.metadata), ['updatedAt'], ['desc']) : state.milestoneTemplates,
+      }
     }
+  }
   case REMOVE_PROJECTS_METADATA_SUCCESS:
   case REMOVE_PRODUCT_CATEGORY_SUCCESS:
   case REMOVE_PROJECT_TYPE_SUCCESS:
