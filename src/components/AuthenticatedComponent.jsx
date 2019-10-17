@@ -22,8 +22,8 @@ export function requiresAuthentication(Component) {
         this.setState({isLoggedIn: true})
       }).catch((error) => {
         console.log(error)
-        // FIXME should we include hash, search etc
-        const redirectBackToUrl = window.location.origin + this.props.location.pathname
+        // we have to to redirect to the same page, so we use the whole URL
+        const redirectBackToUrl = encodeURIComponent(window.location.href)
         const newLocation = ACCOUNTS_APP_LOGIN_URL + '?retUrl=' + redirectBackToUrl
         console.log('redirecting... ', newLocation)
         window.location = newLocation
