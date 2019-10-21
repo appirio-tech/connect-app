@@ -90,6 +90,13 @@ jobs:
       LOGICAL_ENV: "dev"
     steps: *deploy_steps
 
+  deployTest01:
+    <<: *deploy_defaults
+    environment:
+      DEPLOY_ENV: "DEV"
+      LOGICAL_ENV: "test01"
+    steps: *deploy_steps
+
   deployProd:
     <<: *deploy_defaults
     environment:
@@ -119,6 +126,14 @@ workflows:
           filters:
             branches:
               only: ['dev', 'dev-msinteg']
+              
+      - deployTest01:
+          context : org-global
+          requires:
+            - build-dev
+          filters:
+            branches:
+              only: ['v5-upgrade']
 
       - deployProd:
           context : org-global
