@@ -210,7 +210,7 @@ class ProfileSettingsForm extends Component {
             }
           </div>
         </div>
-        {this.getField('Company name', 'companyName', false, (isCustomer || isCopilot) && !isManager)}
+        {this.getField('Company name', 'companyName', true, (isCustomer || isCopilot) && !isManager)}
         <div className="field">
           <div className="label">
             <span styleName="fieldLabelText">Country</span>
