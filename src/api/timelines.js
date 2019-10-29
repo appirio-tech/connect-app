@@ -20,8 +20,22 @@ export function getTimelinesByReference(reference, referenceId) {
  * @return {Promise} one timeline
  */
 export function getTimelineById(id) {
+  /*
+     As a temporary fix we use `db=true` param which force Project Service to
+     return the data from DB.
+     This is done as a workaround for the cases when we change some milestone inside
+     timeline, it triggers cascading changes of other milestones in Project Service.
+     So to get updated milestones in Connect we are using this requests to get updated
+     timeline with milestones.
+     If we don't get it directly from DB, there is a big chance that timeline with milestones
+     are not yet updated in ES.
 
-  return axios.get(`${TC_API_URL}/v5/timelines/${id}`)
+     TODO: we should avoid this logic in Connect App which relies on the immediate update
+           of data on Project Service.
+           As soon as we do it in Connect App, we can update Project Service to not support
+           this `db=true` param anymore.
+  */
+  return axios.get(`${TC_API_URL}/v5/timelines/${id}?db=true`)
     .then(resp => resp.data)
 }
 
