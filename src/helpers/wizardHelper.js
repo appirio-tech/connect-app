@@ -1073,7 +1073,7 @@ export const removeValuesOfHiddenNodes = (template, project) => {
 
     // if some option is hidden, we remove it's value from the list of values of the parent question
     case LEVEL.OPTION: {
-      if (_.get(nodeObject, 'nodeObject.__wizard.hiddenByCondition')) {
+      if (_.get(nodeObject, '__wizard.hiddenByCondition')) {
         const questionNode = {...node, optionIndex: -1}
         const questionNodeObject = getNodeObject(template, questionNode)
         const questionValue = _.get(updatedProject, questionNodeObject.fieldName)
