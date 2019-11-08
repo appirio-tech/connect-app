@@ -112,12 +112,13 @@ class SkillsQuestion extends React.Component {
     const { options, customOptionValue } = this.state
 
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
-    const mappedCategories = _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
-    const availableOptions = options
-      .filter(option => _.intersection((option.categories || []).map(c => c.toLowerCase()), mappedCategories).length > 0)
-      .map(
-        option => _.pick(option, ['id', 'name'])
-      )
+    const mappedCategories = categoriesMapping && _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
+
+    // if have a mapping for categories, then filter options, otherwise use all options
+    const availableOptions = (categoriesMapping
+      ? options.filter(option => _.intersection((option.categories || []).map(c => c.toLowerCase()), mappedCategories).length > 0)
+      : options
+    ).map(option => _.pick(option, ['id', 'name']))
 
     let currentValues = getValue() || []
     // remove from currentValues not available options but still keep created custom options without id
