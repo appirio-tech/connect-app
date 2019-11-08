@@ -1,0 +1,11 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 50%;
+}

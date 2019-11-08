@@ -5,24 +5,32 @@
  */
 import React from 'react'
 import { connect } from 'react-redux'
+import { getProjectTemplateById } from '../../../helpers/templates'
 
 import ScopeAndSpecificationContainer from './ScopeAndSpecificationContainer'
 
 const ScopeContainer = (props) => {
-  const sections = props.projectTemplate.scope.sections
+  
+  if (!props.projectTemplate) {
+    return null
+  }
+
+  const template = props.projectTemplate.scope
 
   return (
     <ScopeAndSpecificationContainer
       {...{
         ...props,
-        sections
+        template
       }}
     />
   )
 }
 
-const mapStateToProps = ({ projectState }) => ({
-  projectTemplate: projectState.projectTemplate,
+const mapStateToProps = ({ projectState : { project }, templates: { projectTemplates } }) => ({
+  projectTemplate: project && project.templateId && projectTemplates ? (
+    getProjectTemplateById(projectTemplates, project.templateId)
+  ) : null
 })
 
 const mapDispatchToProps = {}

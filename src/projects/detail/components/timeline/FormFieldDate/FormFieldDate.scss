@@ -1,0 +1,104 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+.milestone-post {
+  display: table-row;
+
+  :global {
+    .tc-label {
+      display: none;
+    }
+
+    input:not([type="checkbox"]).tc-file-field__inputs.error {
+      margin-bottom: 12 * $base-unit;
+    }
+
+    input:not([type="checkbox"]).tc-file-field__inputs.error:focus {
+      /* have to use !important because it is defined initially like that */
+      border-color: $tc-dark-blue-70 !important;
+      margin-bottom: 2 * $base-unit;
+    }
+
+    .tc-file-field__inputs.error + p {
+      position: absolute;
+      margin-bottom: 2 * $base-unit;
+      margin-top: - 10 * $base-unit;
+      min-width: 100%;
+    }
+
+    .tc-file-field__inputs.error:focus + p {
+      display: none;
+    }
+  }
+
+  .col-left {
+    display: table-cell;
+    text-align: right;
+    vertical-align: top;
+  }
+
+  .col-right {
+    display: table-cell;
+    text-align: left;
+    width: 100%;
+
+    &::after {
+      clear: both;
+      content: '';
+      display: block;
+      height: 0;
+      width: 100%;
+    }
+  }
+
+  .field-wrapper {
+    float: left;
+    position: relative;
+    width: 170px;
+  }
+
+  .label-title {
+    color: $tc-gray-80;
+    font-size: 15px;
+    line-height: 30px;
+    min-width: 40px;
+    padding: $base-unit 2 * $base-unit $base-unit 0;
+    text-align: right;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  .col-right .label-title {
+    float: left;
+    padding-left: 4 * $base-unit;
+    width: auto;
+  }
+
+  /* use this selector to overwrite the global style for sure */
+  input:not([type="checkbox"]) {
+    text-transform: initial;
+
+    &::placeholder {
+      color: $tc-gray-30;
+      font-size: 15px;
+      text-transform: initial;
+    }
+  }
+
+  /* when two inputs don't fit one line, make them two lines */
+  @media screen and (max-width: 1090px) {
+    .col-right .label-title {
+      clear: left;
+      transform: translateX(-100%);
+      width: auto;
+    }
+
+    .field-wrapper {
+      clear: both;
+
+      &:last-child {
+        margin-top: - 8 * $base-unit;
+      }
+    }
+  }
+}

@@ -1,0 +1,78 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.addon-header {
+  display: block;
+
+  p {
+    color: $tc-gray-70;
+    font-size: 12px;
+    font-style: italic;
+    line-height: 20px;
+    margin-top: 15px;
+
+    + .subcategory {
+      margin-top: 50px;
+    }
+  }
+}
+
+.addon-title {
+  @include roboto-bold;
+  color: $tc-gray-100;
+  font-size: $tc-heading-sm;
+  line-height: 34px;
+  text-align: center;
+}
+
+.subcategory {
+  margin-top: 70px;
+}
+
+.subcategory-title {
+  @include roboto;
+  color: $tc-gray-100;
+  font-size: $tc-heading-sm;
+  line-height: 25px;
+}
+
+.addon-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.addon-checkbox {
+  display: flex;
+  align-items: center;
+}
+
+:global(.checkbox-group-item) .addon-checkbox :global(.tc-checkbox) {
+  vertical-align: middle;
+}
+
+.addon-label + div:not(:global(.checkbox-option-description)) {
+  display: inline-block;
+  width: 70px;
+  margin-left: 20px;
+}
+    
+.subcategory .addon-label + div  :global(.dropdown-wrap.SelectDropdown.default) {
+  max-width: 70px;
+  min-width: 70px;
+}
+
+.addon-qty {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.addon-qty-label {
+
+}
+
+.addon-row .addon-qty .addon-qty-input {
+  width: 70px;
+  height: 30px;
+  margin: 0px;
+  margin-left: 20px;
+}

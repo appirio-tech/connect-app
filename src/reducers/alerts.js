@@ -16,6 +16,16 @@ import {
   ADD_PROJECT_MEMBER_SUCCESS, ADD_PROJECT_MEMBER_FAILURE,
   UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
+  // invite topcoder Team
+  INVITE_TOPCODER_MEMBER_FAILURE, INVITE_TOPCODER_MEMBER_SUCCESS,
+  REMOVE_TOPCODER_MEMBER_INVITE_FAILURE, REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS,
+  // invite customer
+  INVITE_CUSTOMER_FAILURE, INVITE_CUSTOMER_SUCCESS,
+  REMOVE_CUSTOMER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_SUCCESS,
+  // accepted or refused invite
+  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE,
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED,
+  PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED, PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED,
   // project feeds
   CREATE_PROJECT_FEED_FAILURE,
   CREATE_PROJECT_FEED_COMMENT_FAILURE,
@@ -27,13 +37,35 @@ import {
   // Project status
   PROJECT_STATUS_IN_REVIEW,
   // phase comments
-  CREATE_PHASE_FEED_COMMENT_FAILURE,
-  SAVE_PHASE_FEED_COMMENT_FAILURE,
-  DELETE_PHASE_FEED_COMMENT_FAILURE,
+  CREATE_TOPIC_POST_FAILURE,
+  UPDATE_TOPIC_POST_FAILURE,
+  DELETE_TOPIC_POST_FAILURE,
   // products
   UPDATE_PRODUCT_SUCCESS,
   UPDATE_PHASE_FAILURE,
   DELETE_PROJECT_PHASE_SUCCESS,
+  // timelines
+  UPDATE_PRODUCT_TIMELINE_FAILURE,
+  LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE,
+  // milestones
+  UPDATE_PRODUCT_MILESTONE_FAILURE,
+  COMPLETE_PRODUCT_MILESTONE_FAILURE,
+  COMPLETE_PRODUCT_MILESTONE_SUCCESS,
+  EXTEND_PRODUCT_MILESTONE_FAILURE,
+  EXTEND_PRODUCT_MILESTONE_SUCCESS,
+  SUBMIT_FINAL_FIXES_REQUEST_FAILURE,
+  SUBMIT_FINAL_FIXES_REQUEST_SUCCESS,
+  // Scope changes
+  CREATE_SCOPE_CHANGE_REQUEST_SUCCESS,
+  CREATE_SCOPE_CHANGE_REQUEST_FAILURE,
+  APPROVE_SCOPE_CHANGE_SUCCESS,
+  REJECT_SCOPE_CHANGE_SUCCESS,
+  CANCEL_SCOPE_CHANGE_SUCCESS,
+  ACTIVATE_SCOPE_CHANGE_SUCCESS,
+  APPROVE_SCOPE_CHANGE_FAILURE,
+  REJECT_SCOPE_CHANGE_FAILURE,
+  CANCEL_SCOPE_CHANGE_FAILURE,
+  ACTIVATE_SCOPE_CHANGE_FAILURE
 } from '../config/constants'
 /* eslint-enable no-unused-vars */
 
@@ -67,6 +99,18 @@ export default function(state = {}, action) {
     Alert.success('Project deleted.')
     return state
 
+  case COMPLETE_PRODUCT_MILESTONE_SUCCESS:
+    Alert.success('Milestone is completed.')
+    return state
+
+  case EXTEND_PRODUCT_MILESTONE_SUCCESS:
+    Alert.success('Milestone is extended.')
+    return state
+
+  case SUBMIT_FINAL_FIXES_REQUEST_SUCCESS:
+    Alert.success('Final fixes are submitted.')
+    return state
+
   case LOAD_PROJECT_SUCCESS:
     return Object.assign({}, state, {
       project: action.payload
@@ -85,6 +129,46 @@ export default function(state = {}, action) {
     })
   }
 
+  case CREATE_SCOPE_CHANGE_REQUEST_SUCCESS:
+    Alert.success('Submitted the Change Request successfully')
+    return state
+
+  case CREATE_SCOPE_CHANGE_REQUEST_FAILURE:
+    Alert.error('Unable to submit the Change Request')
+    return state
+
+  case APPROVE_SCOPE_CHANGE_SUCCESS:
+    Alert.success('Approved the Scope Change successfully')
+    return state
+
+  case APPROVE_SCOPE_CHANGE_FAILURE:
+    Alert.error('Unable to Approve the Scope Change')
+    return state
+
+  case REJECT_SCOPE_CHANGE_SUCCESS:
+    Alert.success('Rejected the Scope Change successfully')
+    return state
+
+  case REJECT_SCOPE_CHANGE_FAILURE:
+    Alert.error('Unable to Reject the Scope Change')
+    return state
+
+  case CANCEL_SCOPE_CHANGE_SUCCESS:
+    Alert.success('Canceled the Scope Change successfully')
+    return state
+
+  case CANCEL_SCOPE_CHANGE_FAILURE:
+    Alert.error('Unable to Cancel the Scope Change')
+    return state
+
+  case ACTIVATE_SCOPE_CHANGE_SUCCESS:
+    Alert.success('Activated the Scope Change successfully')
+    return state
+
+  case ACTIVATE_SCOPE_CHANGE_FAILURE:
+    Alert.error('Unable to Activate the Scope Change')
+    return state
+
   case UPDATE_PRODUCT_SUCCESS:
     Alert.success('Product updated')
     return state
@@ -96,9 +180,62 @@ export default function(state = {}, action) {
     }
     return state
 
-  case UPDATE_PROJECT_FAILURE:
-    Alert.error('Please add a name for your project and then try saving again.')
+  case ADD_PROJECT_ATTACHMENT_SUCCESS:
+    Alert.success('Added attachment to the project successfully')
     return state
+
+  case UPDATE_PROJECT_ATTACHMENT_SUCCESS:
+    Alert.success('Updated attachment succcessfully')
+    return state
+  case REMOVE_PROJECT_ATTACHMENT_SUCCESS:
+    Alert.success('Removed attachment successfully')
+    return state
+
+  case INVITE_TOPCODER_MEMBER_SUCCESS:
+  case INVITE_CUSTOMER_SUCCESS:
+    if(action.payload.success.length && !action.payload.failed) {
+      Alert.success('You\'ve successfully invited member(s).')
+    } else if (action.payload.success.length && action.payload.failed) {
+      Alert.warning('Some members couldn\'t be invited.')
+    } else if (!action.payload.success.length && action.payload.failed) {
+      Alert.error('You are unable to invite members successfully.')
+    }
+    return state
+
+  case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS:
+  case REMOVE_CUSTOMER_INVITE_SUCCESS:
+    Alert.success('You have successfully remove member invitation.')
+    return state
+
+  case REMOVE_TOPCODER_MEMBER_INVITE_FAILURE:
+  case REMOVE_CUSTOMER_INVITE_FAILURE:
+    Alert.error('You are unable to remove member invitations.')
+    return state
+
+  case INVITE_TOPCODER_MEMBER_FAILURE:
+  case INVITE_CUSTOMER_FAILURE:
+    Alert.error('You are unable to invite members successfully.')
+    return state
+
+  case ACCEPT_OR_REFUSE_INVITE_SUCCESS:
+    if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_ACCEPTED){
+      Alert.success('You\'ve successfully joined the project.')
+    } else if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_REFUSED){
+      Alert.success('You\'ve refused to join the project.')
+    } else if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED){
+      Alert.success('You\'ve approved copilot invitation request.')
+    } else if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED){
+      Alert.success('You\'ve rejected copilot invitation request.')
+    }
+    return state
+
+  case UPDATE_PROJECT_FAILURE: {
+    const data = _.get(action.payload, 'response.data.result')
+    let message = _.get(data, 'content.message', 'Unable to update project')
+    message = _.get(data, 'details', message)
+    Alert.error(message)
+    return state
+  }
 
   case CREATE_PROJECT_FAILURE:
   case DELETE_PROJECT_FAILURE:
@@ -115,10 +252,17 @@ export default function(state = {}, action) {
   case CREATE_PROJECT_FEED_FAILURE:
   case SAVE_PROJECT_FEED_FAILURE:
   case DELETE_PROJECT_FEED_FAILURE:
-  case CREATE_PHASE_FEED_COMMENT_FAILURE:
-  case SAVE_PHASE_FEED_COMMENT_FAILURE:
-  case DELETE_PHASE_FEED_COMMENT_FAILURE:
+  case CREATE_TOPIC_POST_FAILURE:
+  case UPDATE_TOPIC_POST_FAILURE:
+  case DELETE_TOPIC_POST_FAILURE:
   case UPDATE_PHASE_FAILURE:
+  case LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE:
+  case UPDATE_PRODUCT_TIMELINE_FAILURE:
+  case UPDATE_PRODUCT_MILESTONE_FAILURE:
+  case COMPLETE_PRODUCT_MILESTONE_FAILURE:
+  case EXTEND_PRODUCT_MILESTONE_FAILURE:
+  case SUBMIT_FINAL_FIXES_REQUEST_FAILURE:
+  case ACCEPT_OR_REFUSE_INVITE_FAILURE:
     if (action.payload && action.payload.response) {
       const rdata = action.payload.response.data
       if (rdata && rdata.result && rdata.result.content && rdata.result.content.message) {

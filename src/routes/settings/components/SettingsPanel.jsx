@@ -5,32 +5,46 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
+
+import Sticky from 'react-stickynode'
+import MediaQuery from 'react-responsive'
+import TwoColsLayout from '../../../components/TwoColsLayout'
+import UserSidebar from '../../../components/UserSidebar/UserSidebar'
+
+import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
+
 import './SettingsPanel.scss'
 
 const SettingsPanel = (props) => (
-  <div className={cn('settings-panel', { wide: props.isWide })}>
-    <div className="inner">
-      <h1 className="title">{props.title}</h1>
-      <p className="text">
-        {props.text}
-        {props.link && <a href={props.link.to}>{props.link.text}</a>}
-      </p>
-      <div className="content">{props.children}</div>
-    </div>
-  </div>
+  <TwoColsLayout>
+    <TwoColsLayout.Sidebar>
+      <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+        {(matches) => {
+          if (matches) {
+            return (
+              <Sticky top={60}>
+                <UserSidebar user={props.user}/>
+              </Sticky>
+            )
+          } else {
+            return <UserSidebar user={props.user}/>
+          }
+        }}
+      </MediaQuery>
+    </TwoColsLayout.Sidebar>
+    <TwoColsLayout.Content>
+      <div styleName="main">
+        <h1 styleName="title">{props.title}</h1>
+        <div styleName="content">{props.children}</div>
+      </div>
+    </TwoColsLayout.Content>
+  </TwoColsLayout>
 )
 
 SettingsPanel.propTypes = {
-  isWide: PropTypes.bool,
   title: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
-  link: PropTypes.shape({
-    to: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired
-  }),
   children: PropTypes.node,
-  onSaveClick: PropTypes.func
+  user: PropTypes.object,
 }
 
 export default SettingsPanel

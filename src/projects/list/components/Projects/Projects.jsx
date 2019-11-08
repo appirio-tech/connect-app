@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import MediaQuery from 'react-responsive'
+import Sticky from 'react-stickynode'
 import { connect } from 'react-redux'
 import { branch, renderComponent, compose, withProps, renderNothing } from 'recompose'
 import { withRouter } from 'react-router-dom'
@@ -6,16 +8,22 @@ import Walkthrough from '../Walkthrough/Walkthrough'
 import CoderBot from '../../../../components/CoderBot/CoderBot'
 import ProjectListNavHeader from './ProjectListNavHeader'
 import ProjectsGridView from './ProjectsGridView'
-import ProjectsCardView from './ProjectsCardView'
+import ProjectsCardView from '../../../components/projectsCard/ProjectsCardView'
+import { acceptOrRefuseInvite } from '../../../actions/projectMember'
 import { loadProjects, setInfiniteAutoload, setProjectsListView } from '../../../actions/loadProjects'
-import { loadProjectTemplates } from '../../../../actions/templates'
+import { loadProjectsMetadata } from '../../../../actions/templates'
 import { sortProjects } from '../../../actions/sortProjects'
 import _ from 'lodash'
 import querystring from 'query-string'
 import { updateProject } from '../../../actions/project'
-import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED, PROJECT_STATUS_ACTIVE,
-  PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
+import { getNewProjectLink } from '../../../../helpers/projectHelper'
+import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
+  ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
+  PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE, SCREEN_BREAKPOINT_MD,
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED,
+} from '../../../../config/constants'
+import TwoColsLayout from '../../../../components/TwoColsLayout'
+import UserSidebar from '../../../../components/UserSidebar/UserSidebar'
 
 const page500 = compose(
   withProps({code:500})
@@ -32,15 +40,19 @@ const EnhancedCards = dataLoadHandler(errorHandler(ProjectsCardView))
 class Projects extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      isAcceptingInvite: {}
+    }
     this.sortHandler = this.sortHandler.bind(this)
     this.onChangeStatus = this.onChangeStatus.bind(this)
     this.onPageChange = this.onPageChange.bind(this)
     this.applyFilters = this.applyFilters.bind(this)
     this.applySearchFilter = this.applySearchFilter.bind(this)
+    this.setFilter = this.setFilter.bind(this)
     this.changeView = this.changeView.bind(this)
     this.init = this.init.bind(this)
     this.removeScrollPosition = this.removeScrollPosition.bind(this)
+    this.callInviteRequest = this.callInviteRequest.bind(this)
   }
 
   componentWillUnmount(){
@@ -84,7 +96,7 @@ class Projects extends Component {
     document.title = 'Projects - Topcoder'
     // this.searchTermFromQuery = this.props.location.query.q || ''
     const {criteria, loadProjects, location, projects, refresh,
-      projectTemplates, isProjectTemplatesLoading, loadProjectTemplates} = props
+      projectTemplates, isProjectTemplatesLoading, loadProjectsMetadata} = props
     // check for criteria specified in URL.
     const queryParams = querystring.parse(location.search)
     this.setState({status : null})
@@ -108,19 +120,13 @@ class Projects extends Component {
       // perform initial load only if there are not projects already loaded or only one projects
       // otherwise we will get projects duplicated in store
       if (projects.length <= 1 || refresh) {
-        // for powerful user filter by 'active' status by default
-        // we cannot put it to PROJECT_LIST_DEFAULT_CRITERIA because
-        // it would apply for both powerful and regular users
-        if (props.isPowerUser && !criteria.status) {
-          criteria.status = PROJECT_STATUS_ACTIVE
-        }
         this.routeWithParams(criteria)
       }
     }
 
     // load project templates if not yet
     if (!isProjectTemplatesLoading && !projectTemplates) {
-      loadProjectTemplates()
+      loadProjectsMetadata()
     }
   }
 
@@ -162,6 +168,19 @@ class Projects extends Component {
     this.routeWithParams(criteria)
   }
 
+  setFilter(name, filter) {
+    let criteria = _.assign({}, this.props.criteria)
+    if(filter && filter !== '') {
+      const temp = {}
+      temp[`${name}`] = `*${filter}*`
+      criteria = _.assign({}, criteria, temp)
+    } else if(_.has(criteria, name)){
+      criteria = _.omit(criteria, name)
+    }
+
+    this.props.loadProjects(criteria)
+  }
+
   changeView(view) {
     this.setState({selectedView : view})
   }
@@ -178,13 +197,46 @@ class Projects extends Component {
     this.props.loadProjects(criteria)
   }
 
+  /**
+   * Call request to accept or decline invite
+   * @param {Object} project project info
+   * @param {Bool} isAccept is accept invite
+   */
+  callInviteRequest(project, isAccept) {
+    const setIsAcceptingInvite = (isAccepting) => {
+      const { isAcceptingInvite } = this.state
+
+      this.setState({
+        isAcceptingInvite: {
+          ...isAcceptingInvite,
+          [project.id]: isAccepting
+        }
+      })
+    }
+
+    setIsAcceptingInvite(true)
+
+    this.props.acceptOrRefuseInvite(project.id, {
+      userId: this.props.currentUser.userId,
+      email: this.props.currentUser.email,
+      status: isAccept ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
+    }, this.props.currentUser).then(() => {
+      setIsAcceptingInvite(false)
+    }) .catch((err) => {
+      // if we fail to accept invite
+      console.log(err)
+      setIsAcceptingInvite(false)
+    })
+  }
+
   render() {
-    const { isPowerUser, isLoading, totalCount, criteria, currentUser, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history } = this.props
+    const { isPowerUser, isCustomer, isLoading, totalCount, criteria, projectsListView, setProjectsListView,
+      setInfiniteAutoload, loadProjects, history, orgConfig, allProjectsCount, user } = this.props
+    const { isAcceptingInvite } = this.state
     // show walk through if user is customer and no projects were returned
     // for default filters
-    const showWalkThrough = !isLoading && totalCount === 0 &&
-      _.isEqual(criteria, PROJECT_LIST_DEFAULT_CRITERIA) &&
-      !isPowerUser
+    const showWalkThrough = !isLoading && !isPowerUser && totalCount === 0 && allProjectsCount === 0 &&
+    _.isEqual(criteria, PROJECT_LIST_DEFAULT_CRITERIA)
     const getStatusCriteriaText = (criteria) => {
       return (_.find(PROJECT_STATUS, { value: criteria.status }) || { name: ''}).name
     }
@@ -195,6 +247,12 @@ class Projects extends Component {
         applyFilters={this.applySearchFilter}
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
+        newProjectLink={getNewProjectLink(orgConfig)}
+        setFilter={this.setFilter}
+        criteria={criteria}
+        isCustomer={isCustomer}
+        callInviteRequest={this.callInviteRequest}
+        isAcceptingInvite={isAcceptingInvite}
       />
     )
     const cardView = (
@@ -202,46 +260,76 @@ class Projects extends Component {
         {...this.props }
         // onPageChange={this.onPageChange}
         // sortHandler={this.sortHandler}
+        applyFilters={this.applySearchFilter}
         onPageChange={this.onPageChange}
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
+        newProjectLink={getNewProjectLink(orgConfig)}
+        callInviteRequest={this.callInviteRequest}
+        isAcceptingInvite={isAcceptingInvite}
       />
     )
     let projectsView
     const chosenView = projectsListView
     const currentStatus = this.state.status || null
-    if (isPowerUser) {
-      if (chosenView === PROJECTS_LIST_VIEW.GRID) {
-        projectsView = gridView
-      } else if (chosenView === PROJECTS_LIST_VIEW.CARD) {
-        projectsView = cardView
-      }
-    } else {
+
+    if (chosenView === PROJECTS_LIST_VIEW.GRID) {
+      projectsView = gridView
+    } else if (chosenView === PROJECTS_LIST_VIEW.CARD) {
       projectsView = cardView
     }
+
     return (
-      <div>
-        <section className="">
-          <div className="container">
-            {(isPowerUser && !showWalkThrough) &&
-              <ProjectListNavHeader applyFilters={this.applyFilters} selectedView={chosenView} changeView={setProjectsListView} currentStatus={currentStatus} criteria={criteria} setInfiniteAutoload={setInfiniteAutoload} loadProjects={loadProjects} history={history}/>}
-            { showWalkThrough  ?
-              (
-                <Walkthrough currentUser={currentUser} />
-              ) : (
-                projectsView
-              )
-            }
+      <TwoColsLayout noPadding>
+        <TwoColsLayout.Sidebar>
+          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+            {(matches) => {
+              if (matches) {
+                return (
+                  <Sticky top={60}>
+                    <UserSidebar user={user}/>
+                  </Sticky>
+                )
+              } else {
+                return <UserSidebar user={user}/>
+              }
+            }}
+          </MediaQuery>
+        </TwoColsLayout.Sidebar>
+        <TwoColsLayout.Content>
+          <div>
+            <section className="">
+              <div className="container">
+                {!showWalkThrough && (
+                  <ProjectListNavHeader
+                    applyFilters={this.applyFilters}
+                    selectedView={chosenView}
+                    changeView={setProjectsListView}
+                    currentStatus={currentStatus}
+                    criteria={criteria}
+                    setInfiniteAutoload={setInfiniteAutoload}
+                    loadProjects={loadProjects}
+                    history={history}
+                    isCustomer={isCustomer}
+                  />
+                )}
+                {showWalkThrough ? (
+                  <Walkthrough newProjectLink={getNewProjectLink(orgConfig)} />
+                ) : (
+                  projectsView
+                )}
+              </div>
+            </section>
           </div>
-        </section>
-      </div>
+        </TwoColsLayout.Content>
+      </TwoColsLayout>
     )
   }
 }
 
-const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templates }) => {
+const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templates, notifications }) => {
   let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
+  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   if (loadUser.user) {
     isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
   }
@@ -249,30 +337,44 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
     const index = _.findIndex(projectSearch.projects, {id: projectState.project.id})
     projectSearch.projects.splice(index, 1, projectState.project)
   }
+  const defaultListView = isPowerUser ? PROJECTS_LIST_VIEW.GRID : PROJECTS_LIST_VIEW.CARD
   return {
     currentUser : {
-      userId: loadUser.user.profile.userId,
-      firstName: loadUser.user.profile.firstName,
-      lastName: loadUser.user.profile.lastName,
-      roles: loadUser.user.roles
+      userId: loadUser.user.userId,
+      firstName: loadUser.user.firstName,
+      lastName: loadUser.user.lastName,
+      roles: loadUser.user.roles,
+      email: loadUser.user.email
     },
+    user: loadUser.user,
+    orgConfig   : loadUser.orgConfig,
     isLoading   : projectSearch.isLoading,
     error       : projectSearch.error,
     projects    : projectSearch.projects,
     members     : members.members,
     totalCount  : projectSearch.totalCount,
+    allProjectsCount: projectSearch.allProjectsCount,
     pageNum     : projectSearch.pageNum,
     criteria    : projectSearch.criteria,
     infiniteAutoload: projectSearch.infiniteAutoload,
-    projectsListView: projectSearch.projectsListView,
+    projectsListView: projectSearch.projectsListView || defaultListView,
     isPowerUser,
-    gridView    : isPowerUser,
+    isCustomer  : !isPowerUser,
     refresh     : projectSearch.refresh,
     projectTemplates: templates.projectTemplates,
-    isProjectTemplatesLoading: templates.isProjectTemplatesLoading,
+    isProjectTemplatesLoading: templates.isLoading,
+    notifications: notifications.notifications,
   }
 }
 
-const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject, setProjectsListView, sortProjects, loadProjectTemplates }
+const actionsToBind = {
+  loadProjects,
+  setInfiniteAutoload,
+  updateProject,
+  setProjectsListView,
+  sortProjects,
+  loadProjectsMetadata,
+  acceptOrRefuseInvite
+}
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(Projects))

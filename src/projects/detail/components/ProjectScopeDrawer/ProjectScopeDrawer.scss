@@ -1,0 +1,15 @@
+.close-btn {
+  cursor: pointer;
+}
+
+.drawer-content {
+  height: 100%;
+  overflow: auto;
+  padding: 5px 50px;
+  position: relative;
+  z-index: 2;
+}
+
+.drawer-project-basic-details-form {
+  padding: 0 40px;
+}

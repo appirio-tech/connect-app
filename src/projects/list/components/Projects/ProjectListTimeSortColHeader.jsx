@@ -8,7 +8,8 @@ import IconCarretDownNormal from '../../../../assets/icons/arrow-6px-carret-down
 import IconCheckDark from '../../../../assets/icons/check-dark.svg'
 
 const options = [
-  { val: 'updatedAt desc', label: 'Last Updated' },
+  //{ val: 'updatedAt desc', label: 'Last Updated' },
+  { val: 'lastActivityAt desc', label: 'Last Updated' },
   { val: 'createdAt', label: 'Oldest First' },
   { val: 'createdAt desc', label: 'Newest First' }
 ]

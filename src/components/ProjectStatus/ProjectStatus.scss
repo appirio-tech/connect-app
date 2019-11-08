@@ -45,6 +45,17 @@
       }
     }
 
+    .dropdown-wrap {
+      .status-header {
+        &.status-active {
+          &.editable {
+            display: flex;
+            justify-content: center;
+          }
+        }
+      }
+    }
+
     .status-label {
       vertical-align: top;
     }
@@ -140,7 +151,7 @@
         color: $tc-black;
         line-height: 30px;
         padding-left: 20px;
-        margin-bottom: 20px;
+        margin-bottom: 2px;
         white-space: nowrap;
       }
   
@@ -159,6 +170,22 @@
   
         &.active {
           background: $tc-gray-10;
+        }
+
+        &.disabled  {
+          cursor: default;
+
+          svg {
+            filter: grayscale(1);
+          }
+
+          span {
+            color: $tc-gray-30;
+          }
+
+          &:hover {
+            background: transparent;
+          }
         }
   
         svg {

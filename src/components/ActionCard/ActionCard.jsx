@@ -42,8 +42,8 @@ class Header extends React.Component{
   onTopicChange(title, content) {
     this.props.onTopicChange(this.props.topicMessage.id, title, content, true)
   }
-  onSaveTopic({title, content}) {
-    this.props.onSaveTopic(this.props.topicMessage.id, title, content)
+  onSaveTopic({title, content, onSaveTopic}) {
+    this.props.onSaveTopic(this.props.topicMessage.id, title, content, onSaveTopic)
   }
 
   render() {
@@ -67,6 +67,7 @@ class Header extends React.Component{
           avatarUrl={this.props.avatarUrl}
           authorName={this.props.authorName}
           cancelEdit={this.cancelEditTopic}
+          canUploadAttachment
         />
       )
     }

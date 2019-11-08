@@ -1,5 +1,8 @@
 import _ from 'lodash'
 import typeToSpecification from '../projectSpecification/typeToSpecification'
+import { evaluate } from 'expression-evaluator'
+import { removeValuesOfHiddenNodes } from '../../helpers/wizardHelper'
+import { flatten } from 'flat'
 
 const products = {
   App: {
@@ -494,51 +497,185 @@ export function getProjectCreationTemplateField(product, sectionId, subSectionId
 }
 
 /**
+ * Helper method to replace the values for conditional variables and then evaluating the expression
+ *
+ * @param {object} condition condition variable to be replaced by value
+ * @param {object} preparedConditions pre-evaluated conditions correspoinding to each key/placeholder
+ * @param {object} flatProjectData current project data so far chosen by user
+ *
+ * @return {boolean} boolean value after replacement of key with value in the condition and parsed against project data
+ */
+function replaceAndEvaluateCondition(condition, preparedConditions, flatProjectData) {
+  let updatedCondition = condition
+  _.forOwn(preparedConditions, (baseCondition, placeholder) => {
+    updatedCondition = _.replace(updatedCondition, new RegExp(placeholder, 'g'), baseCondition)
+  })
+  const result = evaluate(updatedCondition, flatProjectData)
+  return result
+}
+
+/**
  * Helper method to get price and time estimate for the given product.
  *
- * @param {string} productId id of the product. It should resolve to a valid product template
- * @param {object} productConfig project object which contains the current value
+ * @param {object} priceConfig projcet template's config object against deliverable/addons
+ * @param {object} buildingBlocks basic building blocks which combine to define a deliverable
+ * @param {object} preparedConditions pre-evaluated conditions correspoinding to each key/placeholder
+ * @param {object} flatProjectData current project data so far chosen by user
+ * @param {object} evaluateAllConfigs whether to stop at first match or not
  *
  * @return {object} object containing price and time estimate
  */
-export function getProductEstimate(productId, productConfig) {
-  let specification = 'topcoder.v1'
-  let product = null
+function getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditions, flatProjectData, evaluateAllConfigs = false) {
+  const priceKeys = []
+  const priceConfigKeys = _.keys(priceConfig)
+  _.forEach(priceConfigKeys, condition => {
+    const result = replaceAndEvaluateCondition(condition, preparedConditions, flatProjectData)
+    if (result && (evaluateAllConfigs || priceKeys.length === 0)) {
+      priceKeys.push(condition)
+    }
+  })
+  const matchedBlocks = []
+  _.forEach(priceKeys, priceKey => {
+    const allBlocks = priceConfig[priceKey]
+    let filterdBlocks = []
+    for(const idx in allBlocks) {
+      const blocks = allBlocks[idx]
+      const passingBlocks = _.filter(blocks, b => {
+        const bBlock = buildingBlocks[b]
+        if (!bBlock) {
+          console.log('Building Block not found for ' + b)
+          return false
+        }
+        const result = replaceAndEvaluateCondition(bBlock.conditions, preparedConditions, flatProjectData)
+        return result === true
+      })
+      if (passingBlocks.length === blocks.length) {
+        filterdBlocks = filterdBlocks.concat(passingBlocks)
+        if (!evaluateAllConfigs) {
+          break
+        }
+      }
+    }
+    _.forEach(filterdBlocks, fb => {
+      const bb = {
+        ...buildingBlocks[fb],
+        buildingBlockKey: fb,
+      }
+      matchedBlocks.push(bb)
+    })
+  })
+  return matchedBlocks
+}
+
+/**
+ * Helper method to get price and time estimate for the given product.
+ *
+ * @param {object} projectTemplate projcet template to get the config values
+ * @param {object} projectData project object which contains the current value
+ *
+ * @return {object} object containing price and time estimate
+ */
+export function getProductEstimate(projectTemplate, projectData) {
   let price = 0
   let minTime = 0
   let maxTime = 0
-  if (productId) {
-    specification = typeToSpecification[productId]
-    product = findProduct(productId)
-    price = _.get(product, 'basePriceEstimate', 0)
-    minTime = _.get(product, 'baseTimeEstimateMin', 0)
-    maxTime = _.get(product, 'baseTimeEstimateMax', 0)
-  }
-  const sections = require(`../projectQuestions/${specification}`).default
-  if (sections) {
-    sections.forEach((section) => {
-      const subSections = section.subSections
-      if (subSections) {
-        subSections.forEach((subSection) => {
-          // supporting only questions sub section
-          if (subSection.type === 'questions') {
-            const questions = subSection.questions
-            questions.forEach((q) => {
-              // right now we are supporting only radio-group and tiled-radio-group type of questions
-              if(['radio-group', 'tiled-radio-group'].indexOf(q.type) !== -1 && q.affectsQuickQuote) {
-                const answer = _.get(productConfig, q.fieldName)
-                const qOption = _.find(q.options, (o) => o.value === answer)
-                price += _.get(qOption, 'quoteUp', 0)
-                minTime += _.get(qOption, 'minTimeUp', 0)
-                maxTime += _.get(qOption, 'maxTimeUp', 0)
-              }
-            })
-          }
-        })
+  let matchedBlocks = []
+  if (projectTemplate) {
+    const sections = _.get(projectTemplate, 'scope.sections')
+    const addonPriceConfig = _.get(projectTemplate, 'scope.addonPriceConfig', {})
+    const priceConfig = _.get(projectTemplate, 'scope.priceConfig', {})
+    const buildingBlocks = _.get(projectTemplate, 'scope.buildingBlocks', {})
+    const preparedConditions = _.cloneDeep(_.get(projectTemplate, 'scope.preparedConditions', {}))
+    const flatProjectData = flatten(removeValuesOfHiddenNodes(projectTemplate.scope, projectData), { safe: true })
+    _.forOwn(preparedConditions, (cond, placeholder) => {
+      preparedConditions[placeholder] = evaluate(cond, flatProjectData) === true ? '1 == 1' : '1 == 2'
+    })
+    const baseBlocks = getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditions, flatProjectData, true)
+    const addonBlocks = getFilteredBuildingBlocks(addonPriceConfig, buildingBlocks, preparedConditions, flatProjectData, true)
+    // for each addon block, check if user has specified quantity for the selected addons
+    addonBlocks.forEach((addonBlock) => {
+      // retrieves productKey for the addon
+      const addonKey = addonBlock.metadata.addonProductKey
+      // retrieves the location of storing the selected addons details
+      const addonLocation = addonBlock.metadata.addonLocation
+      if (addonKey && addonLocation) { // if addon block is configured to pick quantity of the addon
+        const addonsData = flatProjectData[addonLocation]
+        // finds the addon details for the current addon block
+        const addon = _.find(addonsData, ad => ad.productKey === addonKey)
+        if (addon && addon.qty) {
+          addonBlock.quantity = addon.qty
+        }
       }
     })
+    matchedBlocks = matchedBlocks.concat(baseBlocks, addonBlocks)
+    if (!matchedBlocks || matchedBlocks.length === 0) {
+      price = _.get(projectTemplate, 'scope.basePriceEstimate', 0)
+      minTime = _.get(projectTemplate, 'scope.baseTimeEstimateMin', 0)
+      maxTime = _.get(projectTemplate, 'scope.baseTimeEstimateMax', 0)
+    } else {
+      _.forEach(matchedBlocks, bb => {
+        let bbPrice = _.isString(bb.price) ? evaluate(bb.price, flatProjectData) : bb.price
+        if (isNaN(bbPrice)) { // if we are unable to parse price as numeric value, set it as ZERO
+          bbPrice = 0
+        }
+        // stores back the evaluated price, if the price field contains the formula
+        if (_.isString(bb.price)) {
+          // stores the original formula in metadata
+          bb.metadata.priceFormula = bb.price
+          // updates the price with evaluated price
+          bb.price = bbPrice
+        }
+        price += (bbPrice * (bb.quantity ? bb.quantity : 1))
+        minTime += bb.minTime
+        maxTime += bb.maxTime
+      })
+    }
+    // picks price from the first config for which condition holds true
+
+    if (sections) {
+      sections.forEach((section) => {
+        const subSections = section.subSections
+        if (subSections) {
+          subSections.forEach((subSection) => {
+            // supporting only questions sub section
+            if (subSection.type === 'questions') {
+              const questions = subSection.questions
+              questions.forEach((q) => {
+                // right now we are supporting only radio-group and tiled-radio-group type of questions
+                if(['radio-group', 'tiled-radio-group'].indexOf(q.type) !== -1 && q.affectsQuickQuote) {
+                  const answer = _.get(projectData, q.fieldName)
+                  const qOption = _.find(q.options, (o) => o.value === answer)
+                  price += _.get(qOption, 'quoteUp', 0)
+                  minTime += _.get(qOption, 'minTimeUp', 0)
+                  maxTime += _.get(qOption, 'maxTimeUp', 0)
+                }
+                // right now we are supporting only radio-group and tiled-radio-group type of questions
+                if(['checkbox-group'].indexOf(q.type) !== -1 && q.affectsQuickQuote) {
+                  const answer = _.get(projectData, q.fieldName)
+                  if (answer) {
+                    answer.forEach((a) => {
+                      const qOption = _.find(q.options, (o) => o.value === a)
+                      price += _.get(qOption, 'quoteUp', 0)
+                      minTime += _.get(qOption, 'minTimeUp', 0)
+                      maxTime += _.get(qOption, 'maxTimeUp', 0)
+                    })
+                  }
+                }
+              })
+            }
+          })
+        }
+      })
+    }
   }
-  return { priceEstimate: price, minTime, maxTime, durationEstimate: `${minTime}-${maxTime} days`}
+  const durationEstimate = minTime !== maxTime ? `${minTime}-${maxTime}` : `${minTime}`
+  return {
+    priceEstimate: price,
+    minTime,
+    maxTime,
+    durationEstimate: `${durationEstimate} days`,
+    estimateBlocks: matchedBlocks
+  }
 }
 
 /**

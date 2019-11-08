@@ -1,5 +1,5 @@
 @import '~tc-ui/src/styles/tc-includes';
-
+@import '../../../../styles/variables';
 /* cards are arranged in one column when width is less than 720, as one card minimum width is 360 */
 $screen-one-column: 720px;
 
@@ -19,24 +19,73 @@ $screen-one-column: 720px;
       }
 
       .item-projects {
-        flex: 8 1 505px;
-        min-width: 505px;
-        overflow: hidden;
+        flex: 6 1 350px;
+        min-width: 350px;
+      }
+
+      .item-ref-code {
+        flex: 1 3 100px;
+        min-width: 100px;
+
+        .time-container {
+          display: flex;
+          width: 100%;
+          padding-right: 10px;
+
+          .code-tooltip-container {
+            display: flex;
+            width: 100%;
+
+            .Tooltip {
+              max-width: 100%;
+
+              .tooltip-target {
+                display: flex;
+              }
+
+              .tooltip-body {
+                display: flex;
+
+                span {
+                  width: 200px;
+                  white-space: normal;
+                  display: flex;
+                  justify-content: center;
+                }
+              }
+            }
+          }
+
+          span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
       }
 
       .item-status-date {
-        flex: 1 3 142px;
-        min-width: 142px;
+        flex: 1 3 100px;
+        min-width: 100px;
       }
 
       .item-customer {
-        flex: 2 2 187px;
-        min-width: 187px;
+        flex: 2 2 100px;
+        min-width: 100px;
+        .spacing {
+          width: 100%;
+        }
       }
 
       .item-manager {
-        flex: 2 2 100px;
-        min-width: 100px;
+        flex: 2 2 85px;
+        min-width: 85px;
+      }
+
+      .item-join {
+        max-width: 125px;
+        width: 125px;
+        padding-right: 10px;
       }
 
       .item-status {
@@ -105,6 +154,17 @@ $screen-one-column: 720px;
                   }
                 }
               }
+
+              .filter-drop-down {
+                a.dropdown-menu-header.txt-link {
+                  font-size: 13px;
+                  color: $tc-gray-50;
+
+                  &:focus {
+                    color: $tc-dark-blue;
+                  }
+                }
+              }
             }
           }
         }
@@ -158,29 +218,26 @@ $screen-one-column: 720px;
           align-items: baseline;
 
           .project-container {
-            overflow: hidden;
 
             .project-title {
               display: flex;
+              position: relative;
+
+              .badge-wrapper {
+                position: absolute;
+                top: 0;
+                right: 0;
+
+                @media screen and (max-width: $screen-rg - 1) {
+                  right: 8px;
+                }
+              }
 
               .link-title {
                 flex: 1;
                 @include roboto-medium;
                 color: $tc-black;
                 font-size: 15px;
-              }
-
-              .item-ref-code {
-                flex: none;
-                justify-content: flex-end;
-                background: $tc-gray-10;
-                @include roboto-medium;
-                font-size: 13px;
-                color: $tc-gray-50;
-                border-radius: 2px;
-                line-height: 20px;
-                padding: 0px 2 * $base-unit;
-                cursor: pointer;
               }
             }
 
@@ -377,7 +434,6 @@ $screen-one-column: 720px;
     border-radius: 13px;
     display: inline-block;
     margin-top: 3px;
-
   }
 
   .txt-gray-sm {
@@ -451,19 +507,25 @@ $screen-one-column: 720px;
         }
       }
     }
-      
+
     .project-card-new {
       @media screen and (max-width: $screen-one-column - 1px) {
         margin-top: 2 * $base-unit;
       }
     }
 
-    .cardview-no-more {
+    .cardview-no-more,
+    .cardview-no-project {
       @include roboto;
       color: $tc-gray-40;
       font-size: 13px;
       padding: 10px 0;
       text-align: center;
+      display: inline;
+
+      .tc-btn-all-projects {
+        color: $tc-dark-blue;
+      }
 
       @media screen and (max-width: $screen-md - 1px) {
         margin-bottom: -$base-unit;
@@ -494,11 +556,11 @@ $screen-one-column: 720px;
       }
 
       .icon-carret-down-active g g {
-        color:  rgb(6, 129, 255) !important;
+        color: $tc-dark-blue-100 !important;
       }
 
       .icon-carret-down-active {
-        color: $tc-dark-blue-90;
+        color: $tc-dark-blue-100;
         outline: 0;
         z-index: 3;
         font-size: 0;
@@ -573,6 +635,54 @@ $screen-one-column: 720px;
           }
         }
       }
+    }
+  }
+
+  .filter-drop-down {
+    position: relative;
+    display: inline-block;
+    margin-left: 0px;
+
+    a {
+      outline: 0;
+    }
+
+    .txt-link {
+      position: relative;
+      padding-right: 16px;
+      display: block;
+      z-index: 3;
+
+      &:focus {
+        color: $tc-dark-blue;
+        outline: 0;
+        z-index: 3;
+      }
+
+      .icon-carret-down-normal {
+        font-size: 0;
+        line-height: 0;
+        width: 10px;
+        height: 6px;
+        content: "";
+        display: block;
+        position: absolute;
+        top: 5px;
+        right: 0;
+      }
+    }
+
+    .down-layer {
+      background: $tc-white;
+      border-radius: 5px;
+      min-width: 130px;
+      min-height: 45px;
+      position: absolute;
+      top: -18px;
+      left: -20px;
+      box-shadow: 0 0 10px rgba($tc-black, 0.2);
+      z-index: 3;
+      padding: 32px 5px 10px;
     }
   }
 }

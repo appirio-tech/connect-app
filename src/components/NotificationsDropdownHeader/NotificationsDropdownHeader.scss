@@ -19,17 +19,31 @@
       text-transform: uppercase;
     }
   
-    .mark-all {
-      @include roboto;
-      background: none;
-      border: 0;
+    .right-content {
+      display: flex;
       color: $tc-gray-50;
-      height: 39px;
-      line-height: 39px;
-      display: block;
-      font-size: 12px;
-      letter-spacing: 0;
-      padding: 0;
+
+      .dot {
+        line-height: 39px;
+        position: relative;
+        &:after {
+          content: '\a0\b7\a0';
+          display: inline-block;
+        }
+      }
+
+      .mark-all, .settings {
+        @include roboto;
+        background: none;
+        border: 0;
+        height: 39px;
+        line-height: 39px;
+        display: block;
+        font-size: 12px;
+        letter-spacing: 0;
+        padding: 0;
+        align-self: flex-end
+      }
     }
   }
 }

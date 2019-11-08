@@ -1,0 +1,41 @@
+@import "~tc-ui/src/styles/tc-includes";
+:global {
+  .management-dialog-overlay
+  .project-dialog-conatiner
+  .project-dialog
+  .input-container
+  .autocomplete-wrapper {
+    width: 100%;
+    padding: 0 $base-unit*2 ;
+
+    input {
+      margin: 0;
+    }
+
+    .Select > input[type="hidden"] {
+      display: none;
+    }
+
+    .Select-control {
+      max-height: $base-unit*8;
+      padding: $base-unit 0;
+
+      .Select-placeholder, .Select-input {
+        @include roboto;
+      }
+
+      .Select-placeholder {
+        line-height: $base-unit*8;
+      }
+
+      .Select-arrow-zone {
+        display: none;
+      }
+
+      .Select-loading-zone {
+        padding-right: $base-unit;
+      }
+
+    }
+  }
+}

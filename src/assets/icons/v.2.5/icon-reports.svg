@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>03 icon-reports-inactive</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="sidenav/files" transform="translate(-20.000000, -98.000000)" stroke="#7F7F7F" stroke-width="1.5">
+            <g id="03-icon-reports-inactive">
+                <g transform="translate(20.000000, 98.000000)">
+                    <path d="M0.749,23.25 L22.499,23.25" id="Path"></path>
+                    <path d="M2.749,18.75 L5.5,18.75 C5.77614237,18.75 6,18.9738576 6,19.25 L6,23.25 L2.249,23.25 L2.249,19.25 C2.249,18.9738576 2.47285763,18.75 2.749,18.75 Z" id="Path"></path>
+                    <path d="M10.249,9.75 L13,9.75 C13.2761424,9.75 13.5,9.97385763 13.5,10.25 L13.5,23.25 L9.749,23.25 L9.749,10.25 C9.749,9.97385763 9.97285763,9.75 10.249,9.75 Z" id="Path"></path>
+                    <path d="M17.749,14.25 L20.5,14.25 C20.7761424,14.25 21,14.4738576 21,14.75 L21,23.25 L17.25,23.25 L17.25,14.75 C17.25,14.4742477 17.4732482,14.2505515 17.749,14.25 Z" id="Path"></path>
+                    <path d="M6.883,5.121 L2.866,9.134" id="Path"></path>
+                    <path d="M14.311,6.325 L9.637,5.075" id="Path"></path>
+                    <path d="M20.392,2.889 L16.811,5.689" id="Path"></path>
+                    <circle id="Oval" cx="8.249" cy="4.501" r="1.5"></circle>
+                    <circle id="Oval" cx="21.75" cy="2.25" r="1.5"></circle>
+                    <circle id="Oval" cx="15.75" cy="6.75" r="1.5"></circle>
+                    <circle id="Oval" cx="2.249" cy="10.501" r="1.5"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

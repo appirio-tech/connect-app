@@ -25,12 +25,14 @@
 
       .bar-column:first-child {
         display: flex;
+        flex-shrink: 0;
         // width: calc(100% - 560px);
       }
 
       .bar-column:last-child {
         // width: 560px;
         display: flex;
+        flex-shrink: 0;
       }
 
       .logo-wrapper {
@@ -42,70 +44,21 @@
         }
       }
 
-      .breadcrumb {
-        @include tc-label-xs;
-        line-height: 6 * $base-unit;
-        color: $tc-gray-10;
-        position: relative;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: flex;
-
-        a {
-          display: flex;
-          align-items: center;
-          flex-shrink: 0;
-          color: $tc-gray-50;
-          text-transform: uppercase;
-
-          @media screen and (max-width: $screen-md - 1px) {
-            span {
-              display: none;
-            }
-          }
-
-          .icon-tail-left {// Back arrow
-            fill: $tc-gray-50;
-            height: 13px;
-            margin-right: 5px;
-
-            @media screen and (max-width: $screen-md - 1px) {
-              fill: $tc-white;
-              height: auto;
-              margin-left: 3 * $base-unit;
-              margin-right: 40px; /* take same space to align title at the center */
-              width: 22px;
-            }
-          }
-
-          &:hover,
-          &.hover {
-            text-decoration: none;
-            color: $tc-orange-30;
-
-            .icon-tail-left {// Back arrow
-              fill: $tc-orange-30;
-
-              @media screen and (max-width: $screen-md - 1px) {
-                fill: $tc-white;
-              }
-            }
-          }
-        }
-      }
-
       .bar-column.project-name {
         display: flex;
         align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+        flex-shrink: 1;
+        overflow: hidden;
 
         span {
-          @include tc-heading;
+          @include tc-heading-small;
           color: $tc-gray-10;
           display: block;
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
-          max-width: 500px;
         }
 
         @media screen and (max-width: $screen-md - 1px) {
@@ -116,6 +69,9 @@
       .bar-column.project-name.mobile {
         display: flex;
         align-items: center;
+        flex-shrink: 1;
+        overflow: hidden;
+        padding: 0 2 * $base-unit;
 
         span {
           font-size: 15px;

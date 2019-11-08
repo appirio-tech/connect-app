@@ -7,23 +7,39 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import ScopeAndSpecificationContainer from './ScopeAndSpecificationContainer'
+import { getProjectProductTemplates } from '../../../helpers/templates'
 
 const SpecificationContainer = (props) => {
-  const sections = props.productTemplates[0].template.questions
+  if (!props.productTemplates || !props.productTemplates[0]) {
+    return null
+  }
+
+  // for old projects we use productTemplate instead of projectTemplate
+  const template = props.productTemplates[0].template
 
   return (
     <ScopeAndSpecificationContainer
       {...{
         ...props,
-        sections
+        template
       }}
     />
   )
 }
 
-const mapStateToProps = ({ projectState }) => ({
-  productTemplates: projectState.productTemplates,
-})
+const mapStateToProps = ({ projectState, templates }) => {
+  const { projectTemplates, productTemplates } = templates
+
+  return {
+    productTemplates: (productTemplates && projectTemplates) ? (
+      getProjectProductTemplates(
+        productTemplates,
+        projectTemplates,
+        projectState.project
+      )
+    ) : []
+  }
+}
 
 const mapDispatchToProps = {}
 

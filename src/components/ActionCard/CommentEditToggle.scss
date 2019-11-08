@@ -8,6 +8,17 @@
   height: 12px;
   padding: 0 3px;
 
+  &.in-dark-bg {
+    border: none;
+
+    > i {
+      &::before {
+        color: $tc-gray-0;
+      }
+
+    }
+  }
+
   > i {
     &::before {
       color: $tc-black;

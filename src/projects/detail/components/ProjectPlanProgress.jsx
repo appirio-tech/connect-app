@@ -12,11 +12,12 @@ import ProjectProgress from './ProjectProgress'
 
 const ProjectPlanProgress = ({
   project,
-  phases
+  phases,
+  productsTimelines
 }) => (
   <Section>
     <SectionTitle title="Project status" />
-    <ProjectProgress {...formatProjectProgressProps(project, phases)} />
+    <ProjectProgress {...formatProjectProgressProps(project, phases, productsTimelines)} />
   </Section>
 )
 
@@ -26,7 +27,8 @@ ProjectPlanProgress.defaultProps = {
 
 ProjectPlanProgress.propTypes = {
   project: PT.object.isRequired,
-  phases: PT.array
+  phases: PT.array,
+  productsTimelines: PT.object.isRequired
 }
 
 export default ProjectPlanProgress

@@ -1,0 +1,22 @@
+// this is to include tc styles in the output library
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .special-page-link {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 20px;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      margin-left: 2 * $base-unit;
+      padding-left: 2 * $base-unit;
+      padding-right: 2 * $base-unit;
+    }
+  }
+
+  .special-page-link > * {
+    margin: 10px;
+  }
+}

@@ -4,17 +4,23 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
-import moment from 'moment'
 import uncontrollable from 'uncontrollable'
+import { withRouter } from 'react-router-dom'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
-import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
+import { getPhaseActualData } from '../../../helpers/projectHelper'
+import {
+  PROJECT_ATTACHMENTS_FOLDER,
+} from '../../../config/constants'
+import { filterNotificationsByPosts, filterReadNotifications, filterNotificationsByCriteria } from '../../../routes/notifications/helpers/notifications'
+import { buildPhaseTimelineNotificationsCriteria, buildPhaseSpecifiationNotificationsCriteria } from '../../../routes/notifications/constants/notifications'
 
 import PhaseCard from './PhaseCard'
 import ProjectStageTabs from './ProjectStageTabs'
 import EditProjectForm from './EditProjectForm'
-import PhaseFeed from './PhaseFeed'
-import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
+import ProductTimelineContainer from '../containers/ProductTimelineContainer'
+import PostsContainer from '../../../components/Posts'
+import NotificationsReader from '../../../components/NotificationsReader'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
 const enhance = spinnerWhileLoading(props => !props.processing)
@@ -29,7 +35,7 @@ const EnhancedEditProjectForm = enhance(EditProjectForm)
  *
  * @returns {Object} PhaseCard attr property
  */
-function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed) {
+function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline) {
   // NOTE so far one phase always has 1 product
   // but as in the future this may be changed, we work with products as an array
   const product = _.get(phase, 'products[0]')
@@ -38,31 +44,23 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed) {
   const budget = phase.budget || 0
   const price = `$${formatNumberWithCommas(budget)}`
   const icon = _.get(productTemplate, 'icon')
-  const title = _.get(productTemplate, 'name')
-  const startDate = phase.startDate && moment(phase.startDate)
-  const endDate = phase.endDate && moment(phase.endDate)
+  const title = phase.name
 
-  const plannedDuration = phase.duration ? phase.duration : 0
-  const duration = `${plannedDuration} days`
+  const {
+    startDate,
+    endDate,
+    duration: plannedDuration,
+    progress: progressInPercent,
+  } = getPhaseActualData(phase, timeline)
+
+  const duration = `${plannedDuration} day${plannedDuration !== 1 ? 's' : ''}`
   let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
-  startEndDates += startDate && endDate ? `–${endDate.format('MMM D')}` : ''
-
-  // calculate progress of phase
-  let progressInPercent = phase.progress
-  if (!progressInPercent) {
-    let actualDuration = 0
-    let now = new Date()
-    now = now && moment(now)
-    const durationFromNow = now.diff(startDate, 'days') + 1
-    if (durationFromNow <= plannedDuration) {
-      if (durationFromNow > 0) {
-        actualDuration = durationFromNow
-      }
-    } else {
-      actualDuration = plannedDuration
-    }
-    progressInPercent = (actualDuration  && plannedDuration) ? Math.round((actualDuration / plannedDuration) * 100) : 0
-  }
+  // appends end date to the start date only if end date is greater than start date
+  startEndDates += startDate && endDate && endDate.diff(startDate, 'days') > 0 ? `-${endDate.format('MMM D')}` : ''
+  // extracts the start date's month string plus white space
+  const monthStr = startEndDates.substr(0, 4)
+  // replaces the second occurrence of the month part i.e. removes the end date's month part
+  startEndDates = startEndDates.lastIndexOf(monthStr) !== 0 ? startEndDates.replace(`-${monthStr}`, '-') : startEndDates
 
   const actualPrice = phase.spentBudget
   let paidStatus = 'Quoted'
@@ -98,6 +96,10 @@ class ProjectStage extends React.Component{
     this.removeProductAttachment = this.removeProductAttachment.bind(this)
     this.updateProductAttachment = this.updateProductAttachment.bind(this)
     this.addProductAttachment = this.addProductAttachment.bind(this)
+    this.onTabClick = this.onTabClick.bind(this)
+    this.state = {
+      isExpanded: false
+    }
   }
 
   removeProductAttachment(attachmentId) {
@@ -121,13 +123,44 @@ class ProjectStage extends React.Component{
     addProductAttachment(project.id, phase.id, product.id, attachment)
   }
 
+  onTabClick(tab) {
+    const { expandProjectPhase, phase } = this.props
+
+    expandProjectPhase(phase.id, tab)
+  }
+
+  componentDidMount() {
+    !_.isEmpty(this.props.location.hash) && this.handleUrlHash(this.props)
+  }
+
+  componentDidUpdate(prevProps) {
+    const { location } = this.props
+    if (!_.isEmpty(location.hash) && location.hash !== prevProps.location.hash) {
+      this.handleUrlHash(this.props)
+    }
+  }
+
+  // expand a phase if necessary depending on the url hash
+  handleUrlHash(props) {
+    const { expandProjectPhase, phase, location } = props
+
+    const hashParts = _.split(location.hash.substring(1), '-')
+    const phaseId = hashParts[0] === 'phase' ? parseInt(hashParts[1], 10) : null
+
+    if (phaseId && phase.id === phaseId) {
+      const tab = hashParts[2]
+      expandProjectPhase(phaseId, tab)
+    }
+  }
+
   render() {
     const {
-      activeTab,
       phase,
+      phaseNonDirty,
       phaseIndex,
       project,
       productTemplates,
+      productCategories,
       currentMemberRole,
       isProcessing,
       isSuperUser,
@@ -135,57 +168,88 @@ class ProjectStage extends React.Component{
       updateProduct,
       fireProductDirty,
       fireProductDirtyUndo,
-      onTabClick,
       deleteProjectPhase,
-
-      // comes from phaseFeedHOC
-      currentUser,
-      feed,
-      onLoadMoreComments,
-      onAddNewComment,
-      isAddingComment,
-      onDeleteMessage,
-      allMembers,
-      onSaveMessage,
+      phaseState,
+      collapseProjectPhase,
+      expandProjectPhase,
+      productsTimelines,
+      phasesTopics,
+      notifications,
     } = this.props
 
     // NOTE even though in store we keep products as an array,
     // so far we always have only one product per phase, so will display only one
     const productTemplate = _.find(productTemplates, { id: _.get(phase, 'products[0].templateId') })
     const product = _.get(phase, 'products[0]')
-    const sections = _.get(productTemplate, 'template.questions', [])
+    const productNonDirty = _.get(phaseNonDirty, 'products[0]')
+    const template = productTemplate.template
+    const projectPhaseAnchor = `phase-${phase.id}-posts`
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
 
+    const timeline = _.get(productsTimelines[product.id], 'timeline')
+    const hasTimeline = !!timeline
+    const defaultActiveTab = hasTimeline ? 'timeline' : 'posts'
+    const currentActiveTab = _.get(phaseState, 'tab', defaultActiveTab)
+    const unreadNotification = filterReadNotifications(notifications)
+    const tag = `phase#${phase.id}`
+    const posts = _.get(phasesTopics[tag], 'topic.posts', [])
+    const unreadPostNotifications = filterNotificationsByPosts(unreadNotification, posts)
+    const unreadTimelineNotifications = timeline ? filterNotificationsByCriteria(unreadNotification, buildPhaseTimelineNotificationsCriteria(timeline)) : []
+    const unreadSpecificationNotifications = filterNotificationsByCriteria(unreadNotification, buildPhaseSpecifiationNotificationsCriteria(phase))
+
+    const hasNotifications = {
+      timeline: unreadTimelineNotifications.length > 0,
+      posts: unreadPostNotifications.length > 0,
+      specification: unreadSpecificationNotifications.length > 0,
+    }
+
+    const hasAnyNotifications = _.some(_.values(hasNotifications), _.identity)
+
     return (
       <PhaseCard
-        attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed)}
+        attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, _.get(phasesTopics[tag], 'topic', {}), timeline)}
         projectStatus={project.status}
         isManageUser={isManageUser}
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
+        timeline={timeline}
+        hasUnseen={hasAnyNotifications}
+        phaseId={phase.id}
+        isExpanded={_.get(phaseState, 'isExpanded')}
+        collapseProjectPhase={collapseProjectPhase}
+        expandProjectPhase={expandProjectPhase}
+        project={project}
       >
-        <div>
-          <ProjectStageTabs activeTab={activeTab} onTabClick={onTabClick} />
+        <div id={projectPhaseAnchor}>
+          <ProjectStageTabs
+            activeTab={currentActiveTab}
+            onTabClick={this.onTabClick}
+            isSuperUser={isSuperUser}
+            isManageUser={isManageUser}
+            hasTimeline={hasTimeline}
+            hasNotifications={hasNotifications}
+          />
 
-          {activeTab === 'posts' &&
-            <PhaseFeed
-              user={currentUser}
-              currentUser={currentUser}
-              feed={feed}
-              onLoadMoreComments={onLoadMoreComments}
-              onAddNewComment={onAddNewComment}
-              isAddingComment={isAddingComment}
-              onDeleteMessage={onDeleteMessage}
-              allMembers={allMembers}
-              onSaveMessage={onSaveMessage}
-            />
+          {currentActiveTab === 'timeline' &&
+            <ProductTimelineContainer product={product} project={project} />
           }
 
-          {activeTab === 'specification' &&
+          {currentActiveTab === 'posts' && (
+            <PostsContainer tag={tag} postUrlTemplate={`phase-${phase.id}-posts-{{postId}}`} />
+          )}
+
+          {currentActiveTab === 'specification' &&
             <div className="two-col-content content">
+              <NotificationsReader
+                id={`phase-${phase.id}-specification`}
+                criteria={buildPhaseSpecifiationNotificationsCriteria(phase)}
+              />
               <EnhancedEditProjectForm
                 project={product}
-                sections={sections}
+                projectNonDirty={productNonDirty}
+                template={template}
+                productTemplates={productTemplates}
+                productCategories={productCategories}
                 isEdittable={isSuperUser || !!currentMemberRole}
                 submitHandler={(model) => updateProduct(project.id, phase.id, product.id, model)}
                 saving={isProcessing}
@@ -196,6 +260,7 @@ class ProjectStage extends React.Component{
                 removeAttachment={this.removeProductAttachment}
                 attachmentsStorePath={attachmentsStorePath}
                 canManageAttachments={!!currentMemberRole}
+                disableAutoScrolling
               />
             </div>
           }
@@ -206,7 +271,7 @@ class ProjectStage extends React.Component{
 }
 
 ProjectStage.defaultProps = {
-  activeTab: 'posts',
+  activeTab: '',
   currentMemberRole: null,
 }
 
@@ -214,6 +279,10 @@ ProjectStage.propTypes = {
   activeTab: PT.string,
   onTabClick: PT.func.isRequired,
   project: PT.object.isRequired,
+  productTemplates: PT.array.isRequired,
+  productCategories: PT.array.isRequired,
+  productsTimelines: PT.object,
+  phasesTopics: PT.object,
   currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
@@ -226,8 +295,6 @@ ProjectStage.propTypes = {
   deleteProjectPhase: PT.func.isRequired,
 }
 
-const ProjectStageUncontrollable = uncontrollable(ProjectStage, {
+export default uncontrollable(withRouter(ProjectStage), {
   activeTab: 'onTabClick',
 })
-
-export default phaseFeedHOC(ProjectStageUncontrollable)

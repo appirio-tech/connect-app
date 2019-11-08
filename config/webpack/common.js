@@ -9,6 +9,7 @@
 const _ = require('lodash')
 const path = require('path')
 const webpack = require('webpack')
+const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const constants = require('../constants')
 
@@ -37,10 +38,10 @@ module.exports = {
       '.cjsx'
     ],
     alias: {
-    /*
-      Connect app uses handlebars which has some issue with webpack
-      We have to create an alias to concrete file in order to import it
-     */
+      /*
+        Connect app uses handlebars which has some issue with webpack
+        We have to create an alias to concrete file in order to import it
+       */
       handlebars: 'handlebars/dist/handlebars.min.js'
     }
   },
@@ -95,6 +96,13 @@ module.exports = {
     /*
       Remove some unused files to reduce bundle size
      */
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+
+    /*
+      Copy files from source to destination.
+     */
+    new CopyPlugin([
+      { from: 'src/static', to: 'static' }
+    ])
   ]
 }

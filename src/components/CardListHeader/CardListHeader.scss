@@ -1,0 +1,49 @@
+@import "~tc-ui/src/styles/tc-includes";
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0px 10px 20px;
+  margin-top: 50px;
+}
+
+.topicTitle {
+  @include roboto-bold;
+
+  font-size: 20px;
+  color: $tc-gray-90;
+}
+
+.filterItem {
+  @include roboto;
+
+  color: $tc-gray-50;
+  font-size: 12px;
+  line-height: 30px;
+  display: inline-block;
+  padding: 0 10px;
+  border-radius: 15px;
+  margin-left: 5px;
+  cursor: pointer;
+
+  &.selected {
+    @include roboto-bold;
+
+    color: $tc-gray-90;
+    background-color: $tc-gray-10;
+  }
+}
+
+.count {
+  @include roboto-bold;
+
+  display: inline-block;
+  padding: 4px 6px;
+  border-radius: 9px;
+  color: $tc-gray-0;
+  background-color: $tc-gray-30;
+  font-size: 10px;
+  margin-left: 5px;
+  line-height: 1;
+}

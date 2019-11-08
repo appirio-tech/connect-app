@@ -35,15 +35,18 @@ module.exports = {
 
   FILE_PICKER_API_KEY: process.env.FILE_PICKER_API_KEY_DEV,
   FILE_PICKER_SUBMISSION_CONTAINER_NAME: 'submission-staging-dev',
+  FILE_PICKER_ACCEPT: process.env.FILE_PICKER_ACCEPT_DEV,
 
   SALESFORCE_PROJECT_LEAD_LINK: 'https://c.cs18.visual.force.com/apex/ConnectLead?connectProjectId=',
 
-  CONNECT_SEGMENT_KEY: 'QBtLgV8vCiuRX1lDikbMjcoe9aCHkF6n',
+  CONNECT_SEGMENT_KEY: process.env.DEV_SEGMENT_KEY,
   PREDIX_PROGRAM_ID         : 3448,
   IBM_COGNITIVE_PROGRAM_ID  : 3449,
   HEAP_ANALYTICS_APP_ID     : '4153837120',
 
   TC_NOTIFICATION_URL: 'https://api.topcoder-dev.com/v5/notifications',
   CONNECT_MESSAGE_API_URL: 'https://api.topcoder-dev.com/v5',
-  TC_SYSTEM_USERID: process.env.DEV_TC_SYSTEM_USERID
+  TC_SYSTEM_USERID: process.env.DEV_TC_SYSTEM_USERID,
+  MAINTENANCE_MODE: process.env.DEV_MAINTENANCE_MODE,
+
 }

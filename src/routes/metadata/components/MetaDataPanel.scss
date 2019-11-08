@@ -1,0 +1,249 @@
+// this is to include tc styles in the output library
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .meta-data-panel {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    min-width: 960px;
+    padding: 30px 20px 0;
+
+    > .content {
+      flex: 1;
+      margin-right: 20px;
+
+      &.template-preview {
+        .header {
+          display: flex;
+          align-items: flex-start;
+        }
+
+        h1 {
+          @include tc-heading-small;
+          flex: 1;
+          text-align: center;
+          margin: 0 0 50px;
+          @include roboto-light;
+          font-size: 36px;
+          color: $tc-black;
+          line-height: 40px;
+        }
+
+        .FillProjectDetails {
+          background: $tc-white;
+        }
+      }
+
+      .ProjectWizard {
+        padding: 10px;
+
+        .section-footer {
+          margin-top: 0px;// resets the negative margin which is used in actual rendering
+        }
+      }
+    }
+
+    > .filters {
+      flex: 1;
+      background-color: $tc-white;
+      padding: 10px;
+      border-radius: 6px;
+      max-width: 340px;
+
+      .json_editor_wrapper {
+        overflow: scroll;
+        display: flex;
+        flex-direction: column;
+
+        .maximize-btn {
+          align-self: flex-end;
+        }
+      }
+    }
+
+    h5 {
+      margin-left: 10px;
+    }
+
+    .align-left {
+      margin-left: 10px;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      :global(.Dropdown) {
+        overflow-y: scroll;
+        height: 500px;
+      }
+
+      .clear-margin {
+        :global(.dropdown-wrap) {
+          margin-left: 0;
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .content.content-error {
+    .container {
+      width: 100%;
+      background: $tc-gray-neutral-dark;
+    }
+  }
+
+  .page-error {
+    border-radius:4px;
+    position: relative;
+    padding-top: 55px;
+    text-align: center;
+    min-height: 706px;
+
+    margin: 20px auto 0;
+    background: $tc-white;
+    .icon-coder-broken {
+      margin: 6% 20%;
+    }
+    background-size: 307px 300px;
+    h3{
+      color: $tc-gray-70;
+      @include roboto-medium;
+      font-size: 48px;
+      letter-spacing: 0px;
+      padding: 0 168px 25px 168px;
+      line-height: inherit;
+    }
+
+    span{
+      position: absolute;
+      left: 40%;
+      bottom: 55%;
+      @include roboto-medium;
+      font-size: 25px;
+      color: $tc-gray-70;
+      letter-spacing: 0px;
+    }
+  }
+
+  .revision-dialog-container {
+    background: white;
+    border-radius: $base-unit;
+    margin: $base-unit*4;
+    box-shadow: 1px 8px 18px 1px #77777757;
+    display: flex;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      margin: $base-unit;
+      flex-grow: 1;
+    }
+
+    .revision-dialog {
+      flex-grow: 1;
+      width: 650px;
+
+      .dialog-title {
+        @include roboto;
+        position: relative;
+        margin: $base-unit*6 $base-unit*4;
+        font-size: 19px;
+        font-weight: 400;
+        color: $tc-gray-90;
+        text-align: center;
+
+        span {
+          position: absolute;
+          right: 0;
+          cursor: pointer;
+          top: -$base-unit*2;
+
+          svg {
+            fill: $tc-gray-20;
+          }
+        }
+      }
+
+      .dialog-body {
+        margin: 0 $base-unit*4;
+        margin-top: $base-unit*4;
+        border-top: 1px solid rgb(224, 224, 224);
+        max-height: 300px;
+        overflow-y: auto;
+
+        @media screen and (max-width: 400px) {
+          max-height: 200px;
+        }
+      }
+
+      .dark {
+        background: rgb(250, 250, 251);
+      }
+
+      @media screen and (max-width: $screen-md - 1px) {
+        .revision-member-layout > * {
+          margin-top: $base-unit;
+        }
+      }
+
+      .revision-member-layout {
+        min-height: 60px;
+        padding: $base-unit*2 $base-unit*4;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          padding: $base-unit*2;
+        }
+
+        .memer-details {
+          display: flex;
+          align-items: center;
+          flex-grow: 1;
+        }
+
+        .member-name {
+          display: flex;
+          flex-grow: 1;
+          margin-left: $base-unit*4;
+          @include roboto-bold;
+          color: $tc-black;
+          font-size: $tc-label-lg;
+          width: 33%;
+
+          @media screen and (max-width: $screen-md - 1px) {
+            margin-left: $base-unit*2;
+
+          }
+        }
+      }
+    }
+
+    .dialog-placeholder {
+      height: 200px;
+    }
+
+    .topcoder-dialog {
+      width: 750px;
+    }
+
+    @media screen and (max-width: $screen-md - 1px) {
+      .dialog-body {
+        margin: 0 !important;
+      }
+
+      .topcoder-dialog {
+        width: unset;
+      }
+
+      .revision-dialog {
+        width: unset;
+      }
+    }
+  }
+
+  .hide {
+    display: none;
+  }
+}

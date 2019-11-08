@@ -5,10 +5,13 @@
   height: 14 * $base-unit;
 }
 
-.feed-card {
-  @include stand-alone-item-shadow;
-  border-radius: $card-border-radius;
+.feed-not-found {
+  color: $tc-gray-30;
+  text-align: center;
+  padding: 12px;
+}
 
+.feed-card {
   & + & {
     margin-top: 2 * $base-unit;
   }

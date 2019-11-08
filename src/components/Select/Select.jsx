@@ -8,13 +8,41 @@
  */
 import React from 'react'
 import ReactSelect from 'react-select'
-import 'react-select/dist/react-select.css'
+import CreatableSelect from 'react-select/lib/Creatable'
 import './Select.scss'
 
 const Select = (props) => {
-  return (
-    <ReactSelect {...props} />
-  )
+  let containerclass = 'react-select-hiddendropdown-container'
+  if (props.showDropdownIndicator) {
+    containerclass = 'react-select-container'
+  }
+  if (props.heightAuto) {
+    containerclass += ' height-auto'
+  }
+
+  if (props.createOption) {
+    return (
+      <CreatableSelect
+        {...props}
+        createOptionPosition="first"
+        className={containerclass}
+        classNamePrefix="react-select"
+      />
+    )
+  } else {
+    return (
+      <ReactSelect
+        {...props}
+        createOptionPosition="first"
+        className={containerclass}
+        classNamePrefix="react-select"
+      />
+    )
+  }
+}
+
+Select.defaultProps = {
+  noOptionsMessage: () => 'Type to search'
 }
 
 export default Select

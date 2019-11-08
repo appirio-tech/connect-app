@@ -17,6 +17,14 @@
     font-size: 15px;
     margin-top: 3 * $base-unit;
     line-height: 25px;
+
+    b {
+      font-weight: bold;
+    }
+
+    i {
+      font-style: italic;
+    }
   }
 }
 

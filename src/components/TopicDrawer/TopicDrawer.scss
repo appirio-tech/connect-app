@@ -1,0 +1,11 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.drawer-container {
+  > div:nth-child(2) {
+    @media screen and (max-width: $screen-md - 1px) {
+      width: 100% !important;
+      top: 0 !important;
+      height: 100% !important;
+    }
+  }
+}

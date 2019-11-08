@@ -7,7 +7,8 @@ import uncontrollable from 'uncontrollable'
 import FileDeletionConfirmModal from './FileDeletionConfirmModal'
 import './FileList.scss'
 
-const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent, canModify}) => (
+const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent, canModify, projectMembers, 
+  loggedInUser, askForPermissions }) => (
   <Panel className={cn('file-list', {'modal-active': deletingFile})}>
     {deletingFile && <div className="modal-overlay" />}
     {
@@ -17,7 +18,7 @@ const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent, canMod
           onDeleteIntent(null)
         }
         const _onFileDeleteCancel = () => onDeleteIntent(null)
-        if (deletingFile === file.id) {
+        if (deletingFile && deletingFile === file.id) {
           return (
             <FileDeletionConfirmModal
               key={i}
@@ -34,6 +35,9 @@ const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent, canMod
             onDelete={ onDeleteIntent }
             onSave={ onSave }
             canModify={canModify}
+            projectMembers={projectMembers}
+            loggedInUser={loggedInUser}
+            askForPermissions={askForPermissions}
           />
         )
       })
@@ -42,7 +46,9 @@ const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent, canMod
 )
 
 FileList.propTypes = {
-  canModify: PropTypes.bool.isRequired
+  canModify: PropTypes.bool.isRequired,
+  projectMembers: PropTypes.object.isRequired,
+  loggedInUser: PropTypes.object.isRequired
 }
 
 FileList.Item = FileListItem

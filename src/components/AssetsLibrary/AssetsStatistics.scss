@@ -1,0 +1,47 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.assets-statistics-container {
+  margin-top: 20px;
+}
+
+.assets-statistics {
+  display: inline;
+
+  li {
+    display: inline-block;
+    margin-right: 20px;
+    border-radius: 20px;
+    height: 30px;
+    padding-right: 15px;
+    font-weight: 400;
+    cursor: pointer;
+
+    &.active {
+      background-color: $tc-gray-05;
+      font-weight: 700;
+
+      .total {
+        background-color: $tc-gray-90;
+      }
+    }
+
+    .name {
+      color: $tc-gray-90;
+      font-family: Roboto;
+      font-size: 16px;
+      line-height: 30px;
+      margin-left: 15px;
+      margin-right: 5px;
+    }
+
+    .total {
+      background-color: $tc-gray-50;
+      border-radius: 9px;
+      color: $tc-white;
+      font-family: Roboto;
+      font-size: 10px;
+      line-height: 12px;
+      padding: 0 4px;
+    }
+  }
+}

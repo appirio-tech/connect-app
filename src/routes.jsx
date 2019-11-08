@@ -8,11 +8,13 @@ import CoderBot from './components/CoderBot/CoderBot'
 import projectRoutes from './projects/routes.jsx'
 import notificationsRoutes from './routes/notifications/routes.jsx'
 import settingsRoutes from './routes/settings/routes.jsx'
+import metaDataRoutes from './routes/metadata/routes.jsx'
 import TopBarContainer from './components/TopBar/TopBarContainer'
 import ProjectsToolBar from './components/TopBar/ProjectsToolBar'
 import RedirectComponent from './components/RedirectComponent'
 import CreateContainer from './projects/create/containers/CreateContainer'
 import LoadingIndicator from './components/LoadingIndicator/LoadingIndicator'
+import OrganizationPage from './components/SpecialPage/OrganizationPage'
 import {ACCOUNTS_APP_LOGIN_URL, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from './config/constants'
 import { getTopic } from './api/messages'
 import { getFreshToken } from 'tc-accounts'
@@ -25,22 +27,34 @@ const onRouteChange = (pathname) => {
   TCEmitter.emit(EVENT_ROUTE_CHANGE, pathname)
 
   if (window.analytics) {
-    if (/^projects\/$/.test(pathname)) {
+    if (/^\/projects\/$/.test(pathname)) {
       window.analytics.page('Project Listings')
-    } else if (/^projects\/\d+\/?$/.test(pathname)) {
+    } else if (/^\/projects\/\d+\/?$/.test(pathname)) {
       window.analytics.page('Project Dashboard')
-    } else if (/^projects\/\d+\/discussions\/?$/.test(pathname)) {
+    } else if (/^\/projects\/\d+\/discussions\/?$/.test(pathname)) {
       window.analytics.page('Project Discussions')
-    } else if (/^projects\/\d+\/specification\/?$/.test(pathname)) {
+    } else if (/^\/projects\/\d+\/specification\/?$/.test(pathname)) {
       window.analytics.page('Project Specification')
+    } else if (/^\/projects\/\d+\/scope\/?$/.test(pathname)) {
+      window.analytics.page('Project Scope')
+    } else if (/^\/projects\/\d+\/plan\/?$/.test(pathname)) {
+      window.analytics.page('Project Plan')
+    }  else if (/^\/projects\/\d+\/assets\/?$/.test(pathname)) {
+      window.analytics.page('Assets Library')
+    } else if (/^\/settings\/notifications\/?$/.test(pathname)) {
+      window.analytics.page('Notification Settings')
+    } else if (/^\/notifications\/?$/.test(pathname)) {
+      window.analytics.page('Notification Listings')
     } else if (/^\/$/.test(pathname)) {
       window.analytics.page('Connect Home')
-    } else if (/^new-project\/$/.test(pathname)) {
-      window.analytics.page('New Project : Select Product')
-    } else if (/^new-project\/incomplete$/.test(pathname)) {
+    } else if (/^\/organization\/new-project\/$/.test(pathname)) {
+      window.analytics.page('New Organization Project')
+    } else if (/^\/new-project\/$/.test(pathname)) {
+      window.analytics.page('New Project : Select Project Category')
+    } else if (/^\/new-project\/incomplete$/.test(pathname)) {
       window.analytics.page('New Project : Incomplete Project')
-    } else if (/^new-project\/[a-zA-Z0-9_]+$/.test(pathname)) {
-      window.analytics.page('New Project : Project Details')
+    } else if (/^\/new-project\/[a-zA-Z0-9_-]+$/.test(pathname)) {
+      window.analytics.page('New Project : Project Template/Details')
     }
   }
 }
@@ -65,12 +79,8 @@ class RedirectToProject extends React.Component {
         if (resp.topic) {
           const topic = resp.topic
           const projectId = topic.referenceId
-          if (topic.tag === PROJECT_FEED_TYPE_PRIMARY) {
-            history.replace(`/projects/${projectId}/`)
-          } else if (topic.tag === PROJECT_FEED_TYPE_MESSAGES) {
-            history.replace({
-              pathname: `/projects/${projectId}/discussions/${topic.id}`
-            })
+          if (topic.tag === PROJECT_FEED_TYPE_PRIMARY || topic.tag === PROJECT_FEED_TYPE_MESSAGES) {
+            history.replace(`/projects/${projectId}/messages/${topic.id}`)
           } else {
             history.replace('/projects')
           }
@@ -114,10 +124,16 @@ class Routes extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    const messagesRouteRegExp = /projects\/\d+\/messages/
+    const navigateBetweenMessages = prevProps.location.pathname.match(messagesRouteRegExp) &&
+      this.props.location.pathname.match(messagesRouteRegExp)
+
     if (this.props.location.pathname !== prevProps.location.pathname) {
       if (this.props.location.hash !== '') {
         scrollToHash(this.props.location.hash)
-      } else {
+
+      // don't scroll to the top when open/close a drawer with messages
+      } else if (!navigateBetweenMessages) {
         window.scrollTo(0, 0)
       }
     } else if (this.props.location.hash !== prevProps.location.hash && this.props.location.hash !== '') {
@@ -129,6 +145,7 @@ class Routes extends React.Component {
     return (
       <Switch>
         <Route exact path="/" render={renderApp(topBarWithProjectsToolBar, <Home/>)} />
+        <Route path="/organization/new-project" render={renderApp(null, <OrganizationPage/>)} />
         <Route path="/new-project/:project?/:status?" render={renderApp(null, <CreateContainer/>)} />
         <Route path="/new-project-callback" render={renderApp(null, <CreateContainer/>)} />
         <Route path="/terms" render={renderApp(topBarWithProjectsToolBar, <ConnectTerms/>)} />
@@ -140,6 +157,7 @@ class Routes extends React.Component {
         {/* {reportsListRoutes} */}
         {notificationsRoutes}
         {settingsRoutes}
+        {metaDataRoutes}
 
         <Route path="/error" render={renderApp(topBarWithProjectsToolBar, <CoderBot code={500}/>)} />
         <Route path="/404" render={renderApp(topBarWithProjectsToolBar, <CoderBot code={404}/>)} />

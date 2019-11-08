@@ -3,14 +3,16 @@ import React from 'react'
 import { Prompt, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import update from 'react-addons-update'
+import MediaQuery from 'react-responsive'
 import MessageList from '../../../components/MessageList/MessageList'
 import MessagingEmptyState from '../../../components/MessageList/MessagingEmptyState'
 import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
-import { laodProjectMessages, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
+import { loadProjectMessages, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import FullHeightContainer from 'appirio-tech-react-components/components/FullHeightContainer/FullHeightContainer'
-import FooterV2 from '../../../components/FooterV2/FooterV2'
+import TwoColsLayout from '../../../components/TwoColsLayout'
+import Sticky from '../../../components/Sticky'
+import ProjectInfoContainer from './ProjectInfoContainer'
 
 import {
   THREAD_MESSAGES_PAGE_SIZE,
@@ -19,10 +21,12 @@ import {
   CODER_BOT_USERID,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
-  TC_SYSTEM_USERID
+  TC_SYSTEM_USERID,
+  SCREEN_BREAKPOINT_MD,
 } from '../../../config/constants'
 
 const SYSTEM_USER = {
+  handle: CODER_BOT_USERID,
   firstName: CODER_BOT_USER_FNAME,
   lastName: CODER_BOT_USER_LNAME,
   photoURL: require('file-loader?../../../assets/images/avatar-coder.svg')
@@ -319,12 +323,15 @@ class MessagesView extends React.Component {
     })
   }
 
-  onAddNewMessage(threadId, content) {
+  onAddNewMessage(threadId, content, attachmentIds) {
     const { currentUser } = this.props
     const newMessage = {
       date: new Date(),
       userId: parseInt(currentUser.id),
       content
+    }
+    if (attachmentIds) {
+      Object.assign(newMessage, { attachmentIds })
     }
     this.props.addFeedComment(threadId, PROJECT_FEED_TYPE_MESSAGES, newMessage)
   }
@@ -346,9 +353,9 @@ class MessagesView extends React.Component {
     })
   }
 
-  onSaveMessage(threadId, message, content) {
+  onSaveMessage(threadId, message, content, attachmentIds) {
     const newMessage = {...message}
-    newMessage.content = content
+    Object.assign(newMessage, {content, attachmentIds})
     this.props.saveFeedComment(threadId, PROJECT_FEED_TYPE_MESSAGES, newMessage)
   }
 
@@ -389,19 +396,23 @@ class MessagesView extends React.Component {
   }
 
   onSaveTopic(threadId, postId, title, content) {
-    this.props.saveProjectTopic(threadId, PROJECT_FEED_TYPE_MESSAGES, {postId, title, content})
+    const newTopic = { postId, title, content }
+    this.props.saveProjectTopic(threadId, PROJECT_FEED_TYPE_MESSAGES, newTopic)
   }
 
   onDeleteTopic(threadId) {
     this.props.deleteProjectTopic(threadId, PROJECT_FEED_TYPE_MESSAGES)
   }
 
-  onNewThread({title, content}) {
+  onNewThread({title, content, attachmentIds}) {
     const { project } = this.props
     const newThread = {
       title,
       body: content,
       tag: PROJECT_FEED_TYPE_MESSAGES
+    }
+    if (attachmentIds) {
+      Object.assign(newThread, { attachmentIds })
     }
     this.props.createProjectTopic(project.id, newThread).then(() => {
       this.setState({
@@ -410,9 +421,58 @@ class MessagesView extends React.Component {
     })
   }
 
+  /**
+   * Returns the sidebar content
+   */
+  getSidebarContent() {
+    const {
+      location,
+      currentMemberRole,
+      project,
+      phases,
+      isSuperUser,
+      isManageUser,
+      productsTimelines,
+      phasesTopics,
+      isProcessing
+    } = this.props
+
+    const leftArea = (
+      <ProjectInfoContainer
+        location={location}
+        currentMemberRole={currentMemberRole}
+        project={project}
+        phases={phases}
+        isSuperUser={isSuperUser}
+        isManageUser={isManageUser}
+        productsTimelines={productsTimelines}
+        phasesTopics={phasesTopics}
+        isProjectProcessing={isProcessing}
+
+        // we never load feeds from the old Discussions tab,
+        // otherwise it would cause conflicts with the logic to load feeds on in this Container
+        feeds={[]}
+        isFeedsLoading
+      />
+    )
+
+    return (
+      <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+        {matches => {
+          if (matches) {
+            return <Sticky top={60}>{leftArea}</Sticky>
+          } else {
+            return leftArea
+          }
+        }}
+      </MediaQuery>
+    )
+  }
+
   render() {
     const {threads, isCreateNewMessage, showEmptyState, scrollPosition} = this.state
     const { currentUser, isCreatingFeed, currentMemberRole, error } = this.props
+    const leftArea = this.getSidebarContent()
     const activeThread = threads.filter((item) => item.isActive)[0]
     const onLeaveMessage = this.onLeave() || ''
     const renderRightPanel = () => {
@@ -453,34 +513,39 @@ class MessagesView extends React.Component {
     }
 
     return (
-      <FullHeightContainer offset={80}>
-        <Prompt
-          when={!!onLeaveMessage}
-          message={onLeaveMessage}
-        />
-        <div className="messages-container">
-          <div className="left-area">
-            <MessageList
-              onAdd={this.onNewThreadClick}
-              threads={threads}
-              onSelect={this.onThreadSelect}
-              showAddButton={!!currentMemberRole}
-              showEmptyState={showEmptyState && !threads.length}
-              scrollPosition={scrollPosition}
-            />
-            <FooterV2 />
+      <TwoColsLayout noPadding>
+        <TwoColsLayout.Sidebar>
+          {leftArea}
+        </TwoColsLayout.Sidebar>
+
+        <TwoColsLayout.Content>
+          <Prompt
+            when={!!onLeaveMessage}
+            message={onLeaveMessage}
+          />
+          <div className="messages-container">
+            <div className="left-area">
+              <MessageList
+                onAdd={this.onNewThreadClick}
+                threads={threads}
+                onSelect={this.onThreadSelect}
+                showAddButton={!!currentMemberRole}
+                showEmptyState={showEmptyState && !threads.length}
+                scrollPosition={scrollPosition}
+              />
+            </div>
+            <div className="right-area">
+              { (showEmptyState && !threads.length) &&
+                  <MessagingEmptyState
+                    currentUser={currentUser}
+                    onClose={() => this.setState({showEmptyState: false})}
+                  />
+              }
+              { renderRightPanel() }
+            </div>
           </div>
-          <div className="right-area">
-            { (showEmptyState && !threads.length) &&
-                <MessagingEmptyState
-                  currentUser={currentUser}
-                  onClose={() => this.setState({showEmptyState: false})}
-                />
-            }
-            { renderRightPanel() }
-          </div>
-        </div>
-      </FullHeightContainer>
+        </TwoColsLayout.Content>
+      </TwoColsLayout>
     )
   }
 }
@@ -493,7 +558,7 @@ class MessagesContainer extends React.Component {
     super(props)
   }
   componentWillMount() {
-    this.props.laodProjectMessages(this.props.project.id)
+    this.props.loadProjectMessages(this.props.project.id)
   }
   render() {
     return <EnhancedMessagesView {...this.props} />
@@ -512,7 +577,7 @@ const mapStateToProps = ({ projectTopics, members, loadUser }) => {
   }
 }
 const mapDispatchToProps = {
-  laodProjectMessages,
+  loadProjectMessages,
   createProjectTopic,
   saveProjectTopic,
   deleteProjectTopic,

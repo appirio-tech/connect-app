@@ -1,48 +1,38 @@
 /**
  * Container for system settings
  */
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
+import  _ from 'lodash'
 import { connect } from 'react-redux'
+import spinnerWhileLoading from '../../../../../components/LoadingSpinner'
 import SettingsPanel from '../../../components/SettingsPanel'
-import ChangeEmailForm from '../components/ChangeEmailForm'
-import ChangePasswordForm from '../components/ChangePasswordForm'
-import { checkEmailAvailability, changeEmail, changePassword } from '../../../actions'
+import { checkEmailAvailability, changeEmail, changePassword, getSystemSettings, resetPassword } from '../../../actions'
 import { requiresAuthentication } from '../../../../../components/AuthenticatedComponent'
+import SystemSettingsForm from '../components/SystemSettingsForm'
+import { ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN } from '../../../../../config/constants'
 import './SystemSettingsContainer.scss'
 
-const SystemSettingsContainer = (props) => {
-  const { systemSettings, checkEmailAvailability, changeEmail, changePassword } = props
+const enhance = spinnerWhileLoading(props => !props.systemSettings.isLoading)
+const FormEnhanced = enhance(SystemSettingsForm)
 
-  return (
-    <SettingsPanel
-      title="System"
-      text="Answer just a few questions about your application.
-        You can also provide the needed information in a supporting document—upload it below or add a link in the notes section."
-    >
-      <div className="system-settings-container">
-        <div className="form">
-          <ChangePasswordForm
-            onSubmit={(data) => changePassword(data.password)}
-            {...systemSettings}
-          />
-        </div>
+class SystemSettingsContainer extends Component {
+  componentDidMount() {
+    this.props.getSystemSettings()
+  }
 
-        <div className="form">
-          <ChangeEmailForm
-            checkEmailAvailability={checkEmailAvailability}
-            onSubmit={(data) => changeEmail(data.email)}
-            {...systemSettings}
-          />
-        </div>
-
-        <div className="controls">
-          <button className="tc-btn tc-btn-primary">Save settings</button>
-        </div>
-      </div>
-    </SettingsPanel>
-  )
+  render() {
+    return (
+      <SettingsPanel
+        title="Account and security"
+        user={this.props.user}
+      >
+        <FormEnhanced
+          {...this.props}
+        />
+      </SettingsPanel>
+    )
+  }
 }
 
 SystemSettingsContainer.propTypes = {
@@ -51,14 +41,22 @@ SystemSettingsContainer.propTypes = {
 
 const SystemSettingsContainerWithAuth = requiresAuthentication(SystemSettingsContainer)
 
-const mapStateToProps = ({ settings }) => ({
-  systemSettings: settings.system
-})
+const mapStateToProps = ({ settings, loadUser }) => {
+  const powerUserRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
+
+  return {
+    systemSettings: settings.system,
+    isCustomer: _.intersection(loadUser.user.roles, powerUserRoles).length === 0,
+    user: loadUser.user
+  }
+}
 
 const mapDispatchToProps = {
+  getSystemSettings,
   checkEmailAvailability,
   changeEmail,
-  changePassword
+  changePassword,
+  resetPassword,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SystemSettingsContainerWithAuth)

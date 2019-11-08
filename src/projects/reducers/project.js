@@ -1,40 +1,54 @@
 import {
-  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
+  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_MEMBER_INVITES_PENDING, LOAD_PROJECT_MEMBER_INVITES_FAILURE, LOAD_PROJECT_MEMBER_INVITES_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
   CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CREATE_PROJECT_STAGE_PENDING, CREATE_PROJECT_STAGE_SUCCESS, CREATE_PROJECT_STAGE_FAILURE, CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT_PENDING, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   DELETE_PROJECT_PENDING, DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
   ADD_PROJECT_ATTACHMENT_PENDING, ADD_PROJECT_ATTACHMENT_SUCCESS, ADD_PROJECT_ATTACHMENT_FAILURE,
   UPDATE_PROJECT_ATTACHMENT_PENDING, UPDATE_PROJECT_ATTACHMENT_SUCCESS, UPDATE_PROJECT_ATTACHMENT_FAILURE,
   REMOVE_PROJECT_ATTACHMENT_PENDING, REMOVE_PROJECT_ATTACHMENT_SUCCESS, REMOVE_PROJECT_ATTACHMENT_FAILURE,
+  REMOVE_PENDING_ATTACHMENT, UPDATE_PENDING_ATTACHMENT,
   ADD_PRODUCT_ATTACHMENT_PENDING, ADD_PRODUCT_ATTACHMENT_SUCCESS, ADD_PRODUCT_ATTACHMENT_FAILURE,
   UPDATE_PRODUCT_ATTACHMENT_PENDING, UPDATE_PRODUCT_ATTACHMENT_SUCCESS, UPDATE_PRODUCT_ATTACHMENT_FAILURE,
   REMOVE_PRODUCT_ATTACHMENT_PENDING, REMOVE_PRODUCT_ATTACHMENT_SUCCESS, REMOVE_PRODUCT_ATTACHMENT_FAILURE,
   ADD_PROJECT_MEMBER_PENDING, ADD_PROJECT_MEMBER_SUCCESS, ADD_PROJECT_MEMBER_FAILURE,
   UPDATE_PROJECT_MEMBER_PENDING, UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
-  GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS, LOAD_PROJECT_PHASES_PENDING,
-  LOAD_PROJECT_TEMPLATE_SUCCESS, LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS, LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
+  GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS, LOAD_PROJECT_PHASES_PENDING, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
   UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_SUCCESS, UPDATE_PHASE_SUCCESS, UPDATE_PHASE_PENDING, UPDATE_PHASE_FAILURE,
-  DELETE_PROJECT_PHASE_PENDING, DELETE_PROJECT_PHASE_SUCCESS, DELETE_PROJECT_PHASE_FAILURE,
+  DELETE_PROJECT_PHASE_PENDING, DELETE_PROJECT_PHASE_SUCCESS, DELETE_PROJECT_PHASE_FAILURE, PHASE_DIRTY_UNDO, PHASE_DIRTY,
+  EXPAND_PROJECT_PHASE, COLLAPSE_PROJECT_PHASE, COLLAPSE_ALL_PROJECT_PHASES, INVITE_CUSTOMER_SUCCESS, REMOVE_CUSTOMER_INVITE_SUCCESS,
+  INVITE_TOPCODER_MEMBER_SUCCESS, REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS, INVITE_TOPCODER_MEMBER_PENDING, REMOVE_CUSTOMER_INVITE_PENDING,
+  REMOVE_TOPCODER_MEMBER_INVITE_PENDING, REMOVE_TOPCODER_MEMBER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_FAILURE,
+  INVITE_CUSTOMER_FAILURE, INVITE_TOPCODER_MEMBER_FAILURE, INVITE_CUSTOMER_PENDING,
+  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, RELOAD_PROJECT_MEMBERS_SUCCESS,
+  UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION,
+  CREATE_SCOPE_CHANGE_REQUEST_SUCCESS, APPROVE_SCOPE_CHANGE_SUCCESS, REJECT_SCOPE_CHANGE_SUCCESS, CANCEL_SCOPE_CHANGE_SUCCESS, ACTIVATE_SCOPE_CHANGE_SUCCESS,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
+import { clean } from '../../helpers/utils'
 
 const initialState = {
   isLoading: true,
   processing: false,
   processingMembers: false,
+  processingInvites: false,
   processingAttachments: false,
+  attachmentsAwaitingPermission: null,
+  attachmentPermissions: null,
   error: false,
-  project: {},
+  inviteError: false,
+  project: {
+    invites: [] // invites are pushed directly into it hence need to declare first
+  },
+  assetsMembers: {},
   projectNonDirty: {},
   updateExisting: false,
-  projectTemplate: null,
-  productTemplates: [],
-  allProductTemplates: [],
   phases: null,
   phasesNonDirty: null,
-  isLoadingPhases: false
+  isLoadingPhases: false,
+  showUserInvited: false,
+  phasesStates: {} // controls opened phases and tabs of the phases
 }
 
 // NOTE: We should always update projectNonDirty state whenever we update the project state
@@ -80,6 +94,31 @@ function updateProductInPhases(phases, phaseId, productId, updateProduct, should
 }
 
 /**
+ * Updates the status of a scope change request identified by the index.
+ *
+ * @param {Object} scopeChangeRequests - the list of scope change requests for the project
+ * @param {number} requestId - the id of targetted scope change request
+ * @param {string} status - the new status to update
+ */
+function updateScopeChangeStatus(scopeChangeRequests, updatedScopeChange) {
+  const index = _.findIndex(scopeChangeRequests, s => s.id === updatedScopeChange.id)
+  if (index > -1) {
+    return update(scopeChangeRequests, {
+      [index]: {
+        $set: updatedScopeChange
+      }
+    })
+  }
+  return scopeChangeRequests
+}
+
+function revertDirtyProject(state) {
+  return Object.assign({}, state, {
+    project: _.cloneDeep(state.projectNonDirty)
+  })
+}
+
+/**
  * Finds product in the list of phases
  *
  * @param {Array}  phases         phases list in store
@@ -95,25 +134,52 @@ function getProductInPhases(phases, phaseId, productId) {
   return product
 }
 
-/**
- * Update phase from server result
- *
- * @param {Array}  phases          phases list in store
- * @param {Object} phase           phase
- * @param {Number} phaseIndex      index of phase to update
- *
- * @return {Array}  phases
- */
-function updateSomeBasicInfoIntoPhase(phases, phase, phaseIndex) {
-  if (phase && phaseIndex >= 0) {
-    _.assign(phases[phaseIndex], phase)
-  }
-  return _.cloneDeep(phases || [])
-}
-
 export const projectState = function (state=initialState, action) {
 
   switch (action.type) {
+  case EXPAND_PROJECT_PHASE: {
+    const { phaseId, tab } = action.payload
+    const currentPhaseTab = state.phasesStates[phaseId] || {}
+    const updatedPhaseTab = {
+      ...currentPhaseTab,
+      isExpanded: true
+    }
+    if (tab) {
+      updatedPhaseTab.tab = tab
+    }
+
+    return {
+      ...state,
+      phasesStates: {
+        ...state.phasesStates,
+        [phaseId]: updatedPhaseTab
+      }
+    }
+  }
+
+  case COLLAPSE_PROJECT_PHASE: {
+    const { phaseId } = action.payload
+    const currentPhaseTab = state.phasesStates[phaseId] || {}
+    const updatedPhaseTab = {
+      ...currentPhaseTab,
+      isExpanded: false
+    }
+
+    return {
+      ...state,
+      phasesStates: {
+        ...state.phasesStates,
+        [phaseId]: updatedPhaseTab
+      }
+    }
+  }
+
+  case COLLAPSE_ALL_PROJECT_PHASES:
+    return {
+      ...state,
+      phasesStates: {},
+    }
+
   case LOAD_PROJECT_PENDING:
     return Object.assign({}, state, {
       isLoading: true,
@@ -129,31 +195,84 @@ export const projectState = function (state=initialState, action) {
       lastUpdated: new Date()
     })
 
-  case UPDATE_PHASE_SUCCESS:
-    return update(state, {
-      processing: { $set: false},
-      phases: { $set: updateSomeBasicInfoIntoPhase(state.phases, action.payload, action.payload.phaseIndex || 0)}
+  case LOAD_PROJECT_MEMBER_INVITES_SUCCESS: {
+    return Object.assign({}, state, {
+      showUserInvited: true
+    })
+  }
+
+  case LOAD_PROJECT_MEMBER_INVITES_PENDING:
+    return Object.assign({}, state, {
+      isLoading: true,
+      showUserInvited: false
     })
 
-  case LOAD_PROJECT_TEMPLATE_SUCCESS:
-    return {...state,
-      projectTemplate: action.payload,
+  case ACCEPT_OR_REFUSE_INVITE_PENDING:
+    return Object.assign({}, state, {
+      showUserInvited: true,
+      inviteError: false,
+    })
+
+  case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
+    return Object.assign({}, state, {
+      showUserInvited: false,
+      inviteError: false,
+    })
+  }
+
+  case RELOAD_PROJECT_MEMBERS_SUCCESS: {
+    return Object.assign({}, state, {
+      project:{
+        ...state.project,
+        members: action.payload.members,
+        invites: action.payload.invites,
+      }
+    })
+  }
+
+  case CREATE_PROJECT_STAGE_SUCCESS: {
+    // as we additionally loaded products to the phase object we have to keep them
+    // note that we keep them as they are without creation a new copy
+    const phase = {
+      ...action.payload.phase,
+      products: [action.payload.product]
+    }
+    const phaseNonDirty = {
+      // for non-dirty version we make sure that dont' have the same objects with phase
+      ..._.cloneDeep(action.payload.phase),
+      products: [_.cloneDeep(action.payload.product)]
+    }
+    return update(state, {
+      processing: { $set: false },
+      phases: { $push: [phase] },
+      phasesNonDirty: { $push: [phaseNonDirty] }
+    })
+  }
+
+  case UPDATE_PHASE_SUCCESS: {
+    // as we additionally loaded products to the phase object we have to keep them
+    // note that we keep them as they are without creation a new copy
+    const phase = {
+      ...action.payload,
+      products: state.phases[action.payload.phaseIndex].products
+    }
+    const phaseNonDirty = {
+      // for non-dirty version we make sure that dont' have the same objects with phase
+      ..._.cloneDeep(action.payload),
+      products: state.phasesNonDirty[action.payload.phaseIndex].products
     }
 
-  case LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS:
-    return {...state,
-      // replace all loaded product templates so we keep only the one for current project
-      productTemplates: action.payload,
-    }
-
-  case LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS:
-    return {...state,
-      allProductTemplates: action.payload,
-    }
+    return update(state, {
+      processing: { $set: false },
+      phases: { $splice: [[action.payload.phaseIndex, 1, phase]] },
+      phasesNonDirty: { $splice: [[action.payload.phaseIndex, 1, phaseNonDirty]] },
+    })
+  }
 
   case CLEAR_LOADED_PROJECT:
   case GET_PROJECTS_SUCCESS:
     return Object.assign({}, state, {
+      isLoading: true, // this is excpected to be default value when there is not project loaded
       project: {},
       projectNonDirty: {},
       phases: null,
@@ -193,12 +312,100 @@ export const projectState = function (state=initialState, action) {
       isLoadingPhases: true
     })
 
-  case LOAD_PROJECT_PHASES_SUCCESS:
+  case LOAD_PROJECT_PHASES_SUCCESS: {
+    // loops through the phases to update the attachments field in the products of each phase
+    // NOTE it might not be needed after we get a proper implementation for supporting product attachments
+    const phases = _.map(action.payload, p => {
+      p.products = _.map(p.products, prd => {
+        const attachments = []
+        if (state.project.attachments && state.project.attachments.length) {
+          state.project.attachments.forEach(a => {
+            if (a.category === `product#${prd.id}`) {
+              attachments.push(a)
+            }
+          })
+        }
+        return { ...prd, attachments }
+      })
+      return p
+    })
+    // updates projects' attachments which are not coupled with any product/phase
+    const projectAttachments = []
+    state.project.attachments.forEach(a => {
+      if (!a.category || a.category.indexOf('product') !== 0) {
+        projectAttachments.push(a)
+      }
+    })
     return update(state, {
-      phases: { $set: action.payload },
+      project: { attachments : { $set : projectAttachments } },
+      projectNonDirty: { attachments: { $set: projectAttachments } },
+      phases: { $set:phases },
       phasesNonDirty: { $set: action.payload },
       isLoadingPhases: { $set: false}
     })
+  }
+
+  case CREATE_SCOPE_CHANGE_REQUEST_SUCCESS: {
+    state = revertDirtyProject(state)
+
+    const project = update(state.project, {
+      scopeChangeRequests: { $push: [action.payload] }
+    })
+    return Object.assign({}, state, {
+      project,
+      projectNonDirty: _.cloneDeep(project)
+    })
+  }
+
+  case APPROVE_SCOPE_CHANGE_SUCCESS:
+  case REJECT_SCOPE_CHANGE_SUCCESS:
+  case CANCEL_SCOPE_CHANGE_SUCCESS: {
+    state = revertDirtyProject(state)
+
+    const project = update(state.project, {
+      scopeChangeRequests: {
+        $set: updateScopeChangeStatus(
+          state.project.scopeChangeRequests,
+          action.payload
+        )
+      }
+    })
+    return Object.assign({}, state, {
+      project,
+      projectNonDirty: _.cloneDeep(project)
+    })
+  }
+
+  case ACTIVATE_SCOPE_CHANGE_SUCCESS: {
+    state = revertDirtyProject(state)
+
+    const updatedScopeChangeRequests = updateScopeChangeStatus(
+      state.project.scopeChangeRequests,
+      action.payload
+    )
+    const updatedDetails = _.mergeWith(
+      {},
+      state.project.details,
+      _.cloneDeep(action.payload.newScope),
+      (_objValue, srcValue) => {
+        if (_.isArray(srcValue)) {
+          return srcValue
+        }
+      }
+    )
+    const project = update(state.project, {
+      scopeChangeRequests: {
+        $set: updatedScopeChangeRequests
+      },
+      details: {
+        $set: updatedDetails
+      }
+    })
+    return Object.assign({}, state, {
+      project,
+      projectNonDirty: _.cloneDeep(project)
+    })
+  }
 
   // Create & Edit project
   case CREATE_PROJECT_STAGE_PENDING:
@@ -213,7 +420,6 @@ export const projectState = function (state=initialState, action) {
       error: false
     })
 
-  case CREATE_PROJECT_STAGE_SUCCESS:
   case CREATE_PROJECT_SUCCESS:
   case UPDATE_PROJECT_SUCCESS: {
     // after loading project initially, we also load direct project
@@ -224,6 +430,7 @@ export const projectState = function (state=initialState, action) {
       ...action.payload,
       budget: _.cloneDeep(state.project.budget),
       duration: _.cloneDeep(state.project.duration),
+      invites: _.cloneDeep(state.project.invites),
     }
 
     return Object.assign({}, state, {
@@ -231,7 +438,8 @@ export const projectState = function (state=initialState, action) {
       error: false,
       project: restoredProject,
       projectNonDirty: _.cloneDeep(restoredProject),
-      updateExisting: action.payload.updateExisting
+      updateExisting: action.payload.updateExisting,
+      attachmentsAwaitingPermission: null
     })
   }
 
@@ -278,8 +486,34 @@ export const projectState = function (state=initialState, action) {
     return update(state, {
       processingAttachments: { $set : false },
       project: { attachments: { $push: [action.payload] } },
-      projectNonDirty: { attachments: { $push: [action.payload] } }
+      projectNonDirty: { attachments: { $push: [action.payload] } },
+      attachmentsAwaitingPermission: { $set: null }
     })
+
+  case UPLOAD_PROJECT_ATTACHMENT_FILES: {
+    let query = {}
+    if (state.attachmentsAwaitingPermission && state.attachmentsAwaitingPermission.attachments) {
+      query = { attachments: { $push: action.payload.attachments } }
+    } else {
+      query = { $set : action.payload }
+    }
+    return update(state, {
+      attachmentsAwaitingPermission: query,
+      attachmentPermissions: { $set : null }
+    })
+  }
+
+  case DISCARD_PROJECT_ATTACHMENT:
+    return {
+      ...state,
+      attachmentsAwaitingPermission: null
+    }
+
+  case CHANGE_ATTACHMENT_PERMISSION:
+    return {
+      ...state,
+      attachmentPermissions: action.payload
+    }
 
   case UPDATE_PROJECT_ATTACHMENT_SUCCESS: {
     // get index
@@ -312,6 +546,7 @@ export const projectState = function (state=initialState, action) {
       phasesNonDirty: updateProductInPhases(state.phasesNonDirty, phaseId, productId, {
         attachments: { $push: [_.cloneDeep(attachment)] }
       }),
+      attachmentsAwaitingPermission: null
     }
   }
 
@@ -354,11 +589,39 @@ export const projectState = function (state=initialState, action) {
     // that was just removed
     const idx = _.findIndex(state.project.attachments, a => a.id === action.payload)
     return update(state, {
-      processing: { $set : false },
+      processingAttachments: { $set : false },
       project: { attachments: { $splice: [[idx, 1]] } },
       projectNonDirty: { attachments: { $splice: [[idx, 1]] } }
     })
   }
+
+  case REMOVE_PENDING_ATTACHMENT: {
+    // action.payload will contain id of the attachment
+    // that was just removed
+    const idx = action.payload
+    return update(state, {
+      processingAttachments: { $set : false },
+      attachmentsAwaitingPermission: { attachments : { $splice: [[idx, 1]] } },
+    })
+  }
+
+  case UPDATE_PENDING_ATTACHMENT: {
+    const idx = action.payload.attachmentIdx
+    const existingAttachment = _.get(state.attachmentsAwaitingPermission, `attachments[${idx}]`)
+    const updatedAttachment = _.assign({}, existingAttachment, action.payload.updatedAttachment)
+    return update(state, {
+      processingAttachments: { $set : false },
+      attachmentsAwaitingPermission: { attachments : { $splice: [[idx, 1, updatedAttachment]] } },
+    })
+  }
+
+  case REMOVE_CUSTOMER_INVITE_PENDING:
+  case REMOVE_TOPCODER_MEMBER_INVITE_PENDING:
+  case INVITE_CUSTOMER_PENDING:
+  case INVITE_TOPCODER_MEMBER_PENDING:
+    return Object.assign({}, state, {
+      processingInvites: true
+    })
 
   case ADD_PROJECT_MEMBER_PENDING:
   case REMOVE_PROJECT_MEMBER_PENDING:
@@ -373,6 +636,54 @@ export const projectState = function (state=initialState, action) {
       project: { members: { $push: [action.payload] } },
       projectNonDirty: { members: { $push: [action.payload] } }
     })
+
+  case INVITE_CUSTOMER_SUCCESS: {
+    const newState = Object.assign({}, state)
+    if (!newState.project.invites) {
+      newState.project.invites = []
+    }
+    newState.project.invites.push(...action.payload.success)
+    newState.processingInvites = false
+    newState.error = false
+    if (action.payload.failed) {
+      newState.error = {
+        type: action.type,
+        failed: action.payload.failed,
+      }
+    }
+    return newState
+  }
+
+  case INVITE_TOPCODER_MEMBER_SUCCESS: {
+    const newState = Object.assign({}, state)
+    if (!newState.project.invites) {
+      newState.project.invites = []
+    }
+    newState.project.invites.push(...action.payload.success)
+    newState.processingInvites = false
+    newState.error = false
+    if (action.payload.failed) {
+      newState.error = {
+        type: action.type,
+        failed: action.payload.failed,
+      }
+    }
+    return newState
+  }
+
+  case REMOVE_CUSTOMER_INVITE_SUCCESS: {
+    const newState = Object.assign({}, state)
+    _.remove(newState.project.invites, i => action.payload.id === i.id)
+    newState.processingInvites = false
+    return newState
+  }
+
+  case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS: {
+    const newState = Object.assign({}, state)
+    _.remove(newState.project.invites, i => action.payload.id === i.id)
+    newState.processingInvites = false
+    return newState
+  }
 
   case UPDATE_PROJECT_MEMBER_SUCCESS: {
     // get index
@@ -400,20 +711,77 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
-  case PROJECT_DIRTY: {// payload contains only changed values from the project form
-    return Object.assign({}, state, {
-      project: _.mergeWith({}, state.project, action.payload, { isDirty : true },
-        // customizer to override screens array with changed values
-        (objValue, srcValue, key) => {
-          if (key === 'screens' || key === 'features' || key === 'capabilities') {
-            return srcValue// srcValue contains the changed values from action payload
-          }
+  case PROJECT_DIRTY: {
+    const updatedProject = _.mergeWith({}, _.omit(state.project, 'isDirty'), action.payload,
+      // customizer to override arrays with changed values
+      (objValue, srcValue, key) => {
+        // when we update some array values, we have to replace them completely, rather than merge
+        if (_.isArray(objValue) && _.isArray(srcValue)) {
+          return srcValue
         }
-      )
+        // most likely these cases are particular cases of the upper rule for arrays,
+        // but just in case keep them here for now, until we are sure we can safely remove
+        // this particular cases
+        if (key === 'screens' || key === 'features' || key === 'capabilities') {
+          return srcValue// srcValue contains the changed values from action payload
+        }
+
+        // project's name might contain ampersand
+        if (key === 'name') {
+          return _.escape(srcValue)
+        }
+      }
+    )
+    // dont' compare this properties as they could be not added to `projectNonDirty`
+    // or mutated somewhere in the app
+    const skipProperties = ['members', 'invites']
+    const clearUpdatedProject = clean(_.omit(updatedProject, skipProperties))
+    const clearUpdatedNonDirtyProject = clean(_.omit(state.projectNonDirty, skipProperties))
+    if (!_.isEqual(clearUpdatedProject, clearUpdatedNonDirtyProject)) {
+      updatedProject.isDirty = true
+    }
+
+    // keep this code for debugging
+    // as there are could be some parts of the application which could add additional properties
+    // to the `project` by Redux Store mutation
+    // this code could help to find such places during debugging if `isDirty` becomes `true` unexpectedly
+    /* if (updatedProject.isDirty) {
+      function difference(object, base) {
+        function changes(object, base) {
+          return _.transform(object, function(result, value, key) {
+            if (!_.isEqual(value, base[key])) {
+              result[key] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
+            }
+          });
+        }
+        return changes(object, base);
+      }
+      console.log('diff', difference(clearUpdatedProject, clearUpdatedNonDirtyProject))
+    } */
+    return Object.assign({}, state, {
+      project: updatedProject
+    })
+  }
+
+  case PHASE_DIRTY: {
+    const phaseIndex = state.phases.findIndex(phase => phase.id === action.payload.phaseId)
+    const phasesUpdated = [
+      ...state.phases.slice(0, phaseIndex),
+      {
+        ...state.phases[phaseIndex],
+        ...action.payload.dirtyPhase,
+        isDirty : true
+      },
+      ...state.phases.slice(phaseIndex + 1),
+    ]
+    return Object.assign({}, state, {
+      phases: _.mergeWith([], phasesUpdated)
     })
   }
 
   case PRODUCT_DIRTY:
+
+
     return {
       ...state,
       phases: updateProductInPhases(state.phases, action.payload.phaseId, action.payload.productId, {
@@ -425,8 +793,12 @@ export const projectState = function (state=initialState, action) {
     }
 
   case PROJECT_DIRTY_UNDO: {
+    return revertDirtyProject(state)
+  }
+
+  case PHASE_DIRTY_UNDO: {
     return Object.assign({}, state, {
-      project: _.cloneDeep(state.projectNonDirty)
+      phases: _.cloneDeep(state.phasesNonDirty)
     })
   }
 
@@ -445,6 +817,10 @@ export const projectState = function (state=initialState, action) {
   case UPDATE_PHASE_FAILURE:
   case UPDATE_PRODUCT_FAILURE:
   case ADD_PROJECT_MEMBER_FAILURE:
+  case INVITE_CUSTOMER_FAILURE:
+  case INVITE_TOPCODER_MEMBER_FAILURE:
+  case REMOVE_TOPCODER_MEMBER_INVITE_FAILURE:
+  case REMOVE_CUSTOMER_INVITE_FAILURE:
   case REMOVE_PROJECT_MEMBER_FAILURE:
   case UPDATE_PROJECT_MEMBER_FAILURE:
   case UPDATE_PROJECT_ATTACHMENT_FAILURE:
@@ -454,12 +830,24 @@ export const projectState = function (state=initialState, action) {
   case ADD_PRODUCT_ATTACHMENT_FAILURE:
   case REMOVE_PRODUCT_ATTACHMENT_FAILURE:
   case DELETE_PROJECT_PHASE_FAILURE:
+  case LOAD_PROJECT_MEMBER_INVITES_FAILURE:
     return Object.assign({}, state, {
       isLoading: false,
       processing: false,
       processingMembers: false,
       processingAttachments: false,
+      processingInvites: false,
       error: parseErrorObj(action)
+    })
+  case ACCEPT_OR_REFUSE_INVITE_FAILURE:
+    return Object.assign({}, state, {
+      isLoading: false,
+      processing: false,
+      processingMembers: false,
+      processingAttachments: false,
+      processingInvites: false,
+      error: parseErrorObj(action),
+      inviteError: parseErrorObj(action)
     })
 
   default:

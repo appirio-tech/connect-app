@@ -37,7 +37,7 @@ export function loadDashboardFeeds(projectId) {
   }
 }
 
-export function laodProjectMessages(projectId) {
+export function loadProjectMessages(projectId) {
   const tag = PROJECT_FEED_TYPE_MESSAGES
   return (dispatch) => {
     return dispatch({
@@ -52,7 +52,7 @@ const getProjectTopicsWithMember = (dispatch, projectId, tag) => {
   return new Promise((resolve, reject) => {
     return dispatch({
       type: LOAD_PROJECT_FEEDS,
-      payload: getTopicsWithComments('project', projectId, tag),
+      payload: getTopicsWithComments('project', projectId, tag, false),
       meta: { tag, projectId }
     })
       .then(({ value }) => {

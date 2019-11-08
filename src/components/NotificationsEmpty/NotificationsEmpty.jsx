@@ -8,17 +8,18 @@ import Bell from '../../assets/icons/ui-bell.svg'
 
 
 
-const NotificationsEmpty = (props) => (
+const NotificationsEmpty = ({children, message = 'Good job! You’re all caught up'}) => (
   <div className="notifications-empty">
     <div className="icon">
       <Bell className="icon-ui-bell"/>
     </div>
-    <p className="message">Good job! You’re all caught up</p>
-    {props.children && <div className="additional-content">{props.children}</div>}
+    <p className="message">{message}</p>
+    {children && <div className="additional-content">{children}</div>}
   </div>
 )
 
 NotificationsEmpty.propTypes = {
+  message: PropTypes.string,
   children: PropTypes.node
 }
 

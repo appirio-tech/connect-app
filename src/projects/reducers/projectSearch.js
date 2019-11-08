@@ -4,10 +4,12 @@ import {
   LOAD_MORE_PROJECTS, CLEAR_PROJECT_SEARCH, SET_PROJECTS_SEARCH_CRITERIA,
   SET_PROJECTS_INFINITE_AUTOLOAD,
   SET_PROJECTS_LIST_VIEW,
-  PROJECTS_LIST_VIEW,
   PROJECT_LIST_DEFAULT_CRITERIA,
   PROJECT_SORT,
-  DELETE_PROJECT_SUCCESS
+  DELETE_PROJECT_SUCCESS,
+  ACCEPT_OR_REFUSE_INVITE_SUCCESS,
+  ADMIN_ROLES,
+  MANAGER_ROLES,
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -16,10 +18,12 @@ export const initialState = {
   projects: [],
   error: false,
   totalCount: 0,
+  allProjectsCount: 0,
   pageNum: 1,
   // make a copy of constant to avoid unintentional modifications
   criteria: {...PROJECT_LIST_DEFAULT_CRITERIA},
-  projectsListView: PROJECTS_LIST_VIEW.GRID,
+  // don't set default value as it will depend on the user type
+  projectsListView: null,
   refresh: false
 }
 
@@ -53,9 +57,75 @@ export default function(state = initialState, action) {
     })
   case GET_PROJECTS_SUCCESS: {
     const updatedProjects = action.meta.keepPrevious
-      ? { projects : { $push : action.payload.projects }, totalCount: { $set : action.payload.totalCount} }
-      : { projects : { $set : action.payload.projects }, totalCount: { $set : action.payload.totalCount} }
+      ? { projects : { $push : action.payload.projects }, totalCount: { $set : action.payload.totalCount}, allProjectsCount: { $set : action.payload.allProjectsCount} }
+      : { projects : { $set : action.payload.projects }, totalCount: { $set : action.payload.totalCount}, allProjectsCount: { $set : action.payload.allProjectsCount} }
     return update(state, updatedProjects)
+  }
+
+  case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
+    if (!action.meta.currentUser) {
+      return state
+    }
+    if (action.payload.status === 'refused') {
+      // user refuse invite
+      const { projects } = state
+      const { roles } = action.meta.currentUser
+      const bigRoles = _.intersectionWith(roles, ADMIN_ROLES.concat(MANAGER_ROLES), _.isEqual)
+
+      const projectIndex = _.findIndex(projects, {id: action.meta.projectId})
+      if (projectIndex > -1) {
+        if (bigRoles.length === 0) {
+          // remove project from the search list if normal user refuse invite
+          return update(state, {
+            projects: {$splice: [[projectIndex, 1]]},
+          })
+        } else {
+          // remove user from invites list
+          const userIndex = _.findIndex(projects[projectIndex].invites, {userId: action.meta.currentUser.userId})
+          if (userIndex > -1) {
+            const updatedProject = update(projects[projectIndex], {
+              invites: { $splice: [[userIndex, 1]] },
+            })
+            return update(state, {
+              projects: { $splice: [[projectIndex, 1, updatedProject]] }
+            })
+          }
+        }
+      }
+    } else {
+      // user accept invite
+      const { projects } = state
+      const projectIndex = _.findIndex(projects, {id: action.meta.projectId})
+
+      if (projectIndex > -1) {
+        // construct member for the project member list
+        const member = _.pick(action.meta.currentUser, [
+          'userId', 'photoURL', 'handle',
+        ])
+        member.role = action.payload.role
+        member.projectId = action.meta.projectId
+        member.deletedAt = null // explicitly set `null` as non-deleted members have this value
+
+        // add new member to member list
+        let updatedProject = update(projects[projectIndex], {
+          members: { $push: [member] },
+        })
+
+        // remove user from invites list
+        const userIndex = _.findIndex(projects[projectIndex].invites, {userId: action.meta.currentUser.userId})
+        if (userIndex > -1) {
+          updatedProject = update(updatedProject, {
+            invites: { $splice: [[userIndex, 1]] },
+          })
+        }
+
+        // update project
+        return update(state, {
+          projects: { $splice: [[projectIndex, 1, updatedProject]] }
+        })
+      }
+    }
+    return state
   }
 
   case PROJECT_SORT: {
@@ -69,7 +139,7 @@ export default function(state = initialState, action) {
       isLoading: false,
       projects: [],
       totalCount: 0,
-      error: true
+      error: action.payload
     })
 
   case LOAD_MORE_PROJECTS:

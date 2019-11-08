@@ -1,4 +1,5 @@
 @import '~tc-ui/src/styles/tc-includes';
+@import '../Modal/Modal.scss';
 
 :global {
   .project-status-change-modal {
@@ -9,7 +10,6 @@
     z-index: 20;
 
     &.modal{
-      position: absolute;
     }
 
     .cancellation-reason {
@@ -34,7 +34,7 @@
         width: 100%;
       }
     }
-  
+
     &.dropdown-up {
       top: auto;
       bottom: 320px;

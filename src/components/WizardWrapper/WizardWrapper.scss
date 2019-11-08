@@ -1,0 +1,42 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.WizardWrapper {
+  display: flex;
+}
+
+.left-sidebar {
+  flex: 0 0 auto;
+  width: 154px;
+  background: $tc-gray-neutral-dark;
+  text-align: center;
+
+  padding: 30px 40px;
+
+  :global .top-logo {
+    width: 100%;
+    height: auto;
+
+    text,
+    path {
+      /* we use important as it's defined as component prop*/
+      fill: #47474F !important;
+    }
+  }
+
+  :global .title {
+    font-size: $tc-label-sm;
+    font-weight: 400;
+    line-height: 14px;
+    text-align: center;
+  }
+
+  @media screen and (max-width: $screen-md - 1px) {
+    display: none;
+  }
+}
+
+.content {
+  flex: 1 1 auto;
+  background: $tc-gray-0;
+  box-shadow: 0 0 5px 0 #C0C0C0, 0 0 1px 0 #D5D5D5;
+}

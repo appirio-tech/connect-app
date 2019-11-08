@@ -1,10 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {EditorState, RichUtils, SelectionState} from 'draft-js'
+import {EditorState, RichUtils} from 'draft-js'
 import addImage from 'draft-js-image-plugin/lib/modifiers/addImage'
 import linkifyIt from 'linkify-it'
 import tlds from 'tlds'
-import {hasEntity, getCurrentEntity} from '../../helpers/draftJSHelper'
 import EditorIcons from './EditorIcons'
 import Alert from 'react-s-alert'
 
@@ -175,31 +174,6 @@ class LinkModal extends React.Component {
   }
 }
 
-class AddLinkModal extends React.Component {
-  render () {
-    const editorState = this.props.getEditorState()
-    const entitySelected = hasEntity('LINK', editorState)
-    const entity = getCurrentEntity(editorState)
-    let entityData = null
-
-    if (entitySelected && entity) {
-      entityData = entity.getData()
-    }
-    const url = entityData ? entityData.url : null
-
-    return (
-      <div className={'addLinkModal'}>
-        <LinkModal
-          url={url}
-          showUnlink={entitySelected}
-          type={'LINK'}
-          {...this.props}
-        />
-      </div>
-    )
-  }
-}
-
 class AddImageModal extends React.Component {
   render () {
     return (
@@ -224,51 +198,20 @@ export default class AddLinkButton extends React.Component {
   }
 
   toggleAddLink() {
-    const editorState = this.props.getEditorState()
-    const selection = editorState.getSelection()
-    if (selection.isCollapsed()) {
-      Alert.error('Please select some piece of text .')
-    }
-    if (!selection.getHasFocus()) {
-      return
-    }
-    if (this.props.type === 'link' && selection.isCollapsed()) {
-      const currentEntity = getCurrentEntity(editorState)
-      if (currentEntity && currentEntity.getType() === 'LINK') {
+    if (this.props.type !== 'link') {
+      const editorState = this.props.getEditorState()
+      const selection = editorState.getSelection()
+      if (selection.isCollapsed()) {
+        Alert.error('Please select some piece of text .')
+      }
+      if (!selection.getHasFocus()) {
         return
       }
 
-      const key = selection.getAnchorKey()
-      const block = editorState
-        .getCurrentContent()
-        .getBlockForKey(key)
-      const text = block.getText()
-      const match = linkify.match(text)
-
-      if (!match || !match.length) {
-        return
-      }
-
-      const contentState = editorState.getCurrentContent()
-      const contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', {url: match[0].url})
-      const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
-
-      const selectionState = SelectionState.createEmpty(key)
-      const updatedSelection = selectionState.merge({
-        anchorOffset: 0,
-        focusOffset: block.getLength()
-      })
-
-      const newState = RichUtils.toggleLink(
-        editorState,
-        updatedSelection,
-        entityKey
-      )
-      this.props.setEditorState(newState)
-      return
+      this.show()
+    } else {
+      this.props.onEditLink()
     }
-
-    this.show()
   }
 
   show() {
@@ -296,15 +239,6 @@ export default class AddLinkButton extends React.Component {
             EditorIcons.render(type, active || modalVisible)
           }
         </button>
-        {
-          modalVisible && type === 'link' &&
-          <AddLinkModal
-            getEditorState={getEditorState}
-            setEditorState={setEditorState}
-            theme={theme}
-            closeModal={this.hide}
-          />
-        }
         {
           modalVisible && type === 'image' &&
           <AddImageModal

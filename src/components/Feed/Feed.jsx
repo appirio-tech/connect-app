@@ -1,88 +1,191 @@
 import React from 'react'
+import _ from 'lodash'
+import cn from 'classnames'
+import moment from 'moment'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import FeedComments from './FeedComments'
 import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
+import NotificationsReader from '../../components/NotificationsReader'
+import IconButton from '../IconButton/IconButton'
+
+import { EVENT_TYPE, PROJECT_FEED_TYPE_MESSAGES, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
+
+import XMarkIcon from '../../assets/icons/x-mark.svg'
+import FullscreenIcon from '../../assets/icons/ui-fullscreen.svg'
+import LockIcon from '../../assets/icons/lock.svg'
+import InvisibleIcon from '../../assets/icons/invisible-12-white.svg'
+import CloseIcon from 'appirio-tech-react-components/components/Icons/CloseIcon'
+import MoreIcon from '../../assets/icons/more.svg'
 
 import './Feed.scss'
 
 class Feed extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {editTopicMode: false}
+    this.state = {
+      editTopicMode: false,
+      headerHeight: null, // keeps header height for fullscreen mode
+    }
     this.onEditTopic = this.onEditTopic.bind(this)
     this.cancelEditTopic = this.cancelEditTopic.bind(this)
     this.onTopicChange = this.onTopicChange.bind(this)
     this.onSaveTopic = this.onSaveTopic.bind(this)
+    this.updateHeaderHeight = this.updateHeaderHeight.bind(this)
+    this.filterProjectMembers = this.filterProjectMembers.bind(this)
+  }
+
+  componentDidMount() {
+    const { isFullScreen } = this.props
+
+    if (isFullScreen) {
+      window.addEventListener('resize', this.updateHeaderHeight)
+      this.updateHeaderHeight()
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateHeaderHeight)
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({editTopicMode: nextProps.editTopicMode})
   }
 
+  componentDidUpdate(nextProps) {
+    if (nextProps.id !== this.props.id) {
+      this.updateHeaderHeight()
+    }
+  }
+
   onEditTopic() {
     this.setState({editTopicMode: true})
     this.props.onEditTopic()
   }
+
   cancelEditTopic() {
     this.setState({editTopicMode: false})
     this.props.onTopicChange(this.props.topicMessage.id, null, null, false)
   }
+
   onTopicChange(title, content) {
     this.props.onTopicChange(this.props.topicMessage.id, title, content, true)
   }
-  onSaveTopic({title, content}) {
-    this.props.onSaveTopic(this.props.topicMessage.id, title, content)
+
+  onSaveTopic({title, content, attachmentIds}) {
+    this.props.onSaveTopic(this.props.topicMessage.id, title, content, attachmentIds)
+  }
+
+  updateHeaderHeight() {
+    const { isFullScreen } = this.props
+
+    if (isFullScreen && this.refs.header) {
+      const headerHeight = this.refs.header.clientHeight
+
+      if (this.state.headerHeight !== headerHeight) {
+        this.setState({ headerHeight })
+      }
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    // avoid re-rendering of this heavy component if no properties are changed
+    return !_.isEqual(this.props, nextProps)
+  }
+
+  filterProjectMembers(projectMembers, isPrivate) {
+    return isPrivate ? _.pickBy(projectMembers, pm => pm.role !== PROJECT_ROLE_CUSTOMER) : projectMembers
   }
 
   render() {
     const {
       id, user, currentUser, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
       allowComments, comments, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
-      onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, allMembers
+      onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, allMembers,
+      onEnterFullscreenClick, onExitFullscreenClick, isFullScreen, commentId, projectMembers, commentAnchorPrefix, tag,
+      inTopicDrawer, onDrawerClose
     } = this.props
-    const {editTopicMode} = this.state
-    let authorName = user ? user.firstName : 'Unknown'
-    if (authorName && user && user.lastName) {
-      authorName += ' ' + user.lastName
-    }
+    const { editTopicMode, headerHeight } = this.state
 
     let topicHeader = null
+    const isPrivate = tag === PROJECT_FEED_TYPE_MESSAGES
     if (topicMessage) {
       const self = user && user.userId === currentUser.userId
       const title = this.props.newTitle === null || this.props.newTitle === undefined ? this.props.title : this.props.newTitle
       const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
+      const feedLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#feed-${id}`
+
+      const moreButton = (<IconButton Icon={MoreIcon} />)
 
       topicHeader = (
-        <header styleName="feed-header">
+        <header
+          styleName={
+            'feed-header' +
+            (isPrivate ? ' is-private' : '') +
+            (inTopicDrawer ? ' in-topic-drawer' : '')
+          }
+          ref="header"
+        >
+          <NotificationsReader
+            id={`topic-${id}`}
+            criteria={{ eventType: EVENT_TYPE.TOPIC.CREATED, contents: { topicId: id } }}
+          />
           {editTopicMode ? (
-            <div styleName="header-edit">
-              <RichTextArea
-                editMode
-                messageId={topicMessage.id}
-                isGettingComment={topicMessage.isGettingComment}
-                content={content}
-                title={title}
-                oldTitle={this.props.title}
-                onPost={this.onSaveTopic}
-                onPostChange={this.onTopicChange}
-                isCreating={isSavingTopic}
-                hasError={error}
-                cancelEdit={this.cancelEditTopic}
-                disableContent
-              />
+            <div styleName={cn('header-edit', {hasCloseButton: inTopicDrawer})}>
+              <div styleName="rich-text-wrapper">
+                <RichTextArea
+                  editMode
+                  messageId={topicMessage.id}
+                  isGettingComment={topicMessage.isGettingComment}
+                  content={content}
+                  title={title}
+                  oldTitle={this.props.title}
+                  onPost={this.onSaveTopic}
+                  onPostChange={this.onTopicChange}
+                  isCreating={isSavingTopic}
+                  hasError={error}
+                  cancelEdit={this.cancelEditTopic}
+                  disableContent
+                  editingTopic = {editTopicMode}
+                  textAreaOnly={!!inTopicDrawer}
+                />
+              </div>
+              {
+                inTopicDrawer &&
+                <IconButton onClick={onDrawerClose} Icon={CloseIcon} />
+              }
             </div>
           ) : (
             <div styleName="header-view">
-              <div styleName="title">{title}</div>
-              {self && (
-                <CommentEditToggle
-                  forTopic
-                  hideDelete={comments.length > 0}
-                  onEdit={this.onEditTopic}
-                  onDelete={onDeleteTopic}
-                />
-              )}
+              <div styleName="header-view-inner">
+                {isPrivate &&<div styleName="lock-icon" title="Private topic">{(!inTopicDrawer ? <LockIcon /> : <InvisibleIcon />)}</div>}
+                <div styleName="header-info">
+                  <div styleName="title">{title}</div>
+                  {!inTopicDrawer ? <div styleName="header-details">
+                    <Link to={feedLink}>{moment(topicMessage.date).format('MMM D YYYY')}</Link>
+                    <span>{comments.length} post{comments.length !== 1 ? 's' : ''}</span>
+                  </div> : null}
+                </div>
+                <div styleName="header-actions">
+                  {self && !isFullScreen && (
+                    <CommentEditToggle
+                      forTopic
+                      hideDelete={comments.length > 1}
+                      onEdit={this.onEditTopic}
+                      onDelete={onDeleteTopic}
+                      inDarkBackground={inTopicDrawer}
+                      moreButton={moreButton}
+                    />
+                  )}
+                  {
+                    inTopicDrawer &&
+                    <IconButton onClick={onDrawerClose} Icon={CloseIcon} />
+                  }
+                  {!!onEnterFullscreenClick && <button styleName="fullscreen" onClick={onEnterFullscreenClick}><FullscreenIcon /></button>}
+                  {!!onExitFullscreenClick && <button styleName="fullscreen fullscreen-exit" onClick={onExitFullscreenClick}><XMarkIcon /></button>}
+                </div>
+              </div>
             </div>
           )}
         </header>
@@ -90,7 +193,11 @@ class Feed extends React.Component {
     }
 
     return (
-      <div styleName="feed-container" id={`feed-${id}`}>
+      <div
+        styleName={cn('feed-container', { 'is-fullscreen': isFullScreen })}
+        id={`feed-${id}`}
+        style={{ paddingTop: headerHeight ? headerHeight : 0 }}
+      >
         {topicHeader}
         <FeedComments
           allowComments={allowComments}
@@ -109,6 +216,12 @@ class Feed extends React.Component {
           onSaveMessage={onSaveMessage}
           onDeleteMessage={onDeleteMessage}
           allMembers={allMembers}
+          projectMembers={this.filterProjectMembers(projectMembers, isPrivate)}
+          isFullScreen={isFullScreen}
+          headerHeight={headerHeight}
+          commentId={commentId}
+          error={error}
+          commentAnchorPrefix={commentAnchorPrefix}
         />
         {children}
         {isDeletingTopic &&
@@ -125,6 +238,7 @@ Feed.defaultProps = {
   title: '',
   date:'',
   allowComments: false,
+  isFullScreen: false,
 }
 
 Feed.propTypes = {
@@ -146,7 +260,12 @@ Feed.propTypes = {
   onSaveTopic: PropTypes.func,
   onDeleteTopic: PropTypes.func,
   isAddingComment: PropTypes.bool,
-  isSavingTopic: PropTypes.bool
+  isSavingTopic: PropTypes.bool,
+  onEnterFullscreenClick: PropTypes.func,
+  isFullScreen: PropTypes.bool,
+  commentAnchorPrefix: PropTypes.string,
+  inTopicDrawer: PropTypes.bool,
+  onDrawerClose: PropTypes.func
 }
 
 export default Feed

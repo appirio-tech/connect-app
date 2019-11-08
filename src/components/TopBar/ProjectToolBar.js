@@ -3,16 +3,15 @@ require('./ProjectToolBar.scss')
 import _ from 'lodash'
 import React from 'react'
 import PT from 'prop-types'
-import { NavLink, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
-
+import { getNewProjectLink } from '../../helpers/projectHelper'
 import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
 import MobileMenu from '../MobileMenu/MobileMenu'
 import MobileMenuToggle from '../MobileMenu/MobileMenuToggle'
 
-import TailLeft from '../../assets/icons/arrows-16px-1_tail-left.svg'
 
 import './ProjectToolBar.scss'
 
@@ -54,7 +53,7 @@ class ProjectToolBar extends React.Component {
   }
 
   render() {
-    const { renderLogoSection, userMenu, project, user, mobileMenu, location } = this.props
+    const { renderLogoSection, userMenu, project, user, mobileMenu, location, orgConfig } = this.props
     const { isTooltipVisible, isMobileMenuOpen } = this.state
 
     return (
@@ -62,19 +61,14 @@ class ProjectToolBar extends React.Component {
         <div className="tool-bar">
           <div className="bar-column">
             {renderLogoSection()}
-            <div className="breadcrumb">
-              <NavLink to="/projects">
-                <TailLeft className="icon-tail-left" />
-                <span>View All Projects</span></NavLink>
-            </div>
           </div>
           {project && project.name && <div className="bar-column project-name">
-            <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
-            {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
+            <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{_.unescape(project.name)}</span>
+            {isTooltipVisible && <div className="breadcrumb-tooltip">{_.unescape(project.name)}</div>}
           </div>}
-          <div className="bar-column project-name mobile"><span>{project.name}</span></div>
+          {project && project.name && <div className="bar-column project-name mobile"><span>{_.unescape(project.name)}</span></div>}
           <div className="bar-column">
-            <NewProjectNavLink compact returnUrl={window.location.href} />
+            <NewProjectNavLink compact link={getNewProjectLink(orgConfig)} />
             {userMenu}
             {/* pass location, to make sure that component is re-rendered when location is changed
                 it's necessary to hide notification dropdown on mobile when users uses browser history back/forward buttons */}
@@ -103,7 +97,8 @@ const mapStateToProps = ({ projectState, loadUser }) => {
     isProjectLoading: projectState.isLoading,
     project: projectState.project,
     userRoles: _.get(loadUser, 'user.roles', []),
-    user: loadUser.user
+    user: loadUser.user,
+    orgConfig: loadUser.orgConfig
   }
 }
 

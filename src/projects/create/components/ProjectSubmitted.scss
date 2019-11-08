@@ -1,0 +1,68 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import '~appirio-tech-react-components/components/Wizard/screen-size.scss';
+
+:global {
+  .ProjectSubmitted {
+    font-family: "Roboto", Arial, Helvetica, sans-serif;
+
+    .container {
+      width: 90%;
+
+      .title {
+        color: $tc-gray-100;
+        font-size: 32px;
+        font-weight: 300;
+        line-height: 35px;
+        margin-top: 50px;
+
+        @include mobile {
+          font-size: 24px;
+        }
+      }
+
+      .sub-title {
+        color: $tc-gray-50;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 20px;
+        margin-top: 15px;
+        text-transform: uppercase;
+      }
+
+      .content {
+        color: $tc-gray-100;
+        font-size: 15px;
+        font-weight: 400;
+        margin-top: 50px;
+        line-height: 25px;
+        padding: 0;
+
+        b {
+          font-weight: bold;
+        }
+      }
+
+      .project-link-container {
+        background-color: $tc-gray-neutral-light;
+        border-radius: 6px;
+        height: 60px;
+        width: 100%;
+        color: $tc-dark-blue;
+        font-size: 18px;
+        font-weight: 400;
+        text-align: center;
+        margin-top: 40px;
+        display: flex;
+      }
+
+      .button-container {
+        margin-top: 30px;
+        .copy-link-btn {
+          margin-left: 10px;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}
+  

@@ -14,7 +14,7 @@
     }
 
     .panel-title {
-      @include roboto;
+      @include roboto-bold;
       color: $tc-gray-80;
       text-transform: uppercase;
       font-size: $tc-label-xs;
@@ -95,6 +95,10 @@
 
     &.panel-orange {
       background-color: $tc-orange-10;
+    }
+
+    &.panel-links-container {
+      background: none;
     }
 
     .panel-body {

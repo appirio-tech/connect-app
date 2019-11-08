@@ -1,16 +1,12 @@
 import React from 'react'
 import PT from 'prop-types'
 import './IncompleteProjectConfirmation.scss'
-import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
 
 
 function IncompleteProjectConfirmation({ loadIncompleteProject, removeIncompleteProject }) {
   // const isLoggedIn = userRoles && userRoles.length
   return (
     <div className="IncompleteProjectConfirmation">
-      <div className="header">
-        <ConnectLogoMono className="connectLogo"/>
-      </div>
       <h3>Welcome back!</h3>
       <h5>You started a project with us recently.</h5>
       <p>Do you want to continue where you left off or create a new project?</p>

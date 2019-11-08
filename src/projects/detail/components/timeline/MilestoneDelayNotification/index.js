@@ -1,0 +1,2 @@
+import MilestoneDelayNotification from './MilestoneDelayNotification'
+export default MilestoneDelayNotification

@@ -31,7 +31,7 @@ const SelectProjectTemplate = ({
         icon={icon}
         info={projectTemplate.info}
         key={projectTemplate.id}
-        onClick={() => onProjectTemplateChange(projectTemplate.key)}
+        onClick={() => onProjectTemplateChange(projectTemplate)}
         type={projectTemplate.name}
       />
     )
@@ -39,7 +39,6 @@ const SelectProjectTemplate = ({
 
   return (
     <div>
-      <div className="header headerSelectProjectTemplate" />
       <div className="SelectProjectTemplate">
         <h1> { projectType.displayName } projects </h1>
         <h2>{ projectType.question }</h2>
@@ -55,7 +54,7 @@ const SelectProjectTemplate = ({
 SelectProjectTemplate.propTypes = {
   onProjectTemplateChange: PT.func.isRequired,
   projectTemplates: PT.array.isRequired,
-  projectTypeKey: PT.string.isRequired,
+  projectTypeKey: PT.string,
   projectTypes: PT.array.isRequired,
 }
 

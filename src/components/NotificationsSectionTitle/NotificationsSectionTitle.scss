@@ -2,12 +2,23 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
+  .exiting {
+    .notifications-section-title {
+      opacity: 0;
+      margin: -15px 0;
+      transform: scaleY(0);
+      transition: 500ms all ease-in;
+    }
+  }
+
   .notifications-section-title {
     align-items: center;
     background-color: $tc-gray-20;
     // border-bottom: 1px solid $tc-gray-20;
     display: flex;
     justify-content: space-between;
+    margin: 0;
+    overflow: hidden;
 
     @media screen and (max-width: $screen-md - 1px) {
       background-color: $tc-gray-10;

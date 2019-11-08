@@ -3,6 +3,7 @@
  */
 import _ from 'lodash'
 import { NOTIFICATION_RULES } from '../constants/notifications'
+import { EVENT_TYPE } from '../../../config/constants'
 import Handlebars from 'handlebars'
 
 /**
@@ -59,6 +60,60 @@ const handlebarsFallbackHelper = (value, fallbackValue) => {
 Handlebars.registerHelper('showMore', handlebarsShowMoreHelper)
 Handlebars.registerHelper('fallback', handlebarsFallbackHelper)
 
+export const renderGoTo = (goTo, contents) => {
+  let goToHandlebars = ''
+
+  if (_.isArray(goTo)) {
+    const goToRule = _.find(goTo, (goToRuleTemp) => goToRuleTemp.condition(contents))
+
+    if (goToRule) {
+      goToHandlebars = goToRule.goTo
+    } else {
+      console.error('Cannot find goTo rule.', goTo, contents)
+    }
+  } else {
+    goToHandlebars = goTo
+  }
+
+  return Handlebars.compile(goToHandlebars)(contents)
+}
+
+/**
+ * Filter notifications by criteria
+ *
+ * @param {Array}  notifications notifications list
+ * @param {Object} criteria      criteria to filter notifications
+ *
+ * @returns {Array} notifiations which meet the criteria
+ */
+export const filterNotificationsByCriteria = (notifications, criteria) => {
+  return notifications.filter((notification) => isNotificationMeetCriteria(notification, criteria))
+}
+
+export const isSubEqual = (object, criteria) => {
+  let isEqual = true
+
+  _.forOwn(criteria, (value, key) => {
+    if (_.isObject(value)) {
+      isEqual = isSubEqual(object[key], value)
+    } else {
+      isEqual = !!object && value === object[key]
+    }
+
+    return isEqual
+  })
+
+  return isEqual
+}
+
+export const isNotificationMeetCriteria = (notification, criteria) => {
+  if (_.isArray(criteria)) {
+    return _.some(criteria, isSubEqual.bind(null, notification))
+  }
+
+  return isSubEqual(notification, criteria)
+}
+
 /**
  * Get notification filters by sources
  *
@@ -78,7 +133,7 @@ export const getNotificationsFilters = (sources) => {
   const sortedSources = [...sources].sort(compareSourcesByLastNotificationDate)
 
   sortedSources.forEach(source => {
-    if (source.id !== 'global') {
+    if (source.id !== 'global' && source.total !== 0) {
       filtersBySource.push({
         title: source.title,
         value: source.id,
@@ -117,17 +172,36 @@ const compareSourcesByLastNotificationDate = (s1, s2) => {
  * @return {Array}                list of sources with related notifications
  */
 export const splitNotificationsBySources = (sources, notifications) => {
-  const notificationsBySources = []
+  const notificationsBySources = sources.map(source => {
+    const sourceNotifications = _.filter(notifications, { sourceId: source.id })
 
-  sources.filter(source => source.total > 0).forEach(source => {
-    source.notifications = _.filter(notifications, n => n.sourceId === source.id)
-    notificationsBySources.push(source)
+    return ({
+      ...source,
+      notifications: sourceNotifications,
+      total: sourceNotifications.length,
+    })
   })
 
   // source that has the most recent notification should be on top
   notificationsBySources.sort(compareSourcesByLastNotificationDate)
 
   return notificationsBySources
+}
+
+/**
+ * Filter notifications by posts
+ *
+ * So only notifications related to provided posts will stay
+ *
+ * @param  {Array} notifications list of notifications
+ * @param  {Array} posts         list of posts
+ *
+ * @return {Array}               list of filtered notifications
+ */
+export const filterNotificationsByPosts = (notifications, posts) => {
+  const postIds = _.map(posts, 'id')
+
+  return notifications.filter((notification) => _.includes(postIds, _.get(notification, 'contents.postId')))
 }
 
 /**
@@ -138,6 +212,14 @@ export const splitNotificationsBySources = (sources, notifications) => {
  * @return {Array}                list of filtered notifications
  */
 export const filterReadNotifications = (notifications) => _.filter(notifications, { isRead: false })
+
+/**
+ *
+ * @param {Array} notifications list of notifications
+ *
+ * @return {Array} list of filtered notifications
+ */
+export const filterSeenNotifications = (notifications) => _.filter(notifications, { seen: false })
 
 /**
  * Filter notifications that belongs to project:projectId
@@ -156,14 +238,52 @@ export const filterNotificationsByProjectId = (notifications, projectId) => _.fi
  * Filter notifications about Topic and Post changed
  *
  * @param  {Array}  notifications list of notifications
+ * @param  {RegExp} [tagRegExp]   regexp to filter notification by tags
  *
  * @return {Array}                notifications list filtered of notifications
  */
-export const filterTopicAndPostChangedNotifications = (notifications) => _.filter(notifications, (notification) => {
-  return notification.eventType === 'notifications.connect.project.topic.created' ||
-         notification.eventType === 'notifications.connect.project.post.created' ||
-         notification.eventType === 'notifications.connect.project.post.edited' ||
-         notification.eventType === 'notifications.connect.project.post.mention'
+export const filterTopicAndPostChangedNotifications = (notifications, tagRegExp) => {
+  let topicAndPostNotifications = _.filter(notifications, (notification) => (
+    notification.eventType === EVENT_TYPE.TOPIC.CREATED ||
+    notification.eventType === EVENT_TYPE.POST.CREATED ||
+    notification.eventType === EVENT_TYPE.POST.UPDATED ||
+    notification.eventType === EVENT_TYPE.POST.MENTION
+  ))
+
+  // filter messages using `tags`
+  if (tagRegExp) {
+    topicAndPostNotifications = _.filter(topicAndPostNotifications, (notification) => {
+      const tags = _.get(notification, 'contents.tags', [])
+
+      return _.some(tags, tag => tagRegExp.test(tag))
+    })
+  }
+
+  return topicAndPostNotifications
+}
+
+/**
+ * Filter notifications about Link and File changed
+ *
+ * @param  {Array}  notifications list of notifications
+ *
+ * @return {Array}                notifications list filtered of notifications
+ */
+export const filterFileAndLinkChangedNotifications = (notifications) => {
+  return _.filter(notifications, (notification) => (
+    notification.eventType === EVENT_TYPE.PROJECT.FILE_UPLOADED ||
+    notification.eventType === EVENT_TYPE.PROJECT.LINK_CREATED
+  ))
+}
+
+/**
+ * Filter notification about post mentions
+ * @param {Array} notifications list of notifications
+ *
+ * @return {Array} notifications list filtered by post mention event type
+ */
+export const filterPostsMentionNotifications = (notifications) => _.filter(notifications, (notification) => {
+  return notification.eventType === EVENT_TYPE.POST.MENTION
 })
 
 /**
@@ -174,15 +294,15 @@ export const filterTopicAndPostChangedNotifications = (notifications) => _.filte
  * @return {Array}                notifications list filtered of notifications
  */
 export const filterProjectNotifications = (notifications) => _.filter(notifications, (notification) => {
-  return notification.eventType === 'notifications.connect.project.created' ||
-         notification.eventType === 'notifications.connect.project.approved' ||
-         notification.eventType === 'notifications.connect.project.paused' ||
-         notification.eventType === 'notifications.connect.project.completed' ||
-         notification.eventType === 'notifications.connect.project.specificationModified' ||
-         notification.eventType === 'notifications.connect.project.submittedForReview' ||
-         notification.eventType === 'notifications.connect.project.fileUploaded' ||
-         notification.eventType === 'notifications.connect.project.canceled' ||
-         notification.eventType === 'notifications.connect.project.linkCreated'
+  return notification.eventType === EVENT_TYPE.PROJECT.CREATED ||
+         notification.eventType === EVENT_TYPE.PROJECT.APPROVED ||
+         notification.eventType === EVENT_TYPE.PROJECT.PAUSED ||
+         notification.eventType === EVENT_TYPE.PROJECT.COMPLETED ||
+         notification.eventType === EVENT_TYPE.PROJECT.SPECIFICATION_MODIFIED ||
+         notification.eventType === EVENT_TYPE.PROJECT.SUBMITTED_FOR_REVIEW ||
+         notification.eventType === EVENT_TYPE.PROJECT.FILE_UPLOADED ||
+         notification.eventType === EVENT_TYPE.PROJECT.CANCELED ||
+         notification.eventType === EVENT_TYPE.PROJECT.LINK_CREATED
 })
 
 /**
@@ -230,6 +350,10 @@ const getNotificationRule = (notification) => {
       match = match && _notificationRule.toUserHandle
     }
 
+    if (notification.contents.originator) {
+      match = match && _notificationRule.originator
+    }
+
     if (notification.contents.projectRole) {
       match = match && _notificationRule.projectRoles && _.includes(_notificationRule.projectRoles, notification.contents.projectRole)
     }
@@ -240,10 +364,6 @@ const getNotificationRule = (notification) => {
 
     return match
   })
-
-  if (!notificationRule) {
-    throw new Error(`Cannot find notification rule for eventType '${notification.eventType}' version '${notification.version}'.`)
-  }
 
   return notificationRule
 }
@@ -262,7 +382,7 @@ const isNotificationRuleEqual = (rule1, rule2) => {
    *
    * @type {Array<String>}
    */
-  const ESSENTIAL_RULE_PROPERTIES = ['eventType', 'toTopicStarter', 'toUserHandle', 'projectRole', 'topcoderRole']
+  const ESSENTIAL_RULE_PROPERTIES = ['eventType', 'toTopicStarter', 'toUserHandle', 'projectRole', 'topcoderRole', 'originator']
   const essentialRule1 = _.pick(rule1, ESSENTIAL_RULE_PROPERTIES)
   const essentialRule2 = _.pick(rule2, ESSENTIAL_RULE_PROPERTIES)
 
@@ -336,14 +456,38 @@ const bundleNotifications = (notificationsWithRules) => {
 }
 
 /**
+ * Prepare notification contents:
+ * - extracts phaseId from tags
+ *
+ * @param {Object} contents notification contents
+ *
+ * @returns {Object} notification contents
+ */
+const prepareNotificationContents = (contents) => {
+  const tags = _.get(contents, 'tags', [])
+  const preparedContents = {...contents}
+
+  // check if any of the tags has phaseId
+  const PHASE_ID_REGEXP = /phase#(\d+)/
+  const phaseIds = tags.map((tag) => _.get(tag.match(PHASE_ID_REGEXP), '1', null))
+  const phaseId = _.find(phaseIds, (phaseId) => phaseId !== null)
+
+  if (phaseId) {
+    preparedContents.phaseId = phaseId
+  }
+
+  return preparedContents
+}
+
+/**
  * Prepare notifications
  *
  * @param  {Array} rawNotifications notifications list
  *
- * @return {Array}               notification list
+ * @return {Array} notification list
  */
 export const prepareNotifications = (rawNotifications) => {
-  const notificationsWithRules = rawNotifications.map((rawNotification) => ({
+  const notifications = rawNotifications.map((rawNotification) => ({
     id: `${rawNotification.id}`,
     sourceId: rawNotification.contents.projectId ? `${rawNotification.contents.projectId}` : 'global',
     sourceName: rawNotification.contents.projectId ? (rawNotification.contents.projectName || 'project') : 'Global',
@@ -351,23 +495,49 @@ export const prepareNotifications = (rawNotifications) => {
     date: rawNotification.createdAt,
     isRead: rawNotification.read,
     seen: rawNotification.seen,
-    contents: rawNotification.contents,
+    contents: prepareNotificationContents(rawNotification.contents),
     version: rawNotification.version
-  })).map((notification) => {
+  }))
+
+  // populate notifications with additional properties
+  // - type
+  // - goto
+  // - rule
+  notifications.forEach((notification) => {
     const notificationRule = getNotificationRule(notification)
 
-    // populate notification data
-    notification.type = notificationRule.type
-    if (notificationRule.goTo){
-      const renderGoTo = Handlebars.compile(notificationRule.goTo)
-      notification.goto = renderGoTo(notification.contents)
-    }
+    // if rule for notification is not found show a warning for now as such notification cannot be displayed
+    if (!notificationRule) {
+      console.warn(`Cannot find notification rule for eventType '${notification.eventType}' version '${notification.version}'.`)
+    } else {
+      // populate notification data
+      notification.type = notificationRule.type
+      if (notificationRule.goTo) {
+        notification.goto = renderGoTo(notificationRule.goTo, notification.contents)
+      }
 
-    return {
-      notification,
-      notificationRule
+      notification.rule = notificationRule
     }
   })
+
+  return notifications
+}
+
+/**
+ * Bundle notifications and renders notifications texts
+ *
+ * @param {Array} notifications notifications list
+ *
+ * @returns {Array} notifications list with rendered texts
+ */
+export const preRenderNotifications = (notifications) => {
+  // we will only render notification which has rules
+  const notificationsWithRules = _.compact(
+    notifications.map((notification) => notification.rule ? {
+      notification: _.omit(notification, 'rule'),
+      notificationRule: notification.rule,
+    } : null)
+  )
 
   const bundledNotificationsWithRules = bundleNotifications(notificationsWithRules)
 
@@ -383,15 +553,15 @@ export const prepareNotifications = (rawNotifications) => {
     notification.text = renderText(notification.contents)
   })
 
-  const notifications = _.map(bundledNotificationsWithRules, 'notification')
+  const preRenderedNotifications = _.map(bundledNotificationsWithRules, 'notification')
 
   // sort notifications by date (newer first)
-  notifications.sort((n1, n2) => {
+  preRenderedNotifications.sort((n1, n2) => {
     const date1 = new Date(n1.date).getTime()
     const date2 = new Date(n2.date).getTime()
 
     return date2 - date1
   })
 
-  return notifications
+  return preRenderedNotifications
 }

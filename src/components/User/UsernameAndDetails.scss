@@ -5,7 +5,7 @@
     max-width: 225px;
   
     .username {
-      @include tc-heading;
+      @include tc-heading-small;
       color: $tc-gray-80;
       text-overflow: ellipsis;
       overflow: hidden;

@@ -3,7 +3,7 @@ import store from '../config/store'
 import { getFreshToken, isTokenExpired } from 'tc-accounts'
 
 export const getToken = () => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const userState = store.getState().loadUser
     const token = userState && userState.user ? userState.user.token : null
     if (token && !isTokenExpired(token)) {
@@ -12,6 +12,10 @@ export const getToken = () => {
       return getFreshToken()
         .then((token) => {
           resolve(token)
+        })
+        .catch((err) => {
+          console.log(err)
+          reject(err)
         })
     }
   })

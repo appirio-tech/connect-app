@@ -39,11 +39,15 @@ export default class CommentEditToggle extends React.Component {
     const {showDeleteConfirm } = this.state
     const editOptions = {label:this.props.forTopic ? 'Edit Title' : 'Edit post', val:'1'}
     const deleteOptions = {label:this.props.forTopic ? 'Delete thread' : 'Delete post', val:'2'}
+
     return (
       <div className="dropdownContainer">
         <Dropdown pointerShadow className="drop-down edit-toggle-container">
           <div className={cn('dropdown-menu-header', 'edit-toggle')} title="Edit">
-            <div styleName="edit-toggle-btn"><i/><i/><i/></div>
+            {
+              this.props.moreButton ? this.props.moreButton :
+                <div styleName={cn('edit-toggle-btn', {'in-dark-bg': this.props.inDarkBackground})}><i/><i/><i/></div>
+            }
           </div>
           <div className="dropdown-menu-list down-layer">
             <ul>
@@ -52,10 +56,10 @@ export default class CommentEditToggle extends React.Component {
                 currentSelection=""
               />
               {! this.props.hideDelete &&
-            <DropdownItem key={2} item={deleteOptions}
-              onItemClick={this.showDelete}
-              currentSelection=""
-            />}
+              <DropdownItem key={2} item={deleteOptions}
+                onItemClick={this.showDelete}
+                currentSelection=""
+              /> }
             </ul>
           </div>
         </Dropdown>
@@ -90,6 +94,8 @@ export default class CommentEditToggle extends React.Component {
 CommentEditToggle.propTypes = {
   forTopic: PropTypes.bool,
   hideDelete: PropTypes.bool,
+  inDarkBackground: PropTypes.bool,
   onEdit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
+  moreButton: PropTypes.node
 }

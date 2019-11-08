@@ -8,6 +8,18 @@
   justify-content: space-between;
   height: 50px;
   padding: 0 $base-unit * 3;
+
+  :global {
+
+    .SwitchButton label {
+      margin: 0;
+
+      .label {
+        padding: 0 0 0 10px;
+        order: 1;
+      }
+    }
+  }
 }
 
 .title {
@@ -21,21 +33,25 @@
   align-items: center;
   display: flex;
   justify-content: flex-end;
+  margin-left: 59px;
+  > svg {
+      fill: $tc-gray-neutral-light;
+  }
 }
 
 .plug {
-  width: 16px; /* same width as close button to align center title */
+  width: 83px; /* same width as close button to align center title */
 }
 
 .body {
+  display: flex;
+  flex-direction: column;
   background-color: $tc-gray-neutral-dark;
   height: calc(100vh - 50px); /* window height - header height */
   position: relative;
 }
 
 .submit-wrapper {
-  padding-bottom: 4 * $base-unit;
-
   > button:global(.tc-btn.tc-btn-md) {
     border-radius: 0;
     height: 47px;
@@ -52,12 +68,12 @@
   display: block;
   font-size: 15px;
   line-height: 25px;
-  height: calc(100vh - 50px - 47px - 20px);
+  flex: 1;
   margin: 0;
   padding: 4 * $base-unit;
   resize: none;
 
-  &::placholder {
+  &::placeholder {
     color: $tc-gray-40;
   }
 }
@@ -117,4 +133,83 @@
       padding: 4 * $base-unit;
     }
   }
+}
+
+.attachment-files-mobile {
+  width: 50%;
+  li{
+    @include roboto;
+    font-size: $tc-label-md;
+    color: $tc-dark-blue-110;
+    line-height: 1;
+    padding: $base-unit 0 $base-unit 0;
+    display: flex;
+
+    &.clickable {
+      cursor: pointer;
+    }
+
+    &.is-active {
+      background-color: $tc-gray-neutral-dark;
+    }
+
+    .button-group {
+      margin-left: auto;
+      padding-left:20px;
+      width: 110px;
+    }
+
+    .buttons{
+      margin-right: 5px;
+      margin-left: auto;
+      button {
+        padding: 0;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        opacity: 0.4;
+        height: 16px;
+        width: 16px;
+        background-size: 16px;
+        display: inline-block;
+        margin-left: 15px;
+      }
+    }
+    a {
+      color: $tc-dark-blue-110;
+      line-height: $base-unit*4;
+      max-width: 220px;
+      text-overflow: ellipsis;
+      overflow-x: hidden;
+
+      &:visited {
+        color: $tc-dark-blue-110;
+      }
+    }
+  }
+
+  li:before {
+    content: '\b7\a0';
+    font-size: 200%;
+    color: $tc-dark-blue-110;
+    line-height: $base-unit*3;
+  }
+}
+
+.tc-attachment-button {
+  width: 50%;
+  a{
+    float: right;
+    cursor: pointer;
+    color: $tc-dark-blue;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  margin-right: 20px;
+}
+
+.attachment-wrapper {
+  padding: 10px;
+  display: flex;
 }

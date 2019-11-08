@@ -1,112 +1,129 @@
 version: 2
-jobs:
-  test:
+defaults: &defaults
     docker:
       - image: circleci/node:8.9.4-browsers
-    steps:
-      - run:
-          name: checking out qa framework repo
-          command: git clone --branch develop https://$GITUSER:$GITPASSWD@github.com/appirio-tech/qa-framework-js.git ../qa-framework    
-      - checkout
-      - restore_cache:
-          key: test-node-modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "package-lock.json" }}
-      - run: npm install
-      - save_cache:
-          key: test-node-modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "package-lock.json" }}
+deploy_defaults: &deploy_defaults
+    docker:
+      - image: cibuilds/aws
+install_dependency: &install_dependency
+          name: Installation of build and deployment dependencies.
+          command: |
+            sudo apt install python-dev python-pip -y
+            sudo pip install awscli --upgrade           
+install_deploysuite: &install_deploysuite
+          name: Installation of install_deploysuite.
+          command: |
+            git clone --branch v1.4 https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
+            cp ./../buildscript/master_deploy.sh .
+            cp ./../buildscript/buildenv.sh .
+            cp ./../buildscript/awsconfiguration.sh .
+restore_cache_settings_for_build: &restore_cache_settings_for_build
+          key: connect-node-modules-{{ checksum "package-lock.json" }}
+save_cache_settings: &save_cache_settings    
+          key: connect-node-modules-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
-      - run: npm run lint
-      - run: npm run test
-      - run: npm run build
-      - persist_to_workspace:
+running_npm_build: &running_npm_build
+          name: Running Npm Build
+          command: |
+            source buildenvvar
+            npm run lint
+            npm run test
+            npm run build  
+workspace_persist: &workspace_persist
           root: .
           paths:
-            - dist      
-      - run:
-          name: starting server locally
-          command: npm run start
-          background: true
-      - run: sleep 90         
-      - run:
-          name: Running qa frame work
+            - dist 
+workspace_attach: &workspace_attach
+          at: ./workspace
+
+build_steps: &build_steps
+      # Initialization.
+      - checkout
+      - setup_remote_docker
+      - run: *install_dependency
+      - run: *install_deploysuite
+      - restore_cache: *restore_cache_settings_for_build
+      - run: npm install
+      - save_cache: *save_cache_settings
+      - run: 
+          name: "configuring environment"
           command: |
-            cd $HOME/qa-framework
-            sudo chmod 777 /usr/local/lib/node_modules
-            sudo chmod 777 /usr/local/bin
-            echo 127.0.0.1 local.topcoder-dev.com | sudo tee -a /etc/hosts
-            echo 127.0.0.1 local.topcoder.com | sudo tee -a /etc/hosts
-            cat /etc/hosts
-            mv -f test/config/ci-config.js test/config/config.js
-            npm install
-            npm test
-            pwd
-      - store_artifacts:
-          path: /home/circleci/qa-framework/allure-report            
-            
+            ./awsconfiguration.sh $DEPLOY_ENV
+            ./buildenv.sh -e $DEPLOY_ENV -b ${LOGICAL_ENV}-connectapp-buildvar
+      - run: *running_npm_build
+      - persist_to_workspace: *workspace_persist
+
+deploy_steps: &deploy_steps
+      - checkout
+      - attach_workspace: *workspace_attach
+      - run: *install_deploysuite      
+      - deploy:
+          name: Running MasterScript
+          command: |
+            ./awsconfiguration.sh $DEPLOY_ENV
+            source awsenvconf
+            ./buildenv.sh -e $DEPLOY_ENV -b ${LOGICAL_ENV}-connectapp-deployvar
+            source buildenvvar
+            ./master_deploy.sh -d CFRONT -e $DEPLOY_ENV -c false
+
+jobs:
+  build-dev:
+    <<: *defaults
+    environment:
+      DEPLOY_ENV: "DEV"
+      LOGICAL_ENV: "dev"
+    steps: *build_steps
+
+  build-prod:
+    <<: *defaults
+    environment:
+      DEPLOY_ENV: "PROD"
+      LOGICAL_ENV: "prod"
+    steps: *build_steps
+
   # Just tests commited code.
   deployDev:
-    docker:
-      - image: cibuilds/aws
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ./workspace
-      - run: ./deploy.sh DEV no-cache
-  # deploy to test02
-  deployTest02:
-    docker:
-      - image: cibuilds/aws
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ./workspace
-      - run: ./deploy.sh TEST02 no-cache
+    <<: *deploy_defaults
+    environment:
+      DEPLOY_ENV: "DEV"
+      LOGICAL_ENV: "dev"
+    steps: *deploy_steps
 
   deployProd:
-    docker:
-      - image: cibuilds/aws
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ./workspace
-      - run: ./deploy.sh PROD
-
-  deployDiscourseFree:
-    docker:
-      - image: cibuilds/aws
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ./workspace
-      - run: ./deploy.sh DISCOURSE
-   
+    <<: *deploy_defaults
+    environment:
+      DEPLOY_ENV: "PROD"
+      LOGICAL_ENV: "prod"
+    steps: *deploy_steps
 
 workflows:
   version: 2
   build:
     jobs:
-      - test
-      - deployDev:
-          requires:
-            - test
+      - build-dev:
+          context : org-global
           filters:
             branches:
-              only: ['dev', 'feature/project_plan_v3']
-      - deployTest02:
-          requires:
-            - test
-          filters:
-            branches:
-              only: "feature/discourse-migration"
-      - deployProd:
-          requires:
-            - test
+              ignore: ['master']              
+      - build-prod:
+          context : org-global
           filters:
             branches:
               only: master
-      - deployDiscourseFree:
+              
+      - deployDev:
+          context : org-global
           requires:
-            - test
+            - build-dev
           filters:
             branches:
-              only: master-discourse-free
+              only: ['dev', 'dev-msinteg']
+
+      - deployProd:
+          context : org-global
+          requires:
+            - build-prod
+          filters:
+            branches:
+              only: master

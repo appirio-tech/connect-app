@@ -1,0 +1,35 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+.milestone-post {
+  display: table-row;
+
+  :global {
+    .SelectDropdown {
+      margin: 0;
+    }
+  }
+
+  .col-left {
+    display: table-cell;
+    text-align: right;
+    vertical-align: top;
+  }
+
+  .col-right {
+    display: table-cell;
+    text-align: left;
+    width: 100%;
+  }
+
+  .label-title {
+    color: $tc-gray-80;
+    font-size: 15px;
+    line-height: 30px;
+    min-width: 40px;
+    padding: $base-unit 2 * $base-unit $base-unit 0;
+    text-align: right;
+    white-space: nowrap;
+    width: 100%;
+  }
+}

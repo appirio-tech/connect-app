@@ -1,0 +1,115 @@
+@import "../../styles/includes";
+
+.menuItem.withChildren {
+  .arrowUpIcon {
+    transform: rotate(180deg);
+    opacity: 0.6;
+    height: 10px;
+  }
+
+  &.open .arrowUpIcon {
+    transform: rotate(0deg);
+  }
+
+  &.open > div > .navItem {
+    box-shadow: 0 4px 4px -4px #777;
+    position: relative;
+    z-index: 1;
+  }
+
+  &.open+li {
+    box-shadow: 0 -4px 4px -4px #777;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.navItem {
+  @include roboto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  margin-right: -1px;
+  position: relative;
+  font-size: 14px;
+  cursor: pointer;
+
+  &,
+  &:avtive,
+  &:visited,
+  &:hover {
+    color: $tc-gray-80;
+  }
+}
+
+.childNavItem {
+  a {
+    padding-left: 40px;
+    font-size: 12px;
+  }
+}
+
+.left,
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  margin-right: 10px;
+  width: 24px;
+
+  &.stroke {
+    stroke: $tc-gray-50;
+  }
+
+  &.fille {
+    fill: $tc-gray-50;
+  }
+}
+
+.active .icon.stroke g,
+.active .icon.stroke path {
+  stroke: #0AB88A;
+}
+
+.active .icon.fill circle,
+.active .icon.fill path {
+  fill: #0AB88A;
+}
+
+.arrowUpIcon {
+  float: right;
+}
+
+.active:not(.activeParent) {
+  @include roboto-bold;
+  background-color: $tc-gray-neutral-dark;
+  color: $tc-gray-90;
+
+  &::after,
+  &::before {
+    content: "";
+    position: absolute;
+    height: 12px;
+    width: 12px;
+    background: none;
+    pointer-events: none;
+    border-bottom-right-radius: 8px;
+    box-shadow: 2px 2px $tc-gray-neutral-dark;
+  }
+
+  &::before {
+    right: 0;
+    top: 0;
+    transform: translateY(-100%);
+  }
+
+  &::after {
+    right: 0;
+    bottom: 0;
+    transform: translateY(100%) rotate(270deg);
+  }
+}

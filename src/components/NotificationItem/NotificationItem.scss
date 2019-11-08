@@ -5,6 +5,7 @@
   .notification-item-link {
     display: block;
     border-top: 1px solid $tc-gray-10;
+    overflow: hidden;
 
     @media screen and (max-width: $screen-md - 1px) {
       border-top: 0;
@@ -22,6 +23,14 @@
         }
       }
     }
+
+    &.exiting {
+      opacity: 0;
+      transform: scaleY(0);
+      margin: -35px 0;
+      overflow: hidden;
+      transition: 500ms all ease-in;
+    }
   }
 
   .notification-item {
@@ -29,9 +38,18 @@
     background-color: $tc-white;
     justify-content: space-between;
     transition: 150ms all;
+    overflow: hidden;
 
     &:hover {
       background-color: $tc-dark-blue-10;
+    }
+
+    &.exiting {
+      opacity: 0;
+      transform: scaleY(0);
+      margin: -35px 0;
+      overflow: hidden;
+      transition: 500ms all ease-in;
     }
 
     .icon {

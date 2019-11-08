@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>ui-check-small</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="12.8 6.4 11.4 5 7.4 9 5.4 7 4 8.4 7.4 11.8"></polygon>
+    </defs>
+    <g id="ui-check-small" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons/check-small">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="Mask" fill="#888894" fill-rule="nonzero" xlink:href="#path-1"></use>
+            <g id="color/tc-gray/50" mask="url(#mask-2)" fill="#ffffff" fill-rule="evenodd">
+                <rect id="fill/tc-gray/50" x="0" y="0" width="16" height="16"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -5,15 +5,21 @@ import ProjectTypeCard from './ProjectTypeCard'
 import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 
 import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
-import { DOMAIN } from '../../../config/constants'
 
 import './SelectProductTemplate.scss'
 
 const SelectProductTemplate = ({
   onProductTemplateChange,
   productTemplates,
+  productCategories,
 }) => {
-  const cards = []
+  const cards = {}
+  const categoryNames = {}
+  if (productCategories) {
+    productCategories.forEach((category) => {
+      categoryNames[category.key] = category.displayName
+    })
+  }
 
   productTemplates.forEach((productTemplate) => {
     // don't render disabled items for selection
@@ -21,19 +27,25 @@ const SelectProductTemplate = ({
     if (productTemplate.disabled || productTemplate.hidden) return
 
     const icon = <ProjectTypeIcon type={productTemplate.icon} />
-
-    cards.push(
+    const category = productTemplate.category || ''
+    cards[category] = cards[category] || []
+    cards[category].push(
       <ProjectTypeCard
         icon={icon}
         info={productTemplate.info || productTemplate.details}
         key={productTemplate.id}
         onClick={() => onProductTemplateChange(productTemplate.key || productTemplate.productKey)}
         type={productTemplate.name}
-        buttonText="Select Product"
+        buttonText="Add phase to project"
       />
     )
   })
-
+  const cardDivs = []
+  Object.keys(cards).forEach((category) => {
+    const card = cards[category]
+    const catLabel = categoryNames[category] || category
+    cardDivs.push(<div key={category}><div className="label">{catLabel}</div><div className="cards">{card}</div></div>)
+  })
   return (
     <div>
       <div className="header headerSelectProductTemplate">
@@ -41,10 +53,7 @@ const SelectProductTemplate = ({
       </div>
       <div className="SelectProductTemplate">
         <h1>Add A New Phase</h1>
-        <div className="cards">{cards}</div>
-        <div className="footer">
-          Looking for something else? <a href={`https://${DOMAIN}/contact?utm_source=Connect&utm_medium=Referral&utm_campaign=FooterContact`}>Get in touch with us &rarr;</a>
-        </div>
+        {cardDivs}
       </div>
     </div>
   )
@@ -53,6 +62,7 @@ const SelectProductTemplate = ({
 SelectProductTemplate.propTypes = {
   onProductTemplateChange: PT.func.isRequired,
   productTemplates: PT.array.isRequired,
+  productCategories: PT.array.isRequired,
 }
 
 export default SelectProductTemplate

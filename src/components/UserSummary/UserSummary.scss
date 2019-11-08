@@ -1,0 +1,70 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  width: 100%;
+  padding: 20px 30px;
+}
+
+.user {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+.avatar {
+  flex: 0 0 60px;
+  :global .Avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+}
+.info {
+  padding-left: 20px;
+  flex: 1;
+}
+.name {
+  @include roboto-bold;
+  font-size: 16px;
+  line-height: 20px;
+  color: $tc-gray-90;
+}
+
+.handle {
+  @include roboto;
+  font-size: 12px;
+  line-height: 20px;
+  color: $tc-gray-90;
+}
+
+.member-since {
+  @include roboto;
+  font-size: 10px;
+  line-height: 20px;
+  color: $tc-gray-50;
+}
+
+.stats {
+  margin-top: 20px;
+ display: flex;
+  justify-content: space-around;
+}
+
+.stat {
+  flex: 1;
+}
+
+.stat-number {
+  @include roboto-bold;
+  font-size: 32px;
+  line-height: 35px;
+  color: $tc-gray-90;
+  text-align: center;
+}
+
+.stat-name {
+  @include roboto;
+  font-size: 10px;
+  line-height: 12px;
+  color: $tc-gray-70;
+  text-align: center;
+}
