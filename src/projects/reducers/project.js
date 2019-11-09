@@ -438,7 +438,6 @@ export const projectState = function (state=initialState, action) {
       // as later code counts on this
       attachments: [],
       members: [],
-      invites: [],
 
       ...action.payload,
 
