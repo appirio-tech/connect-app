@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 import PhoneInput from 'appirio-tech-react-components/components/Formsy/PhoneInput'
+import TimezoneInput from 'appirio-tech-react-components/components/Formsy/TimezoneInput'
 const TCFormFields = FormsyForm.Fields
 const Formsy = FormsyForm.Formsy
 import ProfileSettingsAvatar from './ProfileSettingsAvatar'
@@ -127,16 +128,11 @@ class ProfileSettingsForm extends Component {
   }
 
   onSubmit(data) {
-    // hardcoding company size for now as it's required in the backend
-    const defaultValues = {
-      companySize: '16-50'
-    }
     // we have to use initial data as a base for updated data
     // as form could update not all fields, thus they won't be included in `data`
     // for example user avatar is not included in `data` thus will be removed if don't use
     // this.props.values.settings as a base
     const updatedData = {
-      ...defaultValues,
       ...this.props.values.settings,
       ...data,
     }
@@ -164,6 +160,8 @@ class ProfileSettingsForm extends Component {
 
   render() {
     const { isCopilot, isCustomer, isManager } = this.props
+
+    const disablePhoneInput = isCopilot && !isManager
     return (
       <Formsy.Form
         className="profile-settings-form"
@@ -187,7 +185,6 @@ class ProfileSettingsForm extends Component {
         <div className="field">
           <div className="label">
             <span styleName="fieldLabelText">Business Phone</span>&nbsp;
-            <sup styleName="requiredMarker">*</sup>
           </div>
           <div className="input-field">
             <PhoneInput
@@ -200,13 +197,12 @@ class ProfileSettingsForm extends Component {
               type="phone"
               validationError="Invalid business phone"
               showCheckMark
-              required
               listCountry={ISOCountries}
-              forceCountry={this.state.countrySelected}
+              forceCountry={!disablePhoneInput && this.state.countrySelected}
               value={this.props.values.settings.businessPhone}
               onChangeCountry={this.onBusinessPhoneCountryChange}
               onOutsideClick={this.hideBusinessPhoneAlert}
-              disabled={isCopilot && !isManager}
+              disabled={disablePhoneInput}
             />
             {
               this.state.businessPhoneDirty &&
@@ -235,6 +231,26 @@ class ProfileSettingsForm extends Component {
               this.state.countrySelectionDirty &&
               <div styleName="warningText">Note: Changing the country also updates the country code of business phone.</div>
             }
+          </div>
+        </div>
+        <div className="field">
+          <div className="label">
+            <span styleName="fieldLabelText">Local Timezone</span>&nbsp;
+            <sup styleName="requiredMarker">*</sup>
+          </div>
+          <div className="input-field">
+            <TimezoneInput
+              render={
+                (timezoneOptions, filterFn) => (
+                  <FormsySelect
+                    setValueOnly
+                    filterOption={(option, searchText) => filterFn(option.data, searchText)}
+                    value={this.props.values.settings.timeZone || ''}
+                    name="timeZone" options={timezoneOptions}
+                  />
+                )
+              }
+            />
           </div>
         </div>
         <div className="controls">
