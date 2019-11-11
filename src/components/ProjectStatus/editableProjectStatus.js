@@ -10,7 +10,8 @@ import {
   PROJECT_STATUS_ACTIVE,
   PROJECT_STATUS_COMPLETED,
   PROJECT_STATUS_CANCELLED,
-  TOOLTIP_DEFAULT_DELAY
+  TOOLTIP_DEFAULT_DELAY,
+  PROJECT_STATUS_DRAFT
 } from '../../config/constants'
 import CarretDownNormal9px from '../../assets/icons/arrow-9px-carret-down-normal.svg'
 
@@ -63,7 +64,7 @@ const hocStatusDropdown = (CompositeComponent, statusList, projectCanBeActive) =
               <div className="status-header">Project Status</div>
               <ul>
                 {
-                  activestatusList.sort((a, b) => a.dropDownOrder > b.dropDownOrder).map((item) =>
+                  activestatusList.sort((a, b) => a.order - b.order).map((item) =>
                     item.toolTipMessage ? (
                       <Tooltip key={item.value} theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
                         <div className="tooltip-target">
@@ -121,6 +122,7 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
     this.showStatusChangeDialog = this.showStatusChangeDialog.bind(this)
     this.changeStatus = this.changeStatus.bind(this)
     this.handleReasonUpdate = this.handleReasonUpdate.bind(this)
+    this.getProjectStatusDropdownValues = this.getProjectStatusDropdownValues.bind(this)
   }
 
   componentWillReceiveProps() {
@@ -158,12 +160,20 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
     this.setState({ statusChangeReason : _.get(reason, 'value') })
   }
 
+  getProjectStatusDropdownValues(status) {
+    if (status === PROJECT_STATUS_DRAFT) {
+      return [{color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT, order: 2, dropDownOrder: 1 }].concat(PROJECT_STATUS)
+    }
+    return PROJECT_STATUS
+  }
+
   render() {
     const { showStatusChangeDialog, newStatus, statusChangeReason } = this.state
-    const { canEdit, projectCanBeActive } = this.props
+    const { canEdit, projectCanBeActive, status } = this.props
+    const PROJECT_STATUS_VALUES = this.getProjectStatusDropdownValues(status)
     const StatusDropdown = canEdit
-      ? enhanceDropdown(hocStatusDropdown(CompositeComponent, PROJECT_STATUS, projectCanBeActive))
-      : hocStatusDropdown(CompositeComponent, PROJECT_STATUS, projectCanBeActive)
+      ? enhanceDropdown(hocStatusDropdown(CompositeComponent, PROJECT_STATUS_VALUES, projectCanBeActive))
+      : hocStatusDropdown(CompositeComponent, PROJECT_STATUS_VALUES, projectCanBeActive)
     return (
       <div className={cn('EditableProjectStatus', {'modal-active': showStatusChangeDialog})}>
         <div className="modal-overlay" onClick={ this.hideStatusChangeDialog }/>
@@ -190,7 +200,11 @@ editableProjectStatus.propTypes = {
   /**
    * Boolean flag to control if project status can be switched to active.
    */
-  projectCanBeActive: PropTypes.bool
+  projectCanBeActive: PropTypes.bool,
+  /**
+   * String representing project status
+   */
+  status: PropTypes.string
 }
 
 export default editableProjectStatus
