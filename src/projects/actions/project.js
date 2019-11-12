@@ -60,6 +60,7 @@ import {
   SCOPE_CHANGE_REQ_STATUS_APPROVED,
   SCOPE_CHANGE_REQ_STATUS_REJECTED,
   SCOPE_CHANGE_REQ_STATUS_CANCELED,
+  PHASE_STATUS_DRAFT,
 } from '../../config/constants'
 import {
   updateProductMilestone,
@@ -275,7 +276,7 @@ export function createProduct(project, productTemplate, phases, timelines) {
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT_STAGE,
-      payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, startDate, endDate)
+      payload: createProjectPhaseAndProduct(project, productTemplate, PHASE_STATUS_DRAFT, startDate, endDate)
     })
   }
 }
@@ -289,7 +290,7 @@ export function createProduct(project, productTemplate, phases, timelines) {
  *
  * @return {Promise} project
  */
-export function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT_STATUS_DRAFT, startDate, endDate) {
+export function createProjectPhaseAndProduct(project, projectTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate) {
   const param = {
     status,
     name: projectTemplate.name,
