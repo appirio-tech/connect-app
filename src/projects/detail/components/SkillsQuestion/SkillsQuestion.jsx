@@ -9,6 +9,27 @@ import { TC_API_URL } from '../../../../config/constants'
 
 let cachedOptions
 
+/**
+ * If `categoriesMapping` is defined - filter options using selected categories.
+ * Otherwise returns all `options`.
+ *
+ * @param {Object} categoriesMapping  form data and API model categories mapping
+ * @param {Array}  selectedCategories selected categories in the form
+ * @param {Array}  options            all possible options
+ *
+ * @returns {Array} available options
+ */
+const getAvailableOptions = (categoriesMapping, selectedCategories, options) => {
+  if (categoriesMapping) {
+    const mappedCategories = _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
+    const availableOptions = options.filter(option => _.intersection((option.categories || []).map(c => c.toLowerCase()), mappedCategories).length > 0)
+
+    return availableOptions
+  }
+
+  return options
+}
+
 class SkillsQuestion extends React.Component {
   constructor(props) {
     super(props)
@@ -56,12 +77,9 @@ class SkillsQuestion extends React.Component {
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
 
     if (selectedCategories.length !== prevSelectedCategories.length) {
-      const mappedPrevSelectedCategories = _.map(prevSelectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
-      const mappedSelectedCategories = _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
-
       const currentValues = getValue() || []
-      const prevAvailableOptions = options.filter(option => _.intersection((option.categories || []).map(c => c.toLowerCase()), mappedPrevSelectedCategories).length > 0)
-      const nextAvailableOptions = options.filter(option => _.intersection((option.categories || []).map(c => c.toLowerCase()), mappedSelectedCategories).length > 0)
+      const prevAvailableOptions = getAvailableOptions(categoriesMapping, prevSelectedCategories, options)
+      const nextAvailableOptions = getAvailableOptions(categoriesMapping, selectedCategories, options)
       const prevValues = currentValues.filter(skill => _.some(prevAvailableOptions, skill))
       const nextValues = currentValues.filter(skill => _.some(nextAvailableOptions, skill))
 
@@ -112,12 +130,10 @@ class SkillsQuestion extends React.Component {
     const { options, customOptionValue } = this.state
 
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
-    const mappedCategories = _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
-    const availableOptions = options
-      .filter(option => _.intersection((option.categories || []).map(c => c.toLowerCase()), mappedCategories).length > 0)
-      .map(
-        option => _.pick(option, ['id', 'name'])
-      )
+
+    // if have a mapping for categories, then filter options, otherwise use all options
+    const availableOptions = getAvailableOptions(categoriesMapping, selectedCategories, options)
+      .map(option => _.pick(option, ['id', 'name']))
 
     let currentValues = getValue() || []
     // remove from currentValues not available options but still keep created custom options without id
