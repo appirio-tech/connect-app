@@ -125,7 +125,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'dev-msinteg']
+              only: ['dev', 'dev-msinteg', 'v5-upgrade']
               
       - deployTest01:
           context : org-global
