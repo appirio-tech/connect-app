@@ -110,11 +110,32 @@ export function collapseAllProjectPhases() {
   }
 }
 
-export function loadProject(projectId) {
+export function loadProject(projectId, acceptedInvite) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_PROJECT,
-      payload: getProjectById(projectId)
+      payload: getProjectById(projectId).then((project) => {
+        // If we just accepted invitation, then project data may still have not updated
+        // on the server which gets it from ElasticSearch index.
+        // So user may still have a `pending` invitation and not be a member.
+        // Here we fix server response in such case.
+        // see for details issue https://github.com/appirio-tech/connect-app/issues/3377
+        if (acceptedInvite) {
+          // make sure user is not a member somehow, though it should never happens if user has invitation
+          const existentMember = _.find(project.members, { userId: acceptedInvite.userId })
+
+          if (!existentMember) {
+            const invitedMember = {
+              ..._.pick(acceptedInvite, 'projectId', 'role', 'userId'),
+              deletedAt: null // explicitly set `null` as non-deleted members have this value
+            }
+            _.remove(project.invites, { id: acceptedInvite.id })
+            project.members.push(invitedMember)
+          }
+        }
+
+        return project
+      })
     })
   }
 

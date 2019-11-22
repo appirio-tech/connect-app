@@ -135,10 +135,8 @@ class ProjectDetail extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {isProcessing, isLoading, error, project, match, showUserInvited} = nextProps
-    // handle just deleted projects
-    if (! (error || isLoading || isProcessing) && _.isEmpty(project))
-      this.props.history.push('/projects/')
+    const {error, project, match, showUserInvited} = nextProps
+
     if (project && project.name) {
       document.title = `${project.name} - Topcoder`
     }
@@ -192,7 +190,8 @@ class ProjectDetail extends Component {
       userId: this.props.currentUserId,
       email: this.props.currentUserEmail,
       status: isJoining ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
-    }).then(() => {
+    }).then(({ value: acceptedInvite }) => {
+      console.warn('isJoining', isJoining)
       this.isCallingInviteAction = false
       if(!isJoining) {
         // navigate to project listing and reload projects
@@ -203,7 +202,8 @@ class ProjectDetail extends Component {
           // remove query param
           this.props.history.replace(`/projects/${this.props.match.params.projectId}`)
         }
-        this.props.loadProjectDashboard(this.props.match.params.projectId)
+        console.warn('acceptedInvite', acceptedInvite)
+        this.props.loadProjectDashboard(this.props.match.params.projectId, false, acceptedInvite)
       }
     }).catch(err => {
       this.isCallingInviteAction = false
