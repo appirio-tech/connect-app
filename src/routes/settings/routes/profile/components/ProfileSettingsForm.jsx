@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 import PhoneInput from 'appirio-tech-react-components/components/Formsy/PhoneInput'
 import TimezoneInput from 'appirio-tech-react-components/components/Formsy/TimezoneInput'
+import WorkingHoursSelection from 'appirio-tech-react-components/components/Formsy/WorkingHoursSelection'
 const TCFormFields = FormsyForm.Fields
 const Formsy = FormsyForm.Formsy
 import ProfileSettingsAvatar from './ProfileSettingsAvatar'
@@ -250,6 +251,27 @@ class ProfileSettingsForm extends Component {
                   />
                 )
               }
+            />
+          </div>
+        </div>
+        <div className="field">
+          <div className="label">
+            <span styleName="fieldLabelText">Normal Working Hours</span>
+          </div>
+          <div className="input-field">
+            <WorkingHoursSelection
+              startHourLabel="Start Time"
+              endHourLabel="End Time"
+              startHourName="workingHourStart"
+              endHourName="workingHourEnd"
+              startHourValue={this.props.values.settings.workingHourStart || ''}
+              endHourValue={this.props.values.settings.workingHourEnd || ''}
+              wrapperClass={'input-container'}
+
+              // react-select package in react-components is old and not compatible with connect-app.
+              // So, passing the FormsySelect component that uses newer version of react-select
+              selectElement={FormsySelect}
+              selectElementProps={{setValueOnly: true}}
             />
           </div>
         </div>
