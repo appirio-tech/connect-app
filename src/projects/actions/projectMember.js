@@ -20,8 +20,10 @@ import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   PROJECT_MEMBER_INVITE_STATUS_CANCELED,
   RELOAD_PROJECT_MEMBERS,
   CLEAR_MEMBER_SUGGESTIONS,
-  ACCEPT_OR_REFUSE_INVITE_FAILURE
+  ACCEPT_OR_REFUSE_INVITE_FAILURE,
+  ES_REINDEX_DELAY,
 } from '../../config/constants'
+import { delay } from '../../helpers/utils'
 
 
 export function memberSuggestionsDispatch(dispatch) {
@@ -171,7 +173,12 @@ export function acceptOrRefuseInvite(projectId, item, currentUser) {
   return (dispatch) => {
     return dispatch({
       type: ACCEPT_OR_REFUSE_INVITE,
-      payload: updateProjectMemberInvite(projectId, item),
+      payload: updateProjectMemberInvite(projectId, item).then((response) =>
+        // we have to add delay before applying the result of accepting/declining invitation
+        // as it takes some time for the update to be reindexed in ES so the new state is reflected
+        // everywhere
+        delay(ES_REINDEX_DELAY).then(() => response)
+      ),
       meta: { projectId, currentUser },
     })
   }

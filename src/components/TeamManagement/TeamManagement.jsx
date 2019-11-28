@@ -163,10 +163,11 @@ class TeamManagement extends React.Component {
           if (currentUser.isAccountManager) role = 'Account Manager'
           return (
             <Dialog
-              disabled={processingMembers}
+              isLoading={processingMembers}
               onCancel={onClickCancel}
               onConfirm={onClickJoinConfirm}
               title={`Join project as ${role}`}
+              loadingTitle="Adding you to the project...."
               content={JOIN_MESSAGE}
               buttonText="Join project"
               buttonColor="blue"
@@ -245,12 +246,14 @@ class TeamManagement extends React.Component {
           const title = isCurrentUser ? LEAVE_TITLE : REMOVE_TITLE
           const content = isCurrentUser ? LEAVE_MESSAGE : REMOVE_USER_MESSAGE.replace('USERNAME', userFullName)
           const buttonText = isCurrentUser ? 'Leave project' : 'Remove member'
+          const loadingTitle = isCurrentUser ? 'Removing you from the project...' : 'Removing member from the project...'
           return (
             <Dialog
-              disabled={processingMembers}
+              isLoading={processingMembers}
               onCancel={onClickCancel}
               onConfirm={onClickConfirm}
               title={title}
+              loadingTitle={loadingTitle}
               content={content}
               buttonText={buttonText}
               buttonColor="red"
@@ -269,10 +272,11 @@ class TeamManagement extends React.Component {
           const identifier = deletingInvite.item.email ? deletingInvite.item.email : deletingInvite.item.member.handle
           return (
             <Dialog
-              disabled={processingInvites}
+              isLoading={processingInvites}
               onCancel={onClickCancel}
               onConfirm={onClickConfirm}
               title={REMOVE_INVITATION_TITLE}
+              loadingTitle="Deleting invite...."
               content={REMOVE_INVITE_MESSAGE.replace('USEREMAIL', identifier)}
               buttonText="Remove invitation"
               buttonColor="red"
