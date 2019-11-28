@@ -14,9 +14,9 @@ import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../conf
  *
  * @return {Promise} LOAD_ADDITIONAL_PROJECT_DATA action
  */
-const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo, acceptedInvite) => {
+const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) => {
   const { productTemplates } = getState().templates
-  return dispatch(loadProject(projectId, acceptedInvite))
+  return dispatch(loadProject(projectId))
     .then(({ value: project }) => {
       let userIds = _.map(project.members, 'userId')
       userIds = _.union(userIds, _.map(project.invites, 'userId'))
@@ -60,25 +60,20 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo, 
  * @param {Function} dispatch  dispatches redux actions
  * @param {Function} getState  returns redux state
  * @param {Number}   projectId project id
- * @param {Object}   [acceptedInvite] optional accepted invite
  *
  * @return {Promise} LOAD_ADDITIONAL_PROJECT_DATA action
  */
-const getData = (dispatch, getState, projectId, isOnlyLoadProjectInfo, acceptedInvite) => {
-  if (acceptedInvite) {
-    return getDashboardData(dispatch, getState, projectId, isOnlyLoadProjectInfo, acceptedInvite)
-  }
-
+const getData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) => {
   return dispatch(loadProjectInvite(projectId))
     .then(() => getDashboardData(dispatch, getState, projectId, isOnlyLoadProjectInfo))
     .catch(() => getDashboardData(dispatch, getState, projectId, isOnlyLoadProjectInfo))
 }
 
-export function loadProjectDashboard(projectId, isOnlyLoadProjectInfo = false, acceptedInvite) {
+export function loadProjectDashboard(projectId, isOnlyLoadProjectInfo = false) {
   return (dispatch, getState) => {
     return dispatch({
       type: LOAD_PROJECT_DASHBOARD,
-      payload: Promise.all([getData(dispatch, getState, projectId, isOnlyLoadProjectInfo, acceptedInvite)])
+      payload: Promise.all([getData(dispatch, getState, projectId, isOnlyLoadProjectInfo)])
     })
   }
 }

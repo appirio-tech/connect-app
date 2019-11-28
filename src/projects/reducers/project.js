@@ -182,7 +182,6 @@ export const projectState = function (state=initialState, action) {
 
   case LOAD_PROJECT_PENDING:
     return Object.assign({}, state, {
-      error: false,
       isLoading: true,
       project: null,
       projectNonDirty: null
