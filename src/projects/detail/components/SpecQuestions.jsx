@@ -71,6 +71,31 @@ const buildAddonsOptions = (q, productTemplates, productCategories) => {
   )
 }
 
+/**
+ * Format the default value for question if it doesn't have the value.
+ *
+ * WARNING. This is quite important method and should be updated with caution.
+ *          What is the default value could means a lot as other code may rely on it.
+ *
+ *          So far I only added default value other than empty string for the `add-ons` as I tested
+ *          it thoroughly and it needs it for proper work.
+ *
+ *          Most likely it would be good to update default value for other question types which have
+ *          a value type other than string, like `number`, `array`, `object` and so on.
+ *          But before update any of them we have to test it extensively that nothing got broken because of that.
+ *
+ * @param {Object} question question
+ *
+ * @returns {Any}
+ */
+const formatDefaultQuestionValue = (question) => {
+  if (_.includes(['add-ons'], question.type)) {
+    return []
+  } else {
+    return ''
+  }
+}
+
 // { isRequired, represents the overall questions section's compulsion, is also available}
 class SpecQuestions extends React.Component {
   constructor(props) {
@@ -104,7 +129,7 @@ class SpecQuestions extends React.Component {
     const elemProps = {
       name: q.fieldName,
       label: q.label,
-      value: _.get(project, q.fieldName, ''),
+      value: _.get(project, q.fieldName, formatDefaultQuestionValue(q)),
       required: q.required,
       validations: q.required ? 'isRequired' : null,
       validationError: q.validationError,
