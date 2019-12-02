@@ -228,6 +228,9 @@
           }
 
           .member-remove {
+            align-items: center;
+            display: flex;
+            justify-items: flex-end;
             @include roboto;
             color: $tc-dark-blue;
             font-size: $tc-label-sm;
