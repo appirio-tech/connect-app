@@ -14,6 +14,7 @@ import {PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PEN
 import PERMISSIONS from '../../config/permissions'
 import {checkPermission} from '../../helpers/permissions'
 import { compareEmail, compareHandles } from '../../helpers/utils'
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
 
 class TopcoderManagementDialog extends React.Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class TopcoderManagementDialog extends React.Component {
       managerType: {},
       showAlreadyMemberError: false,
       errorMessage: null,
+      processingInviteRequestId: null, // id of invite which request is being processing
     }
 
     this.onUserRoleChange = this.onUserRoleChange.bind(this)
@@ -154,6 +156,7 @@ class TopcoderManagementDialog extends React.Component {
       members, currentUser, isMember, removeMember, onCancel, removeInvite, approveOrDecline, topcoderTeamInvites = [],
       selectedMembers, processingInvites,
     } = this.props
+    const { processingInviteRequestId } = this.state
     const showRemove = currentUser.isAdmin || (isMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
     const showApproveDecline = currentUser.isAdmin || currentUser.isCopilotManager
     let i = 0
@@ -267,15 +270,21 @@ class TopcoderManagementDialog extends React.Component {
                 removeInvite(invite)
               }
               const approve = () => {
+                this.setState({ processingInviteRequestId: invite.id })
                 approveOrDecline({
                   userId: invite.userId,
                   status: 'request_approved'
+                }).then(() => {
+                  this.setState({ processingInviteRequestId: null })
                 })
               }
               const decline = () => {
+                this.setState({ processingInviteRequestId: invite.id })
                 approveOrDecline({
                   userId: invite.userId,
                   status: 'request_rejected'
+                }).then(() => {
+                  this.setState({ processingInviteRequestId: null })
                 })
               }
               const userFullName = getFullNameWithFallback(invite.member)
@@ -300,8 +309,12 @@ class TopcoderManagementDialog extends React.Component {
                   {
                     invite.status===PROJECT_MEMBER_INVITE_STATUS_REQUESTED && showApproveDecline &&
                     <div className="member-remove">
-                      <span onClick={approve}>approve</span>
-                      <span onClick={decline}>decline</span>
+                      {!processingInviteRequestId ? ([
+                        <span onClick={approve} key="approve">approve</span>,
+                        <span onClick={decline} key="decline">decline</span>
+                      ]) : (
+                        <LoadingIndicator isSmall />
+                      )}
                       <span className="email-date">
                         Requested {moment(invite.createdAt).format('MMM D, YY')}
                       </span>
