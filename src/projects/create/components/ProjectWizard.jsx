@@ -347,20 +347,33 @@ class ProjectWizard extends Component {
     if (incompleteProjectStr) {
       const incompleteProject = JSON.parse(incompleteProjectStr)
       const incompleteProjectTemplateId = _.get(incompleteProject, 'templateId')
-      if(projectTemplate.id !== incompleteProjectTemplateId) {
+
+      if (projectTemplate.id !== incompleteProjectTemplateId) {
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
         window.localStorage.removeItem(LS_INCOMPLETE_WIZARD)
-        // save to localstorage
-        const keepData = {}
-        _.set(keepData, 'name', _.get(incompleteProject, 'name', ''))
-        _.set(keepData, 'description', _.get(incompleteProject, 'description', ''))
-        _.set(keepData, 'details.utm.code', _.get(incompleteProject, 'details.utm.code', ''))
-        window.localStorage.setItem(LS_INCOMPLETE_PROJECT, JSON.stringify(keepData))
 
-        // update to project
-        newProject.name = {$set:_.get(incompleteProject, 'name', '')}
-        newProject.description = {$set:_.get(incompleteProject, 'description', '')}
-        newProject.details = {$set: {utm: {code:_.get(incompleteProject, 'details.utm.code', '') }}}
+        // usually, we only save form data to localstorage when user changed at least something in the form
+        // in case we are switching Project Template we are saving form data to localstorage anyway
+        // without waiting for user to change anything, as we already keep some fields which we treat as changes
+        if (projectTemplate) {
+          const keepData = {}
+
+          // keep some project fields
+          _.set(keepData, 'name', _.get(incompleteProject, 'name'))
+          _.set(keepData, 'description', _.get(incompleteProject, 'description'))
+          _.set(keepData, 'details.utm.code', _.get(incompleteProject, 'details.utm.code'))
+
+          // keep chosen project type and template id
+          _.set(keepData, 'type', projectTemplate.category)
+          _.set(keepData, 'templateId', projectTemplate.id)
+
+          window.localStorage.setItem(LS_INCOMPLETE_PROJECT, JSON.stringify(keepData))
+        }
+
+        // keep some form fields values
+        newProject.name = { $set:_.get(incompleteProject, 'name') }
+        newProject.description = { $set:_.get(incompleteProject, 'description') }
+        newProject.details = { $set: { utm: { code:_.get(incompleteProject, 'details.utm.code') } } }
       }
     }
     window.scrollTo(0, 0)
