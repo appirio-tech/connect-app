@@ -24,7 +24,7 @@ import {
 // import { loadProductTimelineWithMilestones } from './productsTimelines'
 import {
   LOAD_PROJECT,
-  LOAD_PROJECT_MEMBER_INVITES,
+  LOAD_PROJECT_MEMBER_INVITE,
   CREATE_PROJECT,
   CREATE_PROJECT_STAGE,
   CLEAR_LOADED_PROJECT,
@@ -130,7 +130,7 @@ export function loadProject(projectId) {
 export function loadProjectInvite(projectId) {
   return (dispatch) => {
     return dispatch({
-      type: LOAD_PROJECT_MEMBER_INVITES,
+      type: LOAD_PROJECT_MEMBER_INVITE,
       payload: getProjectInviteById(projectId)
     })
   }
