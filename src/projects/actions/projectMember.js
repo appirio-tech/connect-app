@@ -7,7 +7,8 @@ import { createProjectMemberInvite as createProjectMemberInvite,
   updateProjectMemberInvite as updateProjectMemberInvite
 } from '../../api/projectMemberInvites'
 import { getProjectById } from '../../api/projects'
-import { loadMembers, loadMembersByHandle } from '../../actions/members'
+import { loadProjectMember } from './project'
+import { loadMembersByHandle } from '../../actions/members'
 
 import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   LOAD_MEMBER_SUGGESTIONS,
@@ -54,8 +55,8 @@ function addProjectMemberWithData(dispatch, projectId, member) {
       type: ADD_PROJECT_MEMBER,
       payload: addMember(projectId, {role: member.role})
     })
-      .then((/*{value, action}*/) => {
-        return resolve(dispatch(loadMembers([member.userId])))
+      .then(({value: newMember}) => {
+        return resolve(dispatch(loadProjectMember(projectId, newMember.id)))
       })
       .catch(err => reject(err))
   })
