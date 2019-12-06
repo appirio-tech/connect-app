@@ -64,6 +64,7 @@ class TeamManagement extends React.Component {
     const currentMember = members.filter((member) => member.userId === currentUser.userId)[0]
     const modalActive = isAddingTeamMember || deletingMember || isShowJoin || showNewMemberConfirmation || deletingInvite
 
+    const customerTeamManageAction = (currentUser.isAdmin || currentUser.isManager) && !currentMember
     const topcoderTeamManageAction = currentUser.isAdmin || (currentMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
     const topcoderTeamViewAction = !topcoderTeamManageAction
     const canJoinAsCopilot = !currentMember && currentUser.isCopilot
@@ -77,6 +78,11 @@ class TeamManagement extends React.Component {
         <div className="projects-team">
           <div className="title">
             <span styleName="title-text">Team</span>
+            {(customerTeamManageAction) &&
+              <span className="title-action" onClick={() => onShowProjectDialog(true)}>
+                Manage
+              </span>
+            }
           </div>
           <div className="members">
             {sortedMembers.map((member, i) => {
