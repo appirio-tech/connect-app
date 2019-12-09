@@ -5,10 +5,7 @@ import { LOAD_MEMBERS_PENDING, LOAD_MEMBERS_SUCCESS, LOAD_MEMBERS_FAILURE,
   CONNECT_USER,
   CONNECT_USER_HANDLE,
   LOAD_USER_SUCCESS,
-  CLEAR_MEMBER_SUGGESTIONS,
-  LOAD_PROJECT_MEMBERS_SUCCESS,
-  LOAD_PROJECT_MEMBER_INVITES_SUCCESS,
-  LOAD_PROJECT_MEMBER_SUCCESS
+  CLEAR_MEMBER_SUGGESTIONS
 } from '../config/constants'
 
 
@@ -56,31 +53,6 @@ export default function(state = initialState, action) {
   case LOAD_MEMBERS_PENDING:
   case LOAD_MEMBERS_FAILURE:
     return state
-
-  case LOAD_PROJECT_MEMBERS_SUCCESS:
-  case LOAD_PROJECT_MEMBER_INVITES_SUCCESS: {
-    const members = action.payload
-    const _members = []
-    _.forEach(members, (item) => _members.push(_.pick(item, 'userId', 'handle', 'firstName', 'lastName', 'photoURL')))
-    const userMap = _.keyBy(_members, 'userId')
-    return Object.assign({}, state, {
-      members: update(state.members, {$merge: userMap})
-    })
-  }
-
-  case LOAD_PROJECT_MEMBER_SUCCESS: {
-    const _member = {
-      userId: action.payload.userId,
-      handle: action.payload.handle,
-      firstName: action.payload.firstName,
-      lastName: action.payload.lastName,
-      photoURL: action.payload.photoURL
-    }
-    return Object.assign({}, state, {
-      members: update(state.members, {$merge: {[_member.userId]: _member}})
-    })
-  }
-
   default:
     return state
   }
