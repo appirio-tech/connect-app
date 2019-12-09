@@ -222,6 +222,7 @@ class TeamManagement extends React.Component {
           return (
             <TopcoderDialog
               processingInvites={processingInvites}
+              processingMembers={processingMembers}
               error={error}
               currentUser={currentUser}
               members={members}

@@ -25,6 +25,7 @@ class TopcoderManagementDialog extends React.Component {
       showAlreadyMemberError: false,
       errorMessage: null,
       processingInviteRequestId: null, // id of invite which request is being processing
+      processingMemberUpdateId: null
     }
 
     this.onUserRoleChange = this.onUserRoleChange.bind(this)
@@ -65,7 +66,10 @@ class TopcoderManagementDialog extends React.Component {
     const managerType = Object.assign({}, this.state.managerType)
     managerType[memberId] = type
     this.props.changeRole(id, {role: this.roles.find((role) => role.title === type).value})
-    this.setState({managerType})
+    this.setState({
+      managerType,
+      processingMemberUpdateId: memberId
+    })
   }
 
   handleRoles(option) {
@@ -154,9 +158,9 @@ class TopcoderManagementDialog extends React.Component {
   render() {
     const {
       members, currentUser, isMember, removeMember, onCancel, removeInvite, approveOrDecline, topcoderTeamInvites = [],
-      selectedMembers, processingInvites,
+      selectedMembers, processingInvites, processingMembers
     } = this.props
-    const { processingInviteRequestId } = this.state
+    const { processingInviteRequestId, processingMemberUpdateId } = this.state
     const showRemove = currentUser.isAdmin || (isMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
     const showApproveDecline = currentUser.isAdmin || currentUser.isCopilotManager
     let i = 0
@@ -187,6 +191,7 @@ class TopcoderManagementDialog extends React.Component {
               }
               const userFullName = getFullNameWithFallback(member)
               const role = _.get(_.find(this.roles, r => r.value === member.role), 'title')
+              const isMemberProcessing = processingMembers && member.userId === processingMemberUpdateId
               return (
                 <div
                   key={i}
@@ -229,36 +234,39 @@ class TopcoderManagementDialog extends React.Component {
                       this.onUserRoleChange(member.userId, member.id, type)
                     }
                     return (
-                      <div className="member-role-container">
-                        {types.map((type) => {
-                          const isCopilotDisabled =
-                            type === 'Copilot' &&
-                            type !== currentType &&
-                            !(currentUser.isCopilotManager || currentUser.isAdmin)
+                      <div className={`member-role-container ${isMemberProcessing ? 'is-processing' : ''}`}>
+                        {
+                          isMemberProcessing ? <LoadingIndicator isSmall /> :
+                            types.map((type) => {
+                              const isCopilotDisabled =
+                                type === 'Copilot' &&
+                                type !== currentType &&
+                                !(currentUser.isCopilotManager || currentUser.isAdmin)
 
-                          return (
-                            isCopilotDisabled ? (
-                              <Tooltip theme="light" key={type}>
-                                <div className="tooltip-target">
-                                  <div className="member-role disabled">
+                              return (
+                                isCopilotDisabled ? (
+                                  <Tooltip theme="light" key={type}>
+                                    <div className="tooltip-target">
+                                      <div className="member-role disabled">
+                                        {type}
+                                      </div>
+                                    </div>
+                                    <div className="tooltip-body">
+                                      {'Only Connect Copilot Managers can change member role to copilots.'}
+                                    </div>
+                                  </Tooltip>
+                                ) : (
+                                  <div
+                                    key={type}
+                                    onClick={() => onClick(type)}
+                                    className={cn('member-role', { active: type === currentType })}
+                                  >
                                     {type}
                                   </div>
-                                </div>
-                                <div className="tooltip-body">
-                                  {'Only Connect Copilot Managers can change member role to copilots.'}
-                                </div>
-                              </Tooltip>
-                            ) : (
-                              <div
-                                key={type}
-                                onClick={() => onClick(type)}
-                                className={cn('member-role', { active: type === currentType })}
-                              >
-                                {type}
-                              </div>
-                            )
-                          )
-                        })}
+                                )
+                              )
+                            })
+                        }
                       </div>
                     )
                   })()}
