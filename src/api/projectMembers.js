@@ -68,7 +68,7 @@ export function removeProjectMember(projectId, memberId) {
 }
 
 export function getProjectMembers(projectId) {
-  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHoursStart,workingHoursEnd,timeZone'
+  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
   const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/?fields=`
     + encodeURIComponent(fields)
   return axios.get(url)
@@ -153,7 +153,7 @@ export function getProjectMemberInvites(projectId) {
 }
 
 export function getProjectMember(projectId, memberId) {
-  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHoursStart,workingHoursEnd,timeZone'
+  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
   const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/${memberId}?fields=`
     + encodeURIComponent(fields)
   return axios.get(url)
