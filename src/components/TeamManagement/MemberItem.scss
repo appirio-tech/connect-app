@@ -1,0 +1,43 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  display: flex;
+  flex-direction: row
+}
+.member-detail {
+  margin-left: 5px;
+}
+
+.member-name {
+  margin-top: 6px;
+}
+.wk-hour{
+  margin-top: 6px;
+  font-size: 12px;
+  color: $tc-gray-50;
+}
+
+.local-time {
+  font-size: 12px;
+  color: $tc-gray-50;
+  line-height: 20px;
+  svg {
+    vertical-align: sub;
+    margin-right: 10px;
+  }
+}
+
+
+.time-info-tooltip {
+  height: 20px;
+  width: 100%;
+  color: $tc-gray-50;
+  display: flex;
+  justify-content: space-between;
+  span {
+    font-size: 12px;
+    color: $tc-gray-50;
+    line-height: 20px;
+    white-space: nowrap
+  }
+}

@@ -7,13 +7,16 @@ import { DOMAIN } from '../../config/constants'
 import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpers'
 import IconDirectArrow from '../../assets/icons/icon-direct-arrow.svg'
 
+// <CoderBroken className="icon-coder-broken" />
 require('./UserTooltip.scss')
 
-const UserTooltip = ({ usr, id, previewAvatar, size, invitedLabel, showEmailOnly }) => {
+const UserTooltip = ({ usr, id, previewAvatar, size, invitedLabel, showEmailOnly, localTimeInfo}) => {
   const theme = `customer-data size-${size}`
   const tooltipMargin = previewAvatar ? -(100 + (id * 20)) : 0
   const userHandle = _.get(usr, 'handle')
   const userEmail = _.get(usr, 'email')
+
+
   const userFullName = getFullNameWithFallback(usr)
   const avatar =
     (
@@ -61,6 +64,7 @@ const UserTooltip = ({ usr, id, previewAvatar, size, invitedLabel, showEmailOnly
               <a href={`mailto:${userEmail}`}>{userEmail}</a>
             </div>}
             {invitedLabel && <div className="invited-label">invited</div>}
+            {localTimeInfo}
           </div>
         </div>
       </div>
@@ -75,6 +79,7 @@ UserTooltip.propTypes = {
     PropTypes.number
   ]).isRequired,
   previewAvatar: PropTypes.bool,
+  localTimeInfo: PropTypes.element,
   size: PropTypes.number
 }
 
