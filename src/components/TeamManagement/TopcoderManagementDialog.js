@@ -25,7 +25,6 @@ class TopcoderManagementDialog extends React.Component {
       showAlreadyMemberError: false,
       errorMessage: null,
       processingInviteRequestId: null, // id of invite which request is being processing
-      processingMemberUpdateId: null
     }
 
     this.onUserRoleChange = this.onUserRoleChange.bind(this)
@@ -66,10 +65,7 @@ class TopcoderManagementDialog extends React.Component {
     const managerType = Object.assign({}, this.state.managerType)
     managerType[memberId] = type
     this.props.changeRole(id, {role: this.roles.find((role) => role.title === type).value})
-    this.setState({
-      managerType,
-      processingMemberUpdateId: memberId
-    })
+    this.setState({managerType})
   }
 
   handleRoles(option) {
@@ -158,9 +154,9 @@ class TopcoderManagementDialog extends React.Component {
   render() {
     const {
       members, currentUser, isMember, removeMember, onCancel, removeInvite, approveOrDecline, topcoderTeamInvites = [],
-      selectedMembers, processingInvites, processingMembers
+      selectedMembers, processingInvites, updatingMemberIds
     } = this.props
-    const { processingInviteRequestId, processingMemberUpdateId } = this.state
+    const { processingInviteRequestId } = this.state
     const showRemove = currentUser.isAdmin || (isMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
     const showApproveDecline = currentUser.isAdmin || currentUser.isCopilotManager
     let i = 0
@@ -191,7 +187,7 @@ class TopcoderManagementDialog extends React.Component {
               }
               const userFullName = getFullNameWithFallback(member)
               const role = _.get(_.find(this.roles, r => r.value === member.role), 'title')
-              const isMemberProcessing = processingMembers && member.userId === processingMemberUpdateId
+              const isMemberProcessing = _.includes(updatingMemberIds, member.id)
               return (
                 <div
                   key={i}
