@@ -5,7 +5,7 @@ import { TC_API_URL, PROJECTS_API_URL } from '../config/constants'
 export function getMembersById (userIds) {
   const _userIdArr = _.map(userIds, _id => `userId:${_id}`)
   // only requesting certain member attributes
-  const fields = 'userId,handle,photoURL,firstName,lastName,details'
+  const fields = 'userId,handle,photoURL,firstName,lastName,details,email'
   const query = _userIdArr.join(' OR ')
   const url = `${TC_API_URL}/v3/members/_search/?fields=`
     + encodeURIComponent(fields)
@@ -20,7 +20,7 @@ export function getMembersById (userIds) {
 export function getMembersByHandle (handles) {
   const _handlesArr = _.map(handles, _id => `handle:${_id}`)
   // only requesting certain member attributes
-  const fields = 'userId,handle,photoURL,firstName,lastName,details'
+  const fields = 'userId,handle,photoURL,firstName,lastName,details,email'
   const query = _handlesArr.join(' OR ')
   const url = `${TC_API_URL}/v3/members/_search/?fields=`
     + encodeURIComponent(fields)
