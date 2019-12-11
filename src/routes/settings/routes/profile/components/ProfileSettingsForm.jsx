@@ -162,7 +162,7 @@ class ProfileSettingsForm extends Component {
   render() {
     const { isCopilot, isCustomer, isManager } = this.props
 
-    const disablePhoneInput = isCopilot && !isManager
+    const disablePhoneInput = this.props.values.settings.businessPhone && isCopilot && !isManager
     return (
       <Formsy.Form
         className="profile-settings-form"
@@ -200,7 +200,7 @@ class ProfileSettingsForm extends Component {
               showCheckMark
               listCountry={ISOCountries}
               forceCountry={!disablePhoneInput && this.state.countrySelected}
-              value={this.props.values.settings.businessPhone}
+              value={this.props.values.settings.businessPhone ? this.props.values.settings.businessPhone : ''}
               onChangeCountry={this.onBusinessPhoneCountryChange}
               onOutsideClick={this.hideBusinessPhoneAlert}
               disabled={disablePhoneInput}
@@ -211,7 +211,7 @@ class ProfileSettingsForm extends Component {
             }
           </div>
         </div>
-        {this.getField('Company name', 'companyName', true, (isCustomer || isCopilot) && !isManager)}
+        {this.getField('Company name', 'companyName', true, this.props.values.settings.companyName && (isCustomer || isCopilot) && !isManager)}
         <div className="field">
           <div className="label">
             <span styleName="fieldLabelText">Country</span>
