@@ -302,7 +302,7 @@ class TopcoderManagementDialog extends React.Component {
                   <div className="member-name">
                     <span className="span-name">{userFullName}</span>
                     <span className="member-handle">
-                      @{invite.member.handle || 'ConnectUser'}
+                      @{invite.handle || 'ConnectUser'}
                     </span>
                   </div>
 

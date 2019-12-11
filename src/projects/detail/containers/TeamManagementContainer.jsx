@@ -127,7 +127,7 @@ class TeamManagementContainer extends Component {
   }
 
   anontateMemberProps() {
-    const {members, allMembers} = this.props
+    const {members} = this.props
     // fill project members from state.members object
     return _.map(members, m => {
       if (!m.userId && !m.role) return m
@@ -147,17 +147,7 @@ class TeamManagementContainer extends Component {
       ].includes(m.role)) {
         m.isManager = true
       }
-      return _.assign({}, m, {
-        photoURL: ''
-      },
-      _.find(allMembers, mem => mem.userId === m.userId))
-    })
-  }
-
-  annotateInvites(invites, members) {
-    return _.map(invites, i => {
-      i.member = _.find(members, m => m.userId === i.userId)
-      return i
+      return m
     })
   }
 
@@ -194,8 +184,7 @@ class TeamManagementContainer extends Component {
 
   render() {
     const projectMembers = this.anontateMemberProps()
-    const projectTeamInvites = this.annotateInvites(this.props.projectTeamInvites, this.props.allMembers)
-    const topcoderTeamInvites = this.annotateInvites(this.props.topcoderTeamInvites, this.props.allMembers)
+    const {projectTeamInvites, topcoderTeamInvites } = this.props
     return (
       <div>
         <TeamManagement
