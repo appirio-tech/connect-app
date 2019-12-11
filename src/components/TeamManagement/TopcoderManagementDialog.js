@@ -24,7 +24,7 @@ class TopcoderManagementDialog extends React.Component {
       managerType: {},
       showAlreadyMemberError: false,
       errorMessage: null,
-      processingInviteRequestIds: [], // id of invite which request is being processing
+      processingInviteRequestIds: [], // ids of invites for which request is being processed
     }
 
     this.onUserRoleChange = this.onUserRoleChange.bind(this)
