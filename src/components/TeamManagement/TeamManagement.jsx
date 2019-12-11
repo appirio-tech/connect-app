@@ -141,6 +141,7 @@ class TeamManagement extends React.Component {
                   previewAvatar
                   size={40}
                   invitedLabel
+                  showEmailOnly={!invite.userId}
                 />
               )
             })}
