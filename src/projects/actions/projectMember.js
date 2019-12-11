@@ -74,7 +74,8 @@ export function updateProjectMember(projectId, memberId, member) {
   return (dispatch) => {
     return dispatch({
       type: UPDATE_PROJECT_MEMBER,
-      payload: updateMember(projectId, memberId, member)
+      payload: updateMember(projectId, memberId, member),
+      meta: { memberId }
     })
   }
 }
