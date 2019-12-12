@@ -9,13 +9,17 @@ import {
   filterTopicAndPostChangedNotifications,
   filterFileAndLinkChangedNotifications,
 } from '../../../../routes/notifications/helpers/notifications'
+import { getProjectRoleForCurrentUser } from '../../../../helpers/projectHelper'
 import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 import ProjectListFilterColHeader from './ProjectListFilterColHeader'
 import GridView from '../../../../components/Grid/GridView'
 import UserTooltip from '../../../../components/User/UserTooltip'
 import {
   PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED, DATE_TO_USER_FIELD_MAP, PHASE_STATUS_REVIEWED,
-  PHASE_STATUS_ACTIVE, PROJECT_STATUS_ACTIVE, TOOLTIP_DEFAULT_DELAY
+  PHASE_STATUS_ACTIVE, PROJECT_STATUS_ACTIVE, TOOLTIP_DEFAULT_DELAY,
+  ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN,
+  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_PROGRAM_MANAGER,
+  PROJECT_ROLE_PROJECT_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT,
 } from '../../../../config/constants'
 import { getProjectTemplateByKey } from '../../../../helpers/templates'
 import TextTruncate from 'react-text-truncate'
@@ -36,7 +40,7 @@ const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 const ProjectsGridView = props => {
   const { projects, members, totalCount, criteria, pageNum, sortHandler, currentUser, onPageChange,
     error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus,
-    applyFilters, projectTemplates, notifications, newProjectLink, setFilter, isCustomer, callInviteRequest,
+    applyFilters, projectTemplates, notifications, newProjectLink, setFilter, callInviteRequest,
     isAcceptingInvite } = props
 
   const currentSortField = _.get(criteria, 'sort', '')
@@ -237,7 +241,17 @@ const ProjectsGridView = props => {
       sortable: false,
       classes: 'item-status',
       renderText: item => {
-        const canEdit = item.status !== PROJECT_STATUS_COMPLETED && !isCustomer
+        const isSuperUser = _.intersection([ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN], currentUser.roles).length > 0
+        const userProjectRole = getProjectRoleForCurrentUser({ project: item, currentUserId: currentUser.userId })
+        const statusEditRoles = [
+          PROJECT_ROLE_COPILOT,
+          PROJECT_ROLE_MANAGER,
+          PROJECT_ROLE_PROGRAM_MANAGER,
+          PROJECT_ROLE_PROJECT_MANAGER,
+          PROJECT_ROLE_SOLUTION_ARCHITECT
+        ]
+        const canEdit = item.status !== PROJECT_STATUS_COMPLETED && (isSuperUser || _.includes(statusEditRoles, userProjectRole))
+
         const hasReviewedOrActivePhases = !!_.find(item.phases, (phase) => _.includes([PHASE_STATUS_REVIEWED, PHASE_STATUS_ACTIVE], phase.status))
         const isProjectActive = item.status === PROJECT_STATUS_ACTIVE
         const isV3Project = item.version === 'v3'
