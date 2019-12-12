@@ -260,6 +260,14 @@
             background: white;
             min-width: 300px;
 
+            &.is-processing {
+              justify-content: center;
+              align-items: center;
+              height: 36px;
+              border: 0;
+              background: transparent;
+            }
+
             .Tooltip {
               align-items: center;
               display: flex;

@@ -217,6 +217,14 @@ export default function(state = {}, action) {
     Alert.error('You are unable to invite members successfully.')
     return state
 
+  case UPDATE_PROJECT_MEMBER_SUCCESS:
+    Alert.success('Member updated successfully.')
+    return state
+
+  case UPDATE_PROJECT_MEMBER_FAILURE:
+    Alert.error('Error updating member.')
+    return state
+
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS:
     if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_ACCEPTED){
       Alert.success('You\'ve successfully joined the project.')
@@ -243,7 +251,6 @@ export default function(state = {}, action) {
   case UPDATE_PROJECT_ATTACHMENT_FAILURE:
   case REMOVE_PROJECT_ATTACHMENT_FAILURE:
   case ADD_PROJECT_MEMBER_FAILURE:
-  case UPDATE_PROJECT_MEMBER_FAILURE:
   case REMOVE_PROJECT_MEMBER_FAILURE:
   case CREATE_PROJECT_FEED_COMMENT_FAILURE:
   case SAVE_PROJECT_FEED_COMMENT_FAILURE:

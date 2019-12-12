@@ -75,7 +75,7 @@ class TeamManagement extends React.Component {
       projectTeamInvites, onProjectInviteDeleteConfirm, onProjectInviteSend, deletingInvite, changeRole,
       onDeleteInvite, isShowTopcoderDialog, onShowTopcoderDialog, processingInvites, processingMembers,
       onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, onAcceptOrRefuse, error,
-      onSelectedMembersUpdate, selectedMembers, allMembers
+      onSelectedMembersUpdate, selectedMembers, allMembers, updatingMemberIds
     } = this.props
 
 
@@ -291,6 +291,7 @@ class TeamManagement extends React.Component {
           return (
             <TopcoderDialog
               processingInvites={processingInvites}
+              updatingMemberIds={updatingMemberIds}
               error={error}
               currentUser={currentUser}
               members={members}
@@ -506,6 +507,11 @@ TeamManagement.propTypes = {
    * Flag indicates if members API is running
    */
   processingMembers: PropTypes.bool.isRequired,
+
+  /**
+   * List of member ids being updated
+   */
+  updatingMemberIds: PropTypes.arrayOf(PropTypes.number).isRequired,
 
   /**
    * Flag indicates if invite API is running

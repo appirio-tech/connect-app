@@ -33,6 +33,7 @@ const initialState = {
   isLoading: true,
   processing: false,
   processingMembers: false,
+  updatingMemberIds: [],
   processingInvites: false,
   processingAttachments: false,
   attachmentsAwaitingPermission: null,
@@ -658,9 +659,13 @@ export const projectState = function (state=initialState, action) {
 
   case ADD_PROJECT_MEMBER_PENDING:
   case REMOVE_PROJECT_MEMBER_PENDING:
-  case UPDATE_PROJECT_MEMBER_PENDING:
     return Object.assign({}, state, {
       processingMembers: true
+    })
+
+  case UPDATE_PROJECT_MEMBER_PENDING:
+    return Object.assign({}, state, {
+      updatingMemberIds: [ ...state.updatingMemberIds, action.meta.memberId ]
     })
 
   case ADD_PROJECT_MEMBER_SUCCESS:
@@ -728,9 +733,9 @@ export const projectState = function (state=initialState, action) {
     })
     updatedMembers.splice(idx, 1, action.payload)
     return update(state, {
-      processingMembers: { $set : false },
       project: { members: { $set: updatedMembers } },
-      projectNonDirty: { members: { $set: updatedMembers } }
+      projectNonDirty: { members: { $set: updatedMembers } },
+      updatingMemberIds: { $set: _.xor(state.updatingMemberIds, [action.payload.id]) }
     })
   }
 
@@ -855,7 +860,6 @@ export const projectState = function (state=initialState, action) {
   case REMOVE_TOPCODER_MEMBER_INVITE_FAILURE:
   case REMOVE_CUSTOMER_INVITE_FAILURE:
   case REMOVE_PROJECT_MEMBER_FAILURE:
-  case UPDATE_PROJECT_MEMBER_FAILURE:
   case UPDATE_PROJECT_ATTACHMENT_FAILURE:
   case ADD_PROJECT_ATTACHMENT_FAILURE:
   case REMOVE_PROJECT_ATTACHMENT_FAILURE:
@@ -881,6 +885,11 @@ export const projectState = function (state=initialState, action) {
       processingInvites: false,
       error: parseErrorObj(action),
       inviteError: parseErrorObj(action)
+    })
+  case UPDATE_PROJECT_MEMBER_FAILURE:
+    return Object.assign({}, state, {
+      updatingMemberIds: _.remove(state.updatingMemberIds, [action.payload.id]),
+      error: parseErrorObj(action)
     })
 
   default:
