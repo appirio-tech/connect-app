@@ -186,6 +186,7 @@ class ProfileSettingsForm extends Component {
         <div className="field">
           <div className="label">
             <span styleName="fieldLabelText">Business Phone</span>&nbsp;
+            <sup styleName="requiredMarker">*</sup>
           </div>
           <div className="input-field">
             <PhoneInput
@@ -199,7 +200,8 @@ class ProfileSettingsForm extends Component {
               validationError="Invalid business phone"
               showCheckMark
               listCountry={ISOCountries}
-              forceCountry={!disablePhoneInput && this.state.countrySelected}
+              required
+              forceCountry={this.state.countrySelected}
               value={this.props.values.settings.businessPhone ? this.props.values.settings.businessPhone : ''}
               onChangeCountry={this.onBusinessPhoneCountryChange}
               onOutsideClick={this.hideBusinessPhoneAlert}
