@@ -26,13 +26,14 @@ const  MemberItem  = (props) => {
   let localTimeInfoEl = null
 
   let isWorkingTime = false
+  let showIcon = false
   let localWhStart
   let localWhEnd
 
   if(localTime || workingHourStart && workingHourEnd ) {
 
     if(workingHourStart && workingHourEnd) {
-
+      showIcon = true
       localWhStart = moment({hour: workingHourStart.split(':')[0]}).format('h:mm A')
       localWhEnd = moment({hour: workingHourEnd.split(':')[0]}).format('h:mm A')
 
@@ -43,7 +44,7 @@ const  MemberItem  = (props) => {
         if(localEndHour <= localStartHour) {
           localEndHour += 24
           if(localHour < localStartHour) {
-            localHour += 24 
+            localHour += 24
           }
         }
         if(localHour >= localStartHour && localHour <= localEndHour) {
@@ -63,7 +64,7 @@ const  MemberItem  = (props) => {
       <div styleName="member-detail">
         <div styleName="member-name">{showEmailOnly? email :userFullName}</div>
         {localWhStart && localWhEnd && <div styleName="wk-hour">WH: {localWhStart} - {localWhEnd}</div>}
-        {localTime &&<div styleName="local-time">{isWorkingTime ? <SunIcon/>: <MoonIcon/>}Local time: {localTime}</div>}
+        {localTime &&<div styleName="local-time">{showIcon&& (isWorkingTime ? <SunIcon/>: <MoonIcon/>)}Local time: {localTime}</div>}
       </div>
     </div>
   )
