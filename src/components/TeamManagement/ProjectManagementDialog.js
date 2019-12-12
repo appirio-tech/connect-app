@@ -135,7 +135,7 @@ class ProjectManagementDialog extends React.Component {
                   <div className="memer-details">
                     <Avatar
                       userName={userFullName}
-                      avatarUrl={getAvatarResized(_.get(member, 'photoURL'), 40)}
+                      avatarUrl={getAvatarResized(_.get(member, 'photoURL') || '', 40)}
                       size={40}
                     />
                     <div className="member-name">
@@ -156,23 +156,24 @@ class ProjectManagementDialog extends React.Component {
                 removeInvite(invite)
               }
               i++
-              const handle = invite.member ? invite.member.handle : null
-              const userFullName = getFullNameWithFallback(invite.member)
+              const hasUserId = !_.isNil(invite.userId)
+              const handle = invite.handle
+              const userFullName = getFullNameWithFallback(invite)
               return (
                 <div
                   key={i}
                   className={`project-member-layout ${(i % 2 !== 0) ? 'dark' : ''}`}
                 >
                   <Avatar
-                    userName={invite.email || userFullName}
-                    avatarUrl={invite.email ? '' : getAvatarResized(_.get(invite.member || {}, 'photoURL'), 40)}
+                    userName={hasUserId ? userFullName : invite.email}
+                    avatarUrl={hasUserId ? getAvatarResized(_.get(invite, 'photoURL') || '', 40) : ''}
                     size={40}
                   />
                   <div className="member-name">
-                    {!invite.email && <span className="span-name">{userFullName}</span>}
+                    {hasUserId && <span className="span-name">{userFullName}</span>}
                     <span className="member-handle-container">
-                      {!invite.email && <span className="member-handle">@{handle}</span>}
-                      {invite.email && <span className="member-email">{invite.email}</span>}
+                      {hasUserId && handle && <span className="member-handle">@{handle}</span>}
+                      { (!hasUserId) && <span className="member-email">{invite.email}</span>}
                     </span>
                   </div>
                   {showRemove && <div className="member-remove" onClick={remove}>
