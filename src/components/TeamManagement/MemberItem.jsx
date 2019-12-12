@@ -21,7 +21,7 @@ const  MemberItem  = (props) => {
   let timeZoneInfo
   if(timeZone) {
     timeZoneInfo = _.find(timezones, (t) => {return t.zoneName === timeZone})
-    localTime = moment().utcOffset(timeZoneInfo.gmtOffset/3600).format('h:mm A')
+    localTime = moment().utcOffset(timeZoneInfo.gmtOffset/3600).format('h:mm A Z')
   }
   let localTimeInfoEl = null
 
