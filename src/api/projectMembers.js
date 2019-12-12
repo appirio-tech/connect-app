@@ -73,73 +73,8 @@ export function getProjectMembers(projectId) {
     + encodeURIComponent(fields)
   return axios.get(url)
     .then( resp => {
-      return populateUserDetails(resp.data.result.content)
+      return resp.data.result.content
     })
-}
-
-// temporary fix to populate data which is not returned at the moment by Member Service
-const userDetails = {
-  40152856: {
-    handle: 'pshah_manager',
-    firstName: 'Parth121',
-    lastName: 'Manager1',
-    photoUrl: 'https://topcoder-dev-media.s3.amazonaws.com/member/profile/pshah_manager-1565325063054.jpeg',
-    timeZone: 'America/Chicago',
-    workingHourStart: '9:00',
-    workingHourEnd: '18:00'
-  },
-  40152922: {
-    photoURL: 'https://topcoder-dev-media.s3.amazonaws.com/member/profile/pshah_customer-1552561016111.png',
-    handle: 'pshah_customer',
-    firstName: 'Parth',
-    lastName: 'Customer',
-    timeZone: 'Asia/Kolkata',
-    workingHourStart: '15:00',
-    workingHourEnd: '24:00'
-  },
-  40154389: {
-    handle: 'bruce13',
-    firstName: 'Rishi Raj',
-    lastName: 'Sahu',
-    photoURL: 'https://topcoder-dev-media.s3.amazonaws.com/member/profile/bruce13-1531204784385.jpeg',
-    timeZone: 'Asia/Kolkata',
-    workingHourStart: null,
-    workingHourEnd: null
-  },
-  40153891: {
-    handle: 'maxceem-dev',
-    firstName: 'Maksym1',
-    lastName: 'Dev',
-    photoURL: 'https://topcoder-dev-media.s3.amazonaws.com/member/profile/maxceem-dev-1541129349761.jpeg',
-    timeZone: null,
-    workingHourStart: null,
-    workingHourEnd: null
-  },
-  40035291: {
-    handle: 'maxceem',
-    firstName: 'F_NAME',
-    lastName: 'L_NAME',
-    photoURL: 'https://topcoder-dev-media.s3.amazonaws.com/member/profile/maxceem-1541153638241.jpeg',
-    timeZone: null,
-    workingHourStart: null,
-    workingHourEnd: null
-  }
-}
-
-const populateUserDetails = (list) => {
-  if (!list) {
-    return list
-  }
-
-  return _.map(list, (item) => {
-    // if item didn't get data from Member Service, but we have mocked data for it
-    // then populate our mock data
-    if (!item.handle && userDetails[item.userId]) {
-      return { ...item, ...userDetails[item.userId] }
-    }
-
-    return item
-  })
 }
 
 export function getProjectMemberInvites(projectId) {
@@ -148,7 +83,7 @@ export function getProjectMemberInvites(projectId) {
     + encodeURIComponent(fields)
   return axios.get(url)
     .then( resp => {
-      return populateUserDetails(resp.data.result.content)
+      return resp.data.result.content
     })
 }
 
@@ -158,6 +93,6 @@ export function getProjectMember(projectId, memberId) {
     + encodeURIComponent(fields)
   return axios.get(url)
     .then( resp => {
-      return (populateUserDetails([resp.data.result.content]))[0]
+      return resp.data.result.content
     })
 }
