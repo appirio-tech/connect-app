@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="11px" viewBox="0 0 10 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>moon</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="team-list-sidebar-night" transform="translate(-54.000000, -36.000000)" fill="#8231A9" fill-rule="nonzero">
+            <g id="Group" transform="translate(54.000000, 34.000000)">
+                <path d="M5.28155913,12.713995 C7.30257704,12.7355731 9.14869121,11.5544737 10,9.695391 C9.46423638,9.93247029 8.88398696,10.0485812 8.29959292,10.0356904 C6.00880507,10.0330749 4.15237533,8.15026558 4.14979646,5.82692603 C4.17273013,4.25536505 5.02772302,2.81785008 6.38762504,2.06410986 C6.02087055,2.01675005 5.65126089,1.99554555 5.28155913,2.00077661 C2.36456242,2.00077661 0,4.39903246 0,7.35738579 C0,10.3158325 2.36456242,12.713995 5.28155913,12.713995 Z" id="moon"></path>
+            </g>
+        </g>
+    </g>
+</svg>

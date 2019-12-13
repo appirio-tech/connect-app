@@ -456,10 +456,7 @@
         margin: $base-unit 0;
         display: flex;
         flex-wrap: wrap;
-      }
-
-      .Tooltip {
-        margin: $base-unit * 2 $base-unit * 2 $base-unit $base-unit;
+        flex-direction: column;
       }
     }
   }
@@ -523,6 +520,10 @@
     }
   }
 
+}
+
+.button-container{
+  display: inline-flex;
 }
 
 .separator {
