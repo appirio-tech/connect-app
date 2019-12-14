@@ -39,6 +39,16 @@ export function createProjectMemberInvite(projectId, member) {
     })
 }
 
+export function getProjectMemberInvites(projectId) {
+  const fields = 'id,projectId,userId,email,role,status,createdAt,updatedAt,createdBy,updatedBy,handle,firstName,lastName,photoURL'
+  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/invites/?fields=`
+    + encodeURIComponent(fields)
+  return axios.get(url)
+    .then( resp => {
+      return resp.data.result.content
+    })
+}
+
 /**
  * Get a project member invite based on project's id
  * @param  {integer} projectId unique identifier of the project
