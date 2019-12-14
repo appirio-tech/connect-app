@@ -681,6 +681,7 @@ export const projectState = function (state=initialState, action) {
       newState.project.invites = []
     }
     newState.project.invites.push(...action.payload.success)
+    newState.projectNonDirty.invites = newState.project.invites
     newState.processingInvites = false
     newState.error = false
     if (action.payload.failed) {
@@ -698,6 +699,7 @@ export const projectState = function (state=initialState, action) {
       newState.project.invites = []
     }
     newState.project.invites.push(...action.payload.success)
+    newState.projectNonDirty.invites = newState.project.invites
     newState.processingInvites = false
     newState.error = false
     if (action.payload.failed) {
@@ -712,6 +714,7 @@ export const projectState = function (state=initialState, action) {
   case REMOVE_CUSTOMER_INVITE_SUCCESS: {
     const newState = Object.assign({}, state)
     _.remove(newState.project.invites, i => action.payload.id === i.id)
+    newState.projectNonDirty.invites = newState.project.invites
     newState.processingInvites = false
     return newState
   }
@@ -719,6 +722,7 @@ export const projectState = function (state=initialState, action) {
   case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS: {
     const newState = Object.assign({}, state)
     _.remove(newState.project.invites, i => action.payload.id === i.id)
+    newState.projectNonDirty.invites = newState.project.invites
     newState.processingInvites = false
     return newState
   }
