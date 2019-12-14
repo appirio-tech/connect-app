@@ -227,6 +227,10 @@ export const projectState = function (state=initialState, action) {
       project: {
         ...state.project,
         members: action.payload
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
+        members: action.payload
       }
     })
   }
@@ -236,6 +240,10 @@ export const projectState = function (state=initialState, action) {
       project: {
         ...state.project,
         invites: action.payload
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
+        invites: action.payload
       }
     })
   }
@@ -243,13 +251,20 @@ export const projectState = function (state=initialState, action) {
   case LOAD_PROJECT_MEMBER_SUCCESS: {
     const member = action.payload
     const index = _.findIndex(state.project.members, (o) =>  o.userId === parseInt(member.userId))
+    const updatedMembers = (
+      index >=0 ? [...state.project.members.slice(0, index),
+        member,
+        ...state.project.members.slice(index+1)
+      ] : state.project.members.concat([action.payload])
+    )
     return Object.assign({}, state, {
       project: {
         ...state.project,
-        members: index >=0 ? [...state.project.members.slice(0, index),
-          member,
-          ...state.project.members.slice(index+1)
-        ] : state.project.members.concat([action.payload])
+        members: updatedMembers
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
+        members: updatedMembers
       }
     })
   }
@@ -258,6 +273,11 @@ export const projectState = function (state=initialState, action) {
     return Object.assign({}, state, {
       project:{
         ...state.project,
+        members: action.payload.members,
+        invites: action.payload.invites,
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
         members: action.payload.members,
         invites: action.payload.invites,
       }
