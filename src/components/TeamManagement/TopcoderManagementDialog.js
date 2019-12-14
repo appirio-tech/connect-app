@@ -196,7 +196,7 @@ class TopcoderManagementDialog extends React.Component {
                   <div className="memer-details">
                     <Avatar
                       userName={userFullName}
-                      avatarUrl={getAvatarResized(_.get(member, 'photoURL'), 40)}
+                      avatarUrl={getAvatarResized(_.get(member, 'photoURL') || '', 40)}
                       size={40}
                     />
                     <div className="member-name">
@@ -291,7 +291,7 @@ class TopcoderManagementDialog extends React.Component {
                   this.setState(prevState => ({ processingInviteRequestIds: _.xor(prevState.processingInviteRequestIds, [invite.id]) }))
                 })
               }
-              const userFullName = getFullNameWithFallback(invite.member)
+              const userFullName = getFullNameWithFallback(invite)
               i++
               return (
                 <div
@@ -300,13 +300,13 @@ class TopcoderManagementDialog extends React.Component {
                 >
                   <Avatar
                     userName={userFullName}
-                    avatarUrl={getAvatarResized(_.get(invite.member, 'photoURL'), 40)}
+                    avatarUrl={getAvatarResized(_.get(invite, 'photoURL') || '', 40)}
                     size={40}
                   />
                   <div className="member-name">
                     <span className="span-name">{userFullName}</span>
                     <span className="member-handle">
-                      @{invite.member.handle || 'ConnectUser'}
+                      @{invite.handle || 'ConnectUser'}
                     </span>
                   </div>
 
