@@ -73,16 +73,6 @@ export function getProjectMembers(projectId) {
     })
 }
 
-export function getProjectMemberInvites(projectId) {
-  const fields = 'id,projectId,userId,email,role,status,createdAt,updatedAt,createdBy,updatedBy,handle,firstName,lastName,photoURL'
-  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/invites/?fields=`
-    + encodeURIComponent(fields)
-  return axios.get(url)
-    .then( resp => {
-      return resp.data
-    })
-}
-
 export function getProjectMember(projectId, memberId) {
   const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
   const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/${memberId}?fields=`

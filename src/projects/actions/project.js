@@ -17,12 +17,13 @@ import { getProjectById,
 } from '../../api/projects'
 import {
   getProjectInviteById,
+  getProjectMemberInvites,
 } from '../../api/projectMemberInvites'
 import {
   createTimeline,
 } from '../../api/timelines'
 import {
-  getProjectMembers, getProjectMemberInvites, getProjectMember
+  getProjectMembers, getProjectMember
 } from '../../api/projectMembers'
 // import { loadProductTimelineWithMilestones } from './productsTimelines'
 import {
