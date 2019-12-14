@@ -3,6 +3,11 @@
   .Tooltip {
     &.customer-data {
       .tooltip-target {
+        display: flex;
+        &>div:first-child {
+          margin-left: -5px;
+          position: relative;
+        }
         position: relative;
         .Avatar {
           height: 30px;
@@ -214,6 +219,7 @@
             width: 40px;
             height: 40px;
           }
+
 
           .invited-label {
             @include roboto-medium;

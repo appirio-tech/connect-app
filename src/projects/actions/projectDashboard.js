@@ -1,6 +1,5 @@
 import _ from 'lodash'
-import { loadMembers } from '../../actions/members'
-import { loadProject, loadProjectInvite, loadDirectProjectData } from './project'
+import { loadProject, loadProjectInvite, loadDirectProjectData, loadProjectMembers, loadProjectMemberInvites } from './project'
 import { loadProjectPlan } from './projectPlan'
 import { loadProjectsMetadata } from '../../actions/templates'
 import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
@@ -25,7 +24,9 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
       _.remove(userIds, i => !i)
       // load additional data in parallel
       let promises = [
-        dispatch(loadMembers(userIds))
+        //dispatch(loadMembers(userIds)),
+        dispatch(loadProjectMembers(projectId)),
+        dispatch(loadProjectMemberInvites(projectId))
       ]
       if (isOnlyLoadProjectInfo) {
         promises = []

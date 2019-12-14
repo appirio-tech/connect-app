@@ -20,7 +20,8 @@ export function updateProjectMemberInvite(projectId, member) {
  * @return {object}  project member invite returned by api
  */
 export function createProjectMemberInvite(projectId, member) {
-  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/invite/`
+  const fields = 'id,projectId,userId,email,role,status,createdAt,updatedAt,createdBy,updatedBy,handle,firstName,lastName,photoURL'
+  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/invite/?fields=` + encodeURIComponent(fields)
   return axios({
     method: 'post',
     url,
@@ -30,6 +31,16 @@ export function createProjectMemberInvite(projectId, member) {
     },
   })
     .then(resp => resp.data)
+}
+
+export function getProjectMemberInvites(projectId) {
+  const fields = 'id,projectId,userId,email,role,status,createdAt,updatedAt,createdBy,updatedBy,handle,firstName,lastName,photoURL'
+  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/invites/?fields=`
+    + encodeURIComponent(fields)
+  return axios.get(url)
+    .then( resp => {
+      return resp.data
+    })
 }
 
 /**

@@ -23,6 +23,7 @@ import {
   ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, RELOAD_PROJECT_MEMBERS_SUCCESS,
   UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION,
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS, APPROVE_SCOPE_CHANGE_SUCCESS, REJECT_SCOPE_CHANGE_SUCCESS, CANCEL_SCOPE_CHANGE_SUCCESS, ACTIVATE_SCOPE_CHANGE_SUCCESS,
+  LOAD_PROJECT_MEMBERS_SUCCESS, LOAD_PROJECT_MEMBER_INVITES_SUCCESS, LOAD_PROJECT_MEMBER_SUCCESS
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -40,6 +41,7 @@ const initialState = {
   error: false,
   inviteError: false,
   project: {
+    members: [],
     invites: [] // invites are pushed directly into it hence need to declare first
   },
   assetsMembers: {},
@@ -227,10 +229,62 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
+  case LOAD_PROJECT_MEMBERS_SUCCESS: {
+    return Object.assign({}, state, {
+      project: {
+        ...state.project,
+        members: action.payload
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
+        members: action.payload
+      }
+    })
+  }
+
+  case LOAD_PROJECT_MEMBER_INVITES_SUCCESS: {
+    return Object.assign({}, state, {
+      project: {
+        ...state.project,
+        invites: action.payload
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
+        invites: action.payload
+      }
+    })
+  }
+
+  case LOAD_PROJECT_MEMBER_SUCCESS: {
+    const member = action.payload
+    const index = _.findIndex(state.project.members, (o) =>  o.userId === parseInt(member.userId))
+    const updatedMembers = (
+      index >=0 ? [...state.project.members.slice(0, index),
+        member,
+        ...state.project.members.slice(index+1)
+      ] : state.project.members.concat([action.payload])
+    )
+    return Object.assign({}, state, {
+      project: {
+        ...state.project,
+        members: updatedMembers
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
+        members: updatedMembers
+      }
+    })
+  }
+
   case RELOAD_PROJECT_MEMBERS_SUCCESS: {
     return Object.assign({}, state, {
       project:{
         ...state.project,
+        members: action.payload.members,
+        invites: action.payload.invites,
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
         members: action.payload.members,
         invites: action.payload.invites,
       }
