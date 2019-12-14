@@ -124,10 +124,10 @@ export function inviteTopcoderMembers(projectId, items) {
 function deleteTopcoderMemberInviteWithData(projectId, invite) {
   return new Promise((resolve, reject) => {
     const req = {}
-    if(invite.item.email) {
-      req.email = invite.item.email
-    } else {
+    if(invite.item.userId) {
       req.userId = invite.item.userId
+    } else {
+      req.email = invite.item.email
     }
     req.status = PROJECT_MEMBER_INVITE_STATUS_CANCELED
     updateProjectMemberInvite(projectId, req)
