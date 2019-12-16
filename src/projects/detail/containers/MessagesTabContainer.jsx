@@ -158,7 +158,7 @@ class MessagesTabContainer extends React.Component {
       <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
         {matches => {
           if (matches) {
-            return <Sticky top={60}>{leftArea}</Sticky>
+            return <Sticky top={60} bottomBoundary="#wrapper-main">{leftArea}</Sticky>
           } else {
             return leftArea
           }
