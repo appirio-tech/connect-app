@@ -84,7 +84,7 @@ const NotificationsContainerView = (props) => {
           {(matches) => {
             if (matches) {
               return (
-                <Sticky top={60}>
+                <Sticky top={60} bottomBoundary="#wrapper-main">
                   <UserSidebar user={user}/>
                 </Sticky>
               )
@@ -133,7 +133,7 @@ const NotificationsContainerView = (props) => {
             }
           </div>
           <aside className="filters">
-            <Sticky top={90}>
+            <Sticky top={90} bottomBoundary="#wrapper-main">
               <SideFilter
                 filterSections={getNotificationsFilters(allNotificationsBySources)}
                 selectedFilter={filterBy}

@@ -286,7 +286,7 @@ class Projects extends Component {
             {(matches) => {
               if (matches) {
                 return (
-                  <Sticky top={60}>
+                  <Sticky top={60} bottomBoundary="#wrapper-main">
                     <UserSidebar user={user}/>
                   </Sticky>
                 )
