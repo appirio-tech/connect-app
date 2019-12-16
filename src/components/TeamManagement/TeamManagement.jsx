@@ -52,12 +52,21 @@ class TeamManagement extends React.Component {
   }
 
   topcoderTeamInviteButtonClick() {
+    this.refreshStickyComp()
     this.setState({topcoderTeamInviteButtonExpanded: !this.state.topcoderTeamInviteButtonExpanded})
   }
 
   projectTeamInviteButtonClick() {
+    this.refreshStickyComp()
     this.setState({projectTeamInviteButtonExpanded: !this.state.projectTeamInviteButtonExpanded})
   }
+
+  refreshStickyComp() {
+    const event = document.createEvent('Event')
+    event.initEvent('refreshsticky', true, true)
+    document.dispatchEvent(event)
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.processingMembers !== nextProps.processingMembers && (!nextProps.processingMembers)) {
       this.props.onJoin(false)
