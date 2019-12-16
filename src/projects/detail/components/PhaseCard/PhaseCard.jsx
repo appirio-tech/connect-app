@@ -88,7 +88,6 @@ class PhaseCard extends React.Component {
     const {
       attr,
       projectStatus,
-      isManageUser,
       deleteProjectPhase,
       isUpdating,
       timeline,
@@ -218,7 +217,7 @@ class PhaseCard extends React.Component {
                 {!this.state.isEditting && !!isExpanded && (<div styleName="expandable-view">
                   {this.props.children}
                 </div>)}
-                {isManageUser && this.state.isEditting && (
+                {this.state.isEditting && (
                   <div styleName="sm-separator">
                     {!isUpdating && (
                       <EditStageForm
