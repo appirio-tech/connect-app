@@ -22,7 +22,7 @@ const SettingsPanel = (props) => (
         {(matches) => {
           if (matches) {
             return (
-              <Sticky top={60}>
+              <Sticky top={60} bottomBoundary="#wrapper-main">
                 <UserSidebar user={props.user}/>
               </Sticky>
             )
