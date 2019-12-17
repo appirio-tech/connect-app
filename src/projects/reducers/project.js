@@ -1,5 +1,5 @@
 import {
-  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_MEMBER_INVITES_PENDING, LOAD_PROJECT_MEMBER_INVITES_FAILURE, LOAD_PROJECT_MEMBER_INVITES_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
+  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_MEMBER_INVITE_PENDING, LOAD_PROJECT_MEMBER_INVITE_FAILURE, LOAD_PROJECT_MEMBER_INVITE_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
   CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CREATE_PROJECT_STAGE_PENDING, CREATE_PROJECT_STAGE_SUCCESS, CREATE_PROJECT_STAGE_FAILURE, CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT_PENDING, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   DELETE_PROJECT_PENDING, DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
@@ -23,6 +23,7 @@ import {
   ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, RELOAD_PROJECT_MEMBERS_SUCCESS,
   UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION,
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS, APPROVE_SCOPE_CHANGE_SUCCESS, REJECT_SCOPE_CHANGE_SUCCESS, CANCEL_SCOPE_CHANGE_SUCCESS, ACTIVATE_SCOPE_CHANGE_SUCCESS,
+  LOAD_PROJECT_MEMBERS_SUCCESS, LOAD_PROJECT_MEMBER_INVITES_SUCCESS, LOAD_PROJECT_MEMBER_SUCCESS
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -32,6 +33,7 @@ const initialState = {
   isLoading: true,
   processing: false,
   processingMembers: false,
+  updatingMemberIds: [],
   processingInvites: false,
   processingAttachments: false,
   attachmentsAwaitingPermission: null,
@@ -39,6 +41,7 @@ const initialState = {
   error: false,
   inviteError: false,
   project: {
+    members: [],
     invites: [] // invites are pushed directly into it hence need to declare first
   },
   assetsMembers: {},
@@ -195,13 +198,13 @@ export const projectState = function (state=initialState, action) {
       lastUpdated: new Date()
     })
 
-  case LOAD_PROJECT_MEMBER_INVITES_SUCCESS: {
+  case LOAD_PROJECT_MEMBER_INVITE_SUCCESS: {
     return Object.assign({}, state, {
       showUserInvited: true
     })
   }
 
-  case LOAD_PROJECT_MEMBER_INVITES_PENDING:
+  case LOAD_PROJECT_MEMBER_INVITE_PENDING:
     return Object.assign({}, state, {
       isLoading: true,
       showUserInvited: false
@@ -219,10 +222,62 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
+  case LOAD_PROJECT_MEMBERS_SUCCESS: {
+    return Object.assign({}, state, {
+      project: {
+        ...state.project,
+        members: action.payload
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
+        members: action.payload
+      }
+    })
+  }
+
+  case LOAD_PROJECT_MEMBER_INVITES_SUCCESS: {
+    return Object.assign({}, state, {
+      project: {
+        ...state.project,
+        invites: action.payload
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
+        invites: action.payload
+      }
+    })
+  }
+
+  case LOAD_PROJECT_MEMBER_SUCCESS: {
+    const member = action.payload
+    const index = _.findIndex(state.project.members, (o) =>  o.userId === parseInt(member.userId))
+    const updatedMembers = (
+      index >=0 ? [...state.project.members.slice(0, index),
+        member,
+        ...state.project.members.slice(index+1)
+      ] : state.project.members.concat([action.payload])
+    )
+    return Object.assign({}, state, {
+      project: {
+        ...state.project,
+        members: updatedMembers
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
+        members: updatedMembers
+      }
+    })
+  }
+
   case RELOAD_PROJECT_MEMBERS_SUCCESS: {
     return Object.assign({}, state, {
       project:{
         ...state.project,
+        members: action.payload.members,
+        invites: action.payload.invites,
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
         members: action.payload.members,
         invites: action.payload.invites,
       }
@@ -624,9 +679,13 @@ export const projectState = function (state=initialState, action) {
 
   case ADD_PROJECT_MEMBER_PENDING:
   case REMOVE_PROJECT_MEMBER_PENDING:
-  case UPDATE_PROJECT_MEMBER_PENDING:
     return Object.assign({}, state, {
       processingMembers: true
+    })
+
+  case UPDATE_PROJECT_MEMBER_PENDING:
+    return Object.assign({}, state, {
+      updatingMemberIds: [ ...state.updatingMemberIds, action.meta.memberId ]
     })
 
   case ADD_PROJECT_MEMBER_SUCCESS:
@@ -642,6 +701,7 @@ export const projectState = function (state=initialState, action) {
       newState.project.invites = []
     }
     newState.project.invites.push(...action.payload.success)
+    newState.projectNonDirty.invites = newState.project.invites
     newState.processingInvites = false
     newState.error = false
     if (action.payload.failed) {
@@ -659,6 +719,7 @@ export const projectState = function (state=initialState, action) {
       newState.project.invites = []
     }
     newState.project.invites.push(...action.payload.success)
+    newState.projectNonDirty.invites = newState.project.invites
     newState.processingInvites = false
     newState.error = false
     if (action.payload.failed) {
@@ -673,6 +734,7 @@ export const projectState = function (state=initialState, action) {
   case REMOVE_CUSTOMER_INVITE_SUCCESS: {
     const newState = Object.assign({}, state)
     _.remove(newState.project.invites, i => action.payload.id === i.id)
+    newState.projectNonDirty.invites = newState.project.invites
     newState.processingInvites = false
     return newState
   }
@@ -680,6 +742,7 @@ export const projectState = function (state=initialState, action) {
   case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS: {
     const newState = Object.assign({}, state)
     _.remove(newState.project.invites, i => action.payload.id === i.id)
+    newState.projectNonDirty.invites = newState.project.invites
     newState.processingInvites = false
     return newState
   }
@@ -694,9 +757,9 @@ export const projectState = function (state=initialState, action) {
     })
     updatedMembers.splice(idx, 1, action.payload)
     return update(state, {
-      processingMembers: { $set : false },
       project: { members: { $set: updatedMembers } },
-      projectNonDirty: { members: { $set: updatedMembers } }
+      projectNonDirty: { members: { $set: updatedMembers } },
+      updatingMemberIds: { $set: _.xor(state.updatingMemberIds, [action.payload.id]) }
     })
   }
 
@@ -821,7 +884,6 @@ export const projectState = function (state=initialState, action) {
   case REMOVE_TOPCODER_MEMBER_INVITE_FAILURE:
   case REMOVE_CUSTOMER_INVITE_FAILURE:
   case REMOVE_PROJECT_MEMBER_FAILURE:
-  case UPDATE_PROJECT_MEMBER_FAILURE:
   case UPDATE_PROJECT_ATTACHMENT_FAILURE:
   case ADD_PROJECT_ATTACHMENT_FAILURE:
   case REMOVE_PROJECT_ATTACHMENT_FAILURE:
@@ -829,7 +891,7 @@ export const projectState = function (state=initialState, action) {
   case ADD_PRODUCT_ATTACHMENT_FAILURE:
   case REMOVE_PRODUCT_ATTACHMENT_FAILURE:
   case DELETE_PROJECT_PHASE_FAILURE:
-  case LOAD_PROJECT_MEMBER_INVITES_FAILURE:
+  case LOAD_PROJECT_MEMBER_INVITE_FAILURE:
     return Object.assign({}, state, {
       isLoading: false,
       processing: false,
@@ -847,6 +909,11 @@ export const projectState = function (state=initialState, action) {
       processingInvites: false,
       error: parseErrorObj(action),
       inviteError: parseErrorObj(action)
+    })
+  case UPDATE_PROJECT_MEMBER_FAILURE:
+    return Object.assign({}, state, {
+      updatingMemberIds: _.remove(state.updatingMemberIds, [action.payload.id]),
+      error: parseErrorObj(action)
     })
 
   default:

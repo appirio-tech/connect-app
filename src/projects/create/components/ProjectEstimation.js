@@ -67,7 +67,7 @@ function ProjectEstimation({
           return renderBlock({ ...item, duration: duration ? duration : null })
         })}
       </ul>
-      { false && showPrice && (
+      { showPrice && (
         <h3>Our estimate is from <span>$</span>{numberWithCommas(priceEstimate)}</h3>
       )}
     </div>

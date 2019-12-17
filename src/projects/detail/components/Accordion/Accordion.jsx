@@ -150,12 +150,21 @@ class Accordion extends React.Component {
       return 'N/A'//value
     }
 
+    // we shouldn't show or count values for options which are hidden
+    let nonHiddenValue = value
+    if (_.isArray(value)) {
+      nonHiddenValue = _.reject(value, (val) => {
+        const valOption = _.find(options, { value: val })
+        return _.get(valOption, '__wizard.hiddenByCondition', false)
+      })
+    }
+
     switch (type) {
     case TYPE.CHECKBOX: return value ? 'Yes' : 'No'
-    case TYPE.CHECKBOX_GROUP: return value.map(mapValue).join(', ')
+    case TYPE.CHECKBOX_GROUP: return nonHiddenValue.map(mapValue).join(', ')
     case TYPE.RADIO_GROUP: return mapValue(value)
-    case TYPE.ADD_ONS: return `${value.length} selected`
-    case TYPE.SKILLS: return `${value.length} selected`
+    case TYPE.ADD_ONS: return `${nonHiddenValue.length} selected`
+    case TYPE.SKILLS: return `${nonHiddenValue.length} selected`
     case TYPE.SLIDER_RADIO: return mapValue(value)
     case TYPE.SLIDER_STANDARD: return mapDecisionValue(value)
     case TYPE.SELECT_DROPDOWN: return mapValue(value)

@@ -17,14 +17,18 @@ import { getProjectById,
 } from '../../api/projects'
 import {
   getProjectInviteById,
+  getProjectMemberInvites,
 } from '../../api/projectMemberInvites'
 import {
   createTimeline,
 } from '../../api/timelines'
+import {
+  getProjectMembers, getProjectMember
+} from '../../api/projectMembers'
 // import { loadProductTimelineWithMilestones } from './productsTimelines'
 import {
   LOAD_PROJECT,
-  LOAD_PROJECT_MEMBER_INVITES,
+  LOAD_PROJECT_MEMBER_INVITE,
   CREATE_PROJECT,
   CREATE_PROJECT_STAGE,
   CLEAR_LOADED_PROJECT,
@@ -60,6 +64,10 @@ import {
   SCOPE_CHANGE_REQ_STATUS_APPROVED,
   SCOPE_CHANGE_REQ_STATUS_REJECTED,
   SCOPE_CHANGE_REQ_STATUS_CANCELED,
+  PHASE_STATUS_DRAFT,
+  LOAD_PROJECT_MEMBERS,
+  LOAD_PROJECT_MEMBER_INVITES,
+  LOAD_PROJECT_MEMBER
 } from '../../config/constants'
 import {
   updateProductMilestone,
@@ -129,7 +137,7 @@ export function loadProject(projectId) {
 export function loadProjectInvite(projectId) {
   return (dispatch) => {
     return dispatch({
-      type: LOAD_PROJECT_MEMBER_INVITES,
+      type: LOAD_PROJECT_MEMBER_INVITE,
       payload: getProjectInviteById(projectId)
     })
   }
@@ -275,7 +283,7 @@ export function createProduct(project, productTemplate, phases, timelines) {
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT_STAGE,
-      payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, startDate, endDate)
+      payload: createProjectPhaseAndProduct(project, productTemplate, PHASE_STATUS_DRAFT, startDate, endDate)
     })
   }
 }
@@ -289,7 +297,7 @@ export function createProduct(project, productTemplate, phases, timelines) {
  *
  * @return {Promise} project
  */
-export function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT_STATUS_DRAFT, startDate, endDate) {
+export function createProjectPhaseAndProduct(project, projectTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate) {
   const param = {
     status,
     name: projectTemplate.name,
@@ -603,6 +611,33 @@ export function fireProductDirtyUndo() {
   return (dispatch) => {
     return dispatch({
       type: PRODUCT_DIRTY_UNDO
+    })
+  }
+}
+
+export function loadProjectMembers(projectId) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_PROJECT_MEMBERS,
+      payload: getProjectMembers(projectId)
+    })
+  }
+}
+
+export function loadProjectMemberInvites(projectId) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_PROJECT_MEMBER_INVITES,
+      payload: getProjectMemberInvites(projectId)
+    })
+  }
+}
+
+export function loadProjectMember(projectId, memberId) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_PROJECT_MEMBER,
+      payload: getProjectMember(projectId, memberId)
     })
   }
 }

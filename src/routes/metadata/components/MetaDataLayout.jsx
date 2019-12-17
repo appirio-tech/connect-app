@@ -21,7 +21,7 @@ class MetaDataLayout extends React.Component {
             {(matches) => {
               if (matches) {
                 return (
-                  <Sticky top={60}>
+                  <Sticky top={60} bottomBoundary="#wrapper-main">
                     <MetadataSidebar/>
                   </Sticky>
                 )

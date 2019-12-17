@@ -7,7 +7,8 @@ import { createProjectMemberInvite as createProjectMemberInvite,
   updateProjectMemberInvite as updateProjectMemberInvite
 } from '../../api/projectMemberInvites'
 import { getProjectById } from '../../api/projects'
-import { loadMembers, loadMembersByHandle } from '../../actions/members'
+import { loadProjectMember } from './project'
+import { loadMembersByHandle } from '../../actions/members'
 
 import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   LOAD_MEMBER_SUGGESTIONS,
@@ -54,8 +55,8 @@ function addProjectMemberWithData(dispatch, projectId, member) {
       type: ADD_PROJECT_MEMBER,
       payload: addMember(projectId, {role: member.role})
     })
-      .then((/*{value, action}*/) => {
-        return resolve(dispatch(loadMembers([member.userId])))
+      .then(({value: newMember}) => {
+        return resolve(dispatch(loadProjectMember(projectId, newMember.id)))
       })
       .catch(err => reject(err))
   })
@@ -74,7 +75,8 @@ export function updateProjectMember(projectId, memberId, member) {
   return (dispatch) => {
     return dispatch({
       type: UPDATE_PROJECT_MEMBER,
-      payload: updateMember(projectId, memberId, member)
+      payload: updateMember(projectId, memberId, member),
+      meta: { memberId }
     })
   }
 }
@@ -122,10 +124,10 @@ export function inviteTopcoderMembers(projectId, items) {
 function deleteTopcoderMemberInviteWithData(projectId, invite) {
   return new Promise((resolve, reject) => {
     const req = {}
-    if(invite.item.email) {
-      req.email = invite.item.email
-    } else {
+    if(invite.item.userId) {
       req.userId = invite.item.userId
+    } else {
+      req.email = invite.item.email
     }
     req.status = PROJECT_MEMBER_INVITE_STATUS_CANCELED
     updateProjectMemberInvite(projectId, req)

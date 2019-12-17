@@ -4,7 +4,7 @@ import uncontrollable from 'uncontrollable'
 import './TeamManagement.scss'
 import ProjectDialog from './ProjectManagementDialog'
 import TopcoderDialog from './TopcoderManagementDialog'
-import UserTooltip from '../User/UserTooltip'
+import MemberItem from './MemberItem'
 import AddIcon from  '../../assets/icons/icon-ui-bold-add.svg'
 import Dialog from './Dialog'
 import PERMISSIONS from '../../config/permissions'
@@ -26,8 +26,8 @@ const REMOVE_INVITATION_TITLE = 'You\'re about to remove an invitation'
 const REMOVE_TITLE = 'You\'re about to delete a member from the team'
 const LEAVE_TITLE = 'You\'re about to leave the project'
 
-const LEAVE_MESSAGE = `Once you leave, somebody on your team has to add you for you to be
-  for you to be able to see the project. Do you stil want to leave?`
+const LEAVE_MESSAGE = `Once you leave, somebody on your team has to add you back to the team for you to be able to see the project.
+  Do you still want to leave?`
 
 const JOIN_MESSAGE = `You are about to join the project. Once you join you will be responsible for project delivery.
   Are you sure you want to join?`
@@ -41,6 +41,31 @@ const REMOVE_INVITE_MESSAGE = `Once you cancel the invitation for <span style="f
   in order for them to gain access`
 
 class TeamManagement extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      topcoderTeamInviteButtonExpanded: false,
+      projectTeamInviteButtonExpanded: false,
+    }
+    this.projectTeamInviteButtonClick = this.projectTeamInviteButtonClick.bind(this)
+    this.topcoderTeamInviteButtonClick = this.topcoderTeamInviteButtonClick.bind(this)
+  }
+
+  topcoderTeamInviteButtonClick() {
+    this.refreshStickyComp()
+    this.setState({topcoderTeamInviteButtonExpanded: !this.state.topcoderTeamInviteButtonExpanded})
+  }
+
+  projectTeamInviteButtonClick() {
+    this.refreshStickyComp()
+    this.setState({projectTeamInviteButtonExpanded: !this.state.projectTeamInviteButtonExpanded})
+  }
+
+  refreshStickyComp() {
+    const event = document.createEvent('Event')
+    event.initEvent('refreshsticky', true, true)
+    document.dispatchEvent(event)
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.processingMembers !== nextProps.processingMembers && (!nextProps.processingMembers)) {
@@ -59,11 +84,18 @@ class TeamManagement extends React.Component {
       projectTeamInvites, onProjectInviteDeleteConfirm, onProjectInviteSend, deletingInvite, changeRole,
       onDeleteInvite, isShowTopcoderDialog, onShowTopcoderDialog, processingInvites, processingMembers,
       onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, onAcceptOrRefuse, error,
-      onSelectedMembersUpdate, selectedMembers, allMembers,
+      onSelectedMembersUpdate, selectedMembers, allMembers, updatingMemberIds
     } = this.props
+
+
+    const {
+      projectTeamInviteButtonExpanded,
+      topcoderTeamInviteButtonExpanded,
+    } = this.state
     const currentMember = members.filter((member) => member.userId === currentUser.userId)[0]
     const modalActive = isAddingTeamMember || deletingMember || isShowJoin || showNewMemberConfirmation || deletingInvite
 
+    const customerTeamManageAction = (currentUser.isAdmin || currentUser.isManager) && !currentMember
     const topcoderTeamManageAction = currentUser.isAdmin || (currentMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
     const topcoderTeamViewAction = !topcoderTeamManageAction
     const canJoinAsCopilot = !currentMember && currentUser.isCopilot
@@ -71,42 +103,73 @@ class TeamManagement extends React.Component {
     const canShowInvite = currentMember && (currentUser.isCustomer || currentMember.isCopilot || currentMember.isManager)
 
     const sortedMembers = members
+    let projectTeamInviteCount = 0
+    let topcoderTeamInviteCount = 0
 
     return (
       <div className="team-management-container">
         <div className="projects-team">
           <div className="title">
             <span styleName="title-text">Team</span>
+            {(customerTeamManageAction) &&
+              <span className="title-action" onClick={() => onShowProjectDialog(true)}>
+                Manage
+              </span>
+            }
           </div>
           <div className="members">
             {sortedMembers.map((member, i) => {
               if (!member.isCustomer) {
                 return
               }
+              projectTeamInviteCount++
+              if(!projectTeamInviteButtonExpanded && projectTeamInviteCount > 3) {
+                return null
+              }
               return (
-                <UserTooltip usr={member} id={i} key={i} previewAvatar size={40} />
-              )
-            })}
-            {projectTeamInvites.map((invite, i) => {
-              const member = invite.email ? { email: invite.email } : invite.member
-
-              return (
-                <UserTooltip
+                <MemberItem
                   usr={member}
                   id={i}
                   key={i}
                   previewAvatar
                   size={40}
-                  invitedLabel
-                  showEmailOnly={!!invite.email}
                 />
               )
             })}
+            {projectTeamInvites.map((invite, i) => {
+              // const member = invite.email ? { email: invite.email } : invite.member
+              projectTeamInviteCount++
+              if(!projectTeamInviteButtonExpanded && projectTeamInviteCount > 3) {
+                return null
+              }
+              return (
+                <MemberItem
+                  usr={invite}
+                  id={i}
+                  key={i}
+                  previewAvatar
+                  size={40}
+                  invitedLabel
+                  showEmailOnly={!invite.userId}
+                />
+              )
+            })}
+            {projectTeamInviteCount >3 &&
+                <div styleName="button-container">
+                  <div className="join-btn" onClick={this.projectTeamInviteButtonClick}>
+                    {!projectTeamInviteButtonExpanded ?'Show All': 'Show Less'}
+                  </div>
+                </div>
+            }
             { (canShowInvite) &&
-              <div className="join-btn" onClick={() => onShowProjectDialog(true)}>
-                <AddIcon />
-                Manage Invitations
-              </div>
+                <div styleName="button-container">
+                  <div className="join-btn" onClick={() => onShowProjectDialog(true)}>
+                    <AddIcon />
+                    <div>
+                    Manage Invitations
+                    </div>
+                  </div>
+                </div>
             }
           </div>
         </div>
@@ -126,29 +189,50 @@ class TeamManagement extends React.Component {
               if (member.isCustomer) {
                 return
               }
+
+              topcoderTeamInviteCount++
+              if(!topcoderTeamInviteButtonExpanded &&topcoderTeamInviteCount > 3) {
+                return null
+              }
+
               return (
-                <UserTooltip usr={member} id={i} key={i} previewAvatar size={40} />
+                <MemberItem usr={member} id={i} key={i} previewAvatar size={40}/>
               )
             })}
             {topcoderTeamInvites.map((invite, i) => {
               if (invite.isCustomer) {
                 return
               }
+              topcoderTeamInviteCount++
+              if(!topcoderTeamInviteButtonExpanded &&topcoderTeamInviteCount > 3) {
+                return null
+              }
+
               return (
-                <UserTooltip
-                  usr={invite.member}
+                <MemberItem key={i}
+                  usr={invite}
                   id={i}
-                  key={i}
                   previewAvatar
                   size={40}
                   invitedLabel
                 />
               )
             })}
+            {topcoderTeamInviteCount >3 &&
+              <div styleName="button-container">
+                <div className="join-btn" onClick={this.topcoderTeamInviteButtonClick}>
+                  {!topcoderTeamInviteButtonExpanded ?'Show All': 'Show Less'}
+                </div>
+              </div>
+            }
             { (canJoinAsCopilot || canJoinAsManager) &&
-              <div className="join-btn" onClick={() => onJoin(true)}>
-                <AddIcon />
-                {canJoinAsCopilot ? 'Join project as copilot' : 'Join project'}
+              <div styleName="button-container">
+                <div className="join-btn" onClick={() => onJoin(true)}>
+                  <AddIcon />
+                  <div>
+                    {canJoinAsCopilot ? 'Join project as copilot' : 'Join project'}
+                  </div>
+                </div>
               </div>
             }
           </div>
@@ -216,6 +300,7 @@ class TeamManagement extends React.Component {
           return (
             <TopcoderDialog
               processingInvites={processingInvites}
+              updatingMemberIds={updatingMemberIds}
               error={error}
               currentUser={currentUser}
               members={members}
@@ -431,6 +516,11 @@ TeamManagement.propTypes = {
    * Flag indicates if members API is running
    */
   processingMembers: PropTypes.bool.isRequired,
+
+  /**
+   * List of member ids being updated
+   */
+  updatingMemberIds: PropTypes.arrayOf(PropTypes.number).isRequired,
 
   /**
    * Flag indicates if invite API is running

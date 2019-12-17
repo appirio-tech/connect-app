@@ -219,10 +219,10 @@ export const LOAD_PROJECT_PENDING     = 'LOAD_PROJECT_PENDING'
 export const LOAD_PROJECT_FAILURE     = 'LOAD_PROJECT_FAILURE'
 export const LOAD_PROJECT_SUCCESS     = 'LOAD_PROJECT_SUCCESS'
 
-export const LOAD_PROJECT_MEMBER_INVITES  = 'LOAD_PROJECT_MEMBER_INVITES'
-export const LOAD_PROJECT_MEMBER_INVITES_PENDING  = 'LOAD_PROJECT_MEMBER_INVITES_PENDING'
-export const LOAD_PROJECT_MEMBER_INVITES_FAILURE  = 'LOAD_PROJECT_MEMBER_INVITES_FAILURE'
-export const LOAD_PROJECT_MEMBER_INVITES_SUCCESS  = 'LOAD_PROJECT_MEMBER_INVITES_SUCCESS'
+export const LOAD_PROJECT_MEMBER_INVITE  = 'LOAD_PROJECT_MEMBER_INVITE'
+export const LOAD_PROJECT_MEMBER_INVITE_PENDING  = 'LOAD_PROJECT_MEMBER_INVITE_PENDING'
+export const LOAD_PROJECT_MEMBER_INVITE_FAILURE  = 'LOAD_PROJECT_MEMBER_INVITE_FAILURE'
+export const LOAD_PROJECT_MEMBER_INVITE_SUCCESS  = 'LOAD_PROJECT_MEMBER_INVITE_SUCCESS'
 
 export const CREATE_PROJECT           = 'CREATE_PROJECT'
 export const CREATE_PROJECT_PENDING   = 'CREATE_PROJECT_PENDING'
@@ -386,6 +386,20 @@ export const UPDATE_PROJECT_MEMBER_FAILURE     = 'UPDATE_PROJECT_MEMBER_FAILURE'
 
 export const CLEAR_LOADED_PROJECT     = 'CLEAR_LOADED_PROJECT'
 
+export const LOAD_PROJECT_MEMBERS         = 'LOAD_PROJECT_MEMBERS'
+export const LOAD_PROJECT_MEMBERS_PENDING = 'LOAD_PROJECT_MEMBERS_PENDING'
+export const LOAD_PROJECT_MEMBERS_SUCCESS = 'LOAD_PROJECT_MEMBERS_SUCCESS'
+export const LOAD_PROJECT_MEMBERS_FAILURE = 'LOAD_PROJECT_MEMBERS_FAILURE'
+
+export const LOAD_PROJECT_MEMBER_INVITES         = 'LOAD_PROJECT_MEMBER_INVITES'
+export const LOAD_PROJECT_MEMBER_INVITES_PENDING = 'LOAD_PROJECT_MEMBER_INVITES_PENDING'
+export const LOAD_PROJECT_MEMBER_INVITES_SUCCESS = 'LOAD_PROJECT_MEMBER_INVITES_SUCCESS'
+export const LOAD_PROJECT_MEMBER_INVITES_FAILURE = 'LOAD_PROJECT_MEMBER_INVITES_FAILURE'
+
+export const LOAD_PROJECT_MEMBER         = 'LOAD_PROJECT_MEMBER'
+export const LOAD_PROJECT_MEMBER_PENDING = 'LOAD_PROJECT_MEMBER_PENDING'
+export const LOAD_PROJECT_MEMBER_SUCCESS = 'LOAD_PROJECT_MEMBER_SUCCESS'
+export const LOAD_PROJECT_MEMBER_FAILURE = 'LOAD_PROJECT_MEMBER_FAILURE'
 
 // Project attachments
 export const ADD_PROJECT_ATTACHMENT          = 'ADD_PROJECT_ATTACHMENT'
@@ -566,7 +580,7 @@ export const PHASE_STATUS_CANCELLED = 'cancelled'
 export const PHASE_STATUS_PAUSED = 'paused'
 
 export const PROJECT_STATUS = [
-  {color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
+  // {color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
   {color: 'gray', name: 'In review', fullName: 'Project is in review', value: PROJECT_STATUS_IN_REVIEW, order: 3, dropDownOrder: 2 },
   {color: 'gray', name: 'Reviewed', fullName: 'Project is reviewed', value: PROJECT_STATUS_REVIEWED, order: 4, dropDownOrder: 3 },
   {color: 'green', name: 'Active', fullName: 'Project is active', value: PROJECT_STATUS_ACTIVE, order: 1, dropDownOrder: 4 },
@@ -737,6 +751,8 @@ export const LS_INCOMPLETE_PROJECT_QUERY_PARAMS = 'incompleteProjectQueryParams'
 export const SPECIAL_QUERY_PARAMS = ['returnUrl', 'refCode']
 
 export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
+// for local testing Connect App with Project Service, comment the previous line and uncomment the next one
+// export const PROJECTS_API_URL = 'http://localhost:8001'
 export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL
 
 export const NEW_PROJECT_PATH = '/new-project'

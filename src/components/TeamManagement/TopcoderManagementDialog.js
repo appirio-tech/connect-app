@@ -14,6 +14,7 @@ import {PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PEN
 import PERMISSIONS from '../../config/permissions'
 import {checkPermission} from '../../helpers/permissions'
 import { compareEmail, compareHandles } from '../../helpers/utils'
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
 
 class TopcoderManagementDialog extends React.Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class TopcoderManagementDialog extends React.Component {
       managerType: {},
       showAlreadyMemberError: false,
       errorMessage: null,
+      processingInviteRequestIds: [], // ids of invites for which request is being processed
     }
 
     this.onUserRoleChange = this.onUserRoleChange.bind(this)
@@ -152,8 +154,9 @@ class TopcoderManagementDialog extends React.Component {
   render() {
     const {
       members, currentUser, isMember, removeMember, onCancel, removeInvite, approveOrDecline, topcoderTeamInvites = [],
-      selectedMembers, processingInvites,
+      selectedMembers, processingInvites, updatingMemberIds
     } = this.props
+    const { processingInviteRequestIds } = this.state
     const showRemove = currentUser.isAdmin || (isMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
     const showApproveDecline = currentUser.isAdmin || currentUser.isCopilotManager
     let i = 0
@@ -184,6 +187,7 @@ class TopcoderManagementDialog extends React.Component {
               }
               const userFullName = getFullNameWithFallback(member)
               const role = _.get(_.find(this.roles, r => r.value === member.role), 'title')
+              const isMemberProcessing = _.includes(updatingMemberIds, member.id)
               return (
                 <div
                   key={i}
@@ -192,7 +196,7 @@ class TopcoderManagementDialog extends React.Component {
                   <div className="memer-details">
                     <Avatar
                       userName={userFullName}
-                      avatarUrl={getAvatarResized(_.get(member, 'photoURL'), 40)}
+                      avatarUrl={getAvatarResized(_.get(member, 'photoURL') || '', 40)}
                       size={40}
                     />
                     <div className="member-name">
@@ -226,36 +230,39 @@ class TopcoderManagementDialog extends React.Component {
                       this.onUserRoleChange(member.userId, member.id, type)
                     }
                     return (
-                      <div className="member-role-container">
-                        {types.map((type) => {
-                          const isCopilotDisabled =
-                            type === 'Copilot' &&
-                            type !== currentType &&
-                            !(currentUser.isCopilotManager || currentUser.isAdmin)
+                      <div className={`member-role-container ${isMemberProcessing ? 'is-processing' : ''}`}>
+                        {
+                          isMemberProcessing ? <LoadingIndicator isSmall /> :
+                            types.map((type) => {
+                              const isCopilotDisabled =
+                                type === 'Copilot' &&
+                                type !== currentType &&
+                                !(currentUser.isCopilotManager || currentUser.isAdmin)
 
-                          return (
-                            isCopilotDisabled ? (
-                              <Tooltip theme="light" key={type}>
-                                <div className="tooltip-target">
-                                  <div className="member-role disabled">
+                              return (
+                                isCopilotDisabled ? (
+                                  <Tooltip theme="light" key={type}>
+                                    <div className="tooltip-target">
+                                      <div className="member-role disabled">
+                                        {type}
+                                      </div>
+                                    </div>
+                                    <div className="tooltip-body">
+                                      {'Only Connect Copilot Managers can change member role to copilots.'}
+                                    </div>
+                                  </Tooltip>
+                                ) : (
+                                  <div
+                                    key={type}
+                                    onClick={() => onClick(type)}
+                                    className={cn('member-role', { active: type === currentType })}
+                                  >
                                     {type}
                                   </div>
-                                </div>
-                                <div className="tooltip-body">
-                                  {'Only Connect Copilot Managers can change member role to copilots.'}
-                                </div>
-                              </Tooltip>
-                            ) : (
-                              <div
-                                key={type}
-                                onClick={() => onClick(type)}
-                                className={cn('member-role', { active: type === currentType })}
-                              >
-                                {type}
-                              </div>
-                            )
-                          )
-                        })}
+                                )
+                              )
+                            })
+                        }
                       </div>
                     )
                   })()}
@@ -267,18 +274,24 @@ class TopcoderManagementDialog extends React.Component {
                 removeInvite(invite)
               }
               const approve = () => {
+                this.setState(prevState => ({ processingInviteRequestIds: [ ...prevState.processingInviteRequestIds, invite.id ] }))
                 approveOrDecline({
                   userId: invite.userId,
                   status: 'request_approved'
+                }).then(() => {
+                  this.setState(prevState => ({ processingInviteRequestIds: _.xor(prevState.processingInviteRequestIds, [invite.id]) }))
                 })
               }
               const decline = () => {
+                this.setState(prevState => ({ processingInviteRequestIds: [ ...prevState.processingInviteRequestIds, invite.id ] }))
                 approveOrDecline({
                   userId: invite.userId,
                   status: 'request_rejected'
+                }).then(() => {
+                  this.setState(prevState => ({ processingInviteRequestIds: _.xor(prevState.processingInviteRequestIds, [invite.id]) }))
                 })
               }
-              const userFullName = getFullNameWithFallback(invite.member)
+              const userFullName = getFullNameWithFallback(invite)
               i++
               return (
                 <div
@@ -287,21 +300,25 @@ class TopcoderManagementDialog extends React.Component {
                 >
                   <Avatar
                     userName={userFullName}
-                    avatarUrl={getAvatarResized(_.get(invite.member, 'photoURL'), 40)}
+                    avatarUrl={getAvatarResized(_.get(invite, 'photoURL') || '', 40)}
                     size={40}
                   />
                   <div className="member-name">
                     <span className="span-name">{userFullName}</span>
                     <span className="member-handle">
-                      @{invite.member.handle || 'ConnectUser'}
+                      @{invite.handle || 'ConnectUser'}
                     </span>
                   </div>
 
                   {
                     invite.status===PROJECT_MEMBER_INVITE_STATUS_REQUESTED && showApproveDecline &&
                     <div className="member-remove">
-                      <span onClick={approve}>approve</span>
-                      <span onClick={decline}>decline</span>
+                      {!_.includes(processingInviteRequestIds, invite.id) ? ([
+                        <span onClick={approve} key="approve">approve</span>,
+                        <span onClick={decline} key="decline">decline</span>
+                      ]) : (
+                        <LoadingIndicator isSmall />
+                      )}
                       <span className="email-date">
                         Requested {moment(invite.createdAt).format('MMM D, YY')}
                       </span>

@@ -13,6 +13,7 @@ import FillProjectDetails from './FillProjectDetails'
 import ProjectSubmitted from './ProjectSubmitted'
 
 import update from 'react-addons-update'
+
 import {
   LS_INCOMPLETE_PROJECT,
   LS_INCOMPLETE_WIZARD,
@@ -338,12 +339,53 @@ class ProjectWizard extends Component {
   }
 
   updateProjectTemplate(projectTemplate) {
+
+    const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
+    const newProject = {}
+    // if we started filling some form and now we are switching template
+    // we are clearing all form data and wizard state, except for 3 for fields: name, description and ref code
+    if (incompleteProjectStr) {
+      const incompleteProject = JSON.parse(incompleteProjectStr)
+      const incompleteProjectTemplateId = _.get(incompleteProject, 'templateId')
+
+      if (projectTemplate.id !== incompleteProjectTemplateId) {
+        window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
+        window.localStorage.removeItem(LS_INCOMPLETE_WIZARD)
+
+        // usually, we only save form data to localstorage when user changed at least something in the form
+        // in case we are switching Project Template we are saving form data to localstorage anyway
+        // without waiting for user to change anything, as we already keep some fields which we treat as changes
+        if (projectTemplate) {
+          const keepData = {}
+
+          // keep some project fields
+          _.set(keepData, 'name', _.get(incompleteProject, 'name'))
+          _.set(keepData, 'description', _.get(incompleteProject, 'description'))
+          _.set(keepData, 'details.utm.code', _.get(incompleteProject, 'details.utm.code'))
+
+          // keep chosen project type and template id
+          _.set(keepData, 'type', projectTemplate.category)
+          _.set(keepData, 'templateId', projectTemplate.id)
+
+          window.localStorage.setItem(LS_INCOMPLETE_PROJECT, JSON.stringify(keepData))
+        }
+
+        // keep some form fields values
+        newProject.name = { $set:_.get(incompleteProject, 'name') }
+        newProject.description = { $set:_.get(incompleteProject, 'description') }
+        newProject.details = { $set: { utm: { code:_.get(incompleteProject, 'details.utm.code') } } }
+      }
+    }
     window.scrollTo(0, 0)
     const { onStepChange, onProjectUpdate } = this.props
     const updateQuery = {}
     if (projectTemplate) {
       updateQuery.type = { $set : projectTemplate.category }
       updateQuery.templateId = { $set: projectTemplate.id }
+    }
+    // merge project fields
+    if(_.keys(newProject).length) {
+      _.assign(updateQuery, newProject)
     }
     this.setState({
       project: update(this.state.project, updateQuery),

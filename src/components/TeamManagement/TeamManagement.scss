@@ -228,6 +228,9 @@
           }
 
           .member-remove {
+            align-items: center;
+            display: flex;
+            justify-items: flex-end;
             @include roboto;
             color: $tc-dark-blue;
             font-size: $tc-label-sm;
@@ -256,6 +259,14 @@
             border: 1px solid $tc-gray-40;
             background: white;
             min-width: 300px;
+
+            &.is-processing {
+              justify-content: center;
+              align-items: center;
+              height: 36px;
+              border: 0;
+              background: transparent;
+            }
 
             .Tooltip {
               align-items: center;
@@ -445,10 +456,7 @@
         margin: $base-unit 0;
         display: flex;
         flex-wrap: wrap;
-      }
-
-      .Tooltip {
-        margin: $base-unit * 2 $base-unit * 2 $base-unit $base-unit;
+        flex-direction: column;
       }
     }
   }
@@ -512,6 +520,10 @@
     }
   }
 
+}
+
+.button-container{
+  display: inline-flex;
 }
 
 .separator {

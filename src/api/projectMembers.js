@@ -51,7 +51,9 @@ export function addProjectMember(projectId, newMember) {
 
 
 export function updateProjectMember(projectId, memberId, updatedProps) {
-  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/${memberId}/`
+  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
+  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/${memberId}/?fields=`
+    + encodeURIComponent(fields)
   return axios.patch(url, { param: updatedProps })
     .then(resp => {
       return resp.data.result.content
@@ -64,5 +66,25 @@ export function removeProjectMember(projectId, memberId) {
     .then(() => {
       // return the member id just removed
       return memberId
+    })
+}
+
+export function getProjectMembers(projectId) {
+  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
+  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/?fields=`
+    + encodeURIComponent(fields)
+  return axios.get(url)
+    .then( resp => {
+      return resp.data.result.content
+    })
+}
+
+export function getProjectMember(projectId, memberId) {
+  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
+  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/${memberId}?fields=`
+    + encodeURIComponent(fields)
+  return axios.get(url)
+    .then( resp => {
+      return resp.data.result.content
     })
 }

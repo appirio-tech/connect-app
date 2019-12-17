@@ -553,9 +553,9 @@ class MetaDataPanel extends React.Component {
         .then((res) => {
           if (!res.error) {
             if (metadataWithVersion && this.props.routerParams.version) {
-              this.props.getProjectMetadataWithVersion(metadataResource, payload.key, payload.version)
+              this.setState({ metadata: res.action.payload.versionMetadata })
             } else{
-              this.props.loadProjectsMetadata()
+              this.setState({ metadata: res.action.payload.metadata })
             }
           }
         })

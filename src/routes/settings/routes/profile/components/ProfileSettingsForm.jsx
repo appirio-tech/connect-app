@@ -5,6 +5,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 import PhoneInput from 'appirio-tech-react-components/components/Formsy/PhoneInput'
+import TimezoneInput from 'appirio-tech-react-components/components/Formsy/TimezoneInput'
+import WorkingHoursSelection from 'appirio-tech-react-components/components/Formsy/WorkingHoursSelection'
 const TCFormFields = FormsyForm.Fields
 const Formsy = FormsyForm.Formsy
 import ProfileSettingsAvatar from './ProfileSettingsAvatar'
@@ -127,16 +129,11 @@ class ProfileSettingsForm extends Component {
   }
 
   onSubmit(data) {
-    // hardcoding company size for now as it's required in the backend
-    const defaultValues = {
-      companySize: '16-50'
-    }
     // we have to use initial data as a base for updated data
     // as form could update not all fields, thus they won't be included in `data`
     // for example user avatar is not included in `data` thus will be removed if don't use
     // this.props.values.settings as a base
     const updatedData = {
-      ...defaultValues,
       ...this.props.values.settings,
       ...data,
     }
@@ -164,6 +161,8 @@ class ProfileSettingsForm extends Component {
 
   render() {
     const { isCopilot, isCustomer, isManager } = this.props
+
+    const disablePhoneInput = this.props.values.settings.businessPhone && isCopilot && !isManager
     return (
       <Formsy.Form
         className="profile-settings-form"
@@ -200,13 +199,13 @@ class ProfileSettingsForm extends Component {
               type="phone"
               validationError="Invalid business phone"
               showCheckMark
-              required
               listCountry={ISOCountries}
+              required
               forceCountry={this.state.countrySelected}
-              value={this.props.values.settings.businessPhone}
+              value={this.props.values.settings.businessPhone ? this.props.values.settings.businessPhone : ''}
               onChangeCountry={this.onBusinessPhoneCountryChange}
               onOutsideClick={this.hideBusinessPhoneAlert}
-              disabled={isCopilot && !isManager}
+              disabled={disablePhoneInput}
             />
             {
               this.state.businessPhoneDirty &&
@@ -214,7 +213,7 @@ class ProfileSettingsForm extends Component {
             }
           </div>
         </div>
-        {this.getField('Company name', 'companyName', true, (isCustomer || isCopilot) && !isManager)}
+        {this.getField('Company name', 'companyName', true, this.props.values.settings.companyName && (isCustomer || isCopilot) && !isManager)}
         <div className="field">
           <div className="label">
             <span styleName="fieldLabelText">Country</span>
@@ -235,6 +234,47 @@ class ProfileSettingsForm extends Component {
               this.state.countrySelectionDirty &&
               <div styleName="warningText">Note: Changing the country also updates the country code of business phone.</div>
             }
+          </div>
+        </div>
+        <div className="field">
+          <div className="label">
+            <span styleName="fieldLabelText">Local Timezone</span>&nbsp;
+            <sup styleName="requiredMarker">*</sup>
+          </div>
+          <div className="input-field">
+            <TimezoneInput
+              render={
+                (timezoneOptions, filterFn) => (
+                  <FormsySelect
+                    setValueOnly
+                    filterOption={(option, searchText) => filterFn(option.data, searchText)}
+                    value={this.props.values.settings.timeZone || ''}
+                    name="timeZone" options={timezoneOptions}
+                  />
+                )
+              }
+            />
+          </div>
+        </div>
+        <div className="field">
+          <div className="label">
+            <span styleName="fieldLabelText">Normal Working Hours</span>
+          </div>
+          <div className="input-field">
+            <WorkingHoursSelection
+              startHourLabel="Start Time"
+              endHourLabel="End Time"
+              startHourName="workingHourStart"
+              endHourName="workingHourEnd"
+              startHourValue={this.props.values.settings.workingHourStart || ''}
+              endHourValue={this.props.values.settings.workingHourEnd || ''}
+              wrapperClass={'input-container'}
+
+              // react-select package in react-components is old and not compatible with connect-app.
+              // So, passing the FormsySelect component that uses newer version of react-select
+              selectElement={FormsySelect}
+              selectElementProps={{setValueOnly: true}}
+            />
           </div>
         </div>
         <div className="controls">

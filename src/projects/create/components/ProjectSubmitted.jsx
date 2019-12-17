@@ -25,18 +25,18 @@ class ProjectSubmitted extends React.Component {
     document.execCommand('copy')
     textField.remove()
   }
-  
+
   render() {
     return (
       <div className="ProjectSubmitted flex column middle center tc-ui">
         <div className="container flex column middle center">
-          <div className="title">Good job!</div>
+          <div className="title">Congratulations!</div>
           <div className="sub-title">Your project has been submitted</div>
           <div className="content">
-            A member of our team will be reaching out to you shortly to continue building your project plan.
+            A member of our team will be reaching out to you shortly to finalize the scope and build your project plan.
             <br />
             <br />
-            Here is your Topcoder project link if you want to share it with members of your team, or directly log in to your Topcoder project dashboard.
+            Use the link below to share your project with members of your team. You can also access all your Topcoder projects in one place from your Connect project dashboard.
           </div>
           <div className="project-link-container flex row middle center">
             { `${this.state.domain}${this.state.url}` }

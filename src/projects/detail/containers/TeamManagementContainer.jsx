@@ -127,7 +127,7 @@ class TeamManagementContainer extends Component {
   }
 
   anontateMemberProps() {
-    const {members, allMembers} = this.props
+    const {members} = this.props
     // fill project members from state.members object
     return _.map(members, m => {
       if (!m.userId && !m.role) return m
@@ -147,17 +147,7 @@ class TeamManagementContainer extends Component {
       ].includes(m.role)) {
         m.isManager = true
       }
-      return _.assign({}, m, {
-        photoURL: ''
-      },
-      _.find(allMembers, mem => mem.userId === m.userId))
-    })
-  }
-
-  annotateInvites(invites, members) {
-    return _.map(invites, i => {
-      i.member = _.find(members, m => m.userId === i.userId)
-      return i
+      return m
     })
   }
 
@@ -194,8 +184,7 @@ class TeamManagementContainer extends Component {
 
   render() {
     const projectMembers = this.anontateMemberProps()
-    const projectTeamInvites = this.annotateInvites(this.props.projectTeamInvites, this.props.allMembers)
-    const topcoderTeamInvites = this.annotateInvites(this.props.topcoderTeamInvites, this.props.allMembers)
+    const {projectTeamInvites, topcoderTeamInvites } = this.props
     return (
       <div>
         <TeamManagement
@@ -203,6 +192,7 @@ class TeamManagementContainer extends Component {
           history={this.props.history}
           onUserInviteAction={this.onUserInviteAction}
           processingMembers={this.props.processingMembers}
+          updatingMemberIds={this.props.updatingMemberIds}
           processingInvites={this.props.processingInvites}
           error={this.props.error}
           currentUser={this.props.currentUser}
@@ -246,6 +236,7 @@ const mapStateToProps = ({loadUser, members, projectState}) => {
     allMembers: _.values(members.members),
     processingInvites: projectState.processingInvites,
     processingMembers: projectState.processingMembers,
+    updatingMemberIds: projectState.updatingMemberIds,
     error: projectState.error,
     topcoderTeamInvites: _.filter(projectState.project.invites, i => i.role !== 'customer'),
     projectTeamInvites: _.filter(projectState.project.invites, i => i.role === 'customer')
@@ -277,6 +268,7 @@ TeamManagementContainer.propTypes = {
   allMembers: PropTypes.arrayOf(PropTypes.object).isRequired,
   projectId: PropTypes.number.isRequired,
   processingMembers: PropTypes.bool.isRequired,
+  updatingMemberIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   processingInvites: PropTypes.bool.isRequired,
   error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   projectTeamInvites: PropTypes.arrayOf(PropTypes.object),
