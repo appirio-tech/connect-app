@@ -6,34 +6,26 @@ export function getProjects(criteria, pageNum) {
   // add default params
   const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', 'details', 'lastActivityAt', 'lastActivityUserId', 'version', 'templateId']
   const params = {
-    limit: PROJECTS_LIST_PER_PAGE,
-    offset: (pageNum - 1) * PROJECTS_LIST_PER_PAGE,
-    fields: includeFields.join(',')
+    fields: includeFields.join(','),
+    sort: 'updatedAt+desc', // default sort value
+    perPage: PROJECTS_LIST_PER_PAGE,
+    page: pageNum,
+    ...criteria,
   }
   // filters
   const filter = _.omit(criteria, ['sort'])
   if (!_.isEmpty(filter)) {
     // support for multiple comma separated types
     if (filter.type && filter.type.indexOf(',') > -1) {
-      filter.type = `in(${filter.type})`
+      params.type = `in(${filter.type})`
     }
-    // support for multiple comma separated segments
-    if (filter.segment && filter.segment.indexOf(',') > -1) {
-      filter.segment = `in(${filter.segment})`
-    }
-    // convert filter object to string
-    const filterStr = _.map(filter, (v, k) => `${k}=${encodeURIComponent(v)}`)
-    params.filter = filterStr.join('&')
   }
-  // sort fields
-  const sort = _.get(criteria, 'sort', null)
-  if (sort) params.sort = sort
 
-  return axios.get(`${PROJECTS_API_URL}/v4/projects/`, { params })
+  return axios.get(`${PROJECTS_API_URL}/v5/projects/`, { params })
     .then( resp => {
       return {
-        totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
-        projects: _.get(resp.data, 'result.content', [])
+        totalCount: parseInt(_.get(resp.headers, 'x-total', 0)),
+        projects: resp.data,
       }
     })
 }
@@ -50,9 +42,9 @@ export function getProjectSuggestions() {
  */
 export function getProjectById(projectId) {
   projectId = parseInt(projectId)
-  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/`)
+  return axios.get(`${PROJECTS_API_URL}/v5/projects/${projectId}/`)
     .then(resp => {
-      const res = _.get(resp.data, 'result.content', {})
+      const res = resp.data
       _.forEach(res.attachments, a => {
         a.downloadUrl = `/projects/${projectId}/attachments/${a.id}`
       })
@@ -72,8 +64,8 @@ export function getProjectById(projectId) {
 export function getProjectPhases(projectId, query = {}) {
   const params = _.mapValues(query, (param) => encodeURIComponent(param))
 
-  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases`, { params })
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.get(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases`, { params })
+    .then(resp => resp.data)
 }
 
 /**
@@ -85,11 +77,8 @@ export function getProjectPhases(projectId, query = {}) {
  * @return {Promise} resolves to project phase products
  */
 export function getPhaseProducts(projectId, phaseId) {
-  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}/products`)
-    .then(resp => {
-      const res = _.get(resp.data, 'result.content', {})
-      return res
-    })
+  return axios.get(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}/products`)
+    .then(resp => resp.data)
 }
 
 /**
@@ -100,9 +89,9 @@ export function getPhaseProducts(projectId, phaseId) {
  * @return {promise}              updated project
  */
 export function updateProject(projectId, updatedProps, updateExisting) {
-  return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
+  return axios.patch(`${PROJECTS_API_URL}/v5/projects/${projectId}/`, updatedProps)
     .then(resp => {
-      return _.extend(_.get(resp.data, 'result.content'), { updateExisting })
+      return _.extend(resp.data, { updateExisting })
     })
 }
 
@@ -113,10 +102,8 @@ export function updateProject(projectId, updatedProps, updateExisting) {
  * @return {promise}              created scope change request
  */
 export function createScopeChangeRequest(projectId, request) {
-  return axios.post(`${PROJECTS_API_URL}/v4/projects/${projectId}/scopeChangeRequests`, { param: request })
-    .then(resp => {
-      return _.get(resp.data, 'result.content')
-    })
+  return axios.post(`${PROJECTS_API_URL}/v5/projects/${projectId}/scopeChangeRequests`, request)
+    .then(resp => resp.data)
 }/**
  * Create scope change request for the given project with the given details
  * @param  {integer} projectId    project Id
@@ -125,10 +112,8 @@ export function createScopeChangeRequest(projectId, request) {
  * @return {promise}              updated request
  */
 export function updateScopeChangeRequest(projectId, requestId, updatedProps) {
-  return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/scopeChangeRequests/${requestId}`, { param: updatedProps })
-    .then(resp => {
-      return _.get(resp.data, 'result.content')
-    })
+  return axios.patch(`${PROJECTS_API_URL}/v5/projects/${projectId}/scopeChangeRequests/${requestId}`, updatedProps)
+    .then(resp => resp.data)
 }
 
 /**
@@ -140,9 +125,9 @@ export function updateScopeChangeRequest(projectId, requestId, updatedProps) {
  * @return {promise}              updated phase
  */
 export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
-  return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}`, { param: updatedProps })
+  return axios.patch(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}`, updatedProps)
     .then(resp => {
-      return _.extend(_.get(resp.data, 'result.content'), {phaseIndex})
+      return _.extend(resp.data, {phaseIndex})
     })
 }
 
@@ -157,12 +142,8 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
  * @return {Promise}             updated product
  */
 export function updateProduct(projectId, phaseId, productId, updatedProps) {
-  return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}/products/${productId}`, {
-    param: updatedProps,
-  })
-    .then(resp => {
-      return _.get(resp.data, 'result.content')
-    })
+  return axios.patch(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}/products/${productId}`, updatedProps)
+    .then(resp => resp.data)
 }
 
 
@@ -172,10 +153,8 @@ export function createProject(projectProps) {
   // have the discussions tab enabled
   projectProps.details.hideDiscussions = true
 
-  return axios.post(`${PROJECTS_API_URL}/v4/projects/`, { param: projectProps })
-    .then( resp => {
-      return _.get(resp.data, 'result.content', {})
-    })
+  return axios.post(`${PROJECTS_API_URL}/v5/projects/`, projectProps)
+    .then( resp => resp.data)
 }
 
 /**
@@ -187,10 +166,8 @@ export function createProject(projectProps) {
  * @return {Promise} resolves to new phase
  */
 export function createProjectPhase(projectId, phase) {
-  return axios.post(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases`, { param: phase })
-    .then( resp => {
-      return _.get(resp.data, 'result.content', {})
-    })
+  return axios.post(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases`, phase)
+    .then( resp => resp.data)
 }
 
 /**
@@ -203,10 +180,8 @@ export function createProjectPhase(projectId, phase) {
  * @return {Promise} resolves to new product
  */
 export function createPhaseProduct(projectId, phaseId, product) {
-  return axios.post(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}/products`, { param: product })
-    .then( resp => {
-      return _.get(resp.data, 'result.content', {})
-    })
+  return axios.post(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}/products`, product)
+    .then( resp => resp.data)
 }
 
 export function createProjectWithStatus(projectProps, status) {
@@ -215,17 +190,13 @@ export function createProjectWithStatus(projectProps, status) {
   // have the discussions tab enabled
   projectProps.details.hideDiscussions = true
 
-  return axios.post(`${PROJECTS_API_URL}/v4/projects/`, { param: projectProps })
-    .then( resp => {
-      return _.get(resp.data, 'result.content', {})
-    })
+  return axios.post(`${PROJECTS_API_URL}/v5/projects/`, projectProps)
+    .then( resp => resp.data)
     .then(project => {
       const updatedProps = { status }
       const projectId = project.id
-      return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
-        .then(resp => {
-          return _.get(resp.data, 'result.content')
-        })
+      return axios.patch(`${PROJECTS_API_URL}/v5/projects/${projectId}/`, updatedProps)
+        .then(resp => resp.data)
         .catch(error => { // eslint-disable-line no-unused-vars
           // return created project even if status update fails to prevent error page
           return project
@@ -234,7 +205,7 @@ export function createProjectWithStatus(projectProps, status) {
 }
 
 export function deleteProject(projectId) {
-  return axios.delete(`${PROJECTS_API_URL}/v4/projects/${projectId}/`)
+  return axios.delete(`${PROJECTS_API_URL}/v5/projects/${projectId}/`)
     .then(() => {
       return projectId
     })
@@ -248,6 +219,6 @@ export function getDirectProjectData(directProjectId) {
 }
 
 export function deleteProjectPhase(projectId, phaseId) {
-  return axios.delete(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}`)
+  return axios.delete(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}`)
     .then(() => ({ projectId, phaseId }))
 }

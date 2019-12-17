@@ -42,26 +42,24 @@ export function loadMemberSuggestions(value) {
 
 
 export function addProjectMember(projectId, newMember) {
-  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/`
-  return axios.post(url, { param: newMember})
-    .then(resp => {
-      return resp.data.result.content
-    })
+  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/`
+  return axios.post(url, newMember)
+    .then(resp => resp.data)
 }
 
 
 export function updateProjectMember(projectId, memberId, updatedProps) {
   const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
-  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/${memberId}/?fields=`
+  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/${memberId}/?fields=`
     + encodeURIComponent(fields)
-  return axios.patch(url, { param: updatedProps })
+  return axios.patch(url, updatedProps)
     .then(resp => {
-      return resp.data.result.content
+      return resp.data
     })
 }
 
 export function removeProjectMember(projectId, memberId) {
-  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/${memberId}/`
+  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/${memberId}/`
   return axios.delete(url)
     .then(() => {
       // return the member id just removed
@@ -71,20 +69,20 @@ export function removeProjectMember(projectId, memberId) {
 
 export function getProjectMembers(projectId) {
   const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
-  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/?fields=`
+  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/?fields=`
     + encodeURIComponent(fields)
   return axios.get(url)
     .then( resp => {
-      return resp.data.result.content
+      return resp.data
     })
 }
 
 export function getProjectMember(projectId, memberId) {
   const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
-  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/${memberId}?fields=`
+  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/${memberId}?fields=`
     + encodeURIComponent(fields)
   return axios.get(url)
     .then( resp => {
-      return resp.data.result.content
+      return resp.data
     })
 }

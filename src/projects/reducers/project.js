@@ -20,7 +20,7 @@ import {
   INVITE_TOPCODER_MEMBER_SUCCESS, REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS, INVITE_TOPCODER_MEMBER_PENDING, REMOVE_CUSTOMER_INVITE_PENDING,
   REMOVE_TOPCODER_MEMBER_INVITE_PENDING, REMOVE_TOPCODER_MEMBER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_FAILURE,
   INVITE_CUSTOMER_FAILURE, INVITE_TOPCODER_MEMBER_FAILURE, INVITE_CUSTOMER_PENDING,
-  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, RELOAD_PROJECT_MEMBERS_SUCCESS,
+  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING,
   UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION,
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS, APPROVE_SCOPE_CHANGE_SUCCESS, REJECT_SCOPE_CHANGE_SUCCESS, CANCEL_SCOPE_CHANGE_SUCCESS, ACTIVATE_SCOPE_CHANGE_SUCCESS,
   LOAD_PROJECT_MEMBERS_SUCCESS, LOAD_PROJECT_MEMBER_INVITES_SUCCESS, LOAD_PROJECT_MEMBER_SUCCESS
@@ -193,7 +193,14 @@ export const projectState = function (state=initialState, action) {
   case LOAD_PROJECT_SUCCESS:
     return Object.assign({}, state, {
       isLoading: false,
-      project: action.payload,
+      project: {
+        // if these arrays are not returned we should init them with empty arrays
+        // as later code counts on this
+        attachments: [],
+        members: [],
+        invites: [],
+        ...action.payload
+      },
       projectNonDirty: _.cloneDeep(action.payload),
       lastUpdated: new Date()
     })
@@ -265,21 +272,6 @@ export const projectState = function (state=initialState, action) {
       projectNonDirty: {
         ...state.projectNonDirty,
         members: updatedMembers
-      }
-    })
-  }
-
-  case RELOAD_PROJECT_MEMBERS_SUCCESS: {
-    return Object.assign({}, state, {
-      project:{
-        ...state.project,
-        members: action.payload.members,
-        invites: action.payload.invites,
-      },
-      projectNonDirty: {
-        ...state.projectNonDirty,
-        members: action.payload.members,
-        invites: action.payload.invites,
       }
     })
   }
@@ -481,7 +473,14 @@ export const projectState = function (state=initialState, action) {
     // after updating project they will be lost, so here we restore them
     // TODO better don't add additional values to `project` object and keep additional values separately
     const restoredProject = {
+      // if these arrays are not returned we should init them with empty arrays
+      // as later code counts on this
+      attachments: [],
+      members: [],
+
       ...action.payload,
+
+      // restore data which we put into `project` object using other reducers
       budget: _.cloneDeep(state.project.budget),
       duration: _.cloneDeep(state.project.duration),
       invites: _.cloneDeep(state.project.invites),

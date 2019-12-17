@@ -276,6 +276,10 @@ export default function(state = {}, action) {
         Alert.error(rdata.result.content.message)
         return state
       }
+      if (rdata && rdata.message) {
+        Alert.error(rdata.message)
+        return state
+      }
       if (action.payload.response.statusText) {
         Alert.error(action.payload.response.statusText)
         return state

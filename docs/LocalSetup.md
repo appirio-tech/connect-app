@@ -35,7 +35,7 @@ psql messages coder -h local.topcoder-dev.com
 And execute the following statement:
 
 ```sql
-INSERT INTO "referenceLookups" (reference, endpoint, "createdAt", "updatedAt") VALUES ('project', 'https://api.topcoder-dev.com/v4/projects/{id}', now(), now());
+INSERT INTO "referenceLookups" (reference, endpoint, "createdAt", "updatedAt") VALUES ('project', 'https://api.topcoder-dev.com/v5/projects/{id}', now(), now());
 ```
 
 

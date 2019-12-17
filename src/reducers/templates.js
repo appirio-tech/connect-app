@@ -161,13 +161,13 @@ export default function(state = initialState, action) {
   case CREATE_FORM_FAILURE:
   case CREATE_PLAN_CONFIG_FAILURE:
   case CREATE_PRICE_CONFIG_FAILURE:
-    Alert.error(`PROJECT METADATA CREATE FAILED: ${action.payload.response.data.result.content.message}`)
+    Alert.error(`PROJECT METADATA CREATE FAILED: ${action.payload.response.data.message}`)
     return {
       ...state,
       isLoading: false
     }
   case UPDATE_PROJECTS_METADATA_FAILURE:
-    Alert.error(`PROJECT METADATA UPDATE FAILED: ${action.payload.response.data.result.content.message}`)
+    Alert.error(`PROJECT METADATA UPDATE FAILED: ${action.payload.response.data.message}`)
     return {
       ...state,
       isLoading: false
@@ -177,7 +177,7 @@ export default function(state = initialState, action) {
   case REMOVE_PROJECT_TYPE_FAILURE:
   case REMOVE_PROJECT_TEMPLATE_FAILURE:
   case REMOVE_PRODUCT_TEMPLATE_FAILURE:
-    Alert.error(`PROJECT METADATA DELETE FAILED: ${action.payload.response.data.result.content.message}`)
+    Alert.error(`PROJECT METADATA DELETE FAILED: ${action.payload.response.data.message}`)
     return {
       ...state,
       isRemoving: false

@@ -364,11 +364,6 @@ export const ACCEPT_OR_REFUSE_INVITE_PENDING = 'ACCEPT_OR_REFUSE_INVITE_PENDING'
 export const ACCEPT_OR_REFUSE_INVITE_FAILURE = 'ACCEPT_OR_REFUSE_INVITE_FAILURE'
 export const ACCEPT_OR_REFUSE_INVITE_SUCCESS = 'ACCEPT_OR_REFUSE_INVITE_SUCCESS'
 
-export const RELOAD_PROJECT_MEMBERS       = 'RELOAD_PROJECT_MEMBERS'
-export const RELOAD_PROJECT_MEMBERS_PENDING       = 'RELOAD_PROJECT_MEMBERS_PENDING'
-export const RELOAD_PROJECT_MEMBERS_FAILURE       = 'RELOAD_PROJECT_MEMBERS_FAILURE'
-export const RELOAD_PROJECT_MEMBERS_SUCCESS       = 'RELOAD_PROJECT_MEMBERS_SUCCESS'
-
 export const ADD_PROJECT_MEMBERS         = 'ADD_PROJECT_MEMBERS'
 export const ADD_PROJECT_MEMBERS_PENDING = 'ADD_PROJECT_MEMBERS_PENDING'
 export const ADD_PROJECT_MEMBERS_SUCCESS = 'ADD_PROJECT_MEMBERS_SUCCESS'
@@ -883,6 +878,9 @@ export const MIN_WINNER_DESIGNS = 3
 
 // default additional desgin cost to select during final-designs milestone
 export const DEFAULT_ADDITIONAL_DESIGN_COST = 100
+
+// the delay in milliseconds we are giving to ElasticSearch of Project Service to reindex changes
+export const ES_REINDEX_DELAY = 5000
 
 // project_catalog_url organization configuration name
 export const PROJECT_CATALOG_URL = 'project_catalog_url'

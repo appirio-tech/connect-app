@@ -121,6 +121,11 @@ class ProjectDetail extends Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      isCallingInviteAction: false,
+      isUserAcceptedInvitation: false,
+    }
+
     this.onUserInviteAction = this.onUserInviteAction.bind(this)
     this.shouldForceCallAcceptRefuseRequest = this.shouldForceCallAcceptRefuseRequest.bind(this)
   }
@@ -182,34 +187,38 @@ class ProjectDetail extends Component {
     return role
   }
 
-  onUserInviteAction(isJoining) {
-    if (this.isCallingInviteAction) {
+  onUserInviteAction(isUserAcceptedInvitation) {
+    if (this.state.isCallingInviteAction) {
       return
     }
     const { acceptOrRefuseInvite, acceptOrRefuseInviteFail } = this.props
-    this.isCallingInviteAction = true
+    this.setState({
+      isCallingInviteAction: true,
+      isUserAcceptedInvitation,
+    })
     acceptOrRefuseInvite(this.props.match.params.projectId, {
       userId: this.props.currentUserId,
       email: this.props.currentUserEmail,
-      status: isJoining ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
-    }).then(() => {
-      this.isCallingInviteAction = false
-      if(!isJoining) {
-        // navigate to project listing and reload projects
-        this.props.loadProjects({ sort: 'updatedAt desc' })
-        this.props.history.push('/projects/')
-      } else {
-        if (this.shouldForceCallAcceptRefuseRequest(this.props)) {
-          // remove query param
-          this.props.history.replace(`/projects/${this.props.match.params.projectId}`)
-        }
-        this.props.loadProjectDashboard(this.props.match.params.projectId)
-      }
-    }).catch(err => {
-      this.isCallingInviteAction = false
-      // show code bot error if invite fail
-      acceptOrRefuseInviteFail(err)
+      status: isUserAcceptedInvitation ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
     })
+      .then(() => {
+        this.setState({ isCallingInviteAction: false })
+        if(!isUserAcceptedInvitation) {
+        // navigate to project listing and reload projects
+          this.props.loadProjects({ sort: 'updatedAt desc' })
+          this.props.history.push('/projects/')
+        } else {
+          if (this.shouldForceCallAcceptRefuseRequest(this.props)) {
+          // remove query param
+            this.props.history.replace(`/projects/${this.props.match.params.projectId}`)
+          }
+          this.props.loadProjectDashboard(this.props.match.params.projectId)
+        }
+      }).catch(err => {
+        this.setState({ isCallingInviteAction: false })
+        // show code bot error if invite fail
+        acceptOrRefuseInviteFail(err)
+      })
   }
 
   /**
@@ -225,6 +234,7 @@ class ProjectDetail extends Component {
 
   render() {
     const { error } = this.props
+    const { isCallingInviteAction, isUserAcceptedInvitation } = this.state
     const currentMemberRole = this.getProjectRoleForCurrentUser(this.props)
     const adminRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
     const isSuperUser = this.props.currentUserRoles.some((role) => adminRoles.indexOf(role) !== -1)
@@ -252,9 +262,11 @@ class ProjectDetail extends Component {
           onCancel={() => this.onUserInviteAction(false)}
           onConfirm={() => this.onUserInviteAction(true)}
           title={JOIN_INVITE_TITLE}
+          loadingTitle={isUserAcceptedInvitation ? 'Adding you to the project....' : 'Declining invitation...'}
           content={JOIN_INVITE_MESSAGE}
           buttonText="Join project"
           buttonColor="blue"
+          isLoading={isCallingInviteAction}
         />
     )
   }

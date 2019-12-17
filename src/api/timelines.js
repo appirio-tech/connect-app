@@ -1,9 +1,8 @@
 /**
  * Timelines and milestones API
  */
-import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
-import { TC_API_URL } from '../config/constants'
+import { PROJECTS_API_URL } from '../config/constants'
 
 /**
  * Get timeline by reference
@@ -11,10 +10,8 @@ import { TC_API_URL } from '../config/constants'
  * @return {Promise<[]>} list of timelines
  */
 export function getTimelinesByReference(reference, referenceId) {
-  const filterQuery = encodeURIComponent(`reference=${reference}&referenceId=${referenceId}`)
-
-  return axios.get(`${TC_API_URL}/v4/timelines?filter=${filterQuery}`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.get(`${PROJECTS_API_URL}/v5/timelines?reference=${reference}&referenceId=${referenceId}`)
+    .then(resp => resp.data)
 }
 
 /**
@@ -23,9 +20,23 @@ export function getTimelinesByReference(reference, referenceId) {
  * @return {Promise} one timeline
  */
 export function getTimelineById(id) {
+  /*
+     As a temporary fix we use `db=true` param which force Project Service to
+     return the data from DB.
+     This is done as a workaround for the cases when we change some milestone inside
+     timeline, it triggers cascading changes of other milestones in Project Service.
+     So to get updated milestones in Connect we are using this requests to get updated
+     timeline with milestones.
+     If we don't get it directly from DB, there is a big chance that timeline with milestones
+     are not yet updated in ES.
 
-  return axios.get(`${TC_API_URL}/v4/timelines/${id}`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
+     TODO: we should avoid this logic in Connect App which relies on the immediate update
+           of data on Project Service.
+           As soon as we do it in Connect App, we can update Project Service to not support
+           this `db=true` param anymore.
+  */
+  return axios.get(`${PROJECTS_API_URL}/v5/timelines/${id}?db=true`)
+    .then(resp => resp.data)
 }
 
 /**
@@ -38,10 +49,8 @@ export function getTimelineById(id) {
  * @returns {Promise} milestone
  */
 export function updateMilestone(timelineId, milestoneId, updatedProps) {
-  return axios.patch(`${TC_API_URL}/v4/timelines/${timelineId}/milestones/${milestoneId}`, {
-    param: updatedProps,
-  })
-    .then(resp => _.get(resp.data, 'result.content'))
+  return axios.patch(`${PROJECTS_API_URL}/v5/timelines/${timelineId}/milestones/${milestoneId}`, updatedProps)
+    .then(resp => resp.data)
 }
 
 /**
@@ -52,8 +61,8 @@ export function updateMilestone(timelineId, milestoneId, updatedProps) {
  * @returns {Promise<[]>} list of milestone templates
  */
 export function getMilestoneTemplates(productTemplateId) {
-  return axios.get(`${TC_API_URL}/v4/productTemplates/${productTemplateId}/milestones`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.get(`${PROJECTS_API_URL}/v5/productTemplates/${productTemplateId}/milestones`)
+    .then(resp => resp.data)
 }
 
 /**
@@ -64,10 +73,8 @@ export function getMilestoneTemplates(productTemplateId) {
  * @returns {Promise} timeline
  */
 export function createTimeline(timeline) {
-  return axios.post(`${TC_API_URL}/v4/timelines`, {
-    param: timeline
-  })
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.post(`${PROJECTS_API_URL}/v5/timelines`, timeline)
+    .then(resp => resp.data)
 }
 
 /**
@@ -79,8 +86,6 @@ export function createTimeline(timeline) {
  * @returns {Promise} timeline
  */
 export function updateTimeline(timelineId, updatedProps) {
-  return axios.patch(`${TC_API_URL}/v4/timelines/${timelineId}`, {
-    param: updatedProps,
-  })
-    .then(resp => _.get(resp.data, 'result.content'))
+  return axios.patch(`${PROJECTS_API_URL}/v5/timelines/${timelineId}`, updatedProps)
+    .then(resp => resp.data)
 }
