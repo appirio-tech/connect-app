@@ -51,7 +51,9 @@ export function addProjectMember(projectId, newMember) {
 
 
 export function updateProjectMember(projectId, memberId, updatedProps) {
-  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/${memberId}/`
+  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
+  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/${memberId}/?fields=`
+    + encodeURIComponent(fields)
   return axios.patch(url, { param: updatedProps })
     .then(resp => {
       return resp.data.result.content
