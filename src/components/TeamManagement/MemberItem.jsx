@@ -18,10 +18,12 @@ const  MemberItem  = (props) => {
   const timeZone = _.get(usr, 'timeZone')
   const email = _.get(usr, 'email')
   let localTime
+  let localTimeOffsetFormat
   let timeZoneInfo
   if(timeZone) {
     timeZoneInfo = _.find(timezones, (t) => {return t.zoneName === timeZone})
-    localTime = moment().utcOffset(timeZoneInfo.gmtOffset/3600).format('h:mm A Z')
+    localTime = moment().utcOffset(timeZoneInfo.gmtOffset/3600).format('h:mm a')
+    localTimeOffsetFormat = 'UTC' + moment().utcOffset(timeZoneInfo.gmtOffset/3600).format('Z')
   }
   let localTimeInfoEl = null
 
@@ -34,8 +36,8 @@ const  MemberItem  = (props) => {
 
     if(workingHourStart && workingHourEnd) {
       showIcon = true
-      localWhStart = moment({hour: workingHourStart.split(':')[0]}).format('h:mm A')
-      localWhEnd = moment({hour: workingHourEnd.split(':')[0]}).format('h:mm A')
+      localWhStart = moment({hour: workingHourStart.split(':')[0]}).format('h a')
+      localWhEnd = moment({hour: workingHourEnd.split(':')[0]}).format('h a')
 
       if(localTime) {
         let localHour = +moment().utcOffset(timeZoneInfo.gmtOffset/3600).format('H')
@@ -54,7 +56,7 @@ const  MemberItem  = (props) => {
     }
     localTimeInfoEl = (<div styleName="time-info-tooltip">
       {localTime? <span>Local Time - {localTime}</span>: null}
-      {localWhStart && localWhEnd  ? <span>Working Hours - {`${localWhStart} - ${localWhEnd}`}</span>: null}
+      {localWhStart && localWhEnd  ? <span>Working Hours - {`${localWhStart} - ${localWhEnd}`} {localTimeOffsetFormat}</span>: null}
     </div>)
   }
 
@@ -63,7 +65,7 @@ const  MemberItem  = (props) => {
       <UserTooltip {...props} localTimeInfo={localTimeInfoEl}/>
       <div styleName="member-detail">
         <div styleName="member-name">{showEmailOnly? email :userFullName}</div>
-        {localWhStart && localWhEnd && <div styleName="wk-hour">WH: {localWhStart} - {localWhEnd}</div>}
+        {localWhStart && localWhEnd && <div styleName="wk-hour">WH: {localWhStart} - {localWhEnd} {localTimeOffsetFormat}</div>}
         {localTime &&<div styleName="local-time">{showIcon&& (isWorkingTime ? <SunIcon/>: <MoonIcon/>)}Local time: {localTime}</div>}
       </div>
     </div>
