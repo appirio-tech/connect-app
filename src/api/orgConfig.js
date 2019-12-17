@@ -10,7 +10,7 @@ import { PROJECTS_API_URL } from '../config/constants'
  * @returns {Promise<Object>} organization config data
  */
 export function getOrgConfig(groupIds) {
-  return axios.get(`${PROJECTS_API_URL}/v4/projects/metadata/orgConfig?filter=orgId=in(${groupIds})`)
+  return axios.get(`${PROJECTS_API_URL}/v5/projects/metadata/orgConfig?orgId=${groupIds}`)
     .then(resp => {
       return _.get(resp.data, 'result.content', {})
     })

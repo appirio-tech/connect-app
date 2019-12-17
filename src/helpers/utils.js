@@ -89,7 +89,7 @@ export const clean = obj => _.isObject(obj) ? deepClean(obj) : obj
 
 /**
  * Creates a DOM event in browser independent way to be complaint
- * 
+ *
  * @param {String} eventName name of the event to be created
  */
 export const createEvent = (eventName) => {
@@ -102,3 +102,14 @@ export const createEvent = (eventName) => {
   }
   return event
 }
+
+/**
+ * Creates artificial delay
+ *
+ * @param {Integer} milliseconds delay in milliseconds
+ *
+ * @returns {Promise}
+ */
+export const delay = (milliseconds) => new Promise((resolve) => {
+  setTimeout(resolve, milliseconds)
+})

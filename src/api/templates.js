@@ -11,8 +11,8 @@ import { PROJECTS_API_URL } from '../config/constants'
  * @return {Promise} projects metadata (projectTemplates, productTemplates and projectTypes)
  */
 export function getProjectsMetadata() {
-  return axios.get(`${PROJECTS_API_URL}/v4/projects/metadata`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.get(`${PROJECTS_API_URL}/v5/projects/metadata`)
+    .then(resp => resp.data)
 }
 
 /**
@@ -23,9 +23,9 @@ export function getProjectsMetadata() {
  * @return {Promise} project metadata (form, planConfig and priceConfig)
  */
 export function getProjectMetadataWithVersion(type, key, version) {
-  return axios.get(`${PROJECTS_API_URL}/v4/projects/metadata/${type}/${key}/versions/${version}`)
+  return axios.get(`${PROJECTS_API_URL}/v5/projects/metadata/${type}/${key}/versions/${version}`)
     .then((resp) => {
-      const versionMetadata = _.get(resp.data, 'result.content', {})
+      const versionMetadata = resp.data
       return { type, versionMetadata }
     })
 }
@@ -37,8 +37,8 @@ export function getProjectMetadataWithVersion(type, key, version) {
  * @return {Promise} version list (form, planConfig and priceConfig)
  */
 export function getVersionOptionList(type, key) {
-  return axios.get(`${PROJECTS_API_URL}/v4/projects/metadata/${type}/${key}/versions`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.get(`${PROJECTS_API_URL}/v5/projects/metadata/${type}/${key}/versions`)
+    .then(resp => resp.data)
 }
 
 /**
@@ -49,8 +49,8 @@ export function getVersionOptionList(type, key) {
  * @return {Promise} revision list (form, planConfig and priceConfig)
  */
 export function getRevisionList(type, key, version) {
-  return axios.get(`${PROJECTS_API_URL}/v4/projects/metadata/${type}/${key}/versions/${version}/revisions`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.get(`${PROJECTS_API_URL}/v5/projects/metadata/${type}/${key}/versions/${version}/revisions`)
+    .then(resp => resp.data)
 }
 
 /**
@@ -64,16 +64,12 @@ export function createProjectsMetadata(type, data) {
   if (keys.includes(type)) {
     const key = data.key
     const tmpdata = _.omit(data, ['key', 'version', 'id', 'revision'])
-    return axios.post(`${PROJECTS_API_URL}/v4/projects/metadata/${type}/${key}/versions`, {
-      param: tmpdata
-    })
-      .then(resp => _.get(resp.data, 'result.content', {}))
+    return axios.post(`${PROJECTS_API_URL}/v5/projects/metadata/${type}/${key}/versions`, tmpdata)
+      .then(resp => resp.data)
   } else {
     const path = type !== 'milestoneTemplates' ? 'projects' : 'timelines'
-    return axios.post(`${PROJECTS_API_URL}/v4/${path}/metadata/${type}`, {
-      param: data
-    })
-      .then(resp => _.get(resp.data, 'result.content', {}))
+    return axios.post(`${PROJECTS_API_URL}/v5/${path}/metadata/${type}`, data)
+      .then(resp => resp.data)
   }
 }
 
@@ -90,22 +86,12 @@ export function updateProjectsMetadata(metadataId, type, data) {
     const key = data.key
     const version = data.version
     const tmpdata = _.omit(data, ['key', 'version', 'id', 'revision'])
-    return axios.patch(`${PROJECTS_API_URL}/v4/projects/metadata/${type}/${key}/versions/${version}`, {
-      param: tmpdata
-    })
-      .then(resp => {
-        const versionMetadata = _.get(resp.data, 'result.content', {})
-        return { type, versionMetadata }
-      })
+    return axios.patch(`${PROJECTS_API_URL}/v5/projects/metadata/${type}/${key}/versions/${version}`, tmpdata)
+      .then(resp => ({ type, versionMetadata: resp.data }))
   } else {
     const path = type !== 'milestoneTemplates' ? 'projects' : 'timelines'
-    return axios.patch(`${PROJECTS_API_URL}/v4/${path}/metadata/${type}/${metadataId}`, {
-      param: data
-    })
-      .then(resp => {
-        const metadata = _.get(resp.data, 'result.content', {})
-        return { type, metadata }
-      })
+    return axios.patch(`${PROJECTS_API_URL}/v5/${path}/metadata/${type}/${metadataId}`, data)
+      .then(resp => ({ type, metadata: resp.data }))
   }
 }
 
@@ -117,7 +103,7 @@ export function updateProjectsMetadata(metadataId, type, data) {
  */
 export function deleteProjectsMetadata(metadataId, type) {
   const path = type !== 'milestoneTemplates' ? 'projects' : 'timelines'
-  return axios.delete(`${PROJECTS_API_URL}/v4/${path}/metadata/${type}/${metadataId}`)
+  return axios.delete(`${PROJECTS_API_URL}/v5/${path}/metadata/${type}/${metadataId}`)
     .then(() => {
       return { metadataId, type }
     })
@@ -133,7 +119,7 @@ export function deleteProjectsMetadata(metadataId, type) {
 export function deleteProjectsMetadataSpecial(metadataId, type, data) {
   const key = data.key
   const version = data.version
-  return axios.delete(`${PROJECTS_API_URL}/v4/projects/metadata/${type}/${key}/versions/${version}`)
+  return axios.delete(`${PROJECTS_API_URL}/v5/projects/metadata/${type}/${key}/versions/${version}`)
     .then(() => {
       return { metadataId, type }
     })

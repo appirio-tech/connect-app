@@ -2,7 +2,7 @@ import React from 'react'
 import Modal from 'react-modal'
 import PT from 'prop-types'
 import SelectDropdown from '../SelectDropdown/SelectDropdown'
-
+import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator'
 
 class Dialog extends React.Component {
 
@@ -56,7 +56,7 @@ class Dialog extends React.Component {
 
   render()
   {
-    const {onCancel, title, content, buttonColor, buttonText, disabled, showRoleSelector} = this.props
+    const {onCancel, title, content, buttonColor, buttonText, isLoading, showRoleSelector, loadingTitle} = this.props
 
     return (
       <Modal
@@ -64,34 +64,40 @@ class Dialog extends React.Component {
         className="management-dialog"
         overlayClassName="management-dialog-overlay"
         onRequestClose={onCancel}
-        shouldCloseOnOverlayClick={!disabled}
-        shouldCloseOnEsc={!disabled}
+        shouldCloseOnOverlayClick={!isLoading}
+        shouldCloseOnEsc={!isLoading}
         contentLabel=""
       >
         <div className="management-dialog-container">
-          <div className="dialog-title">{title}</div>
-          <div className="dialog-content" dangerouslySetInnerHTML={{__html: content}}/>
-          {showRoleSelector && <Formsy.Form className="input-container">
-            <SelectDropdown
-              name="role"
-              value={this.state.role}
-              theme="role-drop-down default"
-              options={this.roles}
-              onSelect={this.handleRoles}
-            />
-          </Formsy.Form>}
+          <div className="dialog-title">{isLoading ? loadingTitle : title}</div>
+          {isLoading ? (
+            <LoadingIndicator />
+          ) : (
+            <div>
+              <div className="dialog-content" dangerouslySetInnerHTML={{__html: content}}/>
+              {showRoleSelector && <Formsy.Form className="input-container">
+                <SelectDropdown
+                  name="role"
+                  value={this.state.role}
+                  theme="role-drop-down default"
+                  options={this.roles}
+                  onSelect={this.handleRoles}
+                />
+              </Formsy.Form>}
+            </div>
+          )}
           <div className="dialog-actions">
             <button
               onClick={onCancel}
               className="tc-btn tc-btn-default"
-              disabled={disabled}
+              disabled={isLoading}
             >
               Cancel
             </button>
             <button
               onClick={this.onConfirm}
               className={'tc-btn tc-btn-primary tc-btn-md ' + (buttonColor !== 'blue' ? 'btn-red' : '')}
-              disabled={disabled}
+              disabled={isLoading}
             >
               {buttonText}
             </button>
@@ -102,8 +108,9 @@ class Dialog extends React.Component {
   }
 }
 
-Dialog.propTypes = {
-  showRoleSelector: false
+Dialog.defaultProps = {
+  showRoleSelector: false,
+  isLoading: false,
 }
 
 Dialog.propTypes = {
@@ -114,6 +121,7 @@ Dialog.propTypes = {
   buttonColor: PT.string,
   buttonText: PT.string,
   showRoleSelector: PT.bool,
+  isLoading: PT.bool,
 }
 
 export default Dialog
