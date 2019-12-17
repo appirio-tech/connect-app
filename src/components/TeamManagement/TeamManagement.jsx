@@ -26,7 +26,7 @@ const REMOVE_INVITATION_TITLE = 'You\'re about to remove an invitation'
 const REMOVE_TITLE = 'You\'re about to delete a member from the team'
 const LEAVE_TITLE = 'You\'re about to leave the project'
 
-const LEAVE_MESSAGE = `Once you leave, somebody on your team has to add you back to the team to be able to see the project.
+const LEAVE_MESSAGE = `Once you leave, somebody on your team has to add you back to the team for you to be able to see the project.
   Do you still want to leave?`
 
 const JOIN_MESSAGE = `You are about to join the project. Once you join you will be responsible for project delivery.
