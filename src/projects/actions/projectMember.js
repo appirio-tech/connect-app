@@ -6,8 +6,7 @@ import { addProjectMember as addMember,
 import { createProjectMemberInvite as createProjectMemberInvite,
   updateProjectMemberInvite as updateProjectMemberInvite
 } from '../../api/projectMemberInvites'
-import { getProjectById } from '../../api/projects'
-import { loadProjectMember } from './project'
+import { loadProjectMember, loadProjectMembers, loadProjectMemberInvites } from './project'
 import { loadMembersByHandle } from '../../actions/members'
 
 import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
@@ -19,7 +18,6 @@ import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   ACCEPT_OR_REFUSE_INVITE,
   PROJECT_ROLE_CUSTOMER,
   PROJECT_MEMBER_INVITE_STATUS_CANCELED,
-  RELOAD_PROJECT_MEMBERS,
   CLEAR_MEMBER_SUGGESTIONS,
   ACCEPT_OR_REFUSE_INVITE_FAILURE
 } from '../../config/constants'
@@ -190,10 +188,8 @@ export function acceptOrRefuseInviteFail(error) {
 }
 
 export function reloadProjectMembers(projectId) {
-  return (dispatch) => {
-    return dispatch({
-      type: RELOAD_PROJECT_MEMBERS,
-      payload: getProjectById(projectId)
-    })
-  }
+  return (dispatch) => Promise.all([
+    dispatch(loadProjectMembers(projectId)),
+    dispatch(loadProjectMemberInvites(projectId))
+  ])
 }

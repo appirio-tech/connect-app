@@ -118,7 +118,7 @@ class TeamManagementContainer extends Component {
   }
 
   onAcceptOrRefuse(invite) {
-    this.props.acceptOrRefuseInvite(this.props.projectId, invite)
+    return this.props.acceptOrRefuseInvite(this.props.projectId, invite)
       .then(() => this.props.reloadProjectMembers(this.props.projectId))
   }
 
