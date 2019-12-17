@@ -2,6 +2,7 @@
  * Setting related helper methods
  */
 import _ from 'lodash'
+import ISOCountries from '../../../helpers/ISOCountries'
 
 // blank traits object which we can use if trait doesn't exist to create a new one
 export const blankTraits = {
@@ -118,12 +119,21 @@ export const applyProfileSettingsToTraits = (traits, profileSettings) => {
       // define country similar to connect_info if not present for basic_info
       const country = _.get(trait, 'traits.data[0].country', profileSettings.country)
 
+      // Convert home country code from 3 digit numeric string to 3 letter alphabetical code.
+      // Numeric code is not supported by member service.
+      let homeCountryCode = _.get(trait, 'traits.data[0].homeCountryCode')
+      if (homeCountryCode && /^\d{3}$/.test(homeCountryCode)) {
+        const homeCountryISO = _.find(ISOCountries, c => c.numericString === homeCountryCode)
+        homeCountryCode = homeCountryISO && homeCountryISO.alpha3
+      }
+
       // update only if new values are defined
       const updatedProps = _.omitBy({
         photoURL,
         firstName,
         lastName,
         country,
+        homeCountryCode,
       }, _.isUndefined)
 
       updatedTrait.traits = {
