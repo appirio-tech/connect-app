@@ -294,7 +294,11 @@ class EditStageForm extends React.Component {
                   type="number"
                   name="duration"
                   value={duration}
-                  minValue={1}
+                  minValue={0 /*
+                  if we set it as 1, if duration is in readonly mode with value 0
+                  then in Webkit browsers we would get an error:
+                  "An invalid form control with is not focusable."
+                  so if we want to set it to 1, we have fix that error somehow first */}
                   readonly={hasTimeline}
                   readonlyValueTooltip="Phase duration is controlled by duration of individual milestones"
                 />
