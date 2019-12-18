@@ -333,7 +333,7 @@ class SpecQuestions extends React.Component {
         question: q,
         project: currentProjectData,
         template,
-        showPrice: true,
+        showPrice: !_.get(template, 'hidePrice'),
         theme: '',
         currentWizardStep,
         hideTitle: true
