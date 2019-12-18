@@ -235,6 +235,7 @@ class DashboardContainer extends React.Component {
               question={estimationQuestion}
               template={template}
               project={project}
+              showPrice={!_.get(template, 'hidePrice')}
               theme="dashboard"
             />
           }
