@@ -22,6 +22,11 @@ const  MemberItem  = (props) => {
   let timeZoneInfo
   if(timeZone) {
     timeZoneInfo = _.find(timezones, (t) => {return t.zoneName === timeZone})
+    // as a quick fix for https://github.com/appirio-tech/connect-app/issues/3457
+    // set offset for the "Daylight Saving Time"
+    if (timeZoneInfo.zoneName === 'America/New_York') {
+      timeZoneInfo.gmtOffset = -18000
+    }
     localTime = moment().utcOffset(timeZoneInfo.gmtOffset/3600).format('h:mm a')
     localTimeOffsetFormat = 'UTC' + moment().utcOffset(timeZoneInfo.gmtOffset/3600).format('Z')
   }
