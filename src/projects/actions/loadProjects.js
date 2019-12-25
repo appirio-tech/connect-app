@@ -58,7 +58,8 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
 
         })
         // this is to remove any nulls from the list (dev had some bad data)
-        _.remove(userIds, i => !i)
+        // in particular, remove negative userId which are related to M2M users
+        _.remove(userIds, i => !i || i < 0)
         // return if there are no userIds to retrieve, empty result set
         if (!userIds.length)
           resolve(true)
