@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+require('moment-timezone')
 import UserTooltip from '../User/UserTooltip'
 import SunIcon from '../../assets/icons/daylight.svg'
 import MoonIcon from '../../assets/icons/moon.svg'
