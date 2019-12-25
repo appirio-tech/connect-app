@@ -23,7 +23,7 @@ const  MemberItem  = (props) => {
   if(timeZone) {
     const tz = moment().tz(timeZone)
     localTime = tz.format('h:mm a')
-    utcOff = Math.round(tz.utcOffset()/60)
+    utcOff = tz.utcOffset()/60
     localTimeOffsetFormat = 'UTC' + moment().utcOffset(utcOff).format('Z')
   }
   let localTimeInfoEl = null
