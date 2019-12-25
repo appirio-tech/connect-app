@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import {timezones} from 'appirio-tech-react-components/constants/timezones'
 import UserTooltip from '../User/UserTooltip'
 import SunIcon from '../../assets/icons/daylight.svg'
 import MoonIcon from '../../assets/icons/moon.svg'
@@ -19,16 +18,12 @@ const  MemberItem  = (props) => {
   const email = _.get(usr, 'email')
   let localTime
   let localTimeOffsetFormat
-  let timeZoneInfo
+  let utcOff
   if(timeZone) {
-    timeZoneInfo = _.find(timezones, (t) => {return t.zoneName === timeZone})
-    // as a quick fix for https://github.com/appirio-tech/connect-app/issues/3457
-    // set offset for the "Daylight Saving Time"
-    if (timeZoneInfo.zoneName === 'America/New_York') {
-      timeZoneInfo.gmtOffset = -18000
-    }
-    localTime = moment().utcOffset(timeZoneInfo.gmtOffset/3600).format('h:mm a')
-    localTimeOffsetFormat = 'UTC' + moment().utcOffset(timeZoneInfo.gmtOffset/3600).format('Z')
+    const tz = moment().tz(timeZone)
+    localTime = tz.format('h:mm a')
+    utcOff = Math.round(tz.utcOffset()/60)
+    localTimeOffsetFormat = 'UTC' + moment().utcOffset(utcOff).format('Z')
   }
   let localTimeInfoEl = null
 
@@ -45,7 +40,7 @@ const  MemberItem  = (props) => {
       localWhEnd = moment({hour: workingHourEnd.split(':')[0]}).format('h a')
 
       if(localTime) {
-        let localHour = +moment().utcOffset(timeZoneInfo.gmtOffset/3600).format('H')
+        let localHour = +moment().utcOffset(utcOff).format('H')
         const localStartHour = +moment({hour: workingHourStart.split(':')[0] }).format('H')
         let localEndHour = +moment({hour: workingHourEnd.split(':')[0] }).format('H')
         if(localEndHour <= localStartHour) {
