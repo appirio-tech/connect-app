@@ -245,6 +245,7 @@ function markdownToState(markdown, options = {}) {
   const entityMap = {} // entitymap will be returned as part of the final draftjs raw object
   const parsedData = md.parse(_markdown, {}) // remarkable js takes markdown and makes it an array of style objects for us to easily parse
   let currentListType = null // Because of how remarkable's data is formatted, we need to cache what kind of list we're currently dealing with
+  let insideListItem = false // To handle nested code blocks inside list items
 
   // Allow user to define custom BlockTypes and Entities if they so wish
   const BlockTypes = Object.assign({}, DefaultBlockTypes, options.blockTypes || {})
@@ -262,9 +263,32 @@ function markdownToState(markdown, options = {}) {
     let itemType = item.type
     if (itemType === 'list_item_open') {
       itemType = currentListType
+      insideListItem = true
+    } else if (itemType === 'list_item_close'){
+      insideListItem = false
+    }
+
+    if (itemType === 'code') {
+      // If code is at level zero or if code is inside list item, we can treat it similar to fence
+      // Draftjs doesn't support nested blocks, To handle this we render code as inline
+      if(item.level === 0 || insideListItem){
+        item.type = 'fence'
+        item.level = 0 // If inside list item, should behave as it is at level 0
+      }else{
+        // Convert code to inline in cases like: code is inside the blockquote
+        convertCodeToInline(item)
+      }
+
+      itemType = item.type
     }
 
     if (itemType === 'inline') {
+      // Add unstyled block if there is no recently created block exists
+      // This will ensure we are never overwritting content
+      if(blocks[blocks.length - 1].text !== ''){
+        const block = getNewBlock(BlockTypes['paragraph_open']())
+        blocks.push(block)
+      }
       // Parse inline content and apply it to the most recently created block level item,
       // which is where the inline content will belong.
       const {content, blockEntities, blockEntityRanges, blockInlineStyleRanges} = parseInline(item, BlockEntities, BlockStyles)
@@ -282,20 +306,41 @@ function markdownToState(markdown, options = {}) {
       // List items will always be at least `level==1` though so we need a separate check fo that
       // TODO: Draft does allow lists to be nested within lists, it's the one exception to its rule,
       // but right now this code doesn't support that.
-      if (item.level === 0 || item.type === 'list_item_open') {
-        const block = Object.assign({
-          depth: 0,
-          // set default values when creating a block, usually the block would have some inline items and
-          // so these default values would be overwritten because of inline items by `blockToModify` object above
-          text: '',
-          inlineStyleRanges: [],
-          entityRanges: [],
-        }, BlockTypes[itemType](item))
-
+      // blockquote may be nested inside list item with level greater than 0
+      if (item.level === 0 || item.type === 'list_item_open' || item.type === 'blockquote_open') {
+        const block = getNewBlock(BlockTypes[itemType](item))
         blocks.push(block)
       }
     }
   })
+
+  /**
+   * Helper function to convert block item of type Code to inline
+   */
+  function convertCodeToInline(item) {
+    item.type = 'inline'
+    const codeBlockSixSpace = '      '
+    item.content = codeBlockSixSpace + item.content
+    item.children = [{
+      type: 'text',
+      content: item.content,
+      level: 0
+    }]
+  }
+
+  /**
+   * Helper function to create empty block type
+   */
+  function getNewBlock(DefaultBlockType) {
+    return Object.assign({
+      depth: 0,
+      // set default values when creating a block, usually the block would have some inline items and
+      // so these default values would be overwritten because of inline items by `blockToModify` object above
+      text: '',
+      inlineStyleRanges: [],
+      entityRanges: [],
+    }, DefaultBlockType)
+  }
 
   return convertFromRaw({
     entityMap,
