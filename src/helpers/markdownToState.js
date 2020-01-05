@@ -252,7 +252,7 @@ function markdownToState(markdown, options = {}) {
   const BlockEntities = Object.assign({}, DefaultBlockEntities, options.blockEntities || {})
   const BlockStyles = Object.assign({}, DefaultBlockStyles, options.blockStyles || {})
 
-  parsedData.forEach((item) => {
+  parsedData.forEach((item, index) => {
 
     if (item.type === 'bullet_list_open') {
       currentListType = 'unordered_list_item_open'
@@ -269,16 +269,15 @@ function markdownToState(markdown, options = {}) {
     }
 
     if (itemType === 'code') {
-      // If code is at level zero or if code is inside list item, we can treat it similar to fence
-      // Draftjs doesn't support nested blocks, To handle this we render code as inline
-      if(item.level === 0 || insideListItem){
-        item.type = 'fence'
-        item.level = 0 // If inside list item, should behave as it is at level 0
-      }else{
-        // Convert code to inline in cases like: code is inside the blockquote
-        convertCodeToInline(item)
+      let nestedPrefix = ''
+      // If inside list item and is not the first line, then add extra prefix of 2 spaces
+      if(insideListItem && (index > 0 && parsedData[index-1].type !== 'list_item_open')){
+        nestedPrefix = '  '
       }
 
+      // If code is at level zero we can treat it similar to fence
+      // Draftjs doesn't support nested blocks, To handle this we render code as inline
+      (item.level === 0)? item.type = 'fence' : convertCodeToInline(item, nestedPrefix)
       itemType = item.type
     }
 
@@ -316,11 +315,13 @@ function markdownToState(markdown, options = {}) {
 
   /**
    * Helper function to convert block item of type Code to inline
+   * @param item, item of type code to convert
+   * @param nestedPrefix, extra prefix required if item is nested
    */
-  function convertCodeToInline(item) {
+  function convertCodeToInline(item, nestedPrefix = '') {
     item.type = 'inline'
-    const codeBlockSixSpace = '      '
-    item.content = codeBlockSixSpace + item.content
+    const codeBlockPrefix = '    '
+    item.content = nestedPrefix + codeBlockPrefix + item.content
     item.children = [{
       type: 'text',
       content: item.content,
