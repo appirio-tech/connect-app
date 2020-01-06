@@ -245,7 +245,8 @@ function markdownToState(markdown, options = {}) {
   const entityMap = {} // entitymap will be returned as part of the final draftjs raw object
   const parsedData = md.parse(_markdown, {}) // remarkable js takes markdown and makes it an array of style objects for us to easily parse
   let currentListType = null // Because of how remarkable's data is formatted, we need to cache what kind of list we're currently dealing with
-  let insideListItem = false // To handle nested code blocks inside list items
+  let currListItemState = null // maintain state of currently processed list item
+  const listItemNewlinePrefix = '  ' // prefix for blocks not on the first line inside list item
 
   // Allow user to define custom BlockTypes and Entities if they so wish
   const BlockTypes = Object.assign({}, DefaultBlockTypes, options.blockTypes || {})
@@ -260,24 +261,26 @@ function markdownToState(markdown, options = {}) {
       currentListType = 'ordered_list_item_open'
     }
 
+    // If the current item is a direct child of list item, update list item state
+    if (currListItemState && currListItemState.level === (item.level - 1)) {
+      currListItemState.directChildProcessed++
+    }
+
     let itemType = item.type
     if (itemType === 'list_item_open') {
       itemType = currentListType
-      insideListItem = true
+      currListItemState = {
+        level: item.level,
+        directChildProcessed: 0
+      }
     } else if (itemType === 'list_item_close'){
-      insideListItem = false
+      currListItemState = null
     }
 
     if (itemType === 'code') {
       // If code is at level zero or if code is inside list item, we can treat it similar to fence
       // Draftjs doesn't support nested blocks, To handle this we render code as inline
-      if(item.level === 0 || insideListItem){
-        item.type = 'fence'
-        item.level = 0 // If inside list item, should behave as it is at level 0
-      }else{
-        // Convert code to inline in cases like: code is inside the blockquote
-        convertCodeToInline(item)
-      }
+      (item.level === 0)? item.type = 'fence' : convertCodeToInline(item)
 
       itemType = item.type
     }
@@ -299,6 +302,10 @@ function markdownToState(markdown, options = {}) {
       if (content === IMAGE_CONTENT && blockEntityRanges.length && blockEntities[blockEntityRanges[0].key].type === 'image') {
         blockToModify.type = 'atomic'
       }
+	  // If inside list item and is not the first line, then add extra prefix of 2 spaces
+      if (currListItemState && currListItemState.directChildProcessed > 1) {
+        blockToModify.text = listItemNewlinePrefix + blockToModify.text
+      }
       // The entity map is a master object separate from the block so just add any entities created for this block to the master object
       Object.assign(entityMap, blockEntities)
     } else if ((itemType.indexOf('_open') !== -1 || itemType === 'fence') && BlockTypes[itemType]) {
@@ -319,8 +326,8 @@ function markdownToState(markdown, options = {}) {
    */
   function convertCodeToInline(item) {
     item.type = 'inline'
-    const codeBlockSixSpace = '      '
-    item.content = codeBlockSixSpace + item.content
+    const codeBlockPrefix = '    '
+    item.content = codeBlockPrefix + item.content
     item.children = [{
       type: 'text',
       content: item.content,
