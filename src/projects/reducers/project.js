@@ -473,17 +473,17 @@ export const projectState = function (state=initialState, action) {
     // after updating project they will be lost, so here we restore them
     // TODO better don't add additional values to `project` object and keep additional values separately
     const restoredProject = {
-      // if these arrays are not returned we should init them with empty arrays
-      // as later code counts on this
-      attachments: [],
-      members: [],
-
       ...action.payload,
 
       // restore data which we put into `project` object using other reducers
       budget: _.cloneDeep(state.project.budget),
       duration: _.cloneDeep(state.project.duration),
-      invites: _.cloneDeep(state.project.invites),
+      // the next properties we also could modify by other reducers, so we restore them,
+      // and also, we fallback to the default empty array [] as the code relies on it
+      // we should not `cloneDeep` these values as they are not changed
+      attachments: _.get(state.project, 'attachments', []),
+      members: _.get(state.project, 'members', []),
+      invites: _.get(state.project, 'invites', []),
     }
 
     return Object.assign({}, state, {
