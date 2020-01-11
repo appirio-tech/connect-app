@@ -284,7 +284,7 @@ class TemplateForm extends Component {
       const aliases = _.split(values.aliases, ',')
       payload = _.assign({}, payload, { aliases })
     }
-    if(!payload.subCategory) {
+    if (payload.subCategory === '') {
       payload.subCategory = null
     }
     saveTemplate(primaryKeyValue, payload)
