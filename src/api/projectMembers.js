@@ -18,7 +18,7 @@ export function getMembersById (userIds) {
 }
 
 export function getMembersByHandle (handles) {
-  const _handlesArr = _.map(handles, _id => `handle:${_id}`)
+  const _handlesArr = _.map(handles, _handle => `handleLower:${_handle.toLowerCase()}`)
   // only requesting certain member attributes
   const fields = 'userId,handle,photoURL,firstName,lastName,details,email'
   const query = _handlesArr.join(' OR ')
