@@ -7,30 +7,113 @@
   .SelectProjectTemplate {
     @extend .wizardCardContainer;
 
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: $tc-gray-neutral-dark;
+    max-width: none;
+    width: 100%;
+    padding-bottom: 0;
+    align-items: center;
+
     @media screen and (max-width: $screen-md - 1px) {
       padding: 0 2 * $base-unit;
     }
 
+    .cards {
+      flex-direction: column;
+      align-items: center;
+      padding-left: 30px;
+      padding-right: 30px;
+      margin-bottom: 50px;
+      max-width: 1110px;
+      width: 100%;
+
+      @media screen and (max-width: $screen-sm - 1px) {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .card-section {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 52px;
+        width: 100%;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .card-section-title {
+          @include roboto-bold;
+
+          text-align: left;
+          margin-bottom: 4px;
+          text-transform: uppercase;
+          color: $tc-gray-90;
+          font-size: 24px;
+          line-height: 30px;
+        }
+
+        .card-section-sub-title {
+          text-align: left;
+          margin-bottom: 27px;
+          text-transform: uppercase;
+          color: $tc-gray-40;
+          font-size: 10px;
+          letter-spacing: 0.8px;
+          line-height: 22px;
+          text-align: left;
+        }
+      }
+    }
+
+    .footer {
+      position: relative;
+      margin-top: auto;
+      display: flex;
+      flex-wrap: wrap;
+
+      a {
+        display: flex;
+        align-items: center;
+
+        svg {
+          margin-left: 7px;
+
+          path {
+            fill: $tc-dark-blue-100;
+          }
+        }
+      }
+    }
+
     h1 {
       @extend .wizardHeadline;
-      margin-top: 30px;
+      @include roboto-medium;
+
+      color: $tc-gray-90;
+      margin-top: 41px;
+      font-size: 34px;
+      line-height: 41px;
+      margin-bottom: 11px;
+      text-transform: uppercase;
 
       @media screen and (max-width: $screen-md - 1px) {
         font-size: 20px;
         line-height: 30px;
         margin-bottom: 0;
         margin-top: 20px;
-        padding: 5px 40px 0;
+        padding: 5px 50px 0;
       }
 
       + h2 {
-        font-size: 15px;
-        line-height: 20px;
         @include tc-heading-small;
-        @include roboto-bold;
+
         color: $tc-gray-80;
-        margin-bottom: 13px;
-        margin-top: 0px;
+        font-size: 16px;
+        line-height: 19px;
+        margin-bottom: 42px;
 
         @media screen and (max-width: $screen-md - 1px) {
           @include roboto-medium;
@@ -40,26 +123,96 @@
       }
     }
 
-    .header {
-      display: block;
-    }
-  }
+    .project-type-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 25px;
+      width: 100%;
+      padding: 0 25px;
 
-  @media screen and (max-width: 1100px) {
-    .SelectProjectTemplate {
-      max-width: 750px;
-    }
-  }
+      .item {
+        color: $tc-gray-40;
+        font-size: 12px;
+        line-height: 14px;
+        margin: 0 5px 5px;
+        padding: 0 15px;
+        height: 30px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
 
-  @media screen and (max-width: 850px) {
-    .SelectProjectTemplate {
-      max-width: 500px;
+        &.selected {
+          background-color: $tc-gray-10;
+          box-shadow: inset 0 0 2px 0 rgba($tc-black, 0.25);
+        }
+      }
     }
-  }
 
-  @media screen and (max-width: $screen-md - 1px) {
-    .SelectProjectTemplate {
-      max-width: 100%;
+    .search-container {
+      display: flex;
+      width: 100%;
+      margin-bottom: 37px;
+
+      .tc-btn.tc-btn-md {
+        height: 40px;
+
+        .search-icon {
+          width: 16px;
+          margin-right: 5px;
+          margin-top: 2px;
+        }
+      }
+
+      .search-bar {
+        display: flex;
+        flex: 1;
+        margin-right: 10px;
+        position: relative;
+
+        .close-search-icon {
+          border: none;
+          background: transparent;
+          background-color: $tc-gray-10;
+          border-radius: 100%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: absolute;
+          right: 13px;
+          top: 10px;
+
+          svg {
+            width: 7px;
+            height: 7px;
+
+            path {
+              fill: $tc-gray-70;
+            }
+          }
+        }
+
+        input {
+          height: 40px;
+          line-height: 40px;
+          padding: 0 40px 0 20px;
+          border: 1px solid $tc-gray-10;
+          border-radius: 20px;
+          font-size: 14px;
+          margin: 0;
+
+          @include placeholder {
+            color: $tc-gray-70;
+            font-size: 14px;
+            line-height: 40px;
+            opacity: 0.5;
+            text-transform: none;
+          }
+        }
+      }
     }
   }
 }

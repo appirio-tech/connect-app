@@ -1,9 +1,10 @@
 import React from 'react'
 import PT from 'prop-types'
 
-import ProjectTypeCard from './ProjectTypeCard'
+import SelectProjectTypeCard from './SelectProjectTypeCard'
 import { getProjectTemplatesByCategory } from '../../../helpers/templates'
 import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
+import IconArrowRight from '../../../assets/icons/arrows-16px-1_tail-right.svg'
 
 import { DOMAIN } from '../../../config/constants'
 
@@ -17,22 +18,23 @@ const SelectProjectType = ({
   const cards = []
 
   projectTypes.forEach((projectType) => {
-    // don't render disabled items for selection
-    // don't render hidden items as well, hidden items can be reached via direct link though
-    if (projectType.disabled || projectType.hidden) return
 
     const visibleProjectTemplates = getProjectTemplatesByCategory(projectTemplates, projectType.key, true)
+
+    // don't render disabled items for selection
+    // don't render hidden items as well, hidden items can be reached via direct link though
+    if (projectType.disabled || projectType.hidden || visibleProjectTemplates.length === 0) return
 
     const icon = <ProjectTypeIcon type={projectType.icon} />
 
     cards.push(
-      <ProjectTypeCard
+      <SelectProjectTypeCard
         icon={icon}
         info={projectType.info}
         key={projectType.key}
         onClick={() => onProjectTypeChange(projectType.key)}
         type={projectType.displayName}
-        buttonText={visibleProjectTemplates.length > 1 ? 'View All' : 'Select Project'}
+        buttonText="View Solutions"
       />
     )
   })
@@ -43,7 +45,7 @@ const SelectProjectType = ({
         <h1>Create a new project</h1>
         <div className="cards">{cards}</div>
         <div className="footer">
-        Looking for something else? <a href={`https://${DOMAIN}/contact?utm_source=Connect&utm_medium=Referral&utm_campaign=FooterContact`}>Get in touch with us &rarr;</a>
+        Looking for something else? <a href={`https://${DOMAIN}/contact?utm_source=Connect&utm_medium=Referral&utm_campaign=FooterContact`}>Get in touch with us <IconArrowRight /></a>
         </div>
       </div>
     </div>

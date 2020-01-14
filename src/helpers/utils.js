@@ -113,3 +113,19 @@ export const createEvent = (eventName) => {
 export const delay = (milliseconds) => new Promise((resolve) => {
   setTimeout(resolve, milliseconds)
 })
+
+/**
+ * Case-insensitive search
+ *
+ * @param {String} key search key
+ * @param {String} searchString search string
+ *
+ * @returns {Bool}
+ */
+export const caseInsensitiveSearch = (key, searchString) => {
+  if (!key || !searchString) {
+    return false
+  }
+
+  return searchString.toLowerCase().indexOf(key.toLowerCase()) >= 0
+}

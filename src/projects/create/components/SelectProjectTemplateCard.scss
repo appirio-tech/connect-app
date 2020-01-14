@@ -1,0 +1,299 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.SelectProjectTemplateCard {
+  background: $tc-white;
+  border-radius: 10px;
+  margin: 0 0 30px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  color: $tc-gray-90;
+  overflow: hidden;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.one-deliverable {
+  .bottom-card {
+    display: none;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      display: flex;
+
+      .bottom-column {
+        background: transparent;
+        padding: 0;
+
+        h3 {
+          color: $tc-gray-70;
+          text-transform: none;
+          display: flex;
+          justify-content: flex-start;
+        }
+        button {
+          display: flex;
+        }
+      }
+    }
+  }
+}
+
+.more-deliverable,
+.no-deliverable {
+  .right-card {
+    flex: 0;
+  }
+}
+
+.no-deliverable {
+  .bottom-card {
+    display: none;
+  }
+}
+
+.more-deliverable {
+  .right-card {
+    background: transparent;
+
+    .vertical-curve,
+    .info-html {
+      display: none;
+    }
+  }
+}
+
+.header {
+  @include roboto-bold;
+
+  font-size: 16px;
+  line-height: 19px;
+  text-align: left;
+}
+
+.details {
+  color: $tc-gray-70;
+  font-size: 14px;
+  line-height: 17px;
+  width: 100%;
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 21px;
+}
+
+.icon-wrapper {
+  margin-right: 26px;
+}
+
+.left-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 35px 30px 36px 45px;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    flex-direction: column;
+    text-align: center;
+
+    .left-card-content {
+      align-items: center;
+      width: 100%;
+    }
+
+    .icon-wrapper {
+      margin-right: 0;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+.right-card {
+  position: relative;
+  display: flex;
+  background: $tc-gray-neutral-light;
+  align-items: center;
+  padding: 35px 50px 30px 50px;
+  flex: 1;
+
+  .info-html {
+    margin-right: 22px;
+  }
+
+  @media screen and (max-width: $screen-md - 1px) {
+    flex: 0;
+    background: transparent;
+
+    .vertical-curve,
+    .info-html {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: $screen-sm - 1px) {
+    padding: 20px;
+  }
+}
+
+.top-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media screen and (max-width: $screen-sm - 1px) {
+    flex-direction: column;
+
+    .right-card {
+      justify-content: center;
+      padding-top: 0;
+    }
+  }
+}
+
+.left-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.bottom-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: $tc-gray-neutral-light;
+}
+
+.vertical-curve {
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+}
+
+.horizontal-curve {
+  width: 100%;
+  height: 30px;
+}
+
+.learn-more-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  line-height: 17px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.starting-at {
+  font-size: 14px;
+  color: $tc-gray-90;
+
+  strong {
+    @include roboto-bold;
+
+    margin-left: 4px;
+  }
+}
+
+.learn-more {
+  @include roboto-medium;
+
+  font-size: 15px;
+  letter-spacing: 1px;
+  line-height: 18px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-left: 7px;
+
+    path {
+      fill: $tc-dark-blue-100;
+    }
+  }
+}
+
+.info-html {
+  text-align: left;
+
+  h3 {
+    @include roboto-bold;
+
+    min-height: 30px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  * {
+    color: $tc-gray-70;
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+  li {
+    position: relative;
+    padding-left: 15px;
+    margin-bottom: 5px;
+
+    &::before {
+      content: "";
+      display: flex;
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: $tc-dark-blue-100;
+      border-radius: 100%;
+      top: 7px;
+      left: 0;
+    }
+  }
+}
+
+.bottom-column {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 14px;
+  background: $tc-white;
+  border-radius: 10px;
+  max-width: 305px;
+  justify-content: space-between;
+  padding: 25px 30px 26px;
+
+  @media screen and (max-width: $screen-sm - 1px) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .starting-at {
+    margin-top: 16px;
+  }
+
+  .info-html {
+    h3 {
+      color: $tc-gray-90;
+      display: flex;
+      justify-content: center;
+      text-transform: uppercase;
+    }
+  }
+
+  button {
+    display: none;
+    align-self: center;
+    margin-top: 30px;
+  }
+}
+
+.bottom-card-content {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 16px 25px 27px 26px;
+}
