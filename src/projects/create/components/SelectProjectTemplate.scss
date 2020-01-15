@@ -149,8 +149,11 @@
         cursor: pointer;
 
         &.selected {
+          @include roboto-bold;
+
           background-color: $tc-gray-10;
           box-shadow: inset 0 0 2px 0 rgba($tc-black, 0.25);
+          color: $tc-gray-90;
         }
       }
     }

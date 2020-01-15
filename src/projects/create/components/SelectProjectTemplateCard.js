@@ -29,7 +29,7 @@ function SelectProjectTemplateCard(p) {
           <div styleName="left-card-content">
             <h3 styleName="header">{projectTemplate.name}</h3>
             <div styleName="details">{projectTemplate.info}</div>
-            {(subTextHTML || detailLink || deliverables.length === 0) && (
+            {(subTextHTML || detailLink) && (
               <div styleName="vertical-space" />
             )}
             {(subTextHTML || detailLink) && (

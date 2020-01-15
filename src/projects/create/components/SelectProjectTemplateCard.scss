@@ -55,7 +55,7 @@
 .more-deliverable,
 .no-deliverable {
   .right-card {
-    @media screen and (max-width: $screen-md - 1px) {
+    @media screen and (max-width: $screen-sm - 1px) {
       margin-top: 21px;
     }
   }
