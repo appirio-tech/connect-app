@@ -211,6 +211,11 @@ class SelectProjectTemplate extends React.Component{
                     placeholder="Search Solutions…"
                     value={searchInputValue}
                     onChange={(evt) => { this.setState({ searchInputValue: evt.target.value }) }}
+                    onKeyDown={(evt) => {
+                      if (evt.key === 'Enter') {
+                        this.setState({ selectedSearchInputValue: searchInputValue })
+                      }
+                    }}
                   />
                   {(searchInputValue || selectedSearchInputValue) && (
                     <button
