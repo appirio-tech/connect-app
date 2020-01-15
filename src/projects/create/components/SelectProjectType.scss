@@ -32,7 +32,8 @@
     .cards {
       margin: 0 auto;
       max-width: 100% !important;
-      margin-bottom: 50px;
+      margin-bottom: 105px;
+      width: 100%;
 
       @media screen and (max-width: $screen-md - 1px) {
         max-width: 600px;
@@ -56,16 +57,19 @@
         margin-top: 10px;
         padding-top: 10px;
         text-align: left;
+        padding-right: 50px;
       }
     }
 
     .footer {
-      position: relative;
-      margin-top: auto;
       display: flex;
       flex-wrap: wrap;
+      margin-bottom: 30px;
+      justify-content: center;
 
       a {
+        @include roboto-medium;
+
         display: flex;
         align-items: center;
 

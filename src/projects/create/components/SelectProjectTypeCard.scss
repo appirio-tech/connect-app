@@ -7,11 +7,11 @@
   align-items: center;
   border-radius: 10px;
   box-shadow: 0 7px 20px 0 rgba($tc-gray-80, 0.1);
-  width: 420px;
+  max-width: 420px;
   min-height: 370px;
-  max-width: 100%;
   margin: 0 15px 30px;
   padding: 35px 27px 30px 28px;
+  flex-basis: 100%;
 
   @media screen and (max-width: $screen-md - 1px) {
     margin-left: 0;
@@ -33,6 +33,7 @@
   font-size: 26px;
   line-height: 31px;
   text-transform: uppercase;
+  width: 100%;
 }
 
 .sub-type-details {

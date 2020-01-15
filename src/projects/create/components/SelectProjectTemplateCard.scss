@@ -16,6 +16,14 @@
 }
 
 .one-deliverable {
+  .right-card {
+    flex: 1;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      display: none;
+    }
+  }
+
   .bottom-card {
     display: none;
 
@@ -25,6 +33,10 @@
       .bottom-column {
         background: transparent;
         padding: 0;
+
+        @media screen and (max-width: $screen-sm - 1px) {
+          margin-bottom: 0;
+        }
 
         h3 {
           color: $tc-gray-70;
@@ -43,7 +55,9 @@
 .more-deliverable,
 .no-deliverable {
   .right-card {
-    flex: 0;
+    @media screen and (max-width: $screen-md - 1px) {
+      margin-top: 21px;
+    }
   }
 }
 
@@ -79,7 +93,6 @@
   width: 100%;
   text-align: left;
   margin-top: 10px;
-  margin-bottom: 21px;
 }
 
 .icon-wrapper {
@@ -95,6 +108,9 @@
   @media screen and (max-width: $screen-md - 1px) {
     flex-direction: column;
     text-align: center;
+    height: 100%;
+    padding-bottom: 10px;
+    flex-basis: 100%;
 
     .left-card-content {
       align-items: center;
@@ -114,14 +130,17 @@
   background: $tc-gray-neutral-light;
   align-items: center;
   padding: 35px 50px 30px 50px;
-  flex: 1;
 
   .info-html {
     margin-right: 22px;
+    margin-bottom: auto;
+  }
+
+  button {
+    flex-shrink: 0;
   }
 
   @media screen and (max-width: $screen-md - 1px) {
-    flex: 0;
     background: transparent;
 
     .vertical-curve,
@@ -155,6 +174,12 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  min-height: 100%;
+  flex-shrink: 0;
+
+  .vertical-space {
+    height: 21px;
+  }
 }
 
 .bottom-card {
@@ -175,6 +200,9 @@
 .horizontal-curve {
   width: 100%;
   height: 30px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .learn-more-container {
@@ -186,6 +214,11 @@
   line-height: 17px;
   flex-wrap: wrap;
   align-items: center;
+  margin-top: auto;
+
+  .starting-at {
+    margin-right: 10px;
+  }
 }
 
 .starting-at {
@@ -258,7 +291,7 @@
 .bottom-column {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  flex-basis: 100%;
   margin: 14px;
   background: $tc-white;
   border-radius: 10px;
@@ -296,4 +329,5 @@
   justify-content: center;
   flex-wrap: wrap;
   padding: 16px 25px 27px 26px;
+  margin-top: 30px;
 }

@@ -29,20 +29,25 @@ function SelectProjectTemplateCard(p) {
           <div styleName="left-card-content">
             <h3 styleName="header">{projectTemplate.name}</h3>
             <div styleName="details">{projectTemplate.info}</div>
-            <div styleName="learn-more-container">
-              {subTextHTML && (
-                <div
-                  dangerouslySetInnerHTML={{ __html: subTextHTML }}
-                  styleName="starting-at"
-                />
-              )}
-              {detailLink && (
-                <a
-                  styleName="learn-more"
-                  href={detailLink}
-                >Learn More <IconArrowRight /></a>
-              )}
-            </div>
+            {(subTextHTML || detailLink || deliverables.length === 0) && (
+              <div styleName="vertical-space" />
+            )}
+            {(subTextHTML || detailLink) && (
+              <div styleName="learn-more-container">
+                {subTextHTML && (
+                  <div
+                    dangerouslySetInnerHTML={{ __html: subTextHTML }}
+                    styleName="starting-at"
+                  />
+                )}
+                {detailLink && (
+                  <a
+                    styleName="learn-more"
+                    href={detailLink}
+                  >Learn More <IconArrowRight /></a>
+                )}
+              </div>
+            )}
           </div>
         </div>
         <div styleName="right-card">
@@ -74,10 +79,12 @@ function SelectProjectTemplateCard(p) {
                         styleName="starting-at"
                       />
                     )}
-                    <button
-                      className="tc-btn tc-btn-sm tc-btn-primary"
-                      onClick={p.onClick}
-                    >Select</button>
+                    {(deliverables.length === 1) && (
+                      <button
+                        className="tc-btn tc-btn-sm tc-btn-primary"
+                        onClick={p.onClick}
+                      >Select</button>
+                    )}
                   </div>
                 )
             )}

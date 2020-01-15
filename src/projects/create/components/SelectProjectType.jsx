@@ -30,10 +30,9 @@ const SelectProjectType = ({
     cards.push(
       <SelectProjectTypeCard
         icon={icon}
-        info={projectType.info}
+        projectType={projectType}
         key={projectType.key}
         onClick={() => onProjectTypeChange(projectType.key)}
-        type={projectType.displayName}
         buttonText="View Solutions"
       />
     )

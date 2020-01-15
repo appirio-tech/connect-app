@@ -140,13 +140,13 @@ export function getProjectTemplatesByCategory(projectTemplates, categoryKey, vis
  * Get project templates by sub category
  *
  * @param {Array}   projectTemplates list of project templates
- * @param {String}  categoryKey      category key
+ * @param {String}  subCategoryKey     sub category key
  * @param {Boolean} visibleOnly      if true only not hidden and not disabled project templates will returned
  *
  * @returns {Array} list of project templates
  */
-export function getProjectTemplatesBySubCategory(projectTemplates, categoryKey, visibleOnly) {
-  return _.filter(projectTemplates, { subCategory: categoryKey })
+export function getProjectTemplatesBySubCategory(projectTemplates, subCategoryKey, visibleOnly) {
+  return _.filter(projectTemplates, { subCategory: subCategoryKey })
     .filter((projectTemplate) => visibleOnly ? !projectTemplate.hidden && !projectTemplate.disabled : true)
 }
 

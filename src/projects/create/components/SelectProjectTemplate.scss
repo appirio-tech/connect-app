@@ -25,7 +25,7 @@
       align-items: center;
       padding-left: 30px;
       padding-right: 30px;
-      margin-bottom: 50px;
+      margin-bottom: 105px;
       max-width: 1110px;
       width: 100%;
 
@@ -69,12 +69,15 @@
     }
 
     .footer {
-      position: relative;
       margin-top: auto;
       display: flex;
       flex-wrap: wrap;
+      margin-bottom: 30px;
+      justify-content: center;
 
       a {
+        @include roboto-medium;
+
         display: flex;
         align-items: center;
 
@@ -98,6 +101,8 @@
       line-height: 41px;
       margin-bottom: 11px;
       text-transform: uppercase;
+      padding-left: 50px;
+      padding-right:  50px;
 
       @media screen and (max-width: $screen-md - 1px) {
         font-size: 20px;
@@ -188,6 +193,11 @@
           svg {
             width: 7px;
             height: 7px;
+            flex-shrink: 0;
+
+            @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+              margin-left: -1px;
+            }
 
             path {
               fill: $tc-gray-70;
@@ -203,6 +213,11 @@
           border-radius: 20px;
           font-size: 14px;
           margin: 0;
+          color: $tc-gray-70;
+
+          &::-ms-clear {
+            display: none;
+          }
 
           @include placeholder {
             color: $tc-gray-70;
