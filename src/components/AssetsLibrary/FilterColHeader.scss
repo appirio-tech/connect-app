@@ -1,0 +1,29 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.FilterColHeader {
+  :global {
+    .dropdown-menu-list.down-layer {
+      padding-top: 40px;
+    }
+
+    .filter-drop-down {
+      .txt-link {
+        z-index: 10;
+
+        .icon-carret-down-normal {
+          top: 50%;
+          margin-top: -3px;
+        }
+      }
+
+      .Dropdown.no-autoclose {
+        z-index: 5;
+      }
+    }
+    
+    .dropdown-wrap {
+      cursor: default;
+    }
+  }
+}
+

@@ -16,6 +16,17 @@ import FileIcon from '../../components/FileIcon'
 import FolderIcon from '../../assets/icons/v.2.5/icon-folder-small.svg'
 
 import './GridView.scss'
+import ProjectManagerAvatars from '../../projects/list/components/Projects/ProjectManagerAvatars'
+import FilterColHeader from './FilterColHeader'
+import {
+  PROJECT_ASSETS_SHARED_WITH_ADMIN,
+  PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS,
+  PROJECT_ASSETS_SHARED_WITH_TOPCODER_MEMBERS,
+  PROJECT_FEED_TYPE_MESSAGES
+} from '../../config/constants'
+
+let selectedLink
+let clearing = false
 
 const FilesGridView = ({
   links,
@@ -39,8 +50,41 @@ const FilesGridView = ({
   loggedInUser,
   onDeletePostAttachment,
   formatModifyDate,
-  formatFolderTitle
+  formatFolderTitle,
+  setFilter,
+  getFilterValue,
+  clearFilter,
+  filtered
 }) => {
+  let nameFieldRef
+  let sharedWithFieldRef
+  let dateFieldRef
+  
+  const updateSubContents = () => {
+    if (selectedLink) {
+      let link = links.filter(item => {
+        return selectedLink.title === item.title
+          && selectedLink.createdBy === item.createdBy
+          && selectedLink.updatedAt === item.updatedAt
+      })[0]
+      
+      if (!link) {
+        link = _.cloneDeep(selectedLink)
+        link.children = []
+      }
+      
+      onChangeSubFolder(link)
+    }
+  }
+  
+  const clearSubContents = () => clearing = true
+  
+  const clearFieldValues = () => {
+    nameFieldRef.clearFilter()
+    sharedWithFieldRef.clearFilter()
+    dateFieldRef.clearFilter()
+  }
+  
   const renderLink = (link) => {
     if (link.onClick) {
       return (
@@ -72,8 +116,45 @@ const FilesGridView = ({
       onAddAttachment(projectId, attachment)
     })
   }
-  const goBack = () => onChangeSubFolder(null)
-
+  const goBack = () => {
+    onChangeSubFolder(null)
+    selectedLink = null
+  }
+  
+  const renderSharedWith = (link) => {
+    if (link.tag) {
+      return (
+        <p>
+          {(link.tag === PROJECT_FEED_TYPE_MESSAGES)
+            ? PROJECT_ASSETS_SHARED_WITH_TOPCODER_MEMBERS : PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS}
+        </p>
+      )
+    } else if (!link.allowedUsers) {
+      return (
+        <p>
+          {PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS}
+        </p>
+      )
+    } else if (link.allowedUsers.length === 0) {
+      return (
+        <p>
+          {PROJECT_ASSETS_SHARED_WITH_ADMIN}
+        </p>
+      )
+    } else {
+      return (
+        <ProjectManagerAvatars managers={link.userHandles}/>
+      )
+    }
+  }
+  
+  if (clearing) {
+    setTimeout(() => {
+      updateSubContents()
+      clearing = false
+    })
+  }
+  
   return (
     <div styleName="assets-gridview-container">
       {(subFolderContent) && (
@@ -85,11 +166,30 @@ const FilesGridView = ({
           onDeletePostAttachment={onDeletePostAttachment}
           loggedInUser={loggedInUser}
           formatModifyDate={formatModifyDate}
+          setFilter={setFilter}
+          getFilterValue={getFilterValue}
+          clearFilter={clearFilter}
+          updateSubContents={updateSubContents}
+          clearSubContents={clearSubContents}
+          filtered={filtered}
         />)}
       {(!subFolderContent) && (
         <div styleName={cn({'assets-gridview-container-active': (linkToEdit >= 0  || linkToDelete >= 0)}, '')}>
           {(linkToEdit >= 0 || linkToDelete >= 0) && <div styleName="assets-gridview-modal-overlay"/>}
-          <div styleName="assets-gridview-title">{`All ${title}`}</div>
+          <div styleName="assets-gridview-title">
+            {`${filtered ? 'Filtered' : 'All'} ${title}`}
+            {filtered && (
+              <button
+                className="tc-btn tc-btn-default"
+                onClick={() => {
+                  clearFilter()
+                  clearFieldValues()
+                }}
+              >
+                Clear Filters
+              </button>
+            )}
+          </div>
           {pendingAttachments &&
             <AddFilePermission onCancel={discardAttachments}
               onSubmit={onAddingAttachmentPermissions}
@@ -102,9 +202,35 @@ const FilesGridView = ({
           <ul>
             <li styleName="assets-gridview-header" key="assets-gridview-header">
               <div styleName="flex-item-title item-type">Type</div>
-              <div styleName="flex-item-title item-name">Name</div>
+              <div styleName="flex-item-title item-name">
+                <FilterColHeader
+                  ref={(comp) => nameFieldRef = comp}
+                  title="Name"
+                  setFilter={setFilter}
+                  filterName="name"
+                  value={getFilterValue('name')}
+                />
+              </div>
+              <div styleName="flex-item-title item-shared-with">
+                <FilterColHeader
+                  ref={(comp) => sharedWithFieldRef = comp}
+                  title="Shared With"
+                  filterName="sharedWith"
+                  setFilter={setFilter}
+                  value={getFilterValue('sharedWith')}
+                />
+              </div>
               <div styleName="flex-item-title item-created-by">Created By</div>
-              <div styleName="flex-item-title item-modified">Modified</div>
+              <div styleName="flex-item-title item-modified">
+                <FilterColHeader
+                  ref={(comp) => dateFieldRef = comp}
+                  type="date"
+                  title="Date"
+                  setFilter={setFilter}
+                  from={getFilterValue('date.from')}
+                  to={getFilterValue('date.to')}
+                />
+              </div>
               <div styleName="flex-item-title item-action"/>
             </li>
             {links.map((link, idx) => {
@@ -123,7 +249,10 @@ const FilesGridView = ({
               const handleEditClick = () => onEditIntent(idx)
               const canEdit = `${link.createdBy}` === `${loggedInUser.userId}`
 
-              const changeSubFolder = () => onChangeSubFolder(link)
+              const changeSubFolder = () => {
+                onChangeSubFolder(link)
+                selectedLink = link
+              }
               const owner = _.find(assetsMembers, m => m.userId === _.parseInt(link.createdBy))
 
               if (Array.isArray(link.children) && link.children.length > 0) {
@@ -131,6 +260,9 @@ const FilesGridView = ({
                   <li styleName="assets-gridview-row" onClick={changeSubFolder} key={'assets-gridview-folder-' + idx}>
                     <div styleName="flex-item item-type"><FolderIcon /></div>
                     <div styleName="flex-item item-name hand"><p>{formatFolderTitle(link.title)}</p></div>
+                    <div styleName="flex-item item-shared-with">
+                      {renderSharedWith(link)}
+                    </div>
                     <div styleName="flex-item item-created-by">
                       {!owner && (<div className="user-block txt-italic">Unknown</div>)}
                       {owner && (
@@ -170,6 +302,9 @@ const FilesGridView = ({
                       <FileIcon type={link.title.split('.')[1]} />
                     </div>
                     <div styleName="flex-item item-name"><p>{renderLink(link)}</p></div>
+                    <div styleName="flex-item item-shared-with">
+                      {renderSharedWith(link)}
+                    </div>
                     <div styleName="flex-item item-created-by">
                       {!owner && (<div className="user-block txt-italic">Unknown</div>)}
                       {owner && (
@@ -215,6 +350,10 @@ FilesGridView.propTypes = {
   onDeletePostAttachment: PropTypes.func,
   formatModifyDate: PropTypes.func.isRequired,
   formatFolderTitle: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  getFilterValue: PropTypes.func.isRequired,
+  clearFilter: PropTypes.func.isRequired,
+  filtered: PropTypes.bool
 }
 
 FilesGridView.defaultProps = {
