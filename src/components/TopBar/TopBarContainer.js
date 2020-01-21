@@ -88,8 +88,8 @@ class TopBarContainer extends React.Component {
     const userMenuItems = [
       [
         { label: 'My profile', link: '/settings/profile' },
-        { label: 'Account and security', link: '/settings/account' },
         { label: 'Notification settings', link: '/settings/notifications' },
+        { label: 'Account & security', link: '/settings/account' },
       ],
       [
         { label: 'Log out', onClick: logoutClick, absolute: true, id: 0 }
