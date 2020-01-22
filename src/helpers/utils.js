@@ -113,3 +113,19 @@ export const createEvent = (eventName) => {
 export const delay = (milliseconds) => new Promise((resolve) => {
   setTimeout(resolve, milliseconds)
 })
+
+
+/**
+ * format phone bofore send to server
+ * if phone is not head with '+', add '+'
+ *
+ * @param {String}        phone
+ * @returns {String} 
+ */
+export const formatPhone = (phone) => {
+  if(phone[0] === '+') {
+    return phone
+  }else{
+    return '+' + phone
+  }
+}
