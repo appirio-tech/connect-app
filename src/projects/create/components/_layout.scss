@@ -99,7 +99,9 @@ $minimumPageWidth: 984px;
       bottom: 0;
       left: 0;
       right: 0;
-      margin-bottom: 15px;
+      margin-bottom: 30px;
+      font-size: 14px;
+      color: $tc-gray-90;
 
       @media screen and (max-width: $screen-md - 1px) {
         margin-bottom: 2 * $base-unit;
@@ -107,6 +109,10 @@ $minimumPageWidth: 984px;
       }
 
       > a {
+        font-size: 15px;
+        text-transform: uppercase;
+        margin-left: 5px;
+
         @media screen and (max-width: $screen-md - 1px) {
           white-space: nowrap;
         }

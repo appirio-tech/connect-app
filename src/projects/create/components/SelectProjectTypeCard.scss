@@ -1,0 +1,47 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.SelectProjectTypeCard {
+  background: $tc-white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 7px 20px 0 rgba($tc-gray-80, 0.1);
+  max-width: 420px;
+  min-height: 370px;
+  margin: 0 15px 30px;
+  padding: 35px 27px 30px 28px;
+  flex-basis: 100%;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.header {
+  @include roboto-bold;
+
+  color: $tc-gray-90;
+  font-size: 26px;
+  line-height: 31px;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.sub-type-details {
+  color: $tc-gray-70;
+  font-size: 14px;
+  line-height: 17px;
+  width: 100%;
+  text-align: left;
+  flex: 1;
+  margin: 19px 0;
+}
