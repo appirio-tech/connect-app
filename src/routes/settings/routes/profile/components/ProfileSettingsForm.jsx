@@ -63,17 +63,17 @@ class ProfileSettingsForm extends Component {
           countrySelected: country.name,
         })
       }
-    }
-
-    if (isValid) {
-      this.setState({
-        businessPhoneValid: true
-      })
-    } else {
+      if(!this.state.businessPhoneValid && isValid) {
+        this.setState({
+          businessPhoneValid: true
+        })
+      }
+    }else if(this.state.businessPhoneValid){
       this.setState({
         businessPhoneValid: false
       })
     }
+
     // external change means, the user didn't change the phone number field.
     // But it was automatically changed due to country selection change. In such case, we should show
     // the alert under country selection only.
