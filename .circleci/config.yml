@@ -9,7 +9,7 @@ install_dependency: &install_dependency
           name: Installation of build and deployment dependencies.
           command: |
             sudo apt install python-dev python-pip -y
-            sudo pip install awscli --upgrade           
+            sudo pip install awscli --upgrade
 install_deploysuite: &install_deploysuite
           name: Installation of install_deploysuite.
           command: |
@@ -19,7 +19,7 @@ install_deploysuite: &install_deploysuite
             cp ./../buildscript/awsconfiguration.sh .
 restore_cache_settings_for_build: &restore_cache_settings_for_build
           key: connect-node-modules-{{ checksum "package-lock.json" }}
-save_cache_settings: &save_cache_settings    
+save_cache_settings: &save_cache_settings
           key: connect-node-modules-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
@@ -29,11 +29,11 @@ running_npm_build: &running_npm_build
             source buildenvvar
             npm run lint
             npm run test
-            npm run build  
+            npm run build
 workspace_persist: &workspace_persist
           root: .
           paths:
-            - dist 
+            - dist
 workspace_attach: &workspace_attach
           at: ./workspace
 
@@ -46,7 +46,7 @@ build_steps: &build_steps
       - restore_cache: *restore_cache_settings_for_build
       - run: npm install
       - save_cache: *save_cache_settings
-      - run: 
+      - run:
           name: "configuring environment"
           command: |
             ./awsconfiguration.sh $DEPLOY_ENV
@@ -57,7 +57,7 @@ build_steps: &build_steps
 deploy_steps: &deploy_steps
       - checkout
       - attach_workspace: *workspace_attach
-      - run: *install_deploysuite      
+      - run: *install_deploysuite
       - deploy:
           name: Running MasterScript
           command: |
@@ -112,13 +112,13 @@ workflows:
           context : org-global
           filters:
             branches:
-              ignore: ['master']              
+              ignore: ['master']
       - build-prod:
           context : org-global
           filters:
             branches:
               only: master
-              
+
       - deployDev:
           context : org-global
           requires:
