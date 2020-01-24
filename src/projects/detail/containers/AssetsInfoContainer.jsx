@@ -603,18 +603,18 @@ class AssetsInfoContainer extends React.Component {
         }
         
         if (from || to) {
-          const date = new Date(item.updatedAt)
+          const date = moment(item.updatedAt)
           
           if (from) {
-            const fromDate = new Date(from)
+            const fromDate = moment(from)
             
-            fromDateMatch = date.getTime() >= fromDate.getTime()
+            fromDateMatch = date.isSameOrAfter(fromDate, 'day')
           }
           
           if (to) {
-            const toDate = new Date(to)
+            const toDate = moment(to)
             
-            toDateMatch = date.getTime() <= toDate.getTime()
+            toDateMatch = date.isSameOrBefore(toDate, 'day')
           }
         }
         

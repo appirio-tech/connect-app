@@ -93,6 +93,7 @@
 .item-shared-with {
   flex: none;
   width: 140px;
+  word-break: keep-all;
 }
 
 .item-modified, .item-created-by {
