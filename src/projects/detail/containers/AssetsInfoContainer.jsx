@@ -235,16 +235,16 @@ class AssetsInfoContainer extends React.Component {
     const { project } = this.props
     this.props.removeProjectAttachment(project.id, attachmentId)
   }
-  
+
   setFilter(name, filter) {
     const gridFilter = {
       name: this.state.gridFilter.name,
       sharedWith: this.state.gridFilter.sharedWith,
       date: this.state.gridFilter.date,
     }
-    
+
     let target = gridFilter
-  
+
     name.split('.').forEach((key, index, list) => {
       if (index !== list.length - 1) {
         target = target[key]
@@ -252,18 +252,18 @@ class AssetsInfoContainer extends React.Component {
         target[key] = filter
       }
     })
-    
+
     this.setState({ gridFilter })
     this.forceUpdate()
   }
-  
+
   getFilterValue(name) {
     let target = this.state.gridFilter
-    
+
     name.split('.').forEach(key => {
       target = target[key]
     })
-    
+
     return target
   }
 
@@ -458,16 +458,16 @@ class AssetsInfoContainer extends React.Component {
       }
     }
   }
-  
+
   setAttachmentUserDetails(attachments) {
     attachments.forEach((attachment) => {
       if (attachment.allowedUsers) {
         const needToBeLoaded = attachment.allowedUsers.filter(userId => !this.props.projectMembers[userId])
-      
+
         if (needToBeLoaded.length > 0) {
           this.props.loadMembers(needToBeLoaded)
         }
-      
+
         attachment.userHandles = attachment.allowedUsers.map(userId => this.props.projectMembers[userId])
       }
     })
@@ -490,7 +490,7 @@ class AssetsInfoContainer extends React.Component {
         }
       })
     }
-    
+
     attachments = _.sortBy(attachments, attachment => -new Date(attachment.updatedAt).getTime())
       .map(attachment => ({
         id: attachment.id,
@@ -528,7 +528,7 @@ class AssetsInfoContainer extends React.Component {
     const publicTopicLinks = topicLinks.filter(link => link.tag !== PROJECT_FEED_TYPE_MESSAGES)
     const privateTopicLinks = topicLinks.filter(link => link.tag === PROJECT_FEED_TYPE_MESSAGES)
     const phaseLinks = this.extractLinksFromPosts(phaseFeeds)
-    
+
     let links = []
     links = links.concat(project.bookmarks)
     links = links.concat(publicTopicLinks)
@@ -543,38 +543,38 @@ class AssetsInfoContainer extends React.Component {
       ...this.extractAttachmentLinksFromPosts(feeds),
       ...this.extractAttachmentLinksFromPosts(phaseFeeds)
     ]
-  
+
     this.setAttachmentUserDetails(attachments)
-    
+
     links = this.filterAssetList(links)
     attachments = this.filterAssetList(attachments)
-    
+
     return ({
       links,
       attachments,
     })
   }
-  
+
   filterAssetList(list) {
     const {name, sharedWith, date} = this.state.gridFilter
     const {from, to} = date
-    
+
     return list.filter(item => {
       if (item.children) {
         item.children = this.filterAssetList(item.children)
-        
+
         return item.children.length > 0
       } else {
         let nameMatch = true
         let sharedWithMatch = true
         let fromDateMatch = true
         let toDateMatch = true
-        
+
         // filter name
         if (name) {
           nameMatch = item.title.toLowerCase().indexOf(name.toLowerCase()) !== -1
         }
-        
+
         // filter user handle
         if (sharedWith) {
           if (item.tag || item.topicTag) {
@@ -589,8 +589,13 @@ class AssetsInfoContainer extends React.Component {
           } else if (item.allowedUsers instanceof Array) {
             // when allowed users exists
             if (item.allowedUsers.length > 0) {
-              // filter by user handle
-              sharedWithMatch = item.userHandles.filter(user => user.handle.toLowerCase().indexOf(sharedWith) !== -1).length > 0
+              const sharedWithLowerCase = sharedWith.toLowerCase()
+              // filter by user handle, first or last name
+              sharedWithMatch = _.some(item.userHandles, user => (
+                _.get(user, 'handle', '').toLowerCase().indexOf(sharedWithLowerCase) !== -1 ||
+                _.get(user, 'firstName', '').toLowerCase().indexOf(sharedWithLowerCase) !== -1 ||
+                _.get(user, 'lastName', '').toLowerCase().indexOf(sharedWithLowerCase) !== -1
+              ))
             } else {
               // filter by only admins text
               sharedWithMatch = PROJECT_ASSETS_SHARED_WITH_ADMIN.toLowerCase().indexOf(sharedWith) !== -1
@@ -601,32 +606,32 @@ class AssetsInfoContainer extends React.Component {
             sharedWithMatch = PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS.toLowerCase().indexOf(sharedWith) !== -1
           }
         }
-        
+
         if (from || to) {
           const date = moment(item.updatedAt)
-          
+
           if (from) {
             const fromDate = moment(from)
-            
+
             fromDateMatch = date.isSameOrAfter(fromDate, 'day')
           }
-          
+
           if (to) {
             const toDate = moment(to)
-            
+
             toDateMatch = date.isSameOrBefore(toDate, 'day')
           }
         }
-        
+
         return nameMatch && sharedWithMatch && fromDateMatch && toDateMatch
       }
     })
   }
-  
+
   checkFilterDirty() {
     const {name, sharedWith, date} = this.state.gridFilter
     const {from, to} = date
-    
+
     return !!name || !!sharedWith || !!from || !!to
   }
 
@@ -654,7 +659,7 @@ class AssetsInfoContainer extends React.Component {
 
     loadMembers(userIds)
   }
-  
+
   clearFilter() {
     this.setState({
       gridFilter: {
@@ -666,10 +671,10 @@ class AssetsInfoContainer extends React.Component {
         }
       }
     })
-    
+
     this.forceUpdate()
   }
-  
+
   render() {
     const { project, currentMemberRole, isSuperUser, projectTemplates, hideLinks,
       attachmentsAwaitingPermission, addProjectAttachment, discardAttachments, attachmentPermissions,
@@ -775,9 +780,9 @@ class AssetsInfoContainer extends React.Component {
     const formatModifyDate = (link) => ((link.updatedAt) ? moment(link.updatedAt).format('MM/DD/YYYY h:mm A') : '—')
 
     const formatFolderTitle = (linkTitle) => linkTitle
-    
+
     const filterDirty = this.checkFilterDirty()
-    
+
     return (
       <div>
         <div styleName="assets-info-wrapper">
