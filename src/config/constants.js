@@ -947,3 +947,11 @@ export const EVENT_TYPE = {
     DELETED: 'connect.notification.project.topic.deleted',
   },
 }
+
+
+/**
+ * Project assets shared with type text
+ */
+export const PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS = 'All Project Members'
+export const PROJECT_ASSETS_SHARED_WITH_TOPCODER_MEMBERS = 'Only Topcoder Members'
+export const PROJECT_ASSETS_SHARED_WITH_ADMIN = 'Only Admins'
