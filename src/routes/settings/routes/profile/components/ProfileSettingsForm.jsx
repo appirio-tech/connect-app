@@ -68,7 +68,9 @@ class ProfileSettingsForm extends Component {
           businessPhoneValid: true
         })
       }
-    }else if(this.state.businessPhoneValid){
+    }
+    
+    if (this.state.businessPhoneValid && !isValid){
       this.setState({
         businessPhoneValid: false
       })
