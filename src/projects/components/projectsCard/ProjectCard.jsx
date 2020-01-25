@@ -6,7 +6,7 @@ import { getProjectRoleForCurrentUser } from '../../../helpers/projectHelper'
 import ProjectCardHeader from './ProjectCardHeader'
 import ProjectCardBody from './ProjectCardBody'
 import ProjectManagerAvatars from '../../list/components/Projects/ProjectManagerAvatars'
-import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
+import Invitation from '../../../components/Invitation/Invitation'
 import './ProjectCard.scss'
 
 function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus, projectTemplates, unreadMentionsCount, callInviteRequest, isAcceptingInvite }) {
@@ -40,31 +40,19 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
       </div>
       <div className="card-footer">
         <ProjectManagerAvatars managers={project.members} maxShownNum={10} />
-        <div>
-          {(!isMember && isInvited) &&
-            <div className="spacing join-btn-container">
-              {(!isAcceptingInvite) && (
-                <button
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    callInviteRequest(project, true)
-                  }}
-                  className={'tc-btn tc-btn-primary tc-btn-md blue accept-btn'}
-                >
-                  Join project
-                </button>)}
-              {(!isAcceptingInvite) && (
-                <button
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    callInviteRequest(project, false)
-                  }}
-                  className="decline-btn"
-                >Decline</button>)}
-              {isAcceptingInvite && (<LoadingIndicator isSmall />)}
-            </div>
-          }
-        </div>
+        {(!isMember && isInvited) &&
+          <div className="spacing join-btn-container">
+            <Invitation 
+              isLoading={isAcceptingInvite} 
+              onAcceptClick={() => {
+                callInviteRequest(project, true)
+              }}
+              onRejectClick={() => {
+                callInviteRequest(project, false)
+              }}
+            />
+          </div>
+        }
       </div>
     </div>
   )
