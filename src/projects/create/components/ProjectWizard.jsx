@@ -376,7 +376,10 @@ class ProjectWizard extends Component {
         newProject.details = { $set: { utm: { code:_.get(incompleteProject, 'details.utm.code') } } }
       } else {
         const incompleteProject = JSON.parse(incompleteProjectStr)
-        _.assign(newProject, incompleteProject)
+        _.assign(newProject, { $set: incompleteProject })
+        newProject.name = { $set:_.get(incompleteProject, 'name') }
+        newProject.description = { $set:_.get(incompleteProject, 'description') }
+        newProject.details = { $set: { utm: { code:_.get(incompleteProject, 'details.utm.code') } } }
       }
     }
     window.scrollTo(0, 0)
