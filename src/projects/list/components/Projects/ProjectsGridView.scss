@@ -80,6 +80,10 @@ $screen-one-column: 720px;
       .item-manager {
         flex: 2 2 85px;
         min-width: 85px;
+        .spacing {
+          padding-top: 10px;
+          box-sizing: border-box;
+        }
       }
 
 
@@ -684,5 +688,5 @@ $screen-one-column: 720px;
 }
 
 .invitation-container {
-  margin-top: 10px;
+  margin-left: -30px;
 }

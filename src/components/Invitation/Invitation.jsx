@@ -7,9 +7,9 @@ import PT from 'prop-types'
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
 import cn from 'classnames'
 import styles from './Invitation.scss'
-import ArrowIcon from '../../assets/icons/arrow-9px-carret-down-normal.svg'
+import EnhancedDropdown from '../NotificationsDropdown/EnhancedDropdown'
+import ArrowIcon from '../../assets/icons/arrow-6px-carret-down-active.svg'
 import CheckIcon from '../../assets/icons/ui-check.svg'
-console.log(styles)
 
 class Invitation extends React.Component {
   constructor(props) {
@@ -17,12 +17,15 @@ class Invitation extends React.Component {
     this.state = {
       isShow: false
     }
-    this.onLabelClick = this.onLabelClick.bind(this)
+    this.onToggle = this.onToggle.bind(this)
   }
 
-  onLabelClick(event) {
-    event.stopPropagation()
-    this.setState({isShow: !this.state.isShow}) 
+  onToggle(isShow) {
+    if(typeof isShow === 'object') {
+      this.setState({isShow: !this.state.isShow}) 
+    }else {
+      this.setState({isShow}) 
+    }
   }
 
   render() {
@@ -32,33 +35,35 @@ class Invitation extends React.Component {
       isLoading
     } = this.props
 
-    const {
-      isShow 
-    } = this.state
     return (
       <div styleName="container">
-        <div styleName="label" onClick={this.onLabelClick}>
-          You're Invited
-          <ArrowIcon fill="red"/>
-        </div>
-        {isShow &&<div styleName="popup">
-          {!isLoading ?<div>
-            <button
-              onClick={(event) => {
-                event.stopPropagation()
-                onAcceptClick()
-              }}
-              className={cn('tc-btn tc-btn-primary', styles['btn'])}
-            ><CheckIcon/>JOIN</button>
-            <button
-              onClick={(event) => {
-                event.stopPropagation()
-                onRejectClick()
-              }}
-              className={cn('tc-btn', styles['btn'], styles['reject-btn'])}
-            >DECLINE</button>
-          </div>: <LoadingIndicator isSmall />}
-        </div>}
+        <EnhancedDropdown theme="UserDropdownMenu" pointerShadow  noAutoclose onToggle={this.onToggle}>
+          <div className="dropdown-menu-header">
+            <div styleName="label" onClick={this.onToggle}>
+                YOU'RE INVITED
+              <ArrowIcon className={this.state.isShow ? styles.rotate : ''}/>
+            </div>
+          </div>
+          <div className={cn('dropdown-menu-list', styles['popup'] )}>
+            {(!isLoading) ?<div>
+              <button
+                onClick={(event) => {
+                  event.stopPropagation()
+                  onAcceptClick()
+                }}
+                className={cn('tc-btn tc-btn-primary dropdown-wrap', styles['btn'])}
+              ><CheckIcon/>JOIN</button>
+              <button
+                onClick={(event) => {
+                  event.stopPropagation()
+                  onRejectClick()
+                }}
+                className={cn('tc-btn tc-btn-warning dropdown-wrap', styles['btn'], styles['reject-btn'])}
+              >DECLINE</button>
+            </div>: <LoadingIndicator isSmall />}
+          </div>
+
+        </EnhancedDropdown>
       </div>
     )
   }
