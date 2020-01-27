@@ -34,7 +34,7 @@ export function createProjectMemberInvite(projectId, member) {
 }
 
 export function getProjectMemberInvites(projectId) {
-  const fields = 'id,projectId,userId,email,role,status,createdAt,updatedAt,createdBy,updatedBy,handle,firstName,lastName,photoURL'
+  const fields = 'id,projectId,userId,email,role,status,createdAt,updatedAt,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
   const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/invites/?fields=`
     + encodeURIComponent(fields)
   return axios.get(url)

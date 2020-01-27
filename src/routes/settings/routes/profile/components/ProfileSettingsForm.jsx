@@ -12,7 +12,7 @@ const Formsy = FormsyForm.Formsy
 import ProfileSettingsAvatar from './ProfileSettingsAvatar'
 import FormsySelect from '../../../../../components/Select/FormsySelect'
 import ISOCountries from '../../../../../helpers/ISOCountries'
-
+import { formatPhone } from '../../../../../helpers/utils'
 import './ProfileSettingsForm.scss'
 
 const countries = _.orderBy(ISOCountries, ['name'], ['asc']).map(country => ({
@@ -52,8 +52,8 @@ class ProfileSettingsForm extends Component {
     }
   }
 
-  onBusinessPhoneCountryChange({ country, externalChange }) {
-    const { businessPhoneValid, countrySelected: previousSelectedCountry } = this.state
+  onBusinessPhoneCountryChange({ country, externalChange, isValid}) {
+    const { countrySelected: previousSelectedCountry } = this.state
 
     if (country && country.code) {
       if (previousSelectedCountry !== country.name && country.name) {
@@ -63,13 +63,14 @@ class ProfileSettingsForm extends Component {
           countrySelected: country.name,
         })
       }
-
-      if (!businessPhoneValid) {
+      if(!this.state.businessPhoneValid && isValid) {
         this.setState({
           businessPhoneValid: true
         })
       }
-    } else if (businessPhoneValid) {
+    }
+    
+    if (this.state.businessPhoneValid && !isValid){
       this.setState({
         businessPhoneValid: false
       })
@@ -137,6 +138,8 @@ class ProfileSettingsForm extends Component {
       ...this.props.values.settings,
       ...data,
     }
+
+    updatedData.businessPhone = formatPhone(updatedData.businessPhone)
     this.props.saveSettings(updatedData)
 
     this.setState({

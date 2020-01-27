@@ -596,7 +596,7 @@ export const PHASE_STATUS = [
 
 // this defines default criteria to filter projects for projects list
 export const PROJECT_LIST_DEFAULT_CRITERIA = {
-  sort: 'updatedAt desc'
+  sort: 'lastActivityAt desc'
 }
 
 export const NOTIFICATION_TYPE = {
@@ -914,6 +914,7 @@ export const EVENT_TYPE = {
     INVITE_REQUESTED: 'connect.notification.project.member.invite.requested',
     INVITE_APPROVED: 'connect.notification.project.member.invite.approved',
     INVITE_REFUSED: 'connect.notification.project.member.invite.rejected',
+    INVITE_CREATED: 'connect.notification.project.member.invite.created'
   },
   PROJECT: {
     ACTIVE: 'connect.notification.project.active',
@@ -941,6 +942,11 @@ export const EVENT_TYPE = {
     MILESTONE_COMPLETED: 'connect.notification.timeline.milestone.transition.completed',
     WAITING_FOR_CUSTOMER_INPUT: 'connect.notification.timeline.milestone.waiting.customer',
     TIMELINE_ADJUSTED: 'connect.notification.timeline.adjusted',
+  },
+  PROJECT_TIMELINE: {
+    TIMELINE_ADJUSTED: 'connect.notification.project.timeline.adjusted',
+    MILESTONE_COMPLETED: 'connect.notification.project.timeline.milestone.transition.completed',
+    MILESTONE_ACTIVATED: 'connect.notification.project.timeline.milestone.transition.active'
   },
   TOPIC: {
     CREATED: 'connect.notification.project.topic.created',

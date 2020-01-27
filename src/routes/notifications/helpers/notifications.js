@@ -2,7 +2,7 @@
  * Helper methods to filter and preprocess notifications
  */
 import _ from 'lodash'
-import { NOTIFICATION_RULES } from '../constants/notifications'
+import { NOTIFICATION_RULES, IGNORED_NOTIFICATION_TYPES } from '../constants/notifications'
 import { EVENT_TYPE } from '../../../config/constants'
 import Handlebars from 'handlebars'
 
@@ -505,10 +505,13 @@ export const prepareNotifications = (rawNotifications) => {
   // - rule
   notifications.forEach((notification) => {
     const notificationRule = getNotificationRule(notification)
+    const isIgnoredNotification = IGNORED_NOTIFICATION_TYPES.indexOf(notification.eventType) > -1
 
-    // if rule for notification is not found show a warning for now as such notification cannot be displayed
+    // if rule for notification is not found and not in the list of ignored show a warning for now as such notification cannot be displayed
     if (!notificationRule) {
-      console.warn(`Cannot find notification rule for eventType '${notification.eventType}' version '${notification.version}'.`)
+      if(!isIgnoredNotification) {
+        console.warn(`Cannot find notification rule for eventType '${notification.eventType}' version '${notification.version}'.`)
+      }
     } else {
       // populate notification data
       notification.type = notificationRule.type

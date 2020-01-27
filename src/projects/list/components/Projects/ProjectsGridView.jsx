@@ -13,6 +13,7 @@ import { getProjectRoleForCurrentUser } from '../../../../helpers/projectHelper'
 import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 import ProjectListFilterColHeader from './ProjectListFilterColHeader'
 import GridView from '../../../../components/Grid/GridView'
+import Invitation from '../../../../components/Invitation/Invitation'
 import UserTooltip from '../../../../components/User/UserTooltip'
 import {
   PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED, DATE_TO_USER_FIELD_MAP, PHASE_STATUS_REVIEWED,
@@ -33,7 +34,6 @@ import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import './ProjectsGridView.scss'
 import NotificationBadge from '../../../../components/NotificationBadge/NotificationBadge'
 import { getFullNameWithFallback } from '../../../../helpers/tcHelpers'
-import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
@@ -186,52 +186,40 @@ const ProjectsGridView = props => {
         // Hiding the user segment for the momemnt
       }
     },
-    {
-      id: 'joinBtn',
-      headerLabel: '',
-      classes: 'item-join',
-      sortable: false,
-      renderText: item => {
-        // check whether is the project's member
-        const isMember = _.some(item.members, m => (m.userId === currentUser.userId && m.deletedAt === null))
-        if(isMember) return
-        // check whether has pending invition
-        const isInvited = _.some(item.invites, m => ((m.userId === currentUser.userId || m.email === currentUser.email ) && !m.deletedAt && m.status === 'pending'))
-        if(!isInvited) return
-        return (
-          <div className="spacing">
-            {(!isAcceptingInvite[item.id]) && (
-              <button
-                onClick={(event) => {
-                  event.stopPropagation()
-                  callInviteRequest(item, true)
-                }}
-                className={'tc-btn tc-btn-primary tc-btn-md blue accept-btn in-grid'}
-              >
-                Join project
-              </button>)}
-            {(!isAcceptingInvite[item.id]) && (
-              <button
-                onClick={(event) => {
-                  event.stopPropagation()
-                  callInviteRequest(item, false)
-                }}
-                className="decline-btn in-grid"
-              >Decline</button>)}
-            {isAcceptingInvite[item.id] && (<LoadingIndicator isSmall />)}
-          </div>
-        )
-      }
-    }, {
-      id: 'managers',
+    {id: 'managers',
       headerLabel: <ProjectListFilterColHeader setFilter={setFilter} title="Managers" filterName="manager" value={_.get(criteria, 'manager', '')} />,
       sortable: false,
       classes: 'item-manager',
       renderText: item => {
+
+        let showInvitation = true
+        // check whether is the project's member
+        const isMember = _.some(item.members, m => (m.userId === currentUser.userId && m.deletedAt === null))
+        // if(isMember) return
+        // check whether has pending invition
+        const isInvited = _.some(item.invites, m => ((m.userId === currentUser.userId || m.email === currentUser.email ) && !m.deletedAt && m.status === 'pending'))
+        // if(!isInvited) return
+        if(isMember || !isInvited ) {
+          showInvitation = false 
+        }
+
         const m = _.filter(item.members, m => m.role === 'manager')
         return (
           <div className="spacing">
             <ProjectManagerAvatars managers={m} />
+            {showInvitation && (
+              <div styleName="invitation-container">
+                <Invitation 
+                  isLoading={isAcceptingInvite[item.id]} 
+                  onAcceptClick={() => {
+                    callInviteRequest(item, true)
+                  }}
+                  onRejectClick={() => {
+                    callInviteRequest(item, false)
+                  }}
+                />
+              </div>
+            )}
           </div>
         )
       }
