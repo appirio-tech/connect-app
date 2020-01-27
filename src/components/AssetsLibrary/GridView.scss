@@ -8,6 +8,10 @@
   line-height: 20px;
   text-align: left;
   margin-bottom: 16px;
+
+  button {
+    margin-left: 10px;
+  }
 }
 
 .assets-gridview-header,
@@ -43,10 +47,12 @@
   font-weight: 400;
   line-height: 20px;
   text-align: left;
+  word-break: break-all;
 }
 
 .flex-item-title {
   color: $tc-gray-50;
+  font-size: $tc-body-sm;
 }
 
 .flex-item,
@@ -72,7 +78,6 @@
   -ms-flex: 8 1 505px;
   flex: 8 1 505px;
   font-family: Roboto;
-  font-size: 15px;
   font-weight: 400;
   line-height: 30px;
   min-width: 0;
@@ -85,15 +90,19 @@
   }
 }
 
+.item-shared-with {
+  flex: none;
+  width: 140px;
+  word-break: keep-all;
+}
+
 .item-modified, .item-created-by {
   -webkit-box-flex: 0;
   -ms-flex: none;
   flex: none;
   width: 140px;
-  text-align: right;
   display: inline-block;
   font-family: Roboto;
-  font-size: 12px;
   font-weight: 400;
   line-height: 30px;
 }
@@ -102,7 +111,7 @@
   -webkit-box-flex: 0;
   -ms-flex: none;
   flex: none;
-  width: 100px;
+  width: 50px;
   justify-content: flex-end;
   padding-right: 4px;
 }
@@ -140,5 +149,15 @@
   .user-block .tooltip-container {
     text-align: left;
     line-height: 20px;
+  }
+
+  .user-block {
+    .project-customer {
+      position: relative;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 }
