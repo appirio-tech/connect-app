@@ -90,9 +90,7 @@
     }
 
     .join-btn-container {
-      display: flex;
-      align-items: flex-end;
-      flex-direction: column;
+      align-self: center;
     }
   }
 }
