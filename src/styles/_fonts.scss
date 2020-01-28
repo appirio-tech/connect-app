@@ -46,3 +46,26 @@
 
 @include font-family('Roboto', 100, normal, '../assets/fonts/roboto/', 'roboto-thin');
 @include font-family('Roboto', 100, italic, '../assets/fonts/roboto/', 'roboto-thinitalic');
+
+// Roboto-condensed
+@include font-family('Roboto Condensed', 700, normal, '../assets/fonts/roboto-condensed/', 'roboto-condensed-bold');
+@include font-family('Roboto Condensed', 700, italic, '../assets/fonts/roboto-condensed/', 'roboto-condensed-bolditalic');
+
+@include font-family('Roboto Condensed', 400, normal, '../assets/fonts/roboto-condensed/', 'roboto-condensed-regular');
+@include font-family('Roboto Condensed', 400, italic, '../assets/fonts/roboto-condensed/', 'roboto-condensed-italic');
+
+@include font-family('Roboto Condensed', 300, normal, '../assets/fonts/roboto-condensed/', 'roboto-condensed-light');
+@include font-family('Roboto Condensed', 300, italic, '../assets/fonts/roboto-condensed/', 'roboto-condensed-lightitalic');
+
+
+
+// Roboto-condensed mixin
+@mixin roboto-condensed-bold {
+  font-family: 'Roboto Condensed', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+}
+
+@mixin roboto-condensed {
+  font-family: 'Roboto Condensed', Helvetica, Arial, sans-serif;
+  font-weight: 400;
+}

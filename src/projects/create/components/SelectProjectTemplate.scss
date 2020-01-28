@@ -2,6 +2,7 @@
 
 @import 'layout';
 @import '~tc-ui/src/styles/tc-includes';
+@import '~styles/fonts';
 
 :global {
   .SelectProjectTemplate {
@@ -45,7 +46,7 @@
         }
 
         .card-section-title {
-          @include roboto-bold;
+          @include roboto-condensed-bold;
 
           text-align: left;
           margin-bottom: 4px;
@@ -93,7 +94,7 @@
 
     h1 {
       @extend .wizardHeadline;
-      @include roboto-medium;
+      @include roboto-condensed;
 
       color: $tc-gray-90;
       margin-top: 41px;
