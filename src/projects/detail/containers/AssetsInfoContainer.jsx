@@ -9,6 +9,7 @@ import moment from 'moment'
 import LinksGridView from '../../../components/AssetsLibrary/LinksGridView'
 import FilesGridView from '../../../components/AssetsLibrary/FilesGridView'
 import AssetsStatistics from '../../../components/AssetsLibrary/AssetsStatistics'
+import NotificationsReader from '../../../components/NotificationsReader'
 import { updateProject, deleteProject } from '../../actions/project'
 import { loadMembers } from '../../../actions/members'
 import { loadDashboardFeeds, loadProjectMessages } from '../../actions/projectTopics'
@@ -26,6 +27,7 @@ import {
   PROJECT_ASSETS_SHARED_WITH_TOPCODER_MEMBERS,
   PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS,
   PROJECT_ASSETS_SHARED_WITH_ADMIN,
+  EVENT_TYPE,
 } from '../../../config/constants'
 import AddLink from '../../../components/AssetsLibrary/AddLink'
 import PERMISSIONS from '../../../config/permissions'
@@ -814,46 +816,64 @@ class AssetsInfoContainer extends React.Component {
               onClickAction={this.activeAssetsTypeChange}
               activeAssetsType={activeAssetsType}
             />)}
-          {(enableFileUpload && activeAssetsType === 'Files') &&
-            <FilesGridView
-              links={attachments}
-              title="Files"
-              onDelete={this.removeAttachment}
-              onEdit={this.onEditAttachment}
-              onAddAttachment={addProjectAttachment}
-              onUploadAttachment={this.onUploadAttachment}
-              isSharingAttachment={isSharingAttachment}
-              discardAttachments={discardAttachments}
-              onChangePermissions={changeAttachmentPermission}
-              selectedUsers={attachmentPermissions}
-              projectMembers={projectMembers}
-              assetsMembers={assetsMembers}
-              pendingAttachments={attachmentsAwaitingPermission}
-              loggedInUser={loggedInUser}
-              attachmentsStorePath={attachmentsStorePath}
-              onDeletePostAttachment={this.deletePostAttachment}
-              formatModifyDate={formatModifyDate}
-              formatFolderTitle={formatFolderTitle}
-              setFilter={this.setFilter}
-              getFilterValue={this.getFilterValue}
-              clearFilter={this.clearFilter}
-              filtered={filterDirty}
-            />}
-          {(!hideLinks && activeAssetsType === 'Links') &&
-            <LinksGridView
-              links={links}
-              assetsMembers={assetsMembers}
-              canDelete={canManageLinks}
-              canEdit={canManageLinks}
-              onDelete={this.onDeleteLink}
-              onEdit={this.onEditLink}
-              formatModifyDate={formatModifyDate}
-              formatFolderTitle={formatFolderTitle}
-              setFilter={this.setFilter}
-              getFilterValue={this.getFilterValue}
-              clearFilter={this.clearFilter}
-              filtered={filterDirty}
-            />}
+          {(enableFileUpload && activeAssetsType === 'Files') && (
+            <div>
+              <NotificationsReader
+                id="assets-library-files"
+                criteria={[
+                  { eventType: EVENT_TYPE.PROJECT.FILE_UPLOADED, contents: { projectId: project.id } }
+                ]}
+              />
+              <FilesGridView
+                links={attachments}
+                title="Files"
+                onDelete={this.removeAttachment}
+                onEdit={this.onEditAttachment}
+                onAddAttachment={addProjectAttachment}
+                onUploadAttachment={this.onUploadAttachment}
+                isSharingAttachment={isSharingAttachment}
+                discardAttachments={discardAttachments}
+                onChangePermissions={changeAttachmentPermission}
+                selectedUsers={attachmentPermissions}
+                projectMembers={projectMembers}
+                assetsMembers={assetsMembers}
+                pendingAttachments={attachmentsAwaitingPermission}
+                loggedInUser={loggedInUser}
+                attachmentsStorePath={attachmentsStorePath}
+                onDeletePostAttachment={this.deletePostAttachment}
+                formatModifyDate={formatModifyDate}
+                formatFolderTitle={formatFolderTitle}
+                setFilter={this.setFilter}
+                getFilterValue={this.getFilterValue}
+                clearFilter={this.clearFilter}
+                filtered={filterDirty}
+              />
+            </div>
+          )}
+          {(!hideLinks && activeAssetsType === 'Links') && (
+            <div>
+              <NotificationsReader
+                id="assets-library-files"
+                criteria={[
+                  { eventType: EVENT_TYPE.PROJECT.LINK_CREATED, contents: { projectId: project.id } }
+                ]}
+              />
+              <LinksGridView
+                links={links}
+                assetsMembers={assetsMembers}
+                canDelete={canManageLinks}
+                canEdit={canManageLinks}
+                onDelete={this.onDeleteLink}
+                onEdit={this.onEditLink}
+                formatModifyDate={formatModifyDate}
+                formatFolderTitle={formatFolderTitle}
+                setFilter={this.setFilter}
+                getFilterValue={this.getFilterValue}
+                clearFilter={this.clearFilter}
+                filtered={filterDirty}
+              />
+            </div>
+          )}
         </div>
       </div>
     )
