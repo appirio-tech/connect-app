@@ -187,9 +187,9 @@ class AssetsInfoContainer extends React.Component {
 
   onAddNewLink(link) {
     const { updateProject, project, loggedInUser } = this.props
-    link.createdAt = moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    link.createdAt = moment().format()
     link.createdBy = loggedInUser.userId
-    link.updatedAt = moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    link.updatedAt = moment().format()
     link.updatedBy = loggedInUser.userId
     updateProject(project.id, {
       bookmarks: update(project.bookmarks || [], { $push: [link] })
@@ -205,13 +205,16 @@ class AssetsInfoContainer extends React.Component {
 
   onEditLink(idx, title, address) {
     const { updateProject, project, loggedInUser } = this.props
-    const updatedAt = moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    const currentLink = project.bookmarks[idx]
+    const updatedAt = moment().format()
     const updatedBy = loggedInUser.userId
     const updatedLink = {
       title,
       address,
       updatedAt,
-      updatedBy
+      updatedBy,
+      createdAt: currentLink.createdAt,
+      createdBy: currentLink.createdBy,
     }
     updateProject(project.id, {
       bookmarks: update(project.bookmarks, { $splice: [[idx, 1, updatedLink]] })
