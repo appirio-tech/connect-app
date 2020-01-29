@@ -14,7 +14,6 @@ import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 import ProjectListFilterColHeader from './ProjectListFilterColHeader'
 import GridView from '../../../../components/Grid/GridView'
 import Invitation from '../../../../components/Invitation/Invitation'
-import UserTooltip from '../../../../components/User/UserTooltip'
 import {
   PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED, DATE_TO_USER_FIELD_MAP, PHASE_STATUS_REVIEWED,
   PHASE_STATUS_ACTIVE, PROJECT_STATUS_ACTIVE, TOOLTIP_DEFAULT_DELAY,
@@ -168,15 +167,12 @@ const ProjectsGridView = props => {
       sortable: false,
       classes: 'item-customer',
       renderText: item => {
-        const m = _.find(item.members, m => m.isPrimary && m.role === 'customer')
-        if (!m)
+        const m = _.filter(item.members, m =>  m.role === 'customer')
+        if (m.length === 0)
           return <div className="user-block txt-italic">Unknown</div>
         return (
           <div className="spacing">
-            <div className="user-block">
-              <UserTooltip usr={m} id={item.id} size={35} />
-
-            </div>
+            <ProjectManagerAvatars managers={m} />
           </div>
         )
         // TODO: Restore user segment when we support it

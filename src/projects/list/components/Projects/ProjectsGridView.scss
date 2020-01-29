@@ -74,6 +74,8 @@ $screen-one-column: 720px;
         min-width: 100px;
         .spacing {
           width: 100%;
+          padding-top: 10px;
+          box-sizing: border-box;
         }
       }
 
@@ -129,6 +131,7 @@ $screen-one-column: 720px;
         .flex-item-title,
         .flex-item {
           min-height: 60px;
+
 
           &.item-id,
           &.item-projects,
@@ -360,9 +363,8 @@ $screen-one-column: 720px;
         }
 
         .item-customer {
-          padding-top: 10px;
-          -webkit-align-items: baseline;
-          align-items: baseline;
+          padding-left: 10px;
+          align-items: center;
 
           .user-block {
             display: flex;
