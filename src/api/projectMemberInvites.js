@@ -20,7 +20,7 @@ export function updateProjectMemberInvite(projectId, member) {
  * @return {object}  project member invite returned by api
  */
 export function createProjectMemberInvite(projectId, member) {
-  const fields = 'id,projectId,userId,email,role,status,createdAt,updatedAt,createdBy,updatedBy,handle,firstName,lastName,photoURL'
+  const fields = 'id,projectId,userId,email,role,status,createdAt,updatedAt,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
   const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/invite/?fields=` + encodeURIComponent(fields)
   return axios({
     method: 'post',
