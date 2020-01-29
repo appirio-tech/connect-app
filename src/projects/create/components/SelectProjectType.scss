@@ -2,6 +2,7 @@
 
 @import 'layout';
 @import '~tc-ui/src/styles/tc-includes';
+@import "../../../styles/includes";
 
 :global {
   .ProjectWizard {
@@ -41,7 +42,7 @@
     }
 
     > h1 {
-      @include roboto-medium;
+      @include roboto-condensed;
 
       color: $tc-gray-90;
       margin-bottom: 79px;

@@ -1,0 +1,10 @@
+// Roboto-condensed mixin
+@mixin roboto-condensed-bold {
+  font-family: 'Roboto Condensed', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+}
+
+@mixin roboto-condensed {
+  font-family: 'Roboto Condensed', Helvetica, Arial, sans-serif;
+  font-weight: 400;
+}

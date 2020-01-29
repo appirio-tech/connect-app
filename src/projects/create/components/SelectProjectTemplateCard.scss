@@ -1,4 +1,5 @@
 @import '~tc-ui/src/styles/tc-includes';
+@import "../../../styles/includes";
 
 .SelectProjectTemplateCard {
   background: $tc-white;
@@ -76,11 +77,15 @@
       display: none;
     }
   }
+
+  .icon-wrapper {
+    position: relative;
+    margin-top: 15px;
+  }
 }
 
 .header {
-  @include roboto-bold;
-
+  @include roboto-condensed-bold;
   font-size: 16px;
   line-height: 19px;
   text-align: left;
@@ -97,6 +102,10 @@
 
 .icon-wrapper {
   margin-right: 26px;
+  svg{
+    width: 79px;
+    height: 79px; 
+  }
 }
 
 .left-card {
