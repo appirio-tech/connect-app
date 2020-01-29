@@ -184,7 +184,7 @@ export default function(state = {}, action) {
     return state
 
   case UPDATE_PROJECT_ATTACHMENT_SUCCESS:
-    Alert.success('Updated attachment succcessfully')
+    Alert.success('Updated attachment successfully')
     return state
   case REMOVE_PROJECT_ATTACHMENT_SUCCESS:
     Alert.success('Removed attachment successfully')
