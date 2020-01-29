@@ -74,6 +74,8 @@ $screen-one-column: 720px;
         min-width: 100px;
         .spacing {
           width: 100%;
+          padding-top: 10px;
+          box-sizing: border-box;
         }
       }
 
