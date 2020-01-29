@@ -56,16 +56,3 @@
 
 @include font-family('Roboto Condensed', 300, normal, '../assets/fonts/roboto-condensed/', 'roboto-condensed-light');
 @include font-family('Roboto Condensed', 300, italic, '../assets/fonts/roboto-condensed/', 'roboto-condensed-lightitalic');
-
-
-
-// Roboto-condensed mixin
-@mixin roboto-condensed-bold {
-  font-family: 'Roboto Condensed', Helvetica, Arial, sans-serif;
-  font-weight: 700;
-}
-
-@mixin roboto-condensed {
-  font-family: 'Roboto Condensed', Helvetica, Arial, sans-serif;
-  font-weight: 400;
-}
