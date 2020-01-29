@@ -74,7 +74,6 @@ $screen-one-column: 720px;
         min-width: 100px;
         .spacing {
           width: 100%;
-          padding-top: 10px;
           box-sizing: border-box;
         }
       }
@@ -83,7 +82,6 @@ $screen-one-column: 720px;
         flex: 2 2 85px;
         min-width: 85px;
         .spacing {
-          padding-top: 10px;
           box-sizing: border-box;
         }
       }
@@ -690,5 +688,13 @@ $screen-one-column: 720px;
 }
 
 .invitation-container {
-  margin-left: -30px;
+  margin-top: 10px;
+
+  :global(.UserDropdownMenu) {
+    padding: 0;
+  }
+
+  :global(.UserDropdownMenu .Dropdown.pointer-shadow) {
+    margin-top: 25px;
+  }
 }

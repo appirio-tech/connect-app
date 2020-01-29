@@ -209,6 +209,13 @@
   .user-block {
     white-space: nowrap;
 
+    &::after {
+      clear: both;
+      content: '';
+      display: table;
+      width: 100%;
+    }
+
     .txt-box span {
       font-weight: normal;
     }
