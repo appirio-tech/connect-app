@@ -3,23 +3,26 @@
 
 .container{
   position: relative;
-  z-index: 15; 
+  z-index: 15;
 }
 
 .label {
+  @include roboto-bold;
   display: flex;
   align-items: center;
+  box-sizing: content-box;
   justify-content: center;
   background-color: $tc-white;
   color: $tc-dark-blue-100;
   border: 1px solid $tc-dark-blue-100;
   border-radius: 10px;
+  letter-spacing: 0.8px;
+  line-height: 12px;
   width: 125px;
   height: 20px;
-  font-weight: 700;
   font-size: 10px;
   svg{
-    margin-left: 5px;   
+    margin-left: 5px;
     margin-right: -5px;
   }
 }
@@ -28,19 +31,19 @@
   transform:rotate(180deg);
 }
 .btn{
-  width: 84px; 
+  width: 84px;
   border-radius: 20px !important;
   white-space: nowrap;
   margin: 5px;
   svg{
     width: 13px;
-    height: 13px; 
+    height: 13px;
     margin-left: -7px;
     margin-right: 4px;
   }
 }
 .reject-btn{
-  padding-left: 15px !important; 
+  padding-left: 15px !important;
 }
 .popup{
   position: absolute;
