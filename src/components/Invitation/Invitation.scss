@@ -1,9 +1,13 @@
 @import '~tc-ui/src/styles/tc-includes';
 @import '../../styles/includes';
 
-.container{
+.container {
   position: relative;
   z-index: 15;
+
+  :global(.UserDropdownMenu .Dropdown) {
+    width: 100%;
+  }
 }
 
 .label {
@@ -30,30 +34,37 @@
 .rotate {
   transform:rotate(180deg);
 }
-.btn{
-  width: 84px;
-  border-radius: 20px !important;
+
+.btn {
+  @include roboto-bold;
+  border-radius: 15px !important;
+  letter-spacing: 0.8px;
+  font-size: 12px !important;
+  line-height: 14px;
+  padding: 0 15px !important;
+  text-align: center;
   white-space: nowrap;
-  margin: 5px;
-  svg{
-    width: 13px;
-    height: 13px;
-    margin-left: -7px;
+
+  & + & {
+    margin-left: 2 * $base-unit;
+  }
+
+  svg {
     margin-right: 4px;
+    height: 12px;
+    width: 12px;
   }
 }
-.reject-btn{
-  padding-left: 15px !important;
-}
+
 .popup{
   position: absolute;
-  right:1px;
+  right: 0px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: $tc-white;
   border-radius: 6px;
-  box-shadow: 0 5px 35px 5px rgba(21, 21, 22, 0.1), 0 10px 14px 0 rgba(21, 21, 22, 0.3);
+  box-shadow: 0 5px 35px 5px rgba($tc-gray-100, 0.1), 0 10px 14px 0 rgba($tc-gray-100, 0.3);
   width: 212px;
   height: 70px;
 }
