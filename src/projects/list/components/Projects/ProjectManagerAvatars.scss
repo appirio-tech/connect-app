@@ -1,12 +1,17 @@
 @import '~tc-ui/src/styles/tc-includes';
 
+.container {
+  /* because avatars inside list have "margin-left: -$base-unit" */
+  padding-left: $base-unit;
+}
+
 :global {
   .stack-avatar {
     position: relative;
     display: block;
     float: left;
   }
-  
+
   .plus-user {
     position: relative;
     @include roboto-bold;
@@ -18,4 +23,3 @@
     user-select: none;
   }
 }
-  

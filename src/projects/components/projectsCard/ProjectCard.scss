@@ -87,11 +87,6 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-
-      .user-block {
-        /* because avatars inside list have "margin-left: -$base-unit" */
-        padding-left: $base-unit;
-      }
     }
 
     .join-btn-container {
