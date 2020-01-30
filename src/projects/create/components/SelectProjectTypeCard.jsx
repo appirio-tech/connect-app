@@ -1,6 +1,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import './SelectProjectTypeCard.scss'
+import IconOvalWrapper from './IconOvalWrapper'
 
 function SelectProjectTypeCard(p) {
   const { projectType } = p
@@ -8,7 +9,9 @@ function SelectProjectTypeCard(p) {
     <div
       styleName="SelectProjectTypeCard"
     >
-      <div styleName="icon-wrapper">{ p.icon }</div>
+      <IconOvalWrapper>
+        { p.icon }
+      </IconOvalWrapper>
       <h1 styleName="header">{ projectType.displayName }</h1>
       <div styleName="sub-type-details">{ projectType.info }</div>
       <button

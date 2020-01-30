@@ -4,6 +4,7 @@ import PT from 'prop-types'
 import cn from 'classnames'
 
 import './SelectProjectTemplateCard.scss'
+import IconOvalWrapper from './IconOvalWrapper'
 import curveVertical from '../../../assets/images/curve-vertical-43x100.png'
 import curveHorizontal from '../../../assets/images/curve-horizontal-2100x78.png'
 import IconArrowRight from '../../../assets/icons/arrows-16px-1_tail-right.svg'
@@ -25,7 +26,11 @@ function SelectProjectTemplateCard(p) {
     >
       <div styleName="top-card">
         <div styleName="left-card">
-          <div styleName="icon-wrapper">{p.icon}</div>
+          <div styleName="icon-wrapper">
+            <IconOvalWrapper>
+              {p.icon}
+            </IconOvalWrapper>
+          </div>
           <div styleName="left-card-content">
             <h3 styleName="header">{projectTemplate.name}</h3>
             <div styleName="details">{projectTemplate.info}</div>
