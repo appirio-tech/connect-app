@@ -1,0 +1,11 @@
+.icon-wrapper {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  svg:last-child {
+    position: absolute;
+    width: 30px;
+    height: 30px; 
+  }
+}

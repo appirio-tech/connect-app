@@ -20,21 +20,11 @@
   }
 }
 
-.icon-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 26px;
-  svg {
-    width: 79px;
-    height: 79px; 
-  }
-}
-
 .header {
   @include roboto-condensed-bold;
 
   color: $tc-gray-90;
+  margin-top: 26px;
   font-size: 26px;
   line-height: 31px;
   text-transform: uppercase;
