@@ -938,15 +938,10 @@ export const EVENT_TYPE = {
     PHASE_PROGRESS_UPDATED: 'connect.notification.project.phase.update.progress',
     PHASE_SCOPE_UPDATED: 'connect.notification.project.phase.update.scope',
     PHASE_PRODUCT_SPEC_UPDATED: 'connect.notification.project.product.update.spec',
-    MILESTONE_ACTIVATED: 'connect.notification.timeline.milestone.transition.active',
-    MILESTONE_COMPLETED: 'connect.notification.timeline.milestone.transition.completed',
-    WAITING_FOR_CUSTOMER_INPUT: 'connect.notification.timeline.milestone.waiting.customer',
-    TIMELINE_ADJUSTED: 'connect.notification.timeline.adjusted',
-  },
-  PROJECT_TIMELINE: {
-    TIMELINE_ADJUSTED: 'connect.notification.project.timeline.adjusted',
+    MILESTONE_ACTIVATED: 'connect.notification.project.timeline.milestone.transition.active',
     MILESTONE_COMPLETED: 'connect.notification.project.timeline.milestone.transition.completed',
-    MILESTONE_ACTIVATED: 'connect.notification.project.timeline.milestone.transition.active'
+    WAITING_FOR_CUSTOMER_INPUT: 'connect.notification.project.timeline.milestone.waiting.customer',
+    TIMELINE_ADJUSTED: 'connect.notification.project.timeline.adjusted',
   },
   TOPIC: {
     CREATED: 'connect.notification.project.topic.created',
