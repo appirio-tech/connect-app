@@ -33,7 +33,7 @@ const SelectProjectType = ({
         projectType={projectType}
         key={projectType.key}
         onClick={() => onProjectTypeChange(projectType.key)}
-        buttonText="View Solutions"
+        buttonText={projectType.metadata.cardButtonText}
       />
     )
   })
