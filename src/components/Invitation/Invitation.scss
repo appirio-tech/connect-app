@@ -35,13 +35,13 @@
   transform:rotate(180deg);
 }
 
-.btn {
+.btn:global(.tc-btn) {
   @include roboto-bold;
-  border-radius: 15px !important;
+  border-radius: 15px;
   letter-spacing: 0.8px;
-  font-size: 12px !important;
+  font-size: 12px;
   line-height: 14px;
-  padding: 0 15px !important;
+  padding: 0 15px;
   text-align: center;
   white-space: nowrap;
 
