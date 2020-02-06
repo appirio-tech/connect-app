@@ -24,7 +24,7 @@ import {
 } from '../../../../config/constants'
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
-import ProjectTypeIcon from '../../../../components/ProjectTypeIcon'
+import ProductTypeIcon from '../../../../components/ProductTypeIcon'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import MobilePage from '../../../../components/MobilePage/MobilePage'
 import BackIcon from '../../../../assets/icons/arrow-left.svg'
@@ -107,7 +107,7 @@ class PhaseCard extends React.Component {
 
     return (
       <div styleName={'phase-card ' + (isExpanded ? ' expanded ' : ' ')} id={`phase-${phaseId}`}>
-        <NotificationsReader 
+        <NotificationsReader
           id={`phase-${phaseId}`}
           criteria={[
             { eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_ACTIVATED, contents: { phaseId } },
@@ -124,7 +124,7 @@ class PhaseCard extends React.Component {
                   <div styleName="col">
                     <div styleName="project-details">
                       <div styleName="project-ico">
-                        <ProjectTypeIcon type={attr.icon} />
+                        <ProductTypeIcon type={attr.icon} />
                       </div>
                       <div styleName="project-title-container">
                         <h4 styleName="project-title">
@@ -146,7 +146,7 @@ class PhaseCard extends React.Component {
                     </div>
                   </div>
 
-                  { parseInt(attr.price, 10) > 0 && 
+                  { parseInt(attr.price, 10) > 0 &&
                     (<div styleName="col hide-md">
                       <div styleName="price-details">
                         <h5>{attr.price}</h5>
