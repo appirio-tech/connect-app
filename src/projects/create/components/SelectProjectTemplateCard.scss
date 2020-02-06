@@ -69,10 +69,17 @@
 }
 
 .more-deliverable {
+  .top-card {
+    .vertical-curve-wrapper {
+      display: none;
+    }
+
+
+
+  }
   .right-card {
     background: transparent;
 
-    .vertical-curve,
     .info-html {
       display: none;
     }
@@ -148,7 +155,7 @@
   @media screen and (max-width: $screen-md - 1px) {
     background: transparent;
 
-    .vertical-curve,
+    .vertical-curve-wrapper,
     .info-html {
       display: none;
     }
@@ -194,20 +201,28 @@
   background: #f4f4f4;
 }
 
-.vertical-curve {
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 20px;
+.vertical-curve-wrapper {
+
+  svg {
+    float: right;
+    background: #f4f4f4;
+    width: auto;
+    height: 100%;
+  }
+
+  @media screen and (max-width: $screen-md - 1px) {
+    display: none;
+  }
 }
 
-.horizontal-curve {
-  width: 100%;
-  height: 30px;
-  position: absolute;
-  top: 0;
-  left: 0;
+.horizontal-curve-wrapper{
+  height: 20px;
+  svg{
+    width: 100%;
+    height: auto;
+    transform: scaleY(0.2);
+    transform-origin: top left;
+  }
 }
 
 .learn-more-container {

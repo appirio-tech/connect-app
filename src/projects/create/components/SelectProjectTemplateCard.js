@@ -5,8 +5,8 @@ import cn from 'classnames'
 
 import './SelectProjectTemplateCard.scss'
 import IconOvalWrapper from './IconOvalWrapper'
-import curveVertical from '../../../assets/images/curve-vertical-43x100.png'
-import curveHorizontal from '../../../assets/images/curve-horizontal-2100x78.png'
+import CurveVertical from '../../../assets/icons/v.2.5/curve-mask-vertical.svg'
+import CurveHorizontal from '../../../assets/icons/v.2.5/curve-mask-horizontal.svg'
 import IconArrowRight from '../../../assets/icons/arrows-16px-1_tail-right.svg'
 
 function SelectProjectTemplateCard(p) {
@@ -55,8 +55,10 @@ function SelectProjectTemplateCard(p) {
             )}
           </div>
         </div>
+        <div styleName="vertical-curve-wrapper">
+          <CurveVertical/>
+        </div>
         <div styleName="right-card">
-          <img styleName="vertical-curve" src={curveVertical} alt="vertical curve"/>
           {(deliverables.length === 1) && (
             <div
               styleName="info-html"
@@ -71,7 +73,9 @@ function SelectProjectTemplateCard(p) {
       </div>
       {(deliverables.length > 0) && (
         <div styleName="bottom-card">
-          <img styleName="horizontal-curve" src={curveHorizontal} alt="horizontal curve"/>
+          <div styleName="horizontal-curve-wrapper">
+            <CurveHorizontal/>
+          </div>
           <div styleName="bottom-card-content">
             {deliverables.map(
               (item, i) =>

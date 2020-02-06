@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import './IconOvalWrapper.scss'
-import OvalBackgroundIcon from '../../../assets/icons/oval.svg'
+import OvalBackgroundIcon from '../../../assets/icons/v.2.5/oval.svg'
 
 
 function IconOvalWrapper({ children }) {
