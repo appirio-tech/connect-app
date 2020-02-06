@@ -354,7 +354,7 @@ class TeamManagement extends React.Component {
               onTopcoderInviteDeleteConfirm(deletingInvite)
             }
           }
-          const identifier = deletingInvite.item.email ? deletingInvite.item.email : deletingInvite.item.member.handle
+          const identifier = deletingInvite.item.email ? deletingInvite.item.email : deletingInvite.item.handle
           return (
             <Dialog
               isLoading={processingInvites}
