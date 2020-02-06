@@ -16,6 +16,10 @@ $screen-one-column: 720px;
         flex: none;
         min-width: 52px;
         width: 52px;
+
+        .project-type-icon > svg > path {
+          fill: $tc-dark-blue-110;
+        }
       }
 
       .item-projects {
