@@ -78,8 +78,10 @@ export const hasPermission = (permission, project) => {
  * If we define a rule with `projectRoles` list, we also should provide `projectMembers`
  * - the list of project members.
  *
+ * `permissionRule.projectRoles` may be equal to `true` which means user is a project member with any role
+ *
  * @param {Object}        permissionRule               permission rule
- * @param {Array<String>} permissionRule.projectRoles  the list of project roles of the user
+ * @param {Array<String>|Boolean} permissionRule.projectRoles  the list of project roles of the user
  * @param {Array<String>} permissionRule.topcoderRoles the list of Topcoder roles of the user
  * @param {Object}        user                         user for whom we check permissions
  * @param {Object}        user.roles                   list of user roles
@@ -99,13 +101,19 @@ const matchPermissionRule = (permissionRule, user, project) => {
 
   // check Project Roles
   if (permissionRule.projectRoles
-    && permissionRule.projectRoles.length > 0
     && project
     && project.members
   ) {
     const userId = !_.isNumber(user.userId) ? parseInt(user.userId, 10) : user.userId
     const member = _.find(project.members, { userId })
-    hasProjectRole = member && _.includes(permissionRule.projectRoles, member.role)
+
+    if (permissionRule.projectRoles.length > 0) {
+      hasProjectRole = member && _.includes(permissionRule.projectRoles, member.role)
+    } else if (permissionRule.projectRoles === true) {
+      // `projectRoles === true` means that we check if user is a member of the project
+      // with any role
+      hasProjectRole = !!member
+    }
   }
 
   // check Topcoder Roles
