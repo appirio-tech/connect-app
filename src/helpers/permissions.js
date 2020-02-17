@@ -80,9 +80,11 @@ export const hasPermission = (permission, project) => {
  *
  * `permissionRule.projectRoles` may be equal to `true` which means user is a project member with any role
  *
+ * `permissionRule.topcoderRoles` may be equal to `true` which means user is a logged-in user
+ *
  * @param {Object}        permissionRule               permission rule
  * @param {Array<String>|Boolean} permissionRule.projectRoles  the list of project roles of the user
- * @param {Array<String>} permissionRule.topcoderRoles the list of Topcoder roles of the user
+ * @param {Array<String>|Boolean} permissionRule.topcoderRoles the list of Topcoder roles of the user
  * @param {Object}        user                         user for whom we check permissions
  * @param {Object}        user.roles                   list of user roles
  * @param {Object}        [project]                    project object - required to check `topcoderRoles`
@@ -117,11 +119,18 @@ const matchPermissionRule = (permissionRule, user, project) => {
   }
 
   // check Topcoder Roles
-  if (permissionRule.topcoderRoles && permissionRule.topcoderRoles.length > 0) {
-    hasTopcoderRole = _.intersection(
-      _.get(user, 'roles', []).map(role => role.toLowerCase()),
-      permissionRule.topcoderRoles.map(role => role.toLowerCase())
-    ).length > 0
+  if (permissionRule.topcoderRoles) {
+    if (permissionRule.topcoderRoles.length > 0) {
+      hasTopcoderRole = _.intersection(
+        _.get(user, 'roles', []).map(role => role.toLowerCase()),
+        permissionRule.topcoderRoles.map(role => role.toLowerCase())
+      ).length > 0
+    } else if (permissionRule.topcoderRoles === 'true') {
+      // `topcoderRoles === true` means that we check if user is has any Topcoder role
+      // basically this equals to logged-in user, as all the Topcoder users
+      // have at least one role `Topcoder User`
+      hasTopcoderRole = _.get(user, 'roles').length > 0
+    }
   }
 
   return hasProjectRole || hasTopcoderRole
