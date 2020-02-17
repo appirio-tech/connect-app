@@ -96,7 +96,7 @@ class TeamManagement extends React.Component {
     const modalActive = isAddingTeamMember || deletingMember || isShowJoin || showNewMemberConfirmation || deletingInvite
 
     const customerTeamManageAction = (currentUser.isAdmin || currentUser.isManager) && !currentMember
-    const topcoderTeamManageAction = currentUser.isAdmin || (currentMember && hasPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
+    const topcoderTeamManageAction = hasPermission(PERMISSIONS.MANAGE_TOPCODER_TEAM)
     const topcoderTeamViewAction = !topcoderTeamManageAction
     const canJoinAsCopilot = !currentMember && currentUser.isCopilot
     const canJoinAsManager = !currentMember && (currentUser.isManager || currentUser.isAccountManager)

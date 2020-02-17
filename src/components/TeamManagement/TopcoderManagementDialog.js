@@ -157,7 +157,7 @@ class TopcoderManagementDialog extends React.Component {
       selectedMembers, processingInvites, updatingMemberIds
     } = this.props
     const { processingInviteRequestIds } = this.state
-    const showRemove = currentUser.isAdmin || (isMember && hasPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
+    const showRemove = hasPermission(PERMISSIONS.MANAGE_TOPCODER_TEAM)
     const showApproveDecline = currentUser.isAdmin || currentUser.isCopilotManager
     let i = 0
 

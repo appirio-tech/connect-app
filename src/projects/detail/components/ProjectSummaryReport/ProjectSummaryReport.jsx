@@ -9,7 +9,7 @@ import './ProjectSummaryReport.scss'
 
 const ProjectSummaryReport = ({ projectSummary, project }) => {
   const { work, fees, revenue, remaining } = projectSummary.budget
-  const hasBudgetPermission = hasPermission(PERMISSIONS.ACCESS_BUDGET_REPORT, project)
+  const hasBudgetPermission = hasPermission(PERMISSIONS.ACCESS_BUDGET_REPORT)
   const showBudgetSummary = hasBudgetPermission && (work || fees || revenue || remaining)
   const { countries, registrants, designs, linesOfCode, hoursSaved, costSavings, valueCreated } = projectSummary.topcoderDifference
   const showTopcoderDifference = countries || registrants || designs || linesOfCode || hoursSaved || costSavings || valueCreated

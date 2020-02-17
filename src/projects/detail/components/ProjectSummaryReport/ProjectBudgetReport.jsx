@@ -5,12 +5,12 @@ import PERMISSIONS from '../../../../config/permissions'
 import { hasPermission } from '../../../../helpers/permissions'
 import './ProjectBudgetReport.scss'
 
-const ProjectBudgetReport = ({ budget, project }) => {
+const ProjectBudgetReport = ({ budget }) => {
   const { work, fees, revenue, remaining } = budget
 
   const total = revenue + remaining
-  const showSpentData = hasPermission(PERMISSIONS.ACCESS_BUDGET_SPENT_REPORT, project)
-  const showInvoiceData = hasPermission(PERMISSIONS.ACCESS_INVOICE_REPORT, project)
+  const showSpentData = hasPermission(PERMISSIONS.ACCESS_BUDGET_SPENT_REPORT)
+  const showInvoiceData = hasPermission(PERMISSIONS.ACCESS_INVOICE_REPORT)
   const workSpentBarWidth = (work / total) * 100
   const feeBarWidth = (fees / total) * 100
   const invoicedBarWidth = (revenue / total) * 100

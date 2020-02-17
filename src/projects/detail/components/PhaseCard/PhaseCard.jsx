@@ -94,8 +94,6 @@ class PhaseCard extends React.Component {
       hasUnseen,
       phaseId,
       isExpanded,
-      project,
-      isAdmin
     } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
@@ -103,7 +101,12 @@ class PhaseCard extends React.Component {
     status = _.find(PHASE_STATUS, s => s.value === status) ? status : PHASE_STATUS_DRAFT
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
-    const phaseEditable = hasPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project) && (status !== PHASE_STATUS_COMPLETED || (isAdmin)) && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
+    const phaseEditable =
+      ( projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED )
+      && (
+        hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)
+        && ( status !== PHASE_STATUS_COMPLETED || hasPermission(PERMISSIONS.MANAGE_COMPLETED_PHASE) )
+      )
 
     return (
       <div styleName={'phase-card ' + (isExpanded ? ' expanded ' : ' ')} id={`phase-${phaseId}`}>
