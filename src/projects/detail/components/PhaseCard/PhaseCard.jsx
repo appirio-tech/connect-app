@@ -19,8 +19,6 @@ import {
   PROJECT_STATUS_CANCELLED,
   SCREEN_BREAKPOINT_MD,
   EVENT_TYPE,
-  ROLE_CONNECT_ADMIN,
-  ROLE_ADMINISTRATOR,
 } from '../../../../config/constants'
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
@@ -284,16 +282,10 @@ PhaseCard.propTypes = {
 
 
 
-const mapStateToProps = ({loadUser, projectState}) => {
-  const adminRoles = [
-    ROLE_ADMINISTRATOR,
-    ROLE_CONNECT_ADMIN,
-  ]
-  return {
-    currentUserRoles: loadUser.user.roles,
-    isUpdating: projectState.processing,
-  }
-}
+const mapStateToProps = ({loadUser, projectState}) => ({
+  currentUserRoles: loadUser.user.roles,
+  isUpdating: projectState.processing,
+})
 
 const actionCreators = {}
 
