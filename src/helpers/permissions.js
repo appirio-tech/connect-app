@@ -8,6 +8,9 @@ import _ from 'lodash'
  * This method uses permission defined in `permission`
  * and checks that the logged-in user from Redux Store matches it.
  *
+ * To check if user has `project` permissions it uses `project` currently loaded into Redux Store,
+ * but this value can be overridden by providing `project` via argument.
+ *
  * `permission` may be defined in two ways:
  *  - **Full** way with defined `allowRule` and optional `denyRule`, example:
  *    ```js
@@ -54,12 +57,13 @@ import _ from 'lodash'
  */
 export const checkPermission = (permission, project) => {
   const user =  _.get(store.getState(), 'loadUser.user', {})
+  const projectData = project || _.get(store.getState(), 'projectState.project')
 
   const allowRule = permission.allowRule ? permission.allowRule : permission
   const denyRule = permission.denyRule ? permission.denyRule : null
 
-  const allow = matchPermissionRule(allowRule, user, project)
-  const deny = matchPermissionRule(denyRule, user, project)
+  const allow = matchPermissionRule(allowRule, user, projectData)
+  const deny = matchPermissionRule(denyRule, user, projectData)
 
   return allow && !deny
 }
