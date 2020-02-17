@@ -97,7 +97,6 @@ class TeamManagement extends React.Component {
 
     const customerTeamManageAction = (currentUser.isAdmin || currentUser.isManager) && !currentMember
     const topcoderTeamManageAction = hasPermission(PERMISSIONS.MANAGE_TOPCODER_TEAM)
-    const topcoderTeamViewAction = !topcoderTeamManageAction
     const canJoinAsCopilot = !currentMember && currentUser.isCopilot
     const canJoinAsManager = !currentMember && (currentUser.isManager || currentUser.isAccountManager)
     const canShowInvite = currentMember && (currentMember.isCustomer || currentMember.isCopilot || currentMember.isManager)
@@ -178,11 +177,9 @@ class TeamManagement extends React.Component {
         <div className="projects-team">
           <div className="title">
             <span styleName="title-text">Topcoder</span>
-            {(topcoderTeamManageAction || topcoderTeamViewAction) &&
-              <span className="title-action" onClick={() => onShowTopcoderDialog(true)}>
-                {topcoderTeamViewAction ? 'View' : 'Manage'}
-              </span>
-            }
+            <span className="title-action" onClick={() => onShowTopcoderDialog(true)}>
+              {topcoderTeamManageAction ? 'Manage' : 'View'}
+            </span>
           </div>
           <div className="members">
             {sortedMembers.map((member, i) => {
