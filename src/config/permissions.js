@@ -26,8 +26,7 @@ export default {
       PROJECT_ROLE_PROJECT_MANAGER,
       PROJECT_ROLE_PROGRAM_MANAGER,
       PROJECT_ROLE_SOLUTION_ARCHITECT,
-      PROJECT_ROLE_COPILOT,
-      ROLE_CONNECT_ADMIN
+      PROJECT_ROLE_COPILOT
     ],
     topcoderRoles: [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN],
   },
@@ -38,8 +37,7 @@ export default {
       PROJECT_ROLE_ACCOUNT_EXECUTIVE,
       PROJECT_ROLE_PROJECT_MANAGER,
       PROJECT_ROLE_PROGRAM_MANAGER,
-      PROJECT_ROLE_SOLUTION_ARCHITECT,
-      ROLE_CONNECT_ADMIN
+      PROJECT_ROLE_SOLUTION_ARCHITECT
     ],
     topcoderRoles: [
       ROLE_ADMINISTRATOR,
@@ -55,8 +53,10 @@ export default {
     ],
   },
   ACCESS_PRIVATE_POST: {
-    topcoderRoles: [
+    projectRoles: [
       PROJECT_ROLE_COPILOT,
+    ],
+    topcoderRoles: [
       ROLE_CONNECT_MANAGER,
       ROLE_CONNECT_ADMIN,
       ROLE_ADMINISTRATOR,
