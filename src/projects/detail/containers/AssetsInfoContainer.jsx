@@ -31,7 +31,7 @@ import {
 } from '../../../config/constants'
 import AddLink from '../../../components/AssetsLibrary/AddLink'
 import PERMISSIONS from '../../../config/permissions'
-import { checkPermission } from '../../../helpers/permissions'
+import { hasPermission } from '../../../helpers/permissions'
 import {
   addProjectAttachment, updateProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission,
   removeProjectAttachment
@@ -897,7 +897,7 @@ AssetsInfoContainer.PropTypes = {
 const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
   const project = projectState.project
   const projectMembers = _.filter(members.members, m => _.some(project.members, pm => pm.userId === m.userId))
-  const canAccessPrivatePosts = checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
+  const canAccessPrivatePosts = hasPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
   return ({
     projectTemplates : templates.projectTemplates,
     attachmentsAwaitingPermission: projectState.attachmentsAwaitingPermission,

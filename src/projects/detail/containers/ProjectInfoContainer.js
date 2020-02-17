@@ -26,7 +26,7 @@ import {
   PROJECT_ROLE_SOLUTION_ARCHITECT,
 } from '../../../config/constants'
 import PERMISSIONS from '../../../config/permissions'
-import { checkPermission } from '../../../helpers/permissions'
+import { hasPermission } from '../../../helpers/permissions'
 import Panel from '../../../components/Panel/Panel'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 import ProjectDirectLinks from '../../../projects/list/components/Projects/ProjectDirectLinks'
@@ -593,7 +593,7 @@ ProjectInfoContainer.PropTypes = {
 }
 
 const mapStateToProps = ({ templates, notifications }) => {
-  const canAccessPrivatePosts = checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
+  const canAccessPrivatePosts = hasPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
   return ({
     projectTemplates : templates.projectTemplates,
     canAccessPrivatePosts,

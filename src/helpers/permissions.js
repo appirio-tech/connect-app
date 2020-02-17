@@ -55,7 +55,7 @@ import _ from 'lodash'
  *
  * @returns {Boolean}     true, if has permission
  */
-export const checkPermission = (permission, project) => {
+export const hasPermission = (permission, project) => {
   const user =  _.get(store.getState(), 'loadUser.user', {})
   const projectData = project || _.get(store.getState(), 'projectState.project')
 

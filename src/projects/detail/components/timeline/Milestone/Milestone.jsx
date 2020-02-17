@@ -29,7 +29,7 @@ import XMartIcon from '../../../../../assets/icons/x-mark.svg'
 import { MILESTONE_STATUS, SCREEN_BREAKPOINT_MD } from '../../../../../config/constants'
 
 import PERMISSIONS from '../../../../../config/permissions'
-import {checkPermission} from '../../../../../helpers/permissions'
+import {hasPermission} from '../../../../../helpers/permissions'
 
 import './Milestone.scss'
 class Milestone extends React.Component {
@@ -360,7 +360,7 @@ class Milestone extends React.Component {
                 <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
                   {(matches) => (matches ? (
                     <div styleName={'desktop-edit-section'}>
-                      {checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project) && this.state.isHoverHeader && !isUpdating &&
+                      {hasPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project) && this.state.isHoverHeader && !isUpdating &&
                         (<div onClick={this.toggleEditLink} styleName={'post-edit'} >
                           <span styleName="tooltiptext">Edit milestone properties</span>
                         </div>)
@@ -369,7 +369,7 @@ class Milestone extends React.Component {
                   ) : (
                     <div styleName={'mobile-edit-section'}>
                       {
-                        checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project) && !isUpdating &&
+                        hasPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project) && !isUpdating &&
                           (<div onClick={this.toggleMobileEditLink} styleName={'post-edit-mobile'}  />)
                       }
                     </div>

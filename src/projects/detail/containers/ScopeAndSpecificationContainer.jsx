@@ -41,7 +41,7 @@ import {
   activateScopeChange
 } from '../../actions/project'
 import PERMISSIONS from '../../../config/permissions'
-import { checkPermission } from '../../../helpers/permissions'
+import { hasPermission } from '../../../helpers/permissions'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import NotificationsReader from '../../../components/NotificationsReader'
@@ -250,7 +250,7 @@ const mapStateToProps = ({projectState, loadUser, templates, projectTopics, topi
 
   // all feeds includes primary as well as private topics if user has access to private topics
   let feeds = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
-  if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
+  if (hasPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
     feeds = [...feeds, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
   }
 

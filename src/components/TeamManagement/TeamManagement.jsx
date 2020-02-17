@@ -8,7 +8,7 @@ import MemberItem from './MemberItem'
 import AddIcon from  '../../assets/icons/icon-ui-bold-add.svg'
 import Dialog from './Dialog'
 import PERMISSIONS from '../../config/permissions'
-import {checkPermission} from '../../helpers/permissions'
+import {hasPermission} from '../../helpers/permissions'
 import { getFullNameWithFallback } from '../../helpers/tcHelpers'
 
 const userShape = PropTypes.shape({
@@ -96,7 +96,7 @@ class TeamManagement extends React.Component {
     const modalActive = isAddingTeamMember || deletingMember || isShowJoin || showNewMemberConfirmation || deletingInvite
 
     const customerTeamManageAction = (currentUser.isAdmin || currentUser.isManager) && !currentMember
-    const topcoderTeamManageAction = currentUser.isAdmin || (currentMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
+    const topcoderTeamManageAction = currentUser.isAdmin || (currentMember && hasPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
     const topcoderTeamViewAction = !topcoderTeamManageAction
     const canJoinAsCopilot = !currentMember && currentUser.isCopilot
     const canJoinAsManager = !currentMember && (currentUser.isManager || currentUser.isAccountManager)
