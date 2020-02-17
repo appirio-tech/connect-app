@@ -292,7 +292,6 @@ const mapStateToProps = ({loadUser, projectState}) => {
   return {
     currentUserRoles: loadUser.user.roles,
     isUpdating: projectState.processing,
-    isAdmin: _.intersection(loadUser.user.roles, adminRoles).length > 0
   }
 }
 
