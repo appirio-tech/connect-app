@@ -4,7 +4,7 @@ import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import moment from 'moment'
 
 import './UserSummary.scss'
-import { getFullNameWithFallback } from '../../helpers/tcHelpers'
+import { getFullNameWithFallback, getAvatarResized } from '../../helpers/tcHelpers'
 
 const UserSummary = ({user}) => {
   // TODO: Replace hardcoded values with real data
@@ -19,7 +19,7 @@ const UserSummary = ({user}) => {
     <div styleName="container">
       <div styleName="user">
         <div styleName="avatar" >
-          <Avatar avatarUrl={user.photoURL} userName={userName} size={60}/>
+          <Avatar avatarUrl={getAvatarResized(user.photoURL || '', 60)} userName={userName} size={60}/>
         </div>
         <div styleName="info">
           <div styleName="name">
