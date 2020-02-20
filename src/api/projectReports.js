@@ -42,3 +42,13 @@ export function getProjectSummary(projectId) {
     }
   })
 }
+
+/**
+ * Gets signed URL for embeding the requested report.
+ * @param {*} projectId id of the project for which report is to be fecthed
+ * @param {*} reportName unique name of the report
+ */
+export function getProjectReportUrl(projectId, reportName) {
+  return axios.get(`${PROJECTS_API_URL}/v5/projects/${projectId}/reports/embed?reportName=${reportName}`)
+    .then(resp => resp.data)
+}
