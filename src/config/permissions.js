@@ -201,5 +201,20 @@ export default {
     topcoderRoles: [
       ...TOPCODER_ADMINS,
     ],
-  }
+  },
+  // cannot create allow rule, because customer accounts should be able to edit phone, while copilot accounts shouldn't
+  DISABLE_USER_PROFILE_PHONE: {
+    _title: 'Disable phone number in user profile',
+    topcoderRoles: [
+      ROLE_CONNECT_COPILOT,
+    ],
+  },
+  // actually can create allow rule for this case, but keep it disallow for consistency with DISABLE_USER_PROFILE_PHONE
+  DISABLE_USER_PROFILE_COMPANY: {
+    _title: 'Disable company name in user profile',
+    topcoderRoles: [
+      ROLE_CONNECT_COPILOT,
+      ROLE_TOPCODER_USER,
+    ],
+  },
 }
