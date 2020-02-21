@@ -30,12 +30,11 @@ const EnhancedLookerEmbedReport = spinnerWhileLoading(props => {
   return !props.isLoading
 })(LookerEmbedReport)
 
-let timer
-
 class ProjectSummaryReportContainer extends React.Component {
 
   constructor(props) {
     super(props)
+    this.timer = null;
     this.setLookerSessionTimer = this.setLookerSessionTimer.bind(this)
   }
 
@@ -51,18 +50,17 @@ class ProjectSummaryReportContainer extends React.Component {
 
   setLookerSessionTimer() {
     console.log('Setting Looker Session Timer')
-    if (timer) {
-      clearTimeout(timer)
+    if (this.timer) {
+      clearTimeout(this.timer)
     }
-    const thisRef = this
     let timeoutDuration = 60*1000
     if (REPORT_SESSION_LENGTH > 2*60) {
       timeoutDuration = REPORT_SESSION_LENGTH*1000 - 2*60*1000
     }
     // set timeout for raising alert to refresh the token 2 minutes before the session expire
-    timer = setTimeout(() => {
+    this.timer = setTimeout(() => {
       console.log('Calling refresh looker session action')
-      thisRef.props.refreshLookerSession()
+      this.props.refreshLookerSession()
     }, (timeoutDuration))
   }
 
