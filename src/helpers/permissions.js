@@ -65,6 +65,9 @@ export const hasPermission = (permission, project) => {
   const allow = matchPermissionRule(allowRule, user, projectData)
   const deny = matchPermissionRule(denyRule, user, projectData)
 
+  // uncomment for debugging
+  // console.warn('hasPermission', permission, projectData, allow && !deny)
+
   return allow && !deny
 }
 
@@ -83,7 +86,7 @@ export const hasPermission = (permission, project) => {
  * `permissionRule.topcoderRoles` may be equal to `true` which means user is a logged-in user
  *
  * @param {Object}        permissionRule               permission rule
- * @param {Array<String>|Boolean} permissionRule.projectRoles  the list of project roles of the user
+ * @param {Array<String>|Array<Object>|Boolean} permissionRule.projectRoles  the list of project roles of the user
  * @param {Array<String>|Boolean} permissionRule.topcoderRoles the list of Topcoder roles of the user
  * @param {Object}        user                         user for whom we check permissions
  * @param {Object}        user.roles                   list of user roles
@@ -108,9 +111,17 @@ const matchPermissionRule = (permissionRule, user, project) => {
   ) {
     const userId = !_.isNumber(user.userId) ? parseInt(user.userId, 10) : user.userId
     const member = _.find(project.members, { userId })
+    // as we support `projectRoles` as strings and as objects like:
+    // { role: "...", isPrimary: true } we have normalize them to a common shape
+    const normalizedProjectRoles = permissionRule.projectRoles.map((rule) => (
+      _.isString(rule) ? { role: rule } : rule
+    ))
 
     if (permissionRule.projectRoles.length > 0) {
-      hasProjectRole = member && _.includes(permissionRule.projectRoles, member.role)
+      hasProjectRole = member && _.some(normalizedProjectRoles, (rule) => (
+        // checks that common properties are equal
+        _.isMatch(rule, member)
+      ))
     } else if (permissionRule.projectRoles === true) {
       // `projectRoles === true` means that we check if user is a member of the project
       // with any role

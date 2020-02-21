@@ -22,7 +22,8 @@
  *
  * NAMING GUIDELINES
  *
- * We should use unified prefixes to indicate what kind of permissions it is.
+ * There are unified prefixes to indicate what kind of permissions.
+ * If no prefix is suitable, please, feel free to use a new prefix.
  *
  * VIEW_ - means read or view something
  * CREATE_ - create somethings
@@ -35,6 +36,13 @@
  * ACCESS_ - means combination of all 4 operations VIEW/CREATE/UPDATE/DELETE.
  *           usually should be used, when by default users cannot even VIEW something
  *           and if someone can VIEW, then also can do other kind of operations.
+ *
+ * ANTI-PERMISSIONS
+ *
+ * Unfortunately, sometimes it's impossible to create permission rules for some situation in "allowed" manner,
+ * for now in such case we can create permission rules, which wouldn't vise-verse, disallow somethings.
+ * Create such rules ONLY IF CREATING ALLOW RULE IS IMPOSSIBLE.
+ * Add a comment to such rules explaining why allow-rule cannot be created.
  */
 /* eslint-disable no-unused-vars */
 import {
@@ -47,8 +55,11 @@ import {
   PROJECT_ROLE_PROJECT_MANAGER,
   PROJECT_ROLE_PROGRAM_MANAGER,
   PROJECT_ROLE_SOLUTION_ARCHITECT,
+  // PROJECT_ROLE_MEMBER - don't use, it's equal to `projectRoles: true`
+  // PROJECT_ROLE_OWNER  - don't use, it's equal to `projectRoles: { role: PROJECT_ROLE_CUSTOMER, isPrimary: true }`
 
   // Topcoder Roles
+  ROLE_TOPCODER_USER, // users, who only have this role and doesn't have any other specific role we treat as "customer" accounts
   ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN,
   ROLE_CONNECT_MANAGER,
@@ -59,6 +70,7 @@ import {
   ROLE_PROGRAM_MANAGER,
   ROLE_SOLUTION_ARCHITECT,
   ROLE_PROJECT_MANAGER,
+  ROLE_CONNECT_COPILOT,
 } from './constants'
 /* eslint-enable no-unused-vars  */
 
