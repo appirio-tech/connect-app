@@ -34,7 +34,7 @@ class ProjectSummaryReportContainer extends React.Component {
 
   constructor(props) {
     super(props)
-    this.timer = null;
+    this.timer = null
     this.setLookerSessionTimer = this.setLookerSessionTimer.bind(this)
   }
 
