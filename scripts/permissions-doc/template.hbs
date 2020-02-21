@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Permissions</title>
+    <style>
+      .small-text {
+        font-size: 62.5%;
+        line-height: 120%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+        <h1 class="display-4">Permissions</h1>
+        <p class="lead">List of all the possible user permissions inside Topcoder Connect</p>
+        <hr class="my-4">
+        <p>Legend:</p>
+        <ul>
+          <li><span class="badge badge-primary">allowed Project Role</span> - users with such a <strong>Project Role</strong> are allowed to perform the action</li>
+          <li><span class="badge badge-warning">denied Project Role</span> - users with such a <strong>Project Role</strong> are denied to perform the action even they have some other allow roles</li>
+          <li><span class="badge badge-success">allowed Topcoder Role</span> - users with such a <strong>Topcoder Role</strong> are allowed to perform the action</li>
+          <li><span class="badge badge-danger">denied Topcoder Role</span> - users with such a <strong>Topcoder Role</strong> are denied to perform the action even they have some other allow roles</li>
+        </ul>
+      </div>
+
+      {{#each groups}}
+        <div class="row">
+          <div class="col pt-5 pb-2">
+            <h2>{{title}}</h2>
+          </div>
+        </div>
+        {{#each permissions}}
+          <div class="row border-top">
+            <div class="col py-2">
+              {{_meta.title}}
+              <div class="text-black-50 small-text">{{_meta.description}}</div>
+            </div>
+            <div class="col-9 py-2">
+              {{#each allowRule.projectRoles}}
+                <span class="badge badge-primary">{{this}}</span>
+              {{/each}}
+              {{#each denyRule.projectRoles}}
+                <span class="badge badge-warning">{{this}}</span>
+              {{/each}}
+              {{#each allowRule.topcoderRoles}}
+                <span class="badge badge-success">{{this}}</span>
+              {{/each}}
+              {{#each denyRule.topcoderRoles}}
+                <span class="badge badge-danger">{{this}}</span>
+              {{/each}}
+            </div>
+          </div>
+        {{/each}}
+      {{/each}}
+    </div>
+  </body>
+</html>

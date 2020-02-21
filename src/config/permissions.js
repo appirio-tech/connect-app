@@ -123,8 +123,11 @@ const PROJECT_NON_CUSTOMER_MEMBERS = [
 
 export default {
   MANAGE_PROJECT_PLAN: {
-    _title: 'Manage project plan',
-    _description: 'Manage phases and milestones.',
+    _meta: {
+      group: 'Project Plan',
+      title: 'Manage project plan',
+      description: 'Create, update and delete phases and milestones.',
+    },
     projectRoles: [
       PROJECT_ROLE_MANAGER,
       PROJECT_ROLE_PROJECT_MANAGER,
@@ -137,20 +140,29 @@ export default {
     ],
   },
   MANAGE_COMPLETED_PHASE: {
-    _title: 'Manage completed phases',
+    _meta: {
+      group: 'Project Plan',
+      title: 'Manage completed phases',
+    },
     topcoderRoles: [
       ...TOPCODER_ADMINS,
     ],
   },
   MANAGE_TOPCODER_TEAM: {
-    _title: 'Manage topcoder team',
-    _description: 'Invite new members or delete them. There are some additional restrictions for some roles.',
+    _meta: {
+      group: 'Project Members',
+      title: 'Manage topcoder team',
+      description: 'Invite new members or delete them. There are some additional restrictions for some roles.',
+    },
     projectRoles: [
       ...PROJECT_NON_CUSTOMER_MEMBERS
     ],
   },
   ACCESS_PRIVATE_POST: {
-    _title: 'Access private posts',
+    _meta: {
+      group: 'Topics & Posts',
+      title: 'Access private posts',
+    },
     projectRoles: [
       PROJECT_ROLE_COPILOT,
     ],
@@ -159,7 +171,10 @@ export default {
     ]
   },
   ACCESS_BUDGET_REPORT: {
-    _title: 'Access budget report',
+    _meta: {
+      group: 'Budget & Invoice Reports',
+      title: 'Access budget report',
+    },
     projectRoles: [
       PROJECT_ROLE_CUSTOMER,
       PROJECT_ROLE_MANAGER,
@@ -174,7 +189,10 @@ export default {
     ],
   },
   ACCESS_BUDGET_SPENT_REPORT: {
-    _title: 'Access budget spent report',
+    _meta: {
+      group: 'Budget & Invoice Reports',
+      title: 'Access budget spent report',
+    },
     projectRoles: [
       PROJECT_ROLE_MANAGER,
       PROJECT_ROLE_ACCOUNT_MANAGER,
@@ -188,7 +206,10 @@ export default {
     ],
   },
   ACCESS_INVOICE_REPORT: {
-    _title: 'Access invoice report',
+    _meta: {
+      group: 'Budget & Invoice Reports',
+      title: 'Access invoice report',
+    },
     projectRoles: [
       PROJECT_ROLE_CUSTOMER,
       PROJECT_ROLE_MANAGER,
@@ -204,17 +225,109 @@ export default {
   },
   // cannot create allow rule, because customer accounts should be able to edit phone, while copilot accounts shouldn't
   DISABLE_USER_PROFILE_PHONE: {
-    _title: 'Disable phone number in user profile',
+    _meta: {
+      group: 'User Profile',
+      title: 'Disable phone number in user profile',
+    },
     topcoderRoles: [
       ROLE_CONNECT_COPILOT,
     ],
   },
   // actually can create allow rule for this case, but keep it disallow for consistency with DISABLE_USER_PROFILE_PHONE
   DISABLE_USER_PROFILE_COMPANY: {
-    _title: 'Disable company name in user profile',
+    _meta: {
+      group: 'User Profile',
+      title: 'Disable company name in user profile',
+    },
     topcoderRoles: [
       ROLE_CONNECT_COPILOT,
       ROLE_TOPCODER_USER,
+    ],
+  },
+
+  TEST_1: {
+    _meta: {
+      group: 'DEMO/TEST example permissions',
+      title: 'Topcoder role deny',
+      description: 'This permission is just to demonstrate possible format',
+    },
+    allowRule: {
+      topcoderRoles: [
+        ROLE_CONNECT_COPILOT,
+        ROLE_TOPCODER_USER,
+      ],
+    },
+    denyRule: {
+      topcoderRoles: [
+        ROLE_ACCOUNT_EXECUTIVE,
+      ],
+    }
+  },
+
+  TEST_2: {
+    _meta: {
+      group: 'DEMO/TEST example permissions',
+      title: 'Topcoder role and Project role deny',
+      description: 'This permission is just to demonstrate possible format',
+    },
+    allowRule: {
+      topcoderRoles: [
+        ROLE_CONNECT_COPILOT,
+        ROLE_TOPCODER_USER,
+      ],
+      projectRoles: [
+        PROJECT_ROLE_COPILOT,
+        PROJECT_ROLE_CUSTOMER,
+      ],
+    },
+    denyRule: {
+      topcoderRoles: [
+        ROLE_ACCOUNT_EXECUTIVE,
+      ],
+      projectRoles: [
+        PROJECT_ROLE_MANAGER,
+      ],
+    }
+  },
+
+  TEST_3: {
+    _meta: {
+      group: 'DEMO/TEST example permissions',
+      title: 'Any Project Member',
+      description: 'This permission is just to demonstrate possible format',
+    },
+    topcoderRoles: [
+      ROLE_CONNECT_COPILOT,
+      ROLE_TOPCODER_USER,
+    ],
+    projectRoles: true,
+  },
+
+  TEST_4: {
+    _meta: {
+      group: 'DEMO/TEST example permissions',
+      title: 'Owner Project role',
+      description: 'This permission is just to demonstrate possible format',
+    },
+    topcoderRoles: [
+      ROLE_CONNECT_COPILOT,
+      ROLE_TOPCODER_USER,
+    ],
+    projectRoles: [
+      PROJECT_ROLE_MANAGER,
+      { role: PROJECT_ROLE_CUSTOMER, isPrimary: true }
+    ],
+  },
+
+  TEST_5: {
+    _meta: {
+      group: 'DEMO/TEST example permissions',
+      title: 'Any Topcoder User (logged-in)',
+      description: 'This permission is just to demonstrate possible format',
+    },
+    topcoderRoles: true,
+    projectRoles: [
+      PROJECT_ROLE_MANAGER,
     ],
   },
 }
