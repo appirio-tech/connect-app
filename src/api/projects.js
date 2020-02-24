@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
-import { TC_API_URL, PROJECTS_API_URL, PROJECTS_LIST_PER_PAGE } from '../config/constants'
+import { PROJECTS_API_URL, PROJECTS_LIST_PER_PAGE } from '../config/constants'
 
 export function getProjects(criteria, pageNum) {
   // add default params
@@ -208,13 +208,6 @@ export function deleteProject(projectId) {
   return axios.delete(`${PROJECTS_API_URL}/v5/projects/${projectId}/`)
     .then(() => {
       return projectId
-    })
-}
-
-export function getDirectProjectData(directProjectId) {
-  return axios.get(`${TC_API_URL}/v3/direct/projects/${directProjectId}`)
-    .then(resp => {
-      return resp.data.result.content
     })
 }
 
