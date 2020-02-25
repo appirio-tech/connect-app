@@ -19,7 +19,7 @@ const UserSummary = ({user}) => {
     <div styleName="container">
       <div styleName="user">
         <div styleName="avatar" >
-          <Avatar avatarUrl={getAvatarResized(user.photoURL || '', 60)} userName={userName} size={60}/>
+          <Avatar avatarUrl={getAvatarResized(user.photoURL || '', 120)} userName={userName} size={60}/>
         </div>
         <div styleName="info">
           <div styleName="name">
