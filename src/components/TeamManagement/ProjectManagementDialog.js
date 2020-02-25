@@ -135,7 +135,7 @@ class ProjectManagementDialog extends React.Component {
                   <div className="memer-details">
                     <Avatar
                       userName={userFullName}
-                      avatarUrl={getAvatarResized(_.get(member, 'photoURL') || '', 40)}
+                      avatarUrl={getAvatarResized(_.get(member, 'photoURL') || '', 80)}
                       size={40}
                     />
                     <div className="member-name">
@@ -166,7 +166,7 @@ class ProjectManagementDialog extends React.Component {
                 >
                   <Avatar
                     userName={hasUserId ? userFullName : invite.email}
-                    avatarUrl={hasUserId ? getAvatarResized(_.get(invite, 'photoURL') || '', 40) : ''}
+                    avatarUrl={hasUserId ? getAvatarResized(_.get(invite, 'photoURL') || '', 80) : ''}
                     size={40}
                   />
                   <div className="member-name">

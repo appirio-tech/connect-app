@@ -10,7 +10,7 @@ const UserWithName = ({ handle, firstName, lastName, photoURL, photoSize, theme,
   const userFullName = getFullNameWithFallback({ handle, firstName, lastName })
   const avatar = (
     <Avatar
-      avatarUrl={getAvatarResized(photoURL, photoSize)}
+      avatarUrl={getAvatarResized(photoURL, photoSize * 2)} // user double size to increase quality as discussed in #3252
       userName={userFullName}
       size={photoSize}
     />
