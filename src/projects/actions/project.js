@@ -7,7 +7,6 @@ import { getProjectById,
   updateProject as updateProjectAPI,
   deleteProject as deleteProjectAPI,
   deleteProjectPhase as deleteProjectPhaseAPI,
-  getDirectProjectData,
   getProjectPhases,
   updateProduct as updateProductAPI,
   updatePhase as updatePhaseAPI,
@@ -33,7 +32,6 @@ import {
   CREATE_PROJECT_STAGE,
   CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT,
-  LOAD_DIRECT_PROJECT,
   DELETE_PROJECT,
   PROJECT_DIRTY,
   PROJECT_DIRTY_UNDO,
@@ -543,15 +541,6 @@ export function deleteProject(newProject) {
     return dispatch({
       type: DELETE_PROJECT,
       payload: deleteProjectAPI(newProject)
-    })
-  }
-}
-
-export function loadDirectProjectData(directProjectId) {
-  return (dispatch) => {
-    return dispatch({
-      type: LOAD_DIRECT_PROJECT,
-      payload: getDirectProjectData(directProjectId)
     })
   }
 }

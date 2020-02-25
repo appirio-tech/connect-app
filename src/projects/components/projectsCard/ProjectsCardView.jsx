@@ -6,7 +6,6 @@ import ProjectCard from './ProjectCard'
 import NewProjectCard from './NewProjectCard'
 import cn from 'classnames'
 import { PROJECTS_LIST_PER_PAGE } from '../../../config/constants'
-import { setDuration } from '../../../helpers/projectHelper'
 import {
   filterReadNotifications,
   filterNotificationsByProjectId,
@@ -37,7 +36,6 @@ const ProjectsCardView = props => {
   })
 
   const renderProject = (project) => {
-    const duration = setDuration({}, project.status)
     //const { notifications } = this.props;
     const notReadNotifications = filterReadNotifications(notifications)
     const unreadProjectUpdate = filterNotificationsByProjectId(notReadNotifications, project.id)
@@ -47,7 +45,6 @@ const ProjectsCardView = props => {
       <ProjectCard
         project={project}
         currentUser={currentUser}
-        duration={duration}
         onChangeStatus={onChangeStatus}
         projectTemplates={projectTemplates}
         unreadMentionsCount={unreadMentionsCount}

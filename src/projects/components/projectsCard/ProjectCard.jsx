@@ -9,7 +9,7 @@ import ProjectManagerAvatars from '../../list/components/Projects/ProjectManager
 import Invitation from '../../../components/Invitation/Invitation'
 import './ProjectCard.scss'
 
-function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus, projectTemplates, unreadMentionsCount, callInviteRequest, isAcceptingInvite }) {
+function ProjectCard({ project, disabled, currentUser, history, onChangeStatus, projectTemplates, unreadMentionsCount, callInviteRequest, isAcceptingInvite }) {
   const className = `ProjectCard ${ disabled ? 'disabled' : 'enabled'}`
   if (!project) return null
   const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
@@ -31,7 +31,6 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
         <ProjectCardBody
           project={project}
           currentMemberRole={currentMemberRole}
-          duration={duration}
           onChangeStatus={onChangeStatus}
           showLink
           showLinkURL={`/projects/${project.id}/specification`}
@@ -70,7 +69,6 @@ ProjectCard.propTypes = {
   unreadMentionsCount: PT.number.isRequired,
   callInviteRequest: PT.func,
   isAcceptingInvite: PT.bool
-  // duration: PT.object.isRequired,
 }
 
 export default withRouter(ProjectCard)

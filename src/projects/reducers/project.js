@@ -1,5 +1,5 @@
 import {
-  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_MEMBER_INVITE_PENDING, LOAD_PROJECT_MEMBER_INVITE_FAILURE, LOAD_PROJECT_MEMBER_INVITE_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
+  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_MEMBER_INVITE_PENDING, LOAD_PROJECT_MEMBER_INVITE_FAILURE, LOAD_PROJECT_MEMBER_INVITE_SUCCESS, LOAD_PROJECT_FAILURE,
   CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CREATE_PROJECT_STAGE_PENDING, CREATE_PROJECT_STAGE_SUCCESS, CREATE_PROJECT_STAGE_FAILURE, CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT_PENDING, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   DELETE_PROJECT_PENDING, DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
@@ -325,34 +325,6 @@ export const projectState = function (state=initialState, action) {
       phasesNonDirty: null,
     })
 
-  case LOAD_DIRECT_PROJECT_SUCCESS:
-    return update(state, {
-      project: {
-        budget: { $set: {
-          actualCost: action.payload.actualCost,
-          projectedCost: action.payload.projectedCost,
-          totalBudget: action.payload.totalBudget
-        }},
-        duration: { $set: {
-          actualDuration: action.payload.actualDuration,
-          plannedDuration: action.payload.plannedDuration,
-          projectedDuration: action.payload.projectedDuration
-        }}
-      },
-      projectNonDirty: {
-        budget: { $set: {
-          actualCost: action.payload.actualCost,
-          projectedCost: action.payload.projectedCost,
-          totalBudget: action.payload.totalBudget
-        }},
-        duration: { $set: {
-          actualDuration: action.payload.actualDuration,
-          plannedDuration: action.payload.plannedDuration,
-          projectedDuration: action.payload.projectedDuration
-        }}
-      }
-    })
-
   case LOAD_PROJECT_PHASES_PENDING:
     return Object.assign({}, state, {
       isLoadingPhases: true
@@ -468,16 +440,11 @@ export const projectState = function (state=initialState, action) {
 
   case CREATE_PROJECT_SUCCESS:
   case UPDATE_PROJECT_SUCCESS: {
-    // after loading project initially, we also load direct project
-    // and add additional properties to the `project` object in LOAD_DIRECT_PROJECT_SUCCESS action
     // after updating project they will be lost, so here we restore them
     // TODO better don't add additional values to `project` object and keep additional values separately
     const restoredProject = {
       ...action.payload,
 
-      // restore data which we put into `project` object using other reducers
-      budget: _.cloneDeep(state.project.budget),
-      duration: _.cloneDeep(state.project.duration),
       // the next properties we also could modify by other reducers, so we restore them,
       // and also, we fallback to the default empty array [] as the code relies on it
       // we should not `cloneDeep` these values as they are not changed
