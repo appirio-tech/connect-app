@@ -81,10 +81,9 @@ export default function(state = {}, action) {
   }
 
   case CREATE_PROJECT_STAGE_SUCCESS: {
-    const name = _.truncate(action.payload.name, 20)
 
     //delay time for reload stage list of project after creating state
-    setTimeout(() => { Alert.success(`Added New Stage To Project '${name}'`) }, 2000)
+    setTimeout(() => { Alert.success('Added New Stage To Project') }, 2000)
 
     return state
   }
@@ -185,7 +184,7 @@ export default function(state = {}, action) {
     return state
 
   case UPDATE_PROJECT_ATTACHMENT_SUCCESS:
-    Alert.success('Updated attachment succcessfully')
+    Alert.success('Updated attachment successfully')
     return state
   case REMOVE_PROJECT_ATTACHMENT_SUCCESS:
     Alert.success('Removed attachment successfully')

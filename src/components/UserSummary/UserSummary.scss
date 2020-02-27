@@ -27,6 +27,9 @@
   font-size: 16px;
   line-height: 20px;
   color: $tc-gray-90;
+  width: 150px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .handle {

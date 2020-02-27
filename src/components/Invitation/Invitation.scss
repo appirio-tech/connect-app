@@ -1,0 +1,70 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import '../../styles/includes';
+
+.container {
+  position: relative;
+  z-index: 15;
+
+  :global(.UserDropdownMenu .Dropdown) {
+    width: 100%;
+  }
+}
+
+.label {
+  @include roboto-bold;
+  display: flex;
+  align-items: center;
+  box-sizing: content-box;
+  justify-content: center;
+  background-color: $tc-white;
+  color: $tc-dark-blue-100;
+  border: 1px solid $tc-dark-blue-100;
+  border-radius: 10px;
+  letter-spacing: 0.8px;
+  line-height: 12px;
+  width: 125px;
+  height: 20px;
+  font-size: 10px;
+  svg{
+    margin-left: 5px;
+    margin-right: -5px;
+  }
+}
+
+.rotate {
+  transform:rotate(180deg);
+}
+
+.btn:global(.tc-btn) {
+  @include roboto-bold;
+  border-radius: 15px;
+  letter-spacing: 0.8px;
+  font-size: 12px;
+  line-height: 14px;
+  padding: 0 15px;
+  text-align: center;
+  white-space: nowrap;
+
+  & + & {
+    margin-left: 2 * $base-unit;
+  }
+
+  svg {
+    margin-right: 4px;
+    height: 12px;
+    width: 12px;
+  }
+}
+
+.popup{
+  position: absolute;
+  right: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $tc-white;
+  border-radius: 6px;
+  box-shadow: 0 5px 35px 5px rgba($tc-gray-100, 0.1), 0 10px 14px 0 rgba($tc-gray-100, 0.3);
+  width: 212px;
+  height: 70px;
+}

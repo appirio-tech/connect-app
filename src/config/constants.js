@@ -102,12 +102,6 @@ export const LOAD_PROJECT_DASHBOARD_FAILURE     = 'LOAD_PROJECT_DASHBOARD_FAILUR
 export const LOAD_PROJECT_DASHBOARD_SUCCESS     = 'LOAD_PROJECT_DASHBOARD_SUCCESS'
 
 // Direct Project Data
-export const LOAD_DIRECT_PROJECT             = 'LOAD_DIRECT_PROJECT'
-export const LOAD_DIRECT_PROJECT_PENDING     = 'LOAD_DIRECT_PROJECT_PENDING'
-export const LOAD_DIRECT_PROJECT_FAILURE     = 'LOAD_DIRECT_PROJECT_FAILURE'
-export const LOAD_DIRECT_PROJECT_SUCCESS     = 'LOAD_DIRECT_PROJECT_SUCCESS'
-
-// Direct Project Data
 export const LOAD_ADDITIONAL_PROJECT_DATA             = 'LOAD_ADDITIONAL_PROJECT_DATA'
 export const LOAD_ADDITIONAL_PROJECT_DATA_PENDING     = 'LOAD_ADDITIONAL_PROJECT_DATA_PENDING'
 export const LOAD_ADDITIONAL_PROJECT_DATA_FAILURE     = 'LOAD_ADDITIONAL_PROJECT_DATA_FAILURE'
@@ -423,6 +417,7 @@ export const LOAD_PROJECT_SUMMARY         = 'LOAD_PROJECT_SUMMARY'
 export const LOAD_PROJECT_SUMMARY_PENDING = 'LOAD_PROJECT_SUMMARY_PENDING'
 export const LOAD_PROJECT_SUMMARY_SUCCESS = 'LOAD_PROJECT_SUMMARY_SUCCESS'
 export const LOAD_PROJECT_SUMMARY_FAILURE = 'LOAD_PROJECT_SUMMARY_FAILURE'
+export const REFRESH_LOOKER_SESSION = 'REFRESH_LOOKER_SESSION'
 
 // Product attachments
 export const ADD_PRODUCT_ATTACHMENT         = 'ADD_PRODUCT_ATTACHMENT'
@@ -596,7 +591,7 @@ export const PHASE_STATUS = [
 
 // this defines default criteria to filter projects for projects list
 export const PROJECT_LIST_DEFAULT_CRITERIA = {
-  sort: 'updatedAt desc'
+  sort: 'lastActivityAt desc'
 }
 
 export const NOTIFICATION_TYPE = {
@@ -914,6 +909,7 @@ export const EVENT_TYPE = {
     INVITE_REQUESTED: 'connect.notification.project.member.invite.requested',
     INVITE_APPROVED: 'connect.notification.project.member.invite.approved',
     INVITE_REFUSED: 'connect.notification.project.member.invite.rejected',
+    INVITE_CREATED: 'connect.notification.project.member.invite.created'
   },
   PROJECT: {
     ACTIVE: 'connect.notification.project.active',
@@ -937,13 +933,33 @@ export const EVENT_TYPE = {
     PHASE_PROGRESS_UPDATED: 'connect.notification.project.phase.update.progress',
     PHASE_SCOPE_UPDATED: 'connect.notification.project.phase.update.scope',
     PHASE_PRODUCT_SPEC_UPDATED: 'connect.notification.project.product.update.spec',
-    MILESTONE_ACTIVATED: 'connect.notification.timeline.milestone.transition.active',
-    MILESTONE_COMPLETED: 'connect.notification.timeline.milestone.transition.completed',
-    WAITING_FOR_CUSTOMER_INPUT: 'connect.notification.timeline.milestone.waiting.customer',
-    TIMELINE_ADJUSTED: 'connect.notification.timeline.adjusted',
+    MILESTONE_ACTIVATED: 'connect.notification.project.timeline.milestone.transition.active',
+    MILESTONE_COMPLETED: 'connect.notification.project.timeline.milestone.transition.completed',
+    WAITING_FOR_CUSTOMER_INPUT: 'connect.notification.project.timeline.milestone.waiting.customer',
+    TIMELINE_ADJUSTED: 'connect.notification.project.timeline.adjusted',
   },
   TOPIC: {
     CREATED: 'connect.notification.project.topic.created',
     DELETED: 'connect.notification.project.topic.deleted',
   },
 }
+
+
+/**
+ * Project assets shared with type text
+ */
+export const PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS = 'All Project Members'
+export const PROJECT_ASSETS_SHARED_WITH_TOPCODER_MEMBERS = 'Only Topcoder Members'
+export const PROJECT_ASSETS_SHARED_WITH_ADMIN = 'Only Admins'
+
+
+
+/**
+ * REPORTS
+ */
+export const PROJECT_REPORTS = {
+  PROJECT_SUMMARY : 'summary',
+  TAAS_MEMBERS : 'taas_members',
+}
+
+export const REPORT_SESSION_LENGTH = 1800

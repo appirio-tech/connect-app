@@ -2,8 +2,7 @@ import React from 'react'
 import PT from 'prop-types'
 
 import ProjectTypeCard from './ProjectTypeCard'
-import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
-
+import ProductTypeIcon from '../../../components/ProductTypeIcon'
 import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
 
 import './SelectProductTemplate.scss'
@@ -26,7 +25,7 @@ const SelectProductTemplate = ({
     // don't render hidden items as well, hidden items can be reached via direct link though
     if (productTemplate.disabled || productTemplate.hidden) return
 
-    const icon = <ProjectTypeIcon type={productTemplate.icon} />
+    const icon = <ProductTypeIcon type={productTemplate.icon} />
     const category = productTemplate.category || ''
     cards[category] = cards[category] || []
     cards[category].push(

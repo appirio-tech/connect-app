@@ -374,6 +374,9 @@ class ProjectWizard extends Component {
         newProject.name = { $set:_.get(incompleteProject, 'name') }
         newProject.description = { $set:_.get(incompleteProject, 'description') }
         newProject.details = { $set: { utm: { code:_.get(incompleteProject, 'details.utm.code') } } }
+      } else {
+        // retain previously filled data (if any) when choosing the same template
+        _.assign(newProject, { $merge : incompleteProject })
       }
     }
     window.scrollTo(0, 0)

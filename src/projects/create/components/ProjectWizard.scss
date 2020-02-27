@@ -13,6 +13,12 @@
         align-items: flex-start;
       }
 
+      &.ProjectWizard-step-2 {
+        .content {
+          flex-basis: 100%;
+        }
+      }
+
       &.ProjectWizard-step-0 {
         align-items: flex-start;
         padding-top: 30px;

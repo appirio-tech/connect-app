@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import UserTooltip from '../../../../components/User/UserTooltip'
 
-require('./ProjectManagerAvatars.scss')
+import styles from './ProjectManagerAvatars.scss'
 
 const ProjectManagerAvatars = ({ managers, maxShownNum = 3 }) => {
   let extM = false
@@ -15,7 +15,7 @@ const ProjectManagerAvatars = ({ managers, maxShownNum = 3 }) => {
     uniqManagers.length = maxShownNum
   }
   return (
-    <div className="user-block" onClick={e => e.stopPropagation()}>
+    <div className={`user-block ${styles['container']}`} onClick={e => e.stopPropagation()}>
       {uniqManagers.map((user, i) => {
         return (
           <div className={`stack-avatar stack-avatar-${i}`} key={i}>

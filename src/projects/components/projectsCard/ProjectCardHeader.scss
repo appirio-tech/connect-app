@@ -10,8 +10,8 @@
         position: relative;
 
         .badge-wrapper {
-          position: absolute; 
-          right: 0px; 
+          position: absolute;
+          right: 0px;
           top: 4px;
         }
 
@@ -20,6 +20,10 @@
           margin-top: 4px;
           vertical-align: middle;
           display: inline-block;
+
+          > svg > path {
+            fill: $tc-dark-blue-110;
+          }
         }
 
         .project-header-details {

@@ -165,10 +165,10 @@ class TemplateForm extends Component {
                 theme="default max-height"
                 onSelect={(option) => {
                   this.props.dropdownChange(label, option)
-                  this.onChangeDropdown(option)
+                  this.onChangeDropdown(label, option)
                 }}
                 value={value}
-                required
+                required={label!=='subCategory'}
               />
             </div>
           )
@@ -284,6 +284,9 @@ class TemplateForm extends Component {
       const aliases = _.split(values.aliases, ',')
       payload = _.assign({}, payload, { aliases })
     }
+    if (payload.subCategory === '') {
+      payload.subCategory = null
+    }
     saveTemplate(primaryKeyValue, payload)
   }
 
@@ -312,10 +315,12 @@ class TemplateForm extends Component {
     }
   }
 
-  onChangeDropdown(option) {
+  onChangeDropdown(label, option) {
     const { values } = this.state
+    const updatedValue = {}
+    updatedValue[`${label}`] = option.value
     this.setState({
-      values: _.assign({}, values, {category: option.value})
+      values: _.assign({}, values, updatedValue)
     })
   }
 

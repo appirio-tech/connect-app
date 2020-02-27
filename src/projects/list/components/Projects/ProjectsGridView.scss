@@ -16,6 +16,10 @@ $screen-one-column: 720px;
         flex: none;
         min-width: 52px;
         width: 52px;
+
+        .project-type-icon > svg > path {
+          fill: $tc-dark-blue-110;
+        }
       }
 
       .item-projects {
@@ -24,8 +28,8 @@ $screen-one-column: 720px;
       }
 
       .item-ref-code {
-        flex: 1 3 100px;
-        min-width: 100px;
+        flex: 1 3 80px;
+        min-width: 80px;
 
         .time-container {
           display: flex;
@@ -65,8 +69,8 @@ $screen-one-column: 720px;
       }
 
       .item-status-date {
-        flex: 1 3 100px;
-        min-width: 100px;
+        flex: 1 0 140px;
+        min-width: 140px;
       }
 
       .item-customer {
@@ -74,19 +78,18 @@ $screen-one-column: 720px;
         min-width: 100px;
         .spacing {
           width: 100%;
+          box-sizing: border-box;
         }
       }
 
       .item-manager {
-        flex: 2 2 85px;
-        min-width: 85px;
+        flex: 2 2 105px;
+        min-width: 105px;
+        .spacing {
+          box-sizing: border-box;
+        }
       }
 
-      .item-join {
-        max-width: 125px;
-        width: 125px;
-        padding-right: 10px;
-      }
 
       .item-status {
         flex: none;
@@ -130,6 +133,7 @@ $screen-one-column: 720px;
         .flex-item-title,
         .flex-item {
           min-height: 60px;
+
 
           &.item-id,
           &.item-projects,
@@ -213,7 +217,7 @@ $screen-one-column: 720px;
         .item-projects {
           padding-top: 15px;
           padding-bottom: 16px;
-          padding-right: 40px;
+          padding-right: 20px;
           -webkit-align-items: baseline;
           align-items: baseline;
 
@@ -338,6 +342,7 @@ $screen-one-column: 720px;
           }
 
           .time-container {
+            width: 100%;
             .txt-normal {
               font-size: 13px;
               @include roboto-bold;
@@ -361,11 +366,11 @@ $screen-one-column: 720px;
         }
 
         .item-customer {
-          padding-top: 10px;
-          -webkit-align-items: baseline;
-          align-items: baseline;
+          padding-left: 10px;
+          align-items: center;
 
           .user-block {
+            display: flex;
             .project-customer {
               position: relative;
               display: block;
@@ -684,5 +689,17 @@ $screen-one-column: 720px;
       z-index: 3;
       padding: 32px 5px 10px;
     }
+  }
+}
+
+.invitation-container {
+  margin-top: 10px;
+
+  :global(.UserDropdownMenu) {
+    padding: 0;
+  }
+
+  :global(.UserDropdownMenu .Dropdown.pointer-shadow) {
+    margin-top: 25px;
   }
 }

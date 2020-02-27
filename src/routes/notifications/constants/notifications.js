@@ -650,6 +650,13 @@ export const NOTIFICATIONS = [
   }
 ]
 
+// list of ignored notifications
+export const IGNORED_NOTIFICATION_TYPES = [
+  EVENT_TYPE.POST.DELETED,
+  EVENT_TYPE.MEMBER.INVITE_CREATED,
+  EVENT_TYPE.TOPIC.DELETED,
+]
+
 // create a flat list of all possible notifications (expand notification rules)
 export const NOTIFICATION_RULES = (() => {
   const notificationRules = []

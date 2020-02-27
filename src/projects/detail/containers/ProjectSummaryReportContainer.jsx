@@ -9,34 +9,64 @@ import {
   SCREEN_BREAKPOINT_MD,
   PROJECT_FEED_TYPE_PRIMARY,
   PROJECT_FEED_TYPE_MESSAGES,
+  PROJECT_REPORTS,
+  REPORT_SESSION_LENGTH,
 } from '../../../config/constants'
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import Sticky from '../../../components/Sticky'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import PERMISSIONS from '../../../config/permissions'
 import { checkPermission } from '../../../helpers/permissions'
-import { loadProjectSummary } from '../../actions/projectReports'
+import { loadProjectSummary, loadProjectReportsUrls, refreshLookerSession } from '../../actions/projectReports'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import ProjectSummaryReport from '../components/ProjectSummaryReport'
 
-const EnhancedProjectSummaryReport = spinnerWhileLoading(props => {
-  return props.project && !props.isLoading && props.reportsProjectId === props.project.id
-})(ProjectSummaryReport)
+import './ProjectSummaryReportContainer.scss'
+
+const LookerEmbedReport = (props) => {
+  return (<iframe width="100%" src={props.projectSummaryEmbedUrl} onLoad={props.onLoad} />)
+}
+
+const EnhancedLookerEmbedReport = spinnerWhileLoading(props => {
+  return !props.isLoading
+})(LookerEmbedReport)
 
 class ProjectSummaryReportContainer extends React.Component {
 
+  constructor(props) {
+    super(props)
+    this.timer = null
+    this.setLookerSessionTimer = this.setLookerSessionTimer.bind(this)
+  }
+
   componentWillUpdate(nextProps) {
-    const nextReportProjectId = _.get(nextProps, 'projectReports.projectId')
+    const nextReportProjectId = _.get(nextProps, 'reportsProjectId')
     const nextProjectId = _.get(nextProps, 'project.id')
-    if(nextProps.project && nextReportProjectId !== nextProjectId) {
-      nextProps.loadProjectSummary(nextProps.project.id)
+    const lookerSessionExpired = !this.props.lookerSessionExpired && nextProps.lookerSessionExpired
+    if(lookerSessionExpired || (nextProjectId && nextReportProjectId !== nextProjectId)) {
+      nextProps.loadProjectReportsUrls(nextProjectId, PROJECT_REPORTS.PROJECT_SUMMARY)
+      this.setLookerSessionTimer()
     }
+  }
+
+  setLookerSessionTimer() {
+    console.log('Setting Looker Session Timer')
+    if (this.timer) {
+      clearTimeout(this.timer)
+    }
+    let timeoutDuration = 60*1000
+    if (REPORT_SESSION_LENGTH > 2*60) {
+      timeoutDuration = REPORT_SESSION_LENGTH*1000 - 2*60*1000
+    }
+    // set timeout for raising alert to refresh the token 2 minutes before the session expire
+    this.timer = setTimeout(() => {
+      console.log('Calling refresh looker session action')
+      this.props.refreshLookerSession()
+    }, (timeoutDuration))
   }
 
   render() {
     const {
       project,
-      projectReports,
       isSuperUser,
       isManageUser,
       currentMemberRole,
@@ -45,11 +75,10 @@ class ProjectSummaryReportContainer extends React.Component {
       phases,
       productsTimelines,
       phasesTopics,
-      isProcessing,
+      isLoading,
       location,
-      reportsProjectId,
+      projectSummaryEmbedUrl,
     } = this.props
-    const projectSummary = _.get(projectReports, 'projectSummary')
 
     const leftArea = (
       <ProjectInfoContainer
@@ -64,7 +93,7 @@ class ProjectSummaryReportContainer extends React.Component {
         productsTimelines={productsTimelines}
         phasesTopics={phasesTopics}
         onChannelClick={this.onChannelClick}
-        isProjectProcessing={isProcessing}
+        isProjectProcessing={isLoading}
       />
     )
 
@@ -82,14 +111,14 @@ class ProjectSummaryReportContainer extends React.Component {
           </MediaQuery>
         </TwoColsLayout.Sidebar>
         <TwoColsLayout.Content>
-          <EnhancedProjectSummaryReport
-            projectSummary={projectSummary}
-            isLoading={isProcessing}
-            reportsProjectId={reportsProjectId}
-            project={project}
-          />
+          {
+            <EnhancedLookerEmbedReport
+              isLoading={isLoading}
+              projectSummaryEmbedUrl={projectSummaryEmbedUrl}
+              onLoad={this.setLookerSessionTimer}
+            />
+          }
         </TwoColsLayout.Content>
-
       </TwoColsLayout>
     )
   }
@@ -97,14 +126,13 @@ class ProjectSummaryReportContainer extends React.Component {
 
 ProjectSummaryReportContainer.propTypes = {
   currentMemberRole: PT.string.isRequired,
-  isProcessing: PT.bool.isRequired,
+  isLoading: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
   isManageUser: PT.bool.isRequired,
   project: PT.object.isRequired,
-  projectReports: PT.object.isRequired,
   phases: PT.array.isRequired,
   productsTimelines: PT.object.isRequired,
-  reportsProjectId: PT.number.isRequired,
+  reportsProjectId: PT.number,
 }
 
 const mapStateToProps = ({ projectState, projectTopics, phasesTopics, projectReports }) => {
@@ -118,14 +146,17 @@ const mapStateToProps = ({ projectState, projectTopics, phasesTopics, projectRep
     phases: projectState.phases,
     feeds: allFeed,
     phasesTopics,
-    projectReports,
-    isProcessing: projectReports.isLoading,
+    isLoading: projectReports.isLoading,
     reportsProjectId: projectReports.projectId,
+    lookerSessionExpired: projectReports.lookerSessionExpired,
+    projectSummaryEmbedUrl: projectReports.projectSummaryEmbedUrl,
   }
 }
 
 const mapDispatchToProps = {
   loadProjectSummary,
+  loadProjectReportsUrls,
+  refreshLookerSession,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProjectSummaryReportContainer))

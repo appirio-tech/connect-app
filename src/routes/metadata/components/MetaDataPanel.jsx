@@ -369,16 +369,20 @@ class MetaDataPanel extends React.Component {
     } else if (metadataType === 'projectTemplate') {
       const projectTypeOptions = this.getProductCategoryOptions(templates.projectTypes)
       const value = metadata && metadata.category ? metadata.category : projectTypeOptions[0].value
+      const subCategoryVal = metadata && metadata.subCategory ? metadata.subCategory : ''
+      const metadataVal = metadata && metadata.metadataVal ? metadata.metadataVal : {}
       fields = fields.concat([
         { key: 'id', type: 'number' },
         { key: 'name', type: 'text' },
         { key: 'key', type: 'text' },
         { key: 'category', type: 'dropdown', options: projectTypeOptions, value },
+        { key: 'subCategory', type: 'dropdown', options: projectTypeOptions.concat({title: '--', value: ''}), value: subCategoryVal },
         { key: 'icon', type: 'text' },
         { key: 'question', type: 'text' },
         { key: 'info', type: 'text' },
         { key: 'aliases', type: 'array' },
         { key: 'phases', type: 'json', value: phasesDefaultValue },
+        { key: 'metadata', type: 'json', value: metadataVal },
         { key: 'disabled', type: 'checkbox' },
         { key: 'hidden', type: 'checkbox' },
       ])

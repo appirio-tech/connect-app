@@ -2,7 +2,6 @@ import React from 'react'
 import PT from 'prop-types'
 import TextTruncate from 'react-text-truncate'
 import { Link } from 'react-router-dom'
-import ProjectProgress from '../../../components/ProjectProgress/ProjectProgress'
 import ProjectStatus from '../../../components/ProjectStatus/ProjectStatus'
 import editableProjectStatus from '../../../components/ProjectStatus/editableProjectStatus'
 import {
@@ -17,7 +16,7 @@ import _ from 'lodash'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
-function ProjectCardBody({ project, projectCanBeActive, duration, currentMemberRole, descLinesCount = 8,
+function ProjectCardBody({ project, projectCanBeActive, currentMemberRole, descLinesCount = 8,
   onChangeStatus, isSuperUser, showLink, showLinkURL, canEditStatus = true, hideStatus }) {
   if (!project) return null
 
@@ -61,11 +60,6 @@ function ProjectCardBody({ project, projectCanBeActive, duration, currentMemberR
             projectId={project.id}
           />
         }
-        {(project.status === PROJECT_STATUS_ACTIVE && progress !== 0) &&
-          <ProjectProgress {...duration} viewType={ProjectProgress.ViewTypes.CIRCLE} percent={progress}>
-            <span className="progress-text">{progress}% completed</span>
-          </ProjectProgress>
-        }
       </div>}
     </div>
   )
@@ -82,7 +76,6 @@ ProjectCardBody.propTypes = {
   project: PT.object.isRequired,
   projectCanBeActive: PT.bool,
   currentMemberRole: PT.string,
-  duration: PT.object.isRequired,
   showLink: PT.bool,
   showLinkURL: PT.string,
   canEditStatus: PT.bool,

@@ -90,9 +90,15 @@
     }
 
     .join-btn-container {
-      display: flex;
-      align-items: flex-end;
-      flex-direction: column;
+      align-self: center;
+
+      :global(.UserDropdownMenu) {
+        padding: 0;
+      }
+
+      :global(.UserDropdownMenu .Dropdown.pointer-shadow) {
+        margin-top: 25px;
+      }
     }
   }
 }

@@ -69,7 +69,7 @@ class TopBarContainer extends React.Component {
     const { user, toolbar, userRoles, isPowerUser } = this.props
     const userHandle  = _.get(user, 'handle')
     const bigPhotoURL = _.get(user, 'photoURL')
-    const userImage = getAvatarResized(bigPhotoURL, 40)
+    const userImage = getAvatarResized(bigPhotoURL, 80)
     const userName = getFullNameWithFallback(user)
     const homePageUrl = `${window.location.protocol}//${window.location.host}/`
     const logoutLink = `https://accounts.${DOMAIN}/#!/logout?retUrl=${homePageUrl}`
@@ -88,8 +88,8 @@ class TopBarContainer extends React.Component {
     const userMenuItems = [
       [
         { label: 'My profile', link: '/settings/profile' },
-        { label: 'Account and security', link: '/settings/account' },
         { label: 'Notification settings', link: '/settings/notifications' },
+        { label: 'Account & security', link: '/settings/account' },
       ],
       [
         { label: 'Log out', onClick: logoutClick, absolute: true, id: 0 }
@@ -172,7 +172,7 @@ const mapStateToProps = ({ loadUser }) => {
     ROLE_CONNECT_ACCOUNT_MANAGER,
     ROLE_ADMINISTRATOR,
     ROLE_CONNECT_ADMIN,
-    
+
     ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
     ROLE_PRESALES,
     ROLE_ACCOUNT_EXECUTIVE,
