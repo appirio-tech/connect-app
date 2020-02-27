@@ -965,4 +965,4 @@ export const PROJECT_REPORTS = {
 /**
  * Report session length in seconds
  */
-export const REPORT_SESSION_LENGTH = 10 * 60 // 10 minutes
+export const REPORT_SESSION_LENGTH = 30 * 60 // 30 minutes
