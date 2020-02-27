@@ -4,6 +4,7 @@ import PT from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import MediaQuery from 'react-responsive'
+import Modal from 'react-modal'
 
 import {
   SCREEN_BREAKPOINT_MD,
@@ -17,7 +18,7 @@ import Sticky from '../../../components/Sticky'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import PERMISSIONS from '../../../config/permissions'
 import { checkPermission } from '../../../helpers/permissions'
-import { loadProjectSummary, loadProjectReportsUrls, refreshLookerSession } from '../../actions/projectReports'
+import { loadProjectReportsUrls, setLookerSessionExpired } from '../../actions/projectReports'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
 import './ProjectSummaryReportContainer.scss'
@@ -34,34 +35,50 @@ class ProjectSummaryReportContainer extends React.Component {
 
   constructor(props) {
     super(props)
+
     this.timer = null
     this.setLookerSessionTimer = this.setLookerSessionTimer.bind(this)
+    this.reloadProjectReport = this.reloadProjectReport.bind(this)
+  }
+
+  reloadProjectReport() {
+    this.props.loadProjectReportsUrls(_.get(this.props, 'project.id'), PROJECT_REPORTS.PROJECT_SUMMARY)
+    // don't have to set session expire timer here, it would be set of iframe load
+  }
+
+  componentWillMount() {
+    this.reloadProjectReport()
+    // don't have to set session expire timer here, it would be set of iframe load
+  }
+
+  componentWillUnmount() {
+    if (this.timer) {
+      clearTimeout(this.timer)
+    }
   }
 
   componentWillUpdate(nextProps) {
     const nextReportProjectId = _.get(nextProps, 'reportsProjectId')
     const nextProjectId = _.get(nextProps, 'project.id')
-    const lookerSessionExpired = !this.props.lookerSessionExpired && nextProps.lookerSessionExpired
-    if(lookerSessionExpired || (nextProjectId && nextReportProjectId !== nextProjectId)) {
-      nextProps.loadProjectReportsUrls(nextProjectId, PROJECT_REPORTS.PROJECT_SUMMARY)
-      this.setLookerSessionTimer()
+
+    if (nextProjectId && nextReportProjectId !== nextProjectId) {
+      this.props.loadProjectReportsUrls(nextProjectId, PROJECT_REPORTS.PROJECT_SUMMARY)
+      // don't have to set session expire timer here, it would be set of iframe load
     }
   }
 
   setLookerSessionTimer() {
     console.log('Setting Looker Session Timer')
+
     if (this.timer) {
       clearTimeout(this.timer)
     }
-    let timeoutDuration = 60*1000
-    if (REPORT_SESSION_LENGTH > 2*60) {
-      timeoutDuration = REPORT_SESSION_LENGTH*1000 - 2*60*1000
-    }
-    // set timeout for raising alert to refresh the token 2 minutes before the session expire
+
+    // set timeout for raising alert to refresh the token when session expires
     this.timer = setTimeout(() => {
-      console.log('Calling refresh looker session action')
-      this.props.refreshLookerSession()
-    }, (timeoutDuration))
+      console.log('Looker Session is expired by timer')
+      this.props.setLookerSessionExpired(true)
+    }, REPORT_SESSION_LENGTH * 1000)
   }
 
   render() {
@@ -78,6 +95,7 @@ class ProjectSummaryReportContainer extends React.Component {
       isLoading,
       location,
       projectSummaryEmbedUrl,
+      lookerSessionExpired,
     } = this.props
 
     const leftArea = (
@@ -111,13 +129,29 @@ class ProjectSummaryReportContainer extends React.Component {
           </MediaQuery>
         </TwoColsLayout.Sidebar>
         <TwoColsLayout.Content>
-          {
-            <EnhancedLookerEmbedReport
-              isLoading={isLoading}
-              projectSummaryEmbedUrl={projectSummaryEmbedUrl}
-              onLoad={this.setLookerSessionTimer}
-            />
-          }
+          <Modal
+            isOpen={lookerSessionExpired && !isLoading}
+            className="delete-post-dialog"
+            overlayClassName="delete-post-dialog-overlay"
+            contentLabel=""
+          >
+            <div className="modal-title">
+            Report sessions expired
+            </div>
+
+            <div className="modal-body">
+            To keep the data up to date, please, hit "Refresh" button to reload the report.
+            </div>
+
+            <div className="button-area flex center action-area">
+              <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.reloadProjectReport}>Refresh</button>
+            </div>
+          </Modal>
+          <EnhancedLookerEmbedReport
+            isLoading={isLoading}
+            projectSummaryEmbedUrl={projectSummaryEmbedUrl}
+            onLoad={this.setLookerSessionTimer}
+          />
         </TwoColsLayout.Content>
       </TwoColsLayout>
     )
@@ -154,9 +188,8 @@ const mapStateToProps = ({ projectState, projectTopics, phasesTopics, projectRep
 }
 
 const mapDispatchToProps = {
-  loadProjectSummary,
   loadProjectReportsUrls,
-  refreshLookerSession,
+  setLookerSessionExpired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProjectSummaryReportContainer))
