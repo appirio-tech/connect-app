@@ -582,19 +582,19 @@ class AssetsInfoContainer extends React.Component {
 
         // filter user handle
         if (sharedWith) {
+          const sharedWithLowerCase = sharedWith.toLowerCase()
           if (item.tag || item.topicTag) {
             // when tag is exists
             if ((item.tag || item.topicTag) === PROJECT_FEED_TYPE_MESSAGES) {
               // filter with only topcoder members text
-              sharedWithMatch = PROJECT_ASSETS_SHARED_WITH_TOPCODER_MEMBERS.toLowerCase().indexOf(sharedWith) !== -1
+              sharedWithMatch = PROJECT_ASSETS_SHARED_WITH_TOPCODER_MEMBERS.toLowerCase().indexOf(sharedWithLowerCase) !== -1
             } else {
               // filter with all project members text
-              sharedWithMatch = PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS.toLowerCase().indexOf(sharedWith) !== -1
+              sharedWithMatch = PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS.toLowerCase().indexOf(sharedWithLowerCase) !== -1
             }
           } else if (item.allowedUsers instanceof Array) {
             // when allowed users exists
             if (item.allowedUsers.length > 0) {
-              const sharedWithLowerCase = sharedWith.toLowerCase()
               // filter by user handle, first or last name
               sharedWithMatch = _.some(item.userHandles, user => (
                 _.get(user, 'handle', '').toLowerCase().indexOf(sharedWithLowerCase) !== -1 ||
@@ -603,12 +603,12 @@ class AssetsInfoContainer extends React.Component {
               ))
             } else {
               // filter by only admins text
-              sharedWithMatch = PROJECT_ASSETS_SHARED_WITH_ADMIN.toLowerCase().indexOf(sharedWith) !== -1
+              sharedWithMatch = PROJECT_ASSETS_SHARED_WITH_ADMIN.toLowerCase().indexOf(sharedWithLowerCase) !== -1
             }
           } else {
             // no tag and allowed users
             // filter with all project members text
-            sharedWithMatch = PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS.toLowerCase().indexOf(sharedWith) !== -1
+            sharedWithMatch = PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS.toLowerCase().indexOf(sharedWithLowerCase) !== -1
           }
         }
 

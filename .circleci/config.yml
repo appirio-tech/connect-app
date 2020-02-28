@@ -65,7 +65,7 @@ deploy_steps: &deploy_steps
             source awsenvconf
             ./buildenv.sh -e $DEPLOY_ENV -b ${LOGICAL_ENV}-connectapp-deployvar
             source buildenvvar
-            ./master_deploy.sh -d CFRONT -e $DEPLOY_ENV -c false
+            ./master_deploy.sh -d CFRONT -e $DEPLOY_ENV -c $ENABLE_CACHE
 
 jobs:
   build-dev:
@@ -88,6 +88,7 @@ jobs:
     environment:
       DEPLOY_ENV: "DEV"
       LOGICAL_ENV: "dev"
+      ENABLE_CACHE: false
     steps: *deploy_steps
 
   deployTest01:
@@ -95,6 +96,7 @@ jobs:
     environment:
       DEPLOY_ENV: "DEV"
       LOGICAL_ENV: "test01"
+      ENABLE_CACHE: false
     steps: *deploy_steps
 
   deployProd:
@@ -102,6 +104,7 @@ jobs:
     environment:
       DEPLOY_ENV: "PROD"
       LOGICAL_ENV: "prod"
+      ENABLE_CACHE: true
     steps: *deploy_steps
 
 workflows:

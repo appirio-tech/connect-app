@@ -962,4 +962,4 @@ export const PROJECT_REPORTS = {
   TAAS_MEMBERS : 'taas_members',
 }
 
-export const REPORT_SESSION_LENGTH = 600
+export const REPORT_SESSION_LENGTH = 1800
