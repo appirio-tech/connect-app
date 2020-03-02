@@ -151,7 +151,9 @@ function loadGroups(dispatch, userId) {
         ..._.map(groups, 'oldId'),
         ..._.map(groups, 'id')
       ]))
-      loadOrganizationConfigSuccess(dispatch, _.join(groupIds, ','))
+      if (groupIds.length > 0) {
+        loadOrganizationConfigSuccess(dispatch, _.join(groupIds, ','))
+      }
     })
       .catch((err) => {
       // if we fail to load groups
