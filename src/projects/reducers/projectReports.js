@@ -2,7 +2,7 @@ import {
   LOAD_PROJECT_SUMMARY_PENDING,
   LOAD_PROJECT_SUMMARY_SUCCESS,
   LOAD_PROJECT_SUMMARY_FAILURE,
-  REFRESH_LOOKER_SESSION,
+  SET_LOOKER_SESSION_EXPIRED,
 } from '../../config/constants'
 
 const initialState = {
@@ -14,6 +14,19 @@ const initialState = {
   lookerSessionExpired: false,
 }
 
+/**
+ * Adds a `random` query param to the URL so browser could treat such a URL as different.
+ *
+ * @param {String} url URL string to augment
+ *
+ * @returns {String} URL with `random` query param
+ */
+function addRandomParamToUrl(url) {
+  const randomParam = `random=${Math.random().toString().slice(2)}`
+
+  return url + (url.indexOf('?') > -1 ? '&' : '?') + randomParam
+}
+
 export const projectReports = function (state=initialState, action) {
   const payload = action.payload
 
@@ -22,7 +35,7 @@ export const projectReports = function (state=initialState, action) {
     return Object.assign({}, state, {
       isLoading: true,
       error: false,
-      projectId: action.meta.projectId
+      projectId: action.meta.projectId,
     })
 
   case LOAD_PROJECT_SUMMARY_SUCCESS:
@@ -30,7 +43,7 @@ export const projectReports = function (state=initialState, action) {
       return Object.assign({}, state, {
         isLoading: false,
         error: false,
-        projectSummaryEmbedUrl: payload,
+        projectSummaryEmbedUrl: addRandomParamToUrl(payload),
         lookerSessionExpired: false,
         // projectSummary: payload
       })
@@ -41,14 +54,13 @@ export const projectReports = function (state=initialState, action) {
   case LOAD_PROJECT_SUMMARY_FAILURE: {
     return Object.assign({}, state, {
       isLoading: false,
-      lookerSessionExpired: false,
       error: payload
     })
   }
 
-  case REFRESH_LOOKER_SESSION: {
+  case SET_LOOKER_SESSION_EXPIRED: {
     return Object.assign({}, state, {
-      lookerSessionExpired: true
+      lookerSessionExpired: payload
     })
   }
 

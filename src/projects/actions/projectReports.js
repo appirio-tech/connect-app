@@ -1,6 +1,6 @@
 import {
   LOAD_PROJECT_SUMMARY,
-  REFRESH_LOOKER_SESSION,
+  SET_LOOKER_SESSION_EXPIRED,
 } from '../../config/constants'
 import {
   getProjectSummary,
@@ -33,14 +33,15 @@ export function loadProjectReportsUrls(projectId, reportName) {
 }
 
 /**
- * Redux action to refresh the looker session. It is aimed to just indicate that there is need
- * of refreshing the token. It does not do any thing itself. It is upto the state listner to react.
+ * Redux action set the flag `lookerSessionExpired`
+ *
+ * @param {Boolean} isExpired true to indicate that looker session is expired
  */
-export function refreshLookerSession() {
+export function setLookerSessionExpired(isExpired) {
   return (dispatch) => {
     return dispatch({
-      type: REFRESH_LOOKER_SESSION,
-      payload: { lookerSessionExpired: true }
+      type: SET_LOOKER_SESSION_EXPIRED,
+      payload: { lookerSessionExpired: isExpired }
     })
   }
 }
