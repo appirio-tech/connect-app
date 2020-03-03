@@ -14,19 +14,6 @@ const initialState = {
   lookerSessionExpired: false,
 }
 
-/**
- * Adds a `random` query param to the URL so browser could treat such a URL as different.
- *
- * @param {String} url URL string to augment
- *
- * @returns {String} URL with `random` query param
- */
-function addRandomParamToUrl(url) {
-  const randomParam = `random=${Math.random().toString().slice(2)}`
-
-  return url + (url.indexOf('?') > -1 ? '&' : '?') + randomParam
-}
-
 export const projectReports = function (state=initialState, action) {
   const payload = action.payload
 
@@ -43,7 +30,7 @@ export const projectReports = function (state=initialState, action) {
       return Object.assign({}, state, {
         isLoading: false,
         error: false,
-        projectSummaryEmbedUrl: addRandomParamToUrl(payload),
+        projectSummaryEmbedUrl: payload,
         lookerSessionExpired: false,
         // projectSummary: payload
       })
