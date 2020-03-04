@@ -78,6 +78,7 @@ class ProjectSummaryReportContainer extends React.Component {
     this.timer = setTimeout(() => {
       console.log('Looker Session is expired by timer')
       this.props.setLookerSessionExpired(true)
+      window.analytics && window.analytics.track('Looker Session Expired')
     }, REPORT_SESSION_LENGTH * 1000)
   }
 
