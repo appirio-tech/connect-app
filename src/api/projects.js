@@ -4,7 +4,7 @@ import { PROJECTS_API_URL, PROJECTS_LIST_PER_PAGE } from '../config/constants'
 
 export function getProjects(criteria, pageNum) {
   // add default params
-  const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', 'details', 'lastActivityAt', 'lastActivityUserId', 'version', 'templateId']
+  const includeFields = ['id', 'name', 'description', 'members', 'invites', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', 'details', 'lastActivityAt', 'lastActivityUserId', 'version', 'templateId']
   const params = {
     fields: includeFields.join(','),
     sort: 'updatedAt+desc', // default sort value
