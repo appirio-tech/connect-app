@@ -412,7 +412,7 @@ class AssetsInfoContainer extends React.Component {
             address: `/projects/messages/attachments/${attachment.id}`,
             attachmentId: attachment.id,
             attachment: true,
-            deletable: true,
+            deletable: false,
             createdAt: post.date,
             createdBy: attachment.createdBy,
             postId: post.id,
@@ -514,7 +514,7 @@ class AssetsInfoContainer extends React.Component {
 
     const phaseFeeds = _.compact(
       visiblePhases.map((phase) => {
-        const topic = _.get(phasesTopics, `[${phase.id}].topic`)
+        const topic = _.get(phasesTopics, `[phase#${phase.id}].topic`)
 
         if (!topic) {
           return null
