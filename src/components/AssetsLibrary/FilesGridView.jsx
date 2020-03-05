@@ -59,7 +59,7 @@ const FilesGridView = ({
   let nameFieldRef
   let sharedWithFieldRef
   let dateFieldRef
-  
+
   const updateSubContents = () => {
     if (selectedLink) {
       let link = links.filter(item => {
@@ -67,24 +67,24 @@ const FilesGridView = ({
           && selectedLink.createdBy === item.createdBy
           && selectedLink.updatedAt === item.updatedAt
       })[0]
-      
+
       if (!link) {
         link = _.cloneDeep(selectedLink)
         link.children = []
       }
-      
+
       onChangeSubFolder(link)
     }
   }
-  
+
   const clearSubContents = () => clearing = true
-  
+
   const clearFieldValues = () => {
     nameFieldRef.clearFilter()
     sharedWithFieldRef.clearFilter()
     dateFieldRef.clearFilter()
   }
-  
+
   const renderLink = (link) => {
     if (link.onClick) {
       return (
@@ -120,7 +120,7 @@ const FilesGridView = ({
     onChangeSubFolder(null)
     selectedLink = null
   }
-  
+
   const renderSharedWith = (link) => {
     if (link.tag) {
       return (
@@ -147,14 +147,14 @@ const FilesGridView = ({
       )
     }
   }
-  
+
   if (clearing) {
     setTimeout(() => {
       updateSubContents()
       clearing = false
     })
   }
-  
+
   return (
     <div styleName="assets-gridview-container">
       {(subFolderContent) && (
@@ -264,7 +264,9 @@ const FilesGridView = ({
                       {renderSharedWith(link)}
                     </div>
                     <div styleName="flex-item item-created-by">
-                      {!owner && (<div className="user-block txt-italic">Unknown</div>)}
+                      {!owner && !link.createdBy && (<div className="user-block">—</div>)}
+                      {!owner && link.createdBy !== 'CoderBot' && (<div className="user-block txt-italic">Unknown</div>)}
+                      {!owner && link.createdBy === 'CoderBot' && (<div className="user-block">CoderBot</div>)}
                       {owner && (
                         <div className="spacing">
                           <div className="user-block">
