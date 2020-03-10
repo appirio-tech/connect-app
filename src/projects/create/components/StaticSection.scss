@@ -4,6 +4,7 @@
   & :global(.project-main-details) {
     margin-bottom: 6*$base-unit;
     & h2 {
+      word-break: break-all;
       text-align: center;
       font-size: $tc-heading-sm;
       margin-bottom: 2*$base-unit;
@@ -11,6 +12,7 @@
       line-height: $tc-heading-lg;
     }
     & p {
+      word-break: break-all;
       line-height: 25px;
       font-size: $tc-body-md;
       font-weight: 400;
