@@ -72,6 +72,7 @@ class FilterColHeader extends React.Component {
             label="From"
             type="date"
             name="date.from"
+            disabled={this.state.to != ''}
             onChange={this.onFromDateChange}
             value={this.state.from}
           />
@@ -80,6 +81,7 @@ class FilterColHeader extends React.Component {
             type="date"
             name="date.to"
             onChange={this.onToDateChange}
+            minValue={this.state.from}
             value={this.state.to}
           />
         </Formsy.Form>
