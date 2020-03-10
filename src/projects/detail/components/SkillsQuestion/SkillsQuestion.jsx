@@ -93,7 +93,8 @@ class SkillsQuestion extends React.Component {
     }
   }
 
-  onSelectType(value) {
+  onSelectType(valueTemp) 
+    const value = valueTemp.trim()
     const { getValue } = this.props
     const indexOfSpace = value.indexOf(' ')
     const indexOfSemiColon = value.indexOf(';')
