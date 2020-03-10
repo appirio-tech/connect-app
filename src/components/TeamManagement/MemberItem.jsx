@@ -50,7 +50,9 @@ const  MemberItem  = (props) => {
             localHour += 24
           }
         }
-        if(localHour >= localStartHour && localHour <= localEndHour) {
+        const localMins = +moment().utcOffset(utcOff).format('H:m').split(':')[1]
+        const localHourRoundedUp = localMins > 0 ? localHour + 1 : localHour
+        if(localHour >= localStartHour && localHourRoundedUp <= localEndHour) {
           isWorkingTime = true
         }
       }
