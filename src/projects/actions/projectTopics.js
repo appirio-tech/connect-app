@@ -68,7 +68,8 @@ const getProjectTopicsWithMember = (dispatch, projectId, tag) => {
           resolve(value)
         return dispatch(loadMembers(userIds))
           .then(() => resolve(value))
-          .catch(err => reject(err))
+          // even if we failed to load user details for topics we should still proceed to show the topics and don't fail
+          .catch(() => resolve(value))
       })
       .catch(err => reject(err))
   })
