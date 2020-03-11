@@ -30,6 +30,12 @@ class FilterColHeader extends React.Component {
       this.setFilter(this.state.value)
     })
   }
+
+  onFilterClick() {
+    if(this.textInputFilter){
+      setTimeout(()=>this.textInputFilter.focus(), 150)
+    }
+  }
   
   onFromDateChange(name, value) {
     this.setState({from: value})
@@ -89,6 +95,7 @@ class FilterColHeader extends React.Component {
     default: {
       return (
         <input
+          ref={(input) => { this.textInputFilter = input; }}
           type="text"
           name="filter"
           className="tc-file-field__inputs"
@@ -108,7 +115,7 @@ class FilterColHeader extends React.Component {
     return (
       <div styleName="FilterColHeader">
         <Dropdown className="filter-drop-down" noAutoclose>
-          <a href="javascript:;" className="dropdown-menu-header txt-link">
+          <a href="javascript:;" className="dropdown-menu-header txt-link" onFocus={this.onFilterClick.bind(this)}>
             {title}
             <IconCarretDownNormal className="icon-carret-down-normal"/>
           </a>
