@@ -72,8 +72,8 @@ class FilterColHeader extends React.Component {
             label="From"
             type="date"
             name="date.from"
-            disabled={this.state.to != ''}
             onChange={this.onFromDateChange}
+            maxValue={this.state.to}
             value={this.state.from}
           />
           <TCFormFields.TextInput
