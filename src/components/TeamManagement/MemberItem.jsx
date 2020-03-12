@@ -50,7 +50,7 @@ const  MemberItem  = (props) => {
             localHour += 24
           }
         }
-        if(localHour >= localStartHour && localHour < localEndHour) {
+        if(localHour >= localStartHour && localHour <= localEndHour) {
           isWorkingTime = true
         }
       }
