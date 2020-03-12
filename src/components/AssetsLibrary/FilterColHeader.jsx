@@ -33,7 +33,7 @@ class FilterColHeader extends React.Component {
 
   onFilterClick() {
     if(this.textInputFilter){
-      setTimeout(()=>this.textInputFilter.focus(), 150)
+      setTimeout(()=>this.textInputFilter.focus())
     }
   }
   
@@ -115,10 +115,12 @@ class FilterColHeader extends React.Component {
     return (
       <div styleName="FilterColHeader">
         <Dropdown className="filter-drop-down" noAutoclose>
-          <a href="javascript:;" className="dropdown-menu-header txt-link" onFocus={this.onFilterClick.bind(this)}>
-            {title}
-            <IconCarretDownNormal className="icon-carret-down-normal"/>
-          </a>
+          <div className="dropdown-menu-header">
+            <a href="javascript:;" className="txt-link" onClick={this.onFilterClick.bind(this)}>
+              {title}
+              <IconCarretDownNormal className="icon-carret-down-normal"/>
+            </a>
+          </div>
           <div className="dropdown-menu-list down-layer">
             {this.renderByType()}
           </div>

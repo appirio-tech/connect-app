@@ -25,6 +25,12 @@ class ProjectListFilterColHeader extends React.Component {
     })
   }
 
+  onFilterClick() {
+    if(this.textInputFilter){
+      setTimeout(()=>this.textInputFilter.focus())
+    }
+  }
+
   componentDidMount() {
     this.setState({
       value: this.props.value || ''
@@ -39,12 +45,18 @@ class ProjectListFilterColHeader extends React.Component {
     return (
       <div>
         <Dropdown className="filter-drop-down" noAutoclose>
-          <a href="javascript:;" className="dropdown-menu-header txt-link">
-            {title}
-            <IconCarretDownNormal className="icon-carret-down-normal"/>
-          </a>
+          <div className="dropdown-menu-header">
+            <a href="javascript:;" className="txt-link" onClick={this.onFilterClick.bind(this)}>
+              {title}
+              <IconCarretDownNormal className="icon-carret-down-normal"/>
+            </a>
+          </div>
           <div className="dropdown-menu-list down-layer">
-            <input type="text" name="filter" className="tc-file-field__inputs" onChange={this.onChange} value={this.state.value}/>
+            <input type="text" name="filter"
+              ref={(input) => { this.textInputFilter = input; }}
+              className="tc-file-field__inputs"
+              onChange={this.onChange}
+              value={this.state.value}/>
           </div>
         </Dropdown>
       </div>
