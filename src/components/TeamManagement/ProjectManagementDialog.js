@@ -57,7 +57,7 @@ class ProjectManagementDialog extends React.Component {
   isSelectedMemberAlreadyInvited(projectTeamInvites = [], selectedMember) {
     return !!projectTeamInvites.find((invite) => (
       (invite.email && compareEmail(invite.email, selectedMember.label)) ||
-      (invite.userId && compareHandles(this.resolveUserHandle(invite.userId), selectedMember.label))
+      (invite.userId && compareHandles(invite.handle, selectedMember.label))
     ))
   }
 
@@ -78,7 +78,7 @@ class ProjectManagementDialog extends React.Component {
 
     const msgs = _.keys(uniqueMessages).map((message) => {
       const users = uniqueMessages[message].map((failed) => (
-        failed.email ? failed.email : this.resolveUserHandle(failed.userId)
+        failed.email ? failed.email : failed.handle
       ))
 
       return ({
