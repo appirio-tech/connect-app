@@ -400,7 +400,7 @@ class ProjectWizard extends Component {
     })
   }
 
-  updateProjectType(projectType) {
+  updateProjectType(projectType, data) {
     window.scrollTo(0, 0)
     const { onStepChange, onProjectUpdate, projectTemplates } = this.props
     const updateQuery = {}
@@ -410,7 +410,7 @@ class ProjectWizard extends Component {
       updateQuery.type = { $set : projectType }
 
       // sets the appropriate project template if project category has only one project template
-      if (visibleProjectTemplates.length === 1 && projectType.metadata.autoProceedToSingleProjectTemplate) {
+      if (visibleProjectTemplates.length === 1 && data.metadata.autoProceedToSingleProjectTemplate) {
         updateQuery.templateId = { $set : visibleProjectTemplates[0].id }
       }
     }
