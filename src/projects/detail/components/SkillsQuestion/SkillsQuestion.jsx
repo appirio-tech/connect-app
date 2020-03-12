@@ -96,11 +96,10 @@ class SkillsQuestion extends React.Component {
   onSelectType(valueTemp) {
     const value = valueTemp.trim()
     const { getValue } = this.props
-    const indexOfSpace = value.indexOf(' ')
     const indexOfSemiColon = value.indexOf(';')
 
-    // if user enter only ' '  or ';' we should clean it to not allow
-    if (indexOfSpace === 0 || indexOfSemiColon === 0 ) {
+    // if user enter only ';' we should clean it to not allow
+    if (indexOfSemiColon === 0 ) {
       return ''
     }
 
