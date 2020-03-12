@@ -73,6 +73,7 @@ class FilterColHeader extends React.Component {
             type="date"
             name="date.from"
             onChange={this.onFromDateChange}
+            maxValue={this.state.to}
             value={this.state.from}
           />
           <TCFormFields.TextInput
@@ -80,6 +81,7 @@ class FilterColHeader extends React.Component {
             type="date"
             name="date.to"
             onChange={this.onToDateChange}
+            minValue={this.state.from}
             value={this.state.to}
           />
         </Formsy.Form>
