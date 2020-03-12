@@ -182,8 +182,15 @@ class MarkupGenerator {
   }
 
   renderBlockContent(block) {
-    const blockType = block.getType()
+    let blockType = block.getType()
     const text = block.getText()
+
+    // make an attempt to find the type 'code' when unstyled
+    const codeBlockPrefix = "    "
+    if(blockType === "unstyled" && text.startsWith(codeBlockPrefix)){
+      blockType = BLOCK_TYPE.CODE
+    }
+
     if (text === '') {
       // Prevent element collapse if completely empty.
       // TODO: Replace with constant.
