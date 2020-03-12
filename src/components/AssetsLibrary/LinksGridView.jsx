@@ -148,7 +148,7 @@ const LinksGridView = ({
             )}
           </div>
           <ul>
-            <li styleName="assets-gridview-header" key="assets-gridview-header">
+            <li styleName={cn('assets-gridview-header', { 'disabled': linkToEdit >= 0 || linkToDelete >= 0 })} key="assets-gridview-header">
               <div styleName="flex-item-title item-type">Type</div>
               <div styleName="flex-item-title item-name">
                 <FilterColHeader

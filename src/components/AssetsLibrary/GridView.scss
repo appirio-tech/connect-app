@@ -23,6 +23,11 @@
 
 .assets-gridview-header {
   padding: 10px 0;
+
+  &.disabled {
+    position: relative;
+    z-index: 0;
+  }
 }
 
 .assets-gridview-row {
