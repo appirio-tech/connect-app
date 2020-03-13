@@ -280,7 +280,7 @@ export function getProjectNavLinks(project, projectId) {
     messagesTab,
     { label: 'Scope', to: `/projects/${projectId}/scope`, Icon: ScopeIcon, iconClassName: 'fill' },
     // Commented out till it needs to go live.
-    // { label: 'Reports', to: `/projects/${projectId}/reports`, Icon: ReportsIcon, iconClassName: 'stroke' },
+    { label: 'Reports', to: `/projects/${projectId}/reports`, Icon: ReportsIcon, iconClassName: 'stroke' },
     { label: 'Assets Library', to: `/projects/${projectId}/assets`, Icon: AssetsLibraryIcon, iconClassName: 'stroke' },
   ] : [
     { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
