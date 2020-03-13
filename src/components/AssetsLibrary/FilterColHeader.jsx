@@ -33,7 +33,7 @@ class FilterColHeader extends React.Component {
 
   onFilterClick() {
     if(this.textInputFilter){
-      setTimeout(()=>this.textInputFilter.focus())
+      setTimeout(() => this.textInputFilter.focus())
     }
   }
   
@@ -95,7 +95,7 @@ class FilterColHeader extends React.Component {
     default: {
       return (
         <input
-          ref={(input) => { this.textInputFilter = input; }}
+          ref={(input) => { this.textInputFilter = input }}
           type="text"
           name="filter"
           className="tc-file-field__inputs"

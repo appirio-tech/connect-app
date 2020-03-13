@@ -27,7 +27,7 @@ class ProjectListFilterColHeader extends React.Component {
 
   onFilterClick() {
     if(this.textInputFilter){
-      setTimeout(()=>this.textInputFilter.focus())
+      setTimeout(() => this.textInputFilter.focus())
     }
   }
 
@@ -53,10 +53,11 @@ class ProjectListFilterColHeader extends React.Component {
           </div>
           <div className="dropdown-menu-list down-layer">
             <input type="text" name="filter"
-              ref={(input) => { this.textInputFilter = input; }}
+              ref={(input) => { this.textInputFilter = input }}
               className="tc-file-field__inputs"
               onChange={this.onChange}
-              value={this.state.value}/>
+              value={this.state.value}
+            />
           </div>
         </Dropdown>
       </div>
