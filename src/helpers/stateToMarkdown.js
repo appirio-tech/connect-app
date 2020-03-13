@@ -182,15 +182,8 @@ class MarkupGenerator {
   }
 
   renderBlockContent(block) {
-    let blockType = block.getType()
+    const blockType = block.getType()
     const text = block.getText()
-
-    // make an attempt to find the type 'code' when unstyled
-    const codeBlockPrefix = "    "
-    if(blockType === "unstyled" && text.startsWith(codeBlockPrefix)){
-      blockType = BLOCK_TYPE.CODE
-    }
-
     if (text === '') {
       // Prevent element collapse if completely empty.
       // TODO: Replace with constant.
@@ -204,22 +197,18 @@ class MarkupGenerator {
         if (!text) {
           return ''
         }
-
-        if(blockType === BLOCK_TYPE.CODE) {
-          return text
-        }
-
         let content = encodeContent(text)
         if (style.size === 0) {
           return content
         }
         let leadingSpaces = 0
         let trailingSpaces = 0
-
-        const contentTrimLeading = content.replace(/^\u0020*/, '')
-        leadingSpaces = content.length - contentTrimLeading.length
-        content = contentTrimLeading.replace(/\u0020*$/, '')
-        trailingSpaces = contentTrimLeading.length - content.length
+        if (blockType !== BLOCK_TYPE.CODE) {
+          const contentTrimLeading = content.replace(/^\u0020*/, '')
+          leadingSpaces = content.length - contentTrimLeading.length
+          content = contentTrimLeading.replace(/\u0020*$/, '')
+          trailingSpaces = contentTrimLeading.length - content.length
+        }
 
         if (style.has(BOLD)) {
           content = `**${content}**`
@@ -238,8 +227,9 @@ class MarkupGenerator {
           content = (blockType === BLOCK_TYPE.CODE) ? content : '`' + content + '`'
         }
 
-        content = ' '.repeat(leadingSpaces) + content + ' '.repeat(trailingSpaces)
-
+        if (blockType !== BLOCK_TYPE.CODE) {
+          content = ' '.repeat(leadingSpaces) + content + ' '.repeat(trailingSpaces)
+        }
         return content
       }).join('')
       const entity = entityKey ? this.contentState.getEntity(entityKey) : null
