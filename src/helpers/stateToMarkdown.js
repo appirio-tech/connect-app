@@ -186,7 +186,7 @@ class MarkupGenerator {
     const text = block.getText()
 
     // make an attempt to find the type 'code' when unstyled
-    const codeBlockPrefix = "    "
+    const codeBlockPrefix = '    '
     if(blockType === "unstyled" && text.startsWith(codeBlockPrefix)){
       blockType = BLOCK_TYPE.CODE
     }
