@@ -22,6 +22,15 @@
       &.ProjectWizard-step-0 {
         align-items: flex-start;
         padding-top: 30px;
+        .content {
+          .header-controls {
+            .escape-button {
+              @media only screen and (max-width: $screen-md) {
+                top: -10px;
+              }
+            }
+          }
+        }
       }
     }
 
