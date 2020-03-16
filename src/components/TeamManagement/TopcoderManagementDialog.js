@@ -276,7 +276,7 @@ class TopcoderManagementDialog extends React.Component {
               const approve = () => {
                 this.setState(prevState => ({ processingInviteRequestIds: [ ...prevState.processingInviteRequestIds, invite.id ] }))
                 approveOrDecline({
-                  userId: invite.userId,
+                  id: invite.id,
                   status: 'request_approved'
                 }).then(() => {
                   this.setState(prevState => ({ processingInviteRequestIds: _.xor(prevState.processingInviteRequestIds, [invite.id]) }))
@@ -285,7 +285,7 @@ class TopcoderManagementDialog extends React.Component {
               const decline = () => {
                 this.setState(prevState => ({ processingInviteRequestIds: [ ...prevState.processingInviteRequestIds, invite.id ] }))
                 approveOrDecline({
-                  userId: invite.userId,
+                  id: invite.id,
                   status: 'request_rejected'
                 }).then(() => {
                   this.setState(prevState => ({ processingInviteRequestIds: _.xor(prevState.processingInviteRequestIds, [invite.id]) }))
