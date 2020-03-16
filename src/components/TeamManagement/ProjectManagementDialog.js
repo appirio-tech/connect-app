@@ -61,18 +61,6 @@ class ProjectManagementDialog extends React.Component {
     ))
   }
 
-  /**
-   * Get user handle using `allMembers` which comes from props and contains all the users
-   * which are loaded to `members.members` in the Redux store
-   *
-   * @param {Number} userId user id
-   */
-  resolveUserHandle(userId) {
-    const { allMembers } = this.props
-
-    return _.get(_.find(allMembers, { userId }), 'handle')
-  }
-
   showIndividualErrors(error) {
     const uniqueMessages = _.groupBy(error.failed, 'message')
 
