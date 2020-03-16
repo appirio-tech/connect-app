@@ -117,19 +117,12 @@ export function inviteTopcoderMembers(projectId, items) {
   }
 }
 
-function deleteTopcoderMemberInviteWithData(projectId, invite) {
-  return new Promise((resolve, reject) => {
-    deleteProjectMemberInvite(projectId, invite.item.id)
-      .then((res) => resolve(res))
-      .catch(err => reject(err))
-  })
-}
-
 export function deleteTopcoderMemberInvite(projectId, invite) {
   return (dispatch) => {
     dispatch({
       type: REMOVE_TOPCODER_MEMBER_INVITE,
-      payload: deleteTopcoderMemberInviteWithData(projectId, invite)
+      payload: deleteProjectMemberInvite(projectId, invite.item.id),
+      meta: { inviteId: invite.item.id }
     })
   }
 }
@@ -138,7 +131,8 @@ export function deleteProjectInvite(projectId, invite) {
   return (dispatch) => {
     dispatch({
       type: REMOVE_CUSTOMER_INVITE,
-      payload: deleteTopcoderMemberInviteWithData(projectId, invite)
+      payload: deleteProjectMemberInvite(projectId, invite.item.id),
+      meta: { inviteId: invite.item.id }
     })
   }
 }

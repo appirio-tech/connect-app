@@ -704,20 +704,14 @@ export const projectState = function (state=initialState, action) {
     return newState
   }
 
-  case REMOVE_CUSTOMER_INVITE_SUCCESS: {
-    const newState = Object.assign({}, state)
-    _.remove(newState.project.invites, i => action.payload.id === i.id)
-    newState.projectNonDirty.invites = newState.project.invites
-    newState.processingInvites = false
-    return newState
-  }
-
+  case REMOVE_CUSTOMER_INVITE_SUCCESS:
   case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS: {
-    const newState = Object.assign({}, state)
-    _.remove(newState.project.invites, i => action.payload.id === i.id)
-    newState.projectNonDirty.invites = newState.project.invites
-    newState.processingInvites = false
-    return newState
+    const idx = _.findIndex(state.project.invites, { id: action.meta.inviteId })
+    return update(state, {
+      processingInvites: { $set : false },
+      project: { invites: { $splice: [[idx, 1]] } },
+      projectNonDirty: { invites: { $splice: [[idx, 1]] } }
+    })
   }
 
   case UPDATE_PROJECT_MEMBER_SUCCESS: {
