@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { TagSelect } from '../TagSelect/TagSelect'
 
 export class EditLinkModal extends React.Component {
   constructor(props) {
@@ -7,7 +8,8 @@ export class EditLinkModal extends React.Component {
 
     this.state = {
       title : props.link.title,
-      address : props.link.address
+      address : props.link.path,
+      tags: props.link.tags
     }
   }
 
@@ -20,32 +22,47 @@ export class EditLinkModal extends React.Component {
     this.isURLValid()
   }
 
+  handleTagsChange(tags) {
+    this.setState({tags})
+  }
+
   isURLValid() {
     return /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/.test(this.state.address)
   }
 
   render() {
     const { onCancel, onConfirm } = this.props
-    const { title, address } = this.state
+    const { title, address, tags } = this.state
     return (
       <div className="modal delete-link-modal">
         <div className="modal-title danger">
         You're about to edit a link
         </div>
         <div className="modal-body">
-          <label for="title">Title:</label>
-          <input className="edit-input" type="text" value={title} onChange={this.handleTitleChange.bind(this)} name="title"/> 
+          {/* Title */}
+          <label htmlFor="title">Title:</label>
+          <input className="edit-input" type="text" value={title} onChange={this.handleTitleChange.bind(this)} name="title"/>
           <br />
-          <label for="address">Address:</label>
-          <input className="edit-input" type="text" value={address} onChange={this.handleAddressChange.bind(this)} 
+
+          {/* Link Address (URL) */}
+          <label htmlFor="address">Address:</label>
+          <input className="edit-input" type="text" value={address} onChange={this.handleAddressChange.bind(this)}
             name="address"
           />
           <br />
 
+          {/* Tags */}
+          <label htmlFor="tags">Tags:</label>
+          <TagSelect
+            onUpdate={this.handleTagsChange.bind(this)}
+            selectedTags={tags}
+          />
+          <br/>
+
           <div className="button-area flex center">
             <button className="tc-btn tc-btn-default tc-btn-sm btn-cancel" onClick={onCancel}>Cancel</button>
-            {this.isURLValid() ? <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={() => onConfirm(title, address)}>Edit link</button>
-              : <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={() => onConfirm(title, address)} disabled>Edit link</button>}
+            {this.isURLValid() ? <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={() => onConfirm(title, address, tags)}>Edit link</button>
+              : <button className="tc-btn tc-btn-warning tc-btn-sm" disabled>Edit link</button>}
           </div>
         </div>
       </div>

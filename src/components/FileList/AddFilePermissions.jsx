@@ -8,8 +8,9 @@ import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
 
 import './AddFilePermissions.scss'
 import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
+import { TagSelect } from '../TagSelect/TagSelect'
 
-const AddFilePermission = ({ onCancel, onSubmit, onChange, selectedUsers, projectMembers, loggedInUser, isSharingAttachment }) => {
+const AddFilePermission = ({ onCancel, onSubmit, onChange, selectedUsers, selectedTags, projectMembers, loggedInUser, isSharingAttachment }) => {
   selectedUsers = selectedUsers || ''
   const mapHandlesToUserIds = handles => {
     const projectMembersByHandle = mapKeys(projectMembers, value => value.handle)
@@ -25,7 +26,7 @@ const AddFilePermission = ({ onCancel, onSubmit, onChange, selectedUsers, projec
     >
       <div className="project-dialog">
         <div className="dialog-title">
-          Who do you want to share this file with?
+          Attachment Options
           <span onClick={onCancel}><XMarkIcon /></span>
         </div>
 
@@ -33,12 +34,26 @@ const AddFilePermission = ({ onCancel, onSubmit, onChange, selectedUsers, projec
           { isSharingAttachment && <LoadingIndicator isSmall /> }
         </div>
 
-        {/* Share with all members */}
         <div className="dialog-body">
+          {/* Tags */}
+          <div styleName="dialog-sub-title">
+            Tags
+          </div>
+          <TagSelect
+            selectedTags={selectedTags}
+            onUpdate={tags => onChange(selectedUsers, tags)}
+          />
+
+          {/* Permissions */}
+          <div styleName="dialog-sub-title">
+            Who do you want to share this file with?
+          </div>
+
+          {/* Share with all members */}
           <div styleName="btn-all-members">
             <button
               className="tc-btn tc-btn-primary tc-btn-md"
-              onClick={() => onSubmit(null)}
+              onClick={() => onSubmit(null, selectedTags)}
               disabled={isSharingAttachment}
             >All project members</button>
           </div>
@@ -51,13 +66,13 @@ const AddFilePermission = ({ onCancel, onSubmit, onChange, selectedUsers, projec
           <UserAutoComplete
             projectMembers={projectMembers}
             selectedUsers={selectedUsers ? selectedUsers.split(',').map((handle) => ({ value: handle, label: handle })) : []}
-            onUpdate={onChange}
+            onUpdate={users => onChange(users, selectedTags)}
             loggedInUser={loggedInUser}
           />
 
           <div styleName="btn-selected-members">
             <button className="tc-btn tc-btn-primary tc-btn-md"
-              onClick={() => onSubmit(mapHandlesToUserIds(selectedUsers.split(',')))}
+              onClick={() => onSubmit(mapHandlesToUserIds(selectedUsers.split(',')), selectedTags)}
               disabled={!selectedUsers || selectedUsers.length === 0 || isSharingAttachment }
             >Share with selected members</button>
           </div>

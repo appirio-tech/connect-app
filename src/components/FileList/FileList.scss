@@ -120,20 +120,43 @@
       }
 
       .title-edit {
-        display: flex;
-        align-items: center;
         margin-bottom: 10px;
+
+        .title-with-action-btns {
+          display: flex;
+        }
 
         input {
           @include roboto-bold;
           font-size: 15px;
           color: $tc-gray-80;
-          width: 80%;
           height: 30px;
           margin-left: 0;
           margin-bottom: 0;
           background: $tc-gray-neutral-light;
         }
+      }
+
+      .restrict-access-edit {
+        margin-bottom: 10px;
+      }
+
+      .tag {
+        @include roboto-medium;
+        background-color: $tc-gray-10;
+        border-radius: 4px;
+        color: $tc-gray-50;
+        font-size: 13px;
+        height: 20px;
+        line-height: 20px;
+        padding: 0 2 * $base-unit;
+        margin-top: $base-unit;
+        margin-right: $base-unit;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        display: inline-block;
       }
 
       .tc-textarea {
@@ -159,6 +182,10 @@
       margin-left: 22px;
     }
 
+    .save-icons {
+      white-space: nowrap;
+    }
+
     .icon-save {
       margin-right: 25px;
 
@@ -168,7 +195,7 @@
     }
 
     .icon-close {
-      margin-right: 10px;
+      margin-right: 2px;
 
       @media screen and (max-width: $screen-md - 1px) {
         margin-right: 0;
