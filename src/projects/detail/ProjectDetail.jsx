@@ -197,8 +197,7 @@ class ProjectDetail extends Component {
       isUserAcceptedInvitation,
     })
     acceptOrRefuseInvite(this.props.match.params.projectId, {
-      userId: this.props.currentUserId,
-      email: this.props.currentUserEmail,
+      id: this.props.userInvitationId,
       status: isUserAcceptedInvitation ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
     })
       .then(() => {
@@ -250,7 +249,7 @@ class ProjectDetail extends Component {
       return (<LoadingIndicator />)
     }
     return (
-      !showUserInvited?
+      !(showUserInvited || this.shouldForceCallAcceptRefuseRequest(this.props))?
         <EnhancedProjectDetailView
           {...this.props}
           currentMemberRole={currentMemberRole}
@@ -296,7 +295,8 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
     productsTimelines,
     allProductTemplates: templates.productTemplates,
     currentUserRoles: loadUser.user.roles,
-    showUserInvited: projectState.showUserInvited
+    showUserInvited: projectState.showUserInvited,
+    userInvitationId: projectState.userInvitationId
   }
 }
 

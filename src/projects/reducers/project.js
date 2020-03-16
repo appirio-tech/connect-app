@@ -51,6 +51,7 @@ const initialState = {
   phasesNonDirty: null,
   isLoadingPhases: false,
   showUserInvited: false,
+  userInvitationId: null,
   phasesStates: {} // controls opened phases and tabs of the phases
 }
 
@@ -206,8 +207,14 @@ export const projectState = function (state=initialState, action) {
     })
 
   case LOAD_PROJECT_MEMBER_INVITE_SUCCESS: {
+    const { invites, currentUserId, currentUserEmail } = action.payload
+    let invite
+    if (invites && invites.length > 0) {
+      invite = _.find(invites, m => ((m.userId === currentUserId || m.email === currentUserEmail) && !m.deletedAt && m.status === 'pending'))
+    }
     return Object.assign({}, state, {
-      showUserInvited: true
+      showUserInvited: !!invite,
+      userInvitationId: invite ? invite.id : null
     })
   }
 
