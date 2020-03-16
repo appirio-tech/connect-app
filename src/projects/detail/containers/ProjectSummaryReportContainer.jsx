@@ -36,9 +36,6 @@ class ProjectSummaryReportContainer extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      iframeKey: 0, // we would use it to force iframe to reload
-    }
     this.timer = null
     this.setLookerSessionTimer = this.setLookerSessionTimer.bind(this)
     this.reloadProjectReport = this.reloadProjectReport.bind(this)
@@ -68,13 +65,6 @@ class ProjectSummaryReportContainer extends React.Component {
       this.props.loadProjectReportsUrls(nextProjectId, PROJECT_REPORTS.PROJECT_SUMMARY)
       // don't have to set session expire timer here, it would be set of iframe load
     }
-
-    // when we get a new URL for report, force iframe to reload, in case the URL stays the same
-    if (this.props.isLoading && !nextProps.isLoading) {
-      this.setState({
-        iframeKey:  this.state.iframeKey + 1
-      })
-    }
   }
 
   setLookerSessionTimer() {
@@ -88,6 +78,7 @@ class ProjectSummaryReportContainer extends React.Component {
     this.timer = setTimeout(() => {
       console.log('Looker Session is expired by timer')
       this.props.setLookerSessionExpired(true)
+      window.analytics && window.analytics.track('Looker Session Expired')
     }, REPORT_SESSION_LENGTH * 1000)
   }
 
@@ -158,7 +149,6 @@ class ProjectSummaryReportContainer extends React.Component {
             </div>
           </Modal>
           <EnhancedLookerEmbedReport
-            key={this.state.iframeKey}
             isLoading={isLoading}
             projectSummaryEmbedUrl={projectSummaryEmbedUrl}
             onLoad={this.setLookerSessionTimer}

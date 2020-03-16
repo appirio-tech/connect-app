@@ -80,7 +80,9 @@ const ProjectDetailView = (props) => {
   let estimationQuestion = null
   const { estimateBlocks } = getProductEstimate({scope: template}, props.project)
 
-  if (estimateBlocks.length > 0){
+  // we can hide estimation component just by setting `hideEstimation` inside Project Template
+  // also, if there are no `estimateBlocks` found we also don't show estimation component
+  if (!template.hideEstimation && estimateBlocks.length > 0){
     _.forEach(template.sections, (section) => {
       _.forEach(section.subSections, (subSection) => {
         if (subSection.type === 'questions') {
