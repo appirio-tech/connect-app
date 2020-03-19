@@ -135,7 +135,7 @@ const initSettings = (notInitedSettings) => {
 
     // check each of serviceId method separately as some can have
     // values and some don't have
-    ['web', 'email', 'emailBundling'].forEach((serviceId) => {
+    ['web', 'email'].forEach((serviceId) => {
       if (!notifications[type][serviceId]) {
         notifications[type][serviceId] = {}
       }
