@@ -126,12 +126,35 @@ class SpecQuestions extends React.Component {
     } = this.props
     const currentProjectData = isProjectDirty ? dirtyProject : project
 
+    console.log('q.required', q.required)
+    console.log('q.validations', q.validations)
+
+    let validations = q.validations;
+    // if `required` is set we should add our custom validator `isRequired` to the `validations` list
+    // we should support `q.validations` when it's a `string` or `object`
+    // we also should keep validation rules which are already in `q.validations`
+    if (q.required) {
+      // if not validation rules, just add `isRequired`
+      if (!validations) {
+        validations = 'isRequired'
+      } else {
+        // if it's a string and no 'isRequired' rule yet
+        if (_.isString(validations) && !/(?:[^\w]|^)isRequired(?:[^\w]|$)/.test(validations)) {
+          validations += (!!validations ? ',' : '') + 'isRequired'
+
+        // if it's an object and no 'isRequired' rule yet
+        } else if (_.isObject(validations) && !_.findKey(validations, 'isRequired')) {
+          validations.isRequired = true
+        }
+      }
+    }
+
     const elemProps = {
       name: q.fieldName,
       label: q.label,
       value: _.get(project, q.fieldName, formatDefaultQuestionValue(q)),
       required: q.required,
-      validations: q.required ? 'isRequired' : null,
+      validations: validations,
       validationError: q.validationError,
       validationErrors: q.validationErrors,
     }
