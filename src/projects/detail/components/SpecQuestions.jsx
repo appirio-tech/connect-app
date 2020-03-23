@@ -258,9 +258,6 @@ class SpecQuestions extends React.Component {
       elemProps.wrapperClass = 'row'
       elemProps.rows = 3
       elemProps.autoResize = true
-      if (q.validations) {
-        elemProps.validations = q.validations
-      }
       // child = <TCFormFields.Textarea name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'radio-group':
