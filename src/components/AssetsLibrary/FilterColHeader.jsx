@@ -120,6 +120,7 @@ class FilterColHeader extends React.Component {
       return (
         <Formsy.Form>
           <TCFormFields.TextInput
+            inputRef={(input) => { this.textInputFilter = input }}
             label="Name"
             type="text"
             name="name.name"
