@@ -175,6 +175,7 @@
             @include roboto-bold;
             color: $tc-black;
             font-size: $tc-label-lg;
+            line-height: 20px;
             max-width: calc(100% - 60px);
             flex: 1;
             overflow: hidden;
