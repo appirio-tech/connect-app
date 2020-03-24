@@ -80,7 +80,9 @@ const ProjectDetailView = (props) => {
   let estimationQuestion = null
   const { estimateBlocks } = getProductEstimate({scope: template}, props.project)
 
-  if (estimateBlocks.length > 0){
+  // we can hide estimation component just by setting `hideEstimation` inside Project Template
+  // also, if there are no `estimateBlocks` found we also don't show estimation component
+  if (!template.hideEstimation && estimateBlocks.length > 0){
     _.forEach(template.sections, (section) => {
       _.forEach(section.subSections, (subSection) => {
         if (subSection.type === 'questions') {
@@ -197,8 +199,7 @@ class ProjectDetail extends Component {
       isUserAcceptedInvitation,
     })
     acceptOrRefuseInvite(this.props.match.params.projectId, {
-      userId: this.props.currentUserId,
-      email: this.props.currentUserEmail,
+      id: this.props.userInvitationId,
       status: isUserAcceptedInvitation ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
     })
       .then(() => {
@@ -250,7 +251,7 @@ class ProjectDetail extends Component {
       return (<LoadingIndicator />)
     }
     return (
-      !showUserInvited?
+      !(showUserInvited || this.shouldForceCallAcceptRefuseRequest(this.props))?
         <EnhancedProjectDetailView
           {...this.props}
           currentMemberRole={currentMemberRole}
@@ -296,7 +297,8 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
     productsTimelines,
     allProductTemplates: templates.productTemplates,
     currentUserRoles: loadUser.user.roles,
-    showUserInvited: projectState.showUserInvited
+    showUserInvited: projectState.showUserInvited,
+    userInvitationId: projectState.userInvitationId
   }
 }
 

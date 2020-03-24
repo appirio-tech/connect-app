@@ -133,10 +133,19 @@ export function loadProject(projectId) {
 }
 
 export function loadProjectInvite(projectId) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const loadUserState = getState().loadUser
     return dispatch({
       type: LOAD_PROJECT_MEMBER_INVITE,
       payload: getProjectInviteById(projectId)
+        .then((invites) => {
+          if (loadUserState.isLoggedIn && loadUserState.user) {
+            const user = loadUserState.user
+            return Promise.resolve({ invites, currentUserId: user.userId, currentUserEmail: user.email })
+          } else {
+            return Promise.resolve(invites)
+          }
+        })
     })
   }
 

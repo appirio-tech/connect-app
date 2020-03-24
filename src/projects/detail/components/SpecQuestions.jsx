@@ -423,7 +423,9 @@ class SpecQuestions extends React.Component {
           // hide hidden questions, unless we not force to show them
           (showHidden || !question.hidden) &&
           // hide question in edit mode if configured
-          (isCreation || !question.hiddenOnEdit)
+          (isCreation || !question.hiddenOnEdit) &&
+          // don't show estimation component, if it's disabled on the template level
+          !(question.type === 'estimation' && template.hideEstimation)
         ).map((q, index) => {
           return  (
             _.includes(['checkbox', 'checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills', 'slide-radiogroup', 'slider-standard', 'select-dropdown'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (

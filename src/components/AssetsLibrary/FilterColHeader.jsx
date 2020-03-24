@@ -33,6 +33,12 @@ class FilterColHeader extends React.Component {
     })
   }
 
+  onFilterClick() {
+    if(this.textInputFilter){
+      setTimeout(() => this.textInputFilter.focus())
+    }
+  }
+  
   onFromDateChange(name, value) {
     this.setState({from: value})
 
@@ -95,6 +101,7 @@ class FilterColHeader extends React.Component {
             type="date"
             name="date.from"
             onChange={this.onFromDateChange}
+            maxValue={this.state.to}
             value={this.state.from}
           />
           <TCFormFields.TextInput
@@ -102,6 +109,7 @@ class FilterColHeader extends React.Component {
             type="date"
             name="date.to"
             onChange={this.onToDateChange}
+            minValue={this.state.from}
             value={this.state.to}
           />
         </Formsy.Form>
@@ -133,6 +141,7 @@ class FilterColHeader extends React.Component {
     default: {
       return (
         <input
+          ref={(input) => { this.textInputFilter = input }}
           type="text"
           name="filter"
           className="tc-file-field__inputs"
@@ -152,10 +161,12 @@ class FilterColHeader extends React.Component {
     return (
       <div styleName="FilterColHeader">
         <Dropdown className="filter-drop-down" noAutoclose>
-          <a href="javascript:;" className="dropdown-menu-header txt-link">
-            {title}
-            <IconCarretDownNormal className="icon-carret-down-normal"/>
-          </a>
+          <div className="dropdown-menu-header">
+            <a href="javascript:;" className="txt-link" onClick={this.onFilterClick.bind(this)}>
+              {title}
+              <IconCarretDownNormal className="icon-carret-down-normal"/>
+            </a>
+          </div>
           <div className="dropdown-menu-list down-layer">
             {this.renderByType()}
           </div>
