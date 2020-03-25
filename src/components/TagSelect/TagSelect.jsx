@@ -8,15 +8,27 @@ import PropTypes from 'prop-types'
  */
 export const TagSelect = ({ selectedTags, onUpdate, useFormsySelect, name }) => {
   const noOptionsMessage = evt => {
-    if (evt.inputValue === '') {
+    const inputValue = evt.inputValue && evt.inputValue.trim()
+    if (inputValue === '') {
       return 'Start typing to create a new tag'
-    } else if (selectedTags && selectedTags.includes(evt.inputValue)) {
+    } else if (selectedTags && selectedTags.includes(inputValue)) {
       return 'Tag already selected'
     }
   }
 
+  const isValidNewOption = inputValue => {
+    return inputValue && !!inputValue.trim()
+  }
+
+  const getNewOptionData = (inputValue, label) => {
+    return {
+      label,
+      value: inputValue.trim()
+    }
+  }
+
   return (
-    <div>
+    <div className="has-react-select">
       {
         useFormsySelect ?
           <FormsySelect
@@ -28,6 +40,8 @@ export const TagSelect = ({ selectedTags, onUpdate, useFormsySelect, name }) => 
             showDropdownIndicator={false}
             placeholder="Add tags"
             noOptionsMessage={noOptionsMessage}
+            isValidNewOption={isValidNewOption}
+            getNewOptionData={getNewOptionData}
           /> :
           <ReactSelect
             isMulti
@@ -39,6 +53,8 @@ export const TagSelect = ({ selectedTags, onUpdate, useFormsySelect, name }) => 
             value={(selectedTags || []).map(t => ({ value: t, label: t }))}
             onChange={tags => onUpdate(tags.map(t => t.value))}
             noOptionsMessage={noOptionsMessage}
+            isValidNewOption={isValidNewOption}
+            getNewOptionData={getNewOptionData}
           />
       }
 
