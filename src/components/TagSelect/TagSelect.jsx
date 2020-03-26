@@ -2,6 +2,7 @@ import React from 'react'
 import ReactSelect from '../Select/Select'
 import FormsySelect from '../Select/FormsySelect'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 
 /**
  * TagSelect renders the tag selection component for attachment options dialog
@@ -27,24 +28,32 @@ export const TagSelect = ({ selectedTags, onUpdate, useFormsySelect, name }) => 
     }
   }
 
+  const onInputChage = (value) => {
+    // prevent preceding spaces
+    return _.trimStart(value)
+  }
+
   return (
     <div className="has-react-select">
       {
         useFormsySelect ?
           <FormsySelect
             isMulti
+            heightAuto
             name={name}
             setValueOnly
             closeMenuOnSelect
             createOption
             showDropdownIndicator={false}
             placeholder="Add tags"
+            onInputChange={onInputChage}
             noOptionsMessage={noOptionsMessage}
             isValidNewOption={isValidNewOption}
             getNewOptionData={getNewOptionData}
           /> :
           <ReactSelect
             isMulti
+            heightAuto
             name={name}
             closeMenuOnSelect
             createOption
@@ -52,6 +61,7 @@ export const TagSelect = ({ selectedTags, onUpdate, useFormsySelect, name }) => 
             placeholder="Add tags"
             value={(selectedTags || []).map(t => ({ value: t, label: t }))}
             onChange={tags => onUpdate(tags.map(t => t.value))}
+            onInputChange={onInputChage}
             noOptionsMessage={noOptionsMessage}
             isValidNewOption={isValidNewOption}
             getNewOptionData={getNewOptionData}
