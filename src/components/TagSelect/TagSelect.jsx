@@ -28,7 +28,7 @@ export const TagSelect = ({ selectedTags, onUpdate, useFormsySelect, name }) => 
     }
   }
 
-  const onInputChage = (value) => {
+  const onInputChange = (value) => {
     // prevent preceding spaces
     return _.trimStart(value)
   }
@@ -46,7 +46,7 @@ export const TagSelect = ({ selectedTags, onUpdate, useFormsySelect, name }) => 
             createOption
             showDropdownIndicator={false}
             placeholder="Add tags"
-            onInputChange={onInputChage}
+            onInputChange={onInputChange}
             noOptionsMessage={noOptionsMessage}
             isValidNewOption={isValidNewOption}
             getNewOptionData={getNewOptionData}
@@ -61,7 +61,7 @@ export const TagSelect = ({ selectedTags, onUpdate, useFormsySelect, name }) => 
             placeholder="Add tags"
             value={(selectedTags || []).map(t => ({ value: t, label: t }))}
             onChange={tags => onUpdate(tags.map(t => t.value))}
-            onInputChange={onInputChage}
+            onInputChange={onInputChange}
             noOptionsMessage={noOptionsMessage}
             isValidNewOption={isValidNewOption}
             getNewOptionData={getNewOptionData}
