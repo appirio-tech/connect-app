@@ -12,9 +12,10 @@ const FormsySelect = props => {
   // when setValueOnly is set to true, formsy should submit the 'option.value' instead of the whole 'option' object
   const { onChange, setValueOnly, options } = props
   const selectedOption = props.getValue()
+  const getOnlyValues = (selected)  => props.isMulti ? (selected || []).map(o => o.value) : selected.value
 
   const onSelectionChange = selectedOption => {
-    props.setValue(setValueOnly ? selectedOption.value : selectedOption)
+    props.setValue(setValueOnly ? getOnlyValues(selectedOption) : selectedOption)
     onChange && onChange(selectedOption)
   }
   const value = setValueOnly

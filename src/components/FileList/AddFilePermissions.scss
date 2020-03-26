@@ -1,3 +1,5 @@
+@import '~tc-ui/src/styles/tc-includes';
+
 .btn-all-members {
   text-align: center;
   margin-top: 8px;
@@ -10,4 +12,11 @@
 
 .btn-selected-members {
   margin-top: 10px;
+}
+
+.dialog-sub-title {
+  @include  roboto;
+
+  margin-top: 30px;
+  margin-bottom: 10px;
 }

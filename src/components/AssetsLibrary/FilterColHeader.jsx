@@ -9,23 +9,25 @@ const Formsy = FormsyForm.Formsy
 const TCFormFields = FormsyForm.Fields
 
 class FilterColHeader extends React.Component {
-  
+
   constructor(props) {
     super(props)
-    this.state = {value: '', from: '', to: ''}
+    this.state = {value: '', from: '', to: '', name: '', tag: ''}
     this.setFilter = this.setFilter.bind(this)
     this.onChange = this.onChange.bind(this)
     this.onFromDateChange = this.onFromDateChange.bind(this)
     this.onToDateChange = this.onToDateChange.bind(this)
+    this.onNameChange = this.onNameChange.bind(this)
+    this.onTagChange = this.onTagChange.bind(this)
   }
-  
+
   setFilter(newfilter) {
     this.props.setFilter(this.props.filterName, newfilter)
   }
-  
+
   onChange(event) {
     this.setState({value: event.target.value})
-    
+
     setTimeout(() => {
       this.setFilter(this.state.value)
     })
@@ -39,36 +41,56 @@ class FilterColHeader extends React.Component {
   
   onFromDateChange(name, value) {
     this.setState({from: value})
-    
+
     setTimeout(() => {
       this.props.setFilter('date.from', this.state.from)
     })
   }
-  
+
   onToDateChange(name, value) {
     this.setState({to: value})
-    
+
     setTimeout(() => {
       this.props.setFilter('date.to', this.state.to)
     })
   }
-  
+
+  onNameChange(name, value) {
+    this.setState({ name: value})
+
+    setTimeout(() => {
+      this.props.setFilter('name.name', this.state.name)
+    })
+  }
+
+  onTagChange(name, value) {
+    this.setState({tag: value})
+
+    setTimeout(() => {
+      this.props.setFilter('name.tag', this.state.tag)
+    })
+  }
+
   componentDidMount() {
     this.setState({
       value: this.props.value || '',
       from: this.props.from || '',
-      to: this.props.to || ''
+      to: this.props.to || '',
+      name: this.props.name || '',
+      tag: this.props.tag || ''
     })
   }
-  
+
   clearFilter() {
     this.setState({
       value: '',
       from: '',
-      to: ''
+      to: '',
+      name: '',
+      tag: ''
     })
   }
-  
+
   renderByType() {
     switch (this.props.type) {
     case 'date': {
@@ -93,7 +115,30 @@ class FilterColHeader extends React.Component {
         </Formsy.Form>
       )
     }
-      
+
+    case 'name': {
+      return (
+        <Formsy.Form>
+          <TCFormFields.TextInput
+            inputRef={(input) => { this.textInputFilter = input }}
+            label="Name"
+            type="text"
+            name="name.name"
+            onChange={this.onNameChange}
+            value={this.state.name}
+          />
+
+          <TCFormFields.TextInput
+            label="Tag"
+            type="text"
+            name="name.tag"
+            onChange={this.onTagChange}
+            value={this.state.tag}
+          />
+        </Formsy.Form>
+      )
+    }
+
     default: {
       return (
         <input
@@ -108,12 +153,12 @@ class FilterColHeader extends React.Component {
     }
     }
   }
-  
+
   render() {
     const {
       title,
     } = this.props
-    
+
     return (
       <div styleName="FilterColHeader">
         <Dropdown className="filter-drop-down" noAutoclose>

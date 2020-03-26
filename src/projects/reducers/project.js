@@ -38,6 +38,7 @@ const initialState = {
   processingAttachments: false,
   attachmentsAwaitingPermission: null,
   attachmentPermissions: null,
+  attachmentTags: null,
   error: false,
   inviteError: false,
   project: {
@@ -526,7 +527,8 @@ export const projectState = function (state=initialState, action) {
     }
     return update(state, {
       attachmentsAwaitingPermission: query,
-      attachmentPermissions: { $set : null }
+      attachmentPermissions: { $set : null },
+      attachmentTags: { $set: null }
     })
   }
 
@@ -539,7 +541,8 @@ export const projectState = function (state=initialState, action) {
   case CHANGE_ATTACHMENT_PERMISSION:
     return {
       ...state,
-      attachmentPermissions: action.payload
+      attachmentPermissions: action.payload.allowedUsers,
+      attachmentTags: action.payload.tags
     }
 
   case UPDATE_PROJECT_ATTACHMENT_SUCCESS: {

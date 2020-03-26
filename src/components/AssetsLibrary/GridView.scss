@@ -65,11 +65,14 @@
   -ms-flex: none;
   flex: none;
   width: 60px;
+  line-height: 30px;
+  align-items: flex-start;
 
   svg, img {
     height: 30px;
     width: 30px;
     margin-left: 4px;
+    margin-top: 8px;
   }
 }
 
@@ -82,6 +85,8 @@
   line-height: 30px;
   min-width: 0;
   text-align: left;
+  align-items: flex-start;
+  padding-right: 4px;
 
   > p {
     overflow: hidden;
@@ -90,10 +95,16 @@
   }
 }
 
+.item-name-tag-wrapper {
+  overflow: hidden;
+}
+
 .item-shared-with {
   flex: none;
   width: 140px;
   word-break: keep-all;
+  align-items: flex-start;
+  line-height: 30px;
 }
 
 .item-modified, .item-created-by {
@@ -114,6 +125,7 @@
   width: 50px;
   justify-content: flex-end;
   padding-right: 4px;
+  align-items: flex-start;
 }
 
 .item-action .link-buttons {
@@ -143,6 +155,24 @@
 
 .assets-gridview-container-active {
   position: relative;
+}
+
+.tag {
+  @include roboto-medium;
+  background-color: $tc-gray-10;
+  border-radius: 4px;
+  color: $tc-gray-50;
+  font-size: 13px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 2 * $base-unit;
+  margin-top: $base-unit;
+  margin-right: $base-unit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: inline-block;
 }
 
 :global {

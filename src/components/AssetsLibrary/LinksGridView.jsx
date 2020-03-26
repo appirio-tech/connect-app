@@ -49,7 +49,7 @@ const LinksGridView = ({
   let nameFieldRef
   let sharedWithFieldRef
   let dateFieldRef
-  
+
   const updateSubContents = () => {
     if (selectedLink) {
       let link = links.filter(item => {
@@ -57,29 +57,29 @@ const LinksGridView = ({
           && selectedLink.createdBy === item.createdBy
           && selectedLink.updatedAt === item.updatedAt
       })[0]
-      
+
       if (!link) {
         link = _.cloneDeep(selectedLink)
         link.children = []
       }
-      
+
       onChangeSubFolder(link)
     }
   }
-  
+
   const clearSubContents = () => clearing = true
-  
+
   const clearFieldValues = () => {
     nameFieldRef.clearFilter()
     sharedWithFieldRef.clearFilter()
     dateFieldRef.clearFilter()
   }
-  
+
   const renderLink = (link) => {
     if (link.onClick) {
       return (
         <a
-          href={link.address}
+          href={link.path}
           onClick={(evt) => {
             // we only prevent default on click,
             // as we handle clicks with <li>
@@ -91,28 +91,28 @@ const LinksGridView = ({
           {link.title}
         </a>)
     } else if (link.noNewPage) {
-      return <Link to={link.address}>{link.title}</Link>
+      return <Link to={link.path}>{link.title}</Link>
     } else {
-      return <a href={link.address} target="_blank" rel="noopener noreferrer">{link.title}</a>
+      return <a href={link.path} target="_blank" rel="noopener noreferrer">{link.title}</a>
     }
   }
   const goBack = () => {
     onChangeSubFolder(null)
     selectedLink = null
   }
-  
+
   const getSharedWithText = (tag) => {
     return tag === PROJECT_FEED_TYPE_MESSAGES
       ? PROJECT_ASSETS_SHARED_WITH_TOPCODER_MEMBERS : PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS
   }
-  
+
   if (clearing) {
     setTimeout(() => {
       updateSubContents()
       clearing = false
     })
   }
-  
+
   return (
     <div styleName="assets-gridview-container">
       {(subFolderContent) && (
@@ -155,8 +155,9 @@ const LinksGridView = ({
                   ref={(comp) => nameFieldRef = comp}
                   title="Name"
                   setFilter={setFilter}
-                  filterName="name"
-                  value={getFilterValue('name')}
+                  type="name"
+                  name={getFilterValue('name.name')}
+                  tag={getFilterValue('name.tag')}
                 />
               </div>
               <div styleName="flex-item-title item-shared-with">
@@ -183,14 +184,14 @@ const LinksGridView = ({
             </li>
             {links.map((link, idx) => {
               const onDeleteConfirm = () => {
-                onDelete(idx)
+                onDelete(link.id)
                 onDeleteIntent(-1)
               }
               const onDeleteCancel = () => onDeleteIntent(-1)
               const handleDeleteClick = () => onDeleteIntent(idx)
 
-              const onEditConfirm = (title, address) => {
-                onEdit(idx, title, address)
+              const onEditConfirm = (title, address, tags) => {
+                onEdit(link.id, title, address, tags)
                 onEditIntent(-1)
               }
               const onEditCancel = () => onEditIntent(-1)
@@ -200,12 +201,14 @@ const LinksGridView = ({
                 selectedLink = link
               }
               const owner = _.find(assetsMembers, m => m.userId === _.parseInt(link.createdBy))
-              
+
               if (Array.isArray(link.children) && link.children.length > 0) {
                 return (
                   <li styleName="assets-gridview-row" onClick={changeSubFolder} key={'assets-gridview-folder-' + idx}>
                     <div styleName="flex-item item-type"><FolderIcon /></div>
-                    <div styleName="flex-item item-name hand"><p>{formatFolderTitle(link.title)}</p></div>
+                    <div styleName="flex-item item-name hand">
+                      <p>{formatFolderTitle(link.title)}</p>
+                    </div>
                     <div styleName="flex-item item-shared-with">
                       <p>
                         {getSharedWithText(link.tag)}
@@ -247,7 +250,14 @@ const LinksGridView = ({
                 return (
                   <li styleName="assets-gridview-row" key={'assets-gridview-item-' +idx}>
                     <div styleName="flex-item item-type"><LinkIcon/></div>
-                    <div styleName="flex-item item-name"><p>{renderLink(link)}</p></div>
+                    <div styleName="flex-item item-name">
+                      <div styleName="item-name-tag-wrapper">
+                        <p>{renderLink(link)}</p>
+                        {
+                          link.tags && link.tags.map((t, i) => <span styleName="tag" key={i}>{t}</span>)
+                        }
+                      </div>
+                    </div>
                     <div styleName="flex-item item-shared-with">
                       <p>
                         {getSharedWithText(link.tag)}
