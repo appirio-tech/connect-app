@@ -100,14 +100,20 @@ class SkillsQuestion extends React.Component {
 
     // if user enter only ' '  or ';' we should clean it to not allow
     if (indexOfSpace === 0 || indexOfSemiColon === 0 ) {
-      return ''
+      return value.replace(' ', '').replace(';', '')
     }
 
     if (indexOfSemiColon >= 1 ) {
+      const newValue = value.replace(';', '').trim()
       const currentValues = getValue()
-      this.handleChange([...currentValues, { name: value.substring(0, value.length -1) }])
-      // this is return empty to nullify value post processing
-      return ''
+      if (!_.some(currentValues, v => v && v.name === newValue)) {
+        this.handleChange([...currentValues, { name:  newValue}])
+        // this is return empty to nullify value post processing
+        return ''
+      } else {
+        // don't allow semicolon for duplicate values
+        return value.replace(';', '')
+      }
     }
 
     this.setState({ customOptionValue: value })
@@ -172,7 +178,7 @@ class SkillsQuestion extends React.Component {
             placeholder="Start typing a skill then select from the list"
             value={selectGroupValues}
             getOptionLabel={(option) => option.name || ''}
-            getOptionValue={(option) => option.name || ''}
+            getOptionValue={(option) => (option.name || '').trim()}
             onInputChange={this.onSelectType}
             onChange={(val) => {
               this.handleChange(_.union(val, checkboxGroupValues))
