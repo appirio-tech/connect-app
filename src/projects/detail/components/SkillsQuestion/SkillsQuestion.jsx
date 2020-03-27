@@ -98,9 +98,9 @@ class SkillsQuestion extends React.Component {
     const indexOfSpace = value.indexOf(' ')
     const indexOfSemiColon = value.indexOf(';')
 
-    // if user enter only ' '  or ';' we should clean it to not allow
+    // if user enter ' '  or ';' in the start of the input, we should clean it to not allow
     if (indexOfSpace === 0 || indexOfSemiColon === 0 ) {
-      return value.replace(' ', '').replace(';', '')
+      return value.slice(1)
     }
 
     if (indexOfSemiColon >= 1 ) {
