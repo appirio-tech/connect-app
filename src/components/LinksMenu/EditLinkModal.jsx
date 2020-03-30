@@ -52,7 +52,7 @@ export class EditLinkModal extends React.Component {
           <br />
 
           {/* Tags */}
-          <label htmlFor="tags">Tags:</label>
+          <label htmlFor="tags">Tags (optional):</label>
           <TagSelect
             onUpdate={this.handleTagsChange.bind(this)}
             selectedTags={tags}

@@ -37,7 +37,7 @@ const AddFilePermission = ({ onCancel, onSubmit, onChange, selectedUsers, select
         <div className="dialog-body">
           {/* Tags */}
           <div styleName="dialog-sub-title">
-            Tags
+            Tags (optional)
           </div>
           <TagSelect
             selectedTags={selectedTags}

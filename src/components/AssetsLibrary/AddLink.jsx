@@ -77,7 +77,7 @@ class AddLink extends React.Component {
                 wrapperClass="form-group"
               />
               <div className="form-group">
-                <label className="tc-label">Tags</label>
+                <label className="tc-label">Tags (optional)</label>
                 <TagSelect
                   useFormsySelect
                   name="tags"

@@ -141,7 +141,7 @@ export default class FileListItem extends React.Component {
         }
 
         {/* Tags */}
-        <label className="tc-label">Tags</label>
+        <label className="tc-label">Tags (optional)</label>
         <TagSelect
           onUpdate={tags => this.onTagsChange(tags)}
           selectedTags={tags}

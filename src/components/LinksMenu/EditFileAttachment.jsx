@@ -74,7 +74,7 @@ export class EditFileAttachment extends React.Component {
           <br />
 
           {/* Tags */}
-          <label>Tags:</label>
+          <label>Tags (optional):</label>
           <TagSelect
             selectedTags={tags}
             onUpdate={this.onTagsChange}
