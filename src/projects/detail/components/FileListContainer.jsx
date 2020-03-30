@@ -7,6 +7,7 @@ import AddFiles from '../../../components/FileList/AddFiles'
 import { getProjectRoleForCurrentUser } from '../../../helpers/projectHelper'
 import { uploadProjectAttachments, discardAttachments, changeAttachmentPermission } from '../../actions/projectAttachment'
 import AddFilePermission from '../../../components/FileList/AddFilePermissions'
+import { ATTACHMENT_TYPE_FILE } from '../../../config/constants'
 
 class FileListContainer extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class FileListContainer extends Component {
         category,
         size: f.size,
         path: f.key,
-        type: 'file',
+        type: ATTACHMENT_TYPE_FILE,
         contentType: f.mimetype || 'application/unknown'
       }
       attachments.push(attachment)

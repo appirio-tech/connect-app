@@ -26,6 +26,8 @@ import {
   PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS,
   PROJECT_ASSETS_SHARED_WITH_ADMIN,
   EVENT_TYPE,
+  ATTACHMENT_TYPE_LINK,
+  ATTACHMENT_TYPE_FILE,
 } from '../../../config/constants'
 import AddLink from '../../../components/AssetsLibrary/AddLink'
 import PERMISSIONS from '../../../config/permissions'
@@ -58,9 +60,8 @@ class AssetsInfoContainer extends React.Component {
       }
     }
     this.onAddNewLink = this.onAddNewLink.bind(this)
-    this.onDeleteLink = this.onDeleteLink.bind(this)
     this.onEditLink = this.onEditLink.bind(this)
-    this.onEditAttachment = this.onEditAttachment.bind(this)
+    this.onEditFileAttachment = this.onEditFileAttachment.bind(this)
     this.onAddFile = this.onAddFile.bind(this)
     this.onUploadAttachment = this.onUploadAttachment.bind(this)
     this.removeAttachment = this.removeAttachment.bind(this)
@@ -192,14 +193,9 @@ class AssetsInfoContainer extends React.Component {
     addProjectAttachment(project.id, {
       title: link.title,
       tags: link.tags,
-      type: 'link',
+      type: ATTACHMENT_TYPE_LINK,
       path: link.address
     })
-  }
-
-  onDeleteLink(id) {
-    const { project, removeProjectAttachment } = this.props
-    removeProjectAttachment(project.id, id)
   }
 
   onEditLink(id, title, address, tags) {
@@ -212,7 +208,7 @@ class AssetsInfoContainer extends React.Component {
     })
   }
 
-  onEditAttachment(originalAttachment, title, allowedUsers, tags) {
+  onEditFileAttachment(originalAttachment, title, allowedUsers, tags) {
     const { project, updateProjectAttachment, phases, updateProductAttachment } = this.props
     const updatedAttachment = {
       title,
@@ -501,7 +497,7 @@ class AssetsInfoContainer extends React.Component {
     const { project, isSuperUser, phases, feeds,
       isManageUser, phasesTopics, canAccessPrivatePosts } = this.props
 
-    let attachments = _.filter(project.attachments, a => a.type === 'file')
+    let attachments = _.filter(project.attachments, a => a.type === ATTACHMENT_TYPE_FILE)
     // merges the product attachments to show in the links menu
     if (phases && phases.length > 0) {
       phases.forEach(phase => {
@@ -555,7 +551,7 @@ class AssetsInfoContainer extends React.Component {
     const privateTopicLinks = topicLinks.filter(link => link.tag === PROJECT_FEED_TYPE_MESSAGES)
     const phaseLinks = this.extractLinksFromPosts(phaseFeeds)
 
-    let links = _.filter(project.attachments, a => a.type === 'link')
+    let links = _.filter(project.attachments, a => a.type === ATTACHMENT_TYPE_LINK)
     links = links.concat(publicTopicLinks)
     if (canAccessPrivatePosts) {
       links = links.concat(privateTopicLinks)
@@ -763,7 +759,7 @@ class AssetsInfoContainer extends React.Component {
           category,
           size: f.size,
           path: f.key,
-          type: 'file',
+          type: ATTACHMENT_TYPE_FILE,
           contentType: f.mimetype || 'application/unknown'
         }
         attachments.push(attachment)
@@ -862,7 +858,7 @@ class AssetsInfoContainer extends React.Component {
                 links={attachments}
                 title="Files"
                 onDelete={this.removeAttachment}
-                onEdit={this.onEditAttachment}
+                onEdit={this.onEditFileAttachment}
                 onAddAttachment={addProjectAttachment}
                 onUploadAttachment={this.onUploadAttachment}
                 isSharingAttachment={isSharingAttachment}
@@ -898,7 +894,7 @@ class AssetsInfoContainer extends React.Component {
                 assetsMembers={assetsMembers}
                 canDelete={canManageLinks}
                 canEdit={canManageLinks}
-                onDelete={this.onDeleteLink}
+                onDelete={this.removeAttachment}
                 onEdit={this.onEditLink}
                 formatModifyDate={formatModifyDate}
                 formatFolderTitle={formatFolderTitle}
