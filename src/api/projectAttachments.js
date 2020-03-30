@@ -1,19 +1,19 @@
 import { axiosInstance as axios } from './requestInterceptor'
-import { PROJECTS_API_URL, FILE_PICKER_SUBMISSION_CONTAINER_NAME } from '../config/constants'
+import { PROJECTS_API_URL, FILE_PICKER_SUBMISSION_CONTAINER_NAME, ATTACHMENT_TYPE_FILE } from '../config/constants'
 
-export function addProjectAttachment(projectId, fileData) {
+export function addProjectAttachment(projectId, attachment) {
 
-  if (fileData.type === 'file') {
+  if (attachment.type === ATTACHMENT_TYPE_FILE) {
     // add s3 bucket prop
-    fileData.s3Bucket = FILE_PICKER_SUBMISSION_CONTAINER_NAME
+    attachment.s3Bucket = FILE_PICKER_SUBMISSION_CONTAINER_NAME
   }
 
   // The api takes only arrays
-  if (!fileData.tags) {
-    fileData.tags = []
+  if (!attachment.tags) {
+    attachment.tags = []
   }
 
-  return axios.post(`${PROJECTS_API_URL}/v5/projects/${projectId}/attachments`, fileData)
+  return axios.post(`${PROJECTS_API_URL}/v5/projects/${projectId}/attachments`, attachment)
     .then( resp => {
       resp.data.downloadUrl = `/projects/${projectId}/attachments/${resp.data.id}`
       return resp.data

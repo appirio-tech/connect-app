@@ -17,7 +17,7 @@ const UserAutoComplete = ({
   onUpdate,
   loggedInUser
 }) => (
-  <div styleName="user-select-wrapper" className="user-select-wrapper">
+  <div styleName="user-select-wrapper" className="user-select-wrapper has-react-select">
     <Select
       isMulti
       closeMenuOnSelect
