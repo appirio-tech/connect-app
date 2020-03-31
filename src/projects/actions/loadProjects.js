@@ -66,7 +66,7 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
         return dispatch(loadMembers(userIds))
           .then(() => resolve(true))
           // if some errors happens during members loading this should not break project list loading so we catch error here
-          .catch(() => {})
+          .catch(() => resolve(true))
       })
       .catch(err => reject(err))
   })
