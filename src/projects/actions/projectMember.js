@@ -18,7 +18,6 @@ import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   ACCEPT_OR_REFUSE_INVITE,
   PROJECT_ROLE_CUSTOMER,
   CLEAR_MEMBER_SUGGESTIONS,
-  ACCEPT_OR_REFUSE_INVITE_FAILURE,
   ES_REINDEX_DELAY,
 } from '../../config/constants'
 import { delay } from '../../helpers/utils'
@@ -166,16 +165,6 @@ export function acceptOrRefuseInvite(projectId, item, currentUser) {
       ),
       meta: { projectId, currentUser },
     })
-  }
-}
-
-/**
- * Accept or refuse invite request fail
- * @param {Object} error error object
- */
-export function acceptOrRefuseInviteFail(error) {
-  return (dispatch) => {
-    return dispatch({ type: ACCEPT_OR_REFUSE_INVITE_FAILURE, payload: error })
   }
 }
 

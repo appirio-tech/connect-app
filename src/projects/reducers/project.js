@@ -51,7 +51,7 @@ const initialState = {
   phases: null,
   phasesNonDirty: null,
   isLoadingPhases: false,
-  showUserInvited: false,
+  showUserInvited: undefined, // keep default as `undefined` so we can track when it changes values to false/true on load
   userInvitationId: null,
   phasesStates: {} // controls opened phases and tabs of the phases
 }
@@ -195,6 +195,7 @@ export const projectState = function (state=initialState, action) {
   case LOAD_PROJECT_SUCCESS:
     return Object.assign({}, state, {
       isLoading: false,
+      error: false,
       project: {
         // if these arrays are not returned we should init them with empty arrays
         // as later code counts on this
@@ -222,7 +223,7 @@ export const projectState = function (state=initialState, action) {
   case LOAD_PROJECT_MEMBER_INVITE_PENDING:
     return Object.assign({}, state, {
       isLoading: true,
-      showUserInvited: false
+      showUserInvited: undefined
     })
 
   case ACCEPT_OR_REFUSE_INVITE_PENDING:
