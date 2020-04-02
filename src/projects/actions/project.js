@@ -7,7 +7,6 @@ import { getProjectById,
   updateProject as updateProjectAPI,
   deleteProject as deleteProjectAPI,
   deleteProjectPhase as deleteProjectPhaseAPI,
-  getDirectProjectData,
   getProjectPhases,
   updateProduct as updateProductAPI,
   updatePhase as updatePhaseAPI,
@@ -33,7 +32,6 @@ import {
   CREATE_PROJECT_STAGE,
   CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT,
-  LOAD_DIRECT_PROJECT,
   DELETE_PROJECT,
   PROJECT_DIRTY,
   PROJECT_DIRTY_UNDO,
@@ -135,10 +133,19 @@ export function loadProject(projectId) {
 }
 
 export function loadProjectInvite(projectId) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const loadUserState = getState().loadUser
     return dispatch({
       type: LOAD_PROJECT_MEMBER_INVITE,
       payload: getProjectInviteById(projectId)
+        .then((invites) => {
+          if (loadUserState.isLoggedIn && loadUserState.user) {
+            const user = loadUserState.user
+            return Promise.resolve({ invites, currentUserId: user.userId, currentUserEmail: user.email })
+          } else {
+            return Promise.resolve(invites)
+          }
+        })
     })
   }
 
@@ -543,15 +550,6 @@ export function deleteProject(newProject) {
     return dispatch({
       type: DELETE_PROJECT,
       payload: deleteProjectAPI(newProject)
-    })
-  }
-}
-
-export function loadDirectProjectData(directProjectId) {
-  return (dispatch) => {
-    return dispatch({
-      type: LOAD_DIRECT_PROJECT,
-      payload: getDirectProjectData(directProjectId)
     })
   }
 }

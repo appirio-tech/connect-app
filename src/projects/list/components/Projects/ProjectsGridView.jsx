@@ -183,7 +183,7 @@ const ProjectsGridView = props => {
       }
     },
     {id: 'managers',
-      headerLabel: <ProjectListFilterColHeader setFilter={setFilter} title="Managers" filterName="manager" value={_.get(criteria, 'manager', '')} />,
+      headerLabel: <ProjectListFilterColHeader setFilter={setFilter} title="Topcoder" filterName="manager" value={_.get(criteria, 'manager', '')} />,
       sortable: false,
       classes: 'item-manager',
       renderText: item => {
@@ -196,17 +196,17 @@ const ProjectsGridView = props => {
         const isInvited = _.some(item.invites, m => ((m.userId === currentUser.userId || m.email === currentUser.email ) && !m.deletedAt && m.status === 'pending'))
         // if(!isInvited) return
         if(isMember || !isInvited ) {
-          showInvitation = false 
+          showInvitation = false
         }
 
-        const m = _.filter(item.members, m => m.role === 'manager')
+        const m = _.filter(item.members, m => m.role !== 'customer')
         return (
           <div className="spacing">
             <ProjectManagerAvatars managers={m} />
             {showInvitation && (
               <div styleName="invitation-container">
-                <Invitation 
-                  isLoading={isAcceptingInvite[item.id]} 
+                <Invitation
+                  isLoading={isAcceptingInvite[item.id]}
                   onAcceptClick={() => {
                     callInviteRequest(item, true)
                   }}

@@ -21,7 +21,7 @@ const UserTooltip = ({ usr, id, previewAvatar, size, invitedLabel, showEmailOnly
   const avatar =
     (
       <Avatar
-        avatarUrl={showEmailOnly ? '' : getAvatarResized(_.get(usr || {}, 'photoURL'), 40)}
+        avatarUrl={showEmailOnly ? '' : getAvatarResized(_.get(usr || {}, 'photoURL'), 70)}
         userName={showEmailOnly ? userEmail : userFullName}
       />
     )
@@ -31,7 +31,7 @@ const UserTooltip = ({ usr, id, previewAvatar, size, invitedLabel, showEmailOnly
         {
           previewAvatar ? (<div className={`stack-avatar-${id}`}>
             <Avatar
-              avatarUrl={showEmailOnly ? '' : getAvatarResized(_.get(usr || {}, 'photoURL'), 40)}
+              avatarUrl={showEmailOnly ? '' : getAvatarResized(_.get(usr || {}, 'photoURL'), size * 2)}
               userName={showEmailOnly ? userEmail : userFullName}
               size={size}
             />

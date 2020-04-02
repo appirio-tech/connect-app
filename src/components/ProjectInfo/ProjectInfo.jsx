@@ -21,7 +21,7 @@ class ProjectInfo extends Component {
   }
 
   render() {
-    const { project, currentMemberRole, duration,
+    const { project, currentMemberRole,
       onChangeStatus, isSuperUser, phases, onSubmitForReview, isProjectProcessing,
       showDeleteConfirm, toggleProjectDelete, onConfirmDelete } = this.props
 
@@ -90,7 +90,6 @@ class ProjectInfo extends Component {
                   project={project}
                   projectCanBeActive={projectCanBeActive}
                   currentMemberRole={currentMemberRole}
-                  duration={duration}
                   descLinesCount={
                     /* has to be not too big value here,
                       because the plugin will make this number of iterations
@@ -116,7 +115,6 @@ class ProjectInfo extends Component {
 ProjectInfo.propTypes = {
   project: PT.object.isRequired,
   currentMemberRole: PT.string,
-  duration: PT.object.isRequired,
   productsTimelines: PT.object.isRequired,
   updateProject: PT.func,
   isProjectProcessing: PT.bool,

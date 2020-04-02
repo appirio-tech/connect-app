@@ -4,13 +4,25 @@ import { PROJECTS_API_URL } from '../config/constants'
 /**
  * Update project member invite based on project's id & given member
  * @param  {integer} projectId unique identifier of the project
- * @param  {object}  member invite to update
+ * @param  {integer} inviteId unique identifier of the invite
+ * @param  {string}  status the new status for invitation
  * @return {object}  project member invite returned by api
  */
-export function updateProjectMemberInvite(projectId, member) {
-  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/invite/`
-  return axios.put(url, member)
+export function updateProjectMemberInvite(projectId, inviteId, status) {
+  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/invites/${inviteId}`
+  return axios.patch(url, { status })
     .then(resp => resp.data)
+}
+
+/**
+ * Delete project member invite based on project's id & given invite's id
+ * @param  {integer} projectId unique identifier of the project
+ * @param  {integer}  inviteId unique identifier of the invite
+ * @return {object}  project member invite returned by api
+ */
+export function deleteProjectMemberInvite(projectId, inviteId) {
+  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/invites/${inviteId}`
+  return axios.delete(url)
 }
 
 /**
@@ -20,8 +32,8 @@ export function updateProjectMemberInvite(projectId, member) {
  * @return {object}  project member invite returned by api
  */
 export function createProjectMemberInvite(projectId, member) {
-  const fields = 'id,projectId,userId,email,role,status,createdAt,updatedAt,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
-  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/invite/?fields=` + encodeURIComponent(fields)
+  const fields = 'id,projectId,userId,email,role,status,createdAt,updatedAt,createdBy,updatedBy,handle'
+  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/invites/?fields=` + encodeURIComponent(fields)
   return axios({
     method: 'post',
     url,
@@ -34,8 +46,8 @@ export function createProjectMemberInvite(projectId, member) {
 }
 
 export function getProjectMemberInvites(projectId) {
-  const fields = 'id,projectId,userId,email,role,status,createdAt,updatedAt,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
-  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/invites/?fields=`
+  const fields = 'id,projectId,userId,email,role,status,createdAt,updatedAt,createdBy,updatedBy,handle'
+  const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/invites/?fields=`
     + encodeURIComponent(fields)
   return axios.get(url)
     .then( resp => {
@@ -49,6 +61,6 @@ export function getProjectMemberInvites(projectId) {
  * @return {object}  project member invite returned by api
  */
 export function getProjectInviteById(projectId) {
-  return axios.get(`${PROJECTS_API_URL}/v5/projects/${projectId}/members/invite/`)
+  return axios.get(`${PROJECTS_API_URL}/v5/projects/${projectId}/invites`)
     .then(resp => resp.data)
 }

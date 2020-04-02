@@ -41,14 +41,16 @@ const MenuItem = ({
           exact={exact}
           isActive={isActive}
         >
-          <span styleName="left">
-            {!!Icon && (
-              <Icon className={cn(styles.icon, styles[iconClassName])} />
-            )}
-            {label}
-          </span>
-          <span styleName="right">
-            {!!count && <NotificationBadge count={count} text={toolTipText} />}
+          <span styleName="content">
+            <span styleName="left">
+              {!!Icon && (
+                <Icon className={cn(styles.icon, styles[iconClassName])} />
+              )}
+              {label}
+            </span>
+            <span styleName="right">
+              {!!count && <NotificationBadge count={count} text={toolTipText} />}
+            </span>
           </span>
         </NavLink>
       )}
@@ -62,17 +64,19 @@ const MenuItem = ({
             })}
             onClick={() => onAccordionToggle(!isAccordionOpen)}
           >
-            <span styleName="left">
-              {!!Icon && (
-                <Icon className={cn(styles.icon, styles[iconClassName])} />
-              )}
-              {label}
-            </span>
-            <span styleName="right">
-              {!!count && <NotificationBadge count={count} text={toolTipText} />}
-            </span>
+            <span styleName="content">
+              <span styleName="left">
+                {!!Icon && (
+                  <Icon className={cn(styles.icon, styles[iconClassName])} />
+                )}
+                {label}
+              </span>
+              <span styleName="right">
+                {!!count && <NotificationBadge count={count} text={toolTipText} />}
+              </span>
 
-            <ArrowUpIcon className={styles.arrowUpIcon} />
+              <ArrowUpIcon className={styles.arrowUpIcon} />
+            </span>
           </div>
 
           {isAccordionOpen &&

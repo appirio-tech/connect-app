@@ -1,5 +1,5 @@
 import {
-  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_MEMBER_INVITE_PENDING, LOAD_PROJECT_MEMBER_INVITE_FAILURE, LOAD_PROJECT_MEMBER_INVITE_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
+  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_MEMBER_INVITE_PENDING, LOAD_PROJECT_MEMBER_INVITE_FAILURE, LOAD_PROJECT_MEMBER_INVITE_SUCCESS, LOAD_PROJECT_FAILURE,
   CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CREATE_PROJECT_STAGE_PENDING, CREATE_PROJECT_STAGE_SUCCESS, CREATE_PROJECT_STAGE_FAILURE, CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT_PENDING, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   DELETE_PROJECT_PENDING, DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
@@ -38,6 +38,7 @@ const initialState = {
   processingAttachments: false,
   attachmentsAwaitingPermission: null,
   attachmentPermissions: null,
+  attachmentTags: null,
   error: false,
   inviteError: false,
   project: {
@@ -50,7 +51,8 @@ const initialState = {
   phases: null,
   phasesNonDirty: null,
   isLoadingPhases: false,
-  showUserInvited: false,
+  showUserInvited: undefined, // keep default as `undefined` so we can track when it changes values to false/true on load
+  userInvitationId: null,
   phasesStates: {} // controls opened phases and tabs of the phases
 }
 
@@ -193,6 +195,7 @@ export const projectState = function (state=initialState, action) {
   case LOAD_PROJECT_SUCCESS:
     return Object.assign({}, state, {
       isLoading: false,
+      error: false,
       project: {
         // if these arrays are not returned we should init them with empty arrays
         // as later code counts on this
@@ -206,15 +209,21 @@ export const projectState = function (state=initialState, action) {
     })
 
   case LOAD_PROJECT_MEMBER_INVITE_SUCCESS: {
+    const { invites, currentUserId, currentUserEmail } = action.payload
+    let invite
+    if (invites && invites.length > 0) {
+      invite = _.find(invites, m => ((m.userId === currentUserId || m.email === currentUserEmail) && !m.deletedAt && m.status === 'pending'))
+    }
     return Object.assign({}, state, {
-      showUserInvited: true
+      showUserInvited: !!invite,
+      userInvitationId: invite ? invite.id : null
     })
   }
 
   case LOAD_PROJECT_MEMBER_INVITE_PENDING:
     return Object.assign({}, state, {
       isLoading: true,
-      showUserInvited: false
+      showUserInvited: undefined
     })
 
   case ACCEPT_OR_REFUSE_INVITE_PENDING:
@@ -323,34 +332,6 @@ export const projectState = function (state=initialState, action) {
       projectNonDirty: {},
       phases: null,
       phasesNonDirty: null,
-    })
-
-  case LOAD_DIRECT_PROJECT_SUCCESS:
-    return update(state, {
-      project: {
-        budget: { $set: {
-          actualCost: action.payload.actualCost,
-          projectedCost: action.payload.projectedCost,
-          totalBudget: action.payload.totalBudget
-        }},
-        duration: { $set: {
-          actualDuration: action.payload.actualDuration,
-          plannedDuration: action.payload.plannedDuration,
-          projectedDuration: action.payload.projectedDuration
-        }}
-      },
-      projectNonDirty: {
-        budget: { $set: {
-          actualCost: action.payload.actualCost,
-          projectedCost: action.payload.projectedCost,
-          totalBudget: action.payload.totalBudget
-        }},
-        duration: { $set: {
-          actualDuration: action.payload.actualDuration,
-          plannedDuration: action.payload.plannedDuration,
-          projectedDuration: action.payload.projectedDuration
-        }}
-      }
     })
 
   case LOAD_PROJECT_PHASES_PENDING:
@@ -468,16 +449,11 @@ export const projectState = function (state=initialState, action) {
 
   case CREATE_PROJECT_SUCCESS:
   case UPDATE_PROJECT_SUCCESS: {
-    // after loading project initially, we also load direct project
-    // and add additional properties to the `project` object in LOAD_DIRECT_PROJECT_SUCCESS action
     // after updating project they will be lost, so here we restore them
     // TODO better don't add additional values to `project` object and keep additional values separately
     const restoredProject = {
       ...action.payload,
 
-      // restore data which we put into `project` object using other reducers
-      budget: _.cloneDeep(state.project.budget),
-      duration: _.cloneDeep(state.project.duration),
       // the next properties we also could modify by other reducers, so we restore them,
       // and also, we fallback to the default empty array [] as the code relies on it
       // we should not `cloneDeep` these values as they are not changed
@@ -552,7 +528,8 @@ export const projectState = function (state=initialState, action) {
     }
     return update(state, {
       attachmentsAwaitingPermission: query,
-      attachmentPermissions: { $set : null }
+      attachmentPermissions: { $set : null },
+      attachmentTags: { $set: null }
     })
   }
 
@@ -565,7 +542,8 @@ export const projectState = function (state=initialState, action) {
   case CHANGE_ATTACHMENT_PERMISSION:
     return {
       ...state,
-      attachmentPermissions: action.payload
+      attachmentPermissions: action.payload.allowedUsers,
+      attachmentTags: action.payload.tags
     }
 
   case UPDATE_PROJECT_ATTACHMENT_SUCCESS: {
@@ -730,20 +708,14 @@ export const projectState = function (state=initialState, action) {
     return newState
   }
 
-  case REMOVE_CUSTOMER_INVITE_SUCCESS: {
-    const newState = Object.assign({}, state)
-    _.remove(newState.project.invites, i => action.payload.id === i.id)
-    newState.projectNonDirty.invites = newState.project.invites
-    newState.processingInvites = false
-    return newState
-  }
-
+  case REMOVE_CUSTOMER_INVITE_SUCCESS:
   case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS: {
-    const newState = Object.assign({}, state)
-    _.remove(newState.project.invites, i => action.payload.id === i.id)
-    newState.projectNonDirty.invites = newState.project.invites
-    newState.processingInvites = false
-    return newState
+    const idx = _.findIndex(state.project.invites, { id: action.meta.inviteId })
+    return update(state, {
+      processingInvites: { $set : false },
+      project: { invites: { $splice: [[idx, 1]] } },
+      projectNonDirty: { invites: { $splice: [[idx, 1]] } }
+    })
   }
 
   case UPDATE_PROJECT_MEMBER_SUCCESS: {

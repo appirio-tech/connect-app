@@ -102,12 +102,6 @@ export const LOAD_PROJECT_DASHBOARD_FAILURE     = 'LOAD_PROJECT_DASHBOARD_FAILUR
 export const LOAD_PROJECT_DASHBOARD_SUCCESS     = 'LOAD_PROJECT_DASHBOARD_SUCCESS'
 
 // Direct Project Data
-export const LOAD_DIRECT_PROJECT             = 'LOAD_DIRECT_PROJECT'
-export const LOAD_DIRECT_PROJECT_PENDING     = 'LOAD_DIRECT_PROJECT_PENDING'
-export const LOAD_DIRECT_PROJECT_FAILURE     = 'LOAD_DIRECT_PROJECT_FAILURE'
-export const LOAD_DIRECT_PROJECT_SUCCESS     = 'LOAD_DIRECT_PROJECT_SUCCESS'
-
-// Direct Project Data
 export const LOAD_ADDITIONAL_PROJECT_DATA             = 'LOAD_ADDITIONAL_PROJECT_DATA'
 export const LOAD_ADDITIONAL_PROJECT_DATA_PENDING     = 'LOAD_ADDITIONAL_PROJECT_DATA_PENDING'
 export const LOAD_ADDITIONAL_PROJECT_DATA_FAILURE     = 'LOAD_ADDITIONAL_PROJECT_DATA_FAILURE'
@@ -423,6 +417,7 @@ export const LOAD_PROJECT_SUMMARY         = 'LOAD_PROJECT_SUMMARY'
 export const LOAD_PROJECT_SUMMARY_PENDING = 'LOAD_PROJECT_SUMMARY_PENDING'
 export const LOAD_PROJECT_SUMMARY_SUCCESS = 'LOAD_PROJECT_SUMMARY_SUCCESS'
 export const LOAD_PROJECT_SUMMARY_FAILURE = 'LOAD_PROJECT_SUMMARY_FAILURE'
+export const SET_LOOKER_SESSION_EXPIRED = 'SET_LOOKER_SESSION_EXPIRED'
 
 // Product attachments
 export const ADD_PRODUCT_ATTACHMENT         = 'ADD_PRODUCT_ATTACHMENT'
@@ -565,6 +560,11 @@ export const SCOPE_CHANGE_REQ_STATUS_REJECTED = 'rejected'
 export const SCOPE_CHANGE_REQ_STATUS_ACTIVATED = 'activated'
 export const SCOPE_CHANGE_REQ_STATUS_CANCELED = 'canceled'
 
+/*
+* Project Attachment types
+*/
+export const ATTACHMENT_TYPE_FILE = 'file'
+export const ATTACHMENT_TYPE_LINK = 'link'
 
 export const PHASE_STATUS_DRAFT = 'draft'
 export const PHASE_STATUS_IN_REVIEW = 'in_review'
@@ -956,3 +956,18 @@ export const EVENT_TYPE = {
 export const PROJECT_ASSETS_SHARED_WITH_ALL_MEMBERS = 'All Project Members'
 export const PROJECT_ASSETS_SHARED_WITH_TOPCODER_MEMBERS = 'Only Topcoder Members'
 export const PROJECT_ASSETS_SHARED_WITH_ADMIN = 'Only Admins'
+
+
+
+/**
+ * REPORTS
+ */
+export const PROJECT_REPORTS = {
+  PROJECT_SUMMARY : 'summary',
+  TAAS_MEMBERS : 'taas_members',
+}
+
+/**
+ * Report session length in seconds
+ */
+export const REPORT_SESSION_LENGTH = 25 * 60 // 25 minutes (5 minutes less than the report session)

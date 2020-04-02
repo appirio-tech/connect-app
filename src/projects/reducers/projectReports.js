@@ -2,13 +2,16 @@ import {
   LOAD_PROJECT_SUMMARY_PENDING,
   LOAD_PROJECT_SUMMARY_SUCCESS,
   LOAD_PROJECT_SUMMARY_FAILURE,
+  SET_LOOKER_SESSION_EXPIRED,
 } from '../../config/constants'
 
 const initialState = {
   isLoading: false,
   error: false,
   projectId: null,
-  projectSummary: null
+  projectSummary: null,
+  projectSummaryEmbedUrl: null,
+  lookerSessionExpired: false,
 }
 
 export const projectReports = function (state=initialState, action) {
@@ -19,15 +22,17 @@ export const projectReports = function (state=initialState, action) {
     return Object.assign({}, state, {
       isLoading: true,
       error: false,
-      projectId: action.meta.projectId
+      projectId: action.meta.projectId,
     })
 
   case LOAD_PROJECT_SUMMARY_SUCCESS:
-    if(payload.projectId === state.projectId) {
+    if(action.meta.projectId === state.projectId) {
       return Object.assign({}, state, {
         isLoading: false,
         error: false,
-        projectSummary: payload
+        projectSummaryEmbedUrl: payload,
+        lookerSessionExpired: false,
+        // projectSummary: payload
       })
     } else {
       return state
@@ -40,6 +45,11 @@ export const projectReports = function (state=initialState, action) {
     })
   }
 
+  case SET_LOOKER_SESSION_EXPIRED: {
+    return Object.assign({}, state, {
+      lookerSessionExpired: payload
+    })
+  }
 
   default:
     return state

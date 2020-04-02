@@ -32,7 +32,7 @@ const SelectProjectType = ({
         icon={icon}
         projectType={projectType}
         key={projectType.key}
-        onClick={() => onProjectTypeChange(projectType.key)}
+        onClick={() => onProjectTypeChange(projectType.key, projectType)}
         buttonText={projectType.metadata.cardButtonText}
       />
     )

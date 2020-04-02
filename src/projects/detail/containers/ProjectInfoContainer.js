@@ -9,7 +9,7 @@ import { updateProject, deleteProject } from '../../actions/project'
 import { loadDashboardFeeds, loadProjectMessages } from '../../actions/projectTopics'
 import { loadTopic } from '../../../actions/topics'
 import { loadProjectPlan } from '../../actions/projectPlan'
-import { setDuration, getProjectNavLinks } from '../../../helpers/projectHelper'
+import { getProjectNavLinks } from '../../../helpers/projectHelper'
 import {
   PROJECT_ROLE_OWNER,
   PROJECT_ROLE_COPILOT,
@@ -56,7 +56,6 @@ class ProjectInfoContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      duration: {},
       showDeleteConfirm: false
     }
     this.onChangeStatus = this.onChangeStatus.bind(this)
@@ -95,15 +94,8 @@ class ProjectInfoContainer extends React.Component {
       nextProps.activeChannelId !== this.props.activeChannelId
   }
 
-  setDuration({duration, status}) {
-
-    this.setState({duration: setDuration(duration || {}, status)})
-  }
-
   componentWillMount() {
     const { project, isFeedsLoading, feeds, phases, phasesTopics, loadTopic, location } = this.props
-
-    this.setDuration(project)
 
     // load feeds from dashboard if they are not currently loading or loaded yet
     // also it will load feeds, if we already loaded them, but it was 0 feeds before
@@ -126,9 +118,7 @@ class ProjectInfoContainer extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    const { project, location } = props
-
-    this.setDuration(project)
+    const { location } = props
 
     if (!_.isEmpty(location.hash) && location.hash !== this.props.location.hash) {
       this.handleUrlHash(props)
@@ -431,7 +421,7 @@ class ProjectInfoContainer extends React.Component {
   }
 
   render() {
-    const { duration, showDeleteConfirm } = this.state
+    const { showDeleteConfirm } = this.state
     const { project, currentMemberRole, isSuperUser, phases, hideInfo, hideMembers,
       productsTimelines, isProjectProcessing, notifications } = this.props
     let directLinks = null
@@ -518,7 +508,6 @@ class ProjectInfoContainer extends React.Component {
               project={project}
               phases={phases}
               currentMemberRole={currentMemberRole}
-              duration={duration}
               canDeleteProject={canDeleteProject}
               onDeleteProject={this.onDeleteProject}
               onChangeStatus={this.onChangeStatus}

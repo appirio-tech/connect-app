@@ -5,7 +5,7 @@ import { TC_API_URL, PROJECTS_API_URL } from '../config/constants'
 export function getMembersById (userIds) {
   const _userIdArr = _.map(userIds, _id => `userId:${_id}`)
   // only requesting certain member attributes
-  const fields = 'userId,handle,photoURL,firstName,lastName,details,email'
+  const fields = 'userId,handle,photoURL,details'
   const query = _userIdArr.join(' OR ')
   const url = `${TC_API_URL}/v3/members/_search/?fields=`
     + encodeURIComponent(fields)
@@ -20,7 +20,7 @@ export function getMembersById (userIds) {
 export function getMembersByHandle (handles) {
   const _handlesArr = _.map(handles, _handle => `handleLower:${_handle.toLowerCase()}`)
   // only requesting certain member attributes
-  const fields = 'userId,handle,photoURL,firstName,lastName,details,email'
+  const fields = 'userId,handle,photoURL,details'
   const query = _handlesArr.join(' OR ')
   const url = `${TC_API_URL}/v3/members/_search/?fields=`
     + encodeURIComponent(fields)
@@ -49,7 +49,7 @@ export function addProjectMember(projectId, newMember) {
 
 
 export function updateProjectMember(projectId, memberId, updatedProps) {
-  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
+  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,photoURL,workingHourStart,workingHourEnd,timeZone'
   const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/${memberId}/?fields=`
     + encodeURIComponent(fields)
   return axios.patch(url, updatedProps)
@@ -68,7 +68,7 @@ export function removeProjectMember(projectId, memberId) {
 }
 
 export function getProjectMembers(projectId) {
-  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
+  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,photoURL,workingHourStart,workingHourEnd,timeZone'
   const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/?fields=`
     + encodeURIComponent(fields)
   return axios.get(url)
@@ -78,7 +78,7 @@ export function getProjectMembers(projectId) {
 }
 
 export function getProjectMember(projectId, memberId) {
-  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,firstName,lastName,photoURL,workingHourStart,workingHourEnd,timeZone'
+  const fields = 'id,userId,role,isPrimary,deletedAt,createdAt,updatedAt,deletedBy,createdBy,updatedBy,handle,photoURL,workingHourStart,workingHourEnd,timeZone'
   const url = `${PROJECTS_API_URL}/v5/projects/${projectId}/members/${memberId}?fields=`
     + encodeURIComponent(fields)
   return axios.get(url)

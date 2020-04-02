@@ -4,6 +4,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FileBtn from '../../../../../components/FileBtn/FileBtn'
+import { getAvatarResized } from '../../../../..//helpers/tcHelpers'
 import './ProfileSettingsAvatar.scss'
 
 class ProfileSettingsAvatar extends React.Component {
@@ -25,7 +26,7 @@ class ProfileSettingsAvatar extends React.Component {
     const label = isUploading ? 'Uploading, please wait' : 'Upload a new photo'
     return (
       <div className="profile-settings-avatar">
-        <img className="photo" src={photoUrl} />
+        <img className="photo" src={getAvatarResized(photoUrl, 160)} />
         <div className="controls">
           <FileBtn
             label={label}

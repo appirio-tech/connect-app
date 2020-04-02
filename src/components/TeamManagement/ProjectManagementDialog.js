@@ -57,20 +57,8 @@ class ProjectManagementDialog extends React.Component {
   isSelectedMemberAlreadyInvited(projectTeamInvites = [], selectedMember) {
     return !!projectTeamInvites.find((invite) => (
       (invite.email && compareEmail(invite.email, selectedMember.label)) ||
-      (invite.userId && compareHandles(this.resolveUserHandle(invite.userId), selectedMember.label))
+      (invite.userId && compareHandles(invite.handle, selectedMember.label))
     ))
-  }
-
-  /**
-   * Get user handle using `allMembers` which comes from props and contains all the users
-   * which are loaded to `members.members` in the Redux store
-   *
-   * @param {Number} userId user id
-   */
-  resolveUserHandle(userId) {
-    const { allMembers } = this.props
-
-    return _.get(_.find(allMembers, { userId }), 'handle')
   }
 
   showIndividualErrors(error) {
@@ -78,7 +66,7 @@ class ProjectManagementDialog extends React.Component {
 
     const msgs = _.keys(uniqueMessages).map((message) => {
       const users = uniqueMessages[message].map((failed) => (
-        failed.email ? failed.email : this.resolveUserHandle(failed.userId)
+        failed.email ? failed.email : failed.handle
       ))
 
       return ({
@@ -135,7 +123,7 @@ class ProjectManagementDialog extends React.Component {
                   <div className="memer-details">
                     <Avatar
                       userName={userFullName}
-                      avatarUrl={getAvatarResized(_.get(member, 'photoURL') || '', 40)}
+                      avatarUrl={getAvatarResized(_.get(member, 'photoURL') || '', 80)}
                       size={40}
                     />
                     <div className="member-name">
@@ -166,7 +154,7 @@ class ProjectManagementDialog extends React.Component {
                 >
                   <Avatar
                     userName={hasUserId ? userFullName : invite.email}
-                    avatarUrl={hasUserId ? getAvatarResized(_.get(invite, 'photoURL') || '', 40) : ''}
+                    avatarUrl={hasUserId ? getAvatarResized(_.get(invite, 'photoURL') || '', 80) : ''}
                     size={40}
                   />
                   <div className="member-name">

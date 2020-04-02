@@ -7,6 +7,7 @@ const TCFormFields = FormsyForm.Fields
 const Formsy = FormsyForm.Formsy
 
 import './AddLink.scss'
+import { TagSelect } from '../TagSelect/TagSelect'
 
 class AddLink extends React.Component {
   constructor(props) {
@@ -75,6 +76,14 @@ class AddLink extends React.Component {
                 }}
                 wrapperClass="form-group"
               />
+              <div className="form-group">
+                <label className="tc-label">Tags (optional)</label>
+                <TagSelect
+                  useFormsySelect
+                  name="tags"
+                />
+              </div>
+
               <div className="button-area center-buttons">
                 <button className="tc-btn tc-btn-primary tc-btn-sm" type="submit" disabled={!canSubmit}>
                   Add Link
