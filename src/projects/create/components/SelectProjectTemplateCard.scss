@@ -120,13 +120,15 @@
   @media screen and (max-width: $screen-md - 1px) {
     flex-direction: column;
     text-align: center;
-    height: 100%;
     padding-bottom: 10px;
     flex-basis: 100%;
+    -ms-flex: none;
+    width: 100%;
 
     .left-card-content {
       align-items: center;
       width: 100%;
+      -ms-flex: none;
     }
 
     .icon-wrapper {
@@ -171,12 +173,23 @@
   flex-wrap: wrap;
   justify-content: center;
 
+  @media screen and (max-width: $screen-md - 1px) {
+    -ms-flex-direction: column;
+    -ms-flex-wrap: nowrap;
+
+    .right-card {
+      -ms-transform: translateX(50%) translateX(-68px);
+    }
+  }
+
   @media screen and (max-width: $screen-sm - 1px) {
     flex-direction: column;
+    -ms-flex-wrap: nowrap;
 
     .right-card {
       justify-content: center;
       padding-top: 0;
+      -ms-transform: none;
     }
   }
 }
@@ -206,7 +219,6 @@
   svg {
     float: right;
     background: #f4f4f4;
-    width: auto;
     height: 100%;
   }
 
@@ -220,6 +232,7 @@
   svg{
     width: 100%;
     height: auto;
+    min-height: 144px;
     transform: scaleY(0.2);
     transform-origin: top left;
   }

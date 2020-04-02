@@ -11,7 +11,7 @@ import CloseIcon from  '../../assets/icons/icon-close.svg'
 import EditIcon from  '../../assets/icons/icon-edit.svg'
 import SaveIcon from  '../../assets/icons/icon-save.svg'
 import UserAutoComplete from '../UserAutoComplete/UserAutoComplete'
-
+import { TagSelect } from '../TagSelect/TagSelect'
 
 export default class FileListItem extends React.Component {
 
@@ -21,6 +21,7 @@ export default class FileListItem extends React.Component {
       title: props.title,
       description: props.description,
       allowedUsers: props.allowedUsers,
+      tags: props.tags,
       isEditing: false
     }
     this.handleSave = this.handleSave.bind(this)
@@ -52,7 +53,7 @@ export default class FileListItem extends React.Component {
     if (!_.isEmpty(errors)) {
       this.setState({ errors })
     } else {
-      this.props.onSave(this.props.id, {title, description: this.refs.desc.value, allowedUsers: this.state.allowedUsers}, e)
+      this.props.onSave(this.props.id, {title, description: this.refs.desc.value, allowedUsers: this.state.allowedUsers, tags: this.state.tags}, e)
       this.setState({isEditing: false})
     }
   }
@@ -84,6 +85,10 @@ export default class FileListItem extends React.Component {
     })
   }
 
+  onTagsChange(tags) {
+    this.setState({ tags })
+  }
+
   userIdsToHandles(allowedUsers) {
     const { projectMembers } = this.props
     allowedUsers = allowedUsers || []
@@ -99,34 +104,54 @@ export default class FileListItem extends React.Component {
 
   renderEditing() {
     const { title, description, projectMembers, loggedInUser, askForPermissions } = this.props
-    const { errors, allowedUsers } = this.state
+    const { errors, allowedUsers, tags } = this.state
     const onExitEdit = () => this.setState({isEditing: false, errors: {} })
     return (
       <div>
+        {/* Title */}
         <div className="title-edit">
-          <input type="text" defaultValue={title} ref="title" maxLength={50} onChange={ this.onTitleChange }/>
-          <div className="save-icons">
-            <a href="javascript:" className="icon-save" onClick={this.handleSave} title="Save"><SaveIcon /></a>
-            <a href="javascript:" className="icon-close" onClick={onExitEdit} title="Cancel"><CloseIcon /></a>
+          <div className="title-with-action-btns">
+            <label className="tc-label">Title</label>
+            <div className="save-icons">
+              <a href="javascript:" className="icon-save" onClick={this.handleSave} title="Save"><SaveIcon /></a>
+              <a href="javascript:" className="icon-close" onClick={onExitEdit} title="Cancel"><CloseIcon /></a>
+            </div>
           </div>
+
+          <input type="text" defaultValue={title} ref="title" maxLength={50} onChange={ this.onTitleChange }/>
         </div>
         { (errors && errors.title) && <div className="error-message">{ errors.title }</div> }
+
+        {/* Description */}
+        <label className="tc-label">Description</label>
         <textarea defaultValue={description} ref="desc" maxLength={250} className="tc-textarea" />
         { (errors && errors.desc) && <div className="error-message">{ errors.desc }</div> }
+
+        {/* Permissions */}
         { askForPermissions &&
-          <UserAutoComplete
-            onUpdate={this.onUserIdChange}
-            projectMembers={projectMembers}
-            loggedInUser={loggedInUser}
-            selectedUsers={this.userIdsToHandles(allowedUsers).map((handle) => ({ value: handle, label: handle }))}
-          />
+          <div className="restrict-access-edit">
+            <label className="tc-label">Restrict access to</label>
+            <UserAutoComplete
+              onUpdate={this.onUserIdChange}
+              projectMembers={projectMembers}
+              loggedInUser={loggedInUser}
+              selectedUsers={this.userIdsToHandles(allowedUsers).map((handle) => ({ value: handle, label: handle }))}
+            />
+          </div>
         }
+
+        {/* Tags */}
+        <label className="tc-label">Tags (optional)</label>
+        <TagSelect
+          onUpdate={tags => this.onTagsChange(tags)}
+          selectedTags={tags}
+        />
       </div>
     )
   }
 
   renderReadOnly() {
-    const {title, downloadUrl, description, size, isEditable, updatedAt, createdAt, createdByUser, updatedByUser, canModify} = this.props
+    const {title, downloadUrl, description, size, isEditable, updatedAt, createdAt, createdByUser, updatedByUser, canModify, tags} = this.props
 
     return (
       <div>
@@ -149,6 +174,11 @@ export default class FileListItem extends React.Component {
           </div>}
         </div>
         <p>{description}</p>
+        <p>
+          {
+            tags && tags.map((t, i) => <span className="tag" key={i}>{t}</span>)
+          }
+        </p>
       </div>
     )
   }

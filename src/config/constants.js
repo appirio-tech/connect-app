@@ -560,6 +560,11 @@ export const SCOPE_CHANGE_REQ_STATUS_REJECTED = 'rejected'
 export const SCOPE_CHANGE_REQ_STATUS_ACTIVATED = 'activated'
 export const SCOPE_CHANGE_REQ_STATUS_CANCELED = 'canceled'
 
+/*
+* Project Attachment types
+*/
+export const ATTACHMENT_TYPE_FILE = 'file'
+export const ATTACHMENT_TYPE_LINK = 'link'
 
 export const PHASE_STATUS_DRAFT = 'draft'
 export const PHASE_STATUS_IN_REVIEW = 'in_review'

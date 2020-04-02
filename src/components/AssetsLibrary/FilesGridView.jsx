@@ -40,6 +40,7 @@ const FilesGridView = ({
   onEditIntent,
   title,
   selectedUsers,
+  selectedTags,
   onAddAttachment,
   assetsMembers,
   isSharingAttachment,
@@ -59,7 +60,7 @@ const FilesGridView = ({
   let nameFieldRef
   let sharedWithFieldRef
   let dateFieldRef
-  
+
   const updateSubContents = () => {
     if (selectedLink) {
       let link = links.filter(item => {
@@ -67,24 +68,24 @@ const FilesGridView = ({
           && selectedLink.createdBy === item.createdBy
           && selectedLink.updatedAt === item.updatedAt
       })[0]
-      
+
       if (!link) {
         link = _.cloneDeep(selectedLink)
         link.children = []
       }
-      
+
       onChangeSubFolder(link)
     }
   }
-  
+
   const clearSubContents = () => clearing = true
-  
+
   const clearFieldValues = () => {
     nameFieldRef.clearFilter()
     sharedWithFieldRef.clearFilter()
     dateFieldRef.clearFilter()
   }
-  
+
   const renderLink = (link) => {
     if (link.onClick) {
       return (
@@ -106,12 +107,13 @@ const FilesGridView = ({
     }
   }
 
-  const onAddingAttachmentPermissions = (allowedUsers) => {
+  const onAddingAttachmentPermissions = (allowedUsers, tags) => {
     const { attachments, projectId } = pendingAttachments
     _.forEach(attachments, f => {
       const attachment = {
         ...f,
-        allowedUsers
+        allowedUsers,
+        tags
       }
       onAddAttachment(projectId, attachment)
     })
@@ -120,7 +122,7 @@ const FilesGridView = ({
     onChangeSubFolder(null)
     selectedLink = null
   }
-  
+
   const renderSharedWith = (link) => {
     if (link.tag) {
       return (
@@ -147,14 +149,14 @@ const FilesGridView = ({
       )
     }
   }
-  
+
   if (clearing) {
     setTimeout(() => {
       updateSubContents()
       clearing = false
     })
   }
-  
+
   return (
     <div styleName="assets-gridview-container">
       {(subFolderContent) && (
@@ -195,6 +197,7 @@ const FilesGridView = ({
               onSubmit={onAddingAttachmentPermissions}
               onChange={onChangePermissions}
               selectedUsers={selectedUsers}
+              selectedTags={selectedTags}
               projectMembers={projectMembers}
               loggedInUser={loggedInUser}
               isSharingAttachment={isSharingAttachment}
@@ -207,8 +210,9 @@ const FilesGridView = ({
                   ref={(comp) => nameFieldRef = comp}
                   title="Name"
                   setFilter={setFilter}
-                  filterName="name"
-                  value={getFilterValue('name')}
+                  type="name"
+                  name={getFilterValue('name.name')}
+                  tag={getFilterValue('name.tag')}
                 />
               </div>
               <div styleName="flex-item-title item-shared-with">
@@ -241,8 +245,8 @@ const FilesGridView = ({
               const onDeleteCancel = () => onDeleteIntent(-1)
               const handleDeleteClick = () => onDeleteIntent(idx)
 
-              const onEditConfirm = (title, allowedUsers) => {
-                onEdit(link.id, title, allowedUsers)
+              const onEditConfirm = (title, allowedUsers, tags) => {
+                onEdit(link, title, allowedUsers, tags)
                 onEditIntent(-1)
               }
               const onEditCancel = () => onEditIntent(-1)
@@ -264,7 +268,9 @@ const FilesGridView = ({
                       {renderSharedWith(link)}
                     </div>
                     <div styleName="flex-item item-created-by">
-                      {!owner && (<div className="user-block txt-italic">Unknown</div>)}
+                      {!owner && !link.createdBy && (<div className="user-block">—</div>)}
+                      {!owner && link.createdBy !== 'CoderBot' && (<div className="user-block txt-italic">Unknown</div>)}
+                      {!owner && link.createdBy === 'CoderBot' && (<div className="user-block">CoderBot</div>)}
                       {owner && (
                         <div className="spacing">
                           <div className="user-block">
@@ -301,7 +307,14 @@ const FilesGridView = ({
                     <div styleName="flex-item item-type">
                       <FileIcon type={link.title.split('.')[1]} />
                     </div>
-                    <div styleName="flex-item item-name"><p>{renderLink(link)}</p></div>
+                    <div styleName="flex-item item-name">
+                      <div styleName="item-name-tag-wrapper">
+                        <p>{renderLink(link)}</p>
+                        {
+                          link.tags && link.tags.map((t, i) => <span styleName="tag" key={i}>{t}</span>)
+                        }
+                      </div>
+                    </div>
                     <div styleName="flex-item item-shared-with">
                       {renderSharedWith(link)}
                     </div>
@@ -336,6 +349,7 @@ FilesGridView.propTypes = {
   canEdit: PropTypes.bool,
   links: PropTypes.array.isRequired,
   selectedUsers: PropTypes.string,
+  selectedTags: PropTypes.arrayOf(PropTypes.string),
   projectMembers: PropTypes.object,
   pendingAttachments: PropTypes.object,
   onUploadAttachment: PropTypes.func,

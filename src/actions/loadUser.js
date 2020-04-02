@@ -146,8 +146,14 @@ export function loadUserFailure(dispatch) {
 function loadGroups(dispatch, userId) {
   if (userId) {
     getUserGroups(userId, 'user').then((groups) => {
-      const groupIds = _.map(groups, group => group.id)
-      loadOrganizationConfigSuccess(dispatch, _.join(groupIds, ','))
+      const groupIds = _.compact(_.uniq([
+        // get old and new ids as organizations may refer to any of them
+        ..._.map(groups, 'oldId'),
+        ..._.map(groups, 'id')
+      ]))
+      if (groupIds.length > 0) {
+        loadOrganizationConfigSuccess(dispatch, _.join(groupIds, ','))
+      }
     })
       .catch((err) => {
       // if we fail to load groups

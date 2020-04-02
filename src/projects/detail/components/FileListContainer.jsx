@@ -7,6 +7,7 @@ import AddFiles from '../../../components/FileList/AddFiles'
 import { getProjectRoleForCurrentUser } from '../../../helpers/projectHelper'
 import { uploadProjectAttachments, discardAttachments, changeAttachmentPermission } from '../../actions/projectAttachment'
 import AddFilePermission from '../../../components/FileList/AddFilePermissions'
+import { ATTACHMENT_TYPE_FILE } from '../../../config/constants'
 
 class FileListContainer extends Component {
   constructor(props) {
@@ -24,7 +25,8 @@ class FileListContainer extends Component {
         description: '',
         category,
         size: f.size,
-        filePath: f.key,
+        path: f.key,
+        type: ATTACHMENT_TYPE_FILE,
         contentType: f.mimetype || 'application/unknown'
       }
       attachments.push(attachment)
@@ -38,12 +40,13 @@ class FileListContainer extends Component {
     this.props.uploadProjectAttachments(project.id, attachment)
   }
 
-  onAddingAttachmentPermissions(allowedUsers) {
+  onAddingAttachmentPermissions(allowedUsers, tags) {
     const { attachments } = this.props.pendingAttachments
     _.forEach(attachments, f => {
       const attachment = {
         ...f,
-        allowedUsers
+        allowedUsers,
+        tags
       }
       this.props.addAttachment(attachment)
     })
@@ -68,6 +71,7 @@ class FileListContainer extends Component {
       additionalClass,
       pendingAttachments,
       attachmentPermissions,
+      attachmentTags,
       askForPermissions,
     } = this.props
     // we need to clone the array to avoid updating the props `files` array
@@ -111,6 +115,7 @@ class FileListContainer extends Component {
             onSubmit={this.onAddingAttachmentPermissions}
             onChange={this.props.changeAttachmentPermission}
             selectedUsers={attachmentPermissions}
+            selectedTags={attachmentTags}
             projectMembers={allMembers}
             loggedInUser={loggedInUser}
           />
@@ -133,6 +138,7 @@ const mapStateToProps = ({ members, projectState, loadUser }) => {
     allMembers:  _.keyBy(projectMembers, 'userId'),
     pendingAttachments: projectState.attachmentsAwaitingPermission,
     attachmentPermissions: projectState.attachmentPermissions,
+    attachmentTags: projectState.attachmentTags,
     loggedInUser: loadUser.user,
   }
 }
