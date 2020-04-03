@@ -8,6 +8,7 @@ class FileDownload extends React.Component {
   constructor(props) {
     super(props)
     this.state={loaded:false, error:null}
+    
   }
 
   componentWillMount() {
@@ -25,7 +26,7 @@ class FileDownload extends React.Component {
     } else {
       const projectId = this.props.match.params.projectId
       const attachmentId = this.props.match.params.attachmentId
-      getProjectAttachment(projectId, attachmentId).then(({ url }) => {
+      getProjectAttachment(projectId, attachmentId).then((url) => {
         window.location = url
       }).catch(() => {
         this.setState({loaded:true, error:'File unavailable'})
@@ -34,7 +35,7 @@ class FileDownload extends React.Component {
   }
 
   render() {
-
+    
 
     return (
       <div >
