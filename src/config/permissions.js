@@ -245,6 +245,11 @@ export default {
     ],
   },
 
+  /*
+    DEMO RULES
+
+    Rules below just to demonstrate possible rules format
+  */
   TEST_1: {
     _meta: {
       group: 'DEMO/TEST example permissions',
@@ -296,11 +301,16 @@ export default {
       title: 'Any Project Member',
       description: 'This permission is just to demonstrate possible format',
     },
-    topcoderRoles: [
-      ROLE_CONNECT_COPILOT,
-      ROLE_TOPCODER_USER,
-    ],
     projectRoles: true,
+  },
+
+  TEST_5: {
+    _meta: {
+      group: 'DEMO/TEST example permissions',
+      title: 'Any Logged-in User',
+      description: 'This permission is just to demonstrate possible format',
+    },
+    topcoderRoles: true,
   },
 
   TEST_4: {
@@ -309,25 +319,8 @@ export default {
       title: 'Owner Project role',
       description: 'This permission is just to demonstrate possible format',
     },
-    topcoderRoles: [
-      ROLE_CONNECT_COPILOT,
-      ROLE_TOPCODER_USER,
-    ],
     projectRoles: [
-      PROJECT_ROLE_MANAGER,
       { role: PROJECT_ROLE_CUSTOMER, isPrimary: true }
-    ],
-  },
-
-  TEST_5: {
-    _meta: {
-      group: 'DEMO/TEST example permissions',
-      title: 'Any Topcoder User (logged-in)',
-      description: 'This permission is just to demonstrate possible format',
-    },
-    topcoderRoles: true,
-    projectRoles: [
-      PROJECT_ROLE_MANAGER,
     ],
   },
 }
