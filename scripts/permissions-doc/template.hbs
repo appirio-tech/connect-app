@@ -37,20 +37,21 @@
           <div class="row border-top">
             <div class="col py-2">
               {{_meta.title}}
+              <div><small><code>{{_meta.key}}</code></small></div>
               <div class="text-black-50 small-text">{{_meta.description}}</div>
             </div>
             <div class="col-9 py-2">
               {{#each allowRule.projectRoles}}
-                <span class="badge badge-primary">{{this}}</span>
+                <span class="badge badge-primary" title="Allowed Project Role">{{this}}</span>
               {{/each}}
               {{#each denyRule.projectRoles}}
-                <span class="badge badge-warning">{{this}}</span>
+                <span class="badge badge-warning" title="Denied Project Role">{{this}}</span>
               {{/each}}
               {{#each allowRule.topcoderRoles}}
-                <span class="badge badge-success">{{this}}</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">{{this}}</span>
               {{/each}}
               {{#each denyRule.topcoderRoles}}
-                <span class="badge badge-danger">{{this}}</span>
+                <span class="badge badge-danger" title="Denied Topcoder Role">{{this}}</span>
               {{/each}}
             </div>
           </div>
