@@ -27,24 +27,25 @@
  *
  * VIEW_ - means read or view something
  * CREATE_ - create somethings
- * UPDATE_ - edit something
+ * EDIT_ - edit something
  * DELETE_ - delete something
  *
- * MANAGE_ - means combination of 3 operations CREATE/UPDATE/DELETE.
+ * MANAGE_ - means combination of 3 operations CREATE/EDIT/DELETE.
  *           usually should be used, when VIEW operation is allowed to everyone
  *           while 3 manage operations require additional permissions
- * ACCESS_ - means combination of all 4 operations VIEW/CREATE/UPDATE/DELETE.
+ * ACCESS_ - means combination of all 4 operations VIEW/CREATE/EDIT/DELETE.
  *           usually should be used, when by default users cannot even VIEW something
  *           and if someone can VIEW, then also can do other kind of operations.
  *
  * ANTI-PERMISSIONS
  *
- * Unfortunately, sometimes it's impossible to create permission rules for some situation in "allowed" manner,
- * for now in such case we can create permission rules, which wouldn't vise-verse, disallow somethings.
- * Create such rules ONLY IF CREATING ALLOW RULE IS IMPOSSIBLE.
- * Add a comment to such rules explaining why allow-rule cannot be created.
+ * If it's technically impossible to create permission rules for some situation in "allowed" manner,
+ * in such case we can create permission rules, which would disallow somethings.
+ * - Create such rules ONLY IF CREATING ALLOW RULE IS IMPOSSIBLE.
+ * - Add a comment to such rules explaining why allow-rule cannot be created.
  */
 /* eslint-disable no-unused-vars */
+import _ from 'lodash'
 import {
   // Project Roles
   PROJECT_ROLE_CUSTOMER,
@@ -105,6 +106,24 @@ const TOPCODER_MANAGERS_AND_ADMINS = [
 ]
 
 /**
+ * All Topcoder Roles
+ */
+const TOPCODER_ALL = [
+  ROLE_TOPCODER_USER,
+  ROLE_ADMINISTRATOR,
+  ROLE_CONNECT_ADMIN,
+  ROLE_CONNECT_MANAGER,
+  ROLE_CONNECT_ACCOUNT_MANAGER,
+  ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
+  ROLE_PRESALES,
+  ROLE_ACCOUNT_EXECUTIVE,
+  ROLE_PROGRAM_MANAGER,
+  ROLE_SOLUTION_ARCHITECT,
+  ROLE_PROJECT_MANAGER,
+  ROLE_CONNECT_COPILOT,
+]
+
+/**
  * Project non-customer members
  */
 const PROJECT_NON_CUSTOMER_MEMBERS = [
@@ -126,7 +145,7 @@ export default {
     _meta: {
       group: 'Project Plan',
       title: 'Manage project plan',
-      description: 'Create, update and delete phases and milestones.',
+      description: 'Create, edit and delete phases and milestones.',
     },
     projectRoles: [
       PROJECT_ROLE_MANAGER,
@@ -233,26 +252,30 @@ export default {
     ],
   },
 
-  // cannot create allow rule, because customer accounts should be able to edit phone, while copilot accounts shouldn't
-  DISABLE_USER_PROFILE_PHONE: {
+  EDIT_USER_PROFILE_PHONE: {
     _meta: {
       group: 'User Profile',
-      title: 'Disable phone number in user profile',
+      title: 'Edit phone number in user profile',
     },
-    topcoderRoles: [
-      ROLE_CONNECT_COPILOT,
-    ],
+    allowRule: {
+      topcoderRoles: [
+        ..._.difference(TOPCODER_ALL, [ROLE_CONNECT_COPILOT])
+      ]
+    },
+    denyRule: {
+      topcoderRoles: [
+        ROLE_CONNECT_COPILOT
+      ],
+    }
   },
 
-  // actually can create allow rule for this case, but keep it disallow for consistency with DISABLE_USER_PROFILE_PHONE
-  DISABLE_USER_PROFILE_COMPANY: {
+  EDIT_USER_PROFILE_COMPANY: {
     _meta: {
       group: 'User Profile',
-      title: 'Disable company name in user profile',
+      title: 'Edit company name in user profile',
     },
     topcoderRoles: [
-      ROLE_CONNECT_COPILOT,
-      ROLE_TOPCODER_USER,
+      ..._.difference(TOPCODER_ALL, [ROLE_TOPCODER_USER, ROLE_CONNECT_COPILOT])
     ],
   },
 

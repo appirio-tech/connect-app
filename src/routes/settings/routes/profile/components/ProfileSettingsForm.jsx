@@ -165,8 +165,8 @@ class ProfileSettingsForm extends Component {
   }
 
   render() {
-    const disablePhoneInput = this.props.values.settings.businessPhone && hasPermission(PERMISSIONS.DISABLE_USER_PROFILE_PHONE)
-    const disableCompanyInput = this.props.values.settings.companyName && hasPermission(PERMISSIONS.DISABLE_USER_PROFILE_COMPANY)
+    const disablePhoneInput = this.props.values.settings.businessPhone && !hasPermission(PERMISSIONS.EDIT_USER_PROFILE_PHONE)
+    const disableCompanyInput = this.props.values.settings.companyName && !hasPermission(PERMISSIONS.EDIT_USER_PROFILE_COMPANY)
     return (
       <Formsy.Form
         className="profile-settings-form"
