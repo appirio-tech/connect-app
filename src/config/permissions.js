@@ -139,6 +139,7 @@ export default {
       ...TOPCODER_ADMINS,
     ],
   },
+
   MANAGE_COMPLETED_PHASE: {
     _meta: {
       group: 'Project Plan',
@@ -148,6 +149,7 @@ export default {
       ...TOPCODER_ADMINS,
     ],
   },
+
   MANAGE_TOPCODER_TEAM: {
     _meta: {
       group: 'Project Members',
@@ -157,7 +159,11 @@ export default {
     projectRoles: [
       ...PROJECT_NON_CUSTOMER_MEMBERS
     ],
+    topcoderRoles: [
+      ...TOPCODER_ADMINS
+    ]
   },
+
   ACCESS_PRIVATE_POST: {
     _meta: {
       group: 'Topics & Posts',
@@ -170,6 +176,7 @@ export default {
       ...TOPCODER_MANAGERS_AND_ADMINS,
     ]
   },
+
   ACCESS_BUDGET_REPORT: {
     _meta: {
       group: 'Budget & Invoice Reports',
@@ -188,6 +195,7 @@ export default {
       ...TOPCODER_ADMINS,
     ],
   },
+
   ACCESS_BUDGET_SPENT_REPORT: {
     _meta: {
       group: 'Budget & Invoice Reports',
@@ -205,6 +213,7 @@ export default {
       ...TOPCODER_ADMINS,
     ],
   },
+
   ACCESS_INVOICE_REPORT: {
     _meta: {
       group: 'Budget & Invoice Reports',
@@ -223,6 +232,7 @@ export default {
       ...TOPCODER_ADMINS,
     ],
   },
+
   // cannot create allow rule, because customer accounts should be able to edit phone, while copilot accounts shouldn't
   DISABLE_USER_PROFILE_PHONE: {
     _meta: {
@@ -233,6 +243,7 @@ export default {
       ROLE_CONNECT_COPILOT,
     ],
   },
+
   // actually can create allow rule for this case, but keep it disallow for consistency with DISABLE_USER_PROFILE_PHONE
   DISABLE_USER_PROFILE_COMPANY: {
     _meta: {
