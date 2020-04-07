@@ -183,7 +183,7 @@ class TalentPickerQuestion extends Component {
                       <div styleName="d-flex">
                         <div
                           onClick={() => {
-                            this.insertRole(roleIndex, v.role)
+                            this.insertRole(roleIndex + 1, v.role)
                           }}
                           styleName="btn"
                         >
