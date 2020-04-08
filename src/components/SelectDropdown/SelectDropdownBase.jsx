@@ -166,6 +166,7 @@ SelectDropdown.propTypes = {
     title: PT.string.isRequired,
     value: PT.string.isRequired,
     disabled: PT.bool,
+    hide: PT.bool,
     confirm: PT.oneOfType([PT.string, PT.bool]),
     toolTipMessage: PT.string,
   })).isRequired,
