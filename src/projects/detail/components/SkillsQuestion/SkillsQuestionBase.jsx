@@ -139,7 +139,7 @@ class SkillsQuestion extends React.Component {
     } = this.props
     const { options, customOptionValue } = this.state
 
-    const selectedCategories = currentProjectData ? _.get(currentProjectData, categoriesField, []) : []
+    const selectedCategories = _.get(currentProjectData, categoriesField, [])
 
     // if have a mapping for categories, then filter options, otherwise use all options
     const availableOptions = getAvailableOptions(categoriesMapping, selectedCategories, skillsCategories, options)
