@@ -166,7 +166,7 @@ class TalentPickerQuestion extends Component {
                         frequentSkills={[]}
                         disabled={false}
                         isFormDisabled={() => false}
-                        skillsCategories={[skillsCategory ? skillsCategory : '']}
+                        skillsCategories={skillsCategory ? [skillsCategory] : null}
                         isPristine={() => true}
                         isValid={() => true}
                         getErrorMessage={() => ''}

@@ -14,6 +14,7 @@ let cachedOptions
  *
  * @param {Object} categoriesMapping  form data and API model categories mapping
  * @param {Array}  selectedCategories selected categories in the form
+ * @param {Array}  skillsCategories categories of field, use for filter
  * @param {Array}  options            all possible options
  *
  * @returns {Array} available options
@@ -22,8 +23,7 @@ const getAvailableOptions = (categoriesMapping, selectedCategories, skillsCatego
   let mappedCategories
   if (categoriesMapping) {
     mappedCategories = _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
-  }
-  if (skillsCategories && skillsCategories.length > 0 && !!skillsCategories[0]) {
+  } else if (skillsCategories) {
     mappedCategories = skillsCategories
   }
 
@@ -74,10 +74,10 @@ class SkillsQuestion extends React.Component {
   }
 
   componentWillUpdate(prevProps) {
-    const { categoriesMapping, getValue, onChange, setValue, name } = this.props
+    const { categoriesMapping, getValue, onChange, setValue, name, currentProjectData, categoriesField } = this.props
     const { options } = this.state
-    const prevSelectedCategories = this.getSelectedCategories(prevProps)
-    const selectedCategories = this.getSelectedCategories(this.props)
+    const prevSelectedCategories = _.get(prevProps.currentProjectData, categoriesField, [])
+    const selectedCategories = _.get(currentProjectData, categoriesField, [])
 
     if (selectedCategories.length !== prevSelectedCategories.length) {
       const currentValues = getValue() || []
@@ -122,19 +122,6 @@ class SkillsQuestion extends React.Component {
     this.setState({ customOptionValue: value })
   }
 
-  getSelectedCategories(props) {
-    const {
-      currentProjectData,
-      categoriesField,
-      skillsCategories,
-    } = props
-    let selectedCategories = currentProjectData ? _.get(currentProjectData, categoriesField, []) : []
-    if (selectedCategories.length === 0 && skillsCategories) {
-      selectedCategories = skillsCategories
-    }
-    return selectedCategories
-  }
-
   render() {
     const {
       isFormDisabled,
@@ -147,10 +134,12 @@ class SkillsQuestion extends React.Component {
       getValue,
       frequentSkills,
       skillsCategories,
+      currentProjectData,
+      categoriesField,
     } = this.props
     const { options, customOptionValue } = this.state
 
-    const selectedCategories = this.getSelectedCategories(this.props)
+    const selectedCategories = currentProjectData ? _.get(currentProjectData, categoriesField, []) : []
 
     // if have a mapping for categories, then filter options, otherwise use all options
     const availableOptions = getAvailableOptions(categoriesMapping, selectedCategories, skillsCategories, options)
@@ -160,7 +149,7 @@ class SkillsQuestion extends React.Component {
     // remove from currentValues not available options but still keep created custom options without id
     currentValues = currentValues.filter(skill => _.some(availableOptions, skill) || !skill.id)
 
-    const questionDisabled = isFormDisabled() || disabled || selectedCategories.length === 0
+    const questionDisabled = isFormDisabled() || disabled || (selectedCategories.length === 0 && _.isUndefined(skillsCategories))
     const hasError = !isPristine() && !isValid()
     const errorMessage = getErrorMessage() || validationError
 
