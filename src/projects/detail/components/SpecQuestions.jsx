@@ -10,6 +10,7 @@ import cn from 'classnames'
 import SpecQuestionList from './SpecQuestionList/SpecQuestionList'
 import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
 import SkillsQuestion from './SkillsQuestion/SkillsQuestion'
+import TalentPickerQuestion from './TalentPickerQuestion/TalentPickerQuestion'
 import SpecFeatureQuestion from './SpecFeatureQuestion'
 import ColorSelector from './../../../components/ColorSelector/ColorSelector'
 import SelectDropdown from './../../../components/SelectDropdown/SelectDropdown'
@@ -375,6 +376,12 @@ class SpecQuestions extends React.Component {
         onSkillsLoaded: this.handleSkillsLoaded
       })
       break
+    case 'talent-picker':
+      ChildElem = TalentPickerQuestion
+      _.assign(elemProps, {
+        options: q.options,
+      })
+      break
     default:
       ChildElem = () => (
         <div style={{ borderWidth: 1, borderStyle: 'dashed', borderColor: '#f00' }}>
@@ -445,7 +452,7 @@ class SpecQuestions extends React.Component {
           !(question.type === 'estimation' && template.hideEstimation)
         ).map((q, index) => {
           return  (
-            _.includes(['checkbox', 'checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills', 'slide-radiogroup', 'slider-standard', 'select-dropdown'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
+            _.includes(['checkbox', 'checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills', 'slide-radiogroup', 'slider-standard', 'select-dropdown', 'talent-picker'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
               <Accordion
                 key={q.fieldName || `accordion-${index}`}
                 title={q.summaryTitle || q.title}

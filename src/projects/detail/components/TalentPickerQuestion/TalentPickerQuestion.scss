@@ -1,0 +1,43 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  font-size: 15px;
+  overflow-x: auto;
+}
+
+.table {
+  text-align: left;
+
+  td,
+  th {
+    white-space: nowrap;
+    padding: 10px;
+  }
+
+  thead {
+    @include roboto-bold;
+  }
+
+  tbody {
+    tr {
+      border: 1px solid $tc-gray-80;
+    }
+  }
+}
+
+.hide {
+  display: none;
+}
+
+.btn {
+  cursor: pointer;
+  margin: 0 2px;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.skill-selection {
+  min-width: 200px;
+}
