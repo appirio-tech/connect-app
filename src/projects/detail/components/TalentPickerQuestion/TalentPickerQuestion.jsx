@@ -26,9 +26,12 @@ class TalentPickerQuestion extends Component {
   }
 
   setValidator(props) {
-    const { setValidations } = props
+    const { setValidations, required } = props
     const validations = {
       oneRowHaveValidValue: (formValues, value) => {
+        if (!required) {
+          return true
+        }
         return _.some(value, (v) => {
           return v.people !== '0' && v.duration !== '0' && v.skills.length > 0
         }) // validation body
