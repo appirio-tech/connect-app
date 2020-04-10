@@ -120,7 +120,7 @@ const matchPermissionRule = (permissionRule, user, project) => {
     if (permissionRule.projectRoles.length > 0) {
       hasProjectRole = member && _.some(normalizedProjectRoles, (rule) => (
         // checks that common properties are equal
-        _.isMatch(rule, member)
+        _.isMatch(member, rule)
       ))
     } else if (permissionRule.projectRoles === true) {
       // `projectRoles === true` means that we check if user is a member of the project
