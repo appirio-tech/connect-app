@@ -10,12 +10,28 @@ import SkillsQuestion from '../SkillsQuestion/SkillsQuestionBase'
 
 import './TalentPickerQuestion.scss'
 
+const always = () => true
+const never = () => false
+const emptyError = () => ''
+
 class TalentPickerQuestion extends Component {
 
   constructor(props) {
     super(props)
+
+    this.state = {
+      options: []
+    }
+
+    this.peopleOptions = this.getPeopleOptions()
+    this.durationOptions = this.getDurationOptions()
+
     this.getDefaultValue = this.getDefaultValue.bind(this)
-    this.handleValueChange = this.handleValueChange.bind(this)
+
+    this.handlePeopleChange = this.handlePeopleChange.bind(this)
+    this.handleDurationChange = this.handleDurationChange.bind(this)
+    this.handleSkillChange = this.handleSkillChange.bind(this)
+
     this.insertRole = this.insertRole.bind(this)
     this.removeRole = this.removeRole.bind(this)
     this.setValidator(props)
@@ -23,6 +39,15 @@ class TalentPickerQuestion extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setValidator(nextProps)
+
+
+    if (!_.isEqual(this.props.options, nextProps.options)) {
+      this.updateOptions(nextProps)
+    }
+  }
+
+  componentDidMount() {
+    this.updateOptions(this.props)
   }
 
   setValidator(props) {
@@ -40,6 +65,11 @@ class TalentPickerQuestion extends Component {
     setValidations(validations)
   }
 
+  updateOptions(props) {
+    const options = props.options.map(o => ({...o, skillsCategories: o.skillsCategory ? [ o.skillsCategory ] : null}))
+    this.setState({ options })
+  }
+
   getDefaultValue() {
     const { options } = this.props
     return options.map((o) => ({
@@ -50,12 +80,66 @@ class TalentPickerQuestion extends Component {
     }))
   }
 
+  getPeopleOptions() {
+    return [
+      '0',
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10',
+      '10+',
+    ].map((v) => ({
+      value: v,
+      title: v,
+    }))
+  }
+
+  getDurationOptions() {
+    return [
+      '0',
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10',
+      '11',
+      '12',
+    ].map((v) => ({
+      value: v,
+      title: v,
+      hide: v === '0',
+    }))
+  }
+
   handleValueChange(index, field, value) {
     const { getValue, setValue } = this.props
     const values = getValue() || this.getDefaultValue()
     values[index][field] = value
 
     setValue(values)
+  }
+
+  handlePeopleChange(value, index) {
+    this.handleValueChange(index, 'people', value)
+  }
+
+  handleDurationChange(value, index) {
+    this.handleValueChange(index, 'duration', value)
+  }
+
+  handleSkillChange(value, index) {
+    this.handleValueChange(index, 'skills', value)
   }
 
   insertRole(index, role) {
@@ -78,49 +162,16 @@ class TalentPickerQuestion extends Component {
   }
 
   render() {
-    const { wrapperClass, getValue, options } = this.props
+    const { wrapperClass, getValue } = this.props
+    const { options } = this.state
+    const { durationOptions, peopleOptions } = this
 
     const errorMessage =
       this.props.getErrorMessage() || this.props.validationError
     const hasError = !this.props.isPristine() && !this.props.isValid()
 
     const values = getValue() || this.getDefaultValue()
-    const peopleOptions = [
-      '0',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-      '10+',
-    ].map((v) => ({
-      value: v,
-      title: v,
-    }))
-    const durationOptions = [
-      '0',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-      '11',
-      '12',
-    ].map((v) => ({
-      value: v,
-      title: v,
-      hide: v === '0',
-    }))
+
     const canDeleteRole = (role, index) =>
       _.findIndex(values, { role }) !== index
     return (
@@ -137,10 +188,10 @@ class TalentPickerQuestion extends Component {
               </tr>
             </thead>
             <tbody>
-              {values.map((v, roleIndex) => {
+              {options.length > 0 ? values.map((v, roleIndex) => {
                 const roleSetting = _.find(options, { role: v.role })
                 const roleTitle = roleSetting.roleTitle
-                const skillsCategory = roleSetting.skillsCategory
+                const skillsCategories = roleSetting.skillsCategories
                 return (
                   <tr key={roleIndex}>
                     <td>{roleTitle}</td>
@@ -148,38 +199,32 @@ class TalentPickerQuestion extends Component {
                       <SelectDropdown
                         options={peopleOptions}
                         value={v.people}
-                        setValue={(e) => {
-                          this.handleValueChange(roleIndex, 'people', e)
-                        }}
+                        setValue={this.handlePeopleChange}
                         theme="default"
+                        identifier={roleIndex}
                       />
                     </td>
                     <td>
                       <SelectDropdown
                         options={durationOptions}
                         value={v.duration}
-                        setValue={(e) => {
-                          this.handleValueChange(roleIndex, 'duration', e)
-                        }}
+                        setValue={this.handleDurationChange}
                         theme="default"
+                        identifier={roleIndex}
                       />
                     </td>
                     <td styleName="skill-selection">
                       <SkillsQuestion
-                        frequentSkills={[]}
                         disabled={false}
-                        isFormDisabled={() => false}
-                        skillsCategories={skillsCategory ? [skillsCategory] : null}
-                        isPristine={() => true}
-                        isValid={() => true}
-                        getErrorMessage={() => ''}
-                        setValue={(newValue) => {
-                          this.handleValueChange(roleIndex, 'skills', newValue)
-                        }}
-                        getValue={() => {
-                          return v.skills
-                        }}
-                        onChange={() => {}}
+                        isFormDisabled={never}
+                        skillsCategories={skillsCategories || null}
+                        isPristine={always}
+                        isValid={always}
+                        getErrorMessage={emptyError}
+                        identifier={roleIndex}
+                        setValue={this.handleSkillChange}
+                        currentValue={v.skills}
+                        onChange={_.noop}
                       />
                     </td>
                     <td>
@@ -206,7 +251,7 @@ class TalentPickerQuestion extends Component {
                     </td>
                   </tr>
                 )
-              })}
+              }) : null}
             </tbody>
           </table>
         </div>

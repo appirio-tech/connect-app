@@ -5,6 +5,7 @@ import Select from '../../../../components/Select/Select'
 import './SkillsQuestion.scss'
 import { axiosInstance as axios } from '../../../../api/requestInterceptor'
 import { TC_API_URL } from '../../../../config/constants'
+import { createFilter } from 'react-select'
 
 let cachedOptions
 
@@ -33,11 +34,12 @@ const getAvailableOptions = (categoriesMapping, selectedCategories, skillsCatego
   return options
 }
 
-class SkillsQuestion extends React.Component {
+class SkillsQuestion extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
       options: cachedOptions || [],
+      availableOptions: [],
       customOptionValue: '',
     }
     this.handleChange = this.handleChange.bind(this)
@@ -58,29 +60,57 @@ class SkillsQuestion extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.categoriesMapping !== this.props.categoriesMapping ||
+      nextProps.skillsCategories !== this.props.skillsCategories ||
+      nextProps.currentProjectData !== this.props.currentProjectData ||
+      nextProps.categoriesField !== this.props.categoriesField
+    ) {
+      this.updateAvailableOptions(nextProps, this.state.options)
+    }
+  }
+
   updateOptions(options) {
     const { onSkillsLoaded } = this.props
 
     this.setState({ options })
+    this.updateAvailableOptions(this.props, options)
     if (onSkillsLoaded) {
       onSkillsLoaded(options.map((option) => _.pick(option, ['id', 'name'])))
     }
   }
 
+  updateAvailableOptions(props, options) {
+    const {
+      categoriesMapping,
+      skillsCategories,
+      currentProjectData,
+      categoriesField,
+    } = props
+
+    const selectedCategories = _.get(currentProjectData, categoriesField, [])
+
+    // if have a mapping for categories, then filter options, otherwise use all options
+    const availableOptions = getAvailableOptions(categoriesMapping, selectedCategories, skillsCategories, options)
+      .map(option => _.pick(option, ['id', 'name']))
+    this.setState({ availableOptions })
+  }
+
   handleChange(val = []) {
-    const { setValue, onChange, name } = this.props
+    const { setValue, onChange, name, identifier } = this.props
     onChange(name, val)
-    setValue(val)
+    setValue(val, identifier)
   }
 
   componentWillUpdate(prevProps) {
-    const { categoriesMapping, getValue, onChange, setValue, name, currentProjectData, categoriesField } = this.props
+    const { categoriesMapping, currentValue: value, getValue, onChange, setValue, name, currentProjectData, categoriesField, identifier } = this.props
     const { options } = this.state
     const prevSelectedCategories = _.get(prevProps.currentProjectData, categoriesField, [])
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
 
     if (selectedCategories.length !== prevSelectedCategories.length) {
-      const currentValues = getValue() || []
+      const currentValues = value || getValue() || []
       const prevAvailableOptions = getAvailableOptions(categoriesMapping, prevSelectedCategories, prevProps.skillsCategories, options)
       const nextAvailableOptions = getAvailableOptions(categoriesMapping, selectedCategories, this.props.skillsCategories, options)
       const prevValues = currentValues.filter(skill => _.some(prevAvailableOptions, skill))
@@ -88,16 +118,16 @@ class SkillsQuestion extends React.Component {
 
       if (prevValues.length < nextValues.length) {
         onChange(name, prevValues)
-        setValue(prevValues)
+        setValue(prevValues, identifier)
       } else if (prevValues.length > nextValues.length) {
         onChange(name, nextValues)
-        setValue(nextValues)
+        setValue(nextValues, identifier)
       }
     }
   }
 
   onSelectType(value) {
-    const { getValue } = this.props
+    const { getValue, currentValue } = this.props
     const indexOfSpace = value.indexOf(' ')
     const indexOfSemiColon = value.indexOf(';')
 
@@ -108,7 +138,7 @@ class SkillsQuestion extends React.Component {
 
     if (indexOfSemiColon >= 1 ) {
       const newValue = value.replace(';', '').trim()
-      const currentValues = getValue()
+      const currentValues = currentValue || getValue()
       if (!_.some(currentValues, v => v && v.name === newValue)) {
         this.handleChange([...currentValues, { name:  newValue}])
         // this is return empty to nullify value post processing
@@ -130,22 +160,18 @@ class SkillsQuestion extends React.Component {
       getErrorMessage,
       validationError,
       disabled,
-      categoriesMapping,
       getValue,
       frequentSkills,
       skillsCategories,
       currentProjectData,
       categoriesField,
+      currentValue: value,
     } = this.props
-    const { options, customOptionValue } = this.state
+    const { availableOptions, customOptionValue } = this.state
 
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
 
-    // if have a mapping for categories, then filter options, otherwise use all options
-    const availableOptions = getAvailableOptions(categoriesMapping, selectedCategories, skillsCategories, options)
-      .map(option => _.pick(option, ['id', 'name']))
-
-    let currentValues = getValue() || []
+    let currentValues = value || getValue() || []
     // remove from currentValues not available options but still keep created custom options without id
     currentValues = currentValues.filter(skill => _.some(availableOptions, skill) || !skill.id)
 
@@ -153,10 +179,10 @@ class SkillsQuestion extends React.Component {
     const hasError = !isPristine() && !isValid()
     const errorMessage = getErrorMessage() || validationError
 
-    const checkboxGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.id) > -1)
+    const checkboxGroupOptions = availableOptions.filter(option => (frequentSkills || []).indexOf(option.id) > -1)
     const checkboxGroupValues = currentValues.filter(val => _.some(checkboxGroupOptions, option => option.id === val.id ))
 
-    const selectGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.id) === -1)
+    const selectGroupOptions = availableOptions.filter(option => (frequentSkills || []).indexOf(option.id) === -1)
     if (customOptionValue) {
       selectGroupOptions.unshift({ name: customOptionValue })
     }
@@ -182,6 +208,7 @@ class SkillsQuestion extends React.Component {
             placeholder="Start typing a skill then select from the list"
             value={selectGroupValues}
             getOptionLabel={(option) => option.name || ''}
+            filterOption={createFilter({ ignoreAccents: false })}
             getOptionValue={(option) => (option.name || '').trim()}
             onInputChange={this.onSelectType}
             onChange={(val) => {
@@ -204,7 +231,9 @@ SkillsQuestion.defaultProps = {
 }
 
 SkillsQuestion.PropTypes = {
-  skillsCategories: PropTypes.arrayOf(PropTypes.string)
+  skillsCategories: PropTypes.arrayOf(PropTypes.string),
+  identifier: PropTypes.number,
+  currentValue: PropTypes.array
 }
 
 
