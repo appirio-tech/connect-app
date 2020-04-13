@@ -1,0 +1,19 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import '~styles/_variables.scss';
+
+.container {
+  min-height: 100px;
+  width: 100%;
+  z-index: 1;
+  position: relative;
+  background: white;
+}
+
+.user-container {
+  padding: 20px 50px 50px;
+}
+
+.back-button {
+  margin-top: 12px;
+  margin-left: 12px;
+}
