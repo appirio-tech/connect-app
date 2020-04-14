@@ -85,7 +85,7 @@ class SelectDropdown extends PureComponent {
         this.props.onSelect(this.state.selectedOption)
       }
     })
-    this.props.setValue(option.value, this.props.identifier)
+    this.props.setValue(option.value)
   }
 
   render() {
@@ -171,7 +171,6 @@ SelectDropdown.propTypes = {
     toolTipMessage: PT.string,
   })).isRequired,
   theme          : PT.string,
-  identifier     : PT.number,
   selectedOption : PT.object
 }
 

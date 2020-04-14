@@ -98,13 +98,13 @@ class SkillsQuestion extends React.PureComponent {
   }
 
   handleChange(val = []) {
-    const { setValue, onChange, name, identifier } = this.props
+    const { setValue, onChange, name } = this.props
     onChange(name, val)
-    setValue(val, identifier)
+    setValue(val)
   }
 
   componentWillUpdate(prevProps) {
-    const { categoriesMapping, currentValue: value, getValue, onChange, setValue, name, currentProjectData, categoriesField, identifier } = this.props
+    const { categoriesMapping, currentValue: value, getValue, onChange, setValue, name, currentProjectData, categoriesField } = this.props
     const { options } = this.state
     const prevSelectedCategories = _.get(prevProps.currentProjectData, categoriesField, [])
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
@@ -118,10 +118,10 @@ class SkillsQuestion extends React.PureComponent {
 
       if (prevValues.length < nextValues.length) {
         onChange(name, prevValues)
-        setValue(prevValues, identifier)
+        setValue(prevValues)
       } else if (prevValues.length > nextValues.length) {
         onChange(name, nextValues)
-        setValue(nextValues, identifier)
+        setValue(nextValues)
       }
     }
   }
@@ -232,7 +232,6 @@ SkillsQuestion.defaultProps = {
 
 SkillsQuestion.PropTypes = {
   skillsCategories: PropTypes.arrayOf(PropTypes.string),
-  identifier: PropTypes.number,
   currentValue: PropTypes.array
 }
 
