@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import cn from 'classnames'
 import PT from 'prop-types'
 import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
@@ -10,7 +10,7 @@ import Modal from 'react-modal'
 
 import './SelectDropdown.scss'
 
-class SelectDropdown extends Component {
+class SelectDropdown extends PureComponent {
   constructor(props) {
     super(props)
 
@@ -85,7 +85,7 @@ class SelectDropdown extends Component {
         this.props.onSelect(this.state.selectedOption)
       }
     })
-    this.props.setValue(option.value)
+    this.props.setValue(option.value, this.props.identifier)
   }
 
   render() {
@@ -171,6 +171,7 @@ SelectDropdown.propTypes = {
     toolTipMessage: PT.string,
   })).isRequired,
   theme          : PT.string,
+  identifier     : PT.number,
   selectedOption : PT.object
 }
 
