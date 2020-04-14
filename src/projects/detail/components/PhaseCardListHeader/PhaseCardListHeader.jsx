@@ -12,7 +12,7 @@ const PhaseCardListHeader = ({hasPrice}) => (
     <div styleName="title">
       <SectionTitle title="Phases" />
     </div>
-    {hasPrice && <div styleName="price">Price</div>}
+    {false && hasPrice && <div styleName="price">Price</div>}
     <div styleName="status">Status</div>
   </div>
 )
