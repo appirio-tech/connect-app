@@ -13,6 +13,8 @@ import ProfileSettingsAvatar from './ProfileSettingsAvatar'
 import FormsySelect from '../../../../../components/Select/FormsySelect'
 import ISOCountries from '../../../../../helpers/ISOCountries'
 import { formatPhone } from '../../../../../helpers/utils'
+import { hasPermission } from '../../../../../helpers/permissions'
+import PERMISSIONS from '../../../../../config/permissions'
 import './ProfileSettingsForm.scss'
 
 const countries = _.orderBy(ISOCountries, ['name'], ['asc']).map(country => ({
@@ -69,7 +71,7 @@ class ProfileSettingsForm extends Component {
         })
       }
     }
-    
+
     if (this.state.businessPhoneValid && !isValid){
       this.setState({
         businessPhoneValid: false
@@ -163,9 +165,8 @@ class ProfileSettingsForm extends Component {
   }
 
   render() {
-    const { isCopilot, isCustomer, isManager } = this.props
-
-    const disablePhoneInput = this.props.values.settings.businessPhone && isCopilot && !isManager
+    const disablePhoneInput = this.props.values.settings.businessPhone && !hasPermission(PERMISSIONS.EDIT_USER_PROFILE_PHONE)
+    const disableCompanyInput = this.props.values.settings.companyName && !hasPermission(PERMISSIONS.EDIT_USER_PROFILE_COMPANY)
     return (
       <Formsy.Form
         className="profile-settings-form"
@@ -216,7 +217,7 @@ class ProfileSettingsForm extends Component {
             }
           </div>
         </div>
-        {this.getField('Company name', 'companyName', true, this.props.values.settings.companyName && (isCustomer || isCopilot) && !isManager)}
+        {this.getField('Company name', 'companyName', true, disableCompanyInput)}
         <div className="field">
           <div className="label">
             <span styleName="fieldLabelText">Country</span>
@@ -298,9 +299,6 @@ ProfileSettingsForm.propTypes = {
   values: PropTypes.object.isRequired,
   saveSettings: PropTypes.func.isRequired,
   uploadPhoto: PropTypes.func.isRequired,
-  isCustomer: PropTypes.bool.isRequired,
-  isManager: PropTypes.bool.isRequired,
-  isCopilot: PropTypes.bool.isRequired
 }
 
 export default ProfileSettingsForm

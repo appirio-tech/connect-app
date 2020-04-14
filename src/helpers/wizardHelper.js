@@ -23,7 +23,7 @@ import _ from 'lodash'
 import update from 'react-addons-update'
 import { evaluate, getFieldNamesFromExpression, populatePreparedConditions } from 'expression-evaluator'
 import { flatten, unflatten } from 'flat'
-import { checkPermission } from './permissions'
+import { hasPermission } from './permissions'
 
 /**
  * @typedef {Object} NodeObject
@@ -394,7 +394,7 @@ export const initWizard = (template, project, productTemplates, incompleteWizard
     }
 
     // precalculate the result for `userPermissionCondition`
-    if (nodeObject.userPermissionCondition && !checkPermission(nodeObject.userPermissionCondition)) {
+    if (nodeObject.userPermissionCondition && !hasPermission(nodeObject.userPermissionCondition)) {
       // we calculate this value once as user permissions cannot be changed
       // and we would use this value to calculate value of `hiddenByCondition`
       nodeObject.__wizard.hiddenByPermission = true

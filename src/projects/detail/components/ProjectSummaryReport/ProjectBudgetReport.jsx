@@ -2,15 +2,15 @@ import React from 'react'
 import PT from 'prop-types'
 import { formatNumberWithCommas } from '../../../../helpers/format'
 import PERMISSIONS from '../../../../config/permissions'
-import { checkPermission } from '../../../../helpers/permissions'
+import { hasPermission } from '../../../../helpers/permissions'
 import './ProjectBudgetReport.scss'
 
-const ProjectBudgetReport = ({ budget, project }) => {
+const ProjectBudgetReport = ({ budget }) => {
   const { work, fees, revenue, remaining } = budget
 
   const total = revenue + remaining
-  const showSpentData = checkPermission(PERMISSIONS.ACCESS_BUDGET_SPENT_REPORT, project)
-  const showInvoiceData = checkPermission(PERMISSIONS.ACCESS_INVOICE_REPORT, project)
+  const showSpentData = hasPermission(PERMISSIONS.ACCESS_BUDGET_SPENT_REPORT)
+  const showInvoiceData = hasPermission(PERMISSIONS.ACCESS_INVOICE_REPORT)
   const workSpentBarWidth = (work / total) * 100
   const feeBarWidth = (fees / total) * 100
   const invoicedBarWidth = (revenue / total) * 100
