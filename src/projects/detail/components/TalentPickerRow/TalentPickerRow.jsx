@@ -85,7 +85,7 @@ class TalentPickerRow extends React.PureComponent {
             isValid={always}
             getErrorMessage={emptyError}
             setValue={this.handleSkillChange}
-            currentValue={value.skills}
+            getValue={() => value.skills}
             onChange={_.noop}
           />
         </td>

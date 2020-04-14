@@ -104,13 +104,13 @@ class SkillsQuestion extends React.PureComponent {
   }
 
   componentWillUpdate(prevProps) {
-    const { categoriesMapping, currentValue: value, getValue, onChange, setValue, name, currentProjectData, categoriesField } = this.props
+    const { categoriesMapping, getValue, onChange, setValue, name, currentProjectData, categoriesField } = this.props
     const { options } = this.state
     const prevSelectedCategories = _.get(prevProps.currentProjectData, categoriesField, [])
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
 
     if (selectedCategories.length !== prevSelectedCategories.length) {
-      const currentValues = value || getValue() || []
+      const currentValues = getValue() || []
       const prevAvailableOptions = getAvailableOptions(categoriesMapping, prevSelectedCategories, prevProps.skillsCategories, options)
       const nextAvailableOptions = getAvailableOptions(categoriesMapping, selectedCategories, this.props.skillsCategories, options)
       const prevValues = currentValues.filter(skill => _.some(prevAvailableOptions, skill))
@@ -127,7 +127,7 @@ class SkillsQuestion extends React.PureComponent {
   }
 
   onSelectType(value) {
-    const { getValue, currentValue } = this.props
+    const { getValue } = this.props
     const indexOfSpace = value.indexOf(' ')
     const indexOfSemiColon = value.indexOf(';')
 
@@ -138,7 +138,7 @@ class SkillsQuestion extends React.PureComponent {
 
     if (indexOfSemiColon >= 1 ) {
       const newValue = value.replace(';', '').trim()
-      const currentValues = currentValue || getValue()
+      const currentValues = getValue()
       if (!_.some(currentValues, v => v && v.name === newValue)) {
         this.handleChange([...currentValues, { name:  newValue}])
         // this is return empty to nullify value post processing
@@ -165,13 +165,12 @@ class SkillsQuestion extends React.PureComponent {
       skillsCategories,
       currentProjectData,
       categoriesField,
-      currentValue: value,
     } = this.props
     const { availableOptions, customOptionValue } = this.state
 
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
 
-    let currentValues = value || getValue() || []
+    let currentValues = getValue() || []
     // remove from currentValues not available options but still keep created custom options without id
     currentValues = currentValues.filter(skill => _.some(availableOptions, skill) || !skill.id)
 
@@ -232,7 +231,6 @@ SkillsQuestion.defaultProps = {
 
 SkillsQuestion.PropTypes = {
   skillsCategories: PropTypes.arrayOf(PropTypes.string),
-  currentValue: PropTypes.array
 }
 
 
