@@ -178,10 +178,10 @@ class SkillsQuestion extends React.PureComponent {
     const hasError = !isPristine() && !isValid()
     const errorMessage = getErrorMessage() || validationError
 
-    const checkboxGroupOptions = availableOptions.filter(option => (frequentSkills || []).indexOf(option.id) > -1)
+    const checkboxGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.id) > -1)
     const checkboxGroupValues = currentValues.filter(val => _.some(checkboxGroupOptions, option => option.id === val.id ))
 
-    const selectGroupOptions = availableOptions.filter(option => (frequentSkills || []).indexOf(option.id) === -1)
+    const selectGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.id) === -1)
     if (customOptionValue) {
       selectGroupOptions.unshift({ name: customOptionValue })
     }
@@ -227,6 +227,7 @@ class SkillsQuestion extends React.PureComponent {
 SkillsQuestion.defaultProps = {
   onChange: () => {},
   skillsCategories: null,
+  frequentSkills: []
 }
 
 SkillsQuestion.PropTypes = {
