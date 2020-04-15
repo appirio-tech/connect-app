@@ -23,7 +23,7 @@ class ProfileSettingsContainer extends Component {
 
     return (
       <SettingsPanel
-        title="My profile"
+        title="My Profile"
         user={user}
       >
         <ProfileSettingsFormEnhanced
