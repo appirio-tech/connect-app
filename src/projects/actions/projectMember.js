@@ -1,13 +1,13 @@
 import { addProjectMember as addMember,
   removeProjectMember as removeMember,
   updateProjectMember as updateMember,
-  loadMemberSuggestions as loadMemberSuggestionsAPI
+  loadMemberSuggestions as loadMemberSuggestionsAPI,
 } from '../../api/projectMembers'
 import { createProjectMemberInvite as createProjectMemberInvite,
   updateProjectMemberInvite as updateProjectMemberInvite,
   deleteProjectMemberInvite as deleteProjectMemberInvite,
 } from '../../api/projectMemberInvites'
-import { loadProjectMember, loadProjectMembers, loadProjectMemberInvites } from './project'
+import { loadProjectMember, loadProjectMembers } from './project'
 
 import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   LOAD_MEMBER_SUGGESTIONS,
@@ -157,20 +157,13 @@ export function acceptOrRefuseInvite(projectId, item, currentUser) {
     const inviteId = item.id ? item.id : projectState.userInvitationId
     return dispatch({
       type: ACCEPT_OR_REFUSE_INVITE,
-      payload: updateProjectMemberInvite(projectId, inviteId, item.status).then((response) =>
+      payload: updateProjectMemberInvite(projectId, inviteId, item.status).then(() =>
         // we have to add delay before applying the result of accepting/declining invitation
         // as it takes some time for the update to be reindexed in ES so the new state is reflected
         // everywhere
-        delay(ES_REINDEX_DELAY).then(() => response)
+        delay(ES_REINDEX_DELAY).then(() => dispatch(loadProjectMembers(projectId)))
       ),
-      meta: { projectId, currentUser },
+      meta: { projectId, inviteId, currentUser },
     })
   }
-}
-
-export function reloadProjectMembers(projectId) {
-  return (dispatch) => Promise.all([
-    dispatch(loadProjectMembers(projectId)),
-    dispatch(loadProjectMemberInvites(projectId))
-  ])
 }
