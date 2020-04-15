@@ -37,7 +37,7 @@ import ProjectScopeDrawer from '../components/ProjectScopeDrawer'
 import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import NotificationsReader from '../../../components/NotificationsReader'
-import { checkPermission } from '../../../helpers/permissions'
+import { hasPermission } from '../../../helpers/permissions'
 import { getProjectTemplateById } from '../../../helpers/templates'
 import PERMISSIONS from '../../../config/permissions'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
@@ -273,7 +273,7 @@ class DashboardContainer extends React.Component {
           ) : (
             <ProjectPlanEmpty isManageUser={isManageUser} />
           )}
-          {isProjectLive && checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project)  && !isLoadingPhases && (<div styleName="add-button-container">
+          {isProjectLive && hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)  && !isLoadingPhases && (<div styleName="add-button-container">
             <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
           </div>)}
         </TwoColsLayout.Content>
@@ -285,7 +285,7 @@ class DashboardContainer extends React.Component {
 const mapStateToProps = ({ notifications, projectState, projectTopics, templates, topics }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
-  if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
+  if (hasPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
     allFeed = [...allFeed, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
   }
 

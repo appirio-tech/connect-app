@@ -3,16 +3,8 @@ import _ from 'lodash'
 import { HOC as hoc } from 'formsy-react'
 import cn from 'classnames'
 
-import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdownBase'
-import IconX from '../../../../assets/icons/icon-x-mark.svg'
-import IconAdd from '../../../../assets/icons/icon-ui-bold-add.svg'
-import SkillsQuestion from '../SkillsQuestion/SkillsQuestionBase'
-
+import TalentPickerRow from '../TalentPickerRow/TalentPickerRow'
 import './TalentPickerQuestion.scss'
-
-const always = () => true
-const never = () => false
-const emptyError = () => ''
 
 class TalentPickerQuestion extends Component {
 
@@ -23,14 +15,8 @@ class TalentPickerQuestion extends Component {
       options: []
     }
 
-    this.peopleOptions = this.getPeopleOptions()
-    this.durationOptions = this.getDurationOptions()
-
     this.getDefaultValue = this.getDefaultValue.bind(this)
-
-    this.handlePeopleChange = this.handlePeopleChange.bind(this)
-    this.handleDurationChange = this.handleDurationChange.bind(this)
-    this.handleSkillChange = this.handleSkillChange.bind(this)
+    this.handleValueChange = this.handleValueChange.bind(this)
 
     this.insertRole = this.insertRole.bind(this)
     this.removeRole = this.removeRole.bind(this)
@@ -80,91 +66,41 @@ class TalentPickerQuestion extends Component {
     }))
   }
 
-  getPeopleOptions() {
-    return [
-      '0',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-      '10+',
-    ].map((v) => ({
-      value: v,
-      title: v,
-    }))
-  }
-
-  getDurationOptions() {
-    return [
-      '0',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-      '11',
-      '12',
-    ].map((v) => ({
-      value: v,
-      title: v,
-      hide: v === '0',
-    }))
-  }
-
   handleValueChange(index, field, value) {
     const { getValue, setValue } = this.props
-    const values = getValue() || this.getDefaultValue()
-    values[index][field] = value
+    let values = getValue() || this.getDefaultValue()
+    values = [...values.slice(0, index), { ...values[index], [field]: value }, ...values.slice(index + 1)]
 
     setValue(values)
   }
 
-  handlePeopleChange(value, index) {
-    this.handleValueChange(index, 'people', value)
-  }
-
-  handleDurationChange(value, index) {
-    this.handleValueChange(index, 'duration', value)
-  }
-
-  handleSkillChange(value, index) {
-    this.handleValueChange(index, 'skills', value)
-  }
-
   insertRole(index, role) {
     const { getValue, setValue } = this.props
-    const values = getValue() || this.getDefaultValue()
-    values.splice(index, 0, {
-      role,
-      people: '0',
-      duration: '0',
-      skills: [],
-    })
+    let values = getValue() || this.getDefaultValue()
+
+    values = [
+      ...values.slice(0, index),
+      {
+        role,
+        people: '0',
+        duration: '0',
+        skills: [],
+      },
+      ...values.slice(index)
+    ]
     setValue(values)
   }
 
   removeRole(index) {
     const { getValue, setValue } = this.props
-    const values = getValue() || this.getDefaultValue()
-    values.splice(index, 1)
+    let values = getValue() || this.getDefaultValue()
+    values = [...values.slice(0, index), ...values.slice(index + 1)]
     setValue(values)
   }
 
   render() {
     const { wrapperClass, getValue } = this.props
     const { options } = this.state
-    const { durationOptions, peopleOptions } = this
 
     const errorMessage =
       this.props.getErrorMessage() || this.props.validationError
@@ -190,66 +126,17 @@ class TalentPickerQuestion extends Component {
             <tbody>
               {options.length > 0 ? values.map((v, roleIndex) => {
                 const roleSetting = _.find(options, { role: v.role })
-                const roleTitle = roleSetting.roleTitle
-                const skillsCategories = roleSetting.skillsCategories
                 return (
-                  <tr key={roleIndex}>
-                    <td>{roleTitle}</td>
-                    <td>
-                      <SelectDropdown
-                        options={peopleOptions}
-                        value={v.people}
-                        setValue={this.handlePeopleChange}
-                        theme="default"
-                        identifier={roleIndex}
-                      />
-                    </td>
-                    <td>
-                      <SelectDropdown
-                        options={durationOptions}
-                        value={v.duration}
-                        setValue={this.handleDurationChange}
-                        theme="default"
-                        identifier={roleIndex}
-                      />
-                    </td>
-                    <td styleName="skill-selection">
-                      <SkillsQuestion
-                        disabled={false}
-                        isFormDisabled={never}
-                        skillsCategories={skillsCategories || null}
-                        isPristine={always}
-                        isValid={always}
-                        getErrorMessage={emptyError}
-                        identifier={roleIndex}
-                        setValue={this.handleSkillChange}
-                        currentValue={v.skills}
-                        onChange={_.noop}
-                      />
-                    </td>
-                    <td>
-                      <div styleName="d-flex">
-                        <div
-                          onClick={() => {
-                            this.insertRole(roleIndex + 1, v.role)
-                          }}
-                          styleName="btn"
-                        >
-                          <IconAdd />
-                        </div>
-                        {canDeleteRole(v.role, roleIndex) && (
-                          <div
-                            onClick={() => {
-                              this.removeRole(roleIndex)
-                            }}
-                            styleName="btn"
-                          >
-                            <IconX />
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
+                  <TalentPickerRow
+                    key={roleIndex}
+                    rowIndex={roleIndex}
+                    value={v}
+                    canBeDeleted={canDeleteRole(v.role, roleIndex)}
+                    roleSetting={roleSetting}
+                    onChange={this.handleValueChange}
+                    onDeleteRow={this.removeRole}
+                    onAddRow={this.insertRole}
+                  />
                 )
               }) : null}
             </tbody>

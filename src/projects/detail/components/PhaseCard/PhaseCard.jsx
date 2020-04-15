@@ -19,8 +19,6 @@ import {
   PROJECT_STATUS_CANCELLED,
   SCREEN_BREAKPOINT_MD,
   EVENT_TYPE,
-  ROLE_CONNECT_ADMIN,
-  ROLE_ADMINISTRATOR,
 } from '../../../../config/constants'
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
@@ -32,7 +30,7 @@ import EditStageForm from './EditStageForm'
 import NotificationsReader from '../../../../components/NotificationsReader'
 
 import PERMISSIONS from '../../../../config/permissions'
-import {checkPermission} from '../../../../helpers/permissions'
+import {hasPermission} from '../../../../helpers/permissions'
 
 import './PhaseCard.scss'
 
@@ -94,8 +92,6 @@ class PhaseCard extends React.Component {
       hasUnseen,
       phaseId,
       isExpanded,
-      project,
-      isAdmin
     } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
@@ -103,7 +99,12 @@ class PhaseCard extends React.Component {
     status = _.find(PHASE_STATUS, s => s.value === status) ? status : PHASE_STATUS_DRAFT
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
-    const phaseEditable = checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project) && (status !== PHASE_STATUS_COMPLETED || (isAdmin)) && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
+    const phaseEditable =
+      ( projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED )
+      && (
+        hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)
+        && ( status !== PHASE_STATUS_COMPLETED || hasPermission(PERMISSIONS.MANAGE_COMPLETED_PHASE) )
+      )
 
     return (
       <div styleName={'phase-card ' + (isExpanded ? ' expanded ' : ' ')} id={`phase-${phaseId}`}>
@@ -281,17 +282,10 @@ PhaseCard.propTypes = {
 
 
 
-const mapStateToProps = ({loadUser, projectState}) => {
-  const adminRoles = [
-    ROLE_ADMINISTRATOR,
-    ROLE_CONNECT_ADMIN,
-  ]
-  return {
-    currentUserRoles: loadUser.user.roles,
-    isUpdating: projectState.processing,
-    isAdmin: _.intersection(loadUser.user.roles, adminRoles).length > 0
-  }
-}
+const mapStateToProps = ({loadUser, projectState}) => ({
+  currentUserRoles: loadUser.user.roles,
+  isUpdating: projectState.processing,
+})
 
 const actionCreators = {}
 

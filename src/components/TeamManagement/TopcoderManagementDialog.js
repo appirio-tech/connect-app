@@ -12,7 +12,7 @@ import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import AutocompleteInputContainer from './AutocompleteInputContainer'
 import {PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PENDING} from '../../config/constants'
 import PERMISSIONS from '../../config/permissions'
-import {checkPermission} from '../../helpers/permissions'
+import {hasPermission} from '../../helpers/permissions'
 import { compareEmail, compareHandles } from '../../helpers/utils'
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
 
@@ -145,7 +145,7 @@ class TopcoderManagementDialog extends React.Component {
       selectedMembers, processingInvites, updatingMemberIds
     } = this.props
     const { processingInviteRequestIds } = this.state
-    const showRemove = currentUser.isAdmin || (isMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
+    const showRemove = hasPermission(PERMISSIONS.MANAGE_TOPCODER_TEAM)
     const showApproveDecline = currentUser.isAdmin || currentUser.isCopilotManager
     let i = 0
 
