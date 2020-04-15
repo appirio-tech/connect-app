@@ -25,17 +25,17 @@
  * There are unified prefixes to indicate what kind of permissions.
  * If no prefix is suitable, please, feel free to use a new prefix.
  *
- * VIEW_ - means read or view something
  * CREATE_ - create somethings
- * EDIT_ - edit something
+ * READ_   - read something
+ * UPDATE_ - update something
  * DELETE_ - delete something
  *
- * MANAGE_ - means combination of 3 operations CREATE/EDIT/DELETE.
- *           usually should be used, when VIEW operation is allowed to everyone
+ * MANAGE_ - means combination of 3 operations CREATE/UPDATE/DELETE.
+ *           usually should be used, when READ operation is allowed to everyone
  *           while 3 manage operations require additional permissions
- * ACCESS_ - means combination of all 4 operations VIEW/CREATE/EDIT/DELETE.
- *           usually should be used, when by default users cannot even VIEW something
- *           and if someone can VIEW, then also can do other kind of operations.
+ * ACCESS_ - means combination of all 4 operations READ/CREATE/UPDATE/DELETE.
+ *           usually should be used, when by default users cannot even READ something
+ *           and if someone can READ, then also can do other kind of operations.
  *
  * ANTI-PERMISSIONS
  *
@@ -252,10 +252,10 @@ export default {
     ],
   },
 
-  EDIT_USER_PROFILE_PHONE: {
+  UPDATE_USER_PROFILE_PHONE: {
     _meta: {
       group: 'User Profile',
-      title: 'Edit phone number in user profile',
+      title: 'Update phone number in user profile',
     },
     allowRule: {
       topcoderRoles: [
@@ -269,10 +269,10 @@ export default {
     }
   },
 
-  EDIT_USER_PROFILE_COMPANY: {
+  UPDATE_USER_PROFILE_COMPANY: {
     _meta: {
       group: 'User Profile',
-      title: 'Edit company name in user profile',
+      title: 'Update company name in user profile',
     },
     topcoderRoles: [
       ..._.difference(TOPCODER_ALL, [ROLE_TOPCODER_USER, ROLE_CONNECT_COPILOT])
