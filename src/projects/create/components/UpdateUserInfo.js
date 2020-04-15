@@ -4,6 +4,7 @@ import ModalControl from '../../../components/ModalControl'
 import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
 
 import ProfileSettingsForm from '../../../routes/settings/routes/profile/components/ProfileSettingsForm'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 
 import './UpdateUserInfo.scss'
 
@@ -32,6 +33,15 @@ class UpdateUserInfo extends Component {
       closeUserSettings,
     } = this.props
 
+    if (
+      profileSettings.isLoading ||
+      profileSettings.pending
+    ) {
+      return (
+        <LoadingIndicator />
+      )
+    }
+
     return (
       <div styleName="container">
         <ModalControl
@@ -42,6 +52,9 @@ class UpdateUserInfo extends Component {
         />
 
         <div styleName="user-container">
+          <span styleName="title-1">Profile Information</span>
+          <span styleName="title-2">You have incomplete required profile information.</span>
+          <span styleName="title-3">Please complete your profile information below to able to submit your project request.</span>
           <ProfileSettingsForm
             values={profileSettings}
             saveSettings={saveProfileSettings}
@@ -57,6 +70,12 @@ class UpdateUserInfo extends Component {
             isRequiredTimeZone={isTopcoderUser}
             isRequiredCountry={isTopcoderUser}
             isRequiredWorkingHours={isTopcoderUser}
+            isRequiredBusinessEmail={!isTopcoderUser}
+            submitButton="Send my Request"
+            showBackButton
+            onBack={closeUserSettings}
+            shouldDoValidateOnStart
+            shouldShowTitle={false}
           />
         </div>
       </div>

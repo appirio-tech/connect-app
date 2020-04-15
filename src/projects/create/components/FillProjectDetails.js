@@ -9,13 +9,14 @@ import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
 import HeaderWithProgress from './HeaderWithProgress'
 import UpdateUserInfo from './UpdateUserInfo'
 import { formatProfileSettings } from '../../../routes/settings/helpers/settings'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import {
   getProfileSettings,
   saveProfileSettings,
   uploadProfilePhoto,
+  resetProfileSetting,
 } from '../../../routes/settings/actions/index'
 import {
-  ROLE_TOPCODER_USER,
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
   ROLE_CONNECT_ACCOUNT_MANAGER,
@@ -37,7 +38,17 @@ class FillProjectDetails extends Component {
     this.handleStepChange = this.handleStepChange.bind(this)
     this.openUserSettings = this.openUserSettings.bind(this)
     this.closeUserSettings = this.closeUserSettings.bind(this)
-    this.state = { project: {}, currentWizardStep: null, showUpdateUser: false }
+    this.onCreateProject = this.onCreateProject.bind(this)
+    this.onRequireCheckUserSetting = this.onRequireCheckUserSetting.bind(this)
+    this.state = {
+      project: {},
+      currentWizardStep: null,
+      showUpdateUser: false,
+      isSavingProject: false,
+      requireCheckUserSetting: false,
+    }
+    props.resetProfileSetting()
+
   }
 
   componentWillMount() {
@@ -65,6 +76,14 @@ class FillProjectDetails extends Component {
       _.isEqual(
         nextProps.isLoadedProfileSetting,
         this.props.isLoadedProfileSetting
+      ) &&
+      _.isEqual(
+        nextProps.profileSettings.isLoading,
+        this.props.profileSettings.isLoading
+      ) &&
+      _.isEqual(
+        nextProps.profileSettings.pending,
+        this.props.profileSettings.pending
       )
     )
   }
@@ -87,6 +106,16 @@ class FillProjectDetails extends Component {
     this.setState({ showUpdateUser: false })
   }
 
+  onRequireCheckUserSetting(isRequire, cb) {
+    this.setState({ requireCheckUserSetting: isRequire }, cb)
+  }
+
+  onCreateProject(newProject) {
+    this.setState({ requireCheckUserSetting: false }, () => {
+      this.props.onCreateProject(newProject)
+    })
+  }
+
   render() {
     const {
       project,
@@ -102,7 +131,7 @@ class FillProjectDetails extends Component {
       isMissingUserInfo,
       isLoadedProfileSetting,
     } = this.props
-    const { currentWizardStep, showUpdateUser } = this.state
+    const { currentWizardStep, showUpdateUser, isSavingProject, requireCheckUserSetting } = this.state
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
@@ -135,6 +164,19 @@ class FillProjectDetails extends Component {
         )
       }
     }
+    if (
+      isSavingProject
+    ) {
+      return (
+        <div
+          className={cn('FillProjectDetailsWrapper', {
+            [`form-theme-${template.theme}`]: template.theme,
+          })}
+        >
+          <LoadingIndicator />
+        </div>
+      )
+    }
 
     return (
       <div
@@ -149,7 +191,9 @@ class FillProjectDetails extends Component {
           />
         ) : (
           <div className="FillProjectDetails">
-            <div className="header">{header}</div>
+            {!profileSettings.isLoading && !profileSettings.pending && (
+              <div className="header">{header}</div>
+            )}
             <section className="two-col-content content">
               <div className="container">
                 <div className="left-area">
@@ -161,7 +205,7 @@ class FillProjectDetails extends Component {
                       dirtyProject={dirtyProject}
                       template={template}
                       isEditable
-                      submitHandler={this.props.onCreateProject}
+                      submitHandler={this.onCreateProject}
                       addAttachment={this.props.addAttachment}
                       updateAttachment={this.props.updateAttachment}
                       removeAttachment={this.props.removeAttachment}
@@ -177,6 +221,8 @@ class FillProjectDetails extends Component {
                       isMissingUserInfo={isMissingUserInfo}
                       isLoadedProfileSetting={isLoadedProfileSetting}
                       openUserSettings={this.openUserSettings}
+                      onRequireCheckUserSetting={this.onRequireCheckUserSetting}
+                      requireCheckUserSetting={requireCheckUserSetting}
                     />
                   </div>
                   {formDisclaimer && (
@@ -188,7 +234,8 @@ class FillProjectDetails extends Component {
               </div>
             </section>
           </div>
-        )}
+        )
+        }
       </div>
     )
   }
@@ -233,7 +280,6 @@ const mapStateToProps = ({ settings, loadUser }) => {
     ROLE_CONNECT_MANAGER,
   ]
   const topCoderRoles = [
-    ROLE_TOPCODER_USER,
     ROLE_CONNECT_COPILOT,
     ROLE_CONNECT_MANAGER,
     ROLE_CONNECT_ACCOUNT_MANAGER,
@@ -247,8 +293,7 @@ const mapStateToProps = ({ settings, loadUser }) => {
     ROLE_SOLUTION_ARCHITECT,
     ROLE_PROJECT_MANAGER,
   ]
-  const isTopcoderUser =
-    _.intersection(loadUser.user.roles, topCoderRoles).length > 0
+  const isTopcoderUser = _.intersection(loadUser.user.roles, topCoderRoles).length > 0
   let isMissingUserInfo = true
   const profileSettings = formatProfileSettings(settings.profile.traits)
   if (isTopcoderUser) {
@@ -292,6 +337,7 @@ const mapDispatchToProps = {
   getProfileSettings,
   saveProfileSettings,
   uploadProfilePhoto,
+  resetProfileSetting,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FillProjectDetails)

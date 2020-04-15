@@ -44,6 +44,13 @@ class ProfileSettingsForm extends Component {
     this.hideBusinessPhoneAlert = this.hideBusinessPhoneAlert.bind(this)
   }
 
+  componentDidUpdate() {
+    if (this.refs.form && !this.isValidated && this.props.shouldDoValidateOnStart) {
+      this.refs.form.submit()
+      this.isValidated = true
+    }
+  }
+
   onCountryChange(country) {
     // on country change, country code of business phone should change automatically
     if (
@@ -185,19 +192,24 @@ class ProfileSettingsForm extends Component {
       isRequiredCountry,
       isRequiredWorkingHours,
       isRequiredBusinessEmail,
+      submitButton,
+      showBackButton,
+      onBack,
+      shouldShowTitle,
     } = this.props
 
     const disablePhoneInput =
       this.props.values.settings.businessPhone && isCopilot && !isManager
     return (
       <Formsy.Form
+        ref="form"
         className="profile-settings-form"
         onInvalid={this.onInvalid}
         onValid={this.onValid}
         onValidSubmit={this.onSubmit}
         onChange={this.onChange}
       >
-        <div className="section-heading">Personal information</div>
+        {shouldShowTitle && (<div className="section-heading">Personal information</div>)}
         {showAvatar && (
           <div className="field">
             <div className="label">Avatar</div>
@@ -287,6 +299,7 @@ class ProfileSettingsForm extends Component {
               setValueOnly
               onBlur={this.hideCountrySelectAlert}
               required={isRequiredCountry}
+              validationError="Please enter Country"
             />
             {this.state.countrySelectionDirty && (
               <div styleName="warningText">
@@ -319,6 +332,7 @@ class ProfileSettingsForm extends Component {
                   name="timeZone"
                   options={timezoneOptions}
                   required={isRequiredTimeZone}
+                  validationError="Please enter Local Timezone"
                 />
               )}
             />
@@ -353,6 +367,19 @@ class ProfileSettingsForm extends Component {
           </div>
         </div>
         <div className="controls">
+
+          {showBackButton && (
+            <button
+              className="tc-btn tc-btn-default btn-back"
+              onClick={(e) => {
+                e.preventDefault()
+                onBack()
+              }}
+            >
+              Back
+            </button>
+          )}
+
           <button
             type="submit"
             className="tc-btn tc-btn-primary"
@@ -362,7 +389,7 @@ class ProfileSettingsForm extends Component {
               !this.state.dirty
             }
           >
-            Save settings
+            {submitButton}
           </button>
         </div>
       </Formsy.Form>
@@ -380,6 +407,11 @@ ProfileSettingsForm.defaultProps = {
   isRequiredCountry: false,
   isRequiredWorkingHours: false,
   isRequiredBusinessEmail: true,
+  showBackButton: false,
+  submitButton: 'Save settings',
+  onBack: () => {},
+  shouldShowTitle: true,
+  shouldDoValidateOnStart: true,
 }
 
 ProfileSettingsForm.propTypes = {
@@ -398,6 +430,11 @@ ProfileSettingsForm.propTypes = {
   isRequiredCountry: PropTypes.bool,
   isRequiredWorkingHours: PropTypes.bool,
   isRequiredBusinessEmail: PropTypes.bool,
+  showBackButton: PropTypes.bool,
+  shouldShowTitle: PropTypes.bool,
+  shouldDoValidateOnStart: PropTypes.bool,
+  submitButton: PropTypes.string,
+  onBack: PropTypes.func,
 }
 
 export default ProfileSettingsForm

@@ -16,6 +16,7 @@ import {
   STEP_VISIBILITY,
   geStepState,
 } from '../../../helpers/wizardHelper'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import {
   LS_INCOMPLETE_WIZARD,
   LS_INCOMPLETE_PROJECT,
@@ -77,6 +78,9 @@ class ProjectBasicDetailsForm extends Component {
      && _.isEqual(nextProps.dirtyProject, this.props.dirtyProject)
      && _.isEqual(nextProps.isMissingUserInfo, this.props.isMissingUserInfo)
      && _.isEqual(nextProps.isLoadedProfileSetting, this.props.isLoadedProfileSetting)
+     && _.isEqual(nextProps.profileSettings.isLoading, this.props.profileSettings.isLoading)
+     && _.isEqual(nextProps.profileSettings.pending, this.props.profileSettings.pending)
+     && _.isEqual(nextProps.requireCheckUserSetting, this.props.requireCheckUserSetting)
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextState.canSubmit, this.state.canSubmit)
      && _.isEqual(nextState.template, this.state.template)
@@ -84,7 +88,6 @@ class ProjectBasicDetailsForm extends Component {
      && _.isEqual(nextState.isSaving, this.state.isSaving)
      && _.isEqual(nextState.nextWizardStep, this.state.nextWizardStep)
      && _.isEqual(nextState.prevWizardStep, this.state.prevWizardStep)
-     && _.isEqual(nextState.checkUserSetting, this.state.checkUserSetting)
     )
   }
 
@@ -140,18 +143,17 @@ class ProjectBasicDetailsForm extends Component {
         }
       })
     })
-    const { checkUserSetting } = this.state
+    const { isSaving } = this.state
     const {
       isMissingUserInfo,
       isLoadedProfileSetting,
       openUserSettings,
+      requireCheckUserSetting
     } = this.props
-    if (isLoadedProfileSetting && checkUserSetting && isMissingUserInfo) {
-      this.setState({checkUserSetting: false }, () => {
-        openUserSettings()
-      })
+    if (isLoadedProfileSetting && requireCheckUserSetting && isMissingUserInfo) {
+      openUserSettings()
     }
-    if (isLoadedProfileSetting && checkUserSetting && !isMissingUserInfo) {
+    if (!isSaving && isLoadedProfileSetting && requireCheckUserSetting && !isMissingUserInfo) {
       this.submit()
     }
   }
@@ -165,7 +167,8 @@ class ProjectBasicDetailsForm extends Component {
   }
 
   fetchUserSettings() {
-    this.setState({checkUserSetting: true }, () => {
+    const { onRequireCheckUserSetting } = this.props
+    onRequireCheckUserSetting(true, () => {
       this.props.getProfileSettings()
     })
   }
@@ -174,9 +177,10 @@ class ProjectBasicDetailsForm extends Component {
     // we cannot use `model` provided by Formzy because in the `previousStepVisibility==none` mode
     // some parts of the form are hidden, so Formzy thinks we don't have them
     // instead we use this.props.dirtyProject which contains the current project data
-    this.setState({isSaving: true })
-    const modelWithoutHiddenValues = removeValuesOfHiddenNodes(this.state.template, this.props.dirtyProject)
-    this.props.submitHandler(modelWithoutHiddenValues)
+    this.setState({isSaving: true }, () => {
+      const modelWithoutHiddenValues = removeValuesOfHiddenNodes(this.state.template, this.props.dirtyProject)
+      this.props.submitHandler(modelWithoutHiddenValues)
+    })
   }
 
   /**
@@ -239,7 +243,6 @@ class ProjectBasicDetailsForm extends Component {
       prevWizardStep,
       isWizardMode,
       currentWizardStep,
-      checkUserSetting,
     } = this.state
 
     const currentSection = currentWizardStep && template.sections[currentWizardStep.sectionIndex]
@@ -288,6 +291,14 @@ class ProjectBasicDetailsForm extends Component {
       )
     }
 
+    if (
+      this.state.isSaving ||
+      profileSettings.isLoading ||
+      profileSettings.pending
+    ) {
+      return <LoadingIndicator />
+    }
+
     return (
       <div>
         <Formsy.Form
@@ -330,7 +341,7 @@ class ProjectBasicDetailsForm extends Component {
                 className="tc-btn tc-btn-primary tc-btn-md"
                 type="submit"
                 disabled={
-                  (checkUserSetting && profileSettings.isLoading) ||
+                  profileSettings.isLoading ||
                   (this.state.isSaving) ||
                   !canSubmit
                 }
@@ -349,7 +360,9 @@ class ProjectBasicDetailsForm extends Component {
 
 ProjectBasicDetailsForm.defaultProps = {
   shouldUpdateTemplate: false,
-  openUserSettings: () => {}
+  requireCheckUserSetting: false,
+  openUserSettings: () => {},
+  onRequireCheckUserSetting: () => {},
 }
 
 ProjectBasicDetailsForm.propTypes = {
@@ -366,6 +379,8 @@ ProjectBasicDetailsForm.propTypes = {
   isMissingUserInfo: PropTypes.bool.isRequired,
   isLoadedProfileSetting: PropTypes.bool.isRequired,
   openUserSettings: PropTypes.func,
+  onRequireCheckUserSetting: PropTypes.func,
+  requireCheckUserSetting: PropTypes.bool,
 }
 
 export default ProjectBasicDetailsForm
