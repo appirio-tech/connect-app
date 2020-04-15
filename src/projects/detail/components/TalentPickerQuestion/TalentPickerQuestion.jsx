@@ -20,6 +20,7 @@ class TalentPickerQuestion extends Component {
 
     this.insertRole = this.insertRole.bind(this)
     this.removeRole = this.removeRole.bind(this)
+    this.canDeleteRole = this.canDeleteRole.bind(this)
     this.setValidator(props)
   }
 
@@ -98,6 +99,12 @@ class TalentPickerQuestion extends Component {
     setValue(values)
   }
 
+  canDeleteRole(role, index) {
+    const { getValue } = this.props
+    const values = getValue()
+    return _.findIndex(values, { role }) !== index
+  }
+
   render() {
     const { wrapperClass, getValue } = this.props
     const { options } = this.state
@@ -108,8 +115,6 @@ class TalentPickerQuestion extends Component {
 
     const values = getValue() || this.getDefaultValue()
 
-    const canDeleteRole = (role, index) =>
-      _.findIndex(values, { role }) !== index
     return (
       <div className={cn(wrapperClass)}>
         <div styleName="container">
@@ -131,7 +136,7 @@ class TalentPickerQuestion extends Component {
                     key={roleIndex}
                     rowIndex={roleIndex}
                     value={v}
-                    canBeDeleted={canDeleteRole(v.role, roleIndex)}
+                    canBeDeleted={this.canDeleteRole}
                     roleSetting={roleSetting}
                     onChange={this.handleValueChange}
                     onDeleteRow={this.removeRole}
