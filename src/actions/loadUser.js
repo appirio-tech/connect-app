@@ -15,16 +15,16 @@ import {
   ROLE_PROGRAM_MANAGER,
   ROLE_PRESALES, ROLE_PROJECT_MANAGER, ROLE_SOLUTION_ARCHITECT
 } from '../config/constants'
-import { getFreshToken, configureConnector, decodeToken } from 'tc-accounts'
 import { getUserProfile } from '../api/users'
 import { getUserGroups } from '../api/groups'
 import { getOrgConfig } from '../api/orgConfig'
 import { EventTypes } from 'redux-segment'
+import {getFreshToken, decodeToken } from '../helpers/login'
 
-configureConnector({
+/*configureConnector({
   connectorUrl: ACCOUNTS_APP_CONNECTOR_URL,
   frameId: 'tc-accounts-iframe'
-})
+})*/
 
 export function loadUser() {
   return ((dispatch, getState) => {
