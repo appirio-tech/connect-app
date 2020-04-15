@@ -28,17 +28,16 @@ const NewProjectNavLink = ({ compact=false, link }) => {
     )
   } else if (/^https?:\/\//.test(link)) {
     return (
-      <a
+      <button className="tc-btn tc-btn-sm tc-btn-primary"><a
         href={link}
-        className="tc-btn tc-btn-sm tc-btn-primary"
-      >+ New Project</a>
+      >+ New Project</a></button>
     )
   } else {
     return (
       <div className="new-project-link">
-        <Link
-          to={link} className="tc-btn tc-btn-sm tc-btn-primary"
-        >+ New Project</Link>
+        <button className="tc-btn tc-btn-sm tc-btn-primary"><Link
+          to={link} 
+        >+ New Project</Link></button>
       </div>
     )
   }

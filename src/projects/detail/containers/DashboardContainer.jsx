@@ -274,7 +274,7 @@ class DashboardContainer extends React.Component {
             <ProjectPlanEmpty isManageUser={isManageUser} />
           )}
           {isProjectLive && hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)  && !isLoadingPhases && (<div styleName="add-button-container">
-            <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
+            <button className="tc-btn tc-btn-primary tc-btn-sm action-btn"><Link to={`/projects/${project.id}/add-phase`} >Add New Phase</Link></button>
           </div>)}
         </TwoColsLayout.Content>
       </TwoColsLayout>

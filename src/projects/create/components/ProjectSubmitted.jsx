@@ -41,9 +41,9 @@ class ProjectSubmitted extends React.Component {
           <div className="project-link-container flex row middle center">
             { `${this.state.domain}${this.state.url}` }
           </div>
-          <div className="button-container flex row middle center">
+          <div className="button-container flex row middle">
             <a type="button" onClick={this.copyToClipboard} className="copy-link-btn tc-btn tc-btn-sm tc-btn-default flex middle center" disabled={false}>Copy link</a>
-            <a href={this.state.url} type="button" className="go-to-project-dashboard-btn tc-btn tc-btn-sm tc-btn-primary flex middle center" disabled={false}>Go to project dashboard</a>
+            <button className="go-to-project-dashboard-btn tc-btn tc-btn-sm tc-btn-primary flex middle center"><a href={this.state.url} type="button"  disabled={false}>Go to project dashboard</a></button>
           </div>
         </div>
       </div>

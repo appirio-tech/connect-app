@@ -6,7 +6,7 @@ const ProjectsTopBar = () => (
 
   <div className="topbar-container">
     <div className="topbar">
-      <Link to="/new-project"  className="logo tc-btn-sm tc-btn-primary">+ New Project</Link>
+      <button  className="logo tc-btn-sm tc-btn-primary"><Link to="/new-project" >+ New Project</Link></button>
       <span>All Projects</span>
     </div>
   </div>
