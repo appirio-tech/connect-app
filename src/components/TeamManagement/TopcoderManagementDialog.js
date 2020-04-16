@@ -147,7 +147,7 @@ class TopcoderManagementDialog extends React.Component {
     const { processingInviteRequestIds } = this.state
     const showRemove = hasPermission(PERMISSIONS.MANAGE_TOPCODER_TEAM)
     const showApproveDecline = currentUser.isAdmin || currentUser.isCopilotManager
-    const showSuggestions = hasPermission(PERMISSIONS.SEE_MEMBER_SUGGESTIONS);
+    const showSuggestions = hasPermission(PERMISSIONS.SEE_MEMBER_SUGGESTIONS)
     let i = 0
 
     return (
