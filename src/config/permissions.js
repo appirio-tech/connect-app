@@ -72,7 +72,6 @@ import {
   ROLE_SOLUTION_ARCHITECT,
   ROLE_PROJECT_MANAGER,
   ROLE_CONNECT_COPILOT,
-  ROLE_CONNECT_COPILOT_MANAGER,
 } from './constants'
 /* eslint-enable no-unused-vars  */
 
