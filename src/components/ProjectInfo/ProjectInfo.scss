@@ -129,6 +129,7 @@
 .tooltip-target-container {
   flex: 1;
   width: 0;
+  min-width: 0;
   display: flex;
   justify-content: flex-end;
 
