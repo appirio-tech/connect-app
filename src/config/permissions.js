@@ -72,6 +72,7 @@ import {
   ROLE_SOLUTION_ARCHITECT,
   ROLE_PROJECT_MANAGER,
   ROLE_CONNECT_COPILOT,
+  ROLE_CONNECT_COPILOT_MANAGER,
 } from './constants'
 /* eslint-enable no-unused-vars  */
 
@@ -140,7 +141,7 @@ const PROJECT_NON_CUSTOMER_MEMBERS = [
  * The next sets of roles are exported for outside usage with `hasPermission` method.
  */
 
-export default {
+export default {  
   MANAGE_PROJECT_PLAN: {
     _meta: {
       group: 'Project Plan',
@@ -277,6 +278,18 @@ export default {
     topcoderRoles: [
       ..._.difference(TOPCODER_ALL, [ROLE_TOPCODER_USER, ROLE_CONNECT_COPILOT])
     ],
+  },
+
+  SEE_MY_PROJECTS_FILTER: {
+    _meta: {
+      group: 'My Projects Filter',
+      title: 'My Projects Filter',
+    },
+    allowRule: {
+      topcoderRoles: [
+        ..._.difference(TOPCODER_ALL, [ROLE_CONNECT_COPILOT, ROLE_TOPCODER_USER])
+      ]
+    }
   },
 
   /*
