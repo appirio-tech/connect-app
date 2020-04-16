@@ -3,6 +3,7 @@
   .Tooltip {
     &.customer-data {
       .tooltip-target {
+        z-index: 0;
         display: flex;
         &>div:first-child {
           margin-left: -5px;
