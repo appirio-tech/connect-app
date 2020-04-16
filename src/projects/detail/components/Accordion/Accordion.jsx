@@ -8,7 +8,7 @@ import PT from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
 
-import IconX from '../../../../assets/icons/ui-x-mark.svg'
+import IconX from '../../../../assets/icons/x-mark.svg'
 import IconCarretDown from '../../../../assets/icons/arrow-6px-carret-down-normal.svg'
 
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
@@ -196,7 +196,7 @@ class Accordion extends React.Component {
           </Tooltip>
           <div title={this.formatValue()} styleName="value">{this.formatValue()}</div>
           <div styleName="toggle">
-            {isOpen ? <IconX styleName="toggle-icon" /> : <IconCarretDown styleName="toggle-icon" />}
+            {isOpen ? <IconX styleName="toggle-close-icon" /> : <IconCarretDown styleName="toggle-icon" />}
           </div>
         </button>
         <div styleName="content">
