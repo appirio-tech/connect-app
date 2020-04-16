@@ -140,7 +140,7 @@ const PROJECT_NON_CUSTOMER_MEMBERS = [
  * The next sets of roles are exported for outside usage with `hasPermission` method.
  */
 
-export default {  
+export default {
   MANAGE_PROJECT_PLAN: {
     _meta: {
       group: 'Project Plan',
