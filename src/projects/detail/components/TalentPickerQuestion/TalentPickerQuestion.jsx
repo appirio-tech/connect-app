@@ -101,7 +101,7 @@ class TalentPickerQuestion extends Component {
 
   canDeleteRole(role, index) {
     const { getValue } = this.props
-    const values = getValue()
+    const values = getValue() || this.getDefaultValue()
     return _.findIndex(values, { role }) !== index
   }
 
