@@ -128,6 +128,13 @@ class SkillsQuestion extends React.PureComponent {
 
   onSelectType(value) {
     const { getValue } = this.props
+    const { availableOptions } = this.state
+    const isInAvailableOptions = _.some(availableOptions, option => {
+      return option && option.name.trim().toLowerCase() === value.replace(';', '').trim().toLowerCase();
+    })
+    const correspondingOption = availableOptions.find(option => {
+      return option.name.trim().toLowerCase()===value.replace(';', '').trim().toLowerCase()
+    });
     const indexOfSpace = value.indexOf(' ')
     const indexOfSemiColon = value.indexOf(';')
 
@@ -135,12 +142,16 @@ class SkillsQuestion extends React.PureComponent {
     if (indexOfSpace === 0 || indexOfSemiColon === 0 ) {
       return value.slice(1)
     }
-
     if (indexOfSemiColon >= 1 ) {
       const newValue = value.replace(';', '').trim()
       const currentValues = getValue()
-      if (!_.some(currentValues, v => v && v.name === newValue)) {
-        this.handleChange([...currentValues, { name:  newValue}])
+      if (!_.some(currentValues, v => v && v.name.trim().toLowerCase() === newValue.trim().toLowerCase())) {
+        if(isInAvailableOptions) {
+          this.handleChange([...currentValues, correspondingOption])
+          this.setState({ customOptionValue: '' })
+        } else {
+          this.handleChange([...currentValues, { name:  newValue}])
+        }
         // this is return empty to nullify value post processing
         return ''
       } else {
@@ -148,8 +159,9 @@ class SkillsQuestion extends React.PureComponent {
         return value.replace(';', '')
       }
     }
-
-    this.setState({ customOptionValue: value })
+    if (!isInAvailableOptions) {
+      this.setState({ customOptionValue: value })
+    }
   }
 
   render() {
@@ -216,6 +228,7 @@ class SkillsQuestion extends React.PureComponent {
             noOptionsMessage={() => 'No results found'}
             options={selectGroupOptions}
             isDisabled={questionDisabled}
+            
           />
         </div>
         { hasError && (<p styleName="error-message">{errorMessage}</p>) }
