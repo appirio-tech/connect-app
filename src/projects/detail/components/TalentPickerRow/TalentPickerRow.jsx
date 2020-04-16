@@ -65,7 +65,7 @@ class TalentPickerRow extends React.PureComponent {
   }
 
   render() {
-    const { value, canBeDeleted, roleSetting } = this.props
+    const { value, canBeDeleted, roleSetting, rowIndex } = this.props
 
     return (
       <tr>
@@ -77,6 +77,12 @@ class TalentPickerRow extends React.PureComponent {
           <SelectDropdown options={this.durationOptions} value={value.duration} setValue={this.handleDurationChange} theme="default" />
         </td>
         <td styleName="skill-selection">
+          {/*
+            Please do not refactor getValue prop's value to a binded function with constant reference.
+            SkillsQuestion is a pure component. If all the props are constant across renders, SkillsQuestion cannot detect the change in value.skills.
+            So, it'll break the functionality of the component.
+            "getValue" prop is left as inline arrow function to trigger re rendering of the SkillsQuestion component whenever the parent rerenders.
+          */}
           <SkillsQuestion
             disabled={false}
             isFormDisabled={never}
@@ -94,7 +100,7 @@ class TalentPickerRow extends React.PureComponent {
             <div onClick={this.onAddRow} styleName="btn">
               <IconAdd />
             </div>
-            {canBeDeleted && (
+            {canBeDeleted(value.role, rowIndex) && (
               <div onClick={this.onDeleteRow} styleName="btn">
                 <IconX />
               </div>
@@ -108,7 +114,7 @@ class TalentPickerRow extends React.PureComponent {
 
 TalentPickerRow.propTypes = {
   rowIndex: PT.number.isRequired,
-  canBeDeleted: PT.bool.isRequired,
+  canBeDeleted: PT.func.isRequired,
   onChange: PT.func.isRequired,
   onAddRow: PT.func.isRequired,
   onDeleteRow: PT.func.isRequired,
