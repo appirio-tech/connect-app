@@ -1,6 +1,6 @@
 import axios from 'axios'
 import store from '../config/store'
-import { getFreshToken, isTokenExpired } from '../helpers/login'
+import { getFreshToken, isTokenExpired } from 'tc-accounts'
 
 export const getToken = () => {
   return new Promise((resolve, reject) => {

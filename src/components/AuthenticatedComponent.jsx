@@ -1,6 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import { getFreshToken } from '../helpers/login'
+import { getFreshToken } from 'tc-accounts'
 import { ACCOUNTS_APP_LOGIN_URL } from '../config/constants'
 
 export function requiresAuthentication(Component) {

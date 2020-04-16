@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import {
-  ACCOUNTS_APP_CONNECTOR_URL,
   LOAD_USER_SUCCESS,
   LOAD_USER_FAILURE,
   LOAD_ORG_CONFIG_SUCCESS,
@@ -19,7 +18,7 @@ import { getUserProfile } from '../api/users'
 import { getUserGroups } from '../api/groups'
 import { getOrgConfig } from '../api/orgConfig'
 import { EventTypes } from 'redux-segment'
-import {getFreshToken, decodeToken } from '../helpers/login'
+import {getFreshToken, decodeToken } from 'tc-accounts'
 
 /*configureConnector({
   connectorUrl: ACCOUNTS_APP_CONNECTOR_URL,

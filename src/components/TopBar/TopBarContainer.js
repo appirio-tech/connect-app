@@ -4,7 +4,6 @@ import { Link, withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import UserDropdown from 'appirio-tech-react-components/components/UserDropdownMenu/UserDropdownMenu'
 import {
-  ACCOUNTS_APP_LOGIN_URL,
   ACCOUNTS_APP_REGISTER_URL,
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
@@ -20,7 +19,7 @@ import {
 } from '../../config/constants'
 import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
 import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpers.js'
-import { login } from '../../helpers/login'
+import { login } from 'tc-accounts'
 
 require('./TopBarContainer.scss')
 
@@ -86,7 +85,7 @@ class TopBarContainer extends React.Component {
       window.location = logoutLink
     }
 
-    const loginClick = (evt) => {
+    const loginClick = () => {
       login()
     }
 
