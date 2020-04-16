@@ -83,6 +83,7 @@ $screen-one-column: 720px;
       }
 
       .item-manager {
+        z-index: 0;
         flex: 2 2 105px;
         min-width: 105px;
         .spacing {
@@ -366,6 +367,7 @@ $screen-one-column: 720px;
         }
 
         .item-customer {
+          z-index: 0;
           padding-left: 10px;
           align-items: center;
 
