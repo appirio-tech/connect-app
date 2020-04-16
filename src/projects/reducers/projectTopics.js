@@ -510,6 +510,7 @@ export const projectTopics = function (state=initialState, action) {
         rawContent: { $set : rawContent },
         body: { $set : savedComment.body },
         attachments: { $set : savedComment.attachments },
+        links: { $set: getLinksFromPost(savedComment.rawContent) },
         updatedDate: { $set : savedComment.updatedDate },
         edited: {$set : true }
       })
