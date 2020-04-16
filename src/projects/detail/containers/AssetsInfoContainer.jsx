@@ -896,6 +896,7 @@ class AssetsInfoContainer extends React.Component {
                 canEdit={canManageLinks}
                 onDelete={this.removeAttachment}
                 onEdit={this.onEditLink}
+                loggedInUser={loggedInUser}
                 formatModifyDate={formatModifyDate}
                 formatFolderTitle={formatFolderTitle}
                 setFilter={this.setFilter}

@@ -159,6 +159,16 @@ export default {
     ],
   },
 
+  MANAGE_NOT_OWN_ATTACHEMENT: {
+    _meta: {
+      group: 'Project Plan',
+      title: 'Manage asset libraries files and links',
+    },
+    topcoderRoles: [
+      ...TOPCODER_ADMINS,
+    ]
+  },
+
   MANAGE_COMPLETED_PHASE: {
     _meta: {
       group: 'Project Plan',
