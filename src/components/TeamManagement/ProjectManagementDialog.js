@@ -5,6 +5,9 @@ import moment from 'moment'
 import Modal from 'react-modal'
 import XMarkIcon from '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
+import PERMISSIONS from "../../config/permissions";
+
+import { hasPermission } from "../../helpers/permissions";
 import {getAvatarResized, getFullNameWithFallback} from '../../helpers/tcHelpers'
 import { compareEmail, compareHandles } from '../../helpers/utils'
 import AutocompleteInputContainer from './AutocompleteInputContainer'
@@ -88,6 +91,7 @@ class ProjectManagementDialog extends React.Component {
       onCancel, projectTeamInvites = [], selectedMembers, processingInvites,
     } = this.props
     const showRemove = currentUser.isAdmin || (!currentUser.isCopilot && isMember)
+    const showSuggestions = hasPermission(PERMISSIONS.SEE_MEMBER_SUGGESTIONS);
     let i = 0
     return (
       <Modal
@@ -183,6 +187,7 @@ class ProjectManagementDialog extends React.Component {
               currentUser={currentUser}
               selectedMembers={selectedMembers}
               disabled={processingInvites || (!currentUser.isAdmin && !isMember)}
+              showSuggestions={showSuggestions}
             />
             {this.state.showAlreadyMemberError && <div className="error-message">
               Project Member(s) can't be invited again. Please remove them from list.
