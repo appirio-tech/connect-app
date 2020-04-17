@@ -196,6 +196,7 @@ class ProfileSettingsForm extends Component {
       showBackButton,
       onBack,
       shouldShowTitle,
+      buttonExtraClassName,
     } = this.props
 
     const disablePhoneInput =
@@ -370,7 +371,7 @@ class ProfileSettingsForm extends Component {
 
           {showBackButton && (
             <button
-              className="tc-btn tc-btn-default btn-back"
+              className={`tc-btn tc-btn-default btn-back ${buttonExtraClassName}`}
               onClick={(e) => {
                 e.preventDefault()
                 onBack()
@@ -382,7 +383,7 @@ class ProfileSettingsForm extends Component {
 
           <button
             type="submit"
-            className="tc-btn tc-btn-primary"
+            className={`tc-btn tc-btn-primary ${buttonExtraClassName}`}
             disabled={
               this.props.values.pending ||
               !this.state.valid ||
@@ -411,7 +412,8 @@ ProfileSettingsForm.defaultProps = {
   submitButton: 'Save settings',
   onBack: () => {},
   shouldShowTitle: true,
-  shouldDoValidateOnStart: true,
+  shouldDoValidateOnStart: false,
+  buttonExtraClassName: '',
 }
 
 ProfileSettingsForm.propTypes = {
@@ -435,6 +437,7 @@ ProfileSettingsForm.propTypes = {
   shouldDoValidateOnStart: PropTypes.bool,
   submitButton: PropTypes.string,
   onBack: PropTypes.func,
+  buttonExtraClassName: PropTypes.string,
 }
 
 export default ProfileSettingsForm

@@ -13,6 +13,7 @@
 :global {
   .FillProjectDetailsWrapper {
     // @extend .wizardWrapper;
+    position: relative;
 
     &.form-theme-light {
       .FillProjectDetails {
@@ -25,9 +26,28 @@
         }
       }
     }
+
+    .loading-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 20px;
+    }
   }
 
   .FillProjectDetails {
+
+    &.hide {
+      display: none;
+    }
+
     .text-header-wrapper {
       padding: 0 80px;
 

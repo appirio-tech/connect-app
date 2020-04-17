@@ -48,7 +48,6 @@ class FillProjectDetails extends Component {
       requireCheckUserSetting: false,
     }
     props.resetProfileSetting()
-
   }
 
   componentWillMount() {
@@ -131,7 +130,12 @@ class FillProjectDetails extends Component {
       isMissingUserInfo,
       isLoadedProfileSetting,
     } = this.props
-    const { currentWizardStep, showUpdateUser, isSavingProject, requireCheckUserSetting } = this.state
+    const {
+      currentWizardStep,
+      showUpdateUser,
+      isSavingProject,
+      requireCheckUserSetting,
+    } = this.state
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
@@ -164,19 +168,6 @@ class FillProjectDetails extends Component {
         )
       }
     }
-    if (
-      isSavingProject
-    ) {
-      return (
-        <div
-          className={cn('FillProjectDetailsWrapper', {
-            [`form-theme-${template.theme}`]: template.theme,
-          })}
-        >
-          <LoadingIndicator />
-        </div>
-      )
-    }
 
     return (
       <div
@@ -184,58 +175,65 @@ class FillProjectDetails extends Component {
           [`form-theme-${template.theme}`]: template.theme,
         })}
       >
-        {showUpdateUser ? (
+        {showUpdateUser && (
           <UpdateUserInfo
             {...this.props}
             closeUserSettings={this.closeUserSettings}
           />
-        ) : (
-          <div className="FillProjectDetails">
-            {!profileSettings.isLoading && !profileSettings.pending && (
-              <div className="header">{header}</div>
-            )}
-            <section className="two-col-content content">
-              <div className="container">
-                <div className="left-area">
-                  <div className="left-area-content">
-                    <ProjectBasicDetailsForm
-                      getProfileSettings={getProfileSettings}
-                      profileSettings={profileSettings}
-                      project={project}
-                      dirtyProject={dirtyProject}
-                      template={template}
-                      isEditable
-                      submitHandler={this.onCreateProject}
-                      addAttachment={this.props.addAttachment}
-                      updateAttachment={this.props.updateAttachment}
-                      removeAttachment={this.props.removeAttachment}
-                      attachmentsStorePath={this.props.attachmentsStorePath}
-                      canManageAttachments={this.props.canManageAttachments}
-                      saving={processing}
-                      onProjectChange={this.props.onProjectChange}
-                      submitBtnText={submitBtnText}
-                      productTemplates={productTemplates}
-                      onStepChange={this.handleStepChange}
-                      productCategories={productCategories}
-                      shouldUpdateTemplate={shouldUpdateTemplate}
-                      isMissingUserInfo={isMissingUserInfo}
-                      isLoadedProfileSetting={isLoadedProfileSetting}
-                      openUserSettings={this.openUserSettings}
-                      onRequireCheckUserSetting={this.onRequireCheckUserSetting}
-                      requireCheckUserSetting={requireCheckUserSetting}
-                    />
-                  </div>
-                  {formDisclaimer && (
-                    <div className="left-area-footer">
-                      <span>{formDisclaimer}</span>
-                    </div>
-                  )}
+        )}
+
+        <div className={`FillProjectDetails ${showUpdateUser ? 'hide' : ''}`}>
+          <div className="header">{header}</div>
+          <section className="two-col-content content">
+            <div className="container">
+              <div className="left-area">
+                <div className="left-area-content">
+                  <ProjectBasicDetailsForm
+                    getProfileSettings={getProfileSettings}
+                    profileSettings={profileSettings}
+                    project={project}
+                    dirtyProject={dirtyProject}
+                    template={template}
+                    isEditable
+                    submitHandler={this.onCreateProject}
+                    addAttachment={this.props.addAttachment}
+                    updateAttachment={this.props.updateAttachment}
+                    removeAttachment={this.props.removeAttachment}
+                    attachmentsStorePath={this.props.attachmentsStorePath}
+                    canManageAttachments={this.props.canManageAttachments}
+                    saving={processing}
+                    onProjectChange={this.props.onProjectChange}
+                    submitBtnText={submitBtnText}
+                    productTemplates={productTemplates}
+                    onStepChange={this.handleStepChange}
+                    productCategories={productCategories}
+                    shouldUpdateTemplate={shouldUpdateTemplate}
+                    isMissingUserInfo={isMissingUserInfo}
+                    isLoadedProfileSetting={isLoadedProfileSetting}
+                    openUserSettings={this.openUserSettings}
+                    onRequireCheckUserSetting={this.onRequireCheckUserSetting}
+                    requireCheckUserSetting={requireCheckUserSetting}
+                  />
                 </div>
+                {formDisclaimer && (
+                  <div className="left-area-footer">
+                    <span>{formDisclaimer}</span>
+                  </div>
+                )}
               </div>
-            </section>
+            </div>
+          </section>
+        </div>
+
+        {(isSavingProject ||
+          profileSettings.isLoading ||
+          profileSettings.pending) && (
+          <div className="loading-container">
+            <div className="loading">
+              <LoadingIndicator />
+            </div>
           </div>
-        )
-        }
+        )}
       </div>
     )
   }

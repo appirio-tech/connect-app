@@ -16,7 +16,6 @@ import {
   STEP_VISIBILITY,
   geStepState,
 } from '../../../helpers/wizardHelper'
-import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import {
   LS_INCOMPLETE_WIZARD,
   LS_INCOMPLETE_PROJECT,
@@ -289,14 +288,6 @@ class ProjectBasicDetailsForm extends Component {
           </div>
         </div>
       )
-    }
-
-    if (
-      this.state.isSaving ||
-      profileSettings.isLoading ||
-      profileSettings.pending
-    ) {
-      return <LoadingIndicator />
     }
 
     return (
