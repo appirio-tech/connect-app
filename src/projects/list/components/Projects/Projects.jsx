@@ -155,7 +155,7 @@ class Projects extends Component {
   }
 
   applyFilters(filter) {
-    const criteria = _.assign({}, this.props.criteria, filter)
+    const criteria = _.assign({}, filter)
     this.routeWithParams(criteria)
   }
 
