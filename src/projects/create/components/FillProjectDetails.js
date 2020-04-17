@@ -102,7 +102,15 @@ class FillProjectDetails extends Component {
   }
 
   closeUserSettings() {
-    this.setState({ showUpdateUser: false })
+    const { isMissingUserInfo } = this.props
+    this.setState({
+      showUpdateUser: false,
+      ... (
+        isMissingUserInfo ? {
+          requireCheckUserSetting: false
+        } : {}
+      )
+    })
   }
 
   onRequireCheckUserSetting(isRequire, cb) {
@@ -139,7 +147,9 @@ class FillProjectDetails extends Component {
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
-
+    const showLoading = (isSavingProject ||
+      profileSettings.isLoading ||
+      profileSettings.pending)
     const template = projectTemplate.scope
 
     let header = null
@@ -176,13 +186,15 @@ class FillProjectDetails extends Component {
         })}
       >
         {showUpdateUser && (
-          <UpdateUserInfo
-            {...this.props}
-            closeUserSettings={this.closeUserSettings}
-          />
+          <div className={`${showLoading ? 'hide': ''}`}>
+            <UpdateUserInfo
+              {...this.props}
+              closeUserSettings={this.closeUserSettings}
+            />
+          </div>
         )}
 
-        <div className={`FillProjectDetails ${showUpdateUser ? 'hide' : ''}`}>
+        <div className={`FillProjectDetails ${(showUpdateUser || showLoading) ? 'hide' : ''}`}>
           <div className="header">{header}</div>
           <section className="two-col-content content">
             <div className="container">
@@ -225,9 +237,7 @@ class FillProjectDetails extends Component {
           </section>
         </div>
 
-        {(isSavingProject ||
-          profileSettings.isLoading ||
-          profileSettings.pending) && (
+        {showLoading && (
           <div className="loading-container">
             <div className="loading">
               <LoadingIndicator />

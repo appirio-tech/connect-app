@@ -14,6 +14,7 @@
   .FillProjectDetailsWrapper {
     // @extend .wizardWrapper;
     position: relative;
+    min-height: 85px;
 
     &.form-theme-light {
       .FillProjectDetails {
@@ -38,13 +39,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding-top: 20px;
     }
   }
 
   .FillProjectDetails {
 
-    &.hide {
+    .hide {
       display: none;
     }
 
