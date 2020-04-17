@@ -42,7 +42,7 @@ export default class ProjectListNavHeader extends Component {
     e.preventDefault()
     if (this.state.selectedView === e.currentTarget.dataset.view)
       return
-    this.setState({selectedView: e.currentTarget.dataset.view})
+    this.setState({selectedView: e.currentTarget.dataset.view, currentStatus : ''})
     this.props.changeView(e.currentTarget.dataset.view)
   }
 
