@@ -212,7 +212,21 @@ export const projectState = function (state=initialState, action) {
     const { invites, currentUserId, currentUserEmail } = action.payload
     let invite
     if (invites && invites.length > 0) {
-      invite = _.find(invites, m => ((m.userId === currentUserId || m.email === currentUserEmail) && !m.deletedAt && m.status === 'pending'))
+      invite = _.find(invites, inv => (
+        (
+          // user is invited by `handle`
+          inv.userId !== null && inv.userId === currentUserId ||
+          // user is invited by `email` (invite doesn't have `userId`)
+          (
+            inv.userId === null &&
+            inv.email &&
+            currentUserEmail &&
+            inv.email.toLowerCase() === currentUserEmail.toLowerCase()
+          )
+        ) &&
+        !inv.deletedAt &&
+        inv.status === 'pending'
+      ))
     }
     return Object.assign({}, state, {
       showUserInvited: !!invite,
