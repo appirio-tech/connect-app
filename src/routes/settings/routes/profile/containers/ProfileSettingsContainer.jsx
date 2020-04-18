@@ -27,6 +27,7 @@ class ProfileSettingsContainer extends Component {
         user={user}
       >
         <ProfileSettingsFormEnhanced
+          user={user}
           values={profileSettings}
           saveSettings={saveProfileSettings}
           uploadPhoto={uploadProfilePhoto}
