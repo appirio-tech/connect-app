@@ -179,6 +179,7 @@ class ProfileSettingsForm extends Component {
         <div className="field">
           <div className="label">Avatar</div>
           <ProfileSettingsAvatar
+            user = {this.props.user}
             isUploading={this.props.values.isUploadingPhoto}
             photoUrl={this.props.values.settings.photoUrl}
             uploadPhoto={this.props.uploadPhoto}
@@ -299,6 +300,7 @@ ProfileSettingsForm.propTypes = {
   values: PropTypes.object.isRequired,
   saveSettings: PropTypes.func.isRequired,
   uploadPhoto: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
 }
 
 export default ProfileSettingsForm
