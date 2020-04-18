@@ -83,7 +83,13 @@ export function removeProjectMember(projectId, memberId, isUserLeaving) {
   return (dispatch) => {
     return dispatch({
       type: REMOVE_PROJECT_MEMBER,
-      payload: removeMember(projectId, memberId),
+      payload: removeMember(projectId, memberId).then(response =>
+        // we have to add delay before applying the result of removing a project member
+        // (only if the current user is leaving and not when a different user is removed)
+        // as it takes some time for the update to be reindexed in ES so the new state is reflected
+        // everywhere
+        isUserLeaving ? delay(ES_REINDEX_DELAY).then(() => response) : response
+      ),
       meta: { isUserLeaving }
     })
   }
