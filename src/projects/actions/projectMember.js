@@ -19,6 +19,7 @@ import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   PROJECT_ROLE_CUSTOMER,
   CLEAR_MEMBER_SUGGESTIONS,
   ES_REINDEX_DELAY,
+  PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED,
 } from '../../config/constants'
 import { delay } from '../../helpers/utils'
 
@@ -157,12 +158,14 @@ export function acceptOrRefuseInvite(projectId, item, currentUser) {
     const inviteId = item.id ? item.id : projectState.userInvitationId
     return dispatch({
       type: ACCEPT_OR_REFUSE_INVITE,
-      payload: updateProjectMemberInvite(projectId, inviteId, item.status).then(() =>
+      payload: updateProjectMemberInvite(projectId, inviteId, item.status).then(() => {
         // we have to add delay before applying the result of accepting/declining invitation
         // as it takes some time for the update to be reindexed in ES so the new state is reflected
         // everywhere
-        delay(ES_REINDEX_DELAY).then(() => dispatch(loadProjectMembers(projectId)))
-      ),
+        // if request is accepted, then also refresh project members
+        const inviteAccepted = item.status === PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED
+        return delay(ES_REINDEX_DELAY).then(() => inviteAccepted ? dispatch(loadProjectMembers(projectId)) : _.noop)
+      }),
       meta: { projectId, inviteId, currentUser },
     })
   }
