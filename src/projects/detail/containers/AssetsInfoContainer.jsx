@@ -836,7 +836,7 @@ class AssetsInfoContainer extends React.Component {
             </div>
             {(showAddNewButton) && (
               <div styleName="assets-header-button">
-                <button type="button" onClick={newButtonClick} styleName="add-new-button">Add new...</button>
+                <button type="button" onClick={newButtonClick} styleName="add-new-button" className="tc-btn tc-btn-primary tc-btn-sm">Add new...</button>
               </div>)}
           </div>
 
