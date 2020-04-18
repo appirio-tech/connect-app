@@ -158,13 +158,13 @@ export function acceptOrRefuseInvite(projectId, item, currentUser) {
     const inviteId = item.id ? item.id : projectState.userInvitationId
     return dispatch({
       type: ACCEPT_OR_REFUSE_INVITE,
-      payload: updateProjectMemberInvite(projectId, inviteId, item.status).then(() => {
+      payload: updateProjectMemberInvite(projectId, inviteId, item.status).then(response => {
         // we have to add delay before applying the result of accepting/declining invitation
         // as it takes some time for the update to be reindexed in ES so the new state is reflected
         // everywhere
         // if request is accepted, then also refresh project members
         const inviteAccepted = item.status === PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED
-        return delay(ES_REINDEX_DELAY).then(() => inviteAccepted ? dispatch(loadProjectMembers(projectId)) : _.noop)
+        return delay(ES_REINDEX_DELAY).then(() => inviteAccepted ? dispatch(loadProjectMembers(projectId)) : response)
       }),
       meta: { projectId, inviteId, currentUser },
     })
