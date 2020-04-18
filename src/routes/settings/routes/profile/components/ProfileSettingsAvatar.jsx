@@ -23,7 +23,6 @@ class ProfileSettingsAvatar extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     const { isUploading, user } = this.props
     const userName = getFullNameWithFallback(user)
     const label = isUploading ? 'Uploading, please wait' : 'Upload a new photo'
