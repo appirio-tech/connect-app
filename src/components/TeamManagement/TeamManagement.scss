@@ -326,6 +326,9 @@
             font-size: $tc-label-sm;
             color: $tc-dark-blue;
             display: block;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
 
             > span {
               display: block;
