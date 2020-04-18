@@ -7,4 +7,16 @@ body {
   box-sizing: border-box;
   // Prevenet jumping of elements, force scrollbar always-on
   overflow-y: scroll;
+  
+  :global {
+    .tc-btn-primary:hover {
+      background: #3996FF;
+      background-image: -webkit-gradient(linear, left top, left bottom, from(#3996FF), to(#127BF3));
+      background-image: linear-gradient(#3996FF 0%, #127BF3 100%);
+    }
+    
+    .tc-btn-primary:hover,.tc-btn-primary:active,.tc-btn-primary:focus {
+      color: #ffffff;
+    }
+  }
 }
