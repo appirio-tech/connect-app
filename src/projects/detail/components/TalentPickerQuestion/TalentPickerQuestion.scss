@@ -2,29 +2,67 @@
 
 .container {
   font-size: 15px;
-  overflow-x: auto;
+  text-align: left;
+  margin-top: 5px;
 }
 
-.table {
-  text-align: left;
+.header-row {
+  @include roboto;
 
-  td,
-  th {
-    white-space: nowrap;
-    padding: 10px;
+  white-space: nowrap;
+  padding: 0 4px;
+  color: $tc-silver-110;
+  font-size: 13px;
+  line-height: 15px;
+  background-color: $tc-gray-neutral-light;
+  border: 1px solid $tc-gray-neutral-dark;
+  display: flex;
+
+  .body {
+    @include roboto;
+
+    color: $tc-gray-100;
+  }
+}
+
+
+.col-title {
+  padding: 15px 7.5px;
+  flex-grow: 0;
+  flex-shrink: 0;
+
+  &.col-duration {
+    width: 120px;
   }
 
-  thead {
-    @include roboto-bold;
+  &.col-people {
+    width: 78px;
   }
 
-  tbody {
-    tr {
-      border: 1px solid $tc-gray-80;
-    }
+  &.col-skill-selection {
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    // Prevents the column from expanding beyond parent due to flex-grow:1
+    min-width: 0;
+  }
+
+  &.col-role {
+    width: 168px;
+  }
+
+  &.col-actions {
+    width: 76px;
   }
 }
 
 .hide {
   display: none;
+}
+
+
+@media screen and (max-width: 959px) {
+  .header-row {
+    display: none;
+  }
 }

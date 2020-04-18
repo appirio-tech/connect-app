@@ -171,7 +171,8 @@ class Accordion extends React.Component {
     case TYPE.SELECT_DROPDOWN: return mapValue(value)
     case TYPE.TALENT_PICKER: {
       const getRoleName = (role) => _.find(options, { role }).roleTitle
-      return _.filter(value, (v) => v.people !== '0').map((v) => `${getRoleName(v.role)}: ${v.people}`).join(', ')
+      const totalPeoplePerRole = _.mapValues(_.groupBy(value, v => v.role), valuesUnderGroup => _.sumBy(valuesUnderGroup, v => Number(v.people)))
+      return _.toPairs(totalPeoplePerRole).filter(([, people]) => people > 0).map(([role, people]) => `${getRoleName(role)} ${people}`).join(', ')
     }
     default: return value
     }

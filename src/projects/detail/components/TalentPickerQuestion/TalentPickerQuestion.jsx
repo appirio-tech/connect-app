@@ -118,34 +118,30 @@ class TalentPickerQuestion extends Component {
     return (
       <div className={cn(wrapperClass)}>
         <div styleName="container">
-          <table styleName="table">
-            <thead>
-              <tr>
-                <th>Role</th>
-                <th>Number of People Required</th>
-                <th>Engagement Duration</th>
-                <th>Skill Required</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {options.length > 0 ? values.map((v, roleIndex) => {
-                const roleSetting = _.find(options, { role: v.role })
-                return (
-                  <TalentPickerRow
-                    key={roleIndex}
-                    rowIndex={roleIndex}
-                    value={v}
-                    canBeDeleted={this.canDeleteRole}
-                    roleSetting={roleSetting}
-                    onChange={this.handleValueChange}
-                    onDeleteRow={this.removeRole}
-                    onAddRow={this.insertRole}
-                  />
-                )
-              }) : null}
-            </tbody>
-          </table>
+          <div styleName="header-row">
+            <div styleName="col-title col-role">Role</div>
+            <div styleName="col-title col-people">People</div>
+            <div styleName="col-title col-duration">Duration (months)</div>
+            <div styleName="col-title col-skill-selection">Skills</div>
+            <div styleName="col-title col-actions"/>
+          </div>
+          <div styleName="body">
+            {options.length > 0 ? values.map((v, roleIndex) => {
+              const roleSetting = _.find(options, { role: v.role })
+              return (
+                <TalentPickerRow
+                  key={roleIndex}
+                  rowIndex={roleIndex}
+                  value={v}
+                  canBeDeleted={this.canDeleteRole}
+                  roleSetting={roleSetting}
+                  onChange={this.handleValueChange}
+                  onDeleteRow={this.removeRole}
+                  onAddRow={this.insertRole}
+                />
+              )
+            }) : null}
+          </div>
         </div>
         {hasError ? <p className="error-message">{errorMessage}</p> : null}
       </div>
