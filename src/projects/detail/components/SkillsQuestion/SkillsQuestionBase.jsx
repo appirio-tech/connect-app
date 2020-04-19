@@ -129,12 +129,10 @@ class SkillsQuestion extends React.PureComponent {
   onSelectType(value) {
     const { getValue } = this.props
     const { availableOptions } = this.state
-    const isInAvailableOptions = _.some(availableOptions, option => {
-      return option && option.name.trim().toLowerCase() === value.replace(';', '').trim().toLowerCase();
-    })
     const correspondingOption = availableOptions.find(option => {
       return option.name.trim().toLowerCase()===value.replace(';', '').trim().toLowerCase()
     });
+    const isInAvailableOptions = !!correspondingOption
     const indexOfSpace = value.indexOf(' ')
     const indexOfSemiColon = value.indexOf(';')
 
