@@ -8,10 +8,22 @@ body {
   box-sizing: border-box;
   // Prevenet jumping of elements, force scrollbar always-on
   overflow-y: scroll;
-  
+
   :global {
-    .tc-btn-primary {
-      &:hover,&:active,&:focus {
+    // fix hover styles for links:
+    // as links don't have `:enabled` prop we have to apply the same style as we apply to `:enabled` elements
+    // see https://github.com/appirio-tech/tc-ui/blob/feature/connectv2/src/styles/_buttons.scss#L66-L74
+    // we still have to make sure that this common style is not applied to `:disabled` elements so we use
+    // `:not(:disabled)` selector
+    //
+    // TODO move this fix to `tc-ui`
+    // most likely what we can do is to update rules in
+    // https://github.com/appirio-tech/tc-ui/blob/feature/connectv2/src/styles/_buttons.scss
+    // from `:enabled` to `:not(:disabled)`
+    .tc-btn-primary:not(:disabled) {
+      &:hover,
+      &:active,
+      &:focus {
         color: $tc-white;
       }
 
