@@ -279,6 +279,18 @@ export default {
     ],
   },
 
+  SEE_MY_PROJECTS_FILTER: {
+    _meta: {
+      group: 'My Projects Filter',
+      title: 'My Projects Filter',
+    },
+    allowRule: {
+      topcoderRoles: [
+        ..._.difference(TOPCODER_ALL, [ROLE_CONNECT_COPILOT, ROLE_TOPCODER_USER])
+      ]
+    }
+  },
+
   /*
     DEMO RULES
 
