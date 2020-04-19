@@ -212,8 +212,9 @@ class TopcoderManagementDialog extends React.Component {
                         </div>
                       )
                     }
-                    const types = ['Observer', 'Copilot', 'Manager', 'Account Manager', 'Account Executive', 'Program Manager', 'Solution Architect', 'Project Manager']
+                    let types = ['Copilot', 'Manager', 'Account Manager', 'Account Executive', 'Program Manager', 'Solution Architect', 'Project Manager']
                     const currentType = role
+                    types =  currentType === 'Observer'? ['Observer', ...types] : [...types] 
                     const onClick = (type) => {
                       this.onUserRoleChange(member.userId, member.id, type)
                     }
@@ -360,7 +361,7 @@ class TopcoderManagementDialog extends React.Component {
                 name="role"
                 value={this.state.userRole}
                 theme="role-drop-down default"
-                options={this.roles}
+                options={this.roles.filter(role => role.title !== 'Observer')}
                 onSelect={this.handleRoles}
               />
             </Formsy.Form>

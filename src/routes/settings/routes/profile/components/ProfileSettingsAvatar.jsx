@@ -4,7 +4,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FileBtn from '../../../../../components/FileBtn/FileBtn'
-import { getAvatarResized } from '../../../../..//helpers/tcHelpers'
+import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
+import { getFullNameWithFallback, getAvatarResized } from '../../../../..//helpers/tcHelpers'
 import './ProfileSettingsAvatar.scss'
 
 class ProfileSettingsAvatar extends React.Component {
@@ -22,11 +23,14 @@ class ProfileSettingsAvatar extends React.Component {
   }
 
   render() {
-    const { photoUrl, isUploading } = this.props
+    const { isUploading, user } = this.props
+    const userName = getFullNameWithFallback(user)
     const label = isUploading ? 'Uploading, please wait' : 'Upload a new photo'
     return (
       <div className="profile-settings-avatar">
-        <img className="photo" src={getAvatarResized(photoUrl, 160)} />
+        <div styleName="avatar" >
+          <Avatar avatarUrl={getAvatarResized(user.photoURL || '', 160)} userName={userName} size={80}/>
+        </div>
         <div className="controls">
           <FileBtn
             label={label}
@@ -41,9 +45,9 @@ class ProfileSettingsAvatar extends React.Component {
 }
 
 ProfileSettingsAvatar.propTypes = {
-  photoUrl: PropTypes.string,
+  photoURL: PropTypes.string,
   isUploading: PropTypes.bool,
-  uploadPhoto: PropTypes.func
+  uploadPhoto: PropTypes.func,
 }
 
 export default ProfileSettingsAvatar

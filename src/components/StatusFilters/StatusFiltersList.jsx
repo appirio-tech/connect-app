@@ -13,7 +13,7 @@ const StatusFiltersList = ({ statuses, currentStatus, onStatusClick }) => (
       <li 
         key={status.val || 'null'} 
         className={cn(style.item, { [style.active]: status.val === currentStatus })} 
-        onClick={() => onStatusClick(status.val)}
+        onClick={() => status.val !== currentStatus ? onStatusClick(status.val) : ''}
       >
         {status.label}
       </li>
