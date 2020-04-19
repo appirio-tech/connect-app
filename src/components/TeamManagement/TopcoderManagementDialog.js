@@ -150,6 +150,7 @@ class TopcoderManagementDialog extends React.Component {
     const { processingInviteRequestIds } = this.state
     const showRemove = hasPermission(PERMISSIONS.MANAGE_TOPCODER_TEAM)
     const showApproveDecline = currentUser.isAdmin || currentUser.isCopilotManager
+    const showSuggestions = hasPermission(PERMISSIONS.SEE_MEMBER_SUGGESTIONS)
     let i = 0
 
     return (
@@ -355,6 +356,7 @@ class TopcoderManagementDialog extends React.Component {
               currentUser={currentUser}
               selectedMembers={selectedMembers}
               disabled={processingInvites || (!currentUser.isAdmin && !isMember && !currentUser.isCopilotManager)}
+              showSuggestions={showSuggestions}
             />
             { this.state.showAlreadyMemberError && <div className="error-message">
               Project Member(s) can\'t be invited again. Please remove them from list.

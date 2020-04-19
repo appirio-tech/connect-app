@@ -72,6 +72,7 @@ import {
   ROLE_SOLUTION_ARCHITECT,
   ROLE_PROJECT_MANAGER,
   ROLE_CONNECT_COPILOT,
+  ROLE_CONNECT_COPILOT_MANAGER,
 } from './constants'
 /* eslint-enable no-unused-vars  */
 
@@ -279,6 +280,20 @@ export default {
     ],
   },
 
+  SEE_MEMBER_SUGGESTIONS: {
+    _meta: {
+      group: 'View Member Suggestions',
+      title: 'Member Suggestions'
+    },
+    topcoderRoles: [
+      ROLE_ADMINISTRATOR,
+      ROLE_CONNECT_ADMIN,
+      ROLE_CONNECT_MANAGER,
+      ROLE_CONNECT_ACCOUNT_MANAGER,
+      ROLE_CONNECT_COPILOT_MANAGER
+    ], 
+  },
+  
   SEE_MY_PROJECTS_FILTER: {
     _meta: {
       group: 'My Projects Filter',

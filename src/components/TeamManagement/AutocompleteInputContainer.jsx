@@ -48,7 +48,7 @@ class AutocompleteInputContainer extends React.Component {
 
     if (inputValue.length >= AUTOCOMPLETE_TRIGGER_LENGTH) {
       // When customer user is typing a user handle to invite we should not try to show suggestions as we always get error 403
-      if (!currentUser.isCustomer) {
+      if (this.props.showSuggestions) {
         this.props.onLoadUserSuggestions(inputValue)
       }
     } else {
