@@ -11,11 +11,11 @@ body {
   
   :global {
     .tc-btn-primary {
-      &:hover {
+      &:hover,&:active,&:focus {
         color: $tc-white;
       }
 
-      &:hover,&:active,&:focus {
+      &:hover {
         @include background-gradient(#3996FF, #127BF3);
       }
     }
