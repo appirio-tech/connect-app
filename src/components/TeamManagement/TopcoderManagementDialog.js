@@ -10,7 +10,10 @@ import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpe
 import SelectDropdown from '../SelectDropdown/SelectDropdown'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import AutocompleteInputContainer from './AutocompleteInputContainer'
-import {PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PENDING} from '../../config/constants'
+import {
+  PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PENDING,
+  PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED, PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED,
+} from '../../config/constants'
 import PERMISSIONS from '../../config/permissions'
 import {hasPermission} from '../../helpers/permissions'
 import { compareEmail, compareHandles } from '../../helpers/utils'
@@ -266,7 +269,7 @@ class TopcoderManagementDialog extends React.Component {
                 this.setState(prevState => ({ processingInviteRequestIds: [ ...prevState.processingInviteRequestIds, invite.id ] }))
                 approveOrDecline({
                   id: invite.id,
-                  status: 'request_approved'
+                  status: PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED
                 }).then(() => {
                   this.setState(prevState => ({ processingInviteRequestIds: _.xor(prevState.processingInviteRequestIds, [invite.id]) }))
                 })
@@ -275,7 +278,7 @@ class TopcoderManagementDialog extends React.Component {
                 this.setState(prevState => ({ processingInviteRequestIds: [ ...prevState.processingInviteRequestIds, invite.id ] }))
                 approveOrDecline({
                   id: invite.id,
-                  status: 'request_rejected'
+                  status: PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED
                 }).then(() => {
                   this.setState(prevState => ({ processingInviteRequestIds: _.xor(prevState.processingInviteRequestIds, [invite.id]) }))
                 })

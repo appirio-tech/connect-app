@@ -232,9 +232,19 @@ export const projectState = function (state=initialState, action) {
     })
 
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
+    const { id: inviteId } = action.payload
+    const invites = _.filter(state.project.invites, m => m.id !== inviteId)
     return Object.assign({}, state, {
       showUserInvited: false,
       inviteError: false,
+      project: {
+        ...state.project,
+        invites
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
+        invites
+      }
     })
   }
 
