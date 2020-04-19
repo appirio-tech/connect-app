@@ -1,4 +1,5 @@
 @import '~tc-ui/src/styles/tc-styles';
+@import '~tc-ui/src/styles/tc-includes';
 // This is the partial where we load all the Roboto fonts for Webpack
 @import 'fonts';
 
@@ -7,4 +8,16 @@ body {
   box-sizing: border-box;
   // Prevenet jumping of elements, force scrollbar always-on
   overflow-y: scroll;
+  
+  :global {
+    .tc-btn-primary {
+      &:hover,&:active,&:focus {
+        color: $tc-white;
+      }
+
+      &:hover {
+        @include background-gradient(#3996FF, #127BF3);
+      }
+    }
+  }
 }
