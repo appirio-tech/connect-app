@@ -175,6 +175,7 @@ export const projectTopics = function (state=initialState, action) {
     feed.posts = feed.posts || []
     if (feed.posts.length) {
       feed.posts[0].rawContent = rawContent
+      feed.posts[0].links = getLinksFromPost(rawContent)
     }
     const feedUpdateQuery = {}
     feedUpdateQuery[tag] = { topics: { $unshift: [feed] }, totalCount: {$apply: (n) => n + 1} }
@@ -407,6 +408,7 @@ export const projectTopics = function (state=initialState, action) {
     const rawContent = _.get(action, 'meta.rawContent', null)
     const comment = payload.comment
     comment.rawContent = rawContent
+    comment.links = getLinksFromPost(rawContent)
     // find feed index from the state
     const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
@@ -510,6 +512,7 @@ export const projectTopics = function (state=initialState, action) {
         rawContent: { $set : rawContent },
         body: { $set : savedComment.body },
         attachments: { $set : savedComment.attachments },
+        links: { $set: getLinksFromPost(savedComment.rawContent) },
         updatedDate: { $set : savedComment.updatedDate },
         edited: {$set : true }
       })
