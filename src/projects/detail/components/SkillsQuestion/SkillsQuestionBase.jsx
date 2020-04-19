@@ -131,7 +131,7 @@ class SkillsQuestion extends React.PureComponent {
     const { availableOptions } = this.state
     const correspondingOption = availableOptions.find(option => {
       return option.name.trim().toLowerCase()===value.replace(';', '').trim().toLowerCase()
-    });
+    })
     const isInAvailableOptions = !!correspondingOption
     const indexOfSpace = value.indexOf(' ')
     const indexOfSemiColon = value.indexOf(';')
@@ -226,7 +226,7 @@ class SkillsQuestion extends React.PureComponent {
             noOptionsMessage={() => 'No results found'}
             options={selectGroupOptions}
             isDisabled={questionDisabled}
-            
+
           />
         </div>
         { hasError && (<p styleName="error-message">{errorMessage}</p>) }
