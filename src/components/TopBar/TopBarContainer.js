@@ -19,7 +19,7 @@ import {
 } from '../../config/constants'
 import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
 import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpers.js'
-import { login } from 'tc-accounts'
+import { login, logout } from 'tc-accounts'
 
 require('./TopBarContainer.scss')
 
@@ -82,7 +82,8 @@ class TopBarContainer extends React.Component {
       evt.preventDefault()
       window.analytics && window.analytics.reset()
       window.sessionStorage && window.sessionStorage.clear()
-      window.location = logoutLink
+      //window.location = logoutLink
+      logout()
     }
 
     const loginClick = () => {
