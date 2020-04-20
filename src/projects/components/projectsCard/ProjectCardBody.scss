@@ -13,7 +13,10 @@
       .read-more-link {
         white-space: nowrap;
         color: $tc-dark-blue;
-        cursor: pointer;
+
+        & .link {
+          cursor: pointer;
+        }
       }
     }
   
