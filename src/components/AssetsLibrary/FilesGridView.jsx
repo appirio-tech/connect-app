@@ -24,6 +24,8 @@ import {
   PROJECT_ASSETS_SHARED_WITH_TOPCODER_MEMBERS,
   PROJECT_FEED_TYPE_MESSAGES
 } from '../../config/constants'
+import { hasPermission } from '../../helpers/permissions'
+import PERMISSIONS from '../../config/permissions'
 
 let selectedLink
 let clearing = false
@@ -251,7 +253,7 @@ const FilesGridView = ({
               }
               const onEditCancel = () => onEditIntent(-1)
               const handleEditClick = () => onEditIntent(idx)
-              const canEdit = `${link.createdBy}` === `${loggedInUser.userId}`
+              const canEdit = `${link.createdBy}` === `${loggedInUser.userId}` || (hasPermission(PERMISSIONS.MANAGE_NOT_OWN_ATTACHEMENT))
 
               const changeSubFolder = () => {
                 onChangeSubFolder(link)

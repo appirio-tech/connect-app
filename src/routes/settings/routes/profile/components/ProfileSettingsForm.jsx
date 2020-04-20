@@ -13,6 +13,8 @@ import ProfileSettingsAvatar from './ProfileSettingsAvatar'
 import FormsySelect from '../../../../../components/Select/FormsySelect'
 import ISOCountries from '../../../../../helpers/ISOCountries'
 import { formatPhone } from '../../../../../helpers/utils'
+import { hasPermission } from '../../../../../helpers/permissions'
+import PERMISSIONS from '../../../../../config/permissions'
 import './ProfileSettingsForm.scss'
 
 const countries = _.orderBy(ISOCountries, ['name'], ['asc']).map((country) => ({
@@ -180,9 +182,6 @@ class ProfileSettingsForm extends Component {
 
   render() {
     const {
-      isCopilot,
-      isCustomer,
-      isManager,
       showBusinessEmail,
       showAvatar,
       showCompanyName,
@@ -199,8 +198,9 @@ class ProfileSettingsForm extends Component {
       buttonExtraClassName,
     } = this.props
 
-    const disablePhoneInput =
-      this.props.values.settings.businessPhone && isCopilot && !isManager
+    const disablePhoneInput = this.props.values.settings.businessPhone && !hasPermission(PERMISSIONS.UPDATE_USER_PROFILE_PHONE)
+    const disableCompanyInput = this.props.values.settings.companyName && !hasPermission(PERMISSIONS.UPDATE_USER_PROFILE_COMPANY)
+
     return (
       <Formsy.Form
         ref="form"
@@ -215,6 +215,7 @@ class ProfileSettingsForm extends Component {
           <div className="field">
             <div className="label">Avatar</div>
             <ProfileSettingsAvatar
+              user = {this.props.user}
               isUploading={this.props.values.isUploadingPhoto}
               photoUrl={this.props.values.settings.photoUrl}
               uploadPhoto={this.props.uploadPhoto}
@@ -269,9 +270,7 @@ class ProfileSettingsForm extends Component {
             'Company name',
             'companyName',
             true,
-            this.props.values.settings.companyName &&
-              (isCustomer || isCopilot) &&
-              !isManager
+            disableCompanyInput
           )}
         <div className="field">
           {isRequiredCountry ? (
@@ -420,9 +419,6 @@ ProfileSettingsForm.propTypes = {
   values: PropTypes.object.isRequired,
   saveSettings: PropTypes.func.isRequired,
   uploadPhoto: PropTypes.func.isRequired,
-  isCustomer: PropTypes.bool.isRequired,
-  isManager: PropTypes.bool.isRequired,
-  isCopilot: PropTypes.bool.isRequired,
   showBusinessEmail: PropTypes.bool,
   showAvatar: PropTypes.bool,
   showCompanyName: PropTypes.bool,

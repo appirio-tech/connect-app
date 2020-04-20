@@ -53,4 +53,7 @@
     border-radius: 6px;
     box-shadow: 0px 1px 3px 0px $tc-gray-30;
   }
+  &.active {
+    cursor: default;
+  }
 }

@@ -21,13 +21,13 @@ import {
   PROJECT_FEED_TYPE_MESSAGES
 } from '../../config/constants'
 import FilterColHeader from './FilterColHeader'
+import { hasPermission } from '../../helpers/permissions'
+import PERMISSIONS from '../../config/permissions'
 
 let selectedLink
 let clearing = false
 
 const LinksGridView = ({
-  canDelete,
-  canEdit,
   links,
   linkToDelete,
   linkToEdit,
@@ -38,6 +38,7 @@ const LinksGridView = ({
   onEdit,
   onEditIntent,
   title,
+  loggedInUser,
   formatModifyDate,
   formatFolderTitle,
   assetsMembers,
@@ -201,7 +202,7 @@ const LinksGridView = ({
                 selectedLink = link
               }
               const owner = _.find(assetsMembers, m => m.userId === _.parseInt(link.createdBy))
-
+              const canEdit = `${link.createdBy}` === `${loggedInUser.userId}` || (hasPermission(PERMISSIONS.MANAGE_NOT_OWN_ATTACHEMENT))
               if (Array.isArray(link.children) && link.children.length > 0) {
                 return (
                   <li styleName="assets-gridview-row" onClick={changeSubFolder} key={'assets-gridview-folder-' + idx}>
@@ -275,10 +276,10 @@ const LinksGridView = ({
                     </div>
                     <div styleName="flex-item item-modified">{formatModifyDate(link)}</div>
                     <div styleName="flex-item item-action">
-                      {(canEdit || canDelete) && (
+                      {(canEdit) && (
                         <ItemOperations
                           canEdit={canEdit}
-                          canDelete={canDelete}
+                          canDelete={canEdit}
                           handleEditClick={handleEditClick}
                           handleDeleteClick={handleDeleteClick}
                         />)}
@@ -299,6 +300,7 @@ LinksGridView.propTypes = {
   onChangeSubFolder: PropTypes.func,
   onDelete: PropTypes.func,
   title: PropTypes.string,
+  loggedInUser: PropTypes.object.isRequired,
   formatModifyDate: PropTypes.func.isRequired,
   formatFolderTitle: PropTypes.func.isRequired,
   setFilter: PropTypes.func.isRequired,
