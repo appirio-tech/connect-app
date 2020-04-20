@@ -9,6 +9,7 @@ import PositiveNumberInput from '../../../../components/PositiveNumberInput/Posi
 import ProductTypeIcon from '../../../../components/ProductTypeIcon'
 
 import styles from './TalentPickerRow.scss'
+import { SCREEN_BREAKPOINT_MD, SCREEN_BREAKPOINT_RG } from '../../../../config/constants'
 
 const always = () => true
 const never = () => false
@@ -50,7 +51,6 @@ class TalentPickerRow extends React.PureComponent {
 
   render() {
     const { value, canBeDeleted, roleSetting, rowIndex } = this.props
-    const customBreakpoint = 960
 
     /* Different columns are defined here and used in componsing mobile/desktop views below */
     const roleColumn = (
@@ -79,7 +79,9 @@ class TalentPickerRow extends React.PureComponent {
 
     const peopleColumn = (
       <div styleName="col col-people">
-        <label className="tc-label" styleName="label">People</label>
+        <label className="tc-label" styleName="label">
+          People
+        </label>
         <PositiveNumberInput
           type="number"
           styleName="noMargin"
@@ -92,7 +94,9 @@ class TalentPickerRow extends React.PureComponent {
 
     const durationColumn = (
       <div styleName="col col-duration">
-        <label className="tc-label" styleName="label">Duration</label>
+        <label className="tc-label" styleName="label">
+          Duration (months)
+        </label>
         <PositiveNumberInput
           type="number"
           styleName="noMargin"
@@ -105,7 +109,9 @@ class TalentPickerRow extends React.PureComponent {
 
     const skillSelectionColumn = (
       <div styleName="col col-skill-selection">
-        <label className="tc-label" styleName="label">Skills</label>
+        <label className="tc-label" styleName="label">
+          Skills
+        </label>
         {/*
           Please do not refactor getValue prop's value to a binded function with constant reference.
           SkillsQuestion is a pure component. If all the props are constant across renders, SkillsQuestion cannot detect the change in value.skills.
@@ -128,31 +134,54 @@ class TalentPickerRow extends React.PureComponent {
     )
 
     return (
-      <MediaQuery minWidth={customBreakpoint}>
+      <MediaQuery minWidth={SCREEN_BREAKPOINT_RG}>
         {(matches) => {
           return matches ? (
-            // Desktop Layout (960px+)
-            <div styleName="row">
-              {roleColumn}
-              {peopleColumn}
-              {durationColumn}
-              {skillSelectionColumn}
-              {actionsColumn}
-            </div>
-          ) : (
-            // Mobile Layout (till 959px)
+            // Desktop Layout (992px+)
             <div styleName="row">
               <div styleName="inner-row">
                 {roleColumn}
-                {actionsColumn}
-              </div>
-
-              <div styleName="inner-row">
                 {peopleColumn}
                 {durationColumn}
-                {skillSelectionColumn}
+                {actionsColumn}
               </div>
+              <div styleName="inner-row">{skillSelectionColumn}</div>
             </div>
+          ) : (
+            <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+              {(matches) => {
+                return matches ? (
+                  // Tablet Layout (768px to 991px)
+                  <div styleName="row">
+                    <div styleName="inner-row">
+                      {roleColumn}
+                      {actionsColumn}
+                    </div>
+
+                    <div styleName="inner-row">
+                      {peopleColumn}
+                      {durationColumn}
+                      {skillSelectionColumn}
+                    </div>
+                  </div>
+                ) : (
+                  // Mobile Layout (till 767px)
+                  <div styleName="row">
+                    <div styleName="inner-row">
+                      {roleColumn}
+                      {actionsColumn}
+                    </div>
+
+                    <div styleName="inner-row">
+                      {peopleColumn}
+                      {durationColumn}
+                    </div>
+
+                    <div styleName="inner-row">{skillSelectionColumn}</div>
+                  </div>
+                )
+              }}
+            </MediaQuery>
           )
         }}
       </MediaQuery>
@@ -168,13 +197,13 @@ TalentPickerRow.propTypes = {
   onDeleteRow: PT.func.isRequired,
   roleSetting: PT.shape({
     roleTitle: PT.string.isRequired,
-    skillsCategories: PT.arrayOf(PT.string)
+    skillsCategories: PT.arrayOf(PT.string),
   }).isRequired,
   value: PT.shape({
     role: PT.string.isRequired,
     people: PT.string.isRequired,
     duration: PT.string.isRequired,
-    skills: PT.array
+    skills: PT.array,
   }),
 }
 

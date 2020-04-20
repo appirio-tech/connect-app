@@ -122,7 +122,6 @@ class TalentPickerQuestion extends Component {
             <div styleName="col-title col-role">Role</div>
             <div styleName="col-title col-people">People</div>
             <div styleName="col-title col-duration">Duration (months)</div>
-            <div styleName="col-title col-skill-selection">Skills</div>
             <div styleName="col-title col-actions"/>
           </div>
           <div styleName="body">

@@ -31,19 +31,11 @@
   flex-grow: 0;
   flex-shrink: 0;
 
-  &.col-duration {
-    width: 120px;
-  }
-
+  &.col-duration,
   &.col-people {
-    width: 78px;
-  }
-
-  &.col-skill-selection {
+    width: 50%;
     flex-grow: 1;
     flex-shrink: 1;
-
-    // Prevents the column from expanding beyond parent due to flex-grow:1
     min-width: 0;
   }
 

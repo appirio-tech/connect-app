@@ -1,4 +1,5 @@
 @import "~tc-ui/src/styles/tc-includes";
+@import "../../../../styles/includes";
 
 .action-btn {
   cursor: pointer;
@@ -27,37 +28,46 @@
 .row {
   border: 1px solid $tc-gray-neutral-dark;
   border-top-width: 0;
-  display: flex;
   white-space: nowrap;
-  padding: 0 4px;
+  padding: 4px;
   line-height: 20px;
   font-size: 13px;
   vertical-align: top;
+
+  &:first-child {
+    border-top-width: 1px;
+  }
+}
+
+.inner-row {
+  width: 100%;
+  display: flex;
 }
 
 .col {
-  padding: 13px 7.5px;
+  padding: 4px 7.5px;
   flex-grow: 0;
   flex-shrink: 0;
 
-  &.col-duration {
-    width: 120px;
-  }
-
+  &.col-duration,
   &.col-people {
-    width: 78px;
+    width: 50%;
   }
 
   &.col-skill-selection {
     flex-grow: 1;
     flex-shrink: 1;
+    margin-bottom: 4px;
 
     // Prevents the column from expanding beyond parent due to flex-grow:1
     min-width: 0;
   }
 
   &.col-role {
-    width: 168px;
+    flex-grow: 1;
+
+    // Prevents the column from expanding beyond parent due to flex-grow:1
+    min-width: 0;
   }
 
   &.col-actions {
@@ -73,18 +83,18 @@
   }
 
   .label {
-    display: none;
+    display: block;
   }
 }
 
 .col-role-container {
   display: flex;
   align-items: center;
-  margin-top: 4px;
 }
 
 .col-actions-container {
-  margin-top: 6px;
+  justify-content: flex-end;
+  margin-top: 5px;
 }
 
 .col-role {
@@ -101,41 +111,46 @@
   text-overflow: ellipsis;
 }
 
-@media screen and (max-width: 959px) {
-  .row {
-    flex-wrap: wrap;
-    padding: 4px;
-
-    &:first-child {
-      border-top-width: 1px;
+// Tablet Layout (768px+)
+@media screen and (min-width: $screen-md) {
+  .col {
+    &.col-duration {
+      width: 138px;
     }
+
+    &.col-people {
+      width: 78px;
+    }
+  }
+}
+
+// Desktop Layout (992px+)
+@media screen and (min-width: $screen-rg) {
+  .row {
+    padding: 8px 4px;
   }
 
   .col {
-    padding: 8px 7.5px;
-
     &.col-role {
+      width: 168px;
+      flex-grow: 0;
+    }
+
+    &.col-duration,
+    &.col-people {
+      width: 50%;
       flex-grow: 1;
-
-      // Prevents the column from expanding beyond parent due to flex-grow:1
+      flex-shrink: 1;
       min-width: 0;
+
+      .label {
+        display: none;
+      }
     }
 
-    &.col-duration {
-      width: 78px;
+    &.col-skill-selection {
+      margin-left: 168px;
+      margin-right: 76px;
     }
-
-    .label {
-      display: block;
-    }
-  }
-
-  .inner-row {
-    display: flex;
-    width: 100%;
-  }
-
-  .col-actions-container {
-    justify-content: flex-end;
   }
 }
