@@ -51,7 +51,7 @@ function ProjectCardBody({ project, projectCanBeActive, currentMemberRole, descL
         line={descLinesCount}
         truncateText="..."
         text={_.unescape(project.description)}
-        textTruncateChild={showLink ? <span className="read-more-link link" onClick={(evt) => { goToProjectDetails(evt, showLinkURL, projectDetailsURL) }}>read more</span> : <span className="read-more-link">read more</span>}
+        textTruncateChild={showLink ? <span className="read-more-link" onClick={(evt) => { goToProjectDetails(evt, showLinkURL, projectDetailsURL) }}>read more</span> : <span className="read-more-link">read more</span>}
       />
       {!hideStatus && <div className="project-status">
         {(project.status !== PROJECT_STATUS_ACTIVE || progress === 0) &&
