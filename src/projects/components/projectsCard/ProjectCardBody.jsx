@@ -31,11 +31,11 @@ function ProjectCardBody({ project, projectCanBeActive, currentMemberRole, descL
     ], currentMemberRole) > -1)))
   )
 
-  const goToProjectDetails = (evt, projectDetailsURL) => {
-    evt.stopPropagation();
-    evt.preventDefault();
-    evt.nativeEvent.stopImmediatePropagation();
-    history.push(projectDetailsURL)
+  const goToProjectDetails = (evt, showLinkURL, projectDetailsURL) => {
+    evt.stopPropagation()
+    evt.preventDefault()
+    evt.nativeEvent.stopImmediatePropagation()
+    history.push(showLinkURL || projectDetailsURL)
   }
 
   const progress = _.get(process, 'percent', 0)
@@ -51,7 +51,7 @@ function ProjectCardBody({ project, projectCanBeActive, currentMemberRole, descL
         line={descLinesCount}
         truncateText="..."
         text={_.unescape(project.description)}
-        textTruncateChild={showLink ? <span className="read-more-link" onClick={(evt) => { goToProjectDetails(evt, projectDetailsURL) }}>read more</span> : <span className="read-more-link">read more</span>}
+        textTruncateChild={showLink ? <span className="read-more-link" onClick={(evt) => { goToProjectDetails(evt, showLinkURL, projectDetailsURL) }}>read more</span> : <span className="read-more-link">read more</span>}
       />
       {!hideStatus && <div className="project-status">
         {(project.status !== PROJECT_STATUS_ACTIVE || progress === 0) &&
