@@ -836,7 +836,7 @@ class AssetsInfoContainer extends React.Component {
             </div>
             {(showAddNewButton) && (
               <div styleName="assets-header-button">
-                <button type="button" onClick={newButtonClick} styleName="add-new-button">Add new...</button>
+                <button type="button" onClick={newButtonClick} className="tc-btn tc-btn-primary tc-btn-sm">Add new...</button>
               </div>)}
           </div>
 
@@ -896,6 +896,7 @@ class AssetsInfoContainer extends React.Component {
                 canEdit={canManageLinks}
                 onDelete={this.removeAttachment}
                 onEdit={this.onEditLink}
+                loggedInUser={loggedInUser}
                 formatModifyDate={formatModifyDate}
                 formatFolderTitle={formatFolderTitle}
                 setFilter={this.setFilter}

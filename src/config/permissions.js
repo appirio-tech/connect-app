@@ -72,6 +72,7 @@ import {
   ROLE_SOLUTION_ARCHITECT,
   ROLE_PROJECT_MANAGER,
   ROLE_CONNECT_COPILOT,
+  ROLE_CONNECT_COPILOT_MANAGER,
 } from './constants'
 /* eslint-enable no-unused-vars  */
 
@@ -157,6 +158,16 @@ export default {
     topcoderRoles: [
       ...TOPCODER_ADMINS,
     ],
+  },
+
+  MANAGE_NOT_OWN_ATTACHEMENT: {
+    _meta: {
+      group: 'Project Plan',
+      title: 'Manage asset libraries files and links',
+    },
+    topcoderRoles: [
+      ...TOPCODER_ADMINS,
+    ]
   },
 
   MANAGE_COMPLETED_PHASE: {
@@ -277,6 +288,32 @@ export default {
     topcoderRoles: [
       ..._.difference(TOPCODER_ALL, [ROLE_TOPCODER_USER, ROLE_CONNECT_COPILOT])
     ],
+  },
+
+  SEE_MEMBER_SUGGESTIONS: {
+    _meta: {
+      group: 'View Member Suggestions',
+      title: 'Member Suggestions'
+    },
+    topcoderRoles: [
+      ROLE_ADMINISTRATOR,
+      ROLE_CONNECT_ADMIN,
+      ROLE_CONNECT_MANAGER,
+      ROLE_CONNECT_ACCOUNT_MANAGER,
+      ROLE_CONNECT_COPILOT_MANAGER
+    ], 
+  },
+  
+  SEE_MY_PROJECTS_FILTER: {
+    _meta: {
+      group: 'My Projects Filter',
+      title: 'My Projects Filter',
+    },
+    allowRule: {
+      topcoderRoles: [
+        ..._.difference(TOPCODER_ALL, [ROLE_CONNECT_COPILOT, ROLE_TOPCODER_USER])
+      ]
+    }
   },
 
   /*

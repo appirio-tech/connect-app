@@ -55,7 +55,7 @@ class StatusFiltersMobile extends React.Component {
             <li
               key={status.val || 'null'}
               className={cn(style.item, { [style.active]: status.val === currentStatus })}
-              onClick={() => this.onStatusClick(status.val)}
+              onClick={() => status.val !== currentStatus ? this.onStatusClick(status.val) : ''}
             >
               {status.label}
             </li>
