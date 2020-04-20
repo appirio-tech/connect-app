@@ -15,7 +15,7 @@ import ISOCountries from '../../../../../helpers/ISOCountries'
 import { formatPhone } from '../../../../../helpers/utils'
 import './ProfileSettingsForm.scss'
 
-const countries = _.orderBy(ISOCountries, ['name'], ['asc']).map(country => ({
+const countries = _.orderBy(ISOCountries, ['name'], ['asc']).map((country) => ({
   label: country.name,
   value: country.name,
 }))
@@ -29,30 +29,43 @@ class ProfileSettingsForm extends Component {
       businessPhoneValid: true,
       countrySelected: null,
       businessPhoneDirty: false,
-      countrySelectionDirty: false
+      countrySelectionDirty: false,
     }
     this.onSubmit = this.onSubmit.bind(this)
     this.onValid = this.onValid.bind(this)
     this.onInvalid = this.onInvalid.bind(this)
     this.onChange = this.onChange.bind(this)
-    this.onBusinessPhoneCountryChange = this.onBusinessPhoneCountryChange.bind(this)
+    this.onBusinessPhoneCountryChange = this.onBusinessPhoneCountryChange.bind(
+      this
+    )
     this.onCountryChange = this.onCountryChange.bind(this)
 
     this.hideCountrySelectAlert = this.hideCountrySelectAlert.bind(this)
     this.hideBusinessPhoneAlert = this.hideBusinessPhoneAlert.bind(this)
   }
 
+  componentDidUpdate() {
+    if (this.refs.form && !this.isValidated && this.props.shouldDoValidateOnStart) {
+      this.refs.form.submit()
+      this.isValidated = true
+    }
+  }
+
   onCountryChange(country) {
     // on country change, country code of business phone should change automatically
-    if (country && country.value && this.state.countrySelected !== country.value) {
+    if (
+      country &&
+      country.value &&
+      this.state.countrySelected !== country.value
+    ) {
       this.setState({
         countrySelected: country.value,
-        countrySelectionDirty: true
+        countrySelectionDirty: true,
       })
     }
   }
 
-  onBusinessPhoneCountryChange({ country, externalChange, isValid}) {
+  onBusinessPhoneCountryChange({ country, externalChange, isValid }) {
     const { countrySelected: previousSelectedCountry } = this.state
 
     if (country && country.code) {
@@ -63,16 +76,16 @@ class ProfileSettingsForm extends Component {
           countrySelected: country.name,
         })
       }
-      if(!this.state.businessPhoneValid && isValid) {
+      if (!this.state.businessPhoneValid && isValid) {
         this.setState({
-          businessPhoneValid: true
+          businessPhoneValid: true,
         })
       }
     }
-    
-    if (this.state.businessPhoneValid && !isValid){
+
+    if (this.state.businessPhoneValid && !isValid) {
       this.setState({
-        businessPhoneValid: false
+        businessPhoneValid: false,
       })
     }
 
@@ -80,32 +93,35 @@ class ProfileSettingsForm extends Component {
     // But it was automatically changed due to country selection change. In such case, we should show
     // the alert under country selection only.
     const countryName = country && country.name
-    const countryCodeChanged = countryName && previousSelectedCountry && countryName !== previousSelectedCountry
+    const countryCodeChanged =
+      countryName &&
+      previousSelectedCountry &&
+      countryName !== previousSelectedCountry
     if (!externalChange && countryCodeChanged) {
       this.setState({
-        businessPhoneDirty: true
+        businessPhoneDirty: true,
       })
     }
   }
 
   hideCountrySelectAlert() {
     this.setState({
-      countrySelectionDirty: false
+      countrySelectionDirty: false,
     })
   }
 
-  hideBusinessPhoneAlert () {
+  hideBusinessPhoneAlert() {
     this.setState({
-      businessPhoneDirty: false
+      businessPhoneDirty: false,
     })
   }
 
-  getField(label, name, isRequired=false, isDisabled=false) {
+  getField(label, name, isRequired = false, isDisabled = false) {
     let validations = null
     if (name === 'businessPhone') {
       validations = {
         // use same regexp as on server side
-        matchRegexp: /^\+(?:[0-9] ?){6,14}[0-9]$/
+        matchRegexp: /^\+(?:[0-9] ?){6,14}[0-9]$/,
       }
     }
 
@@ -113,7 +129,7 @@ class ProfileSettingsForm extends Component {
       <div className="field">
         <div className="label">
           <span styleName="fieldLabelText">{label}</span>&nbsp;
-          {isRequired && <sup styleName="requiredMarker">*</sup> }
+          {isRequired && <sup styleName="requiredMarker">*</sup>}
         </div>
         <TCFormFields.TextInput
           wrapperClass="input-field"
@@ -144,16 +160,16 @@ class ProfileSettingsForm extends Component {
 
     this.setState({
       businessPhoneDirty: false,
-      countrySelectionDirty: false
+      countrySelectionDirty: false,
     })
   }
 
   onValid() {
-    this.setState({valid: true})
+    this.setState({ valid: true })
   }
 
   onInvalid() {
-    this.setState({valid: false})
+    this.setState({ valid: false })
   }
 
   onChange(currentValues, isChanged) {
@@ -163,106 +179,177 @@ class ProfileSettingsForm extends Component {
   }
 
   render() {
-    const { isCopilot, isCustomer, isManager } = this.props
+    const {
+      isCopilot,
+      isCustomer,
+      isManager,
+      showBusinessEmail,
+      showAvatar,
+      showCompanyName,
+      showTitle,
+      showBusinessPhone,
+      isRequiredTimeZone,
+      isRequiredCountry,
+      isRequiredWorkingHours,
+      isRequiredBusinessEmail,
+      submitButton,
+      showBackButton,
+      onBack,
+      shouldShowTitle,
+      buttonExtraClassName,
+    } = this.props
 
-    const disablePhoneInput = this.props.values.settings.businessPhone && isCopilot && !isManager
+    const disablePhoneInput =
+      this.props.values.settings.businessPhone && isCopilot && !isManager
     return (
       <Formsy.Form
+        ref="form"
         className="profile-settings-form"
         onInvalid={this.onInvalid}
         onValid={this.onValid}
         onValidSubmit={this.onSubmit}
         onChange={this.onChange}
       >
-        <div className="section-heading">Personal information</div>
-        <div className="field">
-          <div className="label">Avatar</div>
-          <ProfileSettingsAvatar
-            isUploading={this.props.values.isUploadingPhoto}
-            photoUrl={this.props.values.settings.photoUrl}
-            uploadPhoto={this.props.uploadPhoto}
-          />
-        </div>
+        {shouldShowTitle && (<div className="section-heading">Personal information</div>)}
+        {showAvatar && (
+          <div className="field">
+            <div className="label">Avatar</div>
+            <ProfileSettingsAvatar
+              isUploading={this.props.values.isUploadingPhoto}
+              photoUrl={this.props.values.settings.photoUrl}
+              uploadPhoto={this.props.uploadPhoto}
+            />
+          </div>
+        )}
         {this.getField('First Name', 'firstName', true)}
         {this.getField('Last Name', 'lastName', true)}
-        {this.getField('Title', 'title', true)}
+        {showTitle && this.getField('Title', 'title', true)}
+        {showBusinessEmail &&
+          this.getField('Business Email', 'businessEmail', isRequiredBusinessEmail)}
+        {showBusinessPhone && (
+          <div className="field">
+            <div className="label">
+              <span styleName="fieldLabelText">Business Phone</span>&nbsp;
+              <sup styleName="requiredMarker">*</sup>
+            </div>
+            <div className="input-field">
+              <PhoneInput
+                validations={{
+                  isValid: () => this.state.businessPhoneValid,
+                }}
+                ref="phoneInput"
+                wrapperClass={'input-container'}
+                name="businessPhone"
+                type="phone"
+                validationError="Invalid business phone"
+                showCheckMark
+                listCountry={ISOCountries}
+                required
+                forceCountry={this.state.countrySelected}
+                value={
+                  this.props.values.settings.businessPhone
+                    ? this.props.values.settings.businessPhone
+                    : ''
+                }
+                onChangeCountry={this.onBusinessPhoneCountryChange}
+                onOutsideClick={this.hideBusinessPhoneAlert}
+                disabled={disablePhoneInput}
+              />
+              {this.state.businessPhoneDirty && (
+                <div styleName="warningText">
+                  Note: Changing the country code also updates your country
+                  selection
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        {showCompanyName &&
+          this.getField(
+            'Company name',
+            'companyName',
+            true,
+            this.props.values.settings.companyName &&
+              (isCustomer || isCopilot) &&
+              !isManager
+          )}
         <div className="field">
-          <div className="label">
-            <span styleName="fieldLabelText">Business Phone</span>&nbsp;
-            <sup styleName="requiredMarker">*</sup>
-          </div>
-          <div className="input-field">
-            <PhoneInput
-              validations={{
-                isValid: () => this.state.businessPhoneValid
-              }}
-              ref="phoneInput"
-              wrapperClass={'input-container'}
-              name="businessPhone"
-              type="phone"
-              validationError="Invalid business phone"
-              showCheckMark
-              listCountry={ISOCountries}
-              required
-              forceCountry={this.state.countrySelected}
-              value={this.props.values.settings.businessPhone ? this.props.values.settings.businessPhone : ''}
-              onChangeCountry={this.onBusinessPhoneCountryChange}
-              onOutsideClick={this.hideBusinessPhoneAlert}
-              disabled={disablePhoneInput}
-            />
-            {
-              this.state.businessPhoneDirty &&
-              <div styleName="warningText">Note: Changing the country code also updates your country selection</div>
-            }
-          </div>
-        </div>
-        {this.getField('Company name', 'companyName', true, this.props.values.settings.companyName && (isCustomer || isCopilot) && !isManager)}
-        <div className="field">
-          <div className="label">
-            <span styleName="fieldLabelText">Country</span>
-          </div>
+          {isRequiredCountry ? (
+            <div className="label">
+              <span styleName="fieldLabelText">Country</span>&nbsp;
+              <sup styleName="requiredMarker">*</sup>
+            </div>
+          ) : (
+            <div className="label">
+              <span styleName="fieldLabelText">Country</span>
+            </div>
+          )}
           <div className="input-field">
             <FormsySelect
               ref="countrySelect"
               name="country"
-              value={this.props.values.settings.country ? this.props.values.settings.country : ''}
+              value={
+                this.props.values.settings.country
+                  ? this.props.values.settings.country
+                  : ''
+              }
               options={countries}
               onChange={this.onCountryChange}
               placeholder="- Select country -"
               showDropdownIndicator
               setValueOnly
               onBlur={this.hideCountrySelectAlert}
+              required={isRequiredCountry}
+              validationError="Please enter Country"
             />
-            {
-              this.state.countrySelectionDirty &&
-              <div styleName="warningText">Note: Changing the country also updates the country code of business phone.</div>
-            }
+            {this.state.countrySelectionDirty && (
+              <div styleName="warningText">
+                Note: Changing the country also updates the country code of
+                business phone.
+              </div>
+            )}
           </div>
         </div>
         <div className="field">
-          <div className="label">
-            <span styleName="fieldLabelText">Local Timezone</span>&nbsp;
-            <sup styleName="requiredMarker">*</sup>
-          </div>
+          {isRequiredTimeZone ? (
+            <div className="label">
+              <span styleName="fieldLabelText">Local Timezone</span>&nbsp;
+              <sup styleName="requiredMarker">*</sup>
+            </div>
+          ) : (
+            <div className="label">
+              <span styleName="fieldLabelText">Local Timezone</span>
+            </div>
+          )}
           <div className="input-field">
             <TimezoneInput
-              render={
-                (timezoneOptions, filterFn) => (
-                  <FormsySelect
-                    setValueOnly
-                    filterOption={(option, searchText) => filterFn(option.data, searchText)}
-                    value={this.props.values.settings.timeZone || ''}
-                    name="timeZone" options={timezoneOptions}
-                  />
-                )
-              }
+              render={(timezoneOptions, filterFn) => (
+                <FormsySelect
+                  setValueOnly
+                  filterOption={(option, searchText) =>
+                    filterFn(option.data, searchText)
+                  }
+                  value={this.props.values.settings.timeZone || ''}
+                  name="timeZone"
+                  options={timezoneOptions}
+                  required={isRequiredTimeZone}
+                  validationError="Please enter Local Timezone"
+                />
+              )}
             />
           </div>
         </div>
         <div className="field">
-          <div className="label">
-            <span styleName="fieldLabelText">Normal Working Hours</span>
-          </div>
+          {isRequiredWorkingHours ? (
+            <div className="label">
+              <span styleName="fieldLabelText">Normal Working Hours</span>&nbsp;
+              <sup styleName="requiredMarker">*</sup>
+            </div>
+          ) : (
+            <div className="label">
+              <span styleName="fieldLabelText">Normal Working Hours</span>
+            </div>
+          )}
           <div className="input-field">
             <WorkingHoursSelection
               startHourLabel="Start Time"
@@ -272,26 +359,61 @@ class ProfileSettingsForm extends Component {
               startHourValue={this.props.values.settings.workingHourStart || ''}
               endHourValue={this.props.values.settings.workingHourEnd || ''}
               wrapperClass={'input-container'}
-
               // react-select package in react-components is old and not compatible with connect-app.
               // So, passing the FormsySelect component that uses newer version of react-select
               selectElement={FormsySelect}
-              selectElementProps={{setValueOnly: true}}
+              selectElementProps={{ setValueOnly: true }}
+              isRequired={isRequiredWorkingHours}
             />
           </div>
         </div>
         <div className="controls">
+
+          {showBackButton && (
+            <button
+              className={`tc-btn tc-btn-default btn-back ${buttonExtraClassName}`}
+              onClick={(e) => {
+                e.preventDefault()
+                onBack()
+              }}
+            >
+              Back
+            </button>
+          )}
+
           <button
             type="submit"
-            className="tc-btn tc-btn-primary"
-            disabled={this.props.values.pending || !this.state.valid || !this.state.dirty}
+            className={`tc-btn tc-btn-primary ${buttonExtraClassName}`}
+            disabled={
+              this.props.values.pending ||
+              !this.state.valid ||
+              !this.state.dirty
+            }
           >
-            Save settings
+            {submitButton}
           </button>
         </div>
       </Formsy.Form>
     )
   }
+}
+
+ProfileSettingsForm.defaultProps = {
+  showBusinessEmail: false,
+  showAvatar: true,
+  showCompanyName: true,
+  showTitle: true,
+  showBusinessPhone: true,
+  isRequiredTimeZone: true,
+  isRequiredCountry: false,
+  isRequiredWorkingHours: false,
+  isRequiredBusinessEmail: true,
+  showBackButton: false,
+  submitButton: 'Save settings',
+  onBack: () => {},
+  shouldShowTitle: true,
+  shouldDoValidateOnStart: false,
+  buttonExtraClassName: '',
 }
 
 ProfileSettingsForm.propTypes = {
@@ -300,7 +422,22 @@ ProfileSettingsForm.propTypes = {
   uploadPhoto: PropTypes.func.isRequired,
   isCustomer: PropTypes.bool.isRequired,
   isManager: PropTypes.bool.isRequired,
-  isCopilot: PropTypes.bool.isRequired
+  isCopilot: PropTypes.bool.isRequired,
+  showBusinessEmail: PropTypes.bool,
+  showAvatar: PropTypes.bool,
+  showCompanyName: PropTypes.bool,
+  showTitle: PropTypes.bool,
+  showBusinessPhone: PropTypes.bool,
+  isRequiredTimeZone: PropTypes.bool,
+  isRequiredCountry: PropTypes.bool,
+  isRequiredWorkingHours: PropTypes.bool,
+  isRequiredBusinessEmail: PropTypes.bool,
+  showBackButton: PropTypes.bool,
+  shouldShowTitle: PropTypes.bool,
+  shouldDoValidateOnStart: PropTypes.bool,
+  submitButton: PropTypes.string,
+  onBack: PropTypes.func,
+  buttonExtraClassName: PropTypes.string,
 }
 
 export default ProfileSettingsForm
