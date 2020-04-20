@@ -41,7 +41,8 @@ class Projects extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isAcceptingInvite: {}
+      isAcceptingInvite: {},
+      previousFilters: {}
     }
     this.sortHandler = this.sortHandler.bind(this)
     this.onChangeStatus = this.onChangeStatus.bind(this)
@@ -94,6 +95,8 @@ class Projects extends Component {
 
   init(props) {
     document.title = 'Projects - Topcoder'
+    let { previousFilters } = this.state
+
     // this.searchTermFromQuery = this.props.location.query.q || ''
     const {criteria, loadProjects, location, projects, refresh,
       projectTemplates, isProjectTemplatesLoading, loadProjectsMetadata} = props
@@ -101,7 +104,7 @@ class Projects extends Component {
     const queryParams = querystring.parse(location.search)
     this.setState({status : null})
     if (!_.isEmpty(queryParams)) {
-      const initialCriteria = {}
+      const initialCriteria = previousFilters
       initialCriteria.sort = (queryParams.sort) ? queryParams.sort : 'updatedAt desc'
       if (queryParams.keyword) initialCriteria.keyword = decodeURIComponent(queryParams.keyword)
       if (queryParams.status) {
@@ -155,7 +158,8 @@ class Projects extends Component {
   }
 
   applyFilters(filter) {
-    const criteria = _.assign({}, this.props.criteria, filter)
+    const { previousFilters } = this.state
+    const criteria = _.assign(previousFilters, this.props.criteria, filter)
     this.routeWithParams(criteria)
   }
 
@@ -169,14 +173,19 @@ class Projects extends Component {
   }
 
   setFilter(name, filter) {
+    let { previousFilters } = this.state
+
     let criteria = _.assign({}, this.props.criteria)
     if(filter && filter !== '') {
       const temp = {}
       temp[`${name}`] = `*${filter}*`
+      previousFilters[`${name}`] = `*${filter}*`
       criteria = _.assign({}, criteria, temp)
     } else if(_.has(criteria, name)){
+      previousFilters = _.omit(previousFilters, name)
       criteria = _.omit(criteria, name)
     }
+    this.setState({previousFilters})
 
     this.props.loadProjects(criteria)
   }
