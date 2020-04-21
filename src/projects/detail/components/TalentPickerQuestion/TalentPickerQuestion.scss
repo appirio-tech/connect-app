@@ -1,4 +1,5 @@
 @import '~tc-ui/src/styles/tc-includes';
+@import '../../../../styles/includes';
 
 .container {
   font-size: 15px;
@@ -53,7 +54,7 @@
 }
 
 
-@media screen and (max-width: 959px) {
+@media screen and (max-width: $screen-rg - 1px) {
   .header-row {
     display: none;
   }
