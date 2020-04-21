@@ -43,13 +43,20 @@
   margin-bottom: 60px;
 }
 
-.title-4 {
-  margin-top: 30px;
-  margin-bottom: 20px;
-}
+.bottom-note {
+  color: $tc-gray-90;
+  font-size: 14px;
+  line-height: 150%;
+  max-width: 380px;
+  padding: 10 * $base-unit 0;
+  text-align: center;
 
-.btn-yes-topcoder {
-  width: auto;
+  > a,
+  > a:visited,
+  > a:hover,
+  > a:active {
+    color: $tc-dark-blue;
+  }
 }
 
 .back-button {

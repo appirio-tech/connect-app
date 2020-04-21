@@ -75,19 +75,10 @@ class UpdateUserInfo extends Component {
             buttonExtraClassName="tc-btn-md"
           />
           {!isTopcoderUser && (
-            <span styleName="title-4">
+            <p styleName="bottom-note">
               Were you looking to join Topcoder’s freelancer community and
-              participate in work?
-            </span>
-          )}
-          {!isTopcoderUser && (
-            <a
-              href={`//www.${DOMAIN}`}
-              className="tc-btn tc-btn-primary tc-btn-md"
-              styleName="btn-yes-topcoder"
-            >
-              Yes
-            </a>
+              participate in work? <a href={`//www.${DOMAIN}`}>Click here</a>
+            </p>
           )}
         </div>
       </div>
