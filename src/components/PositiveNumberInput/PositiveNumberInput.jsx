@@ -14,7 +14,7 @@ class PositiveNumberInput extends React.PureComponent {
   }
 
   onKeyDown(evt) {
-    const isPrintableKey = evt.key.length === 1 && !evt.ctrlKey
+    const isPrintableKey = evt.key.length === 1 && !(evt.ctrlKey || evt.metaKey)
     const digitPattern = /\d/
 
     // Don't allow typing non digit characters
