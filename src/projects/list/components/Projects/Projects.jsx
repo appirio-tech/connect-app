@@ -173,19 +173,20 @@ class Projects extends Component {
   }
 
   setFilter(name, filter) {
-    let { previousFilters } = this.state
-
     let criteria = _.assign({}, this.props.criteria)
     if(filter && filter !== '') {
       const temp = {}
       temp[`${name}`] = `*${filter}*`
-      previousFilters[`${name}`] = `*${filter}*`
       criteria = _.assign({}, criteria, temp)
+      this.setState((state) => {
+        return {previousFilters: _.assign({}, state.previousFilters, temp)};
+      });
     } else if(_.has(criteria, name)){
-      previousFilters = _.omit(previousFilters, name)
       criteria = _.omit(criteria, name)
+      this.setState((state) => {
+        return {previousFilters: _.omit(state.previousFilters, name)};
+      });
     }
-    this.setState({previousFilters})
 
     this.props.loadProjects(criteria)
   }
