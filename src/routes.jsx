@@ -15,7 +15,7 @@ import RedirectComponent from './components/RedirectComponent'
 import CreateContainer from './projects/create/containers/CreateContainer'
 import LoadingIndicator from './components/LoadingIndicator/LoadingIndicator'
 import OrganizationPage from './components/SpecialPage/OrganizationPage'
-import {ACCOUNTS_APP_LOGIN_URL, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from './config/constants'
+import {PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from './config/constants'
 import { getTopic } from './api/messages'
 import { getFreshToken } from 'tc-accounts'
 import { scrollToHash } from './components/ScrollToAnchors.jsx'
@@ -67,7 +67,7 @@ const redirectToConnectIfNeed = () => {
 }
 
 const LoginRedirect = withProps({
-  redirectTo: `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`
+  redirectTo: window.location.protocol + '//' + window.location.host
 })(RedirectComponent)
 
 class RedirectToProject extends React.Component {
@@ -91,9 +91,9 @@ class RedirectToProject extends React.Component {
         })
     }).catch(() => {
       // FIXME should we include hash, search etc
-      const redirectBackToUrl = window.location.origin + '/' + match.location.pathname
-      const newLocation = ACCOUNTS_APP_LOGIN_URL + '?retUrl=' + redirectBackToUrl
-      window.location = newLocation
+      //const redirectBackToUrl = window.location.origin + '/' + match.location.pathname
+      //const newLocation = ACCOUNTS_APP_LOGIN_URL + '?retUrl=' + redirectBackToUrl
+      window.location = window.location.protocol + '//' + window.location.host
     })
   }
 
