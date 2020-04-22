@@ -46,7 +46,10 @@ const initialState = {
     invites: [] // invites are pushed directly into it hence need to declare first
   },
   assetsMembers: {},
-  projectNonDirty: {},
+  projectNonDirty: {
+    members: [],
+    invites: []
+  },
   updateExisting: false,
   phases: null,
   phasesNonDirty: null,
@@ -188,8 +191,14 @@ export const projectState = function (state=initialState, action) {
   case LOAD_PROJECT_PENDING:
     return Object.assign({}, state, {
       isLoading: true,
-      project: null,
-      projectNonDirty: null
+      project: {
+        members: [],
+        invites: []
+      },
+      projectNonDirty: {
+        members: [],
+        invites: []
+      },
     })
 
   case LOAD_PROJECT_SUCCESS:
@@ -352,8 +361,14 @@ export const projectState = function (state=initialState, action) {
   case GET_PROJECTS_SUCCESS:
     return Object.assign({}, state, {
       isLoading: true, // this is excpected to be default value when there is not project loaded
-      project: {},
-      projectNonDirty: {},
+      project: {
+        members: [],
+        invites: []
+      },
+      projectNonDirty: {
+        members: [],
+        invites: []
+      },
       phases: null,
       phasesNonDirty: null,
     })
@@ -523,8 +538,14 @@ export const projectState = function (state=initialState, action) {
     return Object.assign({}, state, {
       processing: false,
       error: false,
-      project: {},
-      projectNonDirty: {}
+      project: {
+        members: [],
+        invites: []
+      },
+      projectNonDirty: {
+        members: [],
+        invites: []
+      },
     })
 
   // Project attachments
