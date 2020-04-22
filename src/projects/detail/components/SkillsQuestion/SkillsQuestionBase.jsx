@@ -175,6 +175,7 @@ class SkillsQuestion extends React.PureComponent {
       skillsCategories,
       currentProjectData,
       categoriesField,
+      selectWrapperClass,
     } = this.props
     const { availableOptions, customOptionValue } = this.state
 
@@ -199,13 +200,14 @@ class SkillsQuestion extends React.PureComponent {
 
     return (
       <div>
-        <SkillsCheckboxGroup
-          disabled={questionDisabled}
-          options={checkboxGroupOptions}
-          getValue={() => checkboxGroupValues}
-          setValue={(val) => { this.handleChange(_.union(val, selectGroupValues)) }}
-        />
-        <div styleName="select-wrapper">
+        {checkboxGroupOptions.length > 0 ? (
+          <SkillsCheckboxGroup
+            disabled={questionDisabled}
+            options={checkboxGroupOptions}
+            getValue={() => checkboxGroupValues}
+            setValue={(val) => { this.handleChange(_.union(val, selectGroupValues)) }}
+          />) : null}
+        <div styleName="select-wrapper" className={selectWrapperClass}>
           <Select
             createOption
             isMulti
@@ -243,6 +245,7 @@ SkillsQuestion.defaultProps = {
 
 SkillsQuestion.PropTypes = {
   skillsCategories: PropTypes.arrayOf(PropTypes.string),
+  selectWrapperClass: PropTypes.string
 }
 
 
