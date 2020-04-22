@@ -11,6 +11,7 @@ import ProjectsGridView from './ProjectsGridView'
 import ProjectsCardView from '../../../components/projectsCard/ProjectsCardView'
 import { acceptOrRefuseInvite } from '../../../actions/projectMember'
 import { loadProjects, setInfiniteAutoload, setProjectsListView } from '../../../actions/loadProjects'
+import { setCriteria } from '../../../actions/setCriteria'
 import { loadProjectsMetadata } from '../../../../actions/templates'
 import { sortProjects } from '../../../actions/sortProjects'
 import _ from 'lodash'
@@ -20,7 +21,7 @@ import { getNewProjectLink } from '../../../../helpers/projectHelper'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
   PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE, SCREEN_BREAKPOINT_MD,
-  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED,
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED, SET_PROJECTS_SEARCH_CRITERIA
 } from '../../../../config/constants'
 import TwoColsLayout from '../../../../components/TwoColsLayout'
 import UserSidebar from '../../../../components/UserSidebar/UserSidebar'
@@ -67,6 +68,7 @@ class Projects extends Component {
     const prevQueryParams = _.get(this.props, 'location.search', null)
     const queryParams = _.get(nextProps, 'location.search', null)
     const { refresh } = nextProps
+
     if (!_.isEqual(prevQueryParams, queryParams) || refresh) {
       this.init(nextProps)
     }
@@ -155,7 +157,10 @@ class Projects extends Component {
   }
 
   applyFilters(filter) {
-    const criteria = _.assign({}, this.props.criteria, filter)
+    const sort = {"sort": this.props.criteria.sort}
+    const criteria = _.assign({},sort, filter)
+    this.setState({criteria: criteria})
+    this.props.setCriteria(criteria)
     this.routeWithParams(criteria)
   }
 
@@ -177,7 +182,7 @@ class Projects extends Component {
     } else if(_.has(criteria, name)){
       criteria = _.omit(criteria, name)
     }
-
+    
     this.props.loadProjects(criteria)
   }
 
@@ -373,13 +378,14 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
 }
 
 const actionsToBind = {
-  loadProjects,
-  setInfiniteAutoload,
-  updateProject,
-  setProjectsListView,
-  sortProjects,
-  loadProjectsMetadata,
-  acceptOrRefuseInvite
+    loadProjects: loadProjects,
+    setInfiniteAutoload: setInfiniteAutoload,
+    updateProject: updateProject,
+    setProjectsListView: setProjectsListView,
+    sortProjects: sortProjects,
+    loadProjectsMetadata: loadProjectsMetadata,
+    acceptOrRefuseInvite: acceptOrRefuseInvite,
+    setCriteria: setCriteria
 }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(Projects))

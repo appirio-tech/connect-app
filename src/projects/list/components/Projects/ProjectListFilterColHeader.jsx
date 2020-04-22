@@ -12,7 +12,7 @@ class ProjectListFilterColHeader extends React.Component {
     this.setFilter = this.setFilter.bind(this)
     this.onChange = this.onChange.bind(this)
     // debounced setFilter function to prevent polluting server with requests
-    this.debouncedSetFilterCheck = _.debounce(this.setFilter, 500)
+    this.debouncedSetFilterCheck = _.debounce(this.setFilter, 1500)
   }
 
   setFilter(newfilter) {
@@ -29,6 +29,11 @@ class ProjectListFilterColHeader extends React.Component {
     if(this.textInputFilter){
       setTimeout(() => this.textInputFilter.focus())
     }
+  }
+  componentWillReceiveProps() {
+    this.setState({
+      value: this.props.value || ''
+    })
   }
 
   componentDidMount() {
