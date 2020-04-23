@@ -67,16 +67,23 @@ class TalentPickerQuestion extends Component {
     }))
   }
 
+  onChange(value) {
+    const {setValue, name} = this.props
+
+    setValue(value)
+    this.props.onChange(name, value)
+  }
+
   handleValueChange(index, field, value) {
-    const { getValue, setValue } = this.props
+    const { getValue } = this.props
     let values = getValue() || this.getDefaultValue()
     values = [...values.slice(0, index), { ...values[index], [field]: value }, ...values.slice(index + 1)]
 
-    setValue(values)
+    this.onChange(values)
   }
 
   insertRole(index, role) {
-    const { getValue, setValue } = this.props
+    const { getValue } = this.props
     let values = getValue() || this.getDefaultValue()
 
     values = [
@@ -89,14 +96,14 @@ class TalentPickerQuestion extends Component {
       },
       ...values.slice(index)
     ]
-    setValue(values)
+    this.onChange(values)
   }
 
   removeRole(index) {
-    const { getValue, setValue } = this.props
+    const { getValue } = this.props
     let values = getValue() || this.getDefaultValue()
     values = [...values.slice(0, index), ...values.slice(index + 1)]
-    setValue(values)
+    this.onChange(values)
   }
 
   canDeleteRole(role, index) {
@@ -149,8 +156,11 @@ TalentPickerQuestion.PropTypes = {
       disabled: PropTypes.bool,
     })
   ).isRequired,
+  onChange: PropTypes.func,
 }
 
-TalentPickerQuestion.defaultProps = {}
+TalentPickerQuestion.defaultProps = {
+  onChange: _.noop
+}
 
 export default hoc(TalentPickerQuestion)
