@@ -19,9 +19,8 @@ import {
 } from '../../config/constants'
 import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
 import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpers.js'
-import { login, logout } from 'tc-accounts'
-
 require('./TopBarContainer.scss')
+import { login, logout } from 'tc-accounts'
 
 class TopBarContainer extends React.Component {
 
