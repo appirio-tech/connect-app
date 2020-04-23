@@ -1,6 +1,5 @@
 import React from 'react'
 import PT from 'prop-types'
-import MediaQuery from 'react-responsive'
 
 import IconX from '../../../../assets/icons/ui-16px-1_bold-remove.svg'
 import IconAdd from '../../../../assets/icons/ui-16px-1_bold-add.svg'
@@ -9,7 +8,6 @@ import PositiveNumberInput from '../../../../components/PositiveNumberInput/Posi
 import ProductTypeIcon from '../../../../components/ProductTypeIcon'
 
 import styles from './TalentPickerRow.scss'
-import { SCREEN_BREAKPOINT_MD, SCREEN_BREAKPOINT_RG } from '../../../../config/constants'
 
 const always = () => true
 const never = () => false
@@ -134,57 +132,19 @@ class TalentPickerRow extends React.PureComponent {
     )
 
     return (
-      <MediaQuery minWidth={SCREEN_BREAKPOINT_RG}>
-        {(matches) => {
-          return matches ? (
-            // Desktop Layout (992px+)
-            <div styleName="row">
-              <div styleName="inner-row">
-                {roleColumn}
-                {peopleColumn}
-                {durationColumn}
-                {actionsColumn}
-              </div>
-              <div styleName="inner-row">{skillSelectionColumn}</div>
-            </div>
-          ) : (
-            <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
-              {(matches) => {
-                return matches ? (
-                  // Tablet Layout (768px to 991px)
-                  <div styleName="row">
-                    <div styleName="inner-row">
-                      {roleColumn}
-                      {actionsColumn}
-                    </div>
+      <div styleName="row">
+        <div styleName="inner-row">
+          {roleColumn}
+          {actionsColumn}
+        </div>
 
-                    <div styleName="inner-row">
-                      {peopleColumn}
-                      {durationColumn}
-                      {skillSelectionColumn}
-                    </div>
-                  </div>
-                ) : (
-                  // Mobile Layout (till 767px)
-                  <div styleName="row">
-                    <div styleName="inner-row">
-                      {roleColumn}
-                      {actionsColumn}
-                    </div>
+        <div styleName="inner-row">
+          {peopleColumn}
+          {durationColumn}
+        </div>
 
-                    <div styleName="inner-row">
-                      {peopleColumn}
-                      {durationColumn}
-                    </div>
-
-                    <div styleName="inner-row">{skillSelectionColumn}</div>
-                  </div>
-                )
-              }}
-            </MediaQuery>
-          )
-        }}
-      </MediaQuery>
+        <div styleName="inner-row">{skillSelectionColumn}</div>
+      </div>
     )
   }
 }

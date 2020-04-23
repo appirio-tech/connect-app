@@ -118,29 +118,21 @@ class TalentPickerQuestion extends Component {
     return (
       <div className={cn(wrapperClass)}>
         <div styleName="container">
-          <div styleName="header-row">
-            <div styleName="col-title col-role">Role</div>
-            <div styleName="col-title col-people">People</div>
-            <div styleName="col-title col-duration">Duration (months)</div>
-            <div styleName="col-title col-actions"/>
-          </div>
-          <div styleName="body">
-            {options.length > 0 ? values.map((v, roleIndex) => {
-              const roleSetting = _.find(options, { role: v.role })
-              return (
-                <TalentPickerRow
-                  key={roleIndex}
-                  rowIndex={roleIndex}
-                  value={v}
-                  canBeDeleted={this.canDeleteRole}
-                  roleSetting={roleSetting}
-                  onChange={this.handleValueChange}
-                  onDeleteRow={this.removeRole}
-                  onAddRow={this.insertRole}
-                />
-              )
-            }) : null}
-          </div>
+          {options.length > 0 ? values.map((v, roleIndex) => {
+            const roleSetting = _.find(options, { role: v.role })
+            return (
+              <TalentPickerRow
+                key={roleIndex}
+                rowIndex={roleIndex}
+                value={v}
+                canBeDeleted={this.canDeleteRole}
+                roleSetting={roleSetting}
+                onChange={this.handleValueChange}
+                onDeleteRow={this.removeRole}
+                onAddRow={this.insertRole}
+              />
+            )
+          }) : null}
         </div>
         {hasError ? <p className="error-message">{errorMessage}</p> : null}
       </div>
