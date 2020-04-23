@@ -10,6 +10,7 @@ import { loadProjectDashboard } from '../actions/projectDashboard'
 import { clearLoadedProject } from '../actions/project'
 import { acceptOrRefuseInvite } from '../actions/projectMember'
 import { loadProjects } from '../actions/loadProjects'
+import { getEmptyProjectObject } from '../reducers/project'
 
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
@@ -153,7 +154,7 @@ class ProjectDetail extends Component {
   componentWillReceiveProps(nextProps) {
     const {isProcessing, isLoading, error, project, match, showUserInvited} = nextProps
     // handle just deleted projects
-    if (! (error || isLoading || isProcessing) && _.isEmpty(project))
+    if (! (error || isLoading || isProcessing) && _.isEqual(getEmptyProjectObject(), project))
       this.props.history.push('/projects/')
     if (project && project.name) {
       document.title = `${project.name} - Topcoder`
