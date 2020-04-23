@@ -29,6 +29,10 @@ import _ from 'lodash'
 import update from 'react-addons-update'
 import { clean } from '../../helpers/utils'
 
+export function getEmptyProjectObject() {
+  return { invites: [], members: [] }
+}
+
 const initialState = {
   isLoading: true,
   processing: false,
@@ -41,15 +45,11 @@ const initialState = {
   attachmentTags: null,
   error: false,
   inviteError: false,
-  project: {
-    members: [],
-    invites: [] // invites are pushed directly into it hence need to declare first
-  },
+  // invites are pushed directly into it hence need to declare first
+  // using the getEmptyProjectObject method
+  project: getEmptyProjectObject(),
   assetsMembers: {},
-  projectNonDirty: {
-    members: [],
-    invites: []
-  },
+  projectNonDirty: getEmptyProjectObject(),
   updateExisting: false,
   phases: null,
   phasesNonDirty: null,
@@ -191,14 +191,8 @@ export const projectState = function (state=initialState, action) {
   case LOAD_PROJECT_PENDING:
     return Object.assign({}, state, {
       isLoading: true,
-      project: {
-        members: [],
-        invites: []
-      },
-      projectNonDirty: {
-        members: [],
-        invites: []
-      },
+      project: getEmptyProjectObject(),
+      projectNonDirty: getEmptyProjectObject(),
     })
 
   case LOAD_PROJECT_SUCCESS:
@@ -361,14 +355,8 @@ export const projectState = function (state=initialState, action) {
   case GET_PROJECTS_SUCCESS:
     return Object.assign({}, state, {
       isLoading: true, // this is excpected to be default value when there is not project loaded
-      project: {
-        members: [],
-        invites: []
-      },
-      projectNonDirty: {
-        members: [],
-        invites: []
-      },
+      project: getEmptyProjectObject(),
+      projectNonDirty: getEmptyProjectObject(),
       phases: null,
       phasesNonDirty: null,
     })
@@ -538,14 +526,8 @@ export const projectState = function (state=initialState, action) {
     return Object.assign({}, state, {
       processing: false,
       error: false,
-      project: {
-        members: [],
-        invites: []
-      },
-      projectNonDirty: {
-        members: [],
-        invites: []
-      },
+      project: getEmptyProjectObject(),
+      projectNonDirty: getEmptyProjectObject(),
     })
 
   // Project attachments
