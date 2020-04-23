@@ -62,12 +62,12 @@ class UpdateUserInfo extends Component {
             showAvatar={false}
             showBusinessEmail={!isTopcoderUser}
             showBusinessPhone={!isTopcoderUser}
-            showCompanyName={false}
+            showCompanyName={!isTopcoderUser}
             isRequiredTimeZone={isTopcoderUser}
             isRequiredCountry={isTopcoderUser}
             isRequiredWorkingHours={isTopcoderUser}
             isRequiredBusinessEmail={!isTopcoderUser}
-            submitButton="Send my Request"
+            submitButton="Send My Request"
             showBackButton
             onBack={closeUserSettings}
             shouldDoValidateOnStart

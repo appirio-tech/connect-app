@@ -120,10 +120,21 @@ class ProfileSettingsForm extends Component {
 
   getField(label, name, isRequired = false, isDisabled = false) {
     let validations = null
+    let validationErrors
+
     if (name === 'businessPhone') {
       validations = {
         // use same regexp as on server side
         matchRegexp: /^\+(?:[0-9] ?){6,14}[0-9]$/,
+      }
+    }
+
+    if (name === 'businessEmail') {
+      validations = {
+        isEmail: true,
+      }
+      validationErrors = {
+        isEmail: 'Please, enter correct email'
       }
     }
 
@@ -139,7 +150,8 @@ class ProfileSettingsForm extends Component {
           name={name}
           validations={validations}
           value={this.props.values.settings[name] || ''}
-          validationError={`Please enter ${label}`}
+          validationError={`Please, enter ${label}`}
+          validationErrors={validationErrors}
           required={isRequired}
           disabled={isDisabled}
         />
@@ -340,12 +352,12 @@ class ProfileSettingsForm extends Component {
         </div>
         <div className="field">
           {isRequiredWorkingHours ? (
-            <div className="label">
+            <div className="label label-working-hours">
               <span styleName="fieldLabelText">Normal Working Hours</span>&nbsp;
               <sup styleName="requiredMarker">*</sup>
             </div>
           ) : (
-            <div className="label">
+            <div className="label label-working-hours">
               <span styleName="fieldLabelText">Normal Working Hours</span>
             </div>
           )}
