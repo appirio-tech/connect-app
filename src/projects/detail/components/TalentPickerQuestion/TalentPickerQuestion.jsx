@@ -155,10 +155,6 @@ class TalentPickerQuestion extends Component {
   }
 }
 
-TalentPickerQuestion.defaultProps = {
-  onChange: _.noop
-}
-
 TalentPickerQuestion.PropTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
@@ -171,6 +167,8 @@ TalentPickerQuestion.PropTypes = {
   onChange: PropTypes.func,
 }
 
-TalentPickerQuestion.defaultProps = {}
+TalentPickerQuestion.defaultProps = {
+  onChange: _.noop
+}
 
 export default hoc(TalentPickerQuestion)
