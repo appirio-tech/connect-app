@@ -6,7 +6,8 @@ import {
   SET_PROJECTS_INFINITE_AUTOLOAD,
   SET_PROJECTS_LIST_VIEW,
   PROJECT_STATUS_ACTIVE,
-  ROLE_TOPCODER_USER
+  ROLE_TOPCODER_USER,
+  PROJECT_FILTER_NAMES
 } from '../../config/constants'
 import { getProjects } from '../../api/projects'
 import { loadMembers } from '../../actions/members'
@@ -21,10 +22,16 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
       criteria,
       pageNum
     })
+    const criteriaToLoad = _.assign({}, criteria)
+    const filters = PROJECT_FILTER_NAMES
+    const columnFilters = filters.filter(filter => _.has(criteria, filter))
+    columnFilters.forEach(filter => {
+      criteriaToLoad[filter]= `*${criteriaToLoad[filter]}*`
+    })
 
     return dispatch({
       type: GET_PROJECTS,
-      payload: getProjects(criteria, pageNum)
+      payload: getProjects(criteriaToLoad, pageNum)
         .then((originalData) => {
           const retryForCustomer = criteria.status === PROJECT_STATUS_ACTIVE && state.loadUser.user.roles &&  state.loadUser.user.roles.length === 1
             && state.loadUser.user.roles[0] === ROLE_TOPCODER_USER

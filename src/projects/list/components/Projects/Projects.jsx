@@ -21,7 +21,7 @@ import { getNewProjectLink } from '../../../../helpers/projectHelper'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
   PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE, SCREEN_BREAKPOINT_MD,
-  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED, SET_PROJECTS_SEARCH_CRITERIA
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED
 } from '../../../../config/constants'
 import TwoColsLayout from '../../../../components/TwoColsLayout'
 import UserSidebar from '../../../../components/UserSidebar/UserSidebar'
@@ -157,9 +157,10 @@ class Projects extends Component {
   }
 
   applyFilters(filter) {
-    const sort = {"sort": this.props.criteria.sort}
-    const criteria = _.assign({},sort, filter)
-    this.setState({criteria: criteria})
+    const sort = {sort: this.props.criteria.sort}
+    const keyword = {keyword: this.props.criteria.keyword}
+    const memberOnly = {memberOnly: this.props.criteria.memberOnly}
+    const criteria = _.assign({}, sort, keyword, memberOnly, filter)
     this.props.setCriteria(criteria)
     this.routeWithParams(criteria)
   }
@@ -176,13 +177,10 @@ class Projects extends Component {
   setFilter(name, filter) {
     let criteria = _.assign({}, this.props.criteria)
     if(filter && filter !== '') {
-      const temp = {}
-      temp[`${name}`] = `*${filter}*`
-      criteria = _.assign({}, criteria, temp)
-    } else if(_.has(criteria, name)){
+      criteria = _.assign({}, criteria, {[name]: filter})
+    } else if(_.has(this.props.criteria, name)){
       criteria = _.omit(criteria, name)
     }
-    
     this.props.loadProjects(criteria)
   }
 
@@ -378,14 +376,14 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
 }
 
 const actionsToBind = {
-    loadProjects: loadProjects,
-    setInfiniteAutoload: setInfiniteAutoload,
-    updateProject: updateProject,
-    setProjectsListView: setProjectsListView,
-    sortProjects: sortProjects,
-    loadProjectsMetadata: loadProjectsMetadata,
-    acceptOrRefuseInvite: acceptOrRefuseInvite,
-    setCriteria: setCriteria
+  loadProjects,
+  setInfiniteAutoload,
+  updateProject,
+  setProjectsListView,
+  sortProjects,
+  loadProjectsMetadata,
+  acceptOrRefuseInvite,
+  setCriteria
 }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(Projects))
