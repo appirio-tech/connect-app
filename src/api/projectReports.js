@@ -52,3 +52,12 @@ export function getProjectReportUrl(projectId, reportName) {
   return axios.get(`${PROJECTS_API_URL}/v5/projects/${projectId}/reports/embed?reportName=${reportName}`)
     .then(resp => resp.data)
 }
+
+/**
+ * Gets signed URL for embeding the requested report.
+ * @param {*} reportName unique name of the report
+ */
+export function getUserReportUrl(reportName) {
+  return axios.get(`${PROJECTS_API_URL}/v5/projects/reports/embed?reportName=${reportName}`)
+    .then(resp => resp.data)
+}

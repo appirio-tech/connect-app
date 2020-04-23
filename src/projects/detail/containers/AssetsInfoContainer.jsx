@@ -31,7 +31,7 @@ import {
 } from '../../../config/constants'
 import AddLink from '../../../components/AssetsLibrary/AddLink'
 import PERMISSIONS from '../../../config/permissions'
-import { checkPermission } from '../../../helpers/permissions'
+import { hasPermission } from '../../../helpers/permissions'
 import {
   addProjectAttachment, updateProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission,
   removeProjectAttachment, updateProductAttachment
@@ -836,7 +836,7 @@ class AssetsInfoContainer extends React.Component {
             </div>
             {(showAddNewButton) && (
               <div styleName="assets-header-button">
-                <button type="button" onClick={newButtonClick} styleName="add-new-button">Add new...</button>
+                <button type="button" onClick={newButtonClick} className="tc-btn tc-btn-primary tc-btn-sm">Add new...</button>
               </div>)}
           </div>
 
@@ -896,6 +896,7 @@ class AssetsInfoContainer extends React.Component {
                 canEdit={canManageLinks}
                 onDelete={this.removeAttachment}
                 onEdit={this.onEditLink}
+                loggedInUser={loggedInUser}
                 formatModifyDate={formatModifyDate}
                 formatFolderTitle={formatFolderTitle}
                 setFilter={this.setFilter}
@@ -925,7 +926,7 @@ AssetsInfoContainer.PropTypes = {
 const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
   const project = projectState.project
   const projectMembers = _.filter(members.members, m => _.some(project.members, pm => pm.userId === m.userId))
-  const canAccessPrivatePosts = checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
+  const canAccessPrivatePosts = hasPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
   return ({
     projectTemplates : templates.projectTemplates,
     attachmentsAwaitingPermission: projectState.attachmentsAwaitingPermission,

@@ -17,6 +17,10 @@ function ProjectCard({ project, disabled, currentUser, history, onChangeStatus, 
   const isMember = _.some(project.members, m => (m.userId === currentUser.userId && m.deletedAt === null))
   // check whether has pending invition
   const isInvited = _.some(project.invites, m => ((m.userId === currentUser.userId || m.email === currentUser.email) && !m.deletedAt && m.status === 'pending'))
+  const projectDetailsURL = project.version === 'v3'
+    ? `/projects/${project.id}/scope`
+    : `/projects/${project.id}/specification`
+
   return (
     <div
       className={className}
@@ -33,7 +37,7 @@ function ProjectCard({ project, disabled, currentUser, history, onChangeStatus, 
           currentMemberRole={currentMemberRole}
           onChangeStatus={onChangeStatus}
           showLink
-          showLinkURL={`/projects/${project.id}/specification`}
+          showLinkURL={projectDetailsURL}
           canEditStatus={false}
         />
       </div>
@@ -41,8 +45,8 @@ function ProjectCard({ project, disabled, currentUser, history, onChangeStatus, 
         <ProjectManagerAvatars managers={project.members} maxShownNum={10} />
         {(!isMember && isInvited) &&
           <div className="spacing join-btn-container">
-            <Invitation 
-              isLoading={isAcceptingInvite} 
+            <Invitation
+              isLoading={isAcceptingInvite}
               onAcceptClick={() => {
                 callInviteRequest(project, true)
               }}

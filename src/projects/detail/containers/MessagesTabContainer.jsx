@@ -30,7 +30,7 @@ import {
 } from '../../actions/projectTopics'
 
 import PERMISSIONS from '../../../config/permissions'
-import { checkPermission } from '../../../helpers/permissions'
+import { hasPermission } from '../../../helpers/permissions'
 
 import {
   SCREEN_BREAKPOINT_MD,
@@ -398,7 +398,7 @@ const mapStateToProps = ({
 
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
-  const canAccessPrivatePosts = checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
+  const canAccessPrivatePosts = hasPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
   if (canAccessPrivatePosts) {
     allFeed = [
       ...allFeed,

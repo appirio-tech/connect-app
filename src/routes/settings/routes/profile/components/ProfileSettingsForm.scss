@@ -84,7 +84,6 @@
           margin-bottom: 0;
         }
          :global(.Dropdown) {
-          overflow-y: scroll;
           height: 120px;
         }
       }
@@ -164,6 +163,10 @@
       margin-top: 20px;
       margin-bottom: 20px;
       text-align: center;
+
+      .btn-back {
+        margin-right: 10px;
+      }
     }
   }
 }

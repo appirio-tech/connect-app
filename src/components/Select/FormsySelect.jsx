@@ -14,6 +14,8 @@ const FormsySelect = props => {
   const selectedOption = props.getValue()
   const getOnlyValues = (selected)  => props.isMulti ? (selected || []).map(o => o.value) : selected.value
 
+  const hasError = !props.isPristine() && !props.isValid()
+  const errorMessage = props.getErrorMessage() || props.validationError
   const onSelectionChange = selectedOption => {
     props.setValue(setValueOnly ? getOnlyValues(selectedOption) : selectedOption)
     onChange && onChange(selectedOption)
@@ -22,7 +24,12 @@ const FormsySelect = props => {
     ? _.find(options, o => o.value === selectedOption)
     : selectedOption
 
-  return <Select {...props} value={value} onChange={onSelectionChange} />
+  return (
+    <div>
+      <Select {...props} value={value} onChange={onSelectionChange} />
+      {(hasError && errorMessage) ? (<p className="error-message">{errorMessage}</p>)  : null}
+    </div>
+  )
 }
 
 FormsySelect.PropTypes = {
