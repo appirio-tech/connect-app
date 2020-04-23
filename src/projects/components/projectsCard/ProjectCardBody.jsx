@@ -1,7 +1,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import TextTruncate from 'react-text-truncate'
-import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import ProjectStatus from '../../../components/ProjectStatus/ProjectStatus'
 import editableProjectStatus from '../../../components/ProjectStatus/editableProjectStatus'
 import {
@@ -17,7 +17,7 @@ import _ from 'lodash'
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
 function ProjectCardBody({ project, projectCanBeActive, currentMemberRole, descLinesCount = 8,
-  onChangeStatus, isSuperUser, showLink, showLinkURL, canEditStatus = true, hideStatus }) {
+  onChangeStatus, isSuperUser, showLink, showLinkURL, canEditStatus = true, hideStatus, history }) {
   if (!project) return null
 
   const canEdit = canEditStatus && (
@@ -30,6 +30,13 @@ function ProjectCardBody({ project, projectCanBeActive, currentMemberRole, descL
       PROJECT_ROLE_SOLUTION_ARCHITECT,
     ], currentMemberRole) > -1)))
   )
+
+  const goToProjectDetails = (evt, showLinkURL, projectDetailsURL) => {
+    evt.stopPropagation()
+    evt.preventDefault()
+    evt.nativeEvent.stopImmediatePropagation()
+    history.push(showLinkURL || projectDetailsURL)
+  }
 
   const progress = _.get(process, 'percent', 0)
 
@@ -44,7 +51,7 @@ function ProjectCardBody({ project, projectCanBeActive, currentMemberRole, descL
         line={descLinesCount}
         truncateText="..."
         text={_.unescape(project.description)}
-        textTruncateChild={showLink ? <Link className="read-more-link" to={showLinkURL || projectDetailsURL}>read more</Link> : <span className="read-more-link">read more</span>}
+        textTruncateChild={showLink ? <span className="read-more-link" onClick={(evt) => { goToProjectDetails(evt, showLinkURL, projectDetailsURL) }}>read more</span> : <span className="read-more-link">read more</span>}
       />
       {!hideStatus && <div className="project-status">
         {(project.status !== PROJECT_STATUS_ACTIVE || progress === 0) &&
@@ -82,4 +89,4 @@ ProjectCardBody.propTypes = {
   hideStatus: PT.bool
 }
 
-export default ProjectCardBody
+export default withRouter(ProjectCardBody)
