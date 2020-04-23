@@ -99,6 +99,7 @@ SCSS Files
       }
     }
   }
+
 SVG Icons
   - This repository uses plugin babel-plugin-inline-react-svg
   - The plugin is used to inline-embed svg icons inside the markup
