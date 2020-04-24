@@ -4,6 +4,7 @@
 	$reactselectheight : 40px;
 	$reactselectcontentheight: 20px;
 	@mixin reactselectstyles {
+		line-height: normal;
 
 		&.height-auto .react-select__control{
 			height: auto;
