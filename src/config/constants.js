@@ -701,7 +701,7 @@ export const DOMAIN = process.env.domain || 'topcoder.com'
 export const CONNECT_DOMAIN = `connect.${DOMAIN}`
 export const CONNECT_MAIN_PAGE_URL = `http://connect.${DOMAIN}`
 export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
-export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || `https://accounts.${DOMAIN}/#!/connect`
+export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || `https://auth0-login.${DOMAIN}/`
 export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL || `https://accounts.${DOMAIN}/#!/connect/registration`
 
 export const TC_API_URL = `https://api.${DOMAIN}`

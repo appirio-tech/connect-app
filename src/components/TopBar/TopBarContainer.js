@@ -4,7 +4,6 @@ import { Link, withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import UserDropdown from 'appirio-tech-react-components/components/UserDropdownMenu/UserDropdownMenu'
 import {
-  ACCOUNTS_APP_LOGIN_URL,
   ACCOUNTS_APP_REGISTER_URL,
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
@@ -21,7 +20,7 @@ import {
 import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
 import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpers.js'
 require('./TopBarContainer.scss')
-
+import { login, logout } from 'tc-accounts'
 
 class TopBarContainer extends React.Component {
 
@@ -74,7 +73,7 @@ class TopBarContainer extends React.Component {
     const homePageUrl = `${window.location.protocol}//${window.location.host}/`
     const logoutLink = `https://accounts.${DOMAIN}/#!/logout?retUrl=${homePageUrl}`
     const isHomePage = this.props.match.path === '/'
-    const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.host}/`
+    //const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.host}/`
     const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
     const isLoggedIn = !!(userRoles && userRoles.length)
 
@@ -82,7 +81,12 @@ class TopBarContainer extends React.Component {
       evt.preventDefault()
       window.analytics && window.analytics.reset()
       window.sessionStorage && window.sessionStorage.clear()
-      window.location = logoutLink
+      //window.location = logoutLink
+      logout()
+    }
+
+    const loginClick = () => {
+      login()
     }
 
     const userMenuItems = [
@@ -119,7 +123,7 @@ class TopBarContainer extends React.Component {
       }
     ]
 
-    const logInBtn = <div className="login-wrapper"><a className="tc-btn tc-btn-sm tc-btn-default" href={loginUrl}>Log in</a></div>
+    const logInBtn = <div className="login-wrapper"><div className="tc-btn tc-btn-sm tc-btn-default" onClick={loginClick}>Log in</div></div>
 
     const avatar = (
       <div className="welcome-info">
@@ -132,7 +136,7 @@ class TopBarContainer extends React.Component {
                 userImage={userImage}
                 domain={ DOMAIN }
                 menuItems={ userMenuItems }
-                loginUrl={ loginUrl }
+                loginClick={ loginClick }
                 registerUrl={ registerUrl }
                 forReactRouter
               />
