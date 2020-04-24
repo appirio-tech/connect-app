@@ -135,9 +135,13 @@ export const caseInsensitiveSearch = (key, searchString) => {
  * if phone is not head with '+', add '+'
  *
  * @param {String}        phone
- * @returns {String} 
+ * @returns {String}
  */
 export const formatPhone = (phone) => {
+  if (!phone) {
+    return phone
+  }
+
   if(phone[0] === '+') {
     return phone
   }else{
