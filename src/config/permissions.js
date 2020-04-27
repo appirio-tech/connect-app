@@ -187,7 +187,7 @@ export default {
       description: 'Invite new members or delete them. There are some additional restrictions for some roles.',
     },
     projectRoles: [
-      ...PROJECT_NON_CUSTOMER_MEMBERS
+      ..._.difference(TOPCODER_ALL, [ROLE_TOPCODER_USER, ROLE_CONNECT_COPILOT])
     ],
     topcoderRoles: [
       ...TOPCODER_ADMINS
@@ -301,9 +301,9 @@ export default {
       ROLE_CONNECT_MANAGER,
       ROLE_CONNECT_ACCOUNT_MANAGER,
       ROLE_CONNECT_COPILOT_MANAGER
-    ], 
+    ],
   },
-  
+
   SEE_MY_PROJECTS_FILTER: {
     _meta: {
       group: 'My Projects Filter',
