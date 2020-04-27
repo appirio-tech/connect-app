@@ -107,14 +107,6 @@ jobs:
       ENABLE_CACHE: true
     steps: *deploy_steps
 
-  deployAuth0:
-    <<: *deploy_defaults
-    environment:
-      DEPLOY_ENV: "DEV"
-      LOGICAL_ENV: "auth0dev"
-      ENABLE_CACHE: false
-    steps: *deploy_steps
-
 workflows:
   version: 2
   build:
@@ -136,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'dev-msinteg']
+              only: ['dev', 'feature/RS256-idtoken']
 
       - deployTest01:
           context : org-global
@@ -153,11 +145,3 @@ workflows:
           filters:
             branches:
               only: master
-
-      - deployAuth0:
-          context : org-global
-          requires:
-            - build-dev
-          filters:
-            branches:
-              only: ['test/auth0']
