@@ -125,9 +125,10 @@ const TOPCODER_ALL = [
 ]
 
 /**
- * Project non-customer members
+ * All Project Roles
  */
-const PROJECT_NON_CUSTOMER_MEMBERS = [
+const PROJECT_ALL = [
+  PROJECT_ROLE_CUSTOMER,
   PROJECT_ROLE_COPILOT,
   PROJECT_ROLE_MANAGER,
   PROJECT_ROLE_ACCOUNT_MANAGER,
@@ -187,7 +188,7 @@ export default {
       description: 'Invite new members or delete them. There are some additional restrictions for some roles.',
     },
     projectRoles: [
-      ...PROJECT_NON_CUSTOMER_MEMBERS
+      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_COPILOT, PROJECT_ROLE_CUSTOMER])
     ],
     topcoderRoles: [
       ...TOPCODER_ADMINS
@@ -301,19 +302,17 @@ export default {
       ROLE_CONNECT_MANAGER,
       ROLE_CONNECT_ACCOUNT_MANAGER,
       ROLE_CONNECT_COPILOT_MANAGER
-    ], 
+    ],
   },
-  
+
   SEE_MY_PROJECTS_FILTER: {
     _meta: {
       group: 'My Projects Filter',
       title: 'My Projects Filter',
     },
-    allowRule: {
-      topcoderRoles: [
-        ..._.difference(TOPCODER_ALL, [ROLE_CONNECT_COPILOT, ROLE_TOPCODER_USER])
-      ]
-    }
+    topcoderRoles: [
+      ..._.difference(TOPCODER_ALL, [ROLE_CONNECT_COPILOT, ROLE_TOPCODER_USER])
+    ]
   },
 
   /*
