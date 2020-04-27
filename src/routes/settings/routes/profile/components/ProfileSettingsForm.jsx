@@ -67,7 +67,7 @@ class ProfileSettingsForm extends Component {
     }
   }
 
-  onBusinessPhoneCountryChange({ country, externalChange, isValid }) {
+  onBusinessPhoneCountryChange({ country, externalChange, isValid: isValidForApi }) {
     const { countrySelected: previousSelectedCountry } = this.state
 
     if (country && country.code) {
@@ -78,14 +78,14 @@ class ProfileSettingsForm extends Component {
           countrySelected: country.name,
         })
       }
-      if (!this.state.businessPhoneValid && isValid) {
-        this.setState({
-          businessPhoneValid: true,
-        })
-      }
     }
 
-    if (this.state.businessPhoneValid && !isValid) {
+    const isValid = isValidForApi && country && country.code
+    if (!this.state.businessPhoneValid && isValid) {
+      this.setState({
+        businessPhoneValid: true,
+      })
+    } else if (this.state.businessPhoneValid && !isValid) {
       this.setState({
         businessPhoneValid: false,
       })
