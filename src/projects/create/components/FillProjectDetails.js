@@ -327,7 +327,6 @@ const mapStateToProps = ({ settings, loadUser }) => {
       !profileSettings.lastName ||
       !profileSettings.title ||
       !profileSettings.companyName ||
-      !profileSettings.businessEmail ||
       !profileSettings.businessPhone
   }
 
