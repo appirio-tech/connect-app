@@ -16,6 +16,7 @@ import {
   uploadProfilePhoto,
   resetProfileSetting,
 } from '../../../routes/settings/actions/index'
+import { getDefaultTopcoderRole } from '../../../helpers/permissions'
 import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
@@ -305,6 +306,14 @@ const mapStateToProps = ({ settings, loadUser }) => {
   let isMissingUserInfo = true
   const profileSettings = formatProfileSettings(settings.profile.traits)
   if (isTopcoderUser) {
+    // We don't ask Topcoder User for "Company Name" and "Title"
+    // but server requires them, so if they are not yet defined, we set them automatically
+    if (!profileSettings.companyName) {
+      profileSettings.companyName = 'Topcoder'
+    }
+    if (!profileSettings.title) {
+      profileSettings.title = getDefaultTopcoderRole(loadUser.user)
+    }
     isMissingUserInfo =
       !profileSettings.firstName ||
       !profileSettings.lastName ||

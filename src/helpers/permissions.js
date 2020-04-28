@@ -1,5 +1,81 @@
 import store from '../config/store'
 import _ from 'lodash'
+import {
+  PROJECT_ROLE_COPILOT,
+  PROJECT_ROLE_MANAGER,
+  PROJECT_ROLE_ACCOUNT_MANAGER,
+  PROJECT_ROLE_CUSTOMER,
+  PROJECT_ROLE_ACCOUNT_EXECUTIVE,
+  PROJECT_ROLE_PROGRAM_MANAGER,
+  PROJECT_ROLE_SOLUTION_ARCHITECT,
+  PROJECT_ROLE_PROJECT_MANAGER,
+
+  ROLE_TOPCODER_USER,
+  ROLE_CONNECT_COPILOT,
+  ROLE_CONNECT_MANAGER,
+  ROLE_CONNECT_ACCOUNT_MANAGER,
+  ROLE_CONNECT_ADMIN,
+  ROLE_ADMINISTRATOR,
+  ROLE_CONNECT_COPILOT_MANAGER,
+  ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
+  ROLE_PRESALES,
+  ROLE_ACCOUNT_EXECUTIVE,
+  ROLE_PROGRAM_MANAGER,
+  ROLE_SOLUTION_ARCHITECT,
+  ROLE_PROJECT_MANAGER,
+} from '../config/constants'
+
+/**
+ * This list determines default Project Role by Topcoder Role.
+ *
+ * - The order of items in this list is IMPORTANT.
+ * - To determine default Project Role we have to go from TOP to END
+ *   and find the first record which has the Topcoder Role of the user.
+ * - Always define default Project Role which is allowed for such Topcoder Role
+ *   as per `PROJECT_TO_TOPCODER_ROLES_MATRIX`
+ */
+export const DEFAULT_PROJECT_ROLE = [
+  {
+    topcoderRole: ROLE_ADMINISTRATOR,
+    projectRole: PROJECT_ROLE_MANAGER,
+  }, {
+    topcoderRole: ROLE_CONNECT_ADMIN,
+    projectRole: PROJECT_ROLE_MANAGER,
+  }, {
+    topcoderRole: ROLE_CONNECT_MANAGER,
+    projectRole: PROJECT_ROLE_MANAGER,
+  }, {
+    topcoderRole: ROLE_CONNECT_ACCOUNT_MANAGER,
+    projectRole: PROJECT_ROLE_ACCOUNT_MANAGER,
+  }, {
+    topcoderRole: ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
+    projectRole: PROJECT_ROLE_ACCOUNT_MANAGER,
+  }, {
+    topcoderRole: ROLE_PRESALES,
+    projectRole: PROJECT_ROLE_ACCOUNT_MANAGER,
+  }, {
+    topcoderRole: ROLE_ACCOUNT_EXECUTIVE,
+    projectRole: PROJECT_ROLE_ACCOUNT_EXECUTIVE,
+  }, {
+    topcoderRole: ROLE_PROGRAM_MANAGER,
+    projectRole: PROJECT_ROLE_PROGRAM_MANAGER,
+  }, {
+    topcoderRole: ROLE_SOLUTION_ARCHITECT,
+    projectRole: PROJECT_ROLE_SOLUTION_ARCHITECT,
+  }, {
+    topcoderRole: ROLE_PROJECT_MANAGER,
+    projectRole: PROJECT_ROLE_PROJECT_MANAGER,
+  }, {
+    topcoderRole: ROLE_CONNECT_COPILOT_MANAGER,
+    projectRole: PROJECT_ROLE_CUSTOMER,
+  }, {
+    topcoderRole: ROLE_CONNECT_COPILOT,
+    projectRole: PROJECT_ROLE_COPILOT,
+  }, {
+    topcoderRole: ROLE_TOPCODER_USER,
+    projectRole: PROJECT_ROLE_CUSTOMER,
+  },
+]
 
 /**
  * Check if user has permission.
@@ -145,4 +221,24 @@ const matchPermissionRule = (permissionRule, user, project) => {
   }
 
   return hasProjectRole || hasTopcoderRole
+}
+
+/**
+ * Get default Topcoder Roles.
+ *
+ * @param {Object} user       user
+ * @param {Array}  user.roles user Topcoder roles
+ *
+ * @returns {String} project role
+ */
+export const getDefaultTopcoderRole = (user) => {
+  for (let i = 0; i < DEFAULT_PROJECT_ROLE.length; i += 1) {
+    const rule = DEFAULT_PROJECT_ROLE[i]
+
+    if (matchPermissionRule({ topcoderRoles: [rule.topcoderRole] }, user)) {
+      return rule.topcoderRole
+    }
+  }
+
+  return undefined
 }
