@@ -322,6 +322,9 @@ const mapStateToProps = ({ settings, loadUser }) => {
       !profileSettings.workingHourStart ||
       !profileSettings.workingHourEnd
   } else {
+    if (!profileSettings.businessEmail) {
+      profileSettings.businessEmail = loadUser.user.email
+    }
     isMissingUserInfo =
       !profileSettings.firstName ||
       !profileSettings.lastName ||

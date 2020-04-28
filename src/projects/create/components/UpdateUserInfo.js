@@ -60,7 +60,7 @@ class UpdateUserInfo extends Component {
             isManager={isManager}
             showTitle={!isTopcoderUser}
             showAvatar={false}
-            showBusinessEmail={false}
+            showBusinessEmail={!isTopcoderUser}
             showBusinessPhone={!isTopcoderUser}
             showCompanyName={!isTopcoderUser}
             isRequiredTimeZone={isTopcoderUser}

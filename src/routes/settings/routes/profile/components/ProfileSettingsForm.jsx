@@ -236,7 +236,7 @@ class ProfileSettingsForm extends Component {
         {this.getField('Last Name', 'lastName', true)}
         {showTitle && this.getField('Title', 'title', true)}
         {showBusinessEmail &&
-          this.getField('Business Email', 'businessEmail', isRequiredBusinessEmail)}
+          this.getField('Business Email', 'businessEmail', isRequiredBusinessEmail, true)}
         {showBusinessPhone && (
           <div className="field">
             <div className="label">
