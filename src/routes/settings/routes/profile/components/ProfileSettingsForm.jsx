@@ -119,23 +119,21 @@ class ProfileSettingsForm extends Component {
   }
 
   getField(label, name, isRequired = false, isDisabled = false) {
-    let validations = null
-    let validationErrors
+    const validations = {}
+    const validationErrors = {}
+
+    if (isRequired) {
+      validations.isRequired = true
+    }
 
     if (name === 'businessPhone') {
-      validations = {
-        // use same regexp as on server side
-        matchRegexp: /^\+(?:[0-9] ?){6,14}[0-9]$/,
-      }
+      // use same regexp as on server side
+      validations.matchRegexp = /^\+(?:[0-9] ?){6,14}[0-9]$/
     }
 
     if (name === 'businessEmail') {
-      validations = {
-        isEmail: true,
-      }
-      validationErrors = {
-        isEmail: 'Please, enter correct email'
-      }
+      validations.isEmail = true
+      validationErrors.isEmail = 'Please, enter correct email'
     }
 
     return (
