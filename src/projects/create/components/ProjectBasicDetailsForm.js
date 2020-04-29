@@ -32,6 +32,7 @@ class ProjectBasicDetailsForm extends Component {
     this.enableButton = this.enableButton.bind(this)
     this.disableButton = this.disableButton.bind(this)
     this.submit = this.submit.bind(this)
+    this.fetchUserSettings = this.fetchUserSettings.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.showNextStep = this.showNextStep.bind(this)
     this.showPrevStep = this.showPrevStep.bind(this)
@@ -63,7 +64,8 @@ class ProjectBasicDetailsForm extends Component {
       prevWizardStep,
       isWizardMode,
       hasDependantFields,
-      currentWizardStep
+      currentWizardStep,
+      checkUserSetting: false,
     }
 
     this.props.onStepChange(currentWizardStep)
@@ -73,6 +75,11 @@ class ProjectBasicDetailsForm extends Component {
     return !(
       _.isEqual(nextProps.project, this.props.project)
      && _.isEqual(nextProps.dirtyProject, this.props.dirtyProject)
+     && _.isEqual(nextProps.isMissingUserInfo, this.props.isMissingUserInfo)
+     && _.isEqual(nextProps.isLoadedProfileSetting, this.props.isLoadedProfileSetting)
+     && _.isEqual(nextProps.profileSettings.isLoading, this.props.profileSettings.isLoading)
+     && _.isEqual(nextProps.profileSettings.pending, this.props.profileSettings.pending)
+     && _.isEqual(nextProps.requireCheckUserSetting, this.props.requireCheckUserSetting)
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextState.canSubmit, this.state.canSubmit)
      && _.isEqual(nextState.template, this.state.template)
@@ -135,6 +142,19 @@ class ProjectBasicDetailsForm extends Component {
         }
       })
     })
+    const { isSaving } = this.state
+    const {
+      isMissingUserInfo,
+      isLoadedProfileSetting,
+      openUserSettings,
+      requireCheckUserSetting
+    } = this.props
+    if (isLoadedProfileSetting && requireCheckUserSetting && isMissingUserInfo) {
+      openUserSettings()
+    }
+    if (!isSaving && isLoadedProfileSetting && requireCheckUserSetting && !isMissingUserInfo) {
+      this.submit()
+    }
   }
 
   enableButton() {
@@ -145,13 +165,21 @@ class ProjectBasicDetailsForm extends Component {
     this.setState({ canSubmit: false })
   }
 
+  fetchUserSettings() {
+    const { onRequireCheckUserSetting } = this.props
+    onRequireCheckUserSetting(true, () => {
+      this.props.getProfileSettings()
+    })
+  }
+
   submit(/* model */) {
     // we cannot use `model` provided by Formzy because in the `previousStepVisibility==none` mode
     // some parts of the form are hidden, so Formzy thinks we don't have them
     // instead we use this.props.dirtyProject which contains the current project data
-    this.setState({isSaving: true })
-    const modelWithoutHiddenValues = removeValuesOfHiddenNodes(this.state.template, this.props.dirtyProject)
-    this.props.submitHandler(modelWithoutHiddenValues)
+    this.setState({isSaving: true }, () => {
+      const modelWithoutHiddenValues = removeValuesOfHiddenNodes(this.state.template, this.props.dirtyProject)
+      this.props.submitHandler(modelWithoutHiddenValues)
+    })
   }
 
   /**
@@ -193,8 +221,18 @@ class ProjectBasicDetailsForm extends Component {
   }
 
   render() {
-    const { isEditable, submitBtnText, dirtyProject, productTemplates, productCategories,
-      addAttachment, updateAttachment, removeAttachment, canManageAttachments, attachmentsStorePath
+    const {
+      isEditable,
+      submitBtnText,
+      dirtyProject,
+      productTemplates,
+      productCategories,
+      addAttachment,
+      updateAttachment,
+      removeAttachment,
+      canManageAttachments,
+      attachmentsStorePath,
+      profileSettings,
     } = this.props
     const {
       project,
@@ -259,7 +297,7 @@ class ProjectBasicDetailsForm extends Component {
           disabled={!isEditable}
           onInvalid={this.disableButton}
           onValid={this.enableButton}
-          onValidSubmit={this.submit}
+          onValidSubmit={this.fetchUserSettings}
           onChange={ this.handleChange }
         >
           {template.sections.map(section => ({
@@ -293,7 +331,11 @@ class ProjectBasicDetailsForm extends Component {
               <button
                 className="tc-btn tc-btn-primary tc-btn-md"
                 type="submit"
-                disabled={(this.state.isSaving) || !canSubmit}
+                disabled={
+                  profileSettings.isLoading ||
+                  (this.state.isSaving) ||
+                  !canSubmit
+                }
               >{submitButtonText}</button>
             )}
           </div>
@@ -308,7 +350,10 @@ class ProjectBasicDetailsForm extends Component {
 }
 
 ProjectBasicDetailsForm.defaultProps = {
-  shouldUpdateTemplate: false
+  shouldUpdateTemplate: false,
+  requireCheckUserSetting: false,
+  openUserSettings: () => {},
+  onRequireCheckUserSetting: () => {},
 }
 
 ProjectBasicDetailsForm.propTypes = {
@@ -321,6 +366,12 @@ ProjectBasicDetailsForm.propTypes = {
   onStepChange: PropTypes.func.isRequired,
   productCategories: PropTypes.array.isRequired,
   shouldUpdateTemplate: PropTypes.bool,
+  profileSettings: PropTypes.object.isRequired,
+  isMissingUserInfo: PropTypes.bool.isRequired,
+  isLoadedProfileSetting: PropTypes.bool.isRequired,
+  openUserSettings: PropTypes.func,
+  onRequireCheckUserSetting: PropTypes.func,
+  requireCheckUserSetting: PropTypes.bool,
 }
 
 export default ProjectBasicDetailsForm

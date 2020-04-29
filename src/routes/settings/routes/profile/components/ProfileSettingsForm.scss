@@ -12,7 +12,7 @@
     > .field {
       display: flex;
       flex-wrap: wrap;
-      align-items: center;
+      align-items: flex-start;
 
       @media screen and (max-width: $screen-md - 1px) {
         flex-direction: column;
@@ -34,16 +34,26 @@
         min-width: 180px;
         max-width: 200px;
         text-align: right;
-        padding-right: 15px;
+        padding: 11px 15px 11px 0;
         color: $tc-gray-80;
         font-size: 15px;
         line-height: 18px;
+
+        &.label-working-hours {
+          padding-top: 28px;
+        }
 
         @media screen and (max-width: $screen-md - 1px) {
           flex: none;
           margin-bottom: 10px;
           margin-left: 10px;
+          padding-top: 0;
+          padding-bottom: 0;
           text-align: left;
+
+          &.label-working-hours {
+            padding-top: 0;
+          }
         }
       }
 
@@ -84,7 +94,6 @@
           margin-bottom: 0;
         }
          :global(.Dropdown) {
-          overflow-y: scroll;
           height: 120px;
         }
       }
@@ -164,6 +173,10 @@
       margin-top: 20px;
       margin-bottom: 20px;
       text-align: center;
+
+      .btn-back {
+        margin-right: 10px;
+      }
     }
   }
 }

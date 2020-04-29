@@ -17,7 +17,7 @@ import TwoColsLayout from '../../../components/TwoColsLayout'
 import Sticky from '../../../components/Sticky'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import PERMISSIONS from '../../../config/permissions'
-import { checkPermission } from '../../../helpers/permissions'
+import { hasPermission } from '../../../helpers/permissions'
 import { loadProjectReportsUrls, setLookerSessionExpired } from '../../actions/projectReports'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
@@ -173,7 +173,7 @@ ProjectSummaryReportContainer.propTypes = {
 const mapStateToProps = ({ projectState, projectTopics, phasesTopics, projectReports }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
-  if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
+  if (hasPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
     allFeed = [...allFeed, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
   }
 

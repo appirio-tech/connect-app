@@ -136,7 +136,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['v5-upgrade', 'feature/new-project-catalog']
+              only: ['feature/permissions']
 
       - deployProd:
           context : org-global

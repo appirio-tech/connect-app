@@ -1,7 +1,7 @@
 # Topcoder Connect App
 
 Topcoder Connect is client facing application of Topcoder. Customers use Topcoder Connect to input requirements of their projects, then managers and
-copilots take it from there. 
+copilots take it from there.
 
 ## Requirements
 
@@ -25,6 +25,8 @@ Open browser with URL http://local.topcoder-dev.com:3000.
 - `$ npm run lint:fix` - Check js code linting and trying to fix errors automatically.
 - `$ npm run test` - Performs tests running. **Note** we don't really have tests, so we only keep this command run successfully.
 - `$ npm run test:watch` - Performs tests on files changes.
+- `$ generate:doc:permissions` - Generate [Permissions documentation](./docs/permissions.html) from the constants
+- `$ generate:doc:permissions:dev` - same like above, but it regenerates the document on every file change and is handy during development
 
 ## TC Deployment Notes
 _[TC Deployment Notes should always be kept up to date **on the default branch**. Update these notes when changes to this information occur]_
@@ -97,6 +99,7 @@ SCSS Files
       }
     }
   }
+
 SVG Icons
   - This repository uses plugin babel-plugin-inline-react-svg
   - The plugin is used to inline-embed svg icons inside the markup

@@ -3,6 +3,7 @@
   .Tooltip {
     &.customer-data {
       .tooltip-target {
+        z-index: 0;
         display: flex;
         &>div:first-child {
           margin-left: -5px;
@@ -127,6 +128,7 @@
               flex-wrap: wrap;
               align-content: flex-start;
               position: relative;
+              width: 80%;
             }
 
             .user-name-container {
@@ -158,6 +160,10 @@
             .user-email-container {
               flex: 1;
               padding-left: 10px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              max-width: 80%;
 
               a {
                 font-size: 12px;

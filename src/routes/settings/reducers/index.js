@@ -19,6 +19,7 @@ import {
   SAVE_NOTIFICATION_SETTINGS_SUCCESS,
   SAVE_NOTIFICATION_SETTINGS_FAILURE,
   GET_PROFILE_SETTINGS_PENDING,
+  GET_PROFILE_SETTINGS_RESET,
   GET_PROFILE_SETTINGS_SUCCESS,
   SAVE_PROFILE_SETTINGS_PENDING,
   GET_PROFILE_SETTINGS_FAILURE,
@@ -249,6 +250,13 @@ export default (state = initialState, action) => {
       profile: {...state.profile,
         isLoading: false,
         traits: action.payload.data,
+      }
+    }
+
+  case GET_PROFILE_SETTINGS_RESET:
+    return {...state,
+      profile: {...state.profile,
+        isLoading: false,
       }
     }
 
