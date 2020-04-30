@@ -48,6 +48,16 @@ class TalentPickerQuestion extends Component {
           return v.people !== '0' && v.duration !== '0' && v.skills.length > 0
         }) // validation body
       },
+      noPartialFillsExist: (formValues, value) => {
+        return _.every(value, v => {
+          const isOneValueFilled = v.people > 0 || v.duration > 0 || (v.skills && v.skills.length)
+          const isAllValuesFilled = v.people > 0 && v.duration > 0 && v.skills && v.skills.length
+
+          // If one value is filled, all values should be filled to make this row valid. Partial fill is not valid
+          const isRowValid = !isOneValueFilled || isAllValuesFilled
+          return isRowValid
+        })
+      }
     }
     setValidations(validations)
   }

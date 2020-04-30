@@ -63,9 +63,8 @@ class Dialog extends React.Component {
         isOpen
         className="management-dialog"
         overlayClassName="management-dialog-overlay"
-        onRequestClose={onCancel}
-        shouldCloseOnOverlayClick={!isLoading}
-        shouldCloseOnEsc={!isLoading}
+        shouldCloseOnOverlayClick={false}
+        shouldCloseOnEsc={false}
         contentLabel=""
       >
         <div className="management-dialog-container">

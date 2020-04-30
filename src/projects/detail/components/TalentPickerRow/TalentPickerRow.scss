@@ -110,3 +110,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+
+.skillHasError {
+  :global {
+    .react-select__control {
+      border-color: $tc-red-70;
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import React from 'react'
 import PT from 'prop-types'
+import cn from 'classnames'
 
 import IconX from '../../../../assets/icons/ui-16px-1_bold-remove.svg'
 import IconAdd from '../../../../assets/icons/ui-16px-1_bold-add.svg'
@@ -21,6 +22,9 @@ class TalentPickerRow extends React.PureComponent {
     this.handleDurationChange = this.handleDurationChange.bind(this)
     this.handleSkillChange = this.handleSkillChange.bind(this)
 
+    this.resetPeople = this.resetPeople.bind(this)
+    this.resetDuration = this.resetDuration.bind(this)
+
     this.onAddRow = this.onAddRow.bind(this)
     this.onDeleteRow = this.onDeleteRow.bind(this)
   }
@@ -37,6 +41,20 @@ class TalentPickerRow extends React.PureComponent {
     this.props.onChange(this.props.rowIndex, 'skills', value)
   }
 
+  resetDuration() {
+    const { rowIndex, onChange, value } = this.props
+    if (!value.duration) {
+      onChange(rowIndex, 'duration', '0')
+    }
+  }
+
+  resetPeople() {
+    const { rowIndex, onChange, value } = this.props
+    if (!value.people) {
+      onChange(rowIndex, 'people', '0')
+    }
+  }
+
   onAddRow() {
     const { rowIndex, value, onAddRow: addRowHandler } = this.props
     addRowHandler(rowIndex + 1, value.role)
@@ -49,6 +67,7 @@ class TalentPickerRow extends React.PureComponent {
 
   render() {
     const { value, canBeDeleted, roleSetting, rowIndex } = this.props
+    const isRowIncomplete = value.people > 0 || value.duration > 0 || (value.skills && value.skills.length)
 
     /* Different columns are defined here and used in componsing mobile/desktop views below */
     const roleColumn = (
@@ -83,9 +102,10 @@ class TalentPickerRow extends React.PureComponent {
         <PositiveNumberInput
           type="number"
           styleName="noMargin"
-          className="tc-file-field__inputs"
+          className={cn('tc-file-field__inputs', { error: isRowIncomplete && value.people <= 0 })}
           value={value.people || ''}
           onChange={this.handlePeopleChange}
+          onBlur={this.resetPeople}
         />
       </div>
     )
@@ -98,9 +118,10 @@ class TalentPickerRow extends React.PureComponent {
         <PositiveNumberInput
           type="number"
           styleName="noMargin"
-          className="tc-file-field__inputs"
+          className={cn('tc-file-field__inputs', {error: isRowIncomplete && value.duration <= 0 })}
           value={value.duration || ''}
           onChange={this.handleDurationChange}
+          onBlur={this.resetDuration}
         />
       </div>
     )
@@ -126,7 +147,7 @@ class TalentPickerRow extends React.PureComponent {
           setValue={this.handleSkillChange}
           getValue={() => value.skills}
           onChange={_.noop}
-          selectWrapperClass={styles.noMargin}
+          selectWrapperClass={cn(styles.noMargin, {[styles.skillHasError]: isRowIncomplete && !(value.skills && value.skills.length)})}
         />
       </div>
     )
