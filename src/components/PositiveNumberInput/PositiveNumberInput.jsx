@@ -21,6 +21,7 @@ class PositiveNumberInput extends React.PureComponent {
     if (isPrintableKey && !digitPattern.test(evt.key)) {
       evt.preventDefault()
     }
+    isPrintableKey && this.enforceInputBelowMax(evt)
     this.props.onKeyDown(evt)
   }
 
@@ -32,6 +33,7 @@ class PositiveNumberInput extends React.PureComponent {
     if (!digitsPattern.test(text)) {
       evt.preventDefault()
     }
+    this.enforceInputBelowMax(evt)
     this.props.onPaste(evt)
   }
 
@@ -44,8 +46,34 @@ class PositiveNumberInput extends React.PureComponent {
     this.props.onKeyUp(evt)
   }
 
+  /**
+   * Makes sure the input value is kept below the max value
+   * @param {Event} evt The keydown or paste event
+   */
+  enforceInputBelowMax(evt) {
+    const { onChange } = this.props
+    const previousValue = evt.target.value
+    if (this.isBelowMaxLimit(previousValue)) {
+      // persists the synthetic event. So that we can use it inside setTimeout
+      evt.persist()
+
+      // setTimeout to let the input element set the actual value after the keydown/paste
+      setTimeout(() => {
+        if (!this.isBelowMaxLimit(evt.target.value)) {
+          evt.target.value = previousValue
+          onChange && onChange(evt)
+        }
+      })
+    }
+  }
+
+  isBelowMaxLimit(text) {
+    const { max = Infinity } = this.props
+    return Number(text) <= max
+  }
+
   render() {
-    const props = omit(this.props, ['onValidityChange'])
+    const props = omit(this.props, ['onValidityChange', 'max'])
     return <input type="number" min={0} {...props} onKeyDown={this.onKeyDown} onPaste={this.onPaste} onKeyUp={this.onKeyUp} />
   }
 }
@@ -59,6 +87,7 @@ PositiveNumberInput.defaultProps = {
 }
 
 PositiveNumberInput.propTypes = {
+  max: PT.number,
   onKeyDown: PT.func,
   onPaste: PT.func,
   onKeyUp: PT.func,
