@@ -335,7 +335,7 @@ class MetaDataPanel extends React.Component {
   getVersionOptions(versionOptions) {
     return _.map(versionOptions, (versionOption) => {
       return {
-        value: _.toString(versionOption.version),
+        value: versionOption.version,
         title: _.toString(versionOption.version)
       }
     })
@@ -350,8 +350,8 @@ class MetaDataPanel extends React.Component {
     const metadata = this.getMetadata(props)
     if (metadataType === 'productTemplate') {
       const prodCatOptions = this.getProductCategoryOptions(templates.productCategories)
-      const categoryValue = metadata && metadata.category ? metadata.category : prodCatOptions[0].value
-      const subCategoryValue = metadata && metadata.subCategory ? metadata.subCategory : prodCatOptions[0].value
+      const categoryValue = metadata && metadata.category
+      const subCategoryValue = metadata && metadata.subCategory
       fields = fields.concat([
         { key: 'id', type: 'number' },
         { key: 'name', type: 'text' },
@@ -367,16 +367,16 @@ class MetaDataPanel extends React.Component {
         { key: 'isAddOn', type: 'checkbox' },
       ])
     } else if (metadataType === 'projectTemplate') {
-      const projectTypeOptions = this.getProductCategoryOptions(templates.projectTypes)
-      const value = metadata && metadata.category ? metadata.category : projectTypeOptions[0].value
-      const subCategoryVal = metadata && metadata.subCategory ? metadata.subCategory : ''
+      const projectTypeOptions = [{title: '--', value: null}, ...this.getProductCategoryOptions(templates.projectTypes)]
+      const value = metadata && metadata.category
+      const subCategoryVal = metadata && metadata.subCategory
       const metadataVal = metadata && metadata.metadataVal ? metadata.metadataVal : {}
       fields = fields.concat([
         { key: 'id', type: 'number' },
         { key: 'name', type: 'text' },
         { key: 'key', type: 'text' },
         { key: 'category', type: 'dropdown', options: projectTypeOptions, value },
-        { key: 'subCategory', type: 'dropdown', options: projectTypeOptions.concat({title: '--', value: ''}), value: subCategoryVal },
+        { key: 'subCategory', type: 'dropdown', options: projectTypeOptions, value: subCategoryVal },
         { key: 'icon', type: 'text' },
         { key: 'question', type: 'text' },
         { key: 'info', type: 'text' },
@@ -406,7 +406,7 @@ class MetaDataPanel extends React.Component {
         ])
       } else {
         const projectVersionOptions = this.getVersionOptions(templates.versionOptions)
-        const value = metadata && metadata.version ? metadata.version : ''
+        const value = metadata && metadata.version
         fields = fields.concat([
           { key: 'key', type: 'text' },
           { key: 'version', type: 'dropdown', options: projectVersionOptions, value },
@@ -433,6 +433,8 @@ class MetaDataPanel extends React.Component {
         }
       })
 
+      const productTemplateValue = metadata && metadata.referenceId
+
       fields = fields.concat([
         { key: 'name', type: 'text' },
         { key: 'description', type: 'textarea' },
@@ -444,7 +446,7 @@ class MetaDataPanel extends React.Component {
         { key: 'completedText', type: 'textarea' },
         { key: 'blockedText', type: 'textarea' },
         { key: 'reference', type: 'text', readonly: true, value: 'productTemplate' },
-        { key: 'referenceId', type: 'dropdown', options: productTemplateOptions, value: String(productTemplateOptions[0].value) },
+        { key: 'referenceId', type: 'dropdown', options: productTemplateOptions, value: productTemplateValue },
         { key: 'metadata', type: 'json' },
         { key: 'hidden', type: 'checkbox' },
       ])
