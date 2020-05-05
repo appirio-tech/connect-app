@@ -707,7 +707,8 @@ export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL |
 export const TC_API_URL = `https://api.${DOMAIN}`
 export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?formData.projectId=`
 export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
-export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
+// export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
+export const TC_NOTIFICATION_URL = 'http://167.71.90.133:4000/v5/notifications'
 
 export const TC_CDN_URL = process.env.NODE_ENV === 'development' ? 'https://d1aahxkjiobka8.cloudfront.net' : 'https://d2nl5eqipnb33q.cloudfront.net'
 
@@ -752,9 +753,9 @@ export const LS_INCOMPLETE_PROJECT_QUERY_PARAMS = 'incompleteProjectQueryParams'
  */
 export const SPECIAL_QUERY_PARAMS = ['returnUrl', 'refCode']
 
-export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
+// export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
 // for local testing Connect App with Project Service, comment the previous line and uncomment the next one
-// export const PROJECTS_API_URL = 'http://localhost:8001'
+export const PROJECTS_API_URL = 'http://167.71.90.133:8001'
 export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL
 
 export const NEW_PROJECT_PATH = '/new-project'
