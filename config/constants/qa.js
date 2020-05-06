@@ -15,7 +15,7 @@ module.exports = {
   ENV               : 'QA',
 
   PROJECTS_API_URL  : 'http://api.topcoder-dev.com',
-  
+
   NEW_RELIC_APPLICATION_ID: process.env.TRAVIS_BRANCH ? '11199233' : '',
 
   ARENA_URL          : '//arena.topcoder-qa.com',
@@ -47,4 +47,6 @@ module.exports = {
   CONNECT_MESSAGE_API_URL: 'https://api.topcoder-qa.com/v5',
   TC_SYSTEM_USERID: process.env.QA_TC_SYSTEM_USERID,
   MAINTENANCE_MODE: process.env.QA_MAINTENANCE_MODE,
+
+  TC_CDN_URL: process.env.TC_CDN_URL || 'https://d1aahxkjiobka8.cloudfront.net'
 }
