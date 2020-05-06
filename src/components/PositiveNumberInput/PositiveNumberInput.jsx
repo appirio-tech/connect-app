@@ -73,7 +73,7 @@ class PositiveNumberInput extends React.PureComponent {
   }
 
   render() {
-    const props = omit(this.props, ['onValidityChange', 'max'])
+    const props = omit(this.props, ['onValidityChange'])
     return <input type="number" min={0} {...props} onKeyDown={this.onKeyDown} onPaste={this.onPaste} onKeyUp={this.onKeyUp} />
   }
 }
