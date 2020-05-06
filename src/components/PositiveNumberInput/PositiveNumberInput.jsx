@@ -7,10 +7,12 @@ class PositiveNumberInput extends React.PureComponent {
     super(props)
 
     this.isInputValid = true
+    this.previousValue = props.value || ''
 
     this.onKeyDown = this.onKeyDown.bind(this)
     this.onPaste = this.onPaste.bind(this)
     this.onKeyUp = this.onKeyUp.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
 
   onKeyDown(evt) {
@@ -21,7 +23,6 @@ class PositiveNumberInput extends React.PureComponent {
     if (isPrintableKey && !digitPattern.test(evt.key)) {
       evt.preventDefault()
     }
-    isPrintableKey && this.enforceInputBelowMax(evt)
     this.props.onKeyDown(evt)
   }
 
@@ -33,7 +34,6 @@ class PositiveNumberInput extends React.PureComponent {
     if (!digitsPattern.test(text)) {
       evt.preventDefault()
     }
-    this.enforceInputBelowMax(evt)
     this.props.onPaste(evt)
   }
 
@@ -46,24 +46,23 @@ class PositiveNumberInput extends React.PureComponent {
     this.props.onKeyUp(evt)
   }
 
+  onChange(evt) {
+    const { onChange } = this.props
+
+    this.enforceInputBelowMax(evt)
+    onChange(evt)
+  }
+
   /**
    * Makes sure the input value is kept below the max value
-   * @param {Event} evt The keydown or paste event
+   * @param {Event} evt The change event
    */
   enforceInputBelowMax(evt) {
-    const { onChange } = this.props
-    const previousValue = evt.target.value
-    if (this.isBelowMaxLimit(previousValue)) {
-      // persists the synthetic event. So that we can use it inside setTimeout
-      evt.persist()
-
-      // setTimeout to let the input element set the actual value after the keydown/paste
-      setTimeout(() => {
-        if (!this.isBelowMaxLimit(evt.target.value)) {
-          evt.target.value = previousValue
-          onChange && onChange(evt)
-        }
-      })
+    const value = evt.target.value
+    if (this.isBelowMaxLimit(value)) {
+      this.previousValue = value
+    } else {
+      evt.target.value = this.previousValue
     }
   }
 
@@ -74,7 +73,17 @@ class PositiveNumberInput extends React.PureComponent {
 
   render() {
     const props = omit(this.props, ['onValidityChange'])
-    return <input type="number" min={0} {...props} onKeyDown={this.onKeyDown} onPaste={this.onPaste} onKeyUp={this.onKeyUp} />
+    return (
+      <input
+        type="number"
+        min={0}
+        {...props}
+        onKeyDown={this.onKeyDown}
+        onPaste={this.onPaste}
+        onKeyUp={this.onKeyUp}
+        onChange={this.onChange}
+      />
+    )
   }
 }
 
@@ -82,8 +91,8 @@ PositiveNumberInput.defaultProps = {
   onKeyDown: noop,
   onPaste: noop,
   onKeyUp: noop,
-  onValidityChange: noop
-
+  onValidityChange: noop,
+  onChange: noop,
 }
 
 PositiveNumberInput.propTypes = {
@@ -91,8 +100,8 @@ PositiveNumberInput.propTypes = {
   onKeyDown: PT.func,
   onPaste: PT.func,
   onKeyUp: PT.func,
-  onValidityChange: PT.func
+  onValidityChange: PT.func,
+  onChange: PT.func,
 }
-
 
 export default PositiveNumberInput
