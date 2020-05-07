@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
+import cn from 'classnames'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { DOMAIN } from '../../config/constants'
@@ -53,7 +54,7 @@ const UserTooltip = ({ usr, id, previewAvatar, size, invitedLabel, showEmailOnly
               </span>
             )}
           </div>
-          <div className="tt-col-user-data">
+          <div className={cn('tt-col-user-data', { 'with-invite-label': invitedLabel })}>
             {!showEmailOnly && <div className="user-name-container">
               <span>{userFullName}</span>
             </div>}
