@@ -100,9 +100,9 @@ class TalentPickerRow extends React.PureComponent {
           People
         </label>
         <PositiveNumberInput
-          type="number"
           styleName="noMargin"
           className={cn('tc-file-field__inputs', { error: isRowIncomplete && value.people <= 0 })}
+          max={10000}
           value={value.people || ''}
           onChange={this.handlePeopleChange}
           onBlur={this.resetPeople}
@@ -116,9 +116,9 @@ class TalentPickerRow extends React.PureComponent {
           Duration (months)
         </label>
         <PositiveNumberInput
-          type="number"
           styleName="noMargin"
           className={cn('tc-file-field__inputs', {error: isRowIncomplete && value.duration <= 0 })}
+          max={10000}
           value={value.duration || ''}
           onChange={this.handleDurationChange}
           onBlur={this.resetDuration}
