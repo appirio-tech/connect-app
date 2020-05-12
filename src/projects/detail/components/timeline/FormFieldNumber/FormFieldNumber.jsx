@@ -10,6 +10,10 @@ const TCFormFields = FormsyForm.Fields
 import './FormFieldNumber.scss'
 
 const FormFieldNumber = (props) => {
+  let ref
+  const setValue = (value) => {
+    ref && ref.setValue(+value)
+  }
 
   return (
     <div styleName="milestone-post">
@@ -17,7 +21,7 @@ const FormFieldNumber = (props) => {
         <label styleName="label-title">{props.label}</label>
       </div>
       <div styleName="col-right">
-        <TCFormFields.TextInput {...props} />
+        <TCFormFields.TextInput {...props} ref={(textInput) => { ref = textInput }} setValue={setValue} />
       </div>
     </div>
   )
