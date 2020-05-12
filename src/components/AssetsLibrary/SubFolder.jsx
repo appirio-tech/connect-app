@@ -29,12 +29,12 @@ class SubFolder extends React.Component {
     this.clearFieldValues = this.clearFieldValues.bind(this)
     this.wrappedSetFilter = this.wrappedSetFilter.bind(this)
   }
-  
+
   componentDidMount() {
     // scroll to the top when open
     document.body.scrollTop = document.documentElement.scrollTop = 0
   }
-  
+
   onDeleteConfirm() {
     const link = this.props.link.children[this.state.linkToDelete]
     if (link) {
@@ -42,39 +42,39 @@ class SubFolder extends React.Component {
       this.onDeleteCancel()
     }
   }
-  
+
   onDeleteCancel() {
     this.setState({
       linkToDelete: -1
     })
   }
-  
+
   deleteLink(idx) {
     this.setState({
       linkToDelete: idx
     })
   }
-  
+
   hasAccess(createdBy) {
     const { loggedInUser } = this.props
     return Number.parseInt(createdBy) === loggedInUser.userId
   }
-  
+
   isURLValid(linkAddress) {
     return /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/.test(linkAddress)
   }
-  
+
   clearFieldValues() {
     this.nameFieldRef.clearFilter()
     this.sharedWithFieldRef.clearFilter()
     this.dateFieldRef.clearFilter()
   }
-  
+
   wrappedSetFilter(name, value) {
     this.props.setFilter(name, value)
     this.props.updateSubContents()
   }
-  
+
   render() {
     const {
       link,
@@ -89,7 +89,7 @@ class SubFolder extends React.Component {
       filtered
     } = this.props
     const { linkToDelete } = this.state
-    
+
     return (
       <div styleName={cn({'assets-gridview-container-active': (linkToDelete >= 0)}, '')}>
         {(linkToDelete >= 0) && <div styleName="assets-gridview-modal-overlay"/>}
@@ -115,9 +115,9 @@ class SubFolder extends React.Component {
               <FilterColHeader
                 ref={comp => this.nameFieldRef = comp}
                 title="Name"
-                filterName="name"
+                filterName="name.name"
                 setFilter={this.wrappedSetFilter}
-                value={getFilterValue('name')}
+                value={getFilterValue('name.name')}
               />
             </div>
             <div styleName="flex-item-title item-shared-with">

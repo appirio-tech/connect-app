@@ -3,6 +3,7 @@
   .Tooltip {
     &.customer-data {
       .tooltip-target {
+        z-index: 0;
         display: flex;
         &>div:first-child {
           margin-left: -5px;
@@ -126,11 +127,14 @@
               display: flex;
               flex-wrap: wrap;
               align-content: flex-start;
-              position: relative;
+              overflow: hidden;
             }
 
             .user-name-container {
-              flex: 1 0 90%;
+              flex: 1 1 100%;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
 
               span {
                 font-size: 15px;
@@ -141,8 +145,10 @@
             }
 
             .user-handle-container {
-              padding-right: 10px;
               height: 20px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
 
               &.with-email {
                 border-right: 1px solid $tc-gray-50;
@@ -158,6 +164,9 @@
             .user-email-container {
               flex: 1;
               padding-left: 10px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
 
               a {
                 font-size: 12px;
@@ -179,6 +188,11 @@
                   line-height: 20px;
                 }
               }
+            }
+
+            .tt-col-user-data.with-invite-label .user-name-container,
+            .tt-col-user-data.with-invite-label .user-email-container.text-dark {
+              margin-right: 75px;
             }
           }
 

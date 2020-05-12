@@ -10,9 +10,12 @@ import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpe
 import SelectDropdown from '../SelectDropdown/SelectDropdown'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import AutocompleteInputContainer from './AutocompleteInputContainer'
-import {PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PENDING} from '../../config/constants'
+import {
+  PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PENDING,
+  PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED, PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED,
+} from '../../config/constants'
 import PERMISSIONS from '../../config/permissions'
-import {checkPermission} from '../../helpers/permissions'
+import {hasPermission} from '../../helpers/permissions'
 import { compareEmail, compareHandles } from '../../helpers/utils'
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
 
@@ -114,20 +117,8 @@ class TopcoderManagementDialog extends React.Component {
   isSelectedMemberAlreadyInvited(topcoderTeamInvites = [], selectedMember) {
     return !!topcoderTeamInvites.find((invite) => (
       (invite.email && compareEmail(invite.email, selectedMember.label)) ||
-      (invite.userId && compareHandles(this.resolveUserHandle(invite.userId), selectedMember.label))
+      (invite.userId && compareHandles(invite.handle, selectedMember.label))
     ))
-  }
-
-  /**
-   * Get user handle using `allMembers` which comes from props and contains all the users
-   * which are loaded to `members.members` in the Redux store
-   *
-   * @param {Number} userId user id
-   */
-  resolveUserHandle(userId) {
-    const { allMembers } = this.props
-
-    return _.get(_.find(allMembers, { userId }), 'handle')
   }
 
   showIndividualErrors(error) {
@@ -135,7 +126,7 @@ class TopcoderManagementDialog extends React.Component {
 
     const msgs = _.keys(uniqueMessages).map((message) => {
       const users = uniqueMessages[message].map((failed) => (
-        failed.email ? failed.email : this.resolveUserHandle(failed.userId)
+        failed.email ? failed.email : failed.handle
       ))
 
       return ({
@@ -157,8 +148,9 @@ class TopcoderManagementDialog extends React.Component {
       selectedMembers, processingInvites, updatingMemberIds
     } = this.props
     const { processingInviteRequestIds } = this.state
-    const showRemove = currentUser.isAdmin || (isMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
+    const showRemove = hasPermission(PERMISSIONS.MANAGE_TOPCODER_TEAM)
     const showApproveDecline = currentUser.isAdmin || currentUser.isCopilotManager
+    const showSuggestions = hasPermission(PERMISSIONS.SEE_MEMBER_SUGGESTIONS)
     let i = 0
 
     return (
@@ -224,8 +216,9 @@ class TopcoderManagementDialog extends React.Component {
                         </div>
                       )
                     }
-                    const types = ['Observer', 'Copilot', 'Manager', 'Account Manager', 'Account Executive', 'Program Manager', 'Solution Architect', 'Project Manager']
+                    let types = ['Copilot', 'Manager', 'Account Manager', 'Account Executive', 'Program Manager', 'Solution Architect', 'Project Manager']
                     const currentType = role
+                    types =  currentType === 'Observer'? ['Observer', ...types] : [...types] 
                     const onClick = (type) => {
                       this.onUserRoleChange(member.userId, member.id, type)
                     }
@@ -276,8 +269,8 @@ class TopcoderManagementDialog extends React.Component {
               const approve = () => {
                 this.setState(prevState => ({ processingInviteRequestIds: [ ...prevState.processingInviteRequestIds, invite.id ] }))
                 approveOrDecline({
-                  userId: invite.userId,
-                  status: 'request_approved'
+                  id: invite.id,
+                  status: PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED
                 }).then(() => {
                   this.setState(prevState => ({ processingInviteRequestIds: _.xor(prevState.processingInviteRequestIds, [invite.id]) }))
                 })
@@ -285,8 +278,8 @@ class TopcoderManagementDialog extends React.Component {
               const decline = () => {
                 this.setState(prevState => ({ processingInviteRequestIds: [ ...prevState.processingInviteRequestIds, invite.id ] }))
                 approveOrDecline({
-                  userId: invite.userId,
-                  status: 'request_rejected'
+                  id: invite.id,
+                  status: PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED
                 }).then(() => {
                   this.setState(prevState => ({ processingInviteRequestIds: _.xor(prevState.processingInviteRequestIds, [invite.id]) }))
                 })
@@ -363,6 +356,7 @@ class TopcoderManagementDialog extends React.Component {
               currentUser={currentUser}
               selectedMembers={selectedMembers}
               disabled={processingInvites || (!currentUser.isAdmin && !isMember && !currentUser.isCopilotManager)}
+              showSuggestions={showSuggestions}
             />
             { this.state.showAlreadyMemberError && <div className="error-message">
               Project Member(s) can\'t be invited again. Please remove them from list.
@@ -372,7 +366,7 @@ class TopcoderManagementDialog extends React.Component {
                 name="role"
                 value={this.state.userRole}
                 theme="role-drop-down default"
-                options={this.roles}
+                options={this.roles.filter(role => role.title !== 'Observer')}
                 onSelect={this.handleRoles}
               />
             </Formsy.Form>

@@ -54,6 +54,7 @@ export const SAVE_NOTIFICATION_SETTINGS_FAILURE = 'SAVE_NOTIFICATION_SETTINGS_FA
 
 export const GET_PROFILE_SETTINGS_PENDING = 'GET_PROFILE_SETTINGS_PENDING'
 export const GET_PROFILE_SETTINGS_SUCCESS = 'GET_PROFILE_SETTINGS_SUCCESS'
+export const GET_PROFILE_SETTINGS_RESET = 'GET_PROFILE_SETTINGS_RESET'
 export const GET_PROFILE_SETTINGS_FAILURE = 'GET_PROFILE_SETTINGS_FAILURE'
 export const SAVE_PROFILE_SETTINGS_PENDING = 'SAVE_PROFILE_SETTINGS_PENDING'
 export const SAVE_PROFILE_SETTINGS_SUCCESS = 'SAVE_PROFILE_SETTINGS_SUCCESS'
@@ -419,6 +420,12 @@ export const LOAD_PROJECT_SUMMARY_SUCCESS = 'LOAD_PROJECT_SUMMARY_SUCCESS'
 export const LOAD_PROJECT_SUMMARY_FAILURE = 'LOAD_PROJECT_SUMMARY_FAILURE'
 export const SET_LOOKER_SESSION_EXPIRED = 'SET_LOOKER_SESSION_EXPIRED'
 
+// User Reports
+export const LOAD_USER_REPORTS         = 'LOAD_USER_REPORTS'
+export const LOAD_USER_REPORTS_PENDING = 'LOAD_USER_REPORTS_PENDING'
+export const LOAD_USER_REPORTS_SUCCESS = 'LOAD_USER_REPORTS_SUCCESS'
+export const LOAD_USER_REPORTS_FAILURE = 'LOAD_USER_REPORTS_FAILURE'
+
 // Product attachments
 export const ADD_PRODUCT_ATTACHMENT         = 'ADD_PRODUCT_ATTACHMENT'
 export const ADD_PRODUCT_ATTACHMENT_PENDING = 'ADD_PRODUCT_ATTACHMENT_PENDING'
@@ -560,6 +567,11 @@ export const SCOPE_CHANGE_REQ_STATUS_REJECTED = 'rejected'
 export const SCOPE_CHANGE_REQ_STATUS_ACTIVATED = 'activated'
 export const SCOPE_CHANGE_REQ_STATUS_CANCELED = 'canceled'
 
+/*
+* Project Attachment types
+*/
+export const ATTACHMENT_TYPE_FILE = 'file'
+export const ATTACHMENT_TYPE_LINK = 'link'
 
 export const PHASE_STATUS_DRAFT = 'draft'
 export const PHASE_STATUS_IN_REVIEW = 'in_review'
@@ -695,7 +707,8 @@ export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL |
 export const TC_API_URL = `https://api.${DOMAIN}`
 export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?formData.projectId=`
 export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
-export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
+// export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
+export const TC_NOTIFICATION_URL = 'http://167.71.90.133:4000/v5/notifications'
 
 export const TC_CDN_URL = process.env.NODE_ENV === 'development' ? 'https://d1aahxkjiobka8.cloudfront.net' : 'https://d2nl5eqipnb33q.cloudfront.net'
 
@@ -740,9 +753,9 @@ export const LS_INCOMPLETE_PROJECT_QUERY_PARAMS = 'incompleteProjectQueryParams'
  */
 export const SPECIAL_QUERY_PARAMS = ['returnUrl', 'refCode']
 
-export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
+// export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
 // for local testing Connect App with Project Service, comment the previous line and uncomment the next one
-// export const PROJECTS_API_URL = 'http://localhost:8001'
+export const PROJECTS_API_URL = 'http://167.71.90.133:8001'
 export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL
 
 export const NEW_PROJECT_PATH = '/new-project'
@@ -965,4 +978,4 @@ export const PROJECT_REPORTS = {
 /**
  * Report session length in seconds
  */
-export const REPORT_SESSION_LENGTH = 30 * 60 // 30 minutes
+export const REPORT_SESSION_LENGTH = 25 * 60 // 25 minutes (5 minutes less than the report session)

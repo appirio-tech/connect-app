@@ -8,9 +8,9 @@ import qs from 'query-string'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { loadProjectDashboard } from '../actions/projectDashboard'
 import { clearLoadedProject } from '../actions/project'
-import { acceptOrRefuseInvite, acceptOrRefuseInviteFail } from '../actions/projectMember'
+import { acceptOrRefuseInvite } from '../actions/projectMember'
 import { loadProjects } from '../actions/loadProjects'
-import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator'
+import { getEmptyProjectObject } from '../reducers/project'
 
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
@@ -80,7 +80,9 @@ const ProjectDetailView = (props) => {
   let estimationQuestion = null
   const { estimateBlocks } = getProductEstimate({scope: template}, props.project)
 
-  if (estimateBlocks.length > 0){
+  // we can hide estimation component just by setting `hideEstimation` inside Project Template
+  // also, if there are no `estimateBlocks` found we also don't show estimation component
+  if (!template.hideEstimation && estimateBlocks.length > 0){
     _.forEach(template.sections, (section) => {
       _.forEach(section.subSections, (subSection) => {
         if (subSection.type === 'questions') {
@@ -123,16 +125,26 @@ class ProjectDetail extends Component {
 
     this.state = {
       isCallingInviteAction: false,
-      isUserAcceptedInvitation: false,
+      isUserAcceptedInvitation: undefined,
+      shouldForceCallAcceptRefuseRequest: false,
     }
 
     this.onUserInviteAction = this.onUserInviteAction.bind(this)
-    this.shouldForceCallAcceptRefuseRequest = this.shouldForceCallAcceptRefuseRequest.bind(this)
   }
 
   componentWillMount() {
     const projectId = this.props.match.params.projectId
     this.props.loadProjectDashboard(projectId)
+
+    // set flag that we have to force invitation action from the beginning
+    // so we can show appropriate loading indicator as soon as possible
+    const invitationQueryParamValue = this.getInvitationQueryParamValue()
+    if (!_.isUndefined(invitationQueryParamValue)) {
+      this.setState({
+        shouldForceCallAcceptRefuseRequest: true,
+        isUserAcceptedInvitation: invitationQueryParamValue === 'accept'
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -142,7 +154,7 @@ class ProjectDetail extends Component {
   componentWillReceiveProps(nextProps) {
     const {isProcessing, isLoading, error, project, match, showUserInvited} = nextProps
     // handle just deleted projects
-    if (! (error || isLoading || isProcessing) && _.isEmpty(project))
+    if (! (error || isLoading || isProcessing) && _.isEqual(getEmptyProjectObject(), project))
       this.props.history.push('/projects/')
     if (project && project.name) {
       document.title = `${project.name} - Topcoder`
@@ -162,15 +174,21 @@ class ProjectDetail extends Component {
       this.props.loadProjectDashboard(match.params.projectId)
     }
 
-    const { previousShowUserInvited } = this.props
-    if ((!error) && showUserInvited === true && !previousShowUserInvited && this.shouldForceCallAcceptRefuseRequest()) {
-      const queryUrlParams = qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
-      this.onUserInviteAction(queryUrlParams.invitation === 'accept')
-    }
-
-    if (project && project.invites && project.invites.length > 0 && this.shouldForceCallAcceptRefuseRequest()) {
-      // remove invitation query param
-      this.props.history.replace(`/projects/${this.props.match.params.projectId}`)
+    // in case we have force automatic invite accept/decline
+    // track the moment when we load invites when `showUserInvited` is no `undefined` anymore
+    // and we have invite, then trigger action
+    // if there is no invite, then silently remove invite query param
+    if (_.isUndefined(this.props.showUserInvited) && !_.isUndefined(showUserInvited) && this.state.shouldForceCallAcceptRefuseRequest) {
+      if (showUserInvited) {
+        const invitationQueryParamValue = this.getInvitationQueryParamValue()
+        this.onUserInviteAction(invitationQueryParamValue === 'accept')
+      } else {
+        this.props.history.replace(`/projects/${this.props.match.params.projectId}`)
+        this.setState({
+          shouldForceCallAcceptRefuseRequest: false,
+          isUserAcceptedInvitation: undefined
+        })
+      }
     }
   }
 
@@ -191,50 +209,51 @@ class ProjectDetail extends Component {
     if (this.state.isCallingInviteAction) {
       return
     }
-    const { acceptOrRefuseInvite, acceptOrRefuseInviteFail } = this.props
+    const { acceptOrRefuseInvite } = this.props
     this.setState({
       isCallingInviteAction: true,
       isUserAcceptedInvitation,
     })
     acceptOrRefuseInvite(this.props.match.params.projectId, {
-      userId: this.props.currentUserId,
-      email: this.props.currentUserEmail,
+      id: this.props.userInvitationId,
       status: isUserAcceptedInvitation ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
     })
       .then(() => {
-        this.setState({ isCallingInviteAction: false })
-        if(!isUserAcceptedInvitation) {
-        // navigate to project listing and reload projects
+        if (!isUserAcceptedInvitation) {
+          // navigate to project listing and reload projects
           this.props.loadProjects({ sort: 'updatedAt desc' })
-          this.props.history.push('/projects/')
+          this.props.history.push('/projects?sort=updatedAt%20desc')
         } else {
-          if (this.shouldForceCallAcceptRefuseRequest(this.props)) {
-          // remove query param
+          // if we have query param to enforce invite accept/decline - remove the params when invite accepted
+          if (this.state.shouldForceCallAcceptRefuseRequest) {
             this.props.history.replace(`/projects/${this.props.match.params.projectId}`)
           }
           this.props.loadProjectDashboard(this.props.match.params.projectId)
         }
-      }).catch(err => {
+        this.setState({
+          isCallingInviteAction: false,
+          // as soon as invite action is done, disable flag for forcing invite action
+          shouldForceCallAcceptRefuseRequest: false
+        })
+      }).catch(() => {
         this.setState({ isCallingInviteAction: false })
-        // show code bot error if invite fail
-        acceptOrRefuseInviteFail(err)
       })
   }
 
   /**
-   * Check if we should force call accept or refuse invite request
+   * Get the value of `invitation` query param.
+   *
+   * @returns {String} value of `invitation` query param
    */
-  shouldForceCallAcceptRefuseRequest() {
+  getInvitationQueryParamValue() {
     const queryUrlParams = qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
-    if (queryUrlParams.invitation && _.includes(['accept', 'decline'], queryUrlParams.invitation) ) {
-      return true
-    }
-    return false
+
+    return queryUrlParams.invitation
   }
 
   render() {
-    const { error } = this.props
-    const { isCallingInviteAction, isUserAcceptedInvitation } = this.state
+    const { inviteError } = this.props
+    const { isCallingInviteAction, isUserAcceptedInvitation, shouldForceCallAcceptRefuseRequest } = this.state
     const currentMemberRole = this.getProjectRoleForCurrentUser(this.props)
     const adminRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
     const isSuperUser = this.props.currentUserRoles.some((role) => adminRoles.indexOf(role) !== -1)
@@ -242,22 +261,9 @@ class ProjectDetail extends Component {
     const isManageUser = this.props.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
     const isCustomerUser = !(isManageUser || isSuperUser)
     const showUserInvited = this.props.showUserInvited
-    if (showUserInvited && this.shouldForceCallAcceptRefuseRequest(this.props)) {
-      if (error) {
-        // show codebbot error
-        return (<EnhancedProjectDetailView {...this.props}/>)
-      }
-      return (<LoadingIndicator />)
-    }
+
     return (
-      !showUserInvited?
-        <EnhancedProjectDetailView
-          {...this.props}
-          currentMemberRole={currentMemberRole}
-          isSuperUser={isSuperUser}
-          isManageUser={isManageUser}
-          isCustomerUser={isCustomerUser}
-        />:
+      ((showUserInvited || shouldForceCallAcceptRefuseRequest) && !inviteError || isCallingInviteAction) ?
         <Dialog
           onCancel={() => this.onUserInviteAction(false)}
           onConfirm={() => this.onUserInviteAction(true)}
@@ -266,7 +272,14 @@ class ProjectDetail extends Component {
           content={JOIN_INVITE_MESSAGE}
           buttonText="Join project"
           buttonColor="blue"
-          isLoading={isCallingInviteAction}
+          isLoading={isCallingInviteAction || shouldForceCallAcceptRefuseRequest}
+        /> :
+        <EnhancedProjectDetailView
+          {...this.props}
+          currentMemberRole={currentMemberRole}
+          isSuperUser={isSuperUser}
+          isManageUser={isManageUser}
+          isCustomerUser={isCustomerUser}
         />
     )
   }
@@ -281,6 +294,7 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
     isLoading: projectDashboard.isLoading,
     isProcessing: projectState.processing,
     error: projectState.inviteError ? projectState.inviteError : projectState.error,
+    inviteError: projectState.inviteError,
     project: projectState.project,
     projectNonDirty: projectState.projectNonDirty,
     projectTemplate: (templateId && projectTemplates) ? (
@@ -296,11 +310,12 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
     productsTimelines,
     allProductTemplates: templates.productTemplates,
     currentUserRoles: loadUser.user.roles,
-    showUserInvited: projectState.showUserInvited
+    showUserInvited: projectState.showUserInvited,
+    userInvitationId: projectState.userInvitationId
   }
 }
 
-const mapDispatchToProps = { loadProjectDashboard, clearLoadedProject, acceptOrRefuseInvite, loadProjects, acceptOrRefuseInviteFail }
+const mapDispatchToProps = { loadProjectDashboard, clearLoadedProject, acceptOrRefuseInvite, loadProjects }
 
 ProjectDetail.propTypes = {
   project: PropTypes.object,

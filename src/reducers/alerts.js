@@ -220,10 +220,6 @@ export default function(state = {}, action) {
     Alert.success('Member updated successfully.')
     return state
 
-  case UPDATE_PROJECT_MEMBER_FAILURE:
-    Alert.error('Error updating member.')
-    return state
-
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS:
     if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_ACCEPTED){
       Alert.success('You\'ve successfully joined the project.')
@@ -269,6 +265,7 @@ export default function(state = {}, action) {
   case EXTEND_PRODUCT_MILESTONE_FAILURE:
   case SUBMIT_FINAL_FIXES_REQUEST_FAILURE:
   case ACCEPT_OR_REFUSE_INVITE_FAILURE:
+  case UPDATE_PROJECT_MEMBER_FAILURE:
     if (action.payload && action.payload.response) {
       const rdata = action.payload.response.data
       if (rdata && rdata.result && rdata.result.content && rdata.result.content.message) {

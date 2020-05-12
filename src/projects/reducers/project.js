@@ -29,6 +29,10 @@ import _ from 'lodash'
 import update from 'react-addons-update'
 import { clean } from '../../helpers/utils'
 
+export function getEmptyProjectObject() {
+  return { invites: [], members: [] }
+}
+
 const initialState = {
   isLoading: true,
   processing: false,
@@ -38,19 +42,20 @@ const initialState = {
   processingAttachments: false,
   attachmentsAwaitingPermission: null,
   attachmentPermissions: null,
+  attachmentTags: null,
   error: false,
   inviteError: false,
-  project: {
-    members: [],
-    invites: [] // invites are pushed directly into it hence need to declare first
-  },
+  // invites are pushed directly into it hence need to declare first
+  // using the getEmptyProjectObject method
+  project: getEmptyProjectObject(),
   assetsMembers: {},
-  projectNonDirty: {},
+  projectNonDirty: getEmptyProjectObject(),
   updateExisting: false,
   phases: null,
   phasesNonDirty: null,
   isLoadingPhases: false,
-  showUserInvited: false,
+  showUserInvited: undefined, // keep default as `undefined` so we can track when it changes values to false/true on load
+  userInvitationId: null,
   phasesStates: {} // controls opened phases and tabs of the phases
 }
 
@@ -186,13 +191,14 @@ export const projectState = function (state=initialState, action) {
   case LOAD_PROJECT_PENDING:
     return Object.assign({}, state, {
       isLoading: true,
-      project: null,
-      projectNonDirty: null
+      project: getEmptyProjectObject(),
+      projectNonDirty: getEmptyProjectObject(),
     })
 
   case LOAD_PROJECT_SUCCESS:
     return Object.assign({}, state, {
       isLoading: false,
+      error: false,
       project: {
         // if these arrays are not returned we should init them with empty arrays
         // as later code counts on this
@@ -206,15 +212,35 @@ export const projectState = function (state=initialState, action) {
     })
 
   case LOAD_PROJECT_MEMBER_INVITE_SUCCESS: {
+    const { invites, currentUserId, currentUserEmail } = action.payload
+    let invite
+    if (invites && invites.length > 0) {
+      invite = _.find(invites, inv => (
+        (
+          // user is invited by `handle`
+          inv.userId !== null && inv.userId === currentUserId ||
+          // user is invited by `email` (invite doesn't have `userId`)
+          (
+            inv.userId === null &&
+            inv.email &&
+            currentUserEmail &&
+            inv.email.toLowerCase() === currentUserEmail.toLowerCase()
+          )
+        ) &&
+        !inv.deletedAt &&
+        inv.status === 'pending'
+      ))
+    }
     return Object.assign({}, state, {
-      showUserInvited: true
+      showUserInvited: !!invite,
+      userInvitationId: invite ? invite.id : null
     })
   }
 
   case LOAD_PROJECT_MEMBER_INVITE_PENDING:
     return Object.assign({}, state, {
       isLoading: true,
-      showUserInvited: false
+      showUserInvited: undefined
     })
 
   case ACCEPT_OR_REFUSE_INVITE_PENDING:
@@ -223,9 +249,19 @@ export const projectState = function (state=initialState, action) {
     })
 
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
+    const { id: inviteId } = action.payload
+    const invites = _.filter(state.project.invites, m => m.id !== inviteId)
     return Object.assign({}, state, {
       showUserInvited: false,
       inviteError: false,
+      project: {
+        ...state.project,
+        invites
+      },
+      projectNonDirty: {
+        ...state.projectNonDirty,
+        invites
+      }
     })
   }
 
@@ -319,8 +355,8 @@ export const projectState = function (state=initialState, action) {
   case GET_PROJECTS_SUCCESS:
     return Object.assign({}, state, {
       isLoading: true, // this is excpected to be default value when there is not project loaded
-      project: {},
-      projectNonDirty: {},
+      project: getEmptyProjectObject(),
+      projectNonDirty: getEmptyProjectObject(),
       phases: null,
       phasesNonDirty: null,
     })
@@ -490,8 +526,8 @@ export const projectState = function (state=initialState, action) {
     return Object.assign({}, state, {
       processing: false,
       error: false,
-      project: {},
-      projectNonDirty: {}
+      project: getEmptyProjectObject(),
+      projectNonDirty: getEmptyProjectObject(),
     })
 
   // Project attachments
@@ -519,7 +555,8 @@ export const projectState = function (state=initialState, action) {
     }
     return update(state, {
       attachmentsAwaitingPermission: query,
-      attachmentPermissions: { $set : null }
+      attachmentPermissions: { $set : null },
+      attachmentTags: { $set: null }
     })
   }
 
@@ -532,7 +569,8 @@ export const projectState = function (state=initialState, action) {
   case CHANGE_ATTACHMENT_PERMISSION:
     return {
       ...state,
-      attachmentPermissions: action.payload
+      attachmentPermissions: action.payload.allowedUsers,
+      attachmentTags: action.payload.tags
     }
 
   case UPDATE_PROJECT_ATTACHMENT_SUCCESS: {
@@ -697,20 +735,14 @@ export const projectState = function (state=initialState, action) {
     return newState
   }
 
-  case REMOVE_CUSTOMER_INVITE_SUCCESS: {
-    const newState = Object.assign({}, state)
-    _.remove(newState.project.invites, i => action.payload.id === i.id)
-    newState.projectNonDirty.invites = newState.project.invites
-    newState.processingInvites = false
-    return newState
-  }
-
+  case REMOVE_CUSTOMER_INVITE_SUCCESS:
   case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS: {
-    const newState = Object.assign({}, state)
-    _.remove(newState.project.invites, i => action.payload.id === i.id)
-    newState.projectNonDirty.invites = newState.project.invites
-    newState.processingInvites = false
-    return newState
+    const idx = _.findIndex(state.project.invites, { id: action.meta.inviteId })
+    return update(state, {
+      processingInvites: { $set : false },
+      project: { invites: { $splice: [[idx, 1]] } },
+      projectNonDirty: { invites: { $splice: [[idx, 1]] } }
+    })
   }
 
   case UPDATE_PROJECT_MEMBER_SUCCESS: {

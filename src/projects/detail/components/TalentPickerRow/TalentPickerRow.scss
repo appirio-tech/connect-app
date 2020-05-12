@@ -1,0 +1,121 @@
+@import "~tc-ui/src/styles/tc-includes";
+@import "../../../../styles/includes";
+
+.action-btn {
+  cursor: pointer;
+  margin: 0 2px;
+  background-color: $tc-gray-neutral-dark;
+  height: 23px;
+  width: 23px;
+  text-align: center;
+  line-height: 25px;
+  border-radius: 12px;
+
+  svg {
+    fill: $tc-gray-50;
+    height: 10px;
+  }
+}
+
+.action-btn-remove {
+  margin-left: 8px;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.row {
+  border: 1px solid $tc-gray-neutral-dark;
+  border-top-width: 0;
+  white-space: nowrap;
+  padding: 4px;
+  line-height: 20px;
+  font-size: 13px;
+  vertical-align: top;
+
+  &:first-child {
+    border-top-width: 1px;
+  }
+}
+
+.inner-row {
+  width: 100%;
+  display: flex;
+}
+
+.col {
+  padding: 4px 7.5px;
+  flex-grow: 0;
+  flex-shrink: 0;
+
+  &.col-duration,
+  &.col-people {
+    width: 50%;
+  }
+
+  &.col-skill-selection {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-bottom: 4px;
+
+    // Prevents the column from expanding beyond parent due to flex-grow:1
+    min-width: 0;
+  }
+
+  &.col-role {
+    flex-grow: 1;
+
+    // Prevents the column from expanding beyond parent due to flex-grow:1
+    min-width: 0;
+  }
+
+  &.col-actions {
+    width: 76px;
+  }
+
+  // Resets standard margins applied by tc-file-field__inputs elements
+  .noMargin {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .label {
+    display: block;
+  }
+}
+
+.col-role-container {
+  display: flex;
+  align-items: center;
+}
+
+.col-actions-container {
+  justify-content: flex-end;
+  margin-top: 5px;
+}
+
+.col-role {
+  svg {
+    width: 22.5px;
+    margin-right: 11px;
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+}
+
+.role-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.skillHasError {
+  :global {
+    .react-select__control {
+      border-color: $tc-red-70;
+    }
+  }
+}

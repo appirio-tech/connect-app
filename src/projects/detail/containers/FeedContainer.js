@@ -33,7 +33,7 @@ import SectionTitle from '../components/SectionTitle'
 import SingleFeedContainer from './SingleFeedContainer'
 
 import { isSystemUser } from '../../../helpers/tcHelpers'
-import { checkPermission } from '../../../helpers/permissions'
+import { hasPermission } from '../../../helpers/permissions'
 import PERMISSIONS from '../../../config/permissions'
 
 import './FeedContainer.scss'
@@ -532,7 +532,7 @@ const mapStateToProps = ({ projectTopics, members, loadUser, notifications, proj
     }))
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
-  const canAccessPrivatePosts = checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
+  const canAccessPrivatePosts = hasPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
   if (canAccessPrivatePosts) {
     allFeed = [...allFeed, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
   }

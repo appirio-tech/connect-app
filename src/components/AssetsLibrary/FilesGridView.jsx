@@ -24,6 +24,8 @@ import {
   PROJECT_ASSETS_SHARED_WITH_TOPCODER_MEMBERS,
   PROJECT_FEED_TYPE_MESSAGES
 } from '../../config/constants'
+import { hasPermission } from '../../helpers/permissions'
+import PERMISSIONS from '../../config/permissions'
 
 let selectedLink
 let clearing = false
@@ -40,6 +42,7 @@ const FilesGridView = ({
   onEditIntent,
   title,
   selectedUsers,
+  selectedTags,
   onAddAttachment,
   assetsMembers,
   isSharingAttachment,
@@ -106,12 +109,13 @@ const FilesGridView = ({
     }
   }
 
-  const onAddingAttachmentPermissions = (allowedUsers) => {
+  const onAddingAttachmentPermissions = (allowedUsers, tags) => {
     const { attachments, projectId } = pendingAttachments
     _.forEach(attachments, f => {
       const attachment = {
         ...f,
-        allowedUsers
+        allowedUsers,
+        tags
       }
       onAddAttachment(projectId, attachment)
     })
@@ -195,6 +199,7 @@ const FilesGridView = ({
               onSubmit={onAddingAttachmentPermissions}
               onChange={onChangePermissions}
               selectedUsers={selectedUsers}
+              selectedTags={selectedTags}
               projectMembers={projectMembers}
               loggedInUser={loggedInUser}
               isSharingAttachment={isSharingAttachment}
@@ -207,8 +212,9 @@ const FilesGridView = ({
                   ref={(comp) => nameFieldRef = comp}
                   title="Name"
                   setFilter={setFilter}
-                  filterName="name"
-                  value={getFilterValue('name')}
+                  type="name"
+                  name={getFilterValue('name.name')}
+                  tag={getFilterValue('name.tag')}
                 />
               </div>
               <div styleName="flex-item-title item-shared-with">
@@ -241,13 +247,13 @@ const FilesGridView = ({
               const onDeleteCancel = () => onDeleteIntent(-1)
               const handleDeleteClick = () => onDeleteIntent(idx)
 
-              const onEditConfirm = (title, allowedUsers) => {
-                onEdit(link.id, title, allowedUsers)
+              const onEditConfirm = (title, allowedUsers, tags) => {
+                onEdit(link, title, allowedUsers, tags)
                 onEditIntent(-1)
               }
               const onEditCancel = () => onEditIntent(-1)
               const handleEditClick = () => onEditIntent(idx)
-              const canEdit = `${link.createdBy}` === `${loggedInUser.userId}`
+              const canEdit = `${link.createdBy}` === `${loggedInUser.userId}` || (hasPermission(PERMISSIONS.MANAGE_NOT_OWN_ATTACHEMENT))
 
               const changeSubFolder = () => {
                 onChangeSubFolder(link)
@@ -303,7 +309,14 @@ const FilesGridView = ({
                     <div styleName="flex-item item-type">
                       <FileIcon type={link.title.split('.')[1]} />
                     </div>
-                    <div styleName="flex-item item-name"><p>{renderLink(link)}</p></div>
+                    <div styleName="flex-item item-name">
+                      <div styleName="item-name-tag-wrapper">
+                        <p>{renderLink(link)}</p>
+                        {
+                          link.tags && link.tags.map((t, i) => <span styleName="tag" key={i}>{t}</span>)
+                        }
+                      </div>
+                    </div>
                     <div styleName="flex-item item-shared-with">
                       {renderSharedWith(link)}
                     </div>
@@ -338,6 +351,7 @@ FilesGridView.propTypes = {
   canEdit: PropTypes.bool,
   links: PropTypes.array.isRequired,
   selectedUsers: PropTypes.string,
+  selectedTags: PropTypes.arrayOf(PropTypes.string),
   projectMembers: PropTypes.object,
   pendingAttachments: PropTypes.object,
   onUploadAttachment: PropTypes.func,

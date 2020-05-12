@@ -19,17 +19,15 @@ class AutocompleteInputContainer extends React.Component {
    * Clear user suggestion list
    */
   clearUserSuggestions() {
-    const { currentUser } = this.props
+    const { showSuggestions } = this.props
 
-    if (!currentUser.isCustomer) {
-      // When customer user is typing a user handle to invite we should not try to clear suggestions,
-      // because we don't show suggestions for customer
+    if (!showSuggestions) {
+      // When we don't show suggestions, we should not clean them
       this.props.onClearUserSuggestions()
     }
   }
 
   onInputChange(inputValue) {
-    const { currentUser } = this.props
     const indexOfSpace = inputValue.indexOf(' ')
     const indexOfSemiColon = inputValue.indexOf(';')
 
@@ -47,8 +45,8 @@ class AutocompleteInputContainer extends React.Component {
     }
 
     if (inputValue.length >= AUTOCOMPLETE_TRIGGER_LENGTH) {
-      // When customer user is typing a user handle to invite we should not try to show suggestions as we always get error 403
-      if (!currentUser.isCustomer) {
+      // When user doesn't have permissions to retrieve suggestions should not try to show suggestions as we always get error 403
+      if (this.props.showSuggestions) {
         this.props.onLoadUserSuggestions(inputValue)
       }
     } else {

@@ -1,6 +1,14 @@
 // this is to include tc styles in the output library
 @import '~tc-ui/src/styles/tc-includes';
 
+    
+.avatar {
+  flex: 0 0 80px;
+  :global .Avatar {
+    width: 80px;
+    height: 80px;
+  }
+}
 :global {
   .profile-settings-avatar {
     display: flex;

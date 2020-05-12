@@ -1,13 +1,13 @@
 import { addProjectMember as addMember,
   removeProjectMember as removeMember,
   updateProjectMember as updateMember,
-  loadMemberSuggestions as loadMemberSuggestionsAPI
+  loadMemberSuggestions as loadMemberSuggestionsAPI,
 } from '../../api/projectMembers'
 import { createProjectMemberInvite as createProjectMemberInvite,
-  updateProjectMemberInvite as updateProjectMemberInvite
+  updateProjectMemberInvite as updateProjectMemberInvite,
+  deleteProjectMemberInvite as deleteProjectMemberInvite,
 } from '../../api/projectMemberInvites'
-import { loadProjectMember, loadProjectMembers, loadProjectMemberInvites } from './project'
-import { loadMembersByHandle } from '../../actions/members'
+import { loadProjectMember, loadProjectMembers } from './project'
 
 import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   LOAD_MEMBER_SUGGESTIONS,
@@ -17,10 +17,9 @@ import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   INVITE_CUSTOMER,
   ACCEPT_OR_REFUSE_INVITE,
   PROJECT_ROLE_CUSTOMER,
-  PROJECT_MEMBER_INVITE_STATUS_CANCELED,
   CLEAR_MEMBER_SUGGESTIONS,
-  ACCEPT_OR_REFUSE_INVITE_FAILURE,
   ES_REINDEX_DELAY,
+  PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED,
 } from '../../config/constants'
 import { delay } from '../../helpers/utils'
 
@@ -85,7 +84,13 @@ export function removeProjectMember(projectId, memberId, isUserLeaving) {
   return (dispatch) => {
     return dispatch({
       type: REMOVE_PROJECT_MEMBER,
-      payload: removeMember(projectId, memberId),
+      payload: removeMember(projectId, memberId).then(response =>
+        // we have to add delay before applying the result of removing a project member
+        // (only if the current user is leaving and not when a different user is removed)
+        // as it takes some time for the update to be reindexed in ES so the new state is reflected
+        // everywhere
+        isUserLeaving ? delay(ES_REINDEX_DELAY).then(() => response) : response
+      ),
       meta: { isUserLeaving }
     })
   }
@@ -95,20 +100,17 @@ function inviteMembersWithData(dispatch, projectId, emailIds, handles, role) {
   return new Promise((resolve, reject) => {
     // remove `@` from handles before making a request to the server as server may not support format with `@`
     const clearedHandles = handles ? handles.map(handle => handle.replace(/^@/, '')) : []
-    return dispatch(loadMembersByHandle(clearedHandles))
-      .then(({ value }) => {
-        const req = {}
-        if(value && value.length > 0) {
-          req.userIds = value.map(member => member.userId)
-        }
-        if(emailIds && emailIds.length > 0) {
-          req.emails = emailIds
-        }
-        req.role = role
-        createProjectMemberInvite(projectId, req)
-          .then((res) => resolve(res))
-          .catch(err => reject(err))
-      })
+    const req = {}
+    if(clearedHandles && clearedHandles.length > 0) {
+      req.handles = clearedHandles
+    }
+    if(emailIds && emailIds.length > 0) {
+      req.emails = emailIds
+    }
+    req.role = role
+    createProjectMemberInvite(projectId, req)
+      .then((res) => resolve(res))
+      .catch(err => reject(err))
   })
 }
 
@@ -121,26 +123,12 @@ export function inviteTopcoderMembers(projectId, items) {
   }
 }
 
-function deleteTopcoderMemberInviteWithData(projectId, invite) {
-  return new Promise((resolve, reject) => {
-    const req = {}
-    if(invite.item.userId) {
-      req.userId = invite.item.userId
-    } else {
-      req.email = invite.item.email
-    }
-    req.status = PROJECT_MEMBER_INVITE_STATUS_CANCELED
-    updateProjectMemberInvite(projectId, req)
-      .then((res) => resolve(res))
-      .catch(err => reject(err))
-  })
-}
-
 export function deleteTopcoderMemberInvite(projectId, invite) {
   return (dispatch) => {
     dispatch({
       type: REMOVE_TOPCODER_MEMBER_INVITE,
-      payload: deleteTopcoderMemberInviteWithData(projectId, invite)
+      payload: deleteProjectMemberInvite(projectId, invite.item.id),
+      meta: { inviteId: invite.item.id }
     })
   }
 }
@@ -149,7 +137,8 @@ export function deleteProjectInvite(projectId, invite) {
   return (dispatch) => {
     dispatch({
       type: REMOVE_CUSTOMER_INVITE,
-      payload: deleteTopcoderMemberInviteWithData(projectId, invite)
+      payload: deleteProjectMemberInvite(projectId, invite.item.id),
+      meta: { inviteId: invite.item.id }
     })
   }
 }
@@ -170,33 +159,22 @@ export function inviteProjectMembers(projectId, emailIds, handles) {
  * @param {Object} currentUser current user info
  */
 export function acceptOrRefuseInvite(projectId, item, currentUser) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const projectState = getState().projectState
+    const inviteId = item.id ? item.id : projectState.userInvitationId
     return dispatch({
       type: ACCEPT_OR_REFUSE_INVITE,
-      payload: updateProjectMemberInvite(projectId, item).then((response) =>
+      payload: updateProjectMemberInvite(projectId, inviteId, item.status).then(response => {
         // we have to add delay before applying the result of accepting/declining invitation
         // as it takes some time for the update to be reindexed in ES so the new state is reflected
         // everywhere
-        delay(ES_REINDEX_DELAY).then(() => response)
-      ),
+        // if invite is approved, then also refresh project members
+        const inviteApproved = item.status === PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED
+        return delay(ES_REINDEX_DELAY).then(() =>
+          inviteApproved ? dispatch(loadProjectMembers(projectId)).then(() => response) : response
+        )
+      }),
       meta: { projectId, currentUser },
     })
   }
-}
-
-/**
- * Accept or refuse invite request fail
- * @param {Object} error error object
- */
-export function acceptOrRefuseInviteFail(error) {
-  return (dispatch) => {
-    return dispatch({ type: ACCEPT_OR_REFUSE_INVITE_FAILURE, payload: error })
-  }
-}
-
-export function reloadProjectMembers(projectId) {
-  return (dispatch) => Promise.all([
-    dispatch(loadProjectMembers(projectId)),
-    dispatch(loadProjectMemberInvites(projectId))
-  ])
 }

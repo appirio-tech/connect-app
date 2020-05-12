@@ -20,6 +20,7 @@ import {
   SAVE_NOTIFICATION_SETTINGS_FAILURE,
   GET_PROFILE_SETTINGS_PENDING,
   GET_PROFILE_SETTINGS_SUCCESS,
+  GET_PROFILE_SETTINGS_RESET,
   GET_PROFILE_SETTINGS_FAILURE,
   SAVE_PROFILE_SETTINGS_PENDING,
   SAVE_PROFILE_SETTINGS_SUCCESS,
@@ -199,6 +200,12 @@ export const saveNotificationSettings = (data) => (dispatch) => {
       type: SAVE_NOTIFICATION_SETTINGS_FAILURE,
       payload: { data }
     })
+  })
+}
+
+export const resetProfileSetting = () => (dispatch) => {
+  dispatch({
+    type: GET_PROFILE_SETTINGS_RESET
   })
 }
 

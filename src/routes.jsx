@@ -9,6 +9,7 @@ import projectRoutes from './projects/routes.jsx'
 import notificationsRoutes from './routes/notifications/routes.jsx'
 import settingsRoutes from './routes/settings/routes.jsx'
 import metaDataRoutes from './routes/metadata/routes.jsx'
+import reportsListRoutes from './routes/reports/routes'
 import TopBarContainer from './components/TopBar/TopBarContainer'
 import ProjectsToolBar from './components/TopBar/ProjectsToolBar'
 import RedirectComponent from './components/RedirectComponent'
@@ -154,7 +155,7 @@ class Routes extends React.Component {
 
         {/* Handle /projects/* routes */}
         {projectRoutes}
-        {/* {reportsListRoutes} */}
+        {reportsListRoutes}
         {notificationsRoutes}
         {settingsRoutes}
         {metaDataRoutes}

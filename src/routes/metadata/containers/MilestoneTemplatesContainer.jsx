@@ -49,6 +49,7 @@ class MilestoneTemplatesContainer extends React.Component {
   render() {
     const {
       milestoneTemplates,
+      productTemplates,
       isLoading,
       isAdmin,
       currentUser,
@@ -78,6 +79,7 @@ class MilestoneTemplatesContainer extends React.Component {
           pageNum={1}
           pageSize={milestoneTemplates ? milestoneTemplates.length : 0}
           milestoneTemplates={milestoneTemplates}
+          productTemplates={productTemplates}
           criteria={criteria}
           sortHandler={this.sortHandler}
           error={error}
@@ -99,6 +101,7 @@ const mapStateToProps = ({ templates, loadUser }) => {
   const powerUserRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
 
   return {
+    productTemplates: templates.productTemplates,
     milestoneTemplates: templates.milestoneTemplates,
     isLoading: templates.isLoading,
     error: templates.error,
