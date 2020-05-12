@@ -7,10 +7,12 @@ class PositiveNumberInput extends React.PureComponent {
     super(props)
 
     this.isInputValid = true
+    this.previousValue = props.value || ''
 
     this.onKeyDown = this.onKeyDown.bind(this)
     this.onPaste = this.onPaste.bind(this)
     this.onKeyUp = this.onKeyUp.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
 
   onKeyDown(evt) {
@@ -44,9 +46,44 @@ class PositiveNumberInput extends React.PureComponent {
     this.props.onKeyUp(evt)
   }
 
+  onChange(evt) {
+    const { onChange } = this.props
+
+    this.enforceInputBelowMax(evt)
+    onChange(evt)
+  }
+
+  /**
+   * Makes sure the input value is kept below the max value
+   * @param {Event} evt The change event
+   */
+  enforceInputBelowMax(evt) {
+    const value = evt.target.value
+    if (this.isBelowMaxLimit(value)) {
+      this.previousValue = value
+    } else {
+      evt.target.value = this.previousValue
+    }
+  }
+
+  isBelowMaxLimit(text) {
+    const { max = Infinity } = this.props
+    return Number(text) <= max
+  }
+
   render() {
     const props = omit(this.props, ['onValidityChange'])
-    return <input type="number" min={0} {...props} onKeyDown={this.onKeyDown} onPaste={this.onPaste} onKeyUp={this.onKeyUp} />
+    return (
+      <input
+        type="number"
+        min={0}
+        {...props}
+        onKeyDown={this.onKeyDown}
+        onPaste={this.onPaste}
+        onKeyUp={this.onKeyUp}
+        onChange={this.onChange}
+      />
+    )
   }
 }
 
@@ -54,16 +91,17 @@ PositiveNumberInput.defaultProps = {
   onKeyDown: noop,
   onPaste: noop,
   onKeyUp: noop,
-  onValidityChange: noop
-
+  onValidityChange: noop,
+  onChange: noop,
 }
 
 PositiveNumberInput.propTypes = {
+  max: PT.number,
   onKeyDown: PT.func,
   onPaste: PT.func,
   onKeyUp: PT.func,
-  onValidityChange: PT.func
+  onValidityChange: PT.func,
+  onChange: PT.func,
 }
-
 
 export default PositiveNumberInput

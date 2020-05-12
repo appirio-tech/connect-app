@@ -715,7 +715,7 @@ export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_
 // export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
 export const TC_NOTIFICATION_URL = 'https://dev.maxceem.com/v5/notifications'
 
-export const TC_CDN_URL = process.env.NODE_ENV === 'development' ? 'https://d1aahxkjiobka8.cloudfront.net' : 'https://d2nl5eqipnb33q.cloudfront.net'
+export const TC_CDN_URL = process.env.TC_CDN_URL || `https://community-app.${DOMAIN}/api/cdn/public`
 
 export const RESET_PASSWORD_URL = `https://accounts.${DOMAIN}/connect/reset-password`
 export const VERIFY_EMAIL_URL = `http://www.${DOMAIN}/settings/account/changeEmail`

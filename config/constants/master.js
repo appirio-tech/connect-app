@@ -49,4 +49,5 @@ module.exports = {
   TC_SYSTEM_USERID: process.env.PROD_TC_SYSTEM_USERID,
   MAINTENANCE_MODE: process.env.PROD_MAINTENANCE_MODE,
 
+  TC_CDN_URL: process.env.TC_CDN_URL
 }
