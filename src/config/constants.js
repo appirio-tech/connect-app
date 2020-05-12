@@ -760,7 +760,7 @@ export const SPECIAL_QUERY_PARAMS = ['returnUrl', 'refCode']
 
 // export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
 // for local testing Connect App with Project Service, comment the previous line and uncomment the next one
-export const PROJECTS_API_URL = 'https://dev.maxceem.com:8001'
+export const PROJECTS_API_URL = 'https://dev.maxceem.com'
 export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL
 
 export const NEW_PROJECT_PATH = '/new-project'
