@@ -709,7 +709,7 @@ export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?
 export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
 export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
 
-export const TC_CDN_URL = process.env.TC_CDN_URL
+export const TC_CDN_URL = process.env.TC_CDN_URL || `https://community-app.${DOMAIN}/api/cdn/public`
 
 export const RESET_PASSWORD_URL = `https://accounts.${DOMAIN}/connect/reset-password`
 export const VERIFY_EMAIL_URL = `http://www.${DOMAIN}/settings/account/changeEmail`
