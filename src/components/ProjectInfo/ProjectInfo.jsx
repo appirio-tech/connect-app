@@ -12,6 +12,7 @@ import ReviewProjectButton from '../../projects/detail/components/ReviewProjectB
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import { TOOLTIP_DEFAULT_DELAY } from '../../config/constants'
 
+import ProjectTypeIcon from '../../components/ProjectTypeIcon'
 import './ProjectInfo.scss'
 
 class ProjectInfo extends Component {
@@ -23,7 +24,7 @@ class ProjectInfo extends Component {
   render() {
     const { project, currentMemberRole,
       onChangeStatus, isSuperUser, phases, onSubmitForReview, isProjectProcessing,
-      showDeleteConfirm, toggleProjectDelete, onConfirmDelete } = this.props
+      showDeleteConfirm, toggleProjectDelete, onConfirmDelete, projectTemplates } = this.props
 
     const code = _.get(project, 'details.utm.code', '')
 
@@ -50,29 +51,45 @@ class ProjectInfo extends Component {
       </div>
     )
 
+    const url = `/projects/${project.id}`
+    const projectTemplateId = project.templateId
+    const projectTemplateKey = _.get(project, 'details.products[0]')
+    const projectTemplate = projectTemplateId
+      ? _.find(projectTemplates, pt => pt.id === projectTemplateId)
+      : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
+    // icon for the product, use default generic work project icon for categories which no longer exist now
+    const productIcon = _.get(projectTemplate, 'icon', 'tech-32px-outline-work-project')
     return (
       <div className="project-info">
-        <div className="project-status">
-          <div styleName="project-name">{_.unescape(project.name)}</div>
-
-          <div styleName="project-status-bottom">
-            <div className="project-status-time">
-              Created {moment(project.createdAt).format('MMM DD, YYYY')}
-            </div>
-            {!!code &&
-            <div styleName="tooltip-target-container">
-              <Tooltip styleName="tooltip" theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
-                <div className="tooltip-target">
-                  <div className="project-status-ref">{_.unescape(code)}</div>
-                </div>
-                <div className="tooltip-body">
-                  <div>{_.unescape(code)}</div>
-                </div>
-              </Tooltip>
-            </div>
-
-            }
+        <div className="icon-and-status" >
+          <div className="item-icon">
+            <Link to={url} className="spacing">
+              <div className="project-type-icon" title={project.type !== undefined ? project.type[0].toUpperCase() + project.type.substr(1).replace(/_/g, ' ') : null}>
+                <ProjectTypeIcon type={productIcon} />
+              </div>
+            </Link>
           </div>
+          <div className="project-status">
+            <div styleName="project-name">{_.unescape(project.name)}</div>
+          </div>
+        </div>
+        <div styleName="project-status-bottom">
+              <div className="project-status-time">
+                Created {moment(project.createdAt).format('MMM DD, YYYY')}
+              </div>
+              {!!code &&
+              <div styleName="tooltip-target-container">
+                <Tooltip styleName="tooltip" theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+                  <div className="tooltip-target">
+                    <div className="project-status-ref">{_.unescape(code)}</div>
+                  </div>
+                  <div className="tooltip-body">
+                    <div>{_.unescape(code)}</div>
+                  </div>
+                </Tooltip>
+              </div>
+
+              }
         </div>
         {showDeleteConfirm && (
           <DeleteProjectModal
