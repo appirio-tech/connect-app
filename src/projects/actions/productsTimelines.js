@@ -133,6 +133,7 @@ export function updateProductMilestone(productId, timelineId, milestoneId, updat
     }).catch((error) => {
       dispatch({
         type: UPDATE_PRODUCT_MILESTONE_FAILURE,
+        payload: error,
         meta: { productId, milestoneId }
       })
       throw error
@@ -234,6 +235,7 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
     }).catch((error) => {
       dispatch({
         type: COMPLETE_PRODUCT_MILESTONE_FAILURE,
+        payload: error,
         meta: { productId, milestoneId }
       })
       throw error
@@ -283,6 +285,7 @@ export function extendProductMilestone(productId, timelineId, milestoneId, exten
     }).catch((error) => {
       dispatch({
         type: EXTEND_PRODUCT_MILESTONE_FAILURE,
+        payload: error,
         meta: { productId, milestoneId }
       })
       throw error
@@ -365,6 +368,7 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
     }).catch((error) => {
       dispatch({
         type: SUBMIT_FINAL_FIXES_REQUEST_FAILURE,
+        payload: error,
         meta: { productId, milestoneId }
       })
       throw error
@@ -437,6 +441,7 @@ export function completeFinalFixesMilestone(productId, timelineId, milestoneId, 
     }).catch((error) => {
       dispatch({
         type: COMPLETE_PRODUCT_MILESTONE_FAILURE,
+        payload: error,
         meta: { productId, milestoneId }
       })
       throw error
