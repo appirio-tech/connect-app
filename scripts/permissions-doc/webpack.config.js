@@ -21,6 +21,7 @@ webpackConfig.module.rules.push({
 
 webpackConfig.plugins = []
 
-console.log('webpackConfig', JSON.stringify(webpackConfig, null, 2))
+// Uncomment for debugging the final webpack config
+// console.log('webpackConfig', JSON.stringify(webpackConfig, null, 2))
 
 module.exports = webpackConfig
