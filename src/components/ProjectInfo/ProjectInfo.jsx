@@ -11,6 +11,7 @@ import { SCREEN_BREAKPOINT_MD, PROJECT_STATUS_ACTIVE, PHASE_STATUS_ACTIVE, PHASE
 import ReviewProjectButton from '../../projects/detail/components/ReviewProjectButton'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import { TOOLTIP_DEFAULT_DELAY } from '../../config/constants'
+import { getProjectTemplateByKey } from '../../helpers/templates'
 
 import ProjectTypeIcon from '../../components/ProjectTypeIcon'
 import './ProjectInfo.scss'
@@ -74,22 +75,22 @@ class ProjectInfo extends Component {
           </div>
         </div>
         <div styleName="project-status-bottom">
-              <div className="project-status-time">
-                Created {moment(project.createdAt).format('MMM DD, YYYY')}
+          <div className="project-status-time">
+            Created {moment(project.createdAt).format('MMM DD, YYYY')}
+          </div>
+          {!!code &&
+          <div styleName="tooltip-target-container">
+            <Tooltip styleName="tooltip" theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+              <div className="tooltip-target">
+                <div className="project-status-ref">{_.unescape(code)}</div>
               </div>
-              {!!code &&
-              <div styleName="tooltip-target-container">
-                <Tooltip styleName="tooltip" theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
-                  <div className="tooltip-target">
-                    <div className="project-status-ref">{_.unescape(code)}</div>
-                  </div>
-                  <div className="tooltip-body">
-                    <div>{_.unescape(code)}</div>
-                  </div>
-                </Tooltip>
+              <div className="tooltip-body">
+                <div>{_.unescape(code)}</div>
               </div>
+            </Tooltip>
+          </div>
 
-              }
+          }
         </div>
         {showDeleteConfirm && (
           <DeleteProjectModal
