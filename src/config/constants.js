@@ -303,6 +303,11 @@ export const UPDATE_PRODUCT_MILESTONE_PENDING     = 'UPDATE_PRODUCT_MILESTONE_PE
 export const UPDATE_PRODUCT_MILESTONE_FAILURE     = 'UPDATE_PRODUCT_MILESTONE_FAILURE'
 export const UPDATE_PRODUCT_MILESTONE_SUCCESS     = 'UPDATE_PRODUCT_MILESTONE_SUCCESS'
 
+export const BULK_UPDATE_PRODUCT_MILESTONES             = 'BULK_UPDATE_PRODUCT_MILESTONES'
+export const BULK_UPDATE_PRODUCT_MILESTONES_PENDING     = 'BULK_UPDATE_PRODUCT_MILESTONES_PENDING'
+export const BULK_UPDATE_PRODUCT_MILESTONES_FAILURE     = 'BULK_UPDATE_PRODUCT_MILESTONES_FAILURE'
+export const BULK_UPDATE_PRODUCT_MILESTONES_SUCCESS     = 'BULK_UPDATE_PRODUCT_MILESTONES_SUCCESS'
+
 export const COMPLETE_PRODUCT_MILESTONE             = 'COMPLETE_PRODUCT_MILESTONE'
 export const COMPLETE_PRODUCT_MILESTONE_PENDING     = 'COMPLETE_PRODUCT_MILESTONE_PENDING'
 export const COMPLETE_PRODUCT_MILESTONE_FAILURE     = 'COMPLETE_PRODUCT_MILESTONE_FAILURE'
@@ -707,7 +712,8 @@ export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL |
 export const TC_API_URL = `https://api.${DOMAIN}`
 export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?formData.projectId=`
 export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
-export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
+// export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
+export const TC_NOTIFICATION_URL = 'https://dev.maxceem.com/v5/notifications'
 
 export const TC_CDN_URL = process.env.TC_CDN_URL || `https://community-app.${DOMAIN}/api/cdn/public`
 
@@ -752,9 +758,9 @@ export const LS_INCOMPLETE_PROJECT_QUERY_PARAMS = 'incompleteProjectQueryParams'
  */
 export const SPECIAL_QUERY_PARAMS = ['returnUrl', 'refCode']
 
-export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
+// export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
 // for local testing Connect App with Project Service, comment the previous line and uncomment the next one
-// export const PROJECTS_API_URL = 'http://localhost:8001'
+export const PROJECTS_API_URL = 'https://dev.maxceem.com'
 export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL
 
 export const NEW_PROJECT_PATH = '/new-project'

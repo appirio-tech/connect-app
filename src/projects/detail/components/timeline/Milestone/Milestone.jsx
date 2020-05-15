@@ -251,7 +251,7 @@ class Milestone extends React.Component {
           placeholder: 'Duration',
           label: 'Duration',
           name: 'duration',
-          value: String(milestone.duration || 0),
+          value: milestone.duration || 0,
           validations: {
             isRequired: true
           },

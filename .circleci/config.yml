@@ -136,7 +136,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['feature/permissions']
+              only: ['feature/bulk-milestone-updates']
 
       - deployProd:
           context : org-global

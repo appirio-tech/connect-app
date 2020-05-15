@@ -54,6 +54,8 @@ export function loadUserSuccess(dispatch, token) {
     currentUser.id = currentUser.userId
     currentUser.token = token
   }
+  // uncomment to add admin role to the user for testing admin functionality locally
+  // currentUser.roles.push('administrator')
   if (currentUser) {
     getUserProfile(currentUser.handle).then((profile) => {
       currentUser = _.assign(currentUser, profile)
