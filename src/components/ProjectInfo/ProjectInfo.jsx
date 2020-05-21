@@ -60,12 +60,14 @@ class ProjectInfo extends Component {
       : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
     // icon for the product, use default generic work project icon for categories which no longer exist now
     const productIcon = _.get(projectTemplate, 'icon', 'tech-32px-outline-work-project')
+    const templateName = _.get(projectTemplate, 'name', null)
+    const projectType = project.type !== undefined ? project.type[0].toUpperCase() + project.type.substr(1).replace(/_/g, ' ') : null
     return (
       <div className="project-info">
         <div className="icon-and-status" >
           <div className="item-icon">
             <Link to={url} className="spacing">
-              <div className="project-type-icon" title={project.type !== undefined ? project.type[0].toUpperCase() + project.type.substr(1).replace(/_/g, ' ') : null}>
+              <div className="project-type-icon" title={templateName ? templateName : projectType}>
                 <ProjectTypeIcon type={productIcon} />
               </div>
             </Link>

@@ -18,13 +18,15 @@ function ProjectCardHeader({ project, onClick, projectTemplates, unreadMentionsC
     : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
   // icon for the product, use default generic work project icon for categories which no longer exist now
   const productIcon = _.get(projectTemplate, 'icon', 'tech-32px-outline-work-project')
+  const templateName = _.get(projectTemplate, 'name', null)
+  const projectType = project.type !== undefined ? project.type[0].toUpperCase() + project.type.substr(1).replace(/_/g, ' ') : null
   return (
     <div className="project-card-header" onClick={onClick}>
       <div className="project-header">
         <span className="badge-wrapper">
           { unreadMentionsCount > 0 && <NotificationBadge count={unreadMentionsCount} /> }
         </span>
-        <div className="project-type-icon" title={project.type !== undefined ? project.type[0].toUpperCase() + project.type.substr(1).replace(/_/g, ' ') : null}>
+        <div className="project-type-icon" title={templateName ? templateName : projectType}>
           <ProjectTypeIcon type={productIcon} />
         </div>
         <div className="project-header-details">
