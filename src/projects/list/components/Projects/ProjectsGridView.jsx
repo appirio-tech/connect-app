@@ -74,9 +74,11 @@ const ProjectsGridView = props => {
           : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
         // icon for the product, use default generic work project icon for categories which no longer exist now
         const productIcon = _.get(projectTemplate, 'icon', 'tech-32px-outline-work-project')
+        const templateName = _.get(projectTemplate, 'name', null)
+        const projectType = item.type !== undefined ? item.type[0].toUpperCase() + item.type.substr(1).replace(/_/g, ' ') : null
         return (
           <Link to={url} className="spacing">
-            <div className="project-type-icon" title={item.type !== undefined ? item.type[0].toUpperCase() + item.type.substr(1).replace(/_/g, ' ') : null}>
+            <div className="project-type-icon" title={templateName ? templateName : projectType}>
               <ProjectTypeIcon type={productIcon} />
             </div>
           </Link>
