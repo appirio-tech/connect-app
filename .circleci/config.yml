@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'dev-msinteg', 'feature/Add_project_type_icon_in_leftNavigation_for_project']
+              only: ['dev', 'dev-msinteg']
 
       - deployTest01:
           context : org-global
