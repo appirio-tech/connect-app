@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'dev-msinteg']
+              only: ['dev']
 
       - deployTest01:
           context : org-global
@@ -136,7 +136,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['feature/bulk-milestone-updates']
+              only: ['feature/faqs']
 
       - deployProd:
           context : org-global
