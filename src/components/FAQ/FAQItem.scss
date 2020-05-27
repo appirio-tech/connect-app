@@ -1,0 +1,69 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.accordion {
+  border: 1px solid $tc-gray-neutral-dark;
+  border-radius: 3px;
+  padding-left: 5 * $base-unit;
+
+  & + & {
+    margin-top: 2 * $base-unit;
+  }
+}
+
+
+.accordion .header {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  height: 8 * $base-unit;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.accordion .title {
+  @include roboto-bold;
+  font-size: $tc-label-md;
+  overflow: hidden;
+  line-height: 3 * $base-unit;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.accordion .value {
+  @include roboto;
+  color: $tc-gray-80;
+  flex: 1 0 auto;
+  font-size: $tc-label-lg;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 0;
+}
+
+.accordion .toggle {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 36px;
+  width: 36px;
+}
+
+.accordion  .toggle-icon {
+  height: auto;
+  width: 10px;
+}
+
+.accordion .content {
+  display: none;
+  color: $tc-gray-70;
+  @include roboto;
+  font-size: $tc-label-md;
+  line-height: 20px;
+  text-align: left;
+  margin-bottom: 2 * $base-unit;
+}
+
+.accordion.is-open .content {
+  display: block;
+}

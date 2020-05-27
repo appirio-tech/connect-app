@@ -985,3 +985,12 @@ export const PROJECT_REPORTS = {
  * Report session length in seconds
  */
 export const REPORT_SESSION_LENGTH = 25 * 60 // 25 minutes (5 minutes less than the report session)
+
+
+/**
+ * Contentful Content Ids
+ */
+export const PROJECT_FAQ_CONTENT_ID = process.env.PROJECT_FAQ_CONTENT_ID
+export const DASHBOARD_FAQ_CONTENT_ID = process.env.DASHBOARD_FAQ_CONTENT_ID
+export const CONTENTFUL_DELIVERY_KEY = process.env.CONTENTFUL_DELIVERY_KEY
+export const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID
