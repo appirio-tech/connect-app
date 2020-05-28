@@ -54,6 +54,19 @@ export function updateMilestone(timelineId, milestoneId, updatedProps) {
 }
 
 /**
+ * Bulk update milestones
+ *
+ * @param {Number} timelineId   timeline id
+ * @param {Array<{}>} milestones  the timeline's milestones
+ *
+ * @returns {Promise} milestones
+ */
+export function updateMilestones(timelineId, milestones) {
+  return axios.patch(`${PROJECTS_API_URL}/v5/timelines/${timelineId}/milestones`, milestones)
+    .then(resp => resp.data)
+}
+
+/**
  * Get milestone templates by product template id
  *
  * @param {Number} productTemplateId product template id

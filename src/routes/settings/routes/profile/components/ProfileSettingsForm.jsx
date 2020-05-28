@@ -277,7 +277,7 @@ class ProfileSettingsForm extends Component {
         )}
         {showCompanyName &&
           this.getField(
-            'Company name',
+            'Company Name',
             'companyName',
             true,
             disableCompanyInput

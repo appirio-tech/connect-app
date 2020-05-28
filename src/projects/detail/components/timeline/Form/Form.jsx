@@ -128,7 +128,7 @@ Form.propTypes = {
   cancelButtonTitle: PT.string,
   fields: PT.arrayOf(PT.shape({
     name: PT.string.isRequired,
-    value: PT.string,
+    value: PT.oneOfType([PT.string, PT.number]),
   })).isRequired,
   onCancelClick: PT.func.isRequired,
   onSubmit: PT.func.isRequired,

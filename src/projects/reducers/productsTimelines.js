@@ -9,6 +9,7 @@ import {
   UPDATE_PRODUCT_MILESTONE_PENDING,
   UPDATE_PRODUCT_MILESTONE_SUCCESS,
   UPDATE_PRODUCT_MILESTONE_FAILURE,
+  BULK_UPDATE_PRODUCT_MILESTONES_SUCCESS,
   UPDATE_PRODUCT_TIMELINE_PENDING,
   UPDATE_PRODUCT_TIMELINE_SUCCESS,
   UPDATE_PRODUCT_TIMELINE_FAILURE,
@@ -106,6 +107,24 @@ function updateTimeline(state, productId, updateTimeline, shouldReplace = false)
   })
 }
 
+/**
+ * Replace the timeline's milestones
+ *
+ * @param {Object} state The state
+ * @param {Number} productId The product id
+ * @param {Array<{}>} milestones The timeline's milestones
+ *
+ * @returns {Object} The state
+ */
+function updateMilestones(state, productId, milestones) {
+  milestones = _.sortBy(milestones, 'order')
+  return update(state, {
+    [productId]: {
+      timeline: {milestones: { $set: milestones }}
+    }
+  })
+}
+
 export const productsTimelines = (state=initialState, action) => {
   const { type, payload, meta } = action
 
@@ -191,13 +210,14 @@ export const productsTimelines = (state=initialState, action) => {
     })
 
   case UPDATE_PRODUCT_MILESTONE_SUCCESS:
-    return updateMilestone(state, meta.productId, meta.milestoneId, payload, true)
-
   case UPDATE_PRODUCT_MILESTONE_FAILURE:
     return updateMilestone(state, meta.productId, meta.milestoneId, {
       isUpdating: { $set: false },
       error: { $set: false }
     })
+
+  case BULK_UPDATE_PRODUCT_MILESTONES_SUCCESS:
+    return updateMilestones(state, meta.productId, payload)
 
   case UPDATE_PRODUCT_TIMELINE_PENDING:
     return updateTimeline(state, meta.productId, {
@@ -224,16 +244,7 @@ export const productsTimelines = (state=initialState, action) => {
 
   case COMPLETE_PRODUCT_MILESTONE_SUCCESS:
   case EXTEND_PRODUCT_MILESTONE_SUCCESS:
-  case SUBMIT_FINAL_FIXES_REQUEST_SUCCESS: {
-    let updatedState = updateMilestone(state, meta.productId, meta.milestoneId, payload[0], true)
-
-    if (meta.nextMilestoneId) {
-      updatedState = updateMilestone(updatedState, meta.productId, meta.nextMilestoneId, payload[1], true)
-    }
-
-    return updatedState
-  }
-
+  case SUBMIT_FINAL_FIXES_REQUEST_SUCCESS:
   case COMPLETE_PRODUCT_MILESTONE_FAILURE:
   case EXTEND_PRODUCT_MILESTONE_FAILURE:
   case SUBMIT_FINAL_FIXES_REQUEST_FAILURE:

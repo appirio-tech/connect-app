@@ -10,7 +10,7 @@ import './MetaDataProjectTemplatesGridView.scss'
 const MilestoneTemplatesGridView = props => {
   const { totalCount, criteria, pageNum, pageSize, sortHandler,
     error, isLoading, infiniteAutoload, setInfiniteAutoload,
-    applyFilters, milestoneTemplates } = props
+    applyFilters, milestoneTemplates, productTemplates } = props
 
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
@@ -57,6 +57,21 @@ const MilestoneTemplatesGridView = props => {
           <div className="spacing project-template-container">
             <div className="template-title">
               {item.type}
+            </div>
+          </div>
+        )
+      }
+    }, {
+      id: 'referenceId',
+      headerLabel: 'Product Template',
+      classes: 'item-key',
+      sortable: true,
+      renderText: item => {
+        const productTemplate = _.find(productTemplates, { id: item.referenceId })
+        return (
+          <div className="spacing project-template-container">
+            <div className="template-title">
+              {productTemplate ? `(${productTemplate.id}) ${productTemplate.name}` : '--'}
             </div>
           </div>
         )

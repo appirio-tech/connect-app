@@ -24,16 +24,15 @@ class SelectDropdown extends PureComponent {
   }
 
   componentWillMount() {
-    this.updateSelectedOptionValue(_.toString(this.props.value))
+    this.updateSelectedOptionValue(this.props.value)
   }
 
   updateSelectedOptionValue(value) {
     const { options } = this.props
 
-    let selectedOption = _.find(options, (o) => o.value === value)
-    if (!selectedOption) {
-      selectedOption = options[0]
-    }
+
+    const selectedOption = _.find(options, { value }) || null
+
     this.setState({
       selectedOption
     }/*, function() {
@@ -89,9 +88,9 @@ class SelectDropdown extends PureComponent {
   }
 
   render() {
-    const { options, theme, disabled } = this.props
+    const { options, theme, disabled, placeholder } = this.props
     const { selectedOption, confirmOption } = this.state
-    const selectedValue = selectedOption.title
+    const selectedValue = selectedOption ? selectedOption.title : placeholder
     const renderOption = (option, optIdx) => {
       if (option.hide) {
         return null
@@ -160,18 +159,28 @@ class SelectDropdown extends PureComponent {
   }
 }
 
+const valuePropType = PT.oneOfType([PT.string, PT.number])
+
+SelectDropdown.defaultProps = {
+  placeholder: ' - Select - '
+}
+
 SelectDropdown.propTypes = {
   onSelect       : PT.func,
   options        : PT.arrayOf(PT.shape({
     title: PT.string.isRequired,
-    value: PT.string.isRequired,
+    value: valuePropType.isRequired,
     disabled: PT.bool,
     hide: PT.bool,
     confirm: PT.oneOfType([PT.string, PT.bool]),
     toolTipMessage: PT.string,
   })).isRequired,
   theme          : PT.string,
-  selectedOption : PT.object
+  value          : valuePropType,
+  /**
+   * Placeholder to show when there is no selected option
+   */
+  placeholder: PT.string,
 }
 
 export default SelectDropdown

@@ -423,7 +423,7 @@ class ProjectInfoContainer extends React.Component {
   render() {
     const { showDeleteConfirm } = this.state
     const { project, currentMemberRole, isSuperUser, phases, hideInfo, hideMembers,
-      productsTimelines, isProjectProcessing, notifications } = this.props
+      productsTimelines, isProjectProcessing, notifications, projectTemplates } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([
@@ -519,6 +519,7 @@ class ProjectInfoContainer extends React.Component {
               toggleProjectDelete={this.toggleProjectDelete}
               onConfirmDelete={this.onConfirmDelete}
               showDeleteConfirm={showDeleteConfirm}
+              projectTemplates={projectTemplates}
             />
           }
 

@@ -42,7 +42,7 @@ function ProjectCard({ project, disabled, currentUser, history, onChangeStatus, 
         />
       </div>
       <div className="card-footer">
-        <ProjectManagerAvatars managers={project.members} maxShownNum={10} />
+        <ProjectManagerAvatars managers={project.members} maxShownNum={4} />
         {(!isMember && isInvited) &&
           <div className="spacing join-btn-container">
             <Invitation

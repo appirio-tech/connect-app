@@ -18,6 +18,26 @@
       margin-top: 4 * $base_unit;
       padding-bottom: 0;
     }
+    .icon-and-status {
+      display: flex;
+      flex-direction: row;
+      align-items: inherit;
+      .item-icon {
+        display: flex;
+        flex-direction: column;
+        min-width: 52px;
+        width: 52px;
+        padding-left: 4 * $base-unit;
+        margin-bottom: 2 * $base-unit;
+  
+        .spacing {
+          margin-top: 5 * $base-unit;
+        }
+        .project-type-icon > svg > path {
+          fill: $tc-dark-blue-110;
+        }
+      }
+    }
 
     .project-info-review {
       > p {
@@ -42,7 +62,7 @@
 
     .project-status {
       margin-bottom: 10px;
-      padding-left: 4 * $base_unit;
+      padding-left: 2 * $base_unit;
       padding-right: 4 * $base_unit;
       display: flex;
       flex-direction: column;
@@ -124,6 +144,8 @@
 .project-status-bottom {
   display: flex;
   justify-content: space-between;
+  padding-left: 4 * $base_unit;
+  padding-right: 4 * $base_unit;
 }
 
 .tooltip-target-container {

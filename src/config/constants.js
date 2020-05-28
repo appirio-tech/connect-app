@@ -303,6 +303,11 @@ export const UPDATE_PRODUCT_MILESTONE_PENDING     = 'UPDATE_PRODUCT_MILESTONE_PE
 export const UPDATE_PRODUCT_MILESTONE_FAILURE     = 'UPDATE_PRODUCT_MILESTONE_FAILURE'
 export const UPDATE_PRODUCT_MILESTONE_SUCCESS     = 'UPDATE_PRODUCT_MILESTONE_SUCCESS'
 
+export const BULK_UPDATE_PRODUCT_MILESTONES             = 'BULK_UPDATE_PRODUCT_MILESTONES'
+export const BULK_UPDATE_PRODUCT_MILESTONES_PENDING     = 'BULK_UPDATE_PRODUCT_MILESTONES_PENDING'
+export const BULK_UPDATE_PRODUCT_MILESTONES_FAILURE     = 'BULK_UPDATE_PRODUCT_MILESTONES_FAILURE'
+export const BULK_UPDATE_PRODUCT_MILESTONES_SUCCESS     = 'BULK_UPDATE_PRODUCT_MILESTONES_SUCCESS'
+
 export const COMPLETE_PRODUCT_MILESTONE             = 'COMPLETE_PRODUCT_MILESTONE'
 export const COMPLETE_PRODUCT_MILESTONE_PENDING     = 'COMPLETE_PRODUCT_MILESTONE_PENDING'
 export const COMPLETE_PRODUCT_MILESTONE_FAILURE     = 'COMPLETE_PRODUCT_MILESTONE_FAILURE'
@@ -708,8 +713,10 @@ export const TC_API_URL = `https://api.${DOMAIN}`
 export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?formData.projectId=`
 export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
 export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
+// Uncomment if you run TC Notifications locally
+// export const TC_NOTIFICATION_URL = 'http://localstho:4000/v5/notifications'
 
-export const TC_CDN_URL = process.env.TC_CDN_URL
+export const TC_CDN_URL = process.env.TC_CDN_URL || `https://community-app.${DOMAIN}/api/cdn/public`
 
 export const RESET_PASSWORD_URL = `https://accounts.${DOMAIN}/connect/reset-password`
 export const VERIFY_EMAIL_URL = `http://www.${DOMAIN}/settings/account/changeEmail`
