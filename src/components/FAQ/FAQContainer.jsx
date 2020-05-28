@@ -7,12 +7,13 @@ import './FAQContainer.scss'
 
 const FAQList = ({ entry }) => (
   <Fragment>
-  { 
-    entry.fields.items.map((item, idx) => {
-      return (
-        <FAQItem key={idx} item={item} />
-    )})
-  }
+    { 
+      entry.fields.items.map((item, idx) => {
+        return (
+          <FAQItem key={idx} item={item} />
+        )}
+      )
+    }
   </Fragment>
 )
 
@@ -24,14 +25,14 @@ class FAQContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
-        faqs: null
+      faqs: null
     }
   }
 
   componentWillMount() {
     getEntry(this.props.contentKey).then((entry) => {
       this.setState({ faqs: entry })
-    });
+    })
   }
 
   render() {

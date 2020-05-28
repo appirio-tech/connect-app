@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { SCREEN_BREAKPOINT_MD, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES, PROJECT_FAQ_CONTENT_ID } from '../../../config/constants'
 import TwoColsLayout from '../../../components/TwoColsLayout'
-import UserSidebar from '../../../components/UserSidebar/UserSidebar'
 import FAQContainer from '../../../components/FAQ/FAQContainer'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import { hasPermission } from '../../../helpers/permissions'
@@ -56,13 +55,13 @@ class ProjectFAQContainer extends Component {
                   </Sticky>
                 )
               } else {
-                return <UserSidebar user={user}/>
+                return leftArea
               }
             }}
           </MediaQuery>
         </TwoColsLayout.Sidebar>
         <TwoColsLayout.Content>
-          <FAQContainer contentKey={PROJECT_FAQ_CONTENT_ID} pageTitle='FAQ About Project' />
+          <FAQContainer contentKey={PROJECT_FAQ_CONTENT_ID} pageTitle="FAQ About Project" />
         </TwoColsLayout.Content>
       </TwoColsLayout>
     )

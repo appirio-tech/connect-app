@@ -8,8 +8,8 @@ import TopBarContainer from '../../components/TopBar/TopBarContainer'
 import ProjectsToolBar from '../../components/TopBar/ProjectsToolBar'
 import { requiresAuthentication } from '../../components/AuthenticatedComponent'
 import TopcoderFAQContainer from './containers/TopcoderFAQContainer'
-// const AuthFAQContainer = requiresAuthentication(TopcoderFAQContainer)
+const AuthFAQContainer = requiresAuthentication(TopcoderFAQContainer)
 export default [
-  <Route key="faqs" exact path="/faqs" render={renderApp(<TopBarContainer toolbar={ProjectsToolBar} />, <TopcoderFAQContainer />)} />,
+  <Route key="faqs" exact path="/faqs" render={renderApp(<TopBarContainer toolbar={ProjectsToolBar} />, <AuthFAQContainer />)} />,
   
 ]

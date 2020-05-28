@@ -33,7 +33,7 @@ class TopcoderFAQContainer extends Component {
           </MediaQuery>
         </TwoColsLayout.Sidebar>
         <TwoColsLayout.Content>
-          <FAQContainer contentKey={DASHBOARD_FAQ_CONTENT_ID} pageTitle='How topcoder works' />
+          <FAQContainer contentKey={DASHBOARD_FAQ_CONTENT_ID} pageTitle="How topcoder works" />
         </TwoColsLayout.Content>
       </TwoColsLayout>
     )
