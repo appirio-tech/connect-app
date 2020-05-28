@@ -1,6 +1,11 @@
 @import '~tc-ui/src/styles/tc-includes';
 @import "../../styles/includes";
 
+
+.faq-list-container {
+
+}
+
 .accordion {
   & + & {
     margin-top: 2 * $base-unit;
