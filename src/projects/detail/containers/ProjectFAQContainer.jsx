@@ -3,7 +3,7 @@ import MediaQuery from 'react-responsive'
 import Sticky from 'react-stickynode'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { SCREEN_BREAKPOINT_MD, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES, PROJECT_FAQ_CONTENT_ID } from '../../../config/constants'
+import { SCREEN_BREAKPOINT_MD, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from '../../../config/constants'
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import FAQContainer from '../../../components/FAQ/FAQContainer'
 import ProjectInfoContainer from './ProjectInfoContainer'
@@ -15,6 +15,7 @@ class ProjectFAQContainer extends Component {
   render() {
     const {
       project,
+      projectTemplate,
       phases,
       currentMemberRole,
       isSuperUser,
@@ -61,7 +62,7 @@ class ProjectFAQContainer extends Component {
           </MediaQuery>
         </TwoColsLayout.Sidebar>
         <TwoColsLayout.Content>
-          <FAQContainer contentKey={PROJECT_FAQ_CONTENT_ID} pageTitle="FAQ About Project" />
+          <FAQContainer contentKey={projectTemplate.metadata.contentful.projectFaqId} pageTitle="FAQ About Project" />
         </TwoColsLayout.Content>
       </TwoColsLayout>
     )
