@@ -18,6 +18,7 @@ import DashboardIcon from '../assets/icons/v.2.5/icon-dashboard.svg'
 import MessagesIcon from '../assets/icons/v.2.5/icon-messages.svg'
 import ReportsIcon from '../assets/icons/v.2.5/icon-reports.svg'
 import AssetsLibraryIcon from '../assets/icons/v.2.5/icon-assets-library.svg'
+import FAQIcon from '../assets/icons/faq.svg'
 import InvisibleIcon from '../assets/icons/invisible.svg'
 
 import { formatNumberWithCommas } from './format'
@@ -282,6 +283,7 @@ export function getProjectNavLinks(project, projectId) {
     // Commented out till it needs to go live.
     { label: 'Reports', to: `/projects/${projectId}/reports`, Icon: ReportsIcon, iconClassName: 'stroke' },
     { label: 'Assets Library', to: `/projects/${projectId}/assets`, Icon: AssetsLibraryIcon, iconClassName: 'stroke' },
+    { label: 'FAQ', to: `/projects/${projectId}/faqs`, Icon: FAQIcon, iconClassName: 'fill' },
   ] : [
     { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
     messagesTab,

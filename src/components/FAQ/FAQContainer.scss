@@ -1,0 +1,52 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import "../../styles/includes";
+
+
+.faq-list-container {
+
+}
+
+.accordion {
+  & + & {
+    margin-top: 2 * $base-unit;
+  }
+}
+
+.main {
+  background-color: $tc-white;
+  border-radius: 6px;
+  max-width: 960px;
+  padding: 35px 35px 20px 35px;
+  flex-grow: 1;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 260px; // gives space to show country selection list
+
+  @media screen and (max-width: $screen-md - 1px) {
+    padding: 0;
+    margin: 0;
+    max-width: none;
+    margin-bottom: 260px; // gives space to show country selection list in mobile view
+  }
+}
+
+.title {
+  font-weight: 400;
+  @include roboto-condensed;
+  color: $tc-black;
+  font-size: 20px;
+  line-height: 30px;
+  text-align: left;
+  text-transform: uppercase;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    display: none;
+  }
+}
+
+.content {
+  margin-top: 25px;
+  @media screen and (max-width: $screen-md - 1px) {
+    margin-top: 0;
+  }
+}
