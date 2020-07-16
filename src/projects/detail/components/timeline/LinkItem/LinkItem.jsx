@@ -114,8 +114,10 @@ class LinkItem extends React.Component {
                 {link.isDownloadable ? (
                   <a
                     href={link.url}
-                    download={link.url}
                     styleName="link"
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     {link.url}
                   </a>
