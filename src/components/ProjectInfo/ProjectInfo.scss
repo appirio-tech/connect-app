@@ -36,6 +36,9 @@
         .project-type-icon > svg > path {
           fill: $tc-dark-blue-110;
         }
+        .project-type-icon > svg > g > path {
+          fill: $tc-dark-blue-110;
+        }
       }
     }
 

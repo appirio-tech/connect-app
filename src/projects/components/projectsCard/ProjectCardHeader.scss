@@ -24,6 +24,10 @@
           > svg > path {
             fill: $tc-dark-blue-110;
           }
+
+          > svg > g > path {
+            fill: $tc-dark-blue-110;
+          }
         }
 
         .project-header-details {
