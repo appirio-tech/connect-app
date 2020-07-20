@@ -72,7 +72,7 @@ class TopBarContainer extends React.Component {
     const userImage = getAvatarResized(bigPhotoURL, 80)
     const userName = getFullNameWithFallback(user)
     const homePageUrl = `${window.location.protocol}//${window.location.host}/`
-    const logoutLink = `https://accounts.${DOMAIN}?logout=true&retUrl=${homePageUrl}`
+    const logoutLink = `${ACCOUNTS_APP_LOGIN_URL}?logout=true&retUrl=${homePageUrl}`
     const isHomePage = this.props.match.path === '/'
     const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.host}/`
     const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
