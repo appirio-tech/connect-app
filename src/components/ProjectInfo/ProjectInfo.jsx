@@ -7,7 +7,7 @@ import DeleteProjectModal from './DeleteProjectModal'
 import ProjectCardBody from '../../projects/components/projectsCard/ProjectCardBody'
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import MediaQuery from 'react-responsive'
-import { SCREEN_BREAKPOINT_MD, PROJECT_STATUS_ACTIVE, PHASE_STATUS_ACTIVE, PHASE_STATUS_REVIEWED, PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
+import { SCREEN_BREAKPOINT_MD, PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 import ReviewProjectButton from '../../projects/detail/components/ReviewProjectButton'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import { TOOLTIP_DEFAULT_DELAY } from '../../config/constants'
@@ -28,12 +28,6 @@ class ProjectInfo extends Component {
       showDeleteConfirm, toggleProjectDelete, onConfirmDelete, projectTemplates } = this.props
 
     const code = _.get(project, 'details.utm.code', '')
-
-    const hasReviewedOrActivePhases = !!_.find(phases, (phase) => _.includes([PHASE_STATUS_REVIEWED, PHASE_STATUS_ACTIVE], phase.status))
-    const isProjectActive = project.status === PROJECT_STATUS_ACTIVE
-    const isV3Project = project.version === 'v3'
-    const projectCanBeActive =  !isV3Project || (!isProjectActive && hasReviewedOrActivePhases) || isProjectActive
-
 
     // prepare review button
     const showReviewBtn = project.status === 'draft' &&
@@ -108,7 +102,6 @@ class ProjectInfo extends Component {
               {matches => (
                 <ProjectCardBody
                   project={project}
-                  projectCanBeActive={projectCanBeActive}
                   currentMemberRole={currentMemberRole}
                   descLinesCount={
                     /* has to be not too big value here,

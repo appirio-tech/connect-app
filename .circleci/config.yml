@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev']
+              only: ['dev', 'feature/removed_dependency_on_phaseStatus_to_change_projectStatus']
 
       - deployTest01:
           context : org-global
