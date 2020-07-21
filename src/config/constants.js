@@ -993,3 +993,11 @@ export const REPORT_SESSION_LENGTH = 25 * 60 // 25 minutes (5 minutes less than 
 export const DASHBOARD_FAQ_CONTENT_ID = process.env.DASHBOARD_FAQ_CONTENT_ID
 export const CONTENTFUL_DELIVERY_KEY = process.env.CONTENTFUL_DELIVERY_KEY
 export const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID
+
+
+/**
+ * Contentful node types
+ */
+export const CONTENTFUL_NODE_TYPES = {
+  HYPERLINK : 'hyperlink',
+}
