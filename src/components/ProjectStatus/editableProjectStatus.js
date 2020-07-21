@@ -4,13 +4,10 @@ import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import cn from 'classnames'
 import _ from 'lodash'
 import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
-import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import {
   PROJECT_STATUS,
-  PROJECT_STATUS_ACTIVE,
   PROJECT_STATUS_COMPLETED,
   PROJECT_STATUS_CANCELLED,
-  TOOLTIP_DEFAULT_DELAY,
   PROJECT_STATUS_DRAFT
 } from '../../config/constants'
 import CarretDownNormal9px from '../../assets/icons/arrow-9px-carret-down-normal.svg'

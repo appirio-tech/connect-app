@@ -24,7 +24,7 @@ class ProjectInfo extends Component {
 
   render() {
     const { project, currentMemberRole,
-      onChangeStatus, isSuperUser, phases, onSubmitForReview, isProjectProcessing,
+      onChangeStatus, isSuperUser, onSubmitForReview, isProjectProcessing,
       showDeleteConfirm, toggleProjectDelete, onConfirmDelete, projectTemplates } = this.props
 
     const code = _.get(project, 'details.utm.code', '')
