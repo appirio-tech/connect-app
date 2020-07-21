@@ -62,6 +62,14 @@
   line-height: 20px;
   text-align: left;
   margin-bottom: 2 * $base-unit;
+
+  a {
+    cursor: pointer;
+    color: $tc-dark-blue;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .accordion.is-open .content {
