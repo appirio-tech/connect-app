@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev']
+              only: ['dev', 'feature/remove_search_toolbar_on_faqPage']
 
       - deployTest01:
           context : org-global
