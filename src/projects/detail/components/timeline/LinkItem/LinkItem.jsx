@@ -135,6 +135,8 @@ class LinkItem extends React.Component {
                   href={link.url}
                   download={link.url}
                   styleName="button download"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 />
               )}
 
