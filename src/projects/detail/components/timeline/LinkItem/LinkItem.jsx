@@ -133,7 +133,6 @@ class LinkItem extends React.Component {
               {!!link.isDownloadable && !updateLink && !deleteLink && !onSelectChange && (
                 <a
                   href={link.url}
-                  download={link.url}
                   styleName="button download"
                   target="_blank"
                   rel="noopener noreferrer"
