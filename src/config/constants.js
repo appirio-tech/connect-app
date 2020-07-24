@@ -888,7 +888,7 @@ export const MILESTONE_STATUS_TEXT = [
 export const MIN_CHECKPOINT_REVIEW_DESIGNS = 5
 
 // minimum winner designs to select during final-designs milestone
-export const MIN_WINNER_DESIGNS = 3
+export const MIN_WINNER_DESIGNS = 2
 
 // default additional desgin cost to select during final-designs milestone
 export const DEFAULT_ADDITIONAL_DESIGN_COST = 100
