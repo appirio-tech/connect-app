@@ -266,7 +266,7 @@ export function getNewProjectLink(orgConfigs) {
  * @param {Object} project - The project object
  * @param {string} projectId - The project id
  */
-export function getProjectNavLinks(project, projectId) {
+export function getProjectNavLinks(project, projectId, renderFAQs) {
   let messagesTab = null
   // `Discussions` items can be added as soon as project is loaded
   // if discussions are not hidden for it
@@ -283,12 +283,15 @@ export function getProjectNavLinks(project, projectId) {
     // Commented out till it needs to go live.
     { label: 'Reports', to: `/projects/${projectId}/reports`, Icon: ReportsIcon, iconClassName: 'stroke' },
     { label: 'Assets Library', to: `/projects/${projectId}/assets`, Icon: AssetsLibraryIcon, iconClassName: 'stroke' },
-    { label: 'FAQ', to: `/projects/${projectId}/faqs`, Icon: FAQIcon, iconClassName: 'fill' },
   ] : [
     { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
     messagesTab,
     { label: 'Specification', to: `/projects/${projectId}/specification`, Icon: ScopeIcon, iconClassName: 'fill' },
   ]
-
+  
+  if (renderFAQs) {
+    const faqTab = { label: 'FAQ', to: `/projects/${projectId}/faqs`, Icon: FAQIcon, iconClassName: 'fill' }
+    navLinks.push(faqTab)
+  }
   return navLinks
 }
