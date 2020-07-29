@@ -888,7 +888,7 @@ export const MILESTONE_STATUS_TEXT = [
 export const MIN_CHECKPOINT_REVIEW_DESIGNS = 5
 
 // minimum winner designs to select during final-designs milestone
-export const MIN_WINNER_DESIGNS = 3
+export const MIN_WINNER_DESIGNS = 2
 
 // default additional desgin cost to select during final-designs milestone
 export const DEFAULT_ADDITIONAL_DESIGN_COST = 100
@@ -985,3 +985,19 @@ export const PROJECT_REPORTS = {
  * Report session length in seconds
  */
 export const REPORT_SESSION_LENGTH = 25 * 60 // 25 minutes (5 minutes less than the report session)
+
+
+/**
+ * Contentful Content Ids
+ */
+export const DASHBOARD_FAQ_CONTENT_ID = process.env.DASHBOARD_FAQ_CONTENT_ID
+export const CONTENTFUL_DELIVERY_KEY = process.env.CONTENTFUL_DELIVERY_KEY
+export const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID
+
+
+/**
+ * Contentful node types
+ */
+export const CONTENTFUL_NODE_TYPES = {
+  HYPERLINK : 'hyperlink',
+}

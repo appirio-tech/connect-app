@@ -1,0 +1,8 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import "../../../styles/includes";
+
+.accordion {
+  & + & {
+    margin-top: 2 * $base-unit;
+  }
+}

@@ -4,19 +4,16 @@ import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import cn from 'classnames'
 import _ from 'lodash'
 import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
-import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import {
   PROJECT_STATUS,
-  PROJECT_STATUS_ACTIVE,
   PROJECT_STATUS_COMPLETED,
   PROJECT_STATUS_CANCELLED,
-  TOOLTIP_DEFAULT_DELAY,
   PROJECT_STATUS_DRAFT
 } from '../../config/constants'
 import CarretDownNormal9px from '../../assets/icons/arrow-9px-carret-down-normal.svg'
 
 
-const hocStatusDropdown = (CompositeComponent, statusList, projectCanBeActive) => {
+const hocStatusDropdown = (CompositeComponent, statusList) => {
   class StatusDropdown extends Component {
     shouldDropdownUp() {
       if (this.refs.dropdown) {
@@ -35,12 +32,6 @@ const hocStatusDropdown = (CompositeComponent, statusList, projectCanBeActive) =
       if (!selected) {
         return null
       }
-
-      const activestatusList = statusList.map((status) => ({
-        ...status,
-        disabled: !projectCanBeActive && status.value === PROJECT_STATUS_ACTIVE,
-        toolTipMessage: (!projectCanBeActive && status.value === PROJECT_STATUS_ACTIVE) ? 'To activate project there should be at least one phase in "Planned" status. Please, check "Project Plan" tab.' : null,
-      }))
 
       this.shouldDropdownUp()
       return (
@@ -64,28 +55,8 @@ const hocStatusDropdown = (CompositeComponent, statusList, projectCanBeActive) =
               <div className="status-header">Project Status</div>
               <ul>
                 {
-                  activestatusList.sort((a, b) => a.order - b.order).map((item) =>
-                    item.toolTipMessage ? (
-                      <Tooltip key={item.value} theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
-                        <div className="tooltip-target">
-                          <li>
-                            <a
-                              href="javascript:"
-                              className={cn('status-option', 'status-' + item.value, { active: item.value === status, disabled: item.disabled })}
-                              onClick={(e) => {
-                                if (!item.disabled)
-                                  onItemSelect(item.value, e)
-                              }}
-                            >
-                              <CompositeComponent status={item} showText />
-                            </a>
-                          </li>
-                        </div>
-                        <div className="tooltip-body">
-                          {item.toolTipMessage}
-                        </div>
-                      </Tooltip>
-                    ) : (
+                  statusList.sort((a, b) => a.order - b.order).map((item) =>
+                    (
                       <div key={item.value} className="tooltip-target">
                         <li>
                           <a
@@ -169,11 +140,11 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
 
   render() {
     const { showStatusChangeDialog, newStatus, statusChangeReason } = this.state
-    const { canEdit, projectCanBeActive, status } = this.props
+    const { canEdit, status } = this.props
     const PROJECT_STATUS_VALUES = this.getProjectStatusDropdownValues(status)
     const StatusDropdown = canEdit
-      ? enhanceDropdown(hocStatusDropdown(CompositeComponent, PROJECT_STATUS_VALUES, projectCanBeActive))
-      : hocStatusDropdown(CompositeComponent, PROJECT_STATUS_VALUES, projectCanBeActive)
+      ? enhanceDropdown(hocStatusDropdown(CompositeComponent, PROJECT_STATUS_VALUES))
+      : hocStatusDropdown(CompositeComponent, PROJECT_STATUS_VALUES)
     return (
       <div className={cn('EditableProjectStatus', {'modal-active': showStatusChangeDialog})}>
         <div className="modal-overlay" onClick={ this.hideStatusChangeDialog }/>
@@ -197,10 +168,6 @@ editableProjectStatus.propTypes = {
    * Boolean flag to control editability of the project status. It does not render the dropdown if it is not editable.
    */
   canEdit: PropTypes.bool,
-  /**
-   * Boolean flag to control if project status can be switched to active.
-   */
-  projectCanBeActive: PropTypes.bool,
   /**
    * String representing project status
    */
