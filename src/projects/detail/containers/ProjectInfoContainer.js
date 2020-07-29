@@ -10,6 +10,7 @@ import { loadDashboardFeeds, loadProjectMessages } from '../../actions/projectTo
 import { loadTopic } from '../../../actions/topics'
 import { loadProjectPlan } from '../../actions/projectPlan'
 import { getProjectNavLinks } from '../../../helpers/projectHelper'
+import { getProjectTemplateByKey, containsFAQ } from '../../../helpers/templates'
 import {
   PROJECT_ROLE_OWNER,
   PROJECT_ROLE_COPILOT,
@@ -450,7 +451,14 @@ class ProjectInfoContainer extends React.Component {
     const notReadPhaseNotifications = filterTopicAndPostChangedNotifications(projectNotReadNotifications, /^phase#\d+$/)
     const notReadAssetsNotifications = filterFileAndLinkChangedNotifications(projectNotReadNotifications)
 
-    const navLinks = getProjectNavLinks(project, project.id).map((navLink) => {
+    const projectTemplateId = project.templateId
+    const projectTemplateKey = _.get(project, 'details.products[0]')
+    const projectTemplate = projectTemplateId
+      ? _.find(projectTemplates, pt => pt.id === projectTemplateId)
+      : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
+
+    const renderFAQs = containsFAQ(projectTemplate)
+    const navLinks = getProjectNavLinks(project, project.id, renderFAQs).map((navLink) => {
       if (navLink.label === 'Messages') {
         navLink.count = notReadMessageNotifications.length
         navLink.toolTipText = 'New messages'
