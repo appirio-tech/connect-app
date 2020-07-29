@@ -177,3 +177,16 @@ export function getProjectTypeByAlias(projectTypes, alias) {
     projectType.aliases[0] === alias
   ) || null
 }
+
+
+
+/**
+ * Finds whether the template supports FAQ or not
+ *
+ * @param {Object}  projectTemplate a project template object
+ *
+ * @return {Boolean} boolean true/false
+ */
+export function containsFAQ(projectTemplate) {
+  return projectTemplate && projectTemplate.metadata && !_.isEmpty(projectTemplate.metadata) && projectTemplate.metadata.contentful && projectTemplate.metadata.contentful.projectFaqId
+}
