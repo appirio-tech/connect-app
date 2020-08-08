@@ -1001,3 +1001,7 @@ export const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID
 export const CONTENTFUL_NODE_TYPES = {
   HYPERLINK : 'hyperlink',
 }
+export const INTERNAL_PROJECT_URLS=[
+  'tc_internal',
+  'tc-internal'
+]
