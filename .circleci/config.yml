@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'feature/new-project-catalog']
+              only: ['dev', 'feature/add_option_for_rendering_internal_intake_forms']
 
       - deployTest01:
           context : org-global
