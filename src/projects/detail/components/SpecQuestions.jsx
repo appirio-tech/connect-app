@@ -380,6 +380,7 @@ class SpecQuestions extends React.Component {
       ChildElem = TalentPickerQuestion
       _.assign(elemProps, {
         options: q.options,
+        talentPickerVersion: q.talentPickerVersion,
       })
       break
     default:

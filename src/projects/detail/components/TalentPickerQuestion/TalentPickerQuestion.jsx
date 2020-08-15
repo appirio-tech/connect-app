@@ -38,28 +38,59 @@ class TalentPickerQuestion extends Component {
   }
 
   setValidator(props) {
-    const { setValidations, required } = props
+    const { setValidations, required, TalentPickerVersion } = props
     const validations = {
       oneRowHaveValidValue: (formValues, value) => {
         if (!required) {
           return true
         }
-        return _.some(value, (v) => {
-          return v.people !== '0' && v.duration !== '0' && v.skills.length > 0
-        }) // validation body
+        if(TalentPickerVersion && TalentPickerVersion === 'v2.0')
+          return this.oneRowValidConditionV2(value) // validation body
+        else
+          return this.oneRowValidCondition(value) // validation body
       },
       noPartialFillsExist: (formValues, value) => {
-        return _.every(value, v => {
-          const isOneValueFilled = v.people > 0 || v.duration > 0 || (v.skills && v.skills.length)
-          const isAllValuesFilled = v.people > 0 && v.duration > 0 && v.skills && v.skills.length
-
-          // If one value is filled, all values should be filled to make this row valid. Partial fill is not valid
-          const isRowValid = !isOneValueFilled || isAllValuesFilled
-          return isRowValid
-        })
+        if(TalentPickerVersion && TalentPickerVersion === 'v2.0')
+          return this.noPartialFillsConditionV2(value) // validation body
+        else
+          return this.noPartialFillsCondition(value) // validation body
       }
     }
     setValidations(validations)
+  }
+
+  oneRowValidConditionV2(value) {
+    return _.some(value, (v) => {
+      return v.people !== '0' && v.duration !== '0' && v.skills.length > 0 && v.workLoad.value !== null && v.jobDescription.length
+    })
+  }
+
+  noPartialFillsConditionV2(value) {
+    return _.every(value, v => {
+      const isOneValueFilled = v.people > 0 || v.duration > 0 || (v.skills && v.skills.length) || (v.jobDescription && v.jobDescription.length) || (v.workLoad && v.workLoad.value !== null)
+      const isAllValuesFilled = v.people > 0 && v.duration > 0 && v.skills && v.skills.length && v.jobDescription.length && v.workLoad.value !== null
+
+      // If one value is filled, all values should be filled to make this row valid. Partial fill is not valid
+      const isRowValid = !isOneValueFilled || isAllValuesFilled
+      return isRowValid
+    })
+  }
+
+  oneRowValidCondition(value) {
+    return _.some(value, (v) => {
+      return v.people !== '0' && v.duration !== '0' && v.skills.length > 0
+    })
+  }
+
+  noPartialFillsCondition(value) {
+    return _.every(value, v => {
+      const isOneValueFilled = v.people > 0 || v.duration > 0 || (v.skills && v.skills.length)
+      const isAllValuesFilled = v.people > 0 && v.duration > 0 && v.skills && v.skills.length
+
+      // If one value is filled, all values should be filled to make this row valid. Partial fill is not valid
+      const isRowValid = !isOneValueFilled || isAllValuesFilled
+      return isRowValid
+    })
   }
 
   updateOptions(props) {
@@ -74,6 +105,9 @@ class TalentPickerQuestion extends Component {
       people: '0',
       duration: '0',
       skills: [],
+      additionalSkills: [],
+      workLoad: { value: null, title: 'Select Workload'},
+      jobDescription: ''
     }))
   }
 
@@ -103,6 +137,9 @@ class TalentPickerQuestion extends Component {
         people: '0',
         duration: '0',
         skills: [],
+        additionalSkills: [],
+        workLoad: { value: null, title: 'Select Workload'},
+        jobDescription: '',
       },
       ...values.slice(index)
     ]
@@ -123,7 +160,7 @@ class TalentPickerQuestion extends Component {
   }
 
   render() {
-    const { wrapperClass, getValue } = this.props
+    const { wrapperClass, getValue, talentPickerVersion } = this.props
     const { options } = this.state
 
     const errorMessage =
@@ -147,6 +184,7 @@ class TalentPickerQuestion extends Component {
                 onChange={this.handleValueChange}
                 onDeleteRow={this.removeRole}
                 onAddRow={this.insertRole}
+                talentPickerVersion={talentPickerVersion}
               />
             )
           }) : null}

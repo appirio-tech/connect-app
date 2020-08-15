@@ -85,6 +85,22 @@
   .label {
     display: block;
   }
+   
+  .job-description input,
+  .TextInput[type="text"] {
+    &.empty {
+      color: $tc-gray-30;
+    }
+  
+    @include placeholder {
+      @include roboto;
+      color: $tc-gray-30;
+      text-transform: none;
+      font-style: italic;
+      font-size: $base-unit*3;
+      line-height: $base-unit*4;
+    }
+  }  
 }
 
 .col-role-container {

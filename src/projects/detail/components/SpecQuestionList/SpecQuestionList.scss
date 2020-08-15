@@ -172,6 +172,10 @@
           border-color: $tc-gray-20;
           max-width: 300px;
           margin-left: 0px;
+          
+          &.error {
+           border: 1px solid #ff5b52 !important;
+          }
 
           &:after {
             border-bottom-color: $tc-gray-70;
