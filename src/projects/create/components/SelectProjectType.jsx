@@ -1,12 +1,13 @@
 import React from 'react'
 import PT from 'prop-types'
+import _ from 'lodash'
 
 import SelectProjectTypeCard from './SelectProjectTypeCard'
 import { getProjectTemplatesByCategory } from '../../../helpers/templates'
 import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 import IconArrowRight from '../../../assets/icons/arrows-16px-1_tail-right.svg'
 
-import { DOMAIN } from '../../../config/constants'
+import { DOMAIN, MANAGER_ROLES } from '../../../config/constants'
 
 import './SelectProjectType.scss'
 
@@ -14,8 +15,13 @@ const SelectProjectType = ({
   onProjectTypeChange,
   projectTypes,
   projectTemplates,
+  userRoles,
 }) => {
   const cards = []
+  const managerRoles = _.filter(MANAGER_ROLES, mgrRole => {
+    return _.find(userRoles, role => role === mgrRole)
+  })
+  const isValidRole = managerRoles && managerRoles.length > 0
 
   projectTypes.forEach((projectType) => {
 
@@ -24,6 +30,10 @@ const SelectProjectType = ({
     // don't render disabled items for selection
     // don't render hidden items as well, hidden items can be reached via direct link though
     if (projectType.disabled || projectType.hidden || visibleProjectTemplates.length === 0) return
+
+    // don't render internal projects to customer user roles
+    if (projectType.metadata && projectType.metadata.isInternal 
+      && projectType.metadata.isInternal === true && !isValidRole) return
 
     const icon = <ProjectTypeIcon type={projectType.icon} />
 
