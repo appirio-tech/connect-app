@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev']
+              only: ['dev', 'feature/talent_picker_version_v2']
 
       - deployTest01:
           context : org-global
@@ -136,7 +136,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['feature/faqs', 'feature/talent_picker_version_v2']
+              only: ['feature/faqs']
 
       - deployProd:
           context : org-global
