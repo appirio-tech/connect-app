@@ -17,6 +17,7 @@ import {
   PROJECT_ROLE_MANAGER,
   DIRECT_PROJECT_URL,
   SALESFORCE_PROJECT_LEAD_LINK,
+  WORK_MANAGER_APP,
   PROJECT_STATUS_CANCELLED,
   PROJECT_STATUS_ACTIVE,
   PROJECT_STATUS_COMPLETED,
@@ -436,6 +437,7 @@ class ProjectInfoContainer extends React.Component {
     ], currentMemberRole) > -1
     if (isMemberOrCopilot || isSuperUser) {
       directLinks = []
+      directLinks.push({name: 'Launch Work Manager', href: `${WORK_MANAGER_APP}/${project.id}/challenges`})
       if (project.directProjectId) {
         directLinks.push({name: 'Project in Topcoder Direct', href: `${DIRECT_PROJECT_URL}${project.directProjectId}`})
       } else {
