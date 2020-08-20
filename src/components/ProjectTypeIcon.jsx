@@ -29,8 +29,7 @@ import IconSalesforceImplementation from '../assets/icons/v.2.5/project-types/sa
 import IconSolutions from '../assets/icons/v.2.5/project-types/solutions.svg'
 import IconUserSentimentAnalysis from '../assets/icons/v.2.5/project-types/user-sentiment-analysis.svg'
 import IconDefault from '../assets/icons/v.2.5/project-types/default.svg'
-import IconTcInternal from '../assets/icons/v.2.5/project-types/tc-internal-2.svg'
-//import IconTcInternal from '../assets/icons/ui-rocket-white.svg'
+import IconTcInternal from '../assets/icons/ui-rocket-white.svg'
 
 const ProjectTypeIcon = ({ type }) => {
   // if type is defined as a relative path to the icon, convert it to icon "id"
