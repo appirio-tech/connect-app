@@ -459,7 +459,7 @@ class SpecQuestions extends React.Component {
           !(question.type === 'estimation' && template.hideEstimation)
         ).map((q, index) => {
           return  (
-            _.includes(['checkbox', 'checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills', 'slide-radiogroup', 'slider-standard', 'select-dropdown', 'talent-picker'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
+            _.includes(['checkbox', 'checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills', 'slide-radiogroup', 'slider-standard', 'select-dropdown', 'talent-picker', 'talent-picker-v2'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
               <Accordion
                 key={q.fieldName || `accordion-${index}`}
                 title={q.summaryTitle || q.title}

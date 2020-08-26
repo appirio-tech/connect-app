@@ -32,6 +32,7 @@ const TYPE = {
   SLIDER_STANDARD: 'slider-standard',
   SELECT_DROPDOWN: 'select-dropdown',
   TALENT_PICKER: 'talent-picker',
+  TALENT_PICKER_V2: 'talent-picker-v2',
 }
 
 /**
@@ -170,6 +171,11 @@ class Accordion extends React.Component {
     case TYPE.SLIDER_STANDARD: return mapDecisionValue(value)
     case TYPE.SELECT_DROPDOWN: return mapValue(value)
     case TYPE.TALENT_PICKER: {
+      const getRoleName = (role) => _.find(options, { role }).roleTitle
+      const totalPeoplePerRole = _.mapValues(_.groupBy(value, v => v.role), valuesUnderGroup => _.sumBy(valuesUnderGroup, v => Number(v.people)))
+      return _.toPairs(totalPeoplePerRole).filter(([, people]) => people > 0).map(([role, people]) => `${getRoleName(role)}: ${people}`).join(', ')
+    }
+    case TYPE.TALENT_PICKER_V2: {
       const getRoleName = (role) => _.find(options, { role }).roleTitle
       const totalPeoplePerRole = _.mapValues(_.groupBy(value, v => v.role), valuesUnderGroup => _.sumBy(valuesUnderGroup, v => Number(v.people)))
       return _.toPairs(totalPeoplePerRole).filter(([, people]) => people > 0).map(([role, people]) => `${getRoleName(role)}: ${people}`).join(', ')
