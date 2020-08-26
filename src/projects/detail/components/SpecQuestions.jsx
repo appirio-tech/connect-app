@@ -11,6 +11,7 @@ import SpecQuestionList from './SpecQuestionList/SpecQuestionList'
 import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
 import SkillsQuestion from './SkillsQuestion/SkillsQuestion'
 import TalentPickerQuestion from './TalentPickerQuestion/TalentPickerQuestion'
+import TalentPickerQuestionV2 from './TalentPickerQuestion/TalentPickerQuestionV2'
 import SpecFeatureQuestion from './SpecFeatureQuestion'
 import ColorSelector from './../../../components/ColorSelector/ColorSelector'
 import SelectDropdown from './../../../components/SelectDropdown/SelectDropdown'
@@ -378,6 +379,12 @@ class SpecQuestions extends React.Component {
       break
     case 'talent-picker':
       ChildElem = TalentPickerQuestion
+      _.assign(elemProps, {
+        options: q.options,
+      })
+      break
+    case 'talent-picker-v2':
+      ChildElem = TalentPickerQuestionV2
       _.assign(elemProps, {
         options: q.options,
       })
