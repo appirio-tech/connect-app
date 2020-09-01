@@ -26,6 +26,7 @@ import {
   PROJECT_ROLE_PROJECT_MANAGER,
   PROJECT_ROLE_PROGRAM_MANAGER,
   PROJECT_ROLE_SOLUTION_ARCHITECT,
+  PROJECT_CATEGORY_TAAS,
 } from '../../../config/constants'
 import PERMISSIONS from '../../../config/permissions'
 import { hasPermission } from '../../../helpers/permissions'
@@ -426,6 +427,14 @@ class ProjectInfoContainer extends React.Component {
     const { showDeleteConfirm } = this.state
     const { project, currentMemberRole, isSuperUser, phases, hideInfo, hideMembers,
       productsTimelines, isProjectProcessing, notifications, projectTemplates } = this.props
+    
+    const projectTemplateId = project.templateId
+    const projectTemplateKey = _.get(project, 'details.products[0]')
+    const projectTemplate = projectTemplateId
+      ? _.find(projectTemplates, pt => pt.id === projectTemplateId)
+      : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
+    
+    const isTaaS = PROJECT_CATEGORY_TAAS === projectTemplate.category
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([
@@ -437,7 +446,8 @@ class ProjectInfoContainer extends React.Component {
     ], currentMemberRole) > -1
     if (isMemberOrCopilot || isSuperUser) {
       directLinks = []
-      directLinks.push({name: 'Launch Work Manager', href: `${WORK_MANAGER_APP}/${project.id}/challenges`})
+      if(!isTaaS)
+        directLinks.push({name: 'Launch Work Manager', href: `${WORK_MANAGER_APP}/${project.id}/challenges`})
       if (project.directProjectId) {
         directLinks.push({name: 'Project in Topcoder Direct', href: `${DIRECT_PROJECT_URL}${project.directProjectId}`})
       } else {
@@ -452,12 +462,6 @@ class ProjectInfoContainer extends React.Component {
     const notReadMessageNotifications = filterTopicAndPostChangedNotifications(projectNotReadNotifications, /^(?:MESSAGES|PRIMARY)$/)
     const notReadPhaseNotifications = filterTopicAndPostChangedNotifications(projectNotReadNotifications, /^phase#\d+$/)
     const notReadAssetsNotifications = filterFileAndLinkChangedNotifications(projectNotReadNotifications)
-
-    const projectTemplateId = project.templateId
-    const projectTemplateKey = _.get(project, 'details.products[0]')
-    const projectTemplate = projectTemplateId
-      ? _.find(projectTemplates, pt => pt.id === projectTemplateId)
-      : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
 
     const renderFAQs = containsFAQ(projectTemplate)
     const navLinks = getProjectNavLinks(project, project.id, renderFAQs).map((navLink) => {

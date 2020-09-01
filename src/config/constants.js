@@ -1006,3 +1006,9 @@ export const INTERNAL_PROJECT_URLS=[
   'tc_internal',
   'tc-internal'
 ]
+
+
+/**
+ * Project category string
+ */
+export const PROJECT_CATEGORY_TAAS = 'talent-as-a-service'
