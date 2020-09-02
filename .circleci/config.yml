@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'feature/talent_picker_v2']
+              only: ['dev', 'feature/RS256-IdToken-backcompatibility']
 
       - deployTest01:
           context : org-global
