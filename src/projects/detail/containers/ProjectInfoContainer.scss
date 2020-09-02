@@ -48,6 +48,18 @@
   letter-spacing: 0.8px;
 }
 
+.administration-section .billing-account-info {
+  @include roboto-medium;
+  font-size: $tc-label-md;
+  color: $tc-gray-40;
+  line-height: $base-unit*6;
+  padding-left: 4 * $base_unit;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    padding-bottom: 4 * $base_unit;
+  }
+}
+
 .all-project-link-wrapper {
   display: flex;
   padding: 20px;
@@ -59,6 +71,8 @@
   justify-content: center;
   margin-top: 20px;
   padding: 5px 0;
+
+
 
   :global {
     .panel {

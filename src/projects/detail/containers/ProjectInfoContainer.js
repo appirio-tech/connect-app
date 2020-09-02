@@ -498,6 +498,7 @@ class ProjectInfoContainer extends React.Component {
     const isProjectActive = project.status === PROJECT_STATUS_ACTIVE
     const isV3Project = project.version === 'v3'
     const projectCanBeActive =  !isV3Project || (!isProjectActive && hasReviewedOrActivePhases) || isProjectActive
+    const BillingInfo = project.billingAccountId ? `BillingAccountId - ${project.billingAccountId}` : 'Billing Account Not Attached'
 
     return (
       <div>
@@ -553,6 +554,16 @@ class ProjectInfoContainer extends React.Component {
             <ProjectDirectLinks
               directLinks={directLinks}
             />
+            {project.billingAccountId ?
+              <div styleName="billing-account-info">
+                {BillingInfo}
+              </div>
+              :
+              <div styleName="billing-account-info">
+                {BillingInfo}
+              </div>
+
+            }
           </div>}
 
           {!hideInfo && <div styleName="project-status-toggle">
