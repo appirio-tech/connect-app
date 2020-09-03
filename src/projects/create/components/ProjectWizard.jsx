@@ -21,6 +21,8 @@ import {
   SPECIAL_QUERY_PARAMS,
   PROJECT_REF_CODE_MAX_LENGTH,
   PROJECT_ATTACHMENTS_FOLDER,
+  MANAGER_ROLES,
+  INTERNAL_PROJECT_URLS
 } from '../../../config/constants'
 import {
   buildProjectUpdateQueryByQueryParamSelectCondition,
@@ -212,7 +214,7 @@ class ProjectWizard extends Component {
    * @return {number} step where wizard should move after parsing the URL param
    */
   loadProjectFromURL(urlParams, updateQuery) {
-    const { projectTemplates, projectTypes } = this.props
+    const { projectTemplates, projectTypes, userRoles } = this.props
     const urlAlias = urlParams && urlParams.project
     const statusParam  = urlParams && urlParams.status
 
@@ -233,10 +235,17 @@ class ProjectWizard extends Component {
     } else {
       // if it is not a project type, it should be a project template
       const projectTemplate = getProjectTemplateByAlias(projectTemplates, urlAlias)
+      const managerRoles = _.filter(MANAGER_ROLES, mgrRole => {
+        return _.find(userRoles, role => role === mgrRole)
+      })
+      const isInternalURL = _.find(INTERNAL_PROJECT_URLS, url => url === urlAlias)
+      let isValidRole = true
+      if(isInternalURL)
+        isValidRole = managerRoles && managerRoles.length > 0
 
       // if we have some project template key in the URL and we can find the project template
       // show details step
-      if (projectTemplate) {
+      if (isValidRole && projectTemplate) {
         updateQuery['type'] = { $set : projectTemplate.category }
         updateQuery['templateId'] = { $set : projectTemplate.id }
         updateQuery['details'] = {}
@@ -566,6 +575,7 @@ class ProjectWizard extends Component {
           onProjectTypeChange={ this.updateProjectType }
           projectTemplates={ projectTemplates }
           projectTypes={ projectTypes }
+          userRoles={ userRoles }
         />
         <SelectProjectTemplate
           onProjectTemplateChange={ this.updateProjectTemplate }

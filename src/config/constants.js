@@ -706,11 +706,12 @@ export const DOMAIN = process.env.domain || 'topcoder.com'
 export const CONNECT_DOMAIN = `connect.${DOMAIN}`
 export const CONNECT_MAIN_PAGE_URL = `http://connect.${DOMAIN}`
 export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
-export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || `https://accounts.${DOMAIN}/#!/connect`
-export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL || `https://accounts.${DOMAIN}/#!/connect/registration`
+export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || `https://accounts.${DOMAIN}/#!/member`
+export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL || `https://accounts.${DOMAIN}/#!/member/registration?regSource=tcBusiness`
 
 export const TC_API_URL = `https://api.${DOMAIN}`
 export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?formData.projectId=`
+export const WORK_MANAGER_APP = `https://challenges.${DOMAIN}/projects`
 export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
 export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
 // Uncomment if you run TC Notifications locally
@@ -718,7 +719,7 @@ export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_
 
 export const TC_CDN_URL = process.env.TC_CDN_URL || `https://community-app.${DOMAIN}/api/cdn/public`
 
-export const RESET_PASSWORD_URL = `https://accounts.${DOMAIN}/connect/reset-password`
+export const RESET_PASSWORD_URL = `https://accounts.${DOMAIN}/member/reset-password`
 export const VERIFY_EMAIL_URL = `http://www.${DOMAIN}/settings/account/changeEmail`
 
 export const PROJECT_NAME_MAX_LENGTH = 255
@@ -1001,3 +1002,13 @@ export const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID
 export const CONTENTFUL_NODE_TYPES = {
   HYPERLINK : 'hyperlink',
 }
+export const INTERNAL_PROJECT_URLS=[
+  'tc_internal',
+  'tc-internal'
+]
+
+
+/**
+ * Project category string
+ */
+export const PROJECT_CATEGORY_TAAS = 'talent-as-a-service'
