@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'feature/replace_login_registration_urls']
+              only: ['dev']
 
       - deployTest01:
           context : org-global
