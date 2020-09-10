@@ -30,6 +30,7 @@ import {
   ROLE_PROGRAM_MANAGER,
   ROLE_SOLUTION_ARCHITECT,
   ROLE_PROJECT_MANAGER,
+  PROFILE_FIELDS_CONFIG,
 } from '../../../config/constants'
 
 class FillProjectDetails extends Component {
@@ -303,8 +304,9 @@ const mapStateToProps = ({ settings, loadUser }) => {
     ROLE_PROJECT_MANAGER,
   ]
   const isTopcoderUser = _.intersection(loadUser.user.roles, topCoderRoles).length > 0
-  let isMissingUserInfo = true
+  let isMissingUserInfo = false
   const profileSettings = formatProfileSettings(settings.profile.traits)
+  const fieldsConfig = isTopcoderUser ? PROFILE_FIELDS_CONFIG.TOPCODER : PROFILE_FIELDS_CONFIG.CUSTOMER
   if (isTopcoderUser) {
     // We don't ask Topcoder User for "Company Name" and "Title"
     // but server requires them, so if they are not yet defined, we set them automatically
@@ -314,24 +316,20 @@ const mapStateToProps = ({ settings, loadUser }) => {
     if (!profileSettings.title) {
       profileSettings.title = getDefaultTopcoderRole(loadUser.user)
     }
-    isMissingUserInfo =
-      !profileSettings.firstName ||
-      !profileSettings.lastName ||
-      !profileSettings.country ||
-      !profileSettings.timeZone ||
-      !profileSettings.workingHourStart ||
-      !profileSettings.workingHourEnd
   } else {
     if (!profileSettings.businessEmail) {
       profileSettings.businessEmail = loadUser.user.email
     }
-    isMissingUserInfo =
-      !profileSettings.firstName ||
-      !profileSettings.lastName ||
-      !profileSettings.title ||
-      !profileSettings.companyName ||
-      !profileSettings.businessPhone
   }
+  // check if any required field doesn't have a value
+  _.forEach(_.keys(fieldsConfig), (fieldKey) => {
+    const isFieldRequired = fieldsConfig[fieldKey]
+
+    if (isFieldRequired && !profileSettings.fieldKey) {
+      isMissingUserInfo = true
+      return false
+    }
+  })
 
   return {
     profileSettings: {

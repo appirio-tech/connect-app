@@ -1012,3 +1012,62 @@ export const INTERNAL_PROJECT_URLS=[
  * Project category string
  */
 export const PROJECT_CATEGORY_TAAS = 'talent-as-a-service'
+
+/**
+ * Config for User Profile fields
+ *
+ * - `true` means field is required
+ * - `false` means field is optional
+ * - if field is not on the list means it should not be shown
+ */
+export const PROFILE_FIELDS_CONFIG = {
+  // this config is used to show any user profile
+  DEFAULT: {
+    // required fields
+    firstName: true,
+    lastName: true,
+    title: true,
+    timeZone: true,
+    businessPhone: true,
+    companyName: true,
+
+    // optional fields
+    country: false,
+    avatar: false,
+    workingHourStart: false,
+    workingHourEnd: false,
+  },
+
+  // configs below are used when we ask users to fill missing fields (progressive registration)
+  TOPCODER: {
+    // required fields
+    firstName: true,
+    lastName: true,
+    country: true,
+    timeZone: true,
+    workingHourStart: true,
+    workingHourEnd: true,
+
+    // optional fields
+    avatar: false,
+    title: false,
+    companyName: false,
+    businessPhone: false,
+  },
+  CUSTOMER: {
+    // required fields
+    businessEmail: true,
+    firstName: true,
+    lastName: true,
+    title: true,
+    companyName: true,
+    businessPhone: true,
+
+    // optional fields
+    avatar: false,
+    country: false,
+    timeZone: false,
+    workingHourStart: false,
+    workingHourEnd: false,
+  }
+}

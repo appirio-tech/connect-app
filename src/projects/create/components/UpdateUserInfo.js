@@ -3,7 +3,7 @@ import PT from 'prop-types'
 
 import ModalControl from '../../../components/ModalControl'
 import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
-import { DOMAIN } from '../../../config/constants'
+import { DOMAIN, PROFILE_FIELDS_CONFIG } from '../../../config/constants'
 
 import ProfileSettingsForm from '../../../routes/settings/routes/profile/components/ProfileSettingsForm'
 
@@ -33,6 +33,19 @@ class UpdateUserInfo extends Component {
       closeUserSettings,
     } = this.props
 
+    const fieldsConfig = isTopcoderUser ? PROFILE_FIELDS_CONFIG.TOPCODER : PROFILE_FIELDS_CONFIG.CUSTOMER
+    // never show avatar
+    delete fieldsConfig.avatar
+    // config the form to only show required fields which doesn't have the value yet
+    const missingFieldsConfig = _.reduce(fieldsConfig, (acc, isFieldRequired, fieldKey) => {
+      console.log({acc, isFieldRequired, fieldKey})
+      if (isFieldRequired && !_.get(profileSettings, `settings.${fieldKey}`)) {
+        acc[fieldKey] = isFieldRequired
+      }
+      return acc
+    }, {})
+
+
     return (
       <div styleName="container">
         <ModalControl
@@ -58,15 +71,7 @@ class UpdateUserInfo extends Component {
             isCustomer={isCustomer}
             isCopilot={isCopilot}
             isManager={isManager}
-            showTitle={!isTopcoderUser}
-            showAvatar={false}
-            showBusinessEmail={!isTopcoderUser}
-            showBusinessPhone={!isTopcoderUser}
-            showCompanyName={!isTopcoderUser}
-            isRequiredTimeZone={isTopcoderUser}
-            isRequiredCountry={isTopcoderUser}
-            isRequiredWorkingHours={isTopcoderUser}
-            isRequiredBusinessEmail={!isTopcoderUser}
+            fieldsConfig={missingFieldsConfig}
             submitButton="Send My Request"
             showBackButton
             onBack={closeUserSettings}
