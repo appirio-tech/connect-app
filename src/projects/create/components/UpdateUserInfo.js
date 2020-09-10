@@ -45,6 +45,13 @@ class UpdateUserInfo extends Component {
       return acc
     }, {})
 
+    // if time zone is required and doesn't have a value yet,
+    // then detect timezone using browser feature and prefill the form
+    let prefilledProfileSettings = null
+    if (fieldsConfig.timeZone && !profileSettings.timeZone) {
+      prefilledProfileSettings = _.cloneDeep(profileSettings)
+      prefilledProfileSettings.settings.timeZone = (new Intl.DateTimeFormat()).resolvedOptions().timeZone
+    }
 
     return (
       <div styleName="container">
@@ -65,7 +72,7 @@ class UpdateUserInfo extends Component {
             your project request.
           </span>
           <ProfileSettingsForm
-            values={profileSettings}
+            values={prefilledProfileSettings || profileSettings}
             saveSettings={saveProfileSettings}
             uploadPhoto={uploadProfilePhoto}
             isCustomer={isCustomer}
