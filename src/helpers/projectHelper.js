@@ -18,6 +18,7 @@ import DashboardIcon from '../assets/icons/v.2.5/icon-dashboard.svg'
 import MessagesIcon from '../assets/icons/v.2.5/icon-messages.svg'
 import ReportsIcon from '../assets/icons/v.2.5/icon-reports.svg'
 import AssetsLibraryIcon from '../assets/icons/v.2.5/icon-assets-library.svg'
+import FAQIcon from '../assets/icons/faq.svg'
 import InvisibleIcon from '../assets/icons/invisible.svg'
 
 import { formatNumberWithCommas } from './format'
@@ -265,7 +266,7 @@ export function getNewProjectLink(orgConfigs) {
  * @param {Object} project - The project object
  * @param {string} projectId - The project id
  */
-export function getProjectNavLinks(project, projectId) {
+export function getProjectNavLinks(project, projectId, renderFAQs) {
   let messagesTab = null
   // `Discussions` items can be added as soon as project is loaded
   // if discussions are not hidden for it
@@ -287,6 +288,10 @@ export function getProjectNavLinks(project, projectId) {
     messagesTab,
     { label: 'Specification', to: `/projects/${projectId}/specification`, Icon: ScopeIcon, iconClassName: 'fill' },
   ]
-
+  
+  if (renderFAQs) {
+    const faqTab = { label: 'FAQ', to: `/projects/${projectId}/faqs`, Icon: FAQIcon, iconClassName: 'fill' }
+    navLinks.push(faqTab)
+  }
   return navLinks
 }

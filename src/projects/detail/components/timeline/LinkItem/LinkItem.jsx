@@ -111,24 +111,14 @@ class LinkItem extends React.Component {
               </a>
 
               <div styleName="link-wrapper">
-                {link.isDownloadable ? (
-                  <a
-                    href={link.url}
-                    download={link.url}
-                    styleName="link"
-                  >
-                    {link.url}
-                  </a>
-                ) : (
-                  <a
-                    href={link.url}
-                    styleName="link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {link.url}
-                  </a>
-                )}
+                <a
+                  href={link.url}
+                  styleName="link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {link.url}
+                </a>
               </div>
             </div>
             <div styleName="link-item-button-group">
@@ -143,8 +133,9 @@ class LinkItem extends React.Component {
               {!!link.isDownloadable && !updateLink && !deleteLink && !onSelectChange && (
                 <a
                   href={link.url}
-                  download={link.url}
                   styleName="button download"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 />
               )}
 

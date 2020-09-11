@@ -1,4 +1,5 @@
 import {convertFromRaw} from 'draft-js'
+import sanitizeHtml from 'sanitize-html'
 const Remarkable = require('remarkable')
 
 // Block level items, key is Remarkable's key for them, value returned is
@@ -218,7 +219,11 @@ export function markdownToHTML(markdown) {
     // typographer: true,
   })
   // Replace the BBCode [u][/u] to markdown '++' for underline style
-  const _markdown = markdown.replace(new RegExp('\\[/?u\\]', 'g'), '++')
+  let _markdown = markdown.replace(new RegExp('\\[/?u\\]', 'g'), '++')
+  _markdown = sanitizeHtml(_markdown, {
+    allowedTags: [ 'blockquote', 'p', 'a', 'ul', 'ol', 'li', 'b', 'i', 'strong', 'em', 'strike', 'abbr', 'code', 'br', 'pre' ],
+    disallowedTagsMode: 'escape'
+  })
   return md.render(_markdown, {}) // remarkable js takes markdown and makes it an array of style objects for us to easily parse
 }
 

@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom'
 import UserSummary from '../UserSummary/UserSummary'
 import MenuList from '../MenuList/MenuList'
 import NotificationsIcon from '../../assets/icons/ui-bell.svg'
+import FAQIcon from '../../assets/icons/faq.svg'
 import AllProjectsIcon from '../../assets/icons/v.2.5/icon-all-projects.svg'
 import MyProfileIcon from '../../assets/icons/v.2.5/icon-my-profile.svg'
 import ReportsIcon from '../../assets/icons/v.2.5/icon-reports.svg'
@@ -55,6 +56,11 @@ const navLinks = [{
   label: 'NOTIFICATIONS',
   to: '/notifications',
   Icon: NotificationsIcon,
+  iconClassName: 'fill',
+}, {
+  label: 'HOW TOPCODER WORKS',
+  to: '/faqs',
+  Icon: FAQIcon,
   iconClassName: 'fill',
 }]
 

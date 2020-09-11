@@ -83,11 +83,13 @@
     "webpack-merge": "^4.1.1"
   },
   "dependencies": {
+    "@contentful/rich-text-react-renderer": "^13.4.0",
     "appirio-tech-react-components": "git+https://github.com/appirio-tech/react-components.git#feature/connectv2",
     "axios": "^0.19.2",
     "brace": "^0.11.1",
     "classnames": "^2.2.3",
     "coffeescript": "^1.12.7",
+    "contentful": "^7.14.4",
     "draft-js": "0.10.5",
     "draft-js-drag-n-drop-plugin": "^2.0.0-rc2",
     "draft-js-image-plugin": "^2.0.0-rc2",
@@ -145,7 +147,8 @@
     "redux-promise-middleware": "4.2.1",
     "redux-segment": "^1.6.2",
     "redux-thunk": "^2.1.0",
-    "remarkable": "^1.7.1",
+    "remarkable": "^1.7.4",
+    "sanitize-html": "^1.27.4",
     "svg-react-loader": "^0.4.5",
     "tc-auth-lib": "git+https://github.com/topcoder-platform/tc-auth-lib.git#dev",
     "tc-ui": "git+https://github.com/appirio-tech/tc-ui.git#feature/connectv2",
