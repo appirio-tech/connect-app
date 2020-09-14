@@ -688,6 +688,24 @@ export const MANAGER_ROLES = [
   ROLE_PROJECT_MANAGER,
 ]
 
+/**
+ * Is user has any of these roles, it means such a user is not a customer.
+ */
+export const NON_CUSTOMER_ROLES = [
+  ROLE_CONNECT_COPILOT,
+  ROLE_CONNECT_MANAGER,
+  ROLE_CONNECT_ACCOUNT_MANAGER,
+  ROLE_CONNECT_ADMIN,
+  ROLE_ADMINISTRATOR,
+  ROLE_CONNECT_COPILOT_MANAGER,
+  ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
+  ROLE_PRESALES,
+  ROLE_ACCOUNT_EXECUTIVE,
+  ROLE_PROGRAM_MANAGER,
+  ROLE_SOLUTION_ARCHITECT,
+  ROLE_PROJECT_MANAGER,
+]
+
 // to be able to start the Connect App we should pass at least the dummy value for `FILE_PICKER_API_KEY`
 // but if we want to test file uploading we should provide the real value in `FILE_PICKER_API_KEY` env variable
 export const FILE_PICKER_API_KEY = process.env.FILE_PICKER_API_KEY || 'DUMMY'
@@ -1056,7 +1074,6 @@ export const PROFILE_FIELDS_CONFIG = {
   },
   CUSTOMER: {
     // required fields
-    businessEmail: true,
     firstName: true,
     lastName: true,
     title: true,
@@ -1064,6 +1081,7 @@ export const PROFILE_FIELDS_CONFIG = {
     businessPhone: true,
 
     // optional fields
+    businessEmail: false,
     avatar: false,
     country: false,
     timeZone: false,

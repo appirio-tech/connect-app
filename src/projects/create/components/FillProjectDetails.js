@@ -16,7 +16,6 @@ import {
   uploadProfilePhoto,
   resetProfileSetting,
 } from '../../../routes/settings/actions/index'
-import { getDefaultTopcoderRole } from '../../../helpers/permissions'
 import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
@@ -24,14 +23,9 @@ import {
   ROLE_CONNECT_COPILOT_MANAGER,
   ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN,
-  ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
-  ROLE_PRESALES,
-  ROLE_ACCOUNT_EXECUTIVE,
-  ROLE_PROGRAM_MANAGER,
-  ROLE_SOLUTION_ARCHITECT,
-  ROLE_PROJECT_MANAGER,
-  PROFILE_FIELDS_CONFIG,
+  NON_CUSTOMER_ROLES,
 } from '../../../config/constants'
+import { isUserProfileComplete } from '../../../helpers/tcHelpers'
 
 class FillProjectDetails extends Component {
   constructor(props) {
@@ -289,47 +283,8 @@ const mapStateToProps = ({ settings, loadUser }) => {
     ROLE_CONNECT_ADMIN,
     ROLE_CONNECT_MANAGER,
   ]
-  const topCoderRoles = [
-    ROLE_CONNECT_COPILOT,
-    ROLE_CONNECT_MANAGER,
-    ROLE_CONNECT_ACCOUNT_MANAGER,
-    ROLE_CONNECT_ADMIN,
-    ROLE_ADMINISTRATOR,
-    ROLE_CONNECT_COPILOT_MANAGER,
-    ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
-    ROLE_PRESALES,
-    ROLE_ACCOUNT_EXECUTIVE,
-    ROLE_PROGRAM_MANAGER,
-    ROLE_SOLUTION_ARCHITECT,
-    ROLE_PROJECT_MANAGER,
-  ]
-  const isTopcoderUser = _.intersection(loadUser.user.roles, topCoderRoles).length > 0
-  let isMissingUserInfo = false
+  const isTopcoderUser = _.intersection(loadUser.user.roles, NON_CUSTOMER_ROLES).length > 0
   const profileSettings = formatProfileSettings(settings.profile.traits)
-  const fieldsConfig = isTopcoderUser ? PROFILE_FIELDS_CONFIG.TOPCODER : PROFILE_FIELDS_CONFIG.CUSTOMER
-  if (isTopcoderUser) {
-    // We don't ask Topcoder User for "Company Name" and "Title"
-    // but server requires them, so if they are not yet defined, we set them automatically
-    if (!profileSettings.companyName) {
-      profileSettings.companyName = 'Topcoder'
-    }
-    if (!profileSettings.title) {
-      profileSettings.title = getDefaultTopcoderRole(loadUser.user)
-    }
-  } else {
-    if (!profileSettings.businessEmail) {
-      profileSettings.businessEmail = loadUser.user.email
-    }
-  }
-  // check if any required field doesn't have a value
-  _.forEach(_.keys(fieldsConfig), (fieldKey) => {
-    const isFieldRequired = fieldsConfig[fieldKey]
-
-    if (isFieldRequired && !profileSettings.fieldKey) {
-      isMissingUserInfo = true
-      return false
-    }
-  })
 
   return {
     profileSettings: {
@@ -346,7 +301,7 @@ const mapStateToProps = ({ settings, loadUser }) => {
       (role) => role === ROLE_CONNECT_COPILOT
     ),
     isTopcoderUser,
-    isMissingUserInfo,
+    isMissingUserInfo: !isUserProfileComplete(loadUser.user, profileSettings),
   }
 }
 

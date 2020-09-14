@@ -168,6 +168,13 @@ class ProfileSettingsForm extends Component {
       ...data,
     }
 
+    // if we don't show the country field, but we show the phone field and we chose
+    // a phone in another country, we have to send to the server updated country
+    // as we always change the country to the same as phone number
+    if (_.isUndefined(this.props.fieldsConfig.country) && this.state.countrySelected) {
+      updatedData.country = this.state.countrySelected
+    }
+
     updatedData.businessPhone = formatPhone(updatedData.businessPhone)
     this.props.saveSettings(updatedData)
 
@@ -194,7 +201,6 @@ class ProfileSettingsForm extends Component {
   render() {
     const {
       fieldsConfig,
-      isRequiredBusinessEmail,
       submitButton,
       showBackButton,
       onBack,

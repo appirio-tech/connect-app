@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import PT from 'prop-types'
-
 import ModalControl from '../../../components/ModalControl'
 import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
-import { DOMAIN, PROFILE_FIELDS_CONFIG } from '../../../config/constants'
-
-import ProfileSettingsForm from '../../../routes/settings/routes/profile/components/ProfileSettingsForm'
-
+import { DOMAIN } from '../../../config/constants'
 import './UpdateUserInfo.scss'
+import IncompleteUserProfile from '../../../components/IncompleteUserProfile/IncompleteUserProfile'
 
 class UpdateUserInfo extends Component {
   constructor(props) {
@@ -25,33 +22,10 @@ class UpdateUserInfo extends Component {
     const {
       profileSettings,
       saveProfileSettings,
-      uploadProfilePhoto,
-      isCustomer,
-      isCopilot,
-      isManager,
       isTopcoderUser,
       closeUserSettings,
+      user,
     } = this.props
-
-    const fieldsConfig = isTopcoderUser ? PROFILE_FIELDS_CONFIG.TOPCODER : PROFILE_FIELDS_CONFIG.CUSTOMER
-    // never show avatar
-    delete fieldsConfig.avatar
-    // config the form to only show required fields which doesn't have the value yet
-    const missingFieldsConfig = _.reduce(fieldsConfig, (acc, isFieldRequired, fieldKey) => {
-      console.log({acc, isFieldRequired, fieldKey})
-      if (isFieldRequired && !_.get(profileSettings, `settings.${fieldKey}`)) {
-        acc[fieldKey] = isFieldRequired
-      }
-      return acc
-    }, {})
-
-    // if time zone is required and doesn't have a value yet,
-    // then detect timezone using browser feature and prefill the form
-    let prefilledProfileSettings = null
-    if (fieldsConfig.timeZone && !profileSettings.timeZone) {
-      prefilledProfileSettings = _.cloneDeep(profileSettings)
-      prefilledProfileSettings.settings.timeZone = (new Intl.DateTimeFormat()).resolvedOptions().timeZone
-    }
 
     return (
       <div styleName="container">
@@ -71,19 +45,14 @@ class UpdateUserInfo extends Component {
             Please complete your profile information below to able to submit
             your project request.
           </span>
-          <ProfileSettingsForm
-            values={prefilledProfileSettings || profileSettings}
-            saveSettings={saveProfileSettings}
-            uploadPhoto={uploadProfilePhoto}
-            isCustomer={isCustomer}
-            isCopilot={isCopilot}
-            isManager={isManager}
-            fieldsConfig={missingFieldsConfig}
+          <IncompleteUserProfile
+            profileSettings={profileSettings}
+            saveProfileSettings={saveProfileSettings}
+            isTopcoderUser={isTopcoderUser}
+            user={user}
             submitButton="Send My Request"
             showBackButton
             onBack={closeUserSettings}
-            shouldDoValidateOnStart
-            shouldShowTitle={false}
             buttonExtraClassName="tc-btn-md"
           />
           {!isTopcoderUser && (

@@ -1,0 +1,66 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import '../../styles/includes';
+
+:global(.management-dialog-overlay .project-dialog-conatiner .project-dialog) {
+  &.dialog {
+    width: 800px;
+  }
+
+  :global(.dialog-body).body {
+    max-height: 500px;
+    padding-top: $base-unit * 4;
+    position: relative;
+  }
+}
+
+:global(.incomplete-profile-dialog-overlay.management-dialog-overlay .project-dialog-conatiner .project-dialog .input-container) {
+  display: block;
+  background: transparent;
+  border-top: 0;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+
+  input {
+    margin: 0;
+  }
+
+  :global(.dropdown-wrap) {
+    margin: 0;
+    width: 100px;
+  }
+}
+
+.subtitle {
+  padding-top: $base-unit * 4;
+  text-align: center;
+}
+
+.loadingOverlay {
+  align-items: center;
+  background-color: #fff;
+  display: flex;
+  left: 0;
+  height: 100%;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+@media screen and (max-width: $screen-md - 1px) {
+  :global(.management-dialog-overlay .project-dialog-conatiner .project-dialog) {
+    &.dialog {
+      width: 100%;
+    }
+  }
+}
+
+@media screen and (max-height: 700px) {
+  :global(.management-dialog-overlay .project-dialog-conatiner .project-dialog) {
+    :global(.dialog-body).body {
+      max-height: calc(100vh - 200px);
+    }
+  }
+}

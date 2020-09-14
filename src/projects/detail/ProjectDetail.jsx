@@ -15,13 +15,17 @@ import { getEmptyProjectObject } from '../reducers/project'
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
   ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER,
-  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED, ACCEPT_OR_REFUSE_INVITE_FAILURE
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED, ACCEPT_OR_REFUSE_INVITE_FAILURE, NON_CUSTOMER_ROLES
 } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
 import { getProjectProductTemplates, getProjectTemplateById } from '../../helpers/templates'
 import Dialog from '../../components/TeamManagement/Dialog'
 import { getProductEstimate } from '../../config/projectWizard'
+import { getProfileSettings, saveProfileSettings } from '../../routes/settings/actions'
+import { formatProfileSettings } from '../../routes/settings/helpers/settings'
+import { isUserProfileComplete } from '../../helpers/tcHelpers'
+import IncompleteUserProfileDialog from '../../components/IncomepleteUserProfileDialog/IncompleteUserProfileDialog'
 
 
 const JOIN_INVITE_TITLE = 'You\'re invited to join this project'
@@ -60,7 +64,9 @@ const errorHandler = showCoderBotIfError(props => props.error && (props.error.ty
 
 // This handles showing a spinner while the state is being loaded async
 const spinner = spinnerWhileLoading(props =>
-  !props.isLoading && (
+  !props.isLoading &&
+  // also wait until user profile is loaded to make sure we are showing incomplete user profile popup first, before showing project details
+  !props.profileSettings.isLoading && (
     // first check that there are no error, before checking project properties
     props.error && props.error.type === LOAD_PROJECT_FAILURE || props.error.type === ACCEPT_OR_REFUSE_INVITE_FAILURE ||
     // old project or has projectTemplate loaded
@@ -127,6 +133,7 @@ class ProjectDetail extends Component {
       isCallingInviteAction: false,
       isUserAcceptedInvitation: undefined,
       shouldForceCallAcceptRefuseRequest: false,
+      showIncompleteProfilePopup: false,
     }
 
     this.onUserInviteAction = this.onUserInviteAction.bind(this)
@@ -135,6 +142,8 @@ class ProjectDetail extends Component {
   componentWillMount() {
     const projectId = this.props.match.params.projectId
     this.props.loadProjectDashboard(projectId)
+    // to check if user profile is complete or no
+    this.props.getProfileSettings()
 
     // set flag that we have to force invitation action from the beginning
     // so we can show appropriate loading indicator as soon as possible
@@ -152,7 +161,7 @@ class ProjectDetail extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {isProcessing, isLoading, error, project, match, showUserInvited} = nextProps
+    const {isProcessing, isLoading, error, project, match, showUserInvited, profileSettings} = nextProps
     // handle just deleted projects
     if (! (error || isLoading || isProcessing) && _.isEqual(getEmptyProjectObject(), project))
       this.props.history.push('/projects/')
@@ -189,6 +198,16 @@ class ProjectDetail extends Component {
           isUserAcceptedInvitation: undefined
         })
       }
+    }
+
+    // as soon as user profile settings are loaded, check if all required fields are completed or show the popup
+    if (this.props.profileSettings.isLoading && !profileSettings.isLoading && !isUserProfileComplete(nextProps.currentUser, profileSettings.settings)) {
+      this.setState({ showIncompleteProfilePopup: true })
+    }
+
+    // as soon as user profile is updated and complete, close the popup
+    if (this.props.profileSettings.pending && !profileSettings.pending && isUserProfileComplete(nextProps.currentUser, profileSettings.settings)) {
+      this.setState({ showIncompleteProfilePopup: false })
     }
   }
 
@@ -252,7 +271,7 @@ class ProjectDetail extends Component {
   }
 
   render() {
-    const { inviteError } = this.props
+    const { inviteError, project, profileSettings, currentUser, saveProfileSettings, isTopcoderUser } = this.props
     const { isCallingInviteAction, isUserAcceptedInvitation, shouldForceCallAcceptRefuseRequest } = this.state
     const currentMemberRole = this.getProjectRoleForCurrentUser(this.props)
     const adminRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
@@ -263,7 +282,7 @@ class ProjectDetail extends Component {
     const showUserInvited = this.props.showUserInvited
 
     return (
-      ((showUserInvited || shouldForceCallAcceptRefuseRequest) && !inviteError || isCallingInviteAction) ?
+      ((showUserInvited || shouldForceCallAcceptRefuseRequest) && !inviteError || isCallingInviteAction) ? (
         <Dialog
           onCancel={() => this.onUserInviteAction(false)}
           onConfirm={() => this.onUserInviteAction(true)}
@@ -273,22 +292,38 @@ class ProjectDetail extends Component {
           buttonText="Join project"
           buttonColor="blue"
           isLoading={isCallingInviteAction || shouldForceCallAcceptRefuseRequest}
-        /> :
-        <EnhancedProjectDetailView
-          {...this.props}
-          currentMemberRole={currentMemberRole}
-          isSuperUser={isSuperUser}
-          isManageUser={isManageUser}
-          isCustomerUser={isCustomerUser}
         />
+      ) : (
+        <div>
+          {this.state.showIncompleteProfilePopup && (
+            <IncompleteUserProfileDialog
+              isTopcoderUser={isTopcoderUser}
+              profileSettings={profileSettings}
+              saveProfileSettings={saveProfileSettings}
+              user={currentUser}
+              onCloseDialog={() => { this.setState({ showIncompleteProfilePopup: false })}}
+              title={`Welcome to ${project.name}`}
+            />
+          )}
+          <EnhancedProjectDetailView
+            {...this.props}
+            currentMemberRole={currentMemberRole}
+            isSuperUser={isSuperUser}
+            isManageUser={isManageUser}
+            isCustomerUser={isCustomerUser}
+          />
+        </div>
+      )
     )
   }
 }
 
-const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines, templates}) => {
+const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines, templates, settings}) => {
   const templateId = (projectState.project || {}).templateId
   const { projectTemplates, productTemplates } = templates
+  const isTopcoderUser = _.intersection(loadUser.user.roles, NON_CUSTOMER_ROLES).length > 0
   return {
+    currentUser: loadUser.user,
     currentUserId: parseInt(loadUser.user.id),
     currentUserEmail: loadUser.user.email,
     isLoading: projectDashboard.isLoading,
@@ -311,11 +346,16 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
     allProductTemplates: templates.productTemplates,
     currentUserRoles: loadUser.user.roles,
     showUserInvited: projectState.showUserInvited,
-    userInvitationId: projectState.userInvitationId
+    userInvitationId: projectState.userInvitationId,
+    profileSettings: {
+      ...settings.profile,
+      settings: formatProfileSettings(settings.profile.traits)
+    },
+    isTopcoderUser,
   }
 }
 
-const mapDispatchToProps = { loadProjectDashboard, clearLoadedProject, acceptOrRefuseInvite, loadProjects }
+const mapDispatchToProps = { loadProjectDashboard, clearLoadedProject, acceptOrRefuseInvite, loadProjects, getProfileSettings, saveProfileSettings }
 
 ProjectDetail.propTypes = {
   project: PropTypes.object,
