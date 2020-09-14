@@ -180,7 +180,7 @@ class FeedComments extends React.Component {
     const {
       currentUser, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
       onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage, allMembers,
-      totalComments, isFullScreen, headerHeight, projectMembers, commentAnchorPrefix
+      totalComments, isFullScreen, headerHeight, projectMembers, commentAnchorPrefix, newComment
     } = this.props
     let { comments } = this.props
     comments = _.sortBy(comments, 'createdBy')
@@ -383,6 +383,7 @@ class FeedComments extends React.Component {
                     hasError={error}
                     allMembers={allMembers}
                     projectMembers={projectMembers}
+                    defaultContent={newComment}
                   />
                 </div>
               }
