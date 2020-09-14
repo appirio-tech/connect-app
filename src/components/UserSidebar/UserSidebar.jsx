@@ -15,6 +15,7 @@ import NotificationSettingsIcon from '../../assets/icons/v.2.5/icon-notification
 import AccountSecurityIcon from '../../assets/icons/v.2.5/icon-account-security.svg'
 
 import './UserSidebar.scss'
+import FooterNeedHelp from '../FooterNeedHelp/FooterNeedHelp'
 
 const navLinks = [{
   label: 'ALL PROJECTS',
@@ -60,6 +61,11 @@ const navLinks = [{
 }, {
   label: 'HOW TOPCODER WORKS',
   to: '/faqs',
+  Icon: FAQIcon,
+  iconClassName: 'fill',
+}, {
+  label: 'GIVE APPLICATION FEEDBACK',
+  to: '/',
   Icon: FAQIcon,
   iconClassName: 'fill',
 }]
@@ -117,6 +123,7 @@ class UserSidebar extends React.Component {
             SYSTEM
           </div>
           <MenuList navLinks={navLinks} onAccordionToggle={(i, open) => this.setAccordionOpen(i, open)} />
+          <FooterNeedHelp />
         </div>
       </div>
     )

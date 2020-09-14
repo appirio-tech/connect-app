@@ -41,6 +41,7 @@ import {
 import { saveFeedComment } from '../../actions/projectTopics'
 
 import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
+import FAQIcon from '../../../assets/icons/faq.svg'
 
 import './ProjectInfoContainer.scss'
 import MenuList from '../../../components/MenuList/MenuList'
@@ -51,6 +52,7 @@ import {
   filterTopicAndPostChangedNotifications,
   filterFileAndLinkChangedNotifications,
 } from '../../../routes/notifications/helpers/notifications'
+import FooterNeedHelp from '../../../components/FooterNeedHelp/FooterNeedHelp'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
@@ -427,13 +429,13 @@ class ProjectInfoContainer extends React.Component {
     const { showDeleteConfirm } = this.state
     const { project, currentMemberRole, isSuperUser, phases, hideInfo, hideMembers,
       productsTimelines, isProjectProcessing, notifications, projectTemplates } = this.props
-    
+
     const projectTemplateId = project.templateId
     const projectTemplateKey = _.get(project, 'details.products[0]')
     const projectTemplate = projectTemplateId
       ? _.find(projectTemplates, pt => pt.id === projectTemplateId)
       : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
-    
+
     const isTaaS = PROJECT_CATEGORY_TAAS === projectTemplate.category
     let directLinks = null
     // check if direct links need to be added
@@ -587,6 +589,21 @@ class ProjectInfoContainer extends React.Component {
           {!hideMembers &&
             <TeamManagementContainer projectId={project.id} members={project.members} />
           }
+          {/* Separator above menulist */}
+          <hr styleName="separator" />
+          <div styleName="menulist-container">
+            <MenuList
+              navLinks={[
+                {
+                  label: 'GIVE APPLICATION FEEDBACK',
+                  to: '/',
+                  Icon: FAQIcon,
+                  iconClassName: 'fill',
+                }
+              ]}
+            />
+          </div>
+          <FooterNeedHelp />
         </div>
       </div>
     )
