@@ -9,7 +9,6 @@ import {
   NON_CUSTOMER_ROLES,
   PROFILE_FIELDS_CONFIG,
 } from '../config/constants'
-import { getDefaultTopcoderRole } from './permissions'
 
 /**
  * Check if a user is a special system user
