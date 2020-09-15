@@ -43,10 +43,6 @@ class TopcoderManagementDialog extends React.Component {
       title: 'Observer',
       value: 'observer',
     }, {
-      title: 'Copilot',
-      value: 'copilot',
-      canAddDirectly: true,
-    }, {
       title: 'Account Manager',
       value: 'account_manager',
     }, {
@@ -82,12 +78,13 @@ class TopcoderManagementDialog extends React.Component {
   }
 
   onChange(selectedMembers) {
-    const { projectTeamInvites, members, topcoderTeamInvites } = this.props
+    const { projectTeamInvites, members, topcoderTeamInvites, copilotTeamInvites } = this.props
 
     const present = _.some(selectedMembers, (selectedMember) => (
       this.isSelectedMemberAlreadyInvited(members, selectedMember)
       || this.isSelectedMemberAlreadyInvited(topcoderTeamInvites, selectedMember)
       || this.isSelectedMemberAlreadyInvited(projectTeamInvites, selectedMember)
+      || this.isSelectedMemberAlreadyInvited(copilotTeamInvites, selectedMember)
     ))
 
     this.setState({
@@ -170,7 +167,7 @@ class TopcoderManagementDialog extends React.Component {
 
           <div className="dialog-body">
             {(members.map((member) => {
-              if (member.isCustomer) {
+              if (member.isCustomer || member.isCopilot) {
                 return null
               }
               i++
@@ -216,9 +213,9 @@ class TopcoderManagementDialog extends React.Component {
                         </div>
                       )
                     }
-                    let types = ['Copilot', 'Manager', 'Account Manager', 'Account Executive', 'Program Manager', 'Solution Architect', 'Project Manager']
+                    let types = ['Manager', 'Account Manager', 'Account Executive', 'Program Manager', 'Solution Architect', 'Project Manager']
                     const currentType = role
-                    types =  currentType === 'Observer'? ['Observer', ...types] : [...types] 
+                    types =  currentType === 'Observer'? ['Observer', ...types] : [...types]
                     const onClick = (type) => {
                       this.onUserRoleChange(member.userId, member.id, type)
                     }
@@ -379,9 +376,7 @@ class TopcoderManagementDialog extends React.Component {
               disabled={processingInvites || this.state.showAlreadyMemberError || selectedMembers.length === 0}
               onClick={this.addUsers}
             >
-              {_.find(this.roles, {value:this.state.userRole}).canAddDirectly && !showApproveDecline
-                ?'Request invite'
-                :'Invite users'}
+              Invite users
             </button>
           </div>
           }

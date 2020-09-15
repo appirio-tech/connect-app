@@ -196,6 +196,33 @@ export default {
     ]
   },
 
+  MANAGE_COPILOTS: {
+    _meta: {
+      group: 'Project Members',
+      title: 'Manage copilots',
+      description: 'Directly invite copilots to the project.',
+    },
+    topcoderRoles: [
+      ...TOPCODER_ADMINS,
+      ROLE_CONNECT_COPILOT_MANAGER
+    ]
+  },
+
+  REQUEST_COPILOTS: {
+    _meta: {
+      group: 'Project Members',
+      title: 'Request copilots',
+      description: 'Request copilots to the project.',
+    },
+    projectRoles: [
+      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_COPILOT, PROJECT_ROLE_CUSTOMER])
+    ],
+    topcoderRoles: [
+      ...TOPCODER_ADMINS,
+      ROLE_CONNECT_COPILOT_MANAGER
+    ]
+  },
+
   ACCESS_PRIVATE_POST: {
     _meta: {
       group: 'Topics & Posts',

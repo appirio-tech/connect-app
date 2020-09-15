@@ -28,7 +28,7 @@ class ProjectManagementDialog extends React.Component {
 
     if (processingInvites && !nextProps.processingInvites ) {
       const notInvitedSelectedMembers = _.reject(selectedMembers, (selectedMember) => (
-        this.isSelectedMemberAlreadyInvited(nextProps.projectTeamInvites, selectedMember)
+        this.isSelectedMemberAlreadyInvited(nextProps.copilotTeamInvites, selectedMember)
       ))
 
       this.props.onSelectedMembersUpdate(notInvitedSelectedMembers)
@@ -58,8 +58,8 @@ class ProjectManagementDialog extends React.Component {
     this.props.onSelectedMembersUpdate(selectedMembers)
   }
 
-  isSelectedMemberAlreadyInvited(projectTeamInvites = [], selectedMember) {
-    return !!projectTeamInvites.find((invite) => (
+  isSelectedMemberAlreadyInvited(copilotTeamInvites = [], selectedMember) {
+    return !!copilotTeamInvites.find((invite) => (
       (invite.email && compareEmail(invite.email, selectedMember.label)) ||
       (invite.userId && compareHandles(invite.handle, selectedMember.label))
     ))
@@ -89,7 +89,7 @@ class ProjectManagementDialog extends React.Component {
   render() {
     const {
       members, currentUser, isMember, removeMember, removeInvite,
-      onCancel, projectTeamInvites = [], selectedMembers, processingInvites,
+      onCancel, copilotTeamInvites = [], selectedMembers, processingInvites,
     } = this.props
     const showRemove = currentUser.isAdmin || (!currentUser.isCopilot && isMember)
     const showSuggestions = hasPermission(PERMISSIONS.SEE_MEMBER_SUGGESTIONS)
@@ -105,13 +105,13 @@ class ProjectManagementDialog extends React.Component {
 
         <div className="project-dialog">
           <div className="dialog-title">
-            Customer team
+            Copilots
             <span onClick={onCancel}><XMarkIcon/></span>
           </div>
 
           <div className="dialog-body">
             {(members.map((member) => {
-              if (!member.isCustomer) {
+              if (!member.isCopilot) {
                 return null
               }
               i++
@@ -144,7 +144,7 @@ class ProjectManagementDialog extends React.Component {
                 </div>
               )
             }))}
-            {(projectTeamInvites.map((invite) => {
+            {(copilotTeamInvites.map((invite) => {
               const remove = () => {
                 removeInvite(invite)
               }
@@ -181,13 +181,13 @@ class ProjectManagementDialog extends React.Component {
           </div>
 
           <div className="input-container">
-            <div className="hint">invite more people</div>
+            <div className="hint">invite more copilots</div>
             <AutocompleteInputContainer
-              placeholder="Enter email address(es) or user handles"
+              placeholder="Enter one or more copilot handles"
               onUpdate={this.onChange}
               currentUser={currentUser}
               selectedMembers={selectedMembers}
-              disabled={processingInvites || (!currentUser.isAdmin && !isMember)}
+              disabled={processingInvites}
               showSuggestions={showSuggestions}
             />
             {this.state.showAlreadyMemberError && <div className="error-message">
