@@ -504,7 +504,8 @@
     }
   }
 
-  .join-btn {
+  .join-btn,
+  a.join-btn {
     @include roboto;
     cursor: pointer;
     padding: $base-unit*2 $base-unit*3;
