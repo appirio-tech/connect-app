@@ -5,7 +5,9 @@ import {
   DISCOURSE_BOT_USERID,
   CODER_BOT_USERID,
   TC_SYSTEM_USERID,
-  TC_CDN_URL
+  TC_CDN_URL,
+  NON_CUSTOMER_ROLES,
+  PROFILE_FIELDS_CONFIG,
 } from '../config/constants'
 
 /**
@@ -44,4 +46,30 @@ export const getFullNameWithFallback = (user) => {
   userFullName = userFullName && userFullName.trim().length > 0 ? userFullName : user.handle
   userFullName = userFullName && userFullName.trim().length > 0 ? userFullName : 'Connect user'
   return userFullName
+}
+
+/**
+ * Check if user profile is complete or no.
+ *
+ * @param {Object} user            `loadUser.user` from Redux Store
+ * @param {Object} profileSettings profile settings with traits
+ *
+ * @returns {Boolean} complete or no
+ */
+export const isUserProfileComplete = (user, profileSettings) => {
+  const isTopcoderUser = _.intersection(user.roles, NON_CUSTOMER_ROLES).length > 0
+  const fieldsConfig = isTopcoderUser ? PROFILE_FIELDS_CONFIG.TOPCODER : PROFILE_FIELDS_CONFIG.CUSTOMER
+
+  // check if any required field doesn't have a value
+  let isMissingUserInfo = false
+  _.forEach(_.keys(fieldsConfig), (fieldKey) => {
+    const isFieldRequired = fieldsConfig[fieldKey]
+
+    if (isFieldRequired && !profileSettings.fieldKey) {
+      isMissingUserInfo = true
+      return false
+    }
+  })
+
+  return !isMissingUserInfo
 }

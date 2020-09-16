@@ -15,6 +15,7 @@ import ISOCountries from '../../../../../helpers/ISOCountries'
 import { formatPhone } from '../../../../../helpers/utils'
 import { hasPermission } from '../../../../../helpers/permissions'
 import PERMISSIONS from '../../../../../config/permissions'
+import { PROFILE_FIELDS_CONFIG } from '../../../../../config/constants'
 import './ProfileSettingsForm.scss'
 
 const countries = _.orderBy(ISOCountries, ['name'], ['asc']).map((country) => ({
@@ -73,7 +74,7 @@ class ProfileSettingsForm extends Component {
     if (country && country.code) {
       if (previousSelectedCountry !== country.name && country.name) {
         // when country code of business phone changes, the country selection should change automatically
-        this.refs.countrySelect.setValue(country.name)
+        this.refs.countrySelect && this.refs.countrySelect.setValue(country.name)
         this.setState({
           countrySelected: country.name,
         })
@@ -167,6 +168,13 @@ class ProfileSettingsForm extends Component {
       ...data,
     }
 
+    // if we don't show the country field, but we show the phone field and we chose
+    // a phone in another country, we have to send to the server updated country
+    // as we always change the country to the same as phone number
+    if (_.isUndefined(this.props.fieldsConfig.country) && this.state.countrySelected) {
+      updatedData.country = this.state.countrySelected
+    }
+
     updatedData.businessPhone = formatPhone(updatedData.businessPhone)
     this.props.saveSettings(updatedData)
 
@@ -192,15 +200,7 @@ class ProfileSettingsForm extends Component {
 
   render() {
     const {
-      showBusinessEmail,
-      showAvatar,
-      showCompanyName,
-      showTitle,
-      showBusinessPhone,
-      isRequiredTimeZone,
-      isRequiredCountry,
-      isRequiredWorkingHours,
-      isRequiredBusinessEmail,
+      fieldsConfig,
       submitButton,
       showBackButton,
       onBack,
@@ -221,7 +221,7 @@ class ProfileSettingsForm extends Component {
         onChange={this.onChange}
       >
         {shouldShowTitle && (<div className="section-heading">Personal information</div>)}
-        {showAvatar && (
+        {!_.isUndefined(fieldsConfig.avatar) && (
           <div className="field">
             <div className="label">Avatar</div>
             <ProfileSettingsAvatar
@@ -232,12 +232,12 @@ class ProfileSettingsForm extends Component {
             />
           </div>
         )}
-        {this.getField('First Name', 'firstName', true)}
-        {this.getField('Last Name', 'lastName', true)}
-        {showTitle && this.getField('Title', 'title', true)}
-        {showBusinessEmail &&
-          this.getField('Business Email', 'businessEmail', isRequiredBusinessEmail, true)}
-        {showBusinessPhone && (
+        {!_.isUndefined(fieldsConfig.firstName) && this.getField('First Name', 'firstName', fieldsConfig.firstName)}
+        {!_.isUndefined(fieldsConfig.lastName) && this.getField('Last Name', 'lastName', fieldsConfig.lastName)}
+        {!_.isUndefined(fieldsConfig.title) && this.getField('Title', 'title', fieldsConfig.title)}
+        {!_.isUndefined(fieldsConfig.businessEmail) &&
+          this.getField('Business Email', 'businessEmail', fieldsConfig.businessEmail, true)}
+        {!_.isUndefined(fieldsConfig.businessPhone) && (
           <div className="field">
             <div className="label">
               <span styleName="fieldLabelText">Business Phone</span>&nbsp;
@@ -255,7 +255,7 @@ class ProfileSettingsForm extends Component {
                 validationError="Invalid business phone"
                 showCheckMark
                 listCountry={ISOCountries}
-                required
+                required={fieldsConfig.businessPhone}
                 forceCountry={this.state.countrySelected}
                 value={
                   this.props.values.settings.businessPhone
@@ -275,107 +275,113 @@ class ProfileSettingsForm extends Component {
             </div>
           </div>
         )}
-        {showCompanyName &&
+        {!_.isUndefined(fieldsConfig.companyName) &&
           this.getField(
             'Company Name',
             'companyName',
-            true,
+            fieldsConfig.companyName,
             disableCompanyInput
           )}
-        <div className="field">
-          {isRequiredCountry ? (
-            <div className="label">
-              <span styleName="fieldLabelText">Country</span>&nbsp;
-              <sup styleName="requiredMarker">*</sup>
-            </div>
-          ) : (
-            <div className="label">
-              <span styleName="fieldLabelText">Country</span>
-            </div>
-          )}
-          <div className="input-field">
-            <FormsySelect
-              ref="countrySelect"
-              name="country"
-              value={
-                this.props.values.settings.country
-                  ? this.props.values.settings.country
-                  : ''
-              }
-              options={countries}
-              onChange={this.onCountryChange}
-              placeholder="- Select country -"
-              showDropdownIndicator
-              setValueOnly
-              onBlur={this.hideCountrySelectAlert}
-              required={isRequiredCountry}
-              validationError="Please enter Country"
-            />
-            {this.state.countrySelectionDirty && (
-              <div styleName="warningText">
-                Note: Changing the country also updates the country code of
-                business phone.
+        {!_.isUndefined(fieldsConfig.country) && (
+          <div className="field">
+            {fieldsConfig.country ? (
+              <div className="label">
+                <span styleName="fieldLabelText">Country</span>&nbsp;
+                <sup styleName="requiredMarker">*</sup>
+              </div>
+            ) : (
+              <div className="label">
+                <span styleName="fieldLabelText">Country</span>
               </div>
             )}
-          </div>
-        </div>
-        <div className="field">
-          {isRequiredTimeZone ? (
-            <div className="label">
-              <span styleName="fieldLabelText">Local Timezone</span>&nbsp;
-              <sup styleName="requiredMarker">*</sup>
-            </div>
-          ) : (
-            <div className="label">
-              <span styleName="fieldLabelText">Local Timezone</span>
-            </div>
-          )}
-          <div className="input-field">
-            <TimezoneInput
-              render={(timezoneOptions, filterFn) => (
-                <FormsySelect
-                  setValueOnly
-                  filterOption={(option, searchText) =>
-                    filterFn(option.data, searchText)
-                  }
-                  value={this.props.values.settings.timeZone || ''}
-                  name="timeZone"
-                  options={timezoneOptions}
-                  required={isRequiredTimeZone}
-                  validationError="Please enter Local Timezone"
-                />
+            <div className="input-field">
+              <FormsySelect
+                ref="countrySelect"
+                name="country"
+                value={
+                  this.props.values.settings.country
+                    ? this.props.values.settings.country
+                    : ''
+                }
+                options={countries}
+                onChange={this.onCountryChange}
+                placeholder="- Select country -"
+                showDropdownIndicator
+                setValueOnly
+                onBlur={this.hideCountrySelectAlert}
+                required={fieldsConfig.country}
+                validationError="Please enter Country"
+              />
+              {this.state.countrySelectionDirty && (
+                <div styleName="warningText">
+                  Note: Changing the country also updates the country code of
+                  business phone.
+                </div>
               )}
-            />
-          </div>
-        </div>
-        <div className="field">
-          {isRequiredWorkingHours ? (
-            <div className="label label-working-hours">
-              <span styleName="fieldLabelText">Normal Working Hours</span>&nbsp;
-              <sup styleName="requiredMarker">*</sup>
             </div>
-          ) : (
-            <div className="label label-working-hours">
-              <span styleName="fieldLabelText">Normal Working Hours</span>
-            </div>
-          )}
-          <div className="input-field">
-            <WorkingHoursSelection
-              startHourLabel="Start Time"
-              endHourLabel="End Time"
-              startHourName="workingHourStart"
-              endHourName="workingHourEnd"
-              startHourValue={this.props.values.settings.workingHourStart || ''}
-              endHourValue={this.props.values.settings.workingHourEnd || ''}
-              wrapperClass={'input-container'}
-              // react-select package in react-components is old and not compatible with connect-app.
-              // So, passing the FormsySelect component that uses newer version of react-select
-              selectElement={FormsySelect}
-              selectElementProps={{ setValueOnly: true }}
-              isRequired={isRequiredWorkingHours}
-            />
           </div>
-        </div>
+        )}
+        {!_.isUndefined(fieldsConfig.timeZone) && (
+          <div className="field">
+            {fieldsConfig.timeZone ? (
+              <div className="label">
+                <span styleName="fieldLabelText">Local Timezone</span>&nbsp;
+                <sup styleName="requiredMarker">*</sup>
+              </div>
+            ) : (
+              <div className="label">
+                <span styleName="fieldLabelText">Local Timezone</span>
+              </div>
+            )}
+            <div className="input-field">
+              <TimezoneInput
+                render={(timezoneOptions, filterFn) => (
+                  <FormsySelect
+                    setValueOnly
+                    filterOption={(option, searchText) =>
+                      filterFn(option.data, searchText)
+                    }
+                    value={this.props.values.settings.timeZone || ''}
+                    name="timeZone"
+                    options={timezoneOptions}
+                    required={fieldsConfig.timeZone}
+                    validationError="Please enter Local Timezone"
+                  />
+                )}
+              />
+            </div>
+          </div>
+        )}
+        {(!_.isUndefined(fieldsConfig.workingHourStart) || !_.isUndefined(fieldsConfig.workingHourStart)) && (
+          <div className="field">
+            {(fieldsConfig.workingHourStart || fieldsConfig.workingHourStart) ? (
+              <div className="label label-working-hours">
+                <span styleName="fieldLabelText">Normal Working Hours</span>&nbsp;
+                <sup styleName="requiredMarker">*</sup>
+              </div>
+            ) : (
+              <div className="label label-working-hours">
+                <span styleName="fieldLabelText">Normal Working Hours</span>
+              </div>
+            )}
+            <div className="input-field">
+              <WorkingHoursSelection
+                startHourLabel="Start Time"
+                endHourLabel="End Time"
+                startHourName="workingHourStart"
+                endHourName="workingHourEnd"
+                startHourValue={this.props.values.settings.workingHourStart || ''}
+                endHourValue={this.props.values.settings.workingHourEnd || ''}
+                wrapperClass={'input-container'}
+                // react-select package in react-components is old and not compatible with connect-app.
+                // So, passing the FormsySelect component that uses newer version of react-select
+                selectElement={FormsySelect}
+                selectElementProps={{ setValueOnly: true }}
+                isRequired={(fieldsConfig.workingHourStart || fieldsConfig.workingHourStart)}
+              />
+            </div>
+          </div>
+        )}
         <div className="controls">
 
           {showBackButton && (
@@ -408,15 +414,8 @@ class ProfileSettingsForm extends Component {
 }
 
 ProfileSettingsForm.defaultProps = {
-  showBusinessEmail: false,
-  showAvatar: true,
-  showCompanyName: true,
-  showTitle: true,
-  showBusinessPhone: true,
-  isRequiredTimeZone: true,
-  isRequiredCountry: false,
-  isRequiredWorkingHours: false,
-  isRequiredBusinessEmail: true,
+  // default config is same for user profile for any kind of users
+  fieldsConfig: PROFILE_FIELDS_CONFIG.DEFAULT,
   showBackButton: false,
   submitButton: 'Save settings',
   onBack: () => {},
@@ -429,15 +428,19 @@ ProfileSettingsForm.propTypes = {
   values: PropTypes.object.isRequired,
   saveSettings: PropTypes.func.isRequired,
   uploadPhoto: PropTypes.func.isRequired,
-  showBusinessEmail: PropTypes.bool,
-  showAvatar: PropTypes.bool,
-  showCompanyName: PropTypes.bool,
-  showTitle: PropTypes.bool,
-  showBusinessPhone: PropTypes.bool,
-  isRequiredTimeZone: PropTypes.bool,
-  isRequiredCountry: PropTypes.bool,
-  isRequiredWorkingHours: PropTypes.bool,
-  isRequiredBusinessEmail: PropTypes.bool,
+  fieldsConfig: PropTypes.shape({
+    avatar: PropTypes.bool,
+    firstName: PropTypes.bool,
+    lastName: PropTypes.bool,
+    title: PropTypes.bool,
+    companyName: PropTypes.bool,
+    businessPhone: PropTypes.bool,
+    businessEmail: PropTypes.bool,
+    country: PropTypes.bool,
+    timeZone: PropTypes.bool,
+    workingHourStart: PropTypes.bool,
+    workingHourEnd: PropTypes.bool,
+  }).isRequired,
   showBackButton: PropTypes.bool,
   shouldShowTitle: PropTypes.bool,
   shouldDoValidateOnStart: PropTypes.bool,

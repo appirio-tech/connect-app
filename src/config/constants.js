@@ -688,6 +688,24 @@ export const MANAGER_ROLES = [
   ROLE_PROJECT_MANAGER,
 ]
 
+/**
+ * Is user has any of these roles, it means such a user is not a customer.
+ */
+export const NON_CUSTOMER_ROLES = [
+  ROLE_CONNECT_COPILOT,
+  ROLE_CONNECT_MANAGER,
+  ROLE_CONNECT_ACCOUNT_MANAGER,
+  ROLE_CONNECT_ADMIN,
+  ROLE_ADMINISTRATOR,
+  ROLE_CONNECT_COPILOT_MANAGER,
+  ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
+  ROLE_PRESALES,
+  ROLE_ACCOUNT_EXECUTIVE,
+  ROLE_PROGRAM_MANAGER,
+  ROLE_SOLUTION_ARCHITECT,
+  ROLE_PROJECT_MANAGER,
+]
+
 // to be able to start the Connect App we should pass at least the dummy value for `FILE_PICKER_API_KEY`
 // but if we want to test file uploading we should provide the real value in `FILE_PICKER_API_KEY` env variable
 export const FILE_PICKER_API_KEY = process.env.FILE_PICKER_API_KEY || 'DUMMY'
@@ -1012,3 +1030,62 @@ export const INTERNAL_PROJECT_URLS=[
  * Project category string
  */
 export const PROJECT_CATEGORY_TAAS = 'talent-as-a-service'
+
+/**
+ * Config for User Profile fields
+ *
+ * - `true` means field is required
+ * - `false` means field is optional
+ * - if field is not on the list means it should not be shown
+ */
+export const PROFILE_FIELDS_CONFIG = {
+  // this config is used to show any user profile
+  DEFAULT: {
+    // required fields
+    firstName: true,
+    lastName: true,
+    title: true,
+    timeZone: true,
+    businessPhone: true,
+    companyName: true,
+
+    // optional fields
+    country: false,
+    avatar: false,
+    workingHourStart: false,
+    workingHourEnd: false,
+  },
+
+  // configs below are used when we ask users to fill missing fields (progressive registration)
+  TOPCODER: {
+    // required fields
+    firstName: true,
+    lastName: true,
+    country: true,
+    timeZone: true,
+    workingHourStart: true,
+    workingHourEnd: true,
+
+    // optional fields
+    avatar: false,
+    title: false,
+    companyName: false,
+    businessPhone: false,
+  },
+  CUSTOMER: {
+    // required fields
+    firstName: true,
+    lastName: true,
+    title: true,
+    companyName: true,
+    businessPhone: true,
+
+    // optional fields
+    businessEmail: false,
+    avatar: false,
+    country: false,
+    timeZone: false,
+    workingHourStart: false,
+    workingHourEnd: false,
+  }
+}
