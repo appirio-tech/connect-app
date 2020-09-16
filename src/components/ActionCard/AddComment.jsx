@@ -25,7 +25,7 @@ export default class AddComment extends React.Component {
   }
 
   render() {
-    const { className, avatarUrl, authorName, placeholder, isAdding, hasError, allMembers, projectMembers } = this.props
+    const { className, avatarUrl, authorName, placeholder, isAdding, hasError, allMembers, projectMembers, defaultContent } = this.props
 
     return (
       <RichTextArea ref="richTextArea"
@@ -41,6 +41,7 @@ export default class AddComment extends React.Component {
         allMembers={allMembers}
         projectMembers={projectMembers}
         canUploadAttachment
+        content={defaultContent}
       />
     )
   }
@@ -57,5 +58,9 @@ AddComment.propTypes = {
   hasError: PropTypes.bool,
   isAdding: PropTypes.bool,
   allMembers: PropTypes.object,
-  projectMembers: PropTypes.object
+  projectMembers: PropTypes.object,
+  /**
+   * Default value for comment content
+   */
+  defaultContent: PropTypes.string,
 }
