@@ -65,7 +65,7 @@ export const isUserProfileComplete = (user, profileSettings) => {
   _.forEach(_.keys(fieldsConfig), (fieldKey) => {
     const isFieldRequired = fieldsConfig[fieldKey]
 
-    if (isFieldRequired && !profileSettings.fieldKey) {
+    if (isFieldRequired && !profileSettings[fieldKey]) {
       isMissingUserInfo = true
       return false
     }
