@@ -1,14 +1,11 @@
 import _ from 'lodash'
 import React from 'react'
 import PT from 'prop-types'
-import cn from 'classnames'
 import moment from 'moment'
 import Modal from 'react-modal'
 import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpers'
-import SelectDropdown from '../SelectDropdown/SelectDropdown'
-import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import AutocompleteInputContainer from './AutocompleteInputContainer'
 import {
   PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PENDING,
@@ -23,58 +20,14 @@ class TopcoderManagementDialog extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      userRole: 'manager',
       managerType: {},
       showAlreadyMemberError: false,
       errorMessage: null,
       processingInviteRequestIds: [], // ids of invites for which request is being processed
     }
 
-    this.onUserRoleChange = this.onUserRoleChange.bind(this)
-    this.handleRoles = this.handleRoles.bind(this)
-    this.addUsers = this.addUsers.bind(this)
     this.onChange = this.onChange.bind(this)
     this.showIndividualErrors = this.showIndividualErrors.bind(this)
-
-    this.roles = [{
-      title: 'Manager',
-      value: 'manager',
-    }, {
-      title: 'Observer',
-      value: 'observer',
-    }, {
-      title: 'Account Manager',
-      value: 'account_manager',
-    }, {
-      title: 'Account Executive',
-      value: 'account_executive',
-    }, {
-      title: 'Program Manager',
-      value: 'program_manager',
-    }, {
-      title: 'Solution Architect',
-      value: 'solution_architect',
-    }, {
-      title: 'Project Manager',
-      value: 'project_manager',
-    }]
-  }
-
-  onUserRoleChange(memberId, id, type) {
-    const managerType = Object.assign({}, this.state.managerType)
-    managerType[memberId] = type
-    this.props.changeRole(id, {role: this.roles.find((role) => role.title === type).value})
-    this.setState({managerType})
-  }
-
-  handleRoles(option) {
-    this.setState({
-      userRole: option.value
-    })
-  }
-
-  addUsers() {
-    this.props.addUsers(this.state.userRole )
   }
 
   onChange(selectedMembers) {
@@ -142,7 +95,7 @@ class TopcoderManagementDialog extends React.Component {
   render() {
     const {
       members, currentUser, isMember, removeMember, onCancel, removeInvite, approveOrDecline, topcoderTeamInvites = [],
-      selectedMembers, processingInvites, updatingMemberIds
+      selectedMembers, processingInvites,
     } = this.props
     const { processingInviteRequestIds } = this.state
     const showRemove = hasPermission(PERMISSIONS.MANAGE_TOPCODER_TEAM)
@@ -159,7 +112,7 @@ class TopcoderManagementDialog extends React.Component {
         contentLabel=""
       >
 
-        <div className="project-dialog topcoder-dialog">
+        <div className="project-dialog">
           <div className="dialog-title">
             Topcoder team
             <span onClick={onCancel}><XMarkIcon /></span>
@@ -175,8 +128,6 @@ class TopcoderManagementDialog extends React.Component {
                 removeMember(member)
               }
               const userFullName = getFullNameWithFallback(member)
-              const role = _.get(_.find(this.roles, r => r.value === member.role), 'title')
-              const isMemberProcessing = _.includes(updatingMemberIds, member.id)
               return (
                 <div
                   key={i}
@@ -203,59 +154,6 @@ class TopcoderManagementDialog extends React.Component {
                       Leave
                     </div>
                   }
-                  {(() => {
-                    if (!isMember || (!currentUser.isAdmin && !currentUser.isManager)) {
-                      return (
-                        <div className="member-type-wrapper">
-                          <div className="member-type">
-                            {role}
-                          </div>
-                        </div>
-                      )
-                    }
-                    let types = ['Manager', 'Account Manager', 'Account Executive', 'Program Manager', 'Solution Architect', 'Project Manager']
-                    const currentType = role
-                    types =  currentType === 'Observer'? ['Observer', ...types] : [...types]
-                    const onClick = (type) => {
-                      this.onUserRoleChange(member.userId, member.id, type)
-                    }
-                    return (
-                      <div className={`member-role-container ${isMemberProcessing ? 'is-processing' : ''}`}>
-                        {
-                          isMemberProcessing ? <LoadingIndicator isSmall /> :
-                            types.map((type) => {
-                              const isCopilotDisabled =
-                                type === 'Copilot' &&
-                                type !== currentType &&
-                                !(currentUser.isCopilotManager || currentUser.isAdmin)
-
-                              return (
-                                isCopilotDisabled ? (
-                                  <Tooltip theme="light" key={type}>
-                                    <div className="tooltip-target">
-                                      <div className="member-role disabled">
-                                        {type}
-                                      </div>
-                                    </div>
-                                    <div className="tooltip-body">
-                                      {'Only Connect Copilot Managers can change member role to copilots.'}
-                                    </div>
-                                  </Tooltip>
-                                ) : (
-                                  <div
-                                    key={type}
-                                    onClick={() => onClick(type)}
-                                    className={cn('member-role', { active: type === currentType })}
-                                  >
-                                    {type}
-                                  </div>
-                                )
-                              )
-                            })
-                        }
-                      </div>
-                    )
-                  })()}
                 </div>
               )
             }))}
@@ -358,15 +256,6 @@ class TopcoderManagementDialog extends React.Component {
             { this.state.showAlreadyMemberError && <div className="error-message">
               Project Member(s) can\'t be invited again. Please remove them from list.
             </div> }
-            <Formsy.Form>
-              <SelectDropdown
-                name="role"
-                value={this.state.userRole}
-                theme="role-drop-down default"
-                options={this.roles.filter(role => role.title !== 'Observer')}
-                onSelect={this.handleRoles}
-              />
-            </Formsy.Form>
             { this.state.errorMessage  && <div className="error-message">
               {this.state.errorMessage}
             </div> }
@@ -374,7 +263,7 @@ class TopcoderManagementDialog extends React.Component {
               className="tc-btn tc-btn-primary tc-btn-md"
               type="submit"
               disabled={processingInvites || this.state.showAlreadyMemberError || selectedMembers.length === 0}
-              onClick={this.addUsers}
+              onClick={this.props.sendInvite}
             >
               Invite users
             </button>
@@ -404,7 +293,7 @@ TopcoderManagementDialog.propTypes = {
   changeRole: PT.func.isRequired,
   projectTeamInvites: PT.arrayOf(PT.object),
   topcoderTeamInvites: PT.arrayOf(PT.object),
-  addUsers: PT.func.isRequired,
+  sendInvite: PT.func.isRequired,
   approveOrDecline: PT.func.isRequired,
   removeInvite: PT.func.isRequired,
   onSelectedMembersUpdate: PT.func.isRequired,

@@ -103,9 +103,9 @@ class TeamManagementContainer extends Component {
     this.props.deleteTopcoderMemberInvite(this.props.projectId, invite)
   }
 
-  onTopcoderInviteSend(role) {
+  onTopcoderInviteSend() {
     const {handles, emails } = this.getEmailsAndHandles()
-    this.props.inviteTopcoderMembers(this.props.projectId, {role, handles, emails})
+    this.props.inviteTopcoderMembers(this.props.projectId, {role: 'manager', handles, emails})
   }
 
   onProjectInviteDelete(invite) {

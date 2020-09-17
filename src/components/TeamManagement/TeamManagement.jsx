@@ -405,7 +405,7 @@ class TeamManagement extends React.Component {
               isMember={!!currentMember}
               onCancel={onClickCancel}
               removeMember={removeMember}
-              addUsers={onTopcoderInviteSend}
+              sendInvite={onTopcoderInviteSend}
               approveOrDecline={onAcceptOrRefuse}
               projectTeamInvites={projectTeamInvites}
               topcoderTeamInvites={topcoderTeamInvites}
