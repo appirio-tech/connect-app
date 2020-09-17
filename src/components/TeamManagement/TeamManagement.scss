@@ -414,17 +414,9 @@
         height: 200px;
       }
 
-      .topcoder-dialog {
-        width: 750px;
-      }
-
       @media screen and (max-width: $screen-md - 1px) {
         .dialog-body {
           margin: 0 !important;
-        }
-
-        .topcoder-dialog {
-          width: unset;
         }
 
         .project-dialog {
