@@ -1044,13 +1044,13 @@ export const PROFILE_FIELDS_CONFIG = {
     // required fields
     firstName: true,
     lastName: true,
+    country: true,
     title: true,
     timeZone: true,
     businessPhone: true,
     companyName: true,
 
     // optional fields
-    country: false,
     avatar: false,
     workingHourStart: false,
     workingHourEnd: false,
@@ -1076,6 +1076,7 @@ export const PROFILE_FIELDS_CONFIG = {
     // required fields
     firstName: true,
     lastName: true,
+    country: true,
     title: true,
     companyName: true,
     businessPhone: true,
@@ -1083,7 +1084,6 @@ export const PROFILE_FIELDS_CONFIG = {
     // optional fields
     businessEmail: false,
     avatar: false,
-    country: false,
     timeZone: false,
     workingHourStart: false,
     workingHourEnd: false,
