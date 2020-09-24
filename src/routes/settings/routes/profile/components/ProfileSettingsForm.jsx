@@ -310,7 +310,7 @@ class ProfileSettingsForm extends Component {
                 required={fieldsConfig.country}
                 validationError="Please enter Country"
               />
-              {this.state.countrySelectionDirty && (
+              {this.state.countrySelectionDirty && !_.isUndefined(fieldsConfig.businessPhone) && (
                 <div styleName="warningText">
                   Note: Changing the country also updates the country code of
                   business phone.
