@@ -1039,25 +1039,40 @@ export const PROJECT_CATEGORY_TAAS = 'talent-as-a-service'
  * - if field is not on the list means it should not be shown
  */
 export const PROFILE_FIELDS_CONFIG = {
-  // this config is used to show any user profile
-  DEFAULT: {
+  TOPCODER: {
+    // required fields
+    firstName: true,
+    lastName: true,
+    title: true,
+    country: true,
+    timeZone: true,
+    workingHourStart: true,
+    workingHourEnd: true,
+
+    // optional fields
+    avatar: false,
+    // companyName: false,
+    // companyURL: false,
+    // businessPhone: false,
+  },
+  CUSTOMER: {
     // required fields
     firstName: true,
     lastName: true,
     country: true,
     title: true,
-    timeZone: true,
-    businessPhone: true,
     companyName: true,
+    companyURL: true,
+    businessPhone: true,
+    businessEmail: true,
 
     // optional fields
     avatar: false,
+    timeZone: false,
     workingHourStart: false,
     workingHourEnd: false,
   },
-
-  // configs below are used when we ask users to fill missing fields (progressive registration)
-  TOPCODER: {
+  COPILOT: {
     // required fields
     firstName: true,
     lastName: true,
@@ -1068,24 +1083,9 @@ export const PROFILE_FIELDS_CONFIG = {
 
     // optional fields
     avatar: false,
-    title: false,
-    companyName: false,
-    businessPhone: false,
-  },
-  CUSTOMER: {
-    // required fields
-    firstName: true,
-    lastName: true,
-    country: true,
-    title: true,
-    companyName: true,
-    businessPhone: true,
-
-    // optional fields
-    businessEmail: false,
-    avatar: false,
-    timeZone: false,
-    workingHourStart: false,
-    workingHourEnd: false,
+    // title: false,
+    // companyName: false,
+    // companyURL: true,
+    // businessPhone: false,
   }
 }

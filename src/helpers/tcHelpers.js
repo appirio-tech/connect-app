@@ -9,6 +9,8 @@ import {
   NON_CUSTOMER_ROLES,
   PROFILE_FIELDS_CONFIG,
 } from '../config/constants'
+import { hasPermission } from './permissions'
+import PERMISSIONS from '../config/permissions'
 
 /**
  * Check if a user is a special system user
@@ -72,4 +74,23 @@ export const isUserProfileComplete = (user, profileSettings) => {
   })
 
   return !isMissingUserInfo
+}
+
+/**
+ * Get User Profile fields config based on the current user roles.
+ *
+ * @returns {Object} fields config
+ */
+export const getUserProfileFieldsConfig = () => {
+  if (hasPermission(PERMISSIONS.VIEW_USER_PROFILE_AS_TOPCODER_EMPLOYEE)) {
+    return PROFILE_FIELDS_CONFIG.TOPCODER
+  }
+
+  if (hasPermission(PERMISSIONS.VIEW_USER_PROFILE_AS_COPILOT)) {
+    return PROFILE_FIELDS_CONFIG.COPILOT
+  }
+
+  if (hasPermission(PERMISSIONS.VIEW_USER_PROFILE_AS_CUSTOMER)) {
+    return PROFILE_FIELDS_CONFIG.CUSTOMER
+  }
 }

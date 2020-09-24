@@ -15,7 +15,6 @@ import ISOCountries from '../../../../../helpers/ISOCountries'
 import { formatPhone } from '../../../../../helpers/utils'
 import { hasPermission } from '../../../../../helpers/permissions'
 import PERMISSIONS from '../../../../../config/permissions'
-import { PROFILE_FIELDS_CONFIG } from '../../../../../config/constants'
 import './ProfileSettingsForm.scss'
 
 const countries = _.orderBy(ISOCountries, ['name'], ['asc']).map((country) => ({
@@ -137,6 +136,11 @@ class ProfileSettingsForm extends Component {
       validationErrors.isEmail = 'Please, enter correct email'
     }
 
+    if (name === 'companyURL') {
+      validations.isRelaxedUrl = true
+      validationErrors.isRelaxedUrl = 'Please, enter correct URL'
+    }
+
     return (
       <div className="field">
         <div className="label">
@@ -235,13 +239,11 @@ class ProfileSettingsForm extends Component {
         {!_.isUndefined(fieldsConfig.firstName) && this.getField('First Name', 'firstName', fieldsConfig.firstName)}
         {!_.isUndefined(fieldsConfig.lastName) && this.getField('Last Name', 'lastName', fieldsConfig.lastName)}
         {!_.isUndefined(fieldsConfig.title) && this.getField('Title', 'title', fieldsConfig.title)}
-        {!_.isUndefined(fieldsConfig.businessEmail) &&
-          this.getField('Business Email', 'businessEmail', fieldsConfig.businessEmail, true)}
         {!_.isUndefined(fieldsConfig.businessPhone) && (
           <div className="field">
             <div className="label">
               <span styleName="fieldLabelText">Business Phone</span>&nbsp;
-              <sup styleName="requiredMarker">*</sup>
+              {fieldsConfig.businessPhone && <sup styleName="requiredMarker">*</sup>}
             </div>
             <div className="input-field">
               <PhoneInput
@@ -275,13 +277,9 @@ class ProfileSettingsForm extends Component {
             </div>
           </div>
         )}
-        {!_.isUndefined(fieldsConfig.companyName) &&
-          this.getField(
-            'Company Name',
-            'companyName',
-            fieldsConfig.companyName,
-            disableCompanyInput
-          )}
+        {!_.isUndefined(fieldsConfig.businessEmail) && this.getField('Business Email', 'businessEmail', fieldsConfig.businessEmail, true)}
+        {!_.isUndefined(fieldsConfig.companyName) && this.getField('Company Name', 'companyName', fieldsConfig.companyName, disableCompanyInput)}
+        {!_.isUndefined(fieldsConfig.companyURL) && this.getField('Company URL', 'companyURL', fieldsConfig.companyURL)}
         {!_.isUndefined(fieldsConfig.country) && (
           <div className="field">
             {fieldsConfig.country ? (
@@ -414,8 +412,6 @@ class ProfileSettingsForm extends Component {
 }
 
 ProfileSettingsForm.defaultProps = {
-  // default config is same for user profile for any kind of users
-  fieldsConfig: PROFILE_FIELDS_CONFIG.DEFAULT,
   showBackButton: false,
   submitButton: 'Save settings',
   onBack: () => {},
@@ -434,6 +430,7 @@ ProfileSettingsForm.propTypes = {
     lastName: PropTypes.bool,
     title: PropTypes.bool,
     companyName: PropTypes.bool,
+    companyURL: PropTypes.bool,
     businessPhone: PropTypes.bool,
     businessEmail: PropTypes.bool,
     country: PropTypes.bool,

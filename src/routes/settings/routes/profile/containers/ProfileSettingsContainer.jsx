@@ -10,6 +10,7 @@ import spinnerWhileLoading from '../../../../../components/LoadingSpinner'
 import { requiresAuthentication } from '../../../../../components/AuthenticatedComponent'
 import { getProfileSettings, saveProfileSettings, uploadProfilePhoto } from '../../../actions/index'
 import { formatProfileSettings } from '../../../helpers/settings'
+import { getUserProfileFieldsConfig } from '../../../../../helpers/tcHelpers'
 
 const enhance = spinnerWhileLoading(props => !props.values.isLoading)
 const ProfileSettingsFormEnhanced = enhance(ProfileSettingsForm)
@@ -20,6 +21,7 @@ class ProfileSettingsContainer extends Component {
 
   render() {
     const { profileSettings, saveProfileSettings, uploadProfilePhoto, user } = this.props
+    const fieldsConfig = getUserProfileFieldsConfig()
 
     return (
       <SettingsPanel
@@ -31,6 +33,7 @@ class ProfileSettingsContainer extends Component {
           values={profileSettings}
           saveSettings={saveProfileSettings}
           uploadPhoto={uploadProfilePhoto}
+          fieldsConfig={fieldsConfig}
         />
       </SettingsPanel>
     )
