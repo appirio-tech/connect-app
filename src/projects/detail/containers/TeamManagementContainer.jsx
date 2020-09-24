@@ -91,7 +91,6 @@ class TeamManagementContainer extends Component {
     const { currentUser, projectId, addProjectMember } = this.props
     let defaultRole = PROJECT_ROLE_MANAGER
     if (currentUser.isCopilot) defaultRole = PROJECT_ROLE_COPILOT
-    if (currentUser.isAccountManager) defaultRole = PROJECT_ROLE_ACCOUNT_MANAGER
     role = role || defaultRole
     addProjectMember(
       projectId,

@@ -196,6 +196,18 @@ export default {
     ]
   },
 
+  JOIN_TOPCODER_TEAM: {
+    _meta: {
+      group: 'Project Members',
+      title: 'Join topcoder team',
+      description: 'Join Topcoder Team without invitation',
+    },
+    topcoderRoles: [
+      ...TOPCODER_ADMINS,
+      ROLE_CONNECT_MANAGER,
+    ]
+  },
+
   MANAGE_COPILOTS: {
     _meta: {
       group: 'Project Members',

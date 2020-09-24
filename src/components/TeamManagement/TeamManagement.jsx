@@ -52,6 +52,7 @@ class TeamManagement extends React.Component {
     this.projectTeamInviteButtonClick = this.projectTeamInviteButtonClick.bind(this)
     this.topcoderTeamInviteButtonClick = this.topcoderTeamInviteButtonClick.bind(this)
     this.copilotTeamInviteButtonClick = this.copilotTeamInviteButtonClick.bind(this)
+    this.onJoinConfirm = this.onJoinConfirm.bind(this)
   }
 
   topcoderTeamInviteButtonClick() {
@@ -85,10 +86,16 @@ class TeamManagement extends React.Component {
     }
   }
 
+  onJoinConfirm() {
+    const { onJoinConfirm } = this.props
+    // call without argument, so the role would be detected automatically
+    onJoinConfirm()
+  }
+
   render() {
     const {
       currentUser, members, deletingMember, isAddingTeamMember, onMemberDeleteConfirm, onMemberDelete, isShowJoin,
-      showNewMemberConfirmation, onJoin, onJoinConfirm, onShowProjectDialog, isShowProjectDialog,
+      showNewMemberConfirmation, onJoin, onShowProjectDialog, isShowProjectDialog,
       projectTeamInvites, onProjectInviteDeleteConfirm, onProjectInviteSend, deletingInvite, changeRole,
       onDeleteInvite, isShowTopcoderDialog, onShowTopcoderDialog, processingInvites, processingMembers,
       onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, onAcceptOrRefuse, error,
@@ -109,7 +116,7 @@ class TeamManagement extends React.Component {
     const copilotTeamManageAction = hasPermission(PERMISSIONS.MANAGE_COPILOTS)
     const canRequestCopilot = hasPermission(PERMISSIONS.REQUEST_COPILOTS)
     const canJoinAsCopilot = !currentMember && currentUser.isCopilot
-    const canJoinAsManager = !currentMember && (currentUser.isManager || currentUser.isAccountManager)
+    const canJoinTopcoderTeam = !currentMember && hasPermission(PERMISSIONS.JOIN_TOPCODER_TEAM)
     const canShowInvite = currentMember && (currentMember.isCustomer || currentMember.isCopilot || currentMember.isManager)
 
     const sortedMembers = members
@@ -124,7 +131,7 @@ class TeamManagement extends React.Component {
             <span styleName="title-text">Team</span>
             {(customerTeamManageAction) &&
               <span className="title-action" onClick={() => onShowProjectDialog(true)}>
-                Manage
+                {currentUser.isAdmin ? 'Manage' : 'View'}
               </span>
             }
           </div>
@@ -292,7 +299,7 @@ class TeamManagement extends React.Component {
                 </div>
               </div>
             }
-            { (canJoinAsCopilot || canJoinAsManager) &&
+            { (canJoinAsCopilot || canJoinTopcoderTeam) &&
               <div styleName="button-container">
                 <div className="join-btn" onClick={() => onJoin(true)}>
                   <AddIcon />
@@ -306,23 +313,18 @@ class TeamManagement extends React.Component {
         </div>
         {isShowJoin && ((() => {
           const onClickCancel = () => onJoin(false)
-          const onClickJoinConfirm = (role) => {
-            onJoinConfirm(role)
-          }
           let role = 'Manager'
           if (currentUser.isCopilot) role = 'Copilot'
-          if (currentUser.isAccountManager) role = 'Account Manager'
           return (
             <Dialog
               isLoading={processingMembers}
               onCancel={onClickCancel}
-              onConfirm={onClickJoinConfirm}
+              onConfirm={this.onJoinConfirm}
               title={`Join project as ${role}`}
               loadingTitle="Adding you to the project...."
               content={JOIN_MESSAGE}
               buttonText="Join project"
               buttonColor="blue"
-              showRoleSelector={currentUser.isManager}
             />
           )
         })())}
