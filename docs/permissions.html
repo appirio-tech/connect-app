@@ -82,7 +82,6 @@
               <div class="text-black-50 small-text">Invite new members or delete them. There are some additional restrictions for some roles.</div>
             </div>
             <div class="col-9 py-2">
-                <span class="badge badge-primary" title="Allowed Project Role">copilot</span>
                 <span class="badge badge-primary" title="Allowed Project Role">manager</span>
                 <span class="badge badge-primary" title="Allowed Project Role">account_manager</span>
                 <span class="badge badge-primary" title="Allowed Project Role">account_executive</span>
@@ -91,6 +90,48 @@
                 <span class="badge badge-primary" title="Allowed Project Role">solution_architect</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">administrator</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Connect Admin</span>
+            </div>
+          </div>
+          <div class="row border-top">
+            <div class="col py-2">
+              Join topcoder team
+              <div><small><code>JOIN_TOPCODER_TEAM</code></small></div>
+              <div class="text-black-50 small-text">Join Topcoder Team without invitation</div>
+            </div>
+            <div class="col-9 py-2">
+                <span class="badge badge-success" title="Allowed Topcoder Role">administrator</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Admin</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Manager</span>
+            </div>
+          </div>
+          <div class="row border-top">
+            <div class="col py-2">
+              Manage copilots
+              <div><small><code>MANAGE_COPILOTS</code></small></div>
+              <div class="text-black-50 small-text">Directly invite copilots to the project.</div>
+            </div>
+            <div class="col-9 py-2">
+                <span class="badge badge-success" title="Allowed Topcoder Role">administrator</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Admin</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Copilot Manager</span>
+            </div>
+          </div>
+          <div class="row border-top">
+            <div class="col py-2">
+              Request copilots
+              <div><small><code>REQUEST_COPILOTS</code></small></div>
+              <div class="text-black-50 small-text">Request copilots to the project.</div>
+            </div>
+            <div class="col-9 py-2">
+                <span class="badge badge-primary" title="Allowed Project Role">manager</span>
+                <span class="badge badge-primary" title="Allowed Project Role">account_manager</span>
+                <span class="badge badge-primary" title="Allowed Project Role">account_executive</span>
+                <span class="badge badge-primary" title="Allowed Project Role">project_manager</span>
+                <span class="badge badge-primary" title="Allowed Project Role">program_manager</span>
+                <span class="badge badge-primary" title="Allowed Project Role">solution_architect</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">administrator</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Admin</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Copilot Manager</span>
             </div>
           </div>
         <div class="row">
@@ -188,6 +229,7 @@
                 <span class="badge badge-success" title="Allowed Topcoder Role">administrator</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Connect Admin</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Connect Manager</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Copilot Manager</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Connect Account Manager</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Business Development Representative</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Presales</span>
@@ -208,6 +250,7 @@
                 <span class="badge badge-success" title="Allowed Topcoder Role">administrator</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Connect Admin</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Connect Manager</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Copilot Manager</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Connect Account Manager</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Business Development Representative</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Presales</span>
@@ -215,6 +258,58 @@
                 <span class="badge badge-success" title="Allowed Topcoder Role">Program Manager</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Solution Architect</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Project Manager</span>
+            </div>
+          </div>
+          <div class="row border-top">
+            <div class="col py-2">
+              View User Profile as Copilot
+              <div><small><code>VIEW_USER_PROFILE_AS_COPILOT</code></small></div>
+              <div class="text-black-50 small-text"></div>
+            </div>
+            <div class="col-9 py-2">
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Copilot</span>
+            </div>
+          </div>
+          <div class="row border-top">
+            <div class="col py-2">
+              View User Profile as Topcoder Employee
+              <div><small><code>VIEW_USER_PROFILE_AS_TOPCODER_EMPLOYEE</code></small></div>
+              <div class="text-black-50 small-text"></div>
+            </div>
+            <div class="col-9 py-2">
+                <span class="badge badge-success" title="Allowed Topcoder Role">administrator</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Admin</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Manager</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Copilot Manager</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Account Manager</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Business Development Representative</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Presales</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Account Executive</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Program Manager</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Solution Architect</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Project Manager</span>
+            </div>
+          </div>
+          <div class="row border-top">
+            <div class="col py-2">
+              View User Profile as Customer
+              <div><small><code>VIEW_USER_PROFILE_AS_CUSTOMER</code></small></div>
+              <div class="text-black-50 small-text"></div>
+            </div>
+            <div class="col-9 py-2">
+                <span class="badge badge-success" title="Allowed Topcoder Role">Topcoder User</span>
+                <span class="badge badge-danger" title="Denied Topcoder Role">administrator</span>
+                <span class="badge badge-danger" title="Denied Topcoder Role">Connect Admin</span>
+                <span class="badge badge-danger" title="Denied Topcoder Role">Connect Manager</span>
+                <span class="badge badge-danger" title="Denied Topcoder Role">Connect Copilot Manager</span>
+                <span class="badge badge-danger" title="Denied Topcoder Role">Connect Account Manager</span>
+                <span class="badge badge-danger" title="Denied Topcoder Role">Business Development Representative</span>
+                <span class="badge badge-danger" title="Denied Topcoder Role">Presales</span>
+                <span class="badge badge-danger" title="Denied Topcoder Role">Account Executive</span>
+                <span class="badge badge-danger" title="Denied Topcoder Role">Program Manager</span>
+                <span class="badge badge-danger" title="Denied Topcoder Role">Solution Architect</span>
+                <span class="badge badge-danger" title="Denied Topcoder Role">Project Manager</span>
+                <span class="badge badge-danger" title="Denied Topcoder Role">Connect Copilot</span>
             </div>
           </div>
         <div class="row">
@@ -251,6 +346,7 @@
                 <span class="badge badge-success" title="Allowed Topcoder Role">administrator</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Connect Admin</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Connect Manager</span>
+                <span class="badge badge-success" title="Allowed Topcoder Role">Connect Copilot Manager</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Connect Account Manager</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Business Development Representative</span>
                 <span class="badge badge-success" title="Allowed Topcoder Role">Presales</span>

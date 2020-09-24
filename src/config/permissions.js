@@ -331,6 +331,43 @@ export default {
     ],
   },
 
+  VIEW_USER_PROFILE_AS_COPILOT: {
+    _meta: {
+      group: 'User Profile',
+      title: 'View User Profile as Copilot',
+    },
+    topcoderRoles: [
+      ROLE_CONNECT_COPILOT
+    ],
+  },
+
+  VIEW_USER_PROFILE_AS_TOPCODER_EMPLOYEE: {
+    _meta: {
+      group: 'User Profile',
+      title: 'View User Profile as Topcoder Employee',
+    },
+    topcoderRoles: [
+      ..._.difference(TOPCODER_ALL, [ROLE_TOPCODER_USER, ROLE_CONNECT_COPILOT])
+    ],
+  },
+
+  VIEW_USER_PROFILE_AS_CUSTOMER: {
+    _meta: {
+      group: 'User Profile',
+      title: 'View User Profile as Customer',
+    },
+    allowRule: {
+      topcoderRoles: [
+        ROLE_TOPCODER_USER
+      ]
+    },
+    denyRule: {
+      topcoderRoles: [
+        ..._.difference(TOPCODER_ALL, [ROLE_TOPCODER_USER])
+      ],
+    }
+  },
+
   SEE_MEMBER_SUGGESTIONS: {
     _meta: {
       group: 'View Member Suggestions',
