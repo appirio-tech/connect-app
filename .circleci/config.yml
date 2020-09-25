@@ -9,6 +9,7 @@ install_dependency: &install_dependency
           name: Installation of build and deployment dependencies.
           command: |
             apt update
+            apt install jq
             apt install python-dev python-pip -y
             pip install awscli --upgrade
 install_deploysuite: &install_deploysuite
