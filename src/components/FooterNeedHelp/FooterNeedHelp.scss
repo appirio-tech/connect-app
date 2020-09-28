@@ -1,0 +1,15 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.need-help {
+  @include roboto;
+  color: $tc-gray-50;
+  font-size: 12px;
+  line-height: 150%;
+  margin-top: 2 * $base-unit;
+  padding-bottom: 8 * $base-unit;
+  text-align: center;
+
+  a {
+    color: $tc-dark-blue-110;
+  }
+}

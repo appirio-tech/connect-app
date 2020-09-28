@@ -5,8 +5,12 @@ import {
   DISCOURSE_BOT_USERID,
   CODER_BOT_USERID,
   TC_SYSTEM_USERID,
-  TC_CDN_URL
+  TC_CDN_URL,
+  NON_CUSTOMER_ROLES,
+  PROFILE_FIELDS_CONFIG,
 } from '../config/constants'
+import { hasPermission } from './permissions'
+import PERMISSIONS from '../config/permissions'
 
 /**
  * Check if a user is a special system user
@@ -44,4 +48,49 @@ export const getFullNameWithFallback = (user) => {
   userFullName = userFullName && userFullName.trim().length > 0 ? userFullName : user.handle
   userFullName = userFullName && userFullName.trim().length > 0 ? userFullName : 'Connect user'
   return userFullName
+}
+
+/**
+ * Check if user profile is complete or no.
+ *
+ * @param {Object} user            `loadUser.user` from Redux Store
+ * @param {Object} profileSettings profile settings with traits
+ *
+ * @returns {Boolean} complete or no
+ */
+export const isUserProfileComplete = (user, profileSettings) => {
+  const isTopcoderUser = _.intersection(user.roles, NON_CUSTOMER_ROLES).length > 0
+  const fieldsConfig = isTopcoderUser ? PROFILE_FIELDS_CONFIG.TOPCODER : PROFILE_FIELDS_CONFIG.CUSTOMER
+
+  // check if any required field doesn't have a value
+  let isMissingUserInfo = false
+  _.forEach(_.keys(fieldsConfig), (fieldKey) => {
+    const isFieldRequired = fieldsConfig[fieldKey]
+
+    if (isFieldRequired && !profileSettings[fieldKey]) {
+      isMissingUserInfo = true
+      return false
+    }
+  })
+
+  return !isMissingUserInfo
+}
+
+/**
+ * Get User Profile fields config based on the current user roles.
+ *
+ * @returns {Object} fields config
+ */
+export const getUserProfileFieldsConfig = () => {
+  if (hasPermission(PERMISSIONS.VIEW_USER_PROFILE_AS_TOPCODER_EMPLOYEE)) {
+    return PROFILE_FIELDS_CONFIG.TOPCODER
+  }
+
+  if (hasPermission(PERMISSIONS.VIEW_USER_PROFILE_AS_COPILOT)) {
+    return PROFILE_FIELDS_CONFIG.COPILOT
+  }
+
+  if (hasPermission(PERMISSIONS.VIEW_USER_PROFILE_AS_CUSTOMER)) {
+    return PROFILE_FIELDS_CONFIG.CUSTOMER
+  }
 }

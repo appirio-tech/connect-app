@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import PT from 'prop-types'
-
 import ModalControl from '../../../components/ModalControl'
 import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
 import { DOMAIN } from '../../../config/constants'
-
-import ProfileSettingsForm from '../../../routes/settings/routes/profile/components/ProfileSettingsForm'
-
 import './UpdateUserInfo.scss'
+import IncompleteUserProfile from '../../../components/IncompleteUserProfile/IncompleteUserProfile'
 
 class UpdateUserInfo extends Component {
   constructor(props) {
@@ -25,12 +22,9 @@ class UpdateUserInfo extends Component {
     const {
       profileSettings,
       saveProfileSettings,
-      uploadProfilePhoto,
-      isCustomer,
-      isCopilot,
-      isManager,
       isTopcoderUser,
       closeUserSettings,
+      user,
     } = this.props
 
     return (
@@ -51,27 +45,14 @@ class UpdateUserInfo extends Component {
             Please complete your profile information below to able to submit
             your project request.
           </span>
-          <ProfileSettingsForm
-            values={profileSettings}
-            saveSettings={saveProfileSettings}
-            uploadPhoto={uploadProfilePhoto}
-            isCustomer={isCustomer}
-            isCopilot={isCopilot}
-            isManager={isManager}
-            showTitle={!isTopcoderUser}
-            showAvatar={false}
-            showBusinessEmail={!isTopcoderUser}
-            showBusinessPhone={!isTopcoderUser}
-            showCompanyName={!isTopcoderUser}
-            isRequiredTimeZone={isTopcoderUser}
-            isRequiredCountry={isTopcoderUser}
-            isRequiredWorkingHours={isTopcoderUser}
-            isRequiredBusinessEmail={!isTopcoderUser}
+          <IncompleteUserProfile
+            profileSettings={profileSettings}
+            saveProfileSettings={saveProfileSettings}
+            isTopcoderUser={isTopcoderUser}
+            user={user}
             submitButton="Send My Request"
             showBackButton
             onBack={closeUserSettings}
-            shouldDoValidateOnStart
-            shouldShowTitle={false}
             buttonExtraClassName="tc-btn-md"
           />
           {!isTopcoderUser && (
