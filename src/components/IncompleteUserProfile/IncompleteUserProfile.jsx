@@ -6,6 +6,7 @@ import PT from 'prop-types'
 import { PROFILE_FIELDS_CONFIG } from '../../config/constants'
 import ProfileSettingsForm from '../../routes/settings/routes/profile/components/ProfileSettingsForm'
 import { getDefaultTopcoderRole } from '../../helpers/permissions'
+import { timezones } from 'appirio-tech-react-components/constants/timezones'
 
 const IncompleteUserProfile = ({
   profileSettings,
@@ -31,7 +32,12 @@ const IncompleteUserProfile = ({
   // if time zone is required and doesn't have a value yet,
   // then detect timezone using browser feature and prefill the form
   if (fieldsConfig.timeZone && !profileSettings.settings.timeZone) {
-    prefilledProfileSettings.settings.timeZone = (new Intl.DateTimeFormat()).resolvedOptions().timeZone
+    const autodetectedTimeZone = (new Intl.DateTimeFormat()).resolvedOptions().timeZone
+    // only use autodetected timezone if it's on our timezone list, otherwise leave it empty
+    if (_.find(timezones, { zoneName: autodetectedTimeZone})) {
+      prefilledProfileSettings.settings.timeZone = autodetectedTimeZone
+    }
+    console.log('Auto-detected timezone', prefilledProfileSettings.settings.timeZone)
   }
 
   if (isTopcoderUser) {
