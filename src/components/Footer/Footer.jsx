@@ -23,8 +23,6 @@ const Footer = () => {
 
   // TODO this looks like a bad way of doing it, I think it should be re-factored
   const shouldHideOnDesktop = isProjectDetails || isCreateProject || isNotificationsPage || isSettingsPage
-  // on mobile show footer only when user is logged-out, so only root page is available
-  const shouldHideOnMobile =  window.location.pathname !== '/'
 
   return (
     <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
@@ -39,9 +37,8 @@ const Footer = () => {
             </div>
           )
         } else {
-          return (shouldHideOnMobile ? null :
-            {/*<FooterV2 />*/}
-          )
+          {/* never show footer on mobile */}
+          return null
         }
       }}
     </MediaQuery>
