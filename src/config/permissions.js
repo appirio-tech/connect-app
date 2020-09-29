@@ -196,6 +196,45 @@ export default {
     ]
   },
 
+  JOIN_TOPCODER_TEAM: {
+    _meta: {
+      group: 'Project Members',
+      title: 'Join topcoder team',
+      description: 'Join Topcoder Team without invitation',
+    },
+    topcoderRoles: [
+      ...TOPCODER_ADMINS,
+      ROLE_CONNECT_MANAGER,
+    ]
+  },
+
+  MANAGE_COPILOTS: {
+    _meta: {
+      group: 'Project Members',
+      title: 'Manage copilots',
+      description: 'Directly invite copilots to the project.',
+    },
+    topcoderRoles: [
+      ...TOPCODER_ADMINS,
+      ROLE_CONNECT_COPILOT_MANAGER
+    ]
+  },
+
+  REQUEST_COPILOTS: {
+    _meta: {
+      group: 'Project Members',
+      title: 'Request copilots',
+      description: 'Request copilots to the project.',
+    },
+    projectRoles: [
+      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_COPILOT, PROJECT_ROLE_CUSTOMER])
+    ],
+    topcoderRoles: [
+      ...TOPCODER_ADMINS,
+      ROLE_CONNECT_COPILOT_MANAGER
+    ]
+  },
+
   ACCESS_PRIVATE_POST: {
     _meta: {
       group: 'Topics & Posts',
@@ -290,6 +329,43 @@ export default {
     topcoderRoles: [
       ..._.difference(TOPCODER_ALL, [ROLE_TOPCODER_USER, ROLE_CONNECT_COPILOT])
     ],
+  },
+
+  VIEW_USER_PROFILE_AS_COPILOT: {
+    _meta: {
+      group: 'User Profile',
+      title: 'View User Profile as Copilot',
+    },
+    topcoderRoles: [
+      ROLE_CONNECT_COPILOT
+    ],
+  },
+
+  VIEW_USER_PROFILE_AS_TOPCODER_EMPLOYEE: {
+    _meta: {
+      group: 'User Profile',
+      title: 'View User Profile as Topcoder Employee',
+    },
+    topcoderRoles: [
+      ..._.difference(TOPCODER_ALL, [ROLE_TOPCODER_USER, ROLE_CONNECT_COPILOT])
+    ],
+  },
+
+  VIEW_USER_PROFILE_AS_CUSTOMER: {
+    _meta: {
+      group: 'User Profile',
+      title: 'View User Profile as Customer',
+    },
+    allowRule: {
+      topcoderRoles: [
+        ROLE_TOPCODER_USER
+      ]
+    },
+    denyRule: {
+      topcoderRoles: [
+        ..._.difference(TOPCODER_ALL, [ROLE_TOPCODER_USER])
+      ],
+    }
   },
 
   SEE_MEMBER_SUGGESTIONS: {

@@ -40,12 +40,13 @@ class ProjectManagementDialog extends React.Component {
   }
 
   onChange(selectedMembers) {
-    const { projectTeamInvites, members, topcoderTeamInvites } = this.props
+    const { projectTeamInvites, members, topcoderTeamInvites, copilotTeamInvites } = this.props
 
     const present = _.some(selectedMembers, (selectedMember) => (
       this.isSelectedMemberAlreadyInvited(members, selectedMember)
       || this.isSelectedMemberAlreadyInvited(topcoderTeamInvites, selectedMember)
       || this.isSelectedMemberAlreadyInvited(projectTeamInvites, selectedMember)
+      || this.isSelectedMemberAlreadyInvited(copilotTeamInvites, selectedMember)
     ))
 
     this.setState({
