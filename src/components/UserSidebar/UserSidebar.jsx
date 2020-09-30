@@ -65,7 +65,9 @@ const navLinks = [{
   iconClassName: 'fill',
 }, {
   label: 'GIVE APPLICATION FEEDBACK',
-  to: '/',
+  to: 'https://forms.gle/hwRWYB3cGQnKVpjk7',
+  enforceA: true,
+  openNewTab: true,
   Icon: FAQIcon,
   iconClassName: 'fill',
 }]
