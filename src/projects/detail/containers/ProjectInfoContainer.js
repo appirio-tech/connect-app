@@ -17,7 +17,6 @@ import {
   PROJECT_ROLE_MANAGER,
   DIRECT_PROJECT_URL,
   SALESFORCE_PROJECT_LEAD_LINK,
-  WORK_MANAGER_APP,
   PROJECT_STATUS_CANCELLED,
   PROJECT_STATUS_ACTIVE,
   PROJECT_STATUS_COMPLETED,
@@ -26,7 +25,6 @@ import {
   PROJECT_ROLE_PROJECT_MANAGER,
   PROJECT_ROLE_PROGRAM_MANAGER,
   PROJECT_ROLE_SOLUTION_ARCHITECT,
-  PROJECT_CATEGORY_TAAS,
 } from '../../../config/constants'
 import PERMISSIONS from '../../../config/permissions'
 import { hasPermission } from '../../../helpers/permissions'
@@ -436,7 +434,7 @@ class ProjectInfoContainer extends React.Component {
       ? _.find(projectTemplates, pt => pt.id === projectTemplateId)
       : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
 
-    const isTaaS = PROJECT_CATEGORY_TAAS === projectTemplate.category
+    // const isTaaS = PROJECT_CATEGORY_TAAS === projectTemplate.category
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([
@@ -448,8 +446,8 @@ class ProjectInfoContainer extends React.Component {
     ], currentMemberRole) > -1
     if (isMemberOrCopilot || isSuperUser) {
       directLinks = []
-      if(!isTaaS)
-        directLinks.push({name: 'Launch Work Manager', href: `${WORK_MANAGER_APP}/${project.id}/challenges`})
+      // if(!isTaaS)
+      //   directLinks.push({name: 'Launch Work Manager', href: `${WORK_MANAGER_APP}/${project.id}/challenges`})
       if (project.directProjectId) {
         directLinks.push({name: 'Project in Topcoder Direct', href: `${DIRECT_PROJECT_URL}${project.directProjectId}`})
       } else {
@@ -596,7 +594,9 @@ class ProjectInfoContainer extends React.Component {
               navLinks={[
                 {
                   label: 'GIVE APPLICATION FEEDBACK',
-                  to: '/',
+                  to: 'https://forms.gle/hwRWYB3cGQnKVpjk7',
+                  enforceA: true,
+                  openNewTab: true,
                   Icon: FAQIcon,
                   iconClassName: 'fill',
                 }
