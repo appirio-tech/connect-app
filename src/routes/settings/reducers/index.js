@@ -35,6 +35,9 @@ import {
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILURE,
   CLEAR_PROFILE_SETTINGS_PHOTO,
+  VERIFY_EMAIL_PENDING,
+  VERIFY_EMAIL_SUCCESS,
+  VERIFY_EMAIL_FAILURE
 } from '../../../config/constants'
 import { applyProfileSettingsToTraits } from '../helpers/settings'
 
@@ -57,6 +60,9 @@ const initialState = {
     passwordSubmitted: false,
     isResettingPassword: false,
     passwordResetSubmitted: false,
+    isVerifyingEmail: false,
+    verifyingEmailResult: null,
+    verifyingEmailError: null,
 
     settings: {}
   },
@@ -189,6 +195,33 @@ export default (state = initialState, action) => {
         emailSubmitted: false,
       }
     }
+
+  case VERIFY_EMAIL_PENDING:
+    return {...state,
+      system: {...state.system,
+        isEmailVerifying: true,
+        verifyingEmailResult: null,
+        verifyingEmailError: null
+      }
+    }
+
+  case VERIFY_EMAIL_SUCCESS:
+    return {...state,
+      system: {...state.system,
+        isEmailVerifying: false,
+        verifyingEmailResult: action.payload,
+      }
+    }
+
+  case VERIFY_EMAIL_FAILURE: {
+    const errorResponse = action.payload
+    return {...state,
+      system: {...state.system,
+        isVerifyingEmail: false,
+        verifyingEmailError: errorResponse.response.data
+      }
+    }
+  }
 
   case CHANGE_PASSWORD_PENDING:
     return {...state,

@@ -2,6 +2,7 @@ import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL, RESET_PASSWORD_URL } from '../config/constants'
 import querystring from 'querystring'
+import { normalizeMemberProfileData, normalizeTraitData } from '../helpers/memberHelper'
 
 /**
  * Get a user based on it's handle/username
@@ -11,9 +12,10 @@ import querystring from 'querystring'
  * @returns {Promise<Object>} user profile data
  */
 export function getUserProfile(handle) {
-  return axios.get(`${TC_API_URL}/v3/members/${handle}/`)
+  return axios.get(`${TC_API_URL}/v5/members/${handle}`)
     .then(resp => {
-      return _.get(resp.data, 'result.content', {})
+      const result = normalizeMemberProfileData(resp.data[0])
+      return result
     })
 }
 
@@ -30,12 +32,8 @@ export function updateUserProfile(handle, updatedProfile, queryParams = {}) {
   let query = querystring.stringify(queryParams)
   query = query ? `?${query}` : ''
 
-  return axios.put(`${TC_API_URL}/v3/members/${handle}/${query}`, {
-    param: updatedProfile
-  })
-    .then(resp => {
-      return _.get(resp.data, 'result.content', {})
-    })
+  return axios.put(`${TC_API_URL}/v5/members/${handle}${query}`, updatedProfile)
+    .then(resp => resp.data)
 }
 
 /**
@@ -46,8 +44,11 @@ export function updateUserProfile(handle, updatedProfile, queryParams = {}) {
  * @returns {Promise<Array>} member traits
  */
 export const getMemberTraits = (handle) => {
-  return axios.get(`${TC_API_URL}/v3/members/${handle}/traits`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.get(`${TC_API_URL}/v5/members/${handle}/traits`)
+    .then(resp => {
+      const result = resp.data.map(trait => normalizeTraitData(trait))
+      return result
+    })
 }
 
 /**
@@ -59,10 +60,8 @@ export const getMemberTraits = (handle) => {
  * @returns {Promise<Array>} member traits
  */
 export const updateMemberTraits = (handle, updatedTraits) => {
-  return axios.put(`${TC_API_URL}/v3/members/${handle}/traits`, {
-    param: updatedTraits
-  })
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.put(`${TC_API_URL}/v5/members/${handle}/traits`, updatedTraits)
+    .then(resp => resp.data)
 }
 
 /**
@@ -74,44 +73,35 @@ export const updateMemberTraits = (handle, updatedTraits) => {
  * @returns {Promise<Array>} member traits
  */
 export const createMemberTraits = (handle, traits) => {
-  return axios.post(`${TC_API_URL}/v3/members/${handle}/traits`, {
-    param: traits
-  })
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.post(`${TC_API_URL}/v5/members/${handle}/traits`, traits)
+    .then(resp => resp.data)
 }
 
 /**
- * Update member photo
+ * Update user photo
  *
- * @param {String} handle           member handle
- * @param {Object} data             params to update photo
- * @param {String} data.contentType photo file content type
- * @param {String} data.token       token provided by pre signed URL
- *
- * @returns {Promise<String>}       photo URL
- */
-export const updateMemberPhoto = (handle, data) => {
-  return axios.put(`${TC_API_URL}/v3/members/${handle}/photo`, {
-    param: data
-  })
-    .then(resp => _.get(resp.data, 'result.content', {}))
-}
-
-/**
- * Get pre-signed URL for member photo
- *
- * @param {String} handle member handle
+ * @param {String} handle user handle
  * @param {File}   file   file to upload
  *
  * @returns {Promise<Object>} data of pre-signed URL
  */
-export const getPreSignedUrl = (handle, file) => {
-  return axios.post(`${TC_API_URL}/v3/members/${handle}/photoUploadUrl`, {
-    param: {
-      contentType: file.type
-    }
-  })
-    .then(resp => _.get(resp.data, 'result.content', {}))
+export const uploadUserPhoto = (handle, file) => {
+  const formData = new FormData()
+  formData.append('photo', file)
+
+  return axios.post(`${TC_API_URL}/v5/members/${handle}/photo`, formData)
+    .then(resp => resp.data)
+}
+
+/**
+ * Verify user email
+ *
+ * @param {String} handle user handle
+ * @param {String} token token to verify
+ */
+export const verifyUserEmail = (handle, token) => {
+  return axios.get(`${TC_API_URL}/v5/members/${handle}/verify?token=${token}`)
+    .then(resp => resp.data)
 }
 
 /**
