@@ -104,7 +104,7 @@ class Feed extends React.Component {
       allowComments, comments, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
       onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, allMembers,
       onEnterFullscreenClick, onExitFullscreenClick, isFullScreen, commentId, projectMembers, commentAnchorPrefix, tag,
-      inTopicDrawer, onDrawerClose
+      inTopicDrawer, onDrawerClose, newComment
     } = this.props
     const { editTopicMode, headerHeight } = this.state
 
@@ -222,6 +222,7 @@ class Feed extends React.Component {
           commentId={commentId}
           error={error}
           commentAnchorPrefix={commentAnchorPrefix}
+          newComment={newComment}
         />
         {children}
         {isDeletingTopic &&

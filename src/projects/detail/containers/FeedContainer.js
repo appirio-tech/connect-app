@@ -113,7 +113,7 @@ class FeedView extends React.Component {
     return hasThread || hasComment
   }
 
-  mapFeed(feed, showAll = false, resetNewComment = false, prevProps) {
+  mapFeed(feed, showAll = false, resetNewComment = false, prevProps, currentProps) {
     const { allMembers, project, currentMemberRole } = this.props
     const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isSavingTopic', 'isDeletingTopic', 'isAddingComment', 'isLoadingComments', 'error'])
     // Github issue##623, allow comments on all posts (including system posts)
@@ -189,7 +189,8 @@ class FeedView extends React.Component {
     item.newComment = ''
     if (!resetNewComment) {
       const feedFromState = _.find(this.state.feeds, f => feed.id === f.id)
-      item.newComment = feedFromState ? feedFromState.newComment : ''
+      const preservedNewComment =_.find(currentProps && currentProps.preservedNewComments, { feedId: feed.id })
+      item.newComment = (feedFromState || preservedNewComment) ? (feedFromState || preservedNewComment).newComment : ''
     }
     item.hasMoreComments = item.comments.length !== item.totalComments
     // adds permalink for the feed
@@ -214,7 +215,7 @@ class FeedView extends React.Component {
         }
         // reset new comment if we were adding comment and there is no error in doing so
         const resetNewComment = prevFeed && prevFeed.isAddingComment && !feed.isAddingComment && !feed.error
-        return this.mapFeed(feed, this.state.showAll.indexOf(feed.id) > -1, resetNewComment, prevProps)
+        return this.mapFeed(feed, this.state.showAll.indexOf(feed.id) > -1, resetNewComment, prevProps, props)
       }).filter(item => item)
     })
   }
@@ -247,6 +248,8 @@ class FeedView extends React.Component {
         return item
       })
     })
+    // also save new comment to a place where we can keep it even during feed reloading
+    this.props.updatePreservedNewComment(feedId, content)
   }
 
   onShowAllComments(feedId) {
@@ -489,6 +492,32 @@ const EnhancedFeedView = enhance(FeedView)
 class FeedContainer extends React.Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      // as we loose `newComment` in the state inside `EnhancedFeedView` we have to keep it here
+      // so we can restore the currently edited new comment, in case the feed has been reloaded
+      preservedNewComments: []
+    }
+
+    this.updatePreservedNewComment = this.updatePreservedNewComment.bind(this)
+  }
+
+  updatePreservedNewComment (feedId, newComment) {
+    const feedIndex = _.findIndex(this.state.preservedNewComments, { feedId })
+
+    if (feedIndex !== -1) {
+      this.setState({
+        preservedNewComments: [
+          ...this.state.preservedNewComments.slice(0, feedIndex),
+          { feedId, newComment },
+          ...this.state.preservedNewComments.slice(feedIndex + 1),
+        ]
+      })
+    } else {
+      this.setState({
+        preservedNewComments: [...this.state.preservedNewComments, { feedId, newComment }]
+      })
+    }
   }
 
   componentWillMount() {
@@ -502,11 +531,14 @@ class FeedContainer extends React.Component {
   }
 
   render() {
+    console.log('preservedNewComments', this.state.preservedNewComments)
     // Load only specified topics if topics input is available. Otherwise, load all feeds
     const {feeds, topics} = this.props
     const props = {
       ...this.props,
-      feeds: topics ? feeds.filter(f => _.includes(topics, f.id)) : feeds
+      feeds: topics ? feeds.filter(f => _.includes(topics, f.id)) : feeds,
+      preservedNewComments: this.state.preservedNewComments,
+      updatePreservedNewComment: this.updatePreservedNewComment,
     }
     return <EnhancedFeedView {...props} />
   }

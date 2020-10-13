@@ -146,7 +146,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['feature/faqs']
+              only: ['feature/faqs', 'feature/project_september']
 
       - deployProd:
           context : org-global

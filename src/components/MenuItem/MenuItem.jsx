@@ -23,9 +23,25 @@ const MenuItem = ({
   match,
   wrapperClass,
   toolTipText,
+  enforceA,
+  openNewTab,
 }) => {
   const matchedPath = match && match.path
   const isChildActive = children && some(children, c => c.to === matchedPath)
+
+  const linkContent = (
+    <span styleName="content">
+      <span styleName="left">
+        {!!Icon && (
+          <Icon className={cn(styles.icon, styles[iconClassName])} />
+        )}
+        {label}
+      </span>
+      <span styleName="right">
+        {!!count && <NotificationBadge count={count} text={toolTipText} />}
+      </span>
+    </span>
+  )
 
   return (
     <li className={
@@ -33,7 +49,7 @@ const MenuItem = ({
         styles.menuItem,
         { [styles.open]: isAccordionOpen, [styles.withChildren]: children })}
     >
-      {!children && (
+      {!children && !enforceA && (
         <NavLink
           to={to}
           className={styles.navItem}
@@ -41,18 +57,18 @@ const MenuItem = ({
           exact={exact}
           isActive={isActive}
         >
-          <span styleName="content">
-            <span styleName="left">
-              {!!Icon && (
-                <Icon className={cn(styles.icon, styles[iconClassName])} />
-              )}
-              {label}
-            </span>
-            <span styleName="right">
-              {!!count && <NotificationBadge count={count} text={toolTipText} />}
-            </span>
-          </span>
+          {linkContent}
         </NavLink>
+      )}
+
+      {!children && enforceA && (
+        <a
+          href={to}
+          className={styles.navItem}
+          target={openNewTab ? '_blank' : ''}
+        >
+          {linkContent}
+        </a>
       )}
 
       {children && (
@@ -91,7 +107,9 @@ const MenuItem = ({
 }
 
 MenuItem.defaultProps = {
-  exact: true
+  exact: true,
+  enforceA: false,
+  openNewTab: false,
 }
 
 MenuItem.propTypes = {
@@ -107,6 +125,15 @@ MenuItem.propTypes = {
   onAccordionToggle: PT.func,
   wrapperClass: PT.string,
   toolTipText: PT.string,
+  /**
+   * Render as regular link `<a>` instead of React Router `<NavLink>`
+   */
+  enforceA: PT.bool,
+  /**
+   * Open link in the new tab.
+   * Only works if `enforceA` is `true`.
+   */
+  openNewTab: PT.bool,
 }
 
 export default withRouter(MenuItem)
