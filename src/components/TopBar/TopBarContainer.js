@@ -75,7 +75,7 @@ class TopBarContainer extends React.Component {
     const logoutLink = `${ACCOUNTS_APP_LOGIN_URL}?logout=true&retUrl=${homePageUrl}`
     const isHomePage = this.props.match.path === '/'
     const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?regSource=tcBusiness&retUrl=${window.location.protocol}//${window.location.host}/`
-    const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
+    const registerUrl = !isHomePage ? loginUrl : null
     const isLoggedIn = !!(userRoles && userRoles.length)
 
     const logoutClick = (evt) => {
