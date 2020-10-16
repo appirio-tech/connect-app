@@ -14,7 +14,6 @@ import { renderComponent, branch, compose, withProps } from 'recompose'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import { createProduct } from '../../actions/project'
 import { getProductTemplateByKey } from '../../../helpers/templates'
-import { loadProjectPhasesWithProducts } from '../../actions/project'
 import { loadProjectDashboard } from '../../../projects/actions/projectDashboard'
 
 
@@ -91,11 +90,9 @@ class ProjectAddPhaseContainer extends React.Component {
       window.location = returnUrl
     } else {
       if (isLoggedIn) {
-        this.props.history.push(`/projects/${project.id}/plan`)
+        this.props.history.push(`/projects/${project.id}`)
       } else {
         this.props.history.push('/')
-        // FIXME ideally we should push on router
-        // window.location = window.location.origin
       }
     }
   }
@@ -103,14 +100,7 @@ class ProjectAddPhaseContainer extends React.Component {
   componentWillReceiveProps(props) {
     const project = _.get(props, 'project', null)
     if (!props.processing && !props.error && project && this.state.isChosenProduct) {
-      if (this.state.shouldReloadPhases) {
-        // reload the project
-        props.loadProjectPhasesWithProducts(project.id)
-        this.setState({shouldReloadPhases: false})
-      } else if (!props.isLoadingPhases) {
-        // back to plan
-        this.closeWizard()
-      }
+      this.closeWizard()
     }
   }
 
@@ -165,6 +155,6 @@ const mapStateToProps = ({projectState, loadUser, templates, productsTimelines }
   productCategories:  templates.productCategories,
 })
 
-const actionCreators = {createProduct, loadProjectPhasesWithProducts, loadProjectDashboard}
+const actionCreators = {createProduct, loadProjectDashboard}
 
 export default withRouter(connect(mapStateToProps, actionCreators)(ProjectAddPhaseContainer))
