@@ -5,7 +5,6 @@ import _ from 'lodash'
 import UserDropdown from 'appirio-tech-react-components/components/UserDropdownMenu/UserDropdownMenu'
 import {
   ACCOUNTS_APP_LOGIN_URL,
-  ACCOUNTS_APP_REGISTER_URL,
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
   ROLE_ADMINISTRATOR,
