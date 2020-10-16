@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import './Home.scss'
 import homeImgSrc from '../../assets/images/hero-tc-landing.png'
-import { DOMAIN, ACCOUNTS_APP_REGISTER_URL } from '../../config/constants'
+import { DOMAIN, ACCOUNTS_APP_LOGIN_URL } from '../../config/constants'
 
 class Home extends React.Component {
   constructor(props) {
