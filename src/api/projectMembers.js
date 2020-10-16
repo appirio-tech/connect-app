@@ -31,7 +31,7 @@ export function getMembersById (userIds) {
 }
 
 export function loadMemberSuggestions(value) {
-  const url = `${TC_API_URL}/v5/members?handle=${value}`
+  const url = `${TC_API_URL}/v5/members/autocomplete?term=${value}&page=1&perPage=10`
   return axios.get(url)
     .then(resp => {
       return resp.data.map(member => normalizeMemberData(member))
