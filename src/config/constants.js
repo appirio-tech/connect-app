@@ -37,6 +37,11 @@ export const CHANGE_EMAIL_PENDING = 'CHANGE_EMAIL_PENDING'
 export const CHANGE_EMAIL_SUCCESS = 'CHANGE_EMAIL_SUCCESS'
 export const CHANGE_EMAIL_FAILURE = 'CHANGE_EMAIL_FAILURE'
 
+export const VERIFY_EMAIL             = 'VERIFY_EMAIL'
+export const VERIFY_EMAIL_PENDING     = 'VERIFY_EMAIL_PENDING'
+export const VERIFY_EMAIL_SUCCESS     = 'VERIFY_EMAIL_SUCCESS'
+export const VERIFY_EMAIL_FAILURE     = 'VERIFY_EMAIL_FAILURE'
+
 export const CHANGE_PASSWORD_PENDING = 'CHANGE_PASSWORD_PENDING'
 export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS'
 export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE'
@@ -738,7 +743,7 @@ export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_
 export const TC_CDN_URL = process.env.TC_CDN_URL || `https://community-app.${DOMAIN}/api/cdn/public`
 
 export const RESET_PASSWORD_URL = `https://accounts.${DOMAIN}/member/reset-password`
-export const VERIFY_EMAIL_URL = `http://www.${DOMAIN}/settings/account/changeEmail`
+export const VERIFY_EMAIL_URL = `http://www.${DOMAIN}/settings/account/email-verification?token=<emailVerifyToken>`
 
 export const PROJECT_NAME_MAX_LENGTH = 255
 export const PROJECT_REF_CODE_MAX_LENGTH = 32

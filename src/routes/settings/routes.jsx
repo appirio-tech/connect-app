@@ -9,18 +9,14 @@ import NotificationSettingsContainer from './routes/notifications/containers/Not
 import SettingsToolBar from './components/SettingsToolBar'
 import SystemSettingsContainer from './routes/system/containers/SystemSettingsContainer'
 import ProfileSettingsContainer from './routes/profile/containers/ProfileSettingsContainer'
-import EmailVerificationFailure from './routes/email-verification/components/Failure'
-import EmailVerificationSuccessContainer from './routes/email-verification/containers/SuccessContainer'
+import EmailVerificationContainer from './routes/email-verification/containers/EmailVerificationContainer'
 import { requiresAuthentication } from '../../components/AuthenticatedComponent'
 const SystemSettingsContainerWithAuth = requiresAuthentication(SystemSettingsContainer)
 const NotificationSettingsContainerWithAuth = requiresAuthentication(NotificationSettingsContainer)
 const ProfileSettingsContainerWithAuth = requiresAuthentication(ProfileSettingsContainer)
 export default [
   <Route key="account" exact path="/settings/account" render={renderApp(<TopBarContainer toolbar={SettingsToolBar} />, <SystemSettingsContainerWithAuth />)} />,
-  <Route key="account/email-verification/success" exact path="/settings/account/email-verification/success/:handle/:token/:newEmail/:oldEmail/:jwtToken" render={renderApp(<TopBarContainer toolbar={SettingsToolBar} />, <EmailVerificationSuccessContainer />)} />,
-  <Route key="account/email-verification/failure" exact path="/settings/account/email-verification/failure" render={renderApp(<TopBarContainer toolbar={SettingsToolBar} />, <EmailVerificationFailure />)} />,
-  
+  <Route key="account/email-verification" exact path="/settings/account/email-verification" render={renderApp(<TopBarContainer toolbar={SettingsToolBar} />, <EmailVerificationContainer />)} />,
   <Route key="notifications" exact path="/settings/notifications" render={renderApp(<TopBarContainer toolbar={SettingsToolBar} />, <NotificationSettingsContainerWithAuth />)} />,
   <Route key="profile" exact path="/settings/profile" render={renderApp(<TopBarContainer toolbar={SettingsToolBar} />, <ProfileSettingsContainerWithAuth />)} />,
-  
 ]

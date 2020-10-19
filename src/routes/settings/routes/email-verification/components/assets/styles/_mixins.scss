@@ -1,0 +1,85 @@
+/*
+ Common mixins for Email Verification Result Page
+ */
+
+@import '~tc-ui/src/styles/tc-includes';
+
+@mixin outer-container {
+  background-color: $tc-gray-neutral-dark;
+  display: block;
+  width: 100%;
+
+  @media screen and (max-width: $screen-lg - 1px) {
+    width: calc(100vw);
+    padding: 7px 10px 20px 10px;
+  }
+
+  @media screen and (min-width: $screen-lg) {
+    padding: 30px 64px 50px 64px;
+  }
+}
+
+@mixin page {
+  background-color: $tc-white;
+  border-radius: 4 * $corner-radius;
+  box-shadow: 0 0 8px #ccc;
+  margin: auto;
+  max-width: 1246px;
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: Roboto-regular, Roboto, sans-serif;
+    font-weight: 400;
+  }
+ }
+
+@mixin text {
+  font-family: Roboto-regular, Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 25px;
+  color: $tc-black;
+  max-width: 600px;
+  margin-bottom: 20px;
+
+  p {
+    margin: 0;
+  }
+
+  strong {
+    font-style: bold;
+  }
+ }
+
+@mixin inner-container {
+  background: $tc-white;
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    font-size: 28px;
+    line-height: 35px;
+    margin-top: 22px;
+    margin-bottom: 3px;
+  }
+}
+
+@mixin back-button {
+  display: flex;
+  justify-content: center;
+  height: 40px;
+  margin: 5px;
+  padding: 5px 23px;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 500;
+  color: $tc-white;
+  background: $tc-dark-blue-110;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}

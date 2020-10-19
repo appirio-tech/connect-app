@@ -35,10 +35,10 @@ import {
   RESET_PASSWORD_FAILURE,
   CLEAR_PROFILE_SETTINGS_PHOTO,
   VERIFY_EMAIL_URL,
+  VERIFY_EMAIL
 } from '../../../config/constants'
 import settingsService from '../services/settings'
 import * as memberService from '../../../api/users'
-import { uploadFileToS3 } from '../../../api/s3'
 import { applyProfileSettingsToTraits, customerTraitId } from '../helpers/settings'
 import Alert from 'react-s-alert'
 
@@ -93,14 +93,12 @@ export const changeEmail = (email) => (dispatch, getState) => {
   const handle = _.get(state, 'loadUser.user.handle')
   const profile = _.get(state, 'settings.system.settings')
   // `achievements` and `ratingSummary` are read-only and cannot be updated in member profile
-  const newProfile = _.omit(profile, 'achievements', 'ratingSummary')
+  const newProfile = _.omit(profile, 'achievements', 'ratingSummary', 'userId', 'handle', 'handleLower', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy')
   // as we used `omit` above we have a new object and can directly update it
   newProfile.email = email
 
   const queryParams = {
-    //successUrl: `${CONNECT_DOMAIN}/settings/account/email-verification/success`,
-    //failUrl: `${CONNECT_DOMAIN}/settings/account/email-verification/failure`
-    verifyUrl: `${VERIFY_EMAIL_URL}`
+    verifyUrl: encodeURI(VERIFY_EMAIL_URL)
   }
 
   memberService.updateUserProfile(handle, newProfile, queryParams)
@@ -116,6 +114,17 @@ export const changeEmail = (email) => (dispatch, getState) => {
         type: CHANGE_EMAIL_FAILURE,
       })
     })
+}
+
+export const verifyEmail = (handle, token) => (dispatch) => {
+  return dispatch({
+    type: VERIFY_EMAIL,
+    payload: memberService.verifyUserEmail(handle, token)
+  }).catch(err => {
+    if (!(err.response.status === 400 || err.response.status === 403)) {
+      Alert.error(`Failed to verify email: ${err.message}`)
+    }
+  })
 }
 
 export const changePassword = (credential) => (dispatch, getState) => {
@@ -217,6 +226,7 @@ export const saveProfileSettings = (settings) => (dispatch, getState) => {
   const state = getState()
   const handle = _.get(state, 'loadUser.user.handle')
   const traits = _.get(state, 'settings.profile.traits')
+    .map(trait => _.omit(trait, 'userId', 'createdBy', 'createdAt', 'updatedBy', 'updatedAt'))
   const existentTraitIds = _.map(
     // some traits could have categoryName as null
     // for such traits we have to use POST method instead of PUT or we will get
@@ -294,14 +304,8 @@ export const uploadProfilePhoto = (file) => (dispatch, getState) => {
   const state = getState()
   const handle = _.get(state, 'loadUser.user.handle')
 
-  memberService.getPreSignedUrl(handle, file)
-    .then(({ preSignedURL, token }) => {
-      return uploadFileToS3(preSignedURL, file)
-        .then(() => memberService.updateMemberPhoto(handle, {
-          contentType: file.type,
-          token,
-        }))
-    }).then(photoUrl => {
+  memberService.uploadUserPhoto(handle, file)
+    .then(data => {
       Alert.success('Profile photo uploaded successfully')
       // clear photo first, otherwise old photo will be there until new one fully loaded
       // which can take time and give impression that new photo hasn't been loaded
@@ -310,7 +314,7 @@ export const uploadProfilePhoto = (file) => (dispatch, getState) => {
       })
       dispatch({
         type: SAVE_PROFILE_PHOTO_SUCCESS,
-        payload: { photoUrl }
+        payload: { photoUrl: data.photoURL }
       })
     }).catch(err => {
       Alert.error(`Failed to upload photo. ${err.message}`)

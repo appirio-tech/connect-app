@@ -1,42 +1,40 @@
-import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL, PROJECTS_API_URL } from '../config/constants'
+import { normalizeMemberData } from '../helpers/memberHelper'
 
 export function getMembersById (userIds) {
-  const _userIdArr = _.map(userIds, _id => `userId:${_id}`)
-  // only requesting certain member attributes
-  const fields = 'userId,handle,photoURL,details'
-  const query = _userIdArr.join(' OR ')
-  const url = `${TC_API_URL}/v3/members/_search/?fields=`
-    + encodeURIComponent(fields)
-    + `&query=${encodeURIComponent(query)}`
-    + '&limit=' + userIds.length
-  return axios.get(url)
-    .then(resp => {
-      return resp.data.result.content
-    })
-}
+  const page = 1
+  const perPage = 100
+  let result = []
 
-export function getMembersByHandle (handles) {
-  const _handlesArr = _.map(handles, _handle => `handleLower:${_handle.toLowerCase()}`)
-  // only requesting certain member attributes
-  const fields = 'userId,handle,photoURL,details'
-  const query = _handlesArr.join(' OR ')
-  const url = `${TC_API_URL}/v3/members/_search/?fields=`
-    + encodeURIComponent(fields)
-    + `&query=${encodeURIComponent(query)}`
-    + '&limit=' + handles.length
-  return axios.get(url)
-    .then(resp => {
-      return resp.data.result.content
-    })
+  return getMembersByIdInternal(page, perPage)
+
+  function getMembersByIdInternal(page, perPage) {
+    const fields = 'userId,handle,photoURL'
+    const query = '[' + userIds.join(',') + ']'
+    const url = `${TC_API_URL}/v5/members?fields=${fields}&userIds=${query}&page=${page}&perPage=${perPage}`
+
+    return axios.get(url)
+      .then(resp => {
+        const count = resp.headers['x-page']
+        const totalPage = resp.headers['x-total-pages']
+
+        result = result.concat(resp.data.map(member => normalizeMemberData(member)))
+
+        if (count < totalPage) {
+          return getMembersByIdInternal(count + 1, perPage)
+        } else {
+          return result
+        }
+      })
+  }
 }
 
 export function loadMemberSuggestions(value) {
-  const url = `${TC_API_URL}/v3/members/_suggest/${value}`
+  const url = `${TC_API_URL}/v5/members/autocomplete?term=${value}&page=1&perPage=10`
   return axios.get(url)
     .then(resp => {
-      return resp.data.result.content
+      return resp.data.map(member => normalizeMemberData(member))
     })
 }
 
