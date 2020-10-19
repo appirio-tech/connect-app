@@ -136,7 +136,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['feature/faqs', 'feature/project_september']
+              only: ['feature/member_service_v5_updates']
 
       - deployProd:
           context : org-global
