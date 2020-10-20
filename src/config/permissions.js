@@ -145,7 +145,7 @@ const PROJECT_ALL = [
 
 export default {
   MANAGE_PROJECT_PLAN: {
-    _meta: {
+    meta: {
       group: 'Project Plan',
       title: 'Manage project plan',
       description: 'Create, edit and delete phases and milestones.',
@@ -163,7 +163,7 @@ export default {
   },
 
   MANAGE_NOT_OWN_ATTACHEMENT: {
-    _meta: {
+    meta: {
       group: 'Project Plan',
       title: 'Manage asset libraries files and links',
     },
@@ -173,7 +173,7 @@ export default {
   },
 
   MANAGE_COMPLETED_PHASE: {
-    _meta: {
+    meta: {
       group: 'Project Plan',
       title: 'Manage completed phases',
     },
@@ -183,7 +183,7 @@ export default {
   },
 
   MANAGE_TOPCODER_TEAM: {
-    _meta: {
+    meta: {
       group: 'Project Members',
       title: 'Manage topcoder team',
       description: 'Invite new members or delete them. There are some additional restrictions for some roles.',
@@ -197,7 +197,7 @@ export default {
   },
 
   JOIN_TOPCODER_TEAM: {
-    _meta: {
+    meta: {
       group: 'Project Members',
       title: 'Join topcoder team',
       description: 'Join Topcoder Team without invitation',
@@ -209,7 +209,7 @@ export default {
   },
 
   MANAGE_COPILOTS: {
-    _meta: {
+    meta: {
       group: 'Project Members',
       title: 'Manage copilots',
       description: 'Directly invite copilots to the project.',
@@ -221,7 +221,7 @@ export default {
   },
 
   REQUEST_COPILOTS: {
-    _meta: {
+    meta: {
       group: 'Project Members',
       title: 'Request copilots',
       description: 'Request copilots to the project.',
@@ -236,7 +236,7 @@ export default {
   },
 
   ACCESS_PRIVATE_POST: {
-    _meta: {
+    meta: {
       group: 'Topics & Posts',
       title: 'Access private posts',
     },
@@ -249,7 +249,7 @@ export default {
   },
 
   ACCESS_BUDGET_REPORT: {
-    _meta: {
+    meta: {
       group: 'Budget & Invoice Reports',
       title: 'Access budget report',
     },
@@ -268,7 +268,7 @@ export default {
   },
 
   ACCESS_BUDGET_SPENT_REPORT: {
-    _meta: {
+    meta: {
       group: 'Budget & Invoice Reports',
       title: 'Access budget spent report',
     },
@@ -286,7 +286,7 @@ export default {
   },
 
   ACCESS_INVOICE_REPORT: {
-    _meta: {
+    meta: {
       group: 'Budget & Invoice Reports',
       title: 'Access invoice report',
     },
@@ -305,7 +305,7 @@ export default {
   },
 
   UPDATE_USER_PROFILE_PHONE: {
-    _meta: {
+    meta: {
       group: 'User Profile',
       title: 'Update phone number in user profile',
     },
@@ -322,7 +322,7 @@ export default {
   },
 
   UPDATE_USER_PROFILE_COMPANY: {
-    _meta: {
+    meta: {
       group: 'User Profile',
       title: 'Update company name in user profile',
     },
@@ -332,7 +332,7 @@ export default {
   },
 
   VIEW_USER_PROFILE_AS_COPILOT: {
-    _meta: {
+    meta: {
       group: 'User Profile',
       title: 'View User Profile as Copilot',
     },
@@ -342,7 +342,7 @@ export default {
   },
 
   VIEW_USER_PROFILE_AS_TOPCODER_EMPLOYEE: {
-    _meta: {
+    meta: {
       group: 'User Profile',
       title: 'View User Profile as Topcoder Employee',
     },
@@ -352,7 +352,7 @@ export default {
   },
 
   VIEW_USER_PROFILE_AS_CUSTOMER: {
-    _meta: {
+    meta: {
       group: 'User Profile',
       title: 'View User Profile as Customer',
     },
@@ -369,7 +369,7 @@ export default {
   },
 
   SEE_MEMBER_SUGGESTIONS: {
-    _meta: {
+    meta: {
       group: 'View Member Suggestions',
       title: 'Member Suggestions'
     },
@@ -383,7 +383,7 @@ export default {
   },
 
   SEE_MY_PROJECTS_FILTER: {
-    _meta: {
+    meta: {
       group: 'My Projects Filter',
       title: 'My Projects Filter',
     },
@@ -398,7 +398,7 @@ export default {
     Rules below just to demonstrate possible rules format
   */
   TEST_1: {
-    _meta: {
+    meta: {
       group: 'DEMO/TEST example permissions',
       title: 'Topcoder role deny',
       description: 'This permission is just to demonstrate possible format',
@@ -417,7 +417,7 @@ export default {
   },
 
   TEST_2: {
-    _meta: {
+    meta: {
       group: 'DEMO/TEST example permissions',
       title: 'Topcoder role and Project role deny',
       description: 'This permission is just to demonstrate possible format',
@@ -443,7 +443,7 @@ export default {
   },
 
   TEST_3: {
-    _meta: {
+    meta: {
       group: 'DEMO/TEST example permissions',
       title: 'Any Project Member',
       description: 'This permission is just to demonstrate possible format',
@@ -452,7 +452,7 @@ export default {
   },
 
   TEST_5: {
-    _meta: {
+    meta: {
       group: 'DEMO/TEST example permissions',
       title: 'Any Logged-in User',
       description: 'This permission is just to demonstrate possible format',
@@ -461,7 +461,7 @@ export default {
   },
 
   TEST_4: {
-    _meta: {
+    meta: {
       group: 'DEMO/TEST example permissions',
       title: 'Owner Project role',
       description: 'This permission is just to demonstrate possible format',

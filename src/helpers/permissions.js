@@ -212,7 +212,7 @@ const matchPermissionRule = (permissionRule, user, project) => {
         _.get(user, 'roles', []).map(role => role.toLowerCase()),
         permissionRule.topcoderRoles.map(role => role.toLowerCase())
       ).length > 0
-    } else if (permissionRule.topcoderRoles === 'true') {
+    } else if (permissionRule.topcoderRoles === true) {
       // `topcoderRoles === true` means that we check if user is has any Topcoder role
       // basically this equals to logged-in user, as all the Topcoder users
       // have at least one role `Topcoder User`

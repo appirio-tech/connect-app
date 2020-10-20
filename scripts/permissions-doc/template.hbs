@@ -10,6 +10,45 @@
         font-size: 62.5%;
         line-height: 120%;
       }
+
+      .permission-variable {
+        line-height: 80%;
+        margin: 5px 0;
+        word-break: break-word;
+      }
+
+      .permission-title {
+        line-height: 120%;
+        margin: 5px 0;
+      }
+
+      .anchor-container .anchor {
+        float: left;
+        opacity: 1;
+        line-height: 1;
+        margin-left: -20px;
+      }
+
+      .anchor-container .anchor::before {
+        visibility: hidden;
+        font-size: 16px;
+        content: '🔗';
+        display: inline-block;
+        width: 20px;
+      }
+
+      .anchor-container:hover .anchor {
+        text-decoration: none;
+      }
+
+      .anchor-container:hover .anchor::before {
+        visibility: visible;
+      }
+
+      .badge-crossed {
+        opacity: 0.4;
+        text-decoration: line-through;
+      }
     </style>
   </head>
   <body>
@@ -21,38 +60,55 @@
         <p>Legend:</p>
         <ul>
           <li><span class="badge badge-primary">allowed Project Role</span> - users with such a <strong>Project Role</strong> are allowed to perform the action</li>
-          <li><span class="badge badge-warning">denied Project Role</span> - users with such a <strong>Project Role</strong> are denied to perform the action even they have some other allow roles</li>
+          <li><span class="badge badge-primary badge-crossed">denied Project Role</span> - users with such a <strong>Project Role</strong> are denied to perform the action even they have some other allow roles</li>
           <li><span class="badge badge-success">allowed Topcoder Role</span> - users with such a <strong>Topcoder Role</strong> are allowed to perform the action</li>
-          <li><span class="badge badge-danger">denied Topcoder Role</span> - users with such a <strong>Topcoder Role</strong> are denied to perform the action even they have some other allow roles</li>
+          <li><span class="badge badge-success badge-crossed">denied Topcoder Role</span> - users with such a <strong>Topcoder Role</strong> are denied to perform the action even they have some other allow roles</li>
         </ul>
       </div>
 
       {{#each groups}}
         <div class="row">
           <div class="col pt-5 pb-2">
-            <h2>{{title}}</h2>
+            <h2 class="anchor-container">
+              <a href="#{{anchor}}" name="{{anchor}}" class="anchor"></a>{{title}}
+            </h2>
           </div>
         </div>
         {{#each permissions}}
           <div class="row border-top">
             <div class="col py-2">
-              {{_meta.title}}
-              <div><small><code>{{_meta.key}}</code></small></div>
-              <div class="text-black-50 small-text">{{_meta.description}}</div>
+              <div class="permission-title anchor-container">
+                <a href="#{{meta.key}}" name="{{meta.key}}" class="anchor"></a>{{meta.title}}
+              </div>
+              <div class="permission-variable"><small><code>{{meta.key}}</code></small></div>
+              <div class="text-black-50 small-text">{{meta.description}}</div>
             </div>
             <div class="col-9 py-2">
-              {{#each allowRule.projectRoles}}
-                <span class="badge badge-primary" title="Allowed Project Role">{{this}}</span>
-              {{/each}}
-              {{#each denyRule.projectRoles}}
-                <span class="badge badge-warning" title="Denied Project Role">{{this}}</span>
-              {{/each}}
-              {{#each allowRule.topcoderRoles}}
-                <span class="badge badge-success" title="Allowed Topcoder Role">{{this}}</span>
-              {{/each}}
-              {{#each denyRule.topcoderRoles}}
-                <span class="badge badge-danger" title="Denied Topcoder Role">{{this}}</span>
-              {{/each}}
+              <div>
+                {{#if (istrue allowRule.projectRoles)}}
+                  <span class="badge badge-primary" title="Allowed">Any Project Member</span>
+                {{else}}
+                  {{#each allowRule.projectRoles}}
+                    <span class="badge badge-primary" title="Allowed Project Role">{{this}}</span>
+                  {{/each}}
+                {{/if}}
+                {{#each denyRule.projectRoles}}
+                  <span class="badge badge-primary badge-crossed" title="Denied Project Role">{{this}}</span>
+                {{/each}}
+              </div>
+
+              <div>
+                {{#if (istrue allowRule.topcoderRoles)}}
+                  <span class="badge badge-success" title="Allowed">Any Logged-in User</span>
+                {{else}}
+                  {{#each allowRule.topcoderRoles}}
+                    <span class="badge badge-success" title="Allowed Topcoder Role">{{this}}</span>
+                  {{/each}}
+                {{/if}}
+                {{#each denyRule.topcoderRoles}}
+                  <span class="badge badge-success badge-crossed" title="Denied Topcoder Role">{{this}}</span>
+                {{/each}}
+              </div>
             </div>
           </div>
         {{/each}}

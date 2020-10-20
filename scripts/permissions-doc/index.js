@@ -42,6 +42,8 @@ import {
 const docTemplatePath = path.resolve(__dirname, './template.hbs')
 const outputDocPath = path.resolve(__dirname, '../../docs/permissions.html')
 
+handlebars.registerHelper('istrue', value => value === true)
+
 /**
  * All Project Roles
  */
@@ -121,8 +123,8 @@ function normalizePermission(permission) {
 
   if (!normalizedPermission.allowRule) {
     normalizedPermission = {
-      _meta: permission._meta,
-      allowRule: _.omit(permission, '_meta')
+      meta: permission.meta,
+      allowRule: _.omit(permission, 'meta')
     }
   }
 
@@ -143,13 +145,17 @@ const renderDocument = handlebars.compile(templateStr)
 const permissionKeys = _.keys(PERMISSIONS)
 const permissions = permissionKeys.map((key) => ({
   ...PERMISSIONS[key],
-  _meta: {
-    ...PERMISSIONS[key]._meta,
+  meta: {
+    ...PERMISSIONS[key].meta,
     key,
   }
 }))
-const groupsObj = _.groupBy(permissions, '_meta.group')
-const groups = _.toPairs(groupsObj).map(([title, permissions]) => ({ title, permissions }))
+const groupsObj = _.groupBy(permissions, 'meta.group')
+const groups = _.toPairs(groupsObj).map(([title, permissions]) => ({
+  title,
+  permissions,
+  anchor: `section-${title.toLowerCase().replace(/\s+/g, '-')}`,
+}))
 
 groups.forEach((group) => {
   group.permissions = group.permissions.map(normalizePermission)
