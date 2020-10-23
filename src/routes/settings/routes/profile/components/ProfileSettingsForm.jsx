@@ -14,7 +14,7 @@ import FormsySelect from '../../../../../components/Select/FormsySelect'
 import ISOCountries from '../../../../../helpers/ISOCountries'
 import { formatPhone } from '../../../../../helpers/utils'
 import { hasPermission } from '../../../../../helpers/permissions'
-import PERMISSIONS from '../../../../../config/permissions'
+import { PERMISSIONS } from '../../../../../config/permissions'
 import './ProfileSettingsForm.scss'
 
 const countries = _.orderBy(ISOCountries, ['name'], ['asc']).map((country) => ({

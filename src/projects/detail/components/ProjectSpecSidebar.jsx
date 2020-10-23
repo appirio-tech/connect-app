@@ -5,10 +5,11 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import SidebarNav from './SidebarNav'
-import { PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../../config/constants'
 import { updateProject } from '../../actions/project'
 import ReviewProjectButton from './ReviewProjectButton'
 import './ProjectSpecSidebar.scss'
+import { hasPermission } from '../../../helpers/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 
 const calcProgress = (project, subSection) => {
   if (subSection.type === 'questions') {
@@ -64,7 +65,6 @@ class ProjectSpecSidebar extends Component {
   shouldComponentUpdate(nextProps) {
     return !(
       _.isEqual(this.props.project, nextProps.project)
-      && _.isEqual(this.props.currentMemberRole, nextProps.currentMemberRole)
       && _.isEqual(this.props.sections, nextProps.sections)
     )
   }
@@ -111,9 +111,8 @@ class ProjectSpecSidebar extends Component {
 
   render() {
     const { navItems, canSubmitForReview } = this.state
-    const { currentMemberRole, project } = this.props
-    const showReviewBtn = project.status === 'draft' &&
-      _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
+    const { project } = this.props
+    const showReviewBtn = project.status === 'draft' && hasPermission(PERMISSIONS.SUBMIT_PROJECT_FOR_REVIEW)
 
     return (
       <div className={cn('projectSpecSidebar', { 'has-review-btn': showReviewBtn })}>
@@ -147,7 +146,6 @@ class ProjectSpecSidebar extends Component {
 ProjectSpecSidebar.PropTypes = {
   project: PropTypes.object.isRequired,
   sections: PropTypes.arrayOf(PropTypes.object).isRequired,
-  currentMemberRole: PropTypes.string
 }
 const mapDispatchToProps = { updateProject }
 

@@ -1,91 +1,12 @@
 import store from '../config/store'
 import _ from 'lodash'
-import {
-  PROJECT_ROLE_COPILOT,
-  PROJECT_ROLE_MANAGER,
-  PROJECT_ROLE_ACCOUNT_MANAGER,
-  PROJECT_ROLE_CUSTOMER,
-  PROJECT_ROLE_ACCOUNT_EXECUTIVE,
-  PROJECT_ROLE_PROGRAM_MANAGER,
-  PROJECT_ROLE_SOLUTION_ARCHITECT,
-  PROJECT_ROLE_PROJECT_MANAGER,
-
-  ROLE_TOPCODER_USER,
-  ROLE_CONNECT_COPILOT,
-  ROLE_CONNECT_MANAGER,
-  ROLE_CONNECT_ACCOUNT_MANAGER,
-  ROLE_CONNECT_ADMIN,
-  ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_COPILOT_MANAGER,
-  ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
-  ROLE_PRESALES,
-  ROLE_ACCOUNT_EXECUTIVE,
-  ROLE_PROGRAM_MANAGER,
-  ROLE_SOLUTION_ARCHITECT,
-  ROLE_PROJECT_MANAGER,
-} from '../config/constants'
-
-/**
- * This list determines default Project Role by Topcoder Role.
- *
- * - The order of items in this list is IMPORTANT.
- * - To determine default Project Role we have to go from TOP to END
- *   and find the first record which has the Topcoder Role of the user.
- * - Always define default Project Role which is allowed for such Topcoder Role
- *   as per `PROJECT_TO_TOPCODER_ROLES_MATRIX`
- */
-export const DEFAULT_PROJECT_ROLE = [
-  {
-    topcoderRole: ROLE_ADMINISTRATOR,
-    projectRole: PROJECT_ROLE_MANAGER,
-  }, {
-    topcoderRole: ROLE_CONNECT_ADMIN,
-    projectRole: PROJECT_ROLE_MANAGER,
-  }, {
-    topcoderRole: ROLE_CONNECT_MANAGER,
-    projectRole: PROJECT_ROLE_MANAGER,
-  }, {
-    topcoderRole: ROLE_CONNECT_ACCOUNT_MANAGER,
-    projectRole: PROJECT_ROLE_ACCOUNT_MANAGER,
-  }, {
-    topcoderRole: ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
-    projectRole: PROJECT_ROLE_ACCOUNT_MANAGER,
-  }, {
-    topcoderRole: ROLE_PRESALES,
-    projectRole: PROJECT_ROLE_ACCOUNT_MANAGER,
-  }, {
-    topcoderRole: ROLE_ACCOUNT_EXECUTIVE,
-    projectRole: PROJECT_ROLE_ACCOUNT_EXECUTIVE,
-  }, {
-    topcoderRole: ROLE_PROGRAM_MANAGER,
-    projectRole: PROJECT_ROLE_PROGRAM_MANAGER,
-  }, {
-    topcoderRole: ROLE_SOLUTION_ARCHITECT,
-    projectRole: PROJECT_ROLE_SOLUTION_ARCHITECT,
-  }, {
-    topcoderRole: ROLE_PROJECT_MANAGER,
-    projectRole: PROJECT_ROLE_PROJECT_MANAGER,
-  }, {
-    topcoderRole: ROLE_CONNECT_COPILOT_MANAGER,
-    projectRole: PROJECT_ROLE_CUSTOMER,
-  }, {
-    topcoderRole: ROLE_CONNECT_COPILOT,
-    projectRole: PROJECT_ROLE_COPILOT,
-  }, {
-    topcoderRole: ROLE_TOPCODER_USER,
-    projectRole: PROJECT_ROLE_CUSTOMER,
-  },
-]
+import { DEFAULT_PROJECT_ROLE } from '../config/permissions'
 
 /**
  * Check if user has permission.
- * (The main permission method which should be used).
- *
- * This method uses permission defined in `permission`
- * and checks that the logged-in user from Redux Store matches it.
- *
- * To check if user has `project` permissions it uses `project` currently loaded into Redux Store,
- * but this value can be overridden by providing `project` via argument.
+ * - By default this method if logged-in user has `permission` for the project
+ *   currently loaded in the Redux Store.
+ * - Optionally, we can check permission for another `project` or `user` by passing them in `entities` argument.
  *
  * `permission` may be defined in two ways:
  *  - **Full** way with defined `allowRule` and optional `denyRule`, example:
@@ -120,29 +41,29 @@ export const DEFAULT_PROJECT_ROLE = [
  *    }
  *    ```
  *
- * If we define any rule with `projectRoles` list, we also should provide `project`
- * with the list of project members in `project.members`.
- *
  * @param {Object}        permissionRule               permission rule
  * @param {Array<String>} permissionRule.projectRoles  the list of project roles of the user
  * @param {Array<String>} permissionRule.topcoderRoles the list of Topcoder roles of the user
- * @param {Object}        [project]                    project object - required to check `topcoderRoles`
- * @param {Array}         project.members              list of project members - required to check `topcoderRoles`
+ * @param {Object}        [entities]                   `project` and `user` which has to be used to check permission
+ * @param {Object}        [entities.project]           project
+ * @param {Array}         entities.project.members     list of project members
+ * @param {Object}        [entities.user]              user
+ * @param {String}        entities.user.role                    user Project Role
  *
  * @returns {Boolean}     true, if has permission
  */
-export const hasPermission = (permission, project) => {
-  const user =  _.get(store.getState(), 'loadUser.user', {})
-  const projectData = project || _.get(store.getState(), 'projectState.project')
+export const hasPermission = (permission, entities = {}) => {
+  const user =  entities.user || _.get(store.getState(), 'loadUser.user', {})
+  const project = entities.project || _.get(store.getState(), 'projectState.project')
 
   const allowRule = permission.allowRule ? permission.allowRule : permission
   const denyRule = permission.denyRule ? permission.denyRule : null
 
-  const allow = matchPermissionRule(allowRule, user, projectData)
-  const deny = matchPermissionRule(denyRule, user, projectData)
+  const allow = matchPermissionRule(allowRule, user, project)
+  const deny = matchPermissionRule(denyRule, user, project)
 
   // uncomment for debugging
-  // console.warn('hasPermission', permission, projectData, allow && !deny)
+  // console.warn('hasPermission', permission, project, allow && !deny)
 
   return allow && !deny
 }
@@ -165,7 +86,7 @@ export const hasPermission = (permission, project) => {
  * @param {Array<String>|Array<Object>|Boolean} permissionRule.projectRoles  the list of project roles of the user
  * @param {Array<String>|Boolean} permissionRule.topcoderRoles the list of Topcoder roles of the user
  * @param {Object}        user                         user for whom we check permissions
- * @param {Object}        user.roles                   list of user roles
+ * @param {String}        user.role                    user Project Role
  * @param {Object}        [project]                    project object - required to check `topcoderRoles`
  * @param {Array}         project.members              list of project members - required to check `topcoderRoles`
  *
@@ -187,13 +108,13 @@ const matchPermissionRule = (permissionRule, user, project) => {
   ) {
     const userId = !_.isNumber(user.userId) ? parseInt(user.userId, 10) : user.userId
     const member = _.find(project.members, { userId })
-    // as we support `projectRoles` as strings and as objects like:
-    // { role: "...", isPrimary: true } we have normalize them to a common shape
-    const normalizedProjectRoles = permissionRule.projectRoles.map((rule) => (
-      _.isString(rule) ? { role: rule } : rule
-    ))
 
     if (permissionRule.projectRoles.length > 0) {
+      // as we support `projectRoles` as strings and as objects like:
+      // { role: "...", isPrimary: true } we have normalize them to a common shape
+      const normalizedProjectRoles = permissionRule.projectRoles.map((rule) => (
+        _.isString(rule) ? { role: rule } : rule
+      ))
       hasProjectRole = member && _.some(normalizedProjectRoles, (rule) => (
         // checks that common properties are equal
         _.isMatch(member, rule)

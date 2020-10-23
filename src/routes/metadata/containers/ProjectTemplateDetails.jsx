@@ -18,10 +18,6 @@ import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndica
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
-import {
-  ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN,
-} from '../../../config/constants'
 import _ from 'lodash'
 
 import './MetaDataContainer.scss'
@@ -46,7 +42,6 @@ class ProjectTemplateDetails extends React.Component {
       updateProjectsMetadata,
       templates,
       isLoading,
-      isAdmin,
       match,
       previewProject,
       firePreviewProjectDirty,
@@ -61,7 +56,6 @@ class ProjectTemplateDetails extends React.Component {
         <div className={isLoading ? 'hide' : ''}>
           <MetaDataPanel
             templates={templates}
-            isAdmin={isAdmin}
             metadataType="projectTemplate"
             metadata={projectTemplate}
             loadProjectsMetadata={loadProjectsMetadata}
@@ -81,7 +75,6 @@ class ProjectTemplateDetails extends React.Component {
 
 
 ProjectTemplateDetails.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
   loadProjectsMetadata: PropTypes.func.isRequired,
   deleteProjectTemplate: PropTypes.func.isRequired,
   createProjectTemplate: PropTypes.func.isRequired,
@@ -91,19 +84,14 @@ ProjectTemplateDetails.propTypes = {
 }
 
 
-const mapStateToProps = ({ projectState, templates, loadUser }) => {
-  const powerUserRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-
-  return {
-    templates,
-    isLoading: templates.isLoading,
-    isRemoving: templates.isRemoving,
-    error: templates.error,
-    currentUser: loadUser.user,
-    isAdmin: _.intersection(loadUser.user.roles, powerUserRoles).length !== 0,
-    previewProject: projectState.project,
-  }
-}
+const mapStateToProps = ({ projectState, templates, loadUser }) => ({
+  templates,
+  isLoading: templates.isLoading,
+  isRemoving: templates.isRemoving,
+  error: templates.error,
+  currentUser: loadUser.user,
+  previewProject: projectState.project,
+})
 
 const mapDispatchToProps = {
   loadProjectsMetadata,

@@ -14,14 +14,11 @@ import ProjectTypesGridView from '../components/ProjectTypesGridView'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
-import {
-  ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN,
-} from '../../../config/constants'
-import _ from 'lodash'
 import CoderBroken from '../../../assets/icons/coder-broken.svg'
 
 import './MetaDataContainer.scss'
+import { hasPermission } from '../../../helpers/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 
 const withLoader = spinnerWhileLoading(props => !props.isLoading && props.projectTypes)
 const ProjectTypesGridViewWithLoader = withLoader(ProjectTypesGridView)
@@ -50,13 +47,11 @@ class ProjectTypesContainer extends React.Component {
     const {
       projectTypes,
       isLoading,
-      isAdmin,
       currentUser,
       error,
     } = this.props
     const { criteria } = this.state
-    // TODO remove: temporary let non-admin user see metadata (they still couldn't save because server will reject)
-    if (!isAdmin && isAdmin) {
+    if (!hasPermission(PERMISSIONS.ACCESS_METADATA)) {
       return (
         <section className="content content-error">
           <div className="container">
@@ -89,22 +84,16 @@ class ProjectTypesContainer extends React.Component {
 
 
 ProjectTypesContainer.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
   loadProjectsMetadata: PropTypes.func.isRequired,
 }
 
 
-const mapStateToProps = ({ templates, loadUser }) => {
-  const powerUserRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-
-  return {
-    projectTypes: templates.projectTypes,
-    isLoading: templates.isLoading,
-    error: templates.error,
-    currentUser: loadUser.user,
-    isAdmin: _.intersection(loadUser.user.roles, powerUserRoles).length !== 0
-  }
-}
+const mapStateToProps = ({ templates, loadUser }) => ({
+  projectTypes: templates.projectTypes,
+  isLoading: templates.isLoading,
+  error: templates.error,
+  currentUser: loadUser.user,
+})
 
 const mapDispatchToProps = {
   loadProjectsMetadata,

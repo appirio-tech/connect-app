@@ -17,13 +17,14 @@ import _ from 'lodash'
 import querystring from 'query-string'
 import { updateProject } from '../../../actions/project'
 import { getNewProjectLink } from '../../../../helpers/projectHelper'
-import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
+import { PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
   PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE, SCREEN_BREAKPOINT_MD,
   PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED,
 } from '../../../../config/constants'
 import TwoColsLayout from '../../../../components/TwoColsLayout'
 import UserSidebar from '../../../../components/UserSidebar/UserSidebar'
+import { hasPermission } from '../../../../helpers/permissions'
+import { PERMISSIONS } from '../../../../config/permissions'
 
 const page500 = compose(
   withProps({code:500})
@@ -235,12 +236,12 @@ class Projects extends Component {
   }
 
   render() {
-    const { isPowerUser, isCustomer, isLoading, totalCount, criteria, projectsListView, setProjectsListView,
+    const { isLoading, totalCount, criteria, projectsListView, setProjectsListView,
       setInfiniteAutoload, loadProjects, history, orgConfig, allProjectsCount, user } = this.props
     const { isAcceptingInvite } = this.state
     // show walk through if user is customer and no projects were returned
     // for default filters
-    const showWalkThrough = !isLoading && !isPowerUser && totalCount === 0 && allProjectsCount === 0 &&
+    const showWalkThrough = !isLoading && hasPermission(PERMISSIONS.SEE_WALK_THROUGH) && totalCount === 0 && allProjectsCount === 0 &&
     _.isEqual(criteria, PROJECT_LIST_DEFAULT_CRITERIA)
     const getStatusCriteriaText = (criteria) => {
       return (_.find(PROJECT_STATUS, { value: criteria.status }) || { name: ''}).name
@@ -255,7 +256,6 @@ class Projects extends Component {
         newProjectLink={getNewProjectLink(orgConfig)}
         setFilter={this.setFilter}
         criteria={criteria}
-        isCustomer={isCustomer}
         callInviteRequest={this.callInviteRequest}
         isAcceptingInvite={isAcceptingInvite}
       />
@@ -315,7 +315,6 @@ class Projects extends Component {
                     setInfiniteAutoload={setInfiniteAutoload}
                     loadProjects={loadProjects}
                     history={history}
-                    isCustomer={isCustomer}
                   />
                 )}
                 {showWalkThrough ? (
@@ -333,16 +332,11 @@ class Projects extends Component {
 }
 
 const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templates, notifications }) => {
-  let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-  if (loadUser.user) {
-    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
-  }
   if (projectState.project && projectState.project.id && projectSearch.projects) {
     const index = _.findIndex(projectSearch.projects, {id: projectState.project.id})
     projectSearch.projects.splice(index, 1, projectState.project)
   }
-  const defaultListView = isPowerUser ? PROJECTS_LIST_VIEW.GRID : PROJECTS_LIST_VIEW.CARD
+  const defaultListView = hasPermission(PERMISSIONS.SEE_GRID_VIEW_BY_DEFAULT) ? PROJECTS_LIST_VIEW.GRID : PROJECTS_LIST_VIEW.CARD
   return {
     currentUser : {
       userId: loadUser.user.userId,
@@ -363,8 +357,6 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
     criteria    : projectSearch.criteria,
     infiniteAutoload: projectSearch.infiniteAutoload,
     projectsListView: projectSearch.projectsListView || defaultListView,
-    isPowerUser,
-    isCustomer  : !isPowerUser,
     refresh     : projectSearch.refresh,
     projectTemplates: templates.projectTemplates,
     isProjectTemplatesLoading: templates.isLoading,

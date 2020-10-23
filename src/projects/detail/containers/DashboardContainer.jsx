@@ -39,7 +39,7 @@ import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import NotificationsReader from '../../../components/NotificationsReader'
 import { hasPermission } from '../../../helpers/permissions'
 import { getProjectTemplateById } from '../../../helpers/templates'
-import PERMISSIONS from '../../../config/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import ProjectEstimation from '../../create/components/ProjectEstimation'
@@ -87,19 +87,7 @@ class DashboardContainer extends React.Component {
   componentDidMount() {
     // if the user is a customer and its not a direct link to a particular phase
     // then by default expand all phases which are active
-    const { isCustomerUser, expandProjectPhase, location } = this.props
-
-    if (isCustomerUser) {
-      _.forEach(this.props.phases, phase => {
-        if (phase.status === PHASE_STATUS_ACTIVE) {
-          expandProjectPhase(phase.id)
-        }
-      })
-    }
-
-    // if the user is a customer and its not a direct link to a particular phase
-    // then by default expand all phases which are active
-    if (_.isEmpty(location.hash) && this.props.isCustomerUser) {
+    if (_.isEmpty(location.hash) && hasPermission(PERMISSIONS.EXPAND_ACTIVE_PHASES_BY_DEFAULT)) {
       _.forEach(this.props.phases, phase => {
         if (phase.status === PHASE_STATUS_ACTIVE) {
           expandProjectPhase(phase.id)
@@ -126,9 +114,6 @@ class DashboardContainer extends React.Component {
       phases,
       phasesNonDirty,
       isLoadingPhases,
-      currentMemberRole,
-      isSuperUser,
-      isManageUser,
       notifications,
       productTemplates,
       projectTemplates,
@@ -165,7 +150,7 @@ class DashboardContainer extends React.Component {
     // manager user sees all phases
     // customer user doesn't see unplanned (draft) phases
     const visiblePhases = phases && phases.filter((phase) => (
-      isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
+      hasPermission(PERMISSIONS.VIEW_DRAFT_PHASES) || phase.status !== PHASE_STATUS_DRAFT
     ))
     const visiblePhasesIds = _.map(visiblePhases, 'id')
     const visiblePhasesNonDirty = phasesNonDirty && phasesNonDirty.filter((phaseNonDirty) => (
@@ -177,11 +162,8 @@ class DashboardContainer extends React.Component {
     const leftArea = (
       <ProjectInfoContainer
         location={location}
-        currentMemberRole={currentMemberRole}
         project={project}
         phases={phases}
-        isSuperUser={isSuperUser}
-        isManageUser={isManageUser}
         feeds={feeds}
         isFeedsLoading={isFeedsLoading}
         productsTimelines={productsTimelines}
@@ -247,7 +229,6 @@ class DashboardContainer extends React.Component {
             containerStyle={{top: '60px', height: 'calc(100% - 60px)', display: 'flex', flexDirection: 'column' }}
             overlayStyle={{top: '60px', left: '280px'}}
             onRequestChange={(open) => this.setState({open})}
-            isSuperUser={isSuperUser}
             project={project}
             template={template}
             updateProject={updateProject}
@@ -257,7 +238,6 @@ class DashboardContainer extends React.Component {
             addProjectAttachment={addProjectAttachment}
             updateProjectAttachment={updateProjectAttachment}
             removeProjectAttachment={removeProjectAttachment}
-            currentMemberRole={currentMemberRole}
             productTemplates={productTemplates}
             productCategories={productCategories}
           />
@@ -271,7 +251,7 @@ class DashboardContainer extends React.Component {
               }}
             />
           ) : (
-            <ProjectPlanEmpty isManageUser={isManageUser} />
+            <ProjectPlanEmpty />
           )}
           {isProjectLive && hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)  && !isLoadingPhases && (<div styleName="add-button-container">
             <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>

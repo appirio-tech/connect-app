@@ -18,12 +18,12 @@ Let's say you would like to add a new place in code where you want to check user
 
    2. After you add a new permission, regenerate [permissions list](https://htmlpreview.github.io/?https://github.com/appirio-tech/connect-app/blob/dev/docs/permissions.html) by running `npm run generate:doc:permissions`.
 
-3. To check if user has permission in code use method `hasPermission(permission)`.
+3. To check if logged-in user has permission in code use method `hasPermission(permission)`.
 
    Example:<br>
-    
+
    ```js
-   import PERMISSIONS from 'config/permissions'
+   import { PERMISSIONS } from 'config/permissions'
    import { hasPermission } from 'helpers/permissions'
 
    if (hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)) {
@@ -31,7 +31,10 @@ Let's say you would like to add a new place in code where you want to check user
    }
    ```
 
-   - Note, optionally, you may pass the `project` object like this `hasPermission(permission, project)`. But you don't have to as `hasPermission` gets `project` object from the Redux Store (`projectState.project`) automatically. Only in case if you want to check user permission to another project which is not loaded into the Redux Store then you may pass `project` explicitly.
+4. If you would like to check permissions for other user (not the current user) or for other project (not the current project) you may pass the second argument `entities: { project?: object, user?: object }`:
+   - `hasPermission(permission, { project })` - check permissions for another project
+   - `hasPermission(permission, { user })` - check permissions for another user
+   - `hasPermission(permission, { project, user })` - check permissions for another project and user
 
 ## Roles
 

@@ -13,10 +13,11 @@ import MilestonePostEditText from '../../MilestonePostEditText'
 import MilestoneDescription from '../../MilestoneDescription'
 import MilestoneDelayNotification from '../../MilestoneDelayNotification'
 import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
-
+import { hasPermission } from '../../../../../../helpers/permissions'
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
 
 import './MilestoneTypeDelivery.scss'
+import { PERMISSIONS } from '../../../../../../config/permissions'
 
 /*
   Acceptance dialogue messages based on the milestone type
@@ -182,7 +183,7 @@ class MilestoneTypeDelivery extends React.Component {
   }
 
   render() {
-    const { milestone, theme, currentUser, previousMilestone } = this.props
+    const { milestone, theme, previousMilestone } = this.props
     const { isShowFinalFixesRequestForm, finalFixRequests } = this.state
     const isAccepted = _.get(milestone, 'details.content.isAccepted', false)
     const isDeclined = _.get(milestone, 'details.content.isDeclined', false)
@@ -214,13 +215,14 @@ class MilestoneTypeDelivery extends React.Component {
       links = _.get(milestone, 'details.content.links', [])
     }
 
+    const canAcceptFinalDelivery = hasPermission(PERMISSIONS.ACCEPT_MILESTONE_FINAL_DELIVERY)
+
     const shouldhaveSecondDot =
     isActive &&
     (!isAccepted &&
       !isDeclined &&
       !isShowFinalFixesRequestForm &&
-      (currentUser.isCopilot || currentUser.isManager) &&
-      !currentUser.isAdmin &&
+      !canAcceptFinalDelivery &&
       !isFinalFixesSubmitted)
 
     const shouldHaveThirdDot =
@@ -228,7 +230,7 @@ class MilestoneTypeDelivery extends React.Component {
       (!isAccepted &&
         !isDeclined &&
         !isShowFinalFixesRequestForm &&
-        (currentUser.isCustomer || currentUser.isAdmin) &&
+        canAcceptFinalDelivery &&
         !isFinalFixesSubmitted)
 
     const shouldHaveFourthDot =
@@ -239,7 +241,7 @@ class MilestoneTypeDelivery extends React.Component {
     const shouldHaveFifthDot =
       isActive &&
       (isAccepted &&
-        !currentUser.isCustomer)
+        !canAcceptFinalDelivery)
 
     const shouldHaveSixthDot = isCompleted
 
@@ -267,8 +269,7 @@ class MilestoneTypeDelivery extends React.Component {
               !isAccepted &&
               !isDeclined &&
               !isShowFinalFixesRequestForm &&
-              (currentUser.isCopilot || currentUser.isManager) &&
-              !currentUser.isAdmin &&
+              !canAcceptFinalDelivery &&
               !isFinalFixesSubmitted &&
               (
                 <DotIndicator>
@@ -288,7 +289,7 @@ class MilestoneTypeDelivery extends React.Component {
               !isAccepted &&
               !isDeclined &&
               !isShowFinalFixesRequestForm &&
-              (currentUser.isCustomer || currentUser.isAdmin) &&
+              canAcceptFinalDelivery &&
               !isFinalFixesSubmitted &&
             (
               <DotIndicator>
@@ -340,7 +341,7 @@ class MilestoneTypeDelivery extends React.Component {
 
             {(isAccepted) && (
               <div>
-                {!currentUser.isCustomer && (
+                {!canAcceptFinalDelivery && (
                   <DotIndicator>
                     <LinkList
                       links={links}
@@ -381,7 +382,7 @@ class MilestoneTypeDelivery extends React.Component {
          */}
         {isCompleted && (
           <div>
-            {currentUser.isCustomer ? (
+            {canAcceptFinalDelivery ? (
               <LinkList links={links}/>
             ) : (
               <LinkList

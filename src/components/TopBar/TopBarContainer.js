@@ -6,17 +6,7 @@ import UserDropdown from 'appirio-tech-react-components/components/UserDropdownM
 import {
   ACCOUNTS_APP_LOGIN_URL,
   ACCOUNTS_APP_REGISTER_URL,
-  ROLE_CONNECT_COPILOT,
-  ROLE_CONNECT_MANAGER,
-  ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN,
-  ROLE_CONNECT_ACCOUNT_MANAGER,
   DOMAIN,
-  ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
-  ROLE_PRESALES,
-  ROLE_ACCOUNT_EXECUTIVE,
-  ROLE_PROJECT_MANAGER,
-  ROLE_PROGRAM_MANAGER, ROLE_SOLUTION_ARCHITECT
 } from '../../config/constants'
 import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
 import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpers.js'
@@ -66,7 +56,7 @@ class TopBarContainer extends React.Component {
         <div />
       )
     }
-    const { user, toolbar, userRoles, isPowerUser } = this.props
+    const { user, toolbar, userRoles } = this.props
     const userHandle  = _.get(user, 'handle')
     const bigPhotoURL = _.get(user, 'photoURL')
     const userImage = getAvatarResized(bigPhotoURL, 80)
@@ -100,7 +90,7 @@ class TopBarContainer extends React.Component {
       {
         style: 'big',
         items: [
-          { label: 'All projects', link: isPowerUser ? '/projects?sort=updatedAt%20desc' : '/projects' },
+          { label: 'All projects', link: '/projects?sort=updatedAt%20desc' },
           { label: 'My profile', link: '/settings/profile' },
           { label: 'Account and security', link: '/settings/account' },
           { label: 'Notification settings', link: '/settings/notifications' },
@@ -164,31 +154,10 @@ class TopBarContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ loadUser }) => {
-  let isPowerUser = false
-  const roles = [
-    ROLE_CONNECT_COPILOT,
-    ROLE_CONNECT_MANAGER,
-    ROLE_CONNECT_ACCOUNT_MANAGER,
-    ROLE_ADMINISTRATOR,
-    ROLE_CONNECT_ADMIN,
-
-    ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
-    ROLE_PRESALES,
-    ROLE_ACCOUNT_EXECUTIVE,
-    ROLE_PROJECT_MANAGER,
-    ROLE_PROGRAM_MANAGER,
-    ROLE_SOLUTION_ARCHITECT,
-  ]
-  if (loadUser.user) {
-    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
-  }
-  return {
-    userRoles              : _.get(loadUser, 'user.roles', []),
-    user                   : loadUser.user,
-    isPowerUser
-  }
-}
+const mapStateToProps = ({ loadUser }) => ({
+  userRoles              : _.get(loadUser, 'user.roles', []),
+  user                   : loadUser.user,
+})
 
 const actionsToBind = { }
 

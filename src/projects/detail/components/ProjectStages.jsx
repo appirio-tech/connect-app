@@ -79,17 +79,14 @@ const ProjectStages = ({
   productTemplates,
   productCategories,
   productsTimelines,
-  currentMemberRole,
   phasesTopics,
   isProcessing,
-  isSuperUser,
   updateProduct,
   fireProductDirty,
   fireProductDirtyUndo,
   addProductAttachment,
   updateProductAttachment,
   removeProductAttachment,
-  isManageUser,
   deleteProjectPhase,
   expandProjectPhase,
   collapseProjectPhase,
@@ -111,10 +108,7 @@ const ProjectStages = ({
           productCategories={productCategories}
           productsTimelines={productsTimelines}
           phasesTopics={phasesTopics}
-          currentMemberRole={currentMemberRole}
           isProcessing={isProcessing}
-          isSuperUser={isSuperUser}
-          isManageUser={isManageUser}
           project={project}
           phase={phase}
           phaseNonDirty={phasesNonDirty[index]}
@@ -140,7 +134,6 @@ const ProjectStages = ({
 )
 
 ProjectStages.defaultProps = {
-  currentMemberRole: null,
 }
 
 ProjectStages.propTypes = {
@@ -149,9 +142,7 @@ ProjectStages.propTypes = {
   productCategories: PT.array.isRequired,
   productsTimelines: PT.object,
   phasesTopics: PT.object,
-  currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,
-  isSuperUser: PT.bool.isRequired,
   updateProduct: PT.func.isRequired,
   fireProductDirty: PT.func.isRequired,
   fireProductDirtyUndo: PT.func.isRequired,

@@ -2,7 +2,7 @@ import React from 'react'
 import PT from 'prop-types'
 import ProjectBudgetReport from './ProjectBudgetReport'
 import TopcoderDifferenceReport  from './TopcoderDifferenceReport'
-import PERMISSIONS from '../../../../config/permissions'
+import { PERMISSIONS } from '../../../../config/permissions'
 import { hasPermission } from '../../../../helpers/permissions'
 
 import './ProjectSummaryReport.scss'

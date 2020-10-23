@@ -20,6 +20,8 @@ import {
 } from '../../../../../../config/constants'
 
 import './MilestoneTypeCheckpointReview.scss'
+import { hasPermission } from '../../../../../../helpers/permissions'
+import { PERMISSIONS } from '../../../../../../config/permissions'
 
 class MilestoneTypeCheckpointReview extends React.Component {
   constructor(props) {
@@ -193,7 +195,6 @@ class MilestoneTypeCheckpointReview extends React.Component {
     const {
       milestone,
       theme,
-      currentUser,
       extensionRequestDialog,
       extensionRequestButton,
       extensionRequestConfirmation,
@@ -228,6 +229,8 @@ class MilestoneTypeCheckpointReview extends React.Component {
 
     const progressPercent = getProgressPercent(totalDays, daysLeft)
     const waitingForCustomer = _.get(milestone, 'details.metadata.waitingForCustomer', true)
+
+    const canManage = hasPermission(PERMISSIONS.MANAGE_MILESTONE)
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -248,7 +251,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
                     theme={daysLeft < 0 ? 'warning' : 'light'}
                     readyForReview
                   >
-                    {!currentUser.isCustomer && !isInReview && (
+                    {canManage && !isInReview && (
                       <button
                         onClick={this.moveToReviewingState}
                         className="tc-btn tc-btn-primary"
@@ -262,7 +265,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
               </DotIndicator>
             )}
 
-            {!isInReview && !currentUser.isCustomer && (
+            {!isInReview && canManage && (
               <DotIndicator hideLine>
                 <LinkList
                   links={links}
@@ -355,20 +358,20 @@ class MilestoneTypeCheckpointReview extends React.Component {
               !isCompleted &&
               !extensionRequestDialog &&
               !isShowCompleteConfirmMessage &&
-              (!currentUser.isCustomer || isInReview) &&
+              (canManage || isInReview) &&
             (
               <DotIndicator hideLine>
                 <div styleName="action-bar" className="flex center">
-                  {(!currentUser.isCustomer || isInReview) && (
+                  {(canManage || isInReview) && (
                     <button
                       className={'tc-btn tc-btn-primary'}
-                      onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.completeReview}
+                      onClick={canManage ? this.showCompleteReviewConfirmation : this.completeReview}
                       disabled={this.shouldDisableCompleteReviewButton(links, selectedLinks) && !isInReview}
                     >
                       Complete review ({hoursLeft}h)
                     </button>
                   )}
-                  {!currentUser.isCustomer && !waitingForCustomer && extensionRequestButton}
+                  {canManage && !waitingForCustomer && extensionRequestButton}
                 </div>
               </DotIndicator>
             )}
@@ -415,7 +418,6 @@ MilestoneTypeCheckpointReview.defaultProps = {
 
 MilestoneTypeCheckpointReview.propTypes = {
   completeMilestone: PT.func.isRequired,
-  currentUser: PT.object.isRequired,
   milestone: PT.object.isRequired,
   theme: PT.string,
   updateMilestoneContent: PT.func.isRequired,

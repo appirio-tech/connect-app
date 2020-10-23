@@ -16,15 +16,6 @@ import {
   uploadProfilePhoto,
   resetProfileSetting,
 } from '../../../routes/settings/actions/index'
-import {
-  ROLE_CONNECT_COPILOT,
-  ROLE_CONNECT_MANAGER,
-  ROLE_CONNECT_ACCOUNT_MANAGER,
-  ROLE_CONNECT_COPILOT_MANAGER,
-  ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN,
-  NON_CUSTOMER_ROLES,
-} from '../../../config/constants'
 import { isUserProfileComplete } from '../../../helpers/tcHelpers'
 
 class FillProjectDetails extends Component {
@@ -270,20 +261,6 @@ FillProjectDetails.propTypes = {
 }
 
 const mapStateToProps = ({ settings, loadUser }) => {
-  const powerUserRoles = [
-    ROLE_CONNECT_COPILOT,
-    ROLE_CONNECT_MANAGER,
-    ROLE_CONNECT_ACCOUNT_MANAGER,
-    ROLE_CONNECT_ADMIN,
-    ROLE_ADMINISTRATOR,
-    ROLE_CONNECT_COPILOT_MANAGER,
-  ]
-  const managerRoles = [
-    ROLE_ADMINISTRATOR,
-    ROLE_CONNECT_ADMIN,
-    ROLE_CONNECT_MANAGER,
-  ]
-  const isTopcoderUser = _.intersection(loadUser.user.roles, NON_CUSTOMER_ROLES).length > 0
   const profileSettings = formatProfileSettings(settings.profile.traits)
 
   return {
@@ -293,14 +270,6 @@ const mapStateToProps = ({ settings, loadUser }) => {
     },
     isLoadedProfileSetting: !_.isEmpty(profileSettings),
     user: loadUser.user,
-    isCustomer:
-      _.intersection(loadUser.user.roles, powerUserRoles).length === 0,
-    isManager: _.intersection(loadUser.user.roles, managerRoles).length > 0,
-    isCopilot: _.some(
-      loadUser.user.roles,
-      (role) => role === ROLE_CONNECT_COPILOT
-    ),
-    isTopcoderUser,
     isMissingUserInfo: !isUserProfileComplete(loadUser.user, profileSettings),
   }
 }

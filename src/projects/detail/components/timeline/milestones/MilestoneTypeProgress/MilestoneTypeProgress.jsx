@@ -16,6 +16,8 @@ import { MILESTONE_STATUS } from '../../../../../../config/constants'
 import { getMilestoneStatusText, getDaysLeft, getProgressPercent, getTotalDays } from '../../../../../../helpers/milestoneHelper'
 
 import './MilestoneTypeProgress.scss'
+import { hasPermission } from '../../../../../../helpers/permissions'
+import { PERMISSIONS } from '../../../../../../config/permissions'
 
 class MilestoneTypeProgress extends React.Component {
   constructor(props) {
@@ -81,7 +83,6 @@ class MilestoneTypeProgress extends React.Component {
     const {
       milestone,
       theme,
-      currentUser,
       extensionRequestDialog,
       extensionRequestButton,
       extensionRequestConfirmation,
@@ -100,6 +101,8 @@ class MilestoneTypeProgress extends React.Component {
 
     const progressPercent = getProgressPercent(totalDays, daysLeft)
     const { showExtensionRequestSection } = this.state
+
+    const canManage = hasPermission(PERMISSIONS.MANAGE_MILESTONE)
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -112,7 +115,7 @@ class MilestoneTypeProgress extends React.Component {
         {isActive && (
           <div>
             <div styleName="top-space">
-              <DotIndicator hideDot={!currentUser.isCustomer || extensionRequestConfirmation}>
+              <DotIndicator hideDot={canManage || extensionRequestConfirmation}>
                 <ProjectProgress
                   labelDayStatus={progressText}
                   progressPercent={progressPercent}
@@ -121,7 +124,7 @@ class MilestoneTypeProgress extends React.Component {
               </DotIndicator>
             </div>
 
-            {!currentUser.isCustomer && (
+            {canManage && (
               <DotIndicator hideDot={showExtensionRequestSection}>
                 <LinkList
                   links={links}
@@ -151,7 +154,7 @@ class MilestoneTypeProgress extends React.Component {
             )}
 
             {!!extensionRequestConfirmation && (
-              <DotIndicator hideDot={!currentUser.isCustomer}>
+              <DotIndicator hideDot={canManage}>
                 <div styleName="top-space">
                   {extensionRequestConfirmation}
                 </div>
@@ -159,7 +162,7 @@ class MilestoneTypeProgress extends React.Component {
             )}
 
             {
-              !currentUser.isCustomer &&
+              canManage &&
               !extensionRequestDialog && showExtensionRequestSection &&
               (
                 <DotIndicator>
@@ -171,7 +174,7 @@ class MilestoneTypeProgress extends React.Component {
                       >
                         Mark as completed
                       </button>
-                      {!currentUser.isCustomer && extensionRequestButton}
+                      {canManage && extensionRequestButton}
                     </div>
                   </div>
                 </DotIndicator>
@@ -198,7 +201,6 @@ MilestoneTypeProgress.defaultProps = {
 
 MilestoneTypeProgress.propTypes = {
   completeMilestone: PT.func.isRequired,
-  currentUser: PT.object.isRequired,
   milestone: PT.object.isRequired,
   theme: PT.string,
   updateMilestoneContent: PT.func.isRequired,

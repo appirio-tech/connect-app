@@ -8,7 +8,7 @@ import TwoColsLayout from '../../../components/TwoColsLayout'
 import FAQContainer from '../../../components/FAQ/FAQContainer'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import { hasPermission } from '../../../helpers/permissions'
-import PERMISSIONS from '../../../config/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 
 class ProjectFAQContainer extends Component {
 
@@ -17,9 +17,6 @@ class ProjectFAQContainer extends Component {
       project,
       projectTemplate,
       phases,
-      currentMemberRole,
-      isSuperUser,
-      isManageUser,
       isProcessing,
       feeds,
       isFeedsLoading,
@@ -31,11 +28,8 @@ class ProjectFAQContainer extends Component {
     const leftArea = (
       <ProjectInfoContainer
         location={location}
-        currentMemberRole={currentMemberRole}
         project={project}
         phases={phases}
-        isSuperUser={isSuperUser}
-        isManageUser={isManageUser}
         feeds={feeds}
         isFeedsLoading={isFeedsLoading}
         productsTimelines={productsTimelines}

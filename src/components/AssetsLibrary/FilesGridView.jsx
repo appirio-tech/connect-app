@@ -25,7 +25,7 @@ import {
   PROJECT_FEED_TYPE_MESSAGES
 } from '../../config/constants'
 import { hasPermission } from '../../helpers/permissions'
-import PERMISSIONS from '../../config/permissions'
+import { PERMISSIONS } from '../../config/permissions'
 
 let selectedLink
 let clearing = false

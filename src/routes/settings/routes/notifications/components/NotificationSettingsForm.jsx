@@ -14,6 +14,8 @@ import './NotificationSettingsForm.scss'
 import _ from 'lodash'
 import SelectDropdown from '../../../../../components/SelectDropdown/SelectDropdown'
 import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
+import { hasPermission } from '../../../../../helpers/permissions'
+import { PERMISSIONS } from '../../../../../config/permissions'
 
 
 // list of the notification groups and related event types
@@ -256,7 +258,6 @@ class NotificationSettingsForm extends React.Component {
   }
 
   render() {
-    const { isCustomer } = this.props
     const areSettingsProvided = !!this.props.values.settings
     const settings = this.state.settings
     const notifications = settings.notifications
@@ -265,6 +266,8 @@ class NotificationSettingsForm extends React.Component {
     if (!areSettingsProvided) {
       return null
     }
+
+    const canToggleWebsiteNotifications = hasPermission(PERMISSIONS.TOGGLE_WEBSITE_NOTIFICATIONS)
 
     return (
       <Formsy.Form
@@ -301,7 +304,7 @@ class NotificationSettingsForm extends React.Component {
                     </div>
                   </th>
                   <td>
-                    {isCustomer ? (
+                    {!canToggleWebsiteNotifications ? (
                       <label className="checkbox-ctrl">
                         <input
                           defaultChecked={notifications[topicFirstType].web.enabled === 'yes'}

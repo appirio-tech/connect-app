@@ -34,7 +34,7 @@ import SingleFeedContainer from './SingleFeedContainer'
 
 import { isSystemUser } from '../../../helpers/tcHelpers'
 import { hasPermission } from '../../../helpers/permissions'
-import PERMISSIONS from '../../../config/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 
 import './FeedContainer.scss'
 
@@ -114,7 +114,7 @@ class FeedView extends React.Component {
   }
 
   mapFeed(feed, showAll = false, resetNewComment = false, prevProps, currentProps) {
-    const { allMembers, project, currentMemberRole } = this.props
+    const { allMembers, project } = this.props
     const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isSavingTopic', 'isDeletingTopic', 'isAddingComment', 'isLoadingComments', 'error'])
     // Github issue##623, allow comments on all posts (including system posts)
     item.allowComments = true
@@ -123,7 +123,7 @@ class FeedView extends React.Component {
     } else {
       item.user = allMembers[item.userId]
     }
-    item.unread = !feed.read && !!currentMemberRole
+    item.unread = !feed.read
     item.totalComments = feed.totalPosts
     item.comments = []
     let prevFeed = null
@@ -142,7 +142,7 @@ class FeedView extends React.Component {
         isSavingComment: p.isSavingComment,
         isDeletingComment: p.isDeletingComment,
         error: p.error,
-        unread: !p.read && !!currentMemberRole,
+        unread: !p.read,
         date,
         createdAt: p.date,
         edited,
@@ -382,7 +382,7 @@ class FeedView extends React.Component {
   }
 
   render () {
-    const {currentUser, currentMemberRole, isCreatingFeed, error, allMembers,
+    const {currentUser, isCreatingFeed, error, allMembers,
       toggleNotificationRead, notifications, project, projectMembers, canAccessPrivatePosts,
       inTopicDrawer, onDrawerClose, isFeedsLoading } = this.props
     const { feeds, isNewPostMobileOpen } = this.state
@@ -394,7 +394,7 @@ class FeedView extends React.Component {
         <SingleFeedContainer
           {...{
             ...feed,
-            allowComments: feed.allowComments && !!currentMemberRole,
+            allowComments: feed.allowComments && hasPermission(PERMISSIONS.CREATE_POSTS),
             currentUser,
             allMembers,
             projectMembers,
@@ -545,7 +545,6 @@ class FeedContainer extends React.Component {
 }
 
 FeedContainer.PropTypes = {
-  currentMemberRole: PropTypes.string,
   project: PropTypes.object.isRequired,
   canAccessPrivatePosts: PropTypes.bool.isRequired,
   topics: PropTypes.array,

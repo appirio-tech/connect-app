@@ -14,14 +14,11 @@ import PriceConfigsGridView from '../components/PriceConfigsGridView'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
-import {
-  ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN,
-} from '../../../config/constants'
-import _ from 'lodash'
 import CoderBroken from '../../../assets/icons/coder-broken.svg'
 
 import './MetaDataContainer.scss'
+import { hasPermission } from '../../../helpers/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 
 const withLoader = spinnerWhileLoading(props => !props.isLoading && props.priceConfigs)
 const PriceConfigsGridViewWithLoader = withLoader(PriceConfigsGridView)
@@ -50,13 +47,11 @@ class PriceConfigsContainer extends React.Component {
     const {
       priceConfigs,
       isLoading,
-      isAdmin,
       currentUser,
       error,
     } = this.props
     const { criteria } = this.state
-    // TODO remove: temporary let non-admin user see metadata (they still couldn't save because server will reject)
-    if (!isAdmin && isAdmin) {
+    if (!hasPermission(PERMISSIONS.ACCESS_METADATA)) {
       return (
         <section className="content content-error">
           <div className="container">
@@ -87,21 +82,15 @@ class PriceConfigsContainer extends React.Component {
 }
 
 PriceConfigsContainer.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
   loadProjectsMetadata: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ templates, loadUser }) => {
-  const powerUserRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-
-  return {
-    priceConfigs: templates.priceConfigs,
-    isLoading: templates.isLoading,
-    error: templates.error,
-    currentUser: loadUser.user,
-    isAdmin: _.intersection(loadUser.user.roles, powerUserRoles).length !== 0
-  }
-}
+const mapStateToProps = ({ templates, loadUser }) => ({
+  priceConfigs: templates.priceConfigs,
+  isLoading: templates.isLoading,
+  error: templates.error,
+  currentUser: loadUser.user,
+})
 
 const mapDispatchToProps = {
   loadProjectsMetadata,

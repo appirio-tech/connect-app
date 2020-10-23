@@ -11,7 +11,7 @@ import _ from 'lodash'
 import fs from 'fs'
 import path from 'path'
 import handlebars from 'handlebars'
-import PERMISSIONS from '../../src/config/permissions'
+import { PERMISSIONS } from '../../src/config/permissions'
 import {
   PROJECT_ROLE_CUSTOMER,
   PROJECT_ROLE_COPILOT,

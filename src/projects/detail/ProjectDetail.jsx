@@ -13,9 +13,8 @@ import { loadProjects } from '../actions/loadProjects'
 import { getEmptyProjectObject } from '../reducers/project'
 
 import {
-  LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
-  ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER,
-  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED, ACCEPT_OR_REFUSE_INVITE_FAILURE, NON_CUSTOMER_ROLES
+  LOAD_PROJECT_FAILURE,
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED, ACCEPT_OR_REFUSE_INVITE_FAILURE
 } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
@@ -77,11 +76,6 @@ const spinner = spinnerWhileLoading(props =>
   )
 )
 const ProjectDetailView = (props) => {
-  let currentMemberRole = props.currentMemberRole
-  if (!currentMemberRole && props.currentUserRoles && props.currentUserRoles.length > 0) {
-    currentMemberRole = props.currentUserRoles[0]
-  }
-
   const template = _.get(props.projectTemplate, 'scope', {})
   let estimationQuestion = null
   const { estimateBlocks } = getProductEstimate({scope: template}, props.project)
@@ -108,10 +102,6 @@ const ProjectDetailView = (props) => {
   const componentProps = {
     project: props.project,
     projectNonDirty: props.projectNonDirty,
-    currentMemberRole: currentMemberRole || '',
-    isSuperUser: props.isSuperUser,
-    isManageUser: props.isManageUser,
-    isCustomerUser: props.isCustomerUser,
     isProcessing: props.isProcessing,
     allProductTemplates: props.allProductTemplates,
     productsTimelines: props.productsTimelines,
@@ -211,19 +201,6 @@ class ProjectDetail extends Component {
     }
   }
 
-  getProjectRoleForCurrentUser({currentUserId, project}) {
-    let role = null
-    if (project) {
-      const member = _.find(project.members, m => m.userId === currentUserId)
-      if (member) {
-        role = member.role
-        if (role === PROJECT_ROLE_CUSTOMER && member.isPrimary)
-          role = PROJECT_ROLE_OWNER
-      }
-    }
-    return role
-  }
-
   onUserInviteAction(isUserAcceptedInvitation) {
     if (this.state.isCallingInviteAction) {
       return
@@ -271,14 +248,8 @@ class ProjectDetail extends Component {
   }
 
   render() {
-    const { inviteError, project, profileSettings, currentUser, saveProfileSettings, isTopcoderUser } = this.props
+    const { inviteError, project, profileSettings, currentUser, saveProfileSettings } = this.props
     const { isCallingInviteAction, isUserAcceptedInvitation, shouldForceCallAcceptRefuseRequest } = this.state
-    const currentMemberRole = this.getProjectRoleForCurrentUser(this.props)
-    const adminRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-    const isSuperUser = this.props.currentUserRoles.some((role) => adminRoles.indexOf(role) !== -1)
-    const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
-    const isManageUser = this.props.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
-    const isCustomerUser = !(isManageUser || isSuperUser)
     const showUserInvited = this.props.showUserInvited
 
     return (
@@ -297,7 +268,6 @@ class ProjectDetail extends Component {
         <div>
           {this.state.showIncompleteProfilePopup && (
             <IncompleteUserProfileDialog
-              isTopcoderUser={isTopcoderUser}
               profileSettings={profileSettings}
               saveProfileSettings={saveProfileSettings}
               user={currentUser}
@@ -307,10 +277,6 @@ class ProjectDetail extends Component {
           )}
           <EnhancedProjectDetailView
             {...this.props}
-            currentMemberRole={currentMemberRole}
-            isSuperUser={isSuperUser}
-            isManageUser={isManageUser}
-            isCustomerUser={isCustomerUser}
           />
         </div>
       )
@@ -321,7 +287,6 @@ class ProjectDetail extends Component {
 const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines, templates, settings}) => {
   const templateId = (projectState.project || {}).templateId
   const { projectTemplates, productTemplates } = templates
-  const isTopcoderUser = _.intersection(loadUser.user.roles, NON_CUSTOMER_ROLES).length > 0
   return {
     currentUser: loadUser.user,
     currentUserId: parseInt(loadUser.user.id),
@@ -351,7 +316,6 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
       ...settings.profile,
       settings: formatProfileSettings(settings.profile.traits)
     },
-    isTopcoderUser,
   }
 }
 

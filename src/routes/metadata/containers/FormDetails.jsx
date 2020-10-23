@@ -20,10 +20,6 @@ import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndica
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
-import {
-  ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN,
-} from '../../../config/constants'
 import _ from 'lodash'
 
 import './MetaDataContainer.scss'
@@ -67,7 +63,6 @@ class FormDetails extends React.Component {
       updateProjectsMetadata,
       getRevisionList,
       templates,
-      isAdmin,
       match,
       isLoading
     } = this.props
@@ -82,7 +77,6 @@ class FormDetails extends React.Component {
         <div className={isLoading ? 'hide' : ''}>
           <MetaDataPanel
             templates={templates}
-            isAdmin={isAdmin}
             metadataType="form"
             metadata={form}
             getRevisionList={getRevisionList}
@@ -103,7 +97,6 @@ class FormDetails extends React.Component {
 
 
 FormDetails.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
   loadProjectsMetadata: PropTypes.func.isRequired,
   deleteProjectsMetadataSpecial: PropTypes.func.isRequired,
   createForm: PropTypes.func.isRequired,
@@ -114,18 +107,13 @@ FormDetails.propTypes = {
 }
 
 
-const mapStateToProps = ({ templates, loadUser }) => {
-  const powerUserRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-
-  return {
-    templates,
-    isLoading: templates.isLoading,
-    versionOptionsLoading: templates.versionOptionsLoading,
-    isRemoving: templates.isRemoving,
-    currentUser: loadUser.user,
-    isAdmin: _.intersection(loadUser.user.roles, powerUserRoles).length !== 0
-  }
-}
+const mapStateToProps = ({ templates, loadUser }) => ({
+  templates,
+  isLoading: templates.isLoading,
+  versionOptionsLoading: templates.versionOptionsLoading,
+  isRemoving: templates.isRemoving,
+  currentUser: loadUser.user,
+})
 
 const mapDispatchToProps = {
   loadProjectsMetadata,
