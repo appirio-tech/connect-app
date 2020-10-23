@@ -14,8 +14,6 @@ import { renderComponent, branch, compose, withProps } from 'recompose'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import { createProduct } from '../../actions/project'
 import { getProductTemplateByKey } from '../../../helpers/templates'
-import { loadProjectDashboard } from '../../../projects/actions/projectDashboard'
-
 
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import Wizard from '../../../components/Wizard'
@@ -155,6 +153,6 @@ const mapStateToProps = ({projectState, loadUser, templates, productsTimelines }
   productCategories:  templates.productCategories,
 })
 
-const actionCreators = {createProduct, loadProjectDashboard}
+const actionCreators = {createProduct}
 
 export default withRouter(connect(mapStateToProps, actionCreators)(ProjectAddPhaseContainer))
