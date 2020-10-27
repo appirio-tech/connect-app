@@ -723,9 +723,9 @@ export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
 export const DOMAIN = process.env.domain || 'topcoder.com'
 export const CONNECT_DOMAIN = `connect.${DOMAIN}`
 export const CONNECT_MAIN_PAGE_URL = `http://connect.${DOMAIN}`
-export const ACCOUNTS_APP_CONNECTOR_URL = 'https://accounts-auth0.topcoder-dev.com'
-export const ACCOUNTS_APP_LOGIN_URL = 'https://accounts-auth0.topcoder-dev.com'
-export const ACCOUNTS_APP_REGISTER_URL = 'https://accounts-auth0.topcoder-dev.com'
+export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
+export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || `https://accounts-auth0.${DOMAIN}`
+export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL ||  `https://accounts-auth0.${DOMAIN}`
 export const TC_API_URL = `https://api.${DOMAIN}`
 export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?formData.projectId=`
 export const WORK_MANAGER_APP = `https://challenges.${DOMAIN}/projects`
