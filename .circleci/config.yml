@@ -1,13 +1,15 @@
 version: 2
 defaults: &defaults
     docker:
-      - image: circleci/node:8.9.4-browsers
+      - image: node:14
 deploy_defaults: &deploy_defaults
     docker:
       - image: cibuilds/aws
 install_dependency: &install_dependency
           name: Installation of build and deployment dependencies.
           command: |
+            sudo apt update
+            sudo apt install jq -y
             sudo apt install python-dev python-pip -y
             sudo pip install awscli --upgrade
 install_deploysuite: &install_deploysuite

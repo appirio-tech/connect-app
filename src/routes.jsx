@@ -19,7 +19,7 @@ import LoadingIndicator from './components/LoadingIndicator/LoadingIndicator'
 import OrganizationPage from './components/SpecialPage/OrganizationPage'
 import {ACCOUNTS_APP_LOGIN_URL, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from './config/constants'
 import { getTopic } from './api/messages'
-import { getFreshToken } from 'tc-accounts'
+import { getFreshToken } from 'tc-auth-lib'
 import { scrollToHash } from './components/ScrollToAnchors.jsx'
 
 import { TCEmitter } from './helpers'
