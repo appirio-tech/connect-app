@@ -15,7 +15,7 @@ import {
   ROLE_PROGRAM_MANAGER,
   ROLE_PRESALES, ROLE_PROJECT_MANAGER, ROLE_SOLUTION_ARCHITECT
 } from '../config/constants'
-import { getFreshToken, configureConnector, decodeToken } from 'tc-accounts'
+import { getFreshToken, configureConnector, decodeToken } from 'tc-auth-lib'
 import { getUserProfile } from '../api/users'
 import { getUserGroups } from '../api/groups'
 import { getOrgConfig } from '../api/orgConfig'

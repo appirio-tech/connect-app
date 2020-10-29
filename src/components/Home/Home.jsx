@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import './Home.scss'
 import homeImgSrc from '../../assets/images/hero-tc-landing.png'
-import { DOMAIN, ACCOUNTS_APP_REGISTER_URL } from '../../config/constants'
+import { DOMAIN, ACCOUNTS_APP_LOGIN_URL } from '../../config/constants'
 
 class Home extends React.Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const registerUrl = ACCOUNTS_APP_REGISTER_URL
+    const registerUrl = `${ACCOUNTS_APP_LOGIN_URL}?regSource=tcBusiness&retUrl=${window.location.protocol}//${window.location.host}/`
     const learnMoreUrl = 'https://www.' + DOMAIN +'/about-topcoder/connect/'
     return (
       <div className="content content-home">
