@@ -5,7 +5,6 @@ import _ from 'lodash'
 import UserDropdown from 'appirio-tech-react-components/components/UserDropdownMenu/UserDropdownMenu'
 import {
   ACCOUNTS_APP_LOGIN_URL,
-  ACCOUNTS_APP_REGISTER_URL,
   DOMAIN,
 } from '../../config/constants'
 import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
