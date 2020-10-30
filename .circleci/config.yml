@@ -136,7 +136,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['feature/faqs', 'feature/project_september']
+              only: ['feature/unified-permissions']
 
       - deployProd:
           context : org-global
