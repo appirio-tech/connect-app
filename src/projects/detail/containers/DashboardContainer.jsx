@@ -85,6 +85,7 @@ class DashboardContainer extends React.Component {
   }
 
   componentDidMount() {
+    const { expandProjectPhase } = this.props
     // if the user is a customer and its not a direct link to a particular phase
     // then by default expand all phases which are active
     if (_.isEmpty(location.hash) && hasPermission(PERMISSIONS.EXPAND_ACTIVE_PHASES_BY_DEFAULT)) {
