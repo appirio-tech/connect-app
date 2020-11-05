@@ -89,24 +89,6 @@ const TOPCODER_ADMINS = [
 ]
 
 /**
- * Topcoder Manager level roles.
- */
-const TOPCODER_MANAGERS = [
-  ROLE_CONNECT_MANAGER,
-  ROLE_PROGRAM_MANAGER,
-  ROLE_SOLUTION_ARCHITECT,
-  ROLE_PROJECT_MANAGER,
-]
-
-/**
- * Topcoder Admin & Manager level roles.
- */
-const TOPCODER_MANAGERS_AND_ADMINS = [
-  ...TOPCODER_ADMINS,
-  ...TOPCODER_MANAGERS,
-]
-
-/**
  * All Topcoder Roles
  */
 const TOPCODER_ALL = [
@@ -340,10 +322,10 @@ export const PERMISSIONS = {
       title: 'Access private posts',
     },
     projectRoles: [
-      PROJECT_ROLE_COPILOT,
+      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
     ],
     topcoderRoles: [
-      ...TOPCODER_MANAGERS_AND_ADMINS,
+      ...TOPCODER_ADMINS,
     ]
   },
 
