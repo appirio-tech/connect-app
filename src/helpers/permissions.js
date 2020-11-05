@@ -63,7 +63,9 @@ export const hasPermission = (permission, entities = {}) => {
   const deny = matchPermissionRule(denyRule, user, project)
 
   // uncomment for debugging
-  // console.warn('hasPermission', permission, project, allow && !deny)
+  // if (permission === PERMISSIONS.VIEW_DRAFT_PHASES) {
+  //   console.warn('hasPermission', permission, project, user, allow && !deny)
+  // }
 
   return allow && !deny
 }
@@ -106,6 +108,9 @@ const matchPermissionRule = (permissionRule, user, project) => {
     && project
     && project.members
   ) {
+    if (_.some(permissionRule.projectRoles, (rule) => _.isArray(rule))) {
+      throw new Error('Role cannot be an array. Make sure, that "projectRoles" doesn\'t have nested arrays: ' + JSON.stringify(permissionRule.projectRoles))
+    }
     const userId = !_.isNumber(user.userId) ? parseInt(user.userId, 10) : user.userId
     const member = _.find(project.members, { userId })
 
@@ -128,6 +133,9 @@ const matchPermissionRule = (permissionRule, user, project) => {
 
   // check Topcoder Roles
   if (permissionRule.topcoderRoles) {
+    if (_.some(permissionRule.topcoderRoles, (rule) => _.isArray(rule))) {
+      throw new Error('Role cannot be an array. Make sure, that "topcoderRoles" doesn\'t have nested arrays: ' + JSON.stringify(permissionRule.topcoderRoles))
+    }
     if (permissionRule.topcoderRoles.length > 0) {
       hasTopcoderRole = _.intersection(
         _.get(user, 'roles', []).map(role => role.toLowerCase()),

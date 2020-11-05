@@ -148,7 +148,7 @@ export const PERMISSIONS = {
       description: 'Create, edit and delete phases and milestones.',
     },
     projectRoles: [
-      _.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
+      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
     ],
     topcoderRoles: [
       ...TOPCODER_ADMINS,
@@ -191,7 +191,7 @@ export const PERMISSIONS = {
       title: 'View draft phases',
     },
     projectRoles: [
-      _.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
+      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
     ],
     topcoderRoles: [
       ROLE_CONNECT_MANAGER,
@@ -598,7 +598,7 @@ export const PERMISSIONS = {
       title: 'Edit project status',
     },
     projectRoles: [
-      _.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
+      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
     ],
     topcoderRoles: [
       ...TOPCODER_ADMINS,
@@ -612,7 +612,7 @@ export const PERMISSIONS = {
       description: 'Direct / Salesforce links'
     },
     projectRoles: [
-      _.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
+      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
     ],
     topcoderRoles: [
       ROLE_CONNECT_MANAGER,
