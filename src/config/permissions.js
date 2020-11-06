@@ -158,7 +158,7 @@ export const PERMISSIONS = {
   MANAGE_NOT_OWN_ATTACHEMENT: {
     meta: {
       group: 'Project Plan',
-      title: 'Manage asset libraries files and links',
+      title: 'Manage asset libraries files and links (not own)',
     },
     topcoderRoles: [
       ...TOPCODER_ADMINS,
