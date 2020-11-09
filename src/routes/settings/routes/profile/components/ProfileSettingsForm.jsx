@@ -47,8 +47,10 @@ class ProfileSettingsForm extends Component {
   }
 
   componentDidUpdate() {
+    // if we want to show validation errors on form showing
     if (this.refs.form && !this.isValidated && this.props.shouldDoValidateOnStart) {
-      this.refs.form.submit()
+      // we have to mark the form as not pristine, so validation errors are shown
+      this.refs.form.setFormPristine(false)
       this.isValidated = true
     }
   }
@@ -423,7 +425,7 @@ ProfileSettingsForm.defaultProps = {
 ProfileSettingsForm.propTypes = {
   values: PropTypes.object.isRequired,
   saveSettings: PropTypes.func.isRequired,
-  uploadPhoto: PropTypes.func.isRequired,
+  uploadPhoto: PropTypes.func,
   fieldsConfig: PropTypes.shape({
     avatar: PropTypes.bool,
     firstName: PropTypes.bool,

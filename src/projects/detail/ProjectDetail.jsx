@@ -200,8 +200,12 @@ class ProjectDetail extends Component {
       }
     }
 
-    // as soon as user profile settings are loaded, check if all required fields are completed or show the popup
-    if (this.props.profileSettings.isLoading && !profileSettings.isLoading && !isUserProfileComplete(nextProps.currentUser, profileSettings.settings)) {
+    // as soon as user profile settings and project are both loaded, check if all required fields are completed or show the popup
+    const profileSettingsJustLoaded = this.props.profileSettings.isLoading && !profileSettings.isLoading
+    const projectJustLoaded = this.props.isLoading && !isLoading
+    const timeToShowIncompleteProfile = !profileSettings.isLoading && !isLoading && (profileSettingsJustLoaded || projectJustLoaded)
+    const projectLoadingError = nextProps.error && (nextProps.error.type === LOAD_PROJECT_FAILURE || nextProps.error.type === ACCEPT_OR_REFUSE_INVITE_FAILURE)
+    if ( !projectLoadingError && timeToShowIncompleteProfile && !isUserProfileComplete(nextProps.currentUser, profileSettings.settings)) {
       this.setState({ showIncompleteProfilePopup: true })
     }
 
