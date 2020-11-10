@@ -739,6 +739,7 @@ export const TC_CDN_URL = process.env.TC_CDN_URL || `https://community-app.${DOM
 
 export const RESET_PASSWORD_URL = `https://accounts.${DOMAIN}/member/reset-password`
 export const VERIFY_EMAIL_URL = `http://www.${DOMAIN}/settings/account/changeEmail`
+export const TOPCODER_CONNECT_TERMS_URL = `https://connect.${DOMAIN}/terms`
 
 export const PROJECT_NAME_MAX_LENGTH = 255
 export const PROJECT_REF_CODE_MAX_LENGTH = 32
@@ -1048,6 +1049,7 @@ export const PROFILE_FIELDS_CONFIG = {
     timeZone: true,
     workingHourStart: true,
     workingHourEnd: true,
+    // termsAccepted: true,
 
     // optional fields
     avatar: false,
@@ -1065,6 +1067,7 @@ export const PROFILE_FIELDS_CONFIG = {
     companyURL: true,
     businessPhone: true,
     businessEmail: true,
+    termsAccepted: true,
 
     // optional fields
     avatar: false,
@@ -1080,6 +1083,7 @@ export const PROFILE_FIELDS_CONFIG = {
     timeZone: true,
     workingHourStart: true,
     workingHourEnd: true,
+    // termsAccepted: true,
 
     // optional fields
     avatar: false,
