@@ -16,7 +16,7 @@ import {
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import Sticky from '../../../components/Sticky'
 import ProjectInfoContainer from './ProjectInfoContainer'
-import PERMISSIONS from '../../../config/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 import { hasPermission } from '../../../helpers/permissions'
 import { loadProjectReportsUrls, setLookerSessionExpired } from '../../actions/projectReports'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
@@ -85,9 +85,6 @@ class ProjectSummaryReportContainer extends React.Component {
   render() {
     const {
       project,
-      isSuperUser,
-      isManageUser,
-      currentMemberRole,
       feeds,
       isFeedsLoading,
       phases,
@@ -102,11 +99,8 @@ class ProjectSummaryReportContainer extends React.Component {
     const leftArea = (
       <ProjectInfoContainer
         location={location}
-        currentMemberRole={currentMemberRole}
         phases={phases}
         project={project}
-        isSuperUser={isSuperUser}
-        isManageUser={isManageUser}
         feeds={feeds}
         isFeedsLoading={isFeedsLoading}
         productsTimelines={productsTimelines}
@@ -160,10 +154,7 @@ class ProjectSummaryReportContainer extends React.Component {
 }
 
 ProjectSummaryReportContainer.propTypes = {
-  currentMemberRole: PT.string.isRequired,
   isLoading: PT.bool.isRequired,
-  isSuperUser: PT.bool.isRequired,
-  isManageUser: PT.bool.isRequired,
   project: PT.object.isRequired,
   phases: PT.array.isRequired,
   productsTimelines: PT.object.isRequired,

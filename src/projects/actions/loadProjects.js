@@ -6,10 +6,11 @@ import {
   SET_PROJECTS_INFINITE_AUTOLOAD,
   SET_PROJECTS_LIST_VIEW,
   PROJECT_STATUS_ACTIVE,
-  ROLE_TOPCODER_USER
 } from '../../config/constants'
 import { getProjects } from '../../api/projects'
 import { loadMembers } from '../../actions/members'
+import { hasPermission } from '../../helpers/permissions'
+import { PERMISSIONS } from '../../config/permissions'
 
 // ignore action
 /*eslint-disable no-unused-vars */
@@ -26,8 +27,7 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
       type: GET_PROJECTS,
       payload: getProjects(criteria, pageNum)
         .then((originalData) => {
-          const retryForCustomer = criteria.status === PROJECT_STATUS_ACTIVE && state.loadUser.user.roles &&  state.loadUser.user.roles.length === 1
-            && state.loadUser.user.roles[0] === ROLE_TOPCODER_USER
+          const retryForCustomer = criteria.status === PROJECT_STATUS_ACTIVE && hasPermission(PERMISSIONS.RETRY_PROJECTS_LOADING)
           if(originalData.totalCount === 0 && retryForCustomer) {
             //retrying for customer if active projects are 0 but there are some projects with other status
             //This is to bypass the walkthrough page which we ideally show for customer with zero projects

@@ -6,11 +6,10 @@ import {
   CODER_BOT_USERID,
   TC_SYSTEM_USERID,
   TC_CDN_URL,
-  NON_CUSTOMER_ROLES,
   PROFILE_FIELDS_CONFIG,
 } from '../config/constants'
 import { hasPermission } from './permissions'
-import PERMISSIONS from '../config/permissions'
+import { PERMISSIONS } from '../config/permissions'
 
 /**
  * Check if a user is a special system user
@@ -59,8 +58,7 @@ export const getFullNameWithFallback = (user) => {
  * @returns {Boolean} complete or no
  */
 export const isUserProfileComplete = (user, profileSettings) => {
-  const isTopcoderUser = _.intersection(user.roles, NON_CUSTOMER_ROLES).length > 0
-  const fieldsConfig = isTopcoderUser ? PROFILE_FIELDS_CONFIG.TOPCODER : PROFILE_FIELDS_CONFIG.CUSTOMER
+  const fieldsConfig = getUserProfileFieldsConfig()
 
   // check if any required field doesn't have a value
   let isMissingUserInfo = false

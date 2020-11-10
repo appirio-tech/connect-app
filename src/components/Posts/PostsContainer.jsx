@@ -60,7 +60,7 @@ class PostsContainer extends React.Component {
    * which is accepted by Feed component
    */
   prepareFeed() {
-    const { topic, error, allMembers, currentMemberRole, tag } = this.props
+    const { topic, error, allMembers, tag } = this.props
     const { showAll } = this.state
 
     if (!topic || !tag) {
@@ -73,7 +73,7 @@ class PostsContainer extends React.Component {
       // Github issue##623, allow comments on all posts (including system posts)
       allowComments: true,
       user: isSystemUser(topic.userId) ? SYSTEM_USER : allMembers[topic.userId],
-      unread: !topic.read && !!currentMemberRole,
+      unread: !topic.read,
       totalComments: topic.totalPosts,
       comments: [],
     }
@@ -88,7 +88,7 @@ class PostsContainer extends React.Component {
         isSavingComment: p.isSavingComment,
         isDeletingComment: p.isDeletingComment,
         error: p.error,
-        unread: !p.read && !!currentMemberRole,
+        unread: !p.read,
         date,
         createdAt: p.date,
         edited,

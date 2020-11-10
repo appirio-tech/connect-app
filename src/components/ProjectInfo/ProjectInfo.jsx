@@ -7,7 +7,7 @@ import DeleteProjectModal from './DeleteProjectModal'
 import ProjectCardBody from '../../projects/components/projectsCard/ProjectCardBody'
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import MediaQuery from 'react-responsive'
-import { SCREEN_BREAKPOINT_MD, PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
+import { SCREEN_BREAKPOINT_MD } from '../../config/constants'
 import ReviewProjectButton from '../../projects/detail/components/ReviewProjectButton'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import { TOOLTIP_DEFAULT_DELAY } from '../../config/constants'
@@ -15,6 +15,8 @@ import { getProjectTemplateByKey } from '../../helpers/templates'
 
 import ProjectTypeIcon from '../../components/ProjectTypeIcon'
 import './ProjectInfo.scss'
+import { hasPermission } from '../../helpers/permissions'
+import { PERMISSIONS } from '../../config/permissions'
 
 class ProjectInfo extends Component {
 
@@ -23,15 +25,14 @@ class ProjectInfo extends Component {
   }
 
   render() {
-    const { project, currentMemberRole,
-      onChangeStatus, isSuperUser, onSubmitForReview, isProjectProcessing,
+    const { project,
+      onChangeStatus, onSubmitForReview, isProjectProcessing,
       showDeleteConfirm, toggleProjectDelete, onConfirmDelete, projectTemplates } = this.props
 
     const code = _.get(project, 'details.utm.code', '')
 
     // prepare review button
-    const showReviewBtn = project.status === 'draft' &&
-      _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
+    const showReviewBtn = project.status === 'draft' && hasPermission(PERMISSIONS.SUBMIT_PROJECT_FOR_REVIEW)
 
     const reviewButtonSection = (
       <div className="project-info-review">
@@ -102,7 +103,6 @@ class ProjectInfo extends Component {
               {matches => (
                 <ProjectCardBody
                   project={project}
-                  currentMemberRole={currentMemberRole}
                   descLinesCount={
                     /* has to be not too big value here,
                       because the plugin will make this number of iterations
@@ -112,7 +112,6 @@ class ProjectInfo extends Component {
                     matches ? 4 : 1000
                   }
                   onChangeStatus={onChangeStatus}
-                  isSuperUser={isSuperUser}
                   showLink
                   hideStatus
                 />
@@ -127,7 +126,6 @@ class ProjectInfo extends Component {
 
 ProjectInfo.propTypes = {
   project: PT.object.isRequired,
-  currentMemberRole: PT.string,
   productsTimelines: PT.object.isRequired,
   updateProject: PT.func,
   isProjectProcessing: PT.bool,

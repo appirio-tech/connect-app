@@ -29,7 +29,7 @@ import {
   createProjectTopic
 } from '../../actions/projectTopics'
 
-import PERMISSIONS from '../../../config/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 import { hasPermission } from '../../../helpers/permissions'
 
 import {
@@ -126,11 +126,8 @@ class MessagesTabContainer extends React.Component {
   getSidebarContent() {
     const {
       location,
-      currentMemberRole,
       project,
       phases,
-      isSuperUser,
-      isManageUser,
       feeds,
       isFeedsLoading,
       productsTimelines,
@@ -141,11 +138,8 @@ class MessagesTabContainer extends React.Component {
     const leftArea = (
       <ProjectInfoContainer
         location={location}
-        currentMemberRole={currentMemberRole}
         project={project}
         phases={phases}
-        isSuperUser={isSuperUser}
-        isManageUser={isManageUser}
         feeds={feeds}
         isFeedsLoading={isFeedsLoading}
         productsTimelines={productsTimelines}
@@ -260,10 +254,8 @@ class MessagesTabContainer extends React.Component {
       match,
       error,
       isCreatingFeed,
-      currentMemberRole,
       projectMembers,
       canAccessPrivatePosts,
-      isSuperUser,
       notificationsState
     } = this.props
     const { isNewPostMobileOpen } = this.state
@@ -375,9 +367,7 @@ class MessagesTabContainer extends React.Component {
           <TopicDrawer
             open={isTopicDrawerOpen}
             onClose={this.onTopicDrawerClose}
-            currentMemberRole={currentMemberRole}
             topic={Number(selectedTopic)}
-            isSuperUser={isSuperUser}
             project={project}
           />
         </TwoColsLayout.Content>

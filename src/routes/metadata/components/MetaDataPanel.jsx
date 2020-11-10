@@ -22,6 +22,8 @@ import XMarkIcon from '../../../assets/icons/x-mark.svg'
 
 import './MetaDataPanel.scss'
 import FullScreenJSONEditor from './FullScreenJSONEditor'
+import { hasPermission } from '../../../helpers/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 
 const phasesDefaultValue = {
   '1-dev-iteration-i': {
@@ -818,7 +820,7 @@ class MetaDataPanel extends React.Component {
   }
 
   render() {
-    const { isAdmin, metadataType, templates } = this.props
+    const { metadataType, templates } = this.props
     const { fields, metadata, isNew, metadataWithVersion, isFullScreen } = this.state
     let template = {}
     if (metadata && metadataType === 'projectTemplate' && metadata.scope) {
@@ -828,8 +830,7 @@ class MetaDataPanel extends React.Component {
     } else if (metadata && metadataWithVersion && metadata.config) {
       template = metadata.config
     }
-    // TODO remove: temporary let non-admin user see metadata (they still couldn't save because server will reject)
-    if (!isAdmin && isAdmin) {
+    if (!hasPermission(PERMISSIONS.ACCESS_METADATA)) {
       return (
         <section className="content content-error">
           <div className="container">
@@ -920,7 +921,6 @@ MetaDataPanel.propTypes = {
   createProjectsMetadata: PropTypes.func.isRequired,
   updateProjectsMetadata: PropTypes.func.isRequired,
   templates: PropTypes.object.isRequired,
-  isAdmin: PropTypes.bool.isRequired,
   previewProject: PropTypes.object,
   routerParams: PropTypes.object,
   firePreviewProjectDirty: PropTypes.func,

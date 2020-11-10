@@ -85,7 +85,6 @@ class ProjectToolBar extends React.Component {
 ProjectToolBar.propTypes = {
   isProjectLoading: PT.bool,
   project: PT.object,
-  isPowerUser: PT.bool,
   /**
    * Function which render the logo section in the top bar
    */

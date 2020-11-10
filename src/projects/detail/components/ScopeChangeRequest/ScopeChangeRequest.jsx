@@ -5,6 +5,8 @@ import { flatten } from 'flat'
 import { SCOPE_CHANGE_REQ_STATUS_PENDING, SCOPE_CHANGE_REQ_STATUS_APPROVED } from '../../../../config/constants'
 
 import styles from './ScopeChangeRequest.scss'
+import { hasPermission } from '../../../../helpers/permissions'
+import { PERMISSIONS } from '../../../../config/permissions'
 
 /**
  * The component that renders the changes in new scope change request from the old scope
@@ -137,10 +139,7 @@ class ScopeChangeRequest extends React.Component {
   render() {
     const { changes } = this.state
     const {
-      isCustomer,
       isRequestor,
-      isManager,
-      isAdmin,
       pendingScopeChange,
       onActivate,
       onApprove,
@@ -151,6 +150,9 @@ class ScopeChangeRequest extends React.Component {
     const status = pendingScopeChange.status
     const isPending = status === SCOPE_CHANGE_REQ_STATUS_PENDING
     const isApproved = status === SCOPE_CHANGE_REQ_STATUS_APPROVED
+    const canApproveReject = hasPermission(PERMISSIONS.APPROVE_REJECT_SCOPE_REQUESTS)
+    const canActivate = hasPermission(PERMISSIONS.ACTIVATE_SCOPE_REQUESTS)
+    const canCancelNotOwn = hasPermission(PERMISSIONS.CANCEL_SCOPE_REQUESTS_NOT_OWN)
 
     return (
       <div className={styles.card}>
@@ -162,27 +164,27 @@ class ScopeChangeRequest extends React.Component {
           </div>
         ))}
 
-        {status === SCOPE_CHANGE_REQ_STATUS_APPROVED && isCustomer && (
+        {status === SCOPE_CHANGE_REQ_STATUS_APPROVED && canApproveReject && (
           <div className={styles.note}>Note: This change is awaiting activation.</div>
         )}
 
         <div className={styles.buttonsContainer}>
-          {(isCustomer || isAdmin) && isPending && (
+          {canApproveReject && isPending && (
             <button className="tc-btn tc-btn-primary tc-btn-md" onClick={onApprove}>
               Approve
             </button>
           )}
-          {(isCustomer || isAdmin) && isPending && (
+          {canApproveReject && isPending && (
             <button className="tc-btn tc-btn-warning tc-btn-md" onClick={onReject}>
               Reject
             </button>
           )}
-          {(isManager || isAdmin) && isApproved && (
+          {canActivate && isApproved && (
             <button className="tc-btn tc-btn-primary tc-btn-md" onClick={onActivate}>
               Activate
             </button>
           )}
-          {(isRequestor || isAdmin) && isPending && (
+          {(isRequestor || canCancelNotOwn) && isPending && (
             <button className="tc-btn tc-btn-warning tc-btn-md" onClick={onCancel}>
               Cancel
             </button>
@@ -194,10 +196,7 @@ class ScopeChangeRequest extends React.Component {
 }
 
 ScopeChangeRequest.propTypes = {
-  isCustomer: PropTypes.bool,
   isRequestor: PropTypes.bool,
-  isManager: PropTypes.bool,
-  isAdmin: PropTypes.bool,
   pendingScopeChange: PropTypes.object.isRequired,
   template: PropTypes.object.isRequired,
   onApprove: PropTypes.func,

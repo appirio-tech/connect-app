@@ -411,7 +411,11 @@
       }
 
       .dialog-placeholder {
-        height: 200px;
+        height: 50px;
+      }
+
+      .dialog-no-members {
+        height: 150px;
       }
 
       @media screen and (max-width: $screen-md - 1px) {

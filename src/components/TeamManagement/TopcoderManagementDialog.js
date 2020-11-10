@@ -11,7 +11,7 @@ import {
   PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PENDING,
   PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED, PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED,
 } from '../../config/constants'
-import PERMISSIONS from '../../config/permissions'
+import { PERMISSIONS } from '../../config/permissions'
 import {hasPermission} from '../../helpers/permissions'
 import { compareEmail, compareHandles } from '../../helpers/utils'
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
@@ -94,12 +94,12 @@ class TopcoderManagementDialog extends React.Component {
 
   render() {
     const {
-      members, currentUser, isMember, removeMember, onCancel, removeInvite, approveOrDecline, topcoderTeamInvites = [],
+      members, currentUser, removeMember, onCancel, removeInvite, approveOrDecline, topcoderTeamInvites = [],
       selectedMembers, processingInvites,
     } = this.props
     const { processingInviteRequestIds } = this.state
-    const showRemove = hasPermission(PERMISSIONS.MANAGE_TOPCODER_TEAM)
-    const showApproveDecline = currentUser.isAdmin || currentUser.isCopilotManager
+    const canManageTopcoderTeam = hasPermission(PERMISSIONS.MANAGE_TOPCODER_TEAM)
+    const showApproveDecline = hasPermission(PERMISSIONS.MANAGE_COPILOTS)
     const showSuggestions = hasPermission(PERMISSIONS.SEE_MEMBER_SUGGESTIONS)
     let i = 0
 
@@ -120,7 +120,7 @@ class TopcoderManagementDialog extends React.Component {
 
           <div className="dialog-body">
             {(members.map((member) => {
-              if (member.isCustomer || member.isCopilot) {
+              if (!hasPermission(PERMISSIONS.BE_LISTED_IN_TOPCODER_TEAM, { user: member })) {
                 return null
               }
               i++
@@ -146,10 +146,10 @@ class TopcoderManagementDialog extends React.Component {
                       </span>
                     </div>
                   </div>
-                  {showRemove && <div className="member-remove" onClick={remove}>
+                  {canManageTopcoderTeam && <div className="member-remove" onClick={remove}>
                     {(currentUser.userId === member.userId) ? 'Leave' : 'Remove'}
                   </div>}
-                  {!showRemove && (currentUser.userId === member.userId) &&
+                  {!canManageTopcoderTeam && (currentUser.userId === member.userId) &&
                     <div className="member-remove" onClick={remove}>
                       Leave
                     </div>
@@ -213,7 +213,7 @@ class TopcoderManagementDialog extends React.Component {
                     </div>
                   }
                   {
-                    invite.status===PROJECT_MEMBER_INVITE_STATUS_REQUESTED && !showApproveDecline && showRemove &&
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_REQUESTED && !showApproveDecline && canManageTopcoderTeam &&
                     <div className="member-remove">
                       <span className="email-date">
                         Requested {moment(invite.createdAt).format('MMM D, YY')}
@@ -221,7 +221,7 @@ class TopcoderManagementDialog extends React.Component {
                     </div>
                   }
                   {
-                    invite.status===PROJECT_MEMBER_INVITE_STATUS_PENDING && showRemove &&
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_PENDING && canManageTopcoderTeam &&
                     <div className="member-remove" onClick={remove}>
                       Remove
                       <span className="email-date">
@@ -230,7 +230,7 @@ class TopcoderManagementDialog extends React.Component {
                     </div>
                   }
                   {
-                    invite.status===PROJECT_MEMBER_INVITE_STATUS_PENDING && !showRemove &&
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_PENDING && !canManageTopcoderTeam &&
                     <div className="member-remove" >
                       <span className="email-date">
                         Invited {moment(invite.createdAt).format('MMM D, YY')}
@@ -241,16 +241,17 @@ class TopcoderManagementDialog extends React.Component {
                 </div>
               )
             }))}
+            {i === 0 && !canManageTopcoderTeam && <div className="dialog-no-members" />}
           </div>
 
-          {(showRemove || showApproveDecline) && <div className="input-container" >
+          {canManageTopcoderTeam && <div className="input-container" >
             <div className="hint">invite more people</div>
             <AutocompleteInputContainer
               placeholder="Enter one or more user handles"
               onUpdate={this.onChange}
               currentUser={currentUser}
               selectedMembers={selectedMembers}
-              disabled={processingInvites || (!currentUser.isAdmin && !isMember && !currentUser.isCopilotManager)}
+              disabled={processingInvites}
               showSuggestions={showSuggestions}
             />
             { this.state.showAlreadyMemberError && <div className="error-message">
@@ -269,7 +270,7 @@ class TopcoderManagementDialog extends React.Component {
             </button>
           </div>
           }
-          {!showRemove && <div className="dialog-placeholder" />}
+          {!canManageTopcoderTeam && <div className="dialog-placeholder" />}
         </div>
       </Modal>
     )
