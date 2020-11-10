@@ -12,7 +12,7 @@ import CardView from '../../../../assets/icons/ui-16px-2_grid-45-gray.svg'
 import GridView from '../../../../assets/icons/grid-list-ico.svg'
 import { SwitchButton } from 'appirio-tech-react-components'
 
-import PERMISSIONS from '../../../../config/permissions'
+import { PERMISSIONS } from '../../../../config/permissions'
 import { hasPermission } from '../../../../helpers/permissions'
 
 export default class ProjectListNavHeader extends Component {
@@ -89,7 +89,7 @@ export default class ProjectListNavHeader extends Component {
               )
             )}
           </MediaQuery>
-          {hasPermission(PERMISSIONS.SEE_MY_PROJECTS_FILTER) && 
+          {hasPermission(PERMISSIONS.SEE_MY_PROJECTS_FILTER) &&
             <div className="primary-filter">
               <div className="tc-switch clearfix">
                 <SwitchButton
@@ -102,7 +102,7 @@ export default class ProjectListNavHeader extends Component {
             </div>
           }
         </div>
-        
+
         <div className="right-wrapper">
           {hasPermission(PERMISSIONS.SEE_MY_PROJECTS_FILTER) && (
             <div className="primary-filter">
@@ -138,5 +138,4 @@ ProjectListNavHeader.propTypes = {
   history: PT.object.isRequired,
   setInfiniteAutoload: PT.func.isRequired,
   loadProjects: PT.func.isRequired,
-  isCustomer: PT.bool.isRequired
 }

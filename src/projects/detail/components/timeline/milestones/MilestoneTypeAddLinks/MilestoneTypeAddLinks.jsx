@@ -19,6 +19,8 @@ import {
 } from '../../../../../../config/constants'
 
 import './MilestoneTypeAddLinks.scss'
+import { hasPermission } from '../../../../../../helpers/permissions'
+import { PERMISSIONS } from '../../../../../../config/permissions'
 
 class MilestoneTypeAddLinks extends React.Component {
   constructor(props) {
@@ -114,7 +116,6 @@ class MilestoneTypeAddLinks extends React.Component {
     const {
       milestone,
       theme,
-      currentUser,
       extensionRequestDialog,
       extensionRequestButton,
       extensionRequestConfirmation,
@@ -137,6 +138,9 @@ class MilestoneTypeAddLinks extends React.Component {
 
     const progressPercent = getProgressPercent(totalDays, daysLeft)
     const { showExtensionRequestSection } = this.state
+
+    const canManage = hasPermission(PERMISSIONS.MANAGE_MILESTONE)
+
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -149,7 +153,7 @@ class MilestoneTypeAddLinks extends React.Component {
         {isActive && (
           <div>
             <div>
-              <DotIndicator hideDot={currentUser.isCustomer && extensionRequestConfirmation}>
+              <DotIndicator hideDot={!canManage && extensionRequestConfirmation}>
                 <div styleName="top-space">
                   <ProjectProgress
                     labelDayStatus={progressText}
@@ -160,7 +164,7 @@ class MilestoneTypeAddLinks extends React.Component {
                 </div>
               </DotIndicator>
 
-              {!currentUser.isCustomer && (
+              {canManage && (
                 <DotIndicator hideLine>
                   <LinkList
                     links={addedLinks}
@@ -198,7 +202,7 @@ class MilestoneTypeAddLinks extends React.Component {
             )}
 
             {!!extensionRequestConfirmation && (
-              <DotIndicator hideLine={!currentUser.isCustomer}>
+              <DotIndicator hideLine={canManage}>
                 <div styleName="top-space">
                   {extensionRequestConfirmation}
                 </div>
@@ -226,19 +230,19 @@ class MilestoneTypeAddLinks extends React.Component {
               !isCompleted &&
               !extensionRequestDialog &&
               !isShowCompleteConfirmMessage &&
-              !currentUser.isCustomer && showExtensionRequestSection &&
+              canManage && showExtensionRequestSection &&
             (
               <DotIndicator hideLine>
                 <div styleName="action-bar" className="flex center">
-                  {(!currentUser.isCustomer) && (
+                  {canManage && (
                     <button
                       className={'tc-btn tc-btn-primary'}
-                      onClick={!currentUser.isCustomer ? this.showCompleteAddLinksConfirmation : this.complete}
+                      onClick={canManage ? this.showCompleteAddLinksConfirmation : this.complete}
                     >
                       Complete
                     </button>
                   )}
-                  {!currentUser.isCustomer && extensionRequestButton}
+                  {canManage && extensionRequestButton}
                 </div>
               </DotIndicator>
             )}
@@ -256,7 +260,6 @@ MilestoneTypeAddLinks.defaultProps = {
 
 MilestoneTypeAddLinks.propTypes = {
   completeMilestone: PT.func.isRequired,
-  currentUser: PT.object.isRequired,
   milestone: PT.object.isRequired,
   theme: PT.string,
   updateMilestoneContent: PT.func.isRequired,

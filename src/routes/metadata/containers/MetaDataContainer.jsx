@@ -25,10 +25,6 @@ import MetaDataMilestoneTemplatesGridView from '../components/MetaDataMilestoneT
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
-import {
-  ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN,
-} from '../../../config/constants'
 import _ from 'lodash'
 
 import './MetaDataContainer.scss'
@@ -52,7 +48,6 @@ class MetaDataContainer extends React.Component {
       createProjectsMetadata,
       updateProjectsMetadata,
       templates,
-      isAdmin,
       currentUser,
       metadataType,
       match,
@@ -82,7 +77,6 @@ class MetaDataContainer extends React.Component {
         <div>
           <MetaDataPanel
             templates={templates}
-            isAdmin={isAdmin}
             metadataType={metadataType}
             metadata={projectTemplate}
             loadProjectsMetadata={loadProjectsMetadata}
@@ -192,7 +186,6 @@ class MetaDataContainer extends React.Component {
 
 
 MetaDataContainer.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
   metadataType: PropTypes.string.isRequired,
   loadProjectsMetadata: PropTypes.func.isRequired,
   deleteProjectsMetadata: PropTypes.func.isRequired,
@@ -201,15 +194,10 @@ MetaDataContainer.propTypes = {
 }
 
 
-const mapStateToProps = ({ templates, loadUser }) => {
-  const powerUserRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-
-  return {
-    templates,
-    currentUser: loadUser.user,
-    isAdmin: _.intersection(loadUser.user.roles, powerUserRoles).length !== 0
-  }
-}
+const mapStateToProps = ({ templates, loadUser }) => ({
+  templates,
+  currentUser: loadUser.user,
+})
 
 const mapDispatchToProps = {
   loadProjectsMetadata,

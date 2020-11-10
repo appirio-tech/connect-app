@@ -16,6 +16,8 @@ import { MILESTONE_STATUS } from '../../../../../../config/constants'
 
 import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 import './MilestoneTypePhaseSpecification.scss'
+import { hasPermission } from '../../../../../../helpers/permissions'
+import { PERMISSIONS } from '../../../../../../config/permissions'
 
 class MilestoneTypePhaseSpecification extends React.Component {
   constructor(props) {
@@ -84,7 +86,6 @@ class MilestoneTypePhaseSpecification extends React.Component {
     const {
       milestone,
       theme,
-      currentUser,
       extensionRequestDialog,
       extensionRequestButton,
       extensionRequestConfirmation,
@@ -96,9 +97,11 @@ class MilestoneTypePhaseSpecification extends React.Component {
     // can add only one specification link
     const canAddLink = links.length < 1
     const { showExtensionRequestSection } = this.state
+
+    const canManage = hasPermission(PERMISSIONS.MANAGE_MILESTONE)
     return (
       <div styleName={cn('milestone-post', theme)}>
-        <DotIndicator hideFirstLine={currentUser.isCustomer} hideDot>
+        <DotIndicator hideFirstLine={!canManage} hideDot>
           <MilestoneDescription description={getMilestoneStatusText(milestone)} />
         </DotIndicator>
 
@@ -107,9 +110,9 @@ class MilestoneTypePhaseSpecification extends React.Component {
          */}
         {isActive && (
           <div>
-            <MilestoneDelayNotification milestone={milestone} hideDot={!currentUser.isCustomer || extensionRequestConfirmation}/>
+            <MilestoneDelayNotification milestone={milestone} hideDot={canManage || extensionRequestConfirmation}/>
 
-            {!currentUser.isCustomer && (
+            {canManage && (
               <DotIndicator hideDot={showExtensionRequestSection}>
                 <LinkList
                   links={links}
@@ -139,7 +142,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
             )}
 
             {!!extensionRequestConfirmation && (
-              <DotIndicator hideDot={!currentUser.isCustomer} hideLine={currentUser.isCustomer}>
+              <DotIndicator hideDot={canManage} hideLine={!canManage}>
                 <div styleName="top-space">
                   {extensionRequestConfirmation}
                 </div>
@@ -147,7 +150,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
             )}
 
             {
-              !currentUser.isCustomer &&
+              canManage &&
               !extensionRequestDialog && showExtensionRequestSection &&
             (
               <DotIndicator>
@@ -159,7 +162,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
                     >
                       Mark as completed
                     </button>
-                    {!currentUser.isCustomer && extensionRequestButton}
+                    {canManage && extensionRequestButton}
                   </div>
                 </div>
               </DotIndicator>
@@ -188,7 +191,6 @@ MilestoneTypePhaseSpecification.defaultProps = {
 
 MilestoneTypePhaseSpecification.propTypes = {
   completeMilestone: PT.func.isRequired,
-  currentUser: PT.object.isRequired,
   milestone: PT.object.isRequired,
   theme: PT.string,
   updateMilestoneContent: PT.func.isRequired,

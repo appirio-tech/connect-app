@@ -45,7 +45,6 @@ const IncompleteUserProfileDialog = ({
 IncompleteUserProfileDialog.propTypes = {
   profileSettings: PT.object.isRequired,
   saveProfileSettings: PT.func.isRequired,
-  isTopcoderUser: PT.bool.isRequired,
   user: PT.object.isRequired,
   onCloseDialog: PT.func.isRequired,
   title: PT.string.isRequired,

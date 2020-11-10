@@ -12,8 +12,6 @@ import './TopicDrawer.scss'
 const TopicDrawer = ({
   open,
   onClose,
-  currentMemberRole,
-  isSuperUser,
   project,
   topic
 }) => {
@@ -32,9 +30,7 @@ const TopicDrawer = ({
     >
       {open && (
         <FeedContainer
-          currentMemberRole={currentMemberRole}
           project={project}
-          isSuperUser={isSuperUser}
           topics={[topic]}
           inTopicDrawer
           onDrawerClose={onClose}

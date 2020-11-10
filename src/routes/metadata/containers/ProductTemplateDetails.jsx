@@ -17,10 +17,6 @@ import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndica
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
-import {
-  ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN,
-} from '../../../config/constants'
 import _ from 'lodash'
 
 import './MetaDataContainer.scss'
@@ -45,7 +41,6 @@ class ProductTemplateDetails extends React.Component {
       updateProjectsMetadata,
       templates,
       isLoading,
-      isAdmin,
       match,
     } = this.props
     const productTemplates = templates.productTemplates
@@ -58,7 +53,6 @@ class ProductTemplateDetails extends React.Component {
         <div className={isLoading ? 'hide' : ''}>
           <MetaDataPanel
             templates={templates}
-            isAdmin={isAdmin}
             metadataType="productTemplate"
             metadata={productTemplate}
             loadProjectsMetadata={loadProjectsMetadata}
@@ -76,7 +70,6 @@ class ProductTemplateDetails extends React.Component {
 
 
 ProductTemplateDetails.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
   loadProjectsMetadata: PropTypes.func.isRequired,
   deleteProductTemplate: PropTypes.func.isRequired,
   createProductTemplate: PropTypes.func.isRequired,
@@ -84,18 +77,13 @@ ProductTemplateDetails.propTypes = {
 }
 
 
-const mapStateToProps = ({ templates, loadUser }) => {
-  const powerUserRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-
-  return {
-    templates,
-    isLoading: templates.isLoading,
-    isRemoving: templates.isRemoving,
-    error: templates.error,
-    currentUser: loadUser.user,
-    isAdmin: _.intersection(loadUser.user.roles, powerUserRoles).length !== 0
-  }
-}
+const mapStateToProps = ({ templates, loadUser }) => ({
+  templates,
+  isLoading: templates.isLoading,
+  isRemoving: templates.isRemoving,
+  error: templates.error,
+  currentUser: loadUser.user,
+})
 
 const mapDispatchToProps = {
   loadProjectsMetadata,

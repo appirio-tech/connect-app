@@ -17,6 +17,8 @@ import spinnerWhileLoading from '../../../../components/LoadingSpinner'
 import EditProjectForm from '../../components/EditProjectForm'
 import './ProjectScopeDrawer.scss'
 import { updateSection } from '../../../../helpers/wizardHelper'
+import { hasPermission } from '../../../../helpers/permissions'
+import { PERMISSIONS } from '../../../../config/permissions'
 
 
 // This handles showing a spinner while the state is being loaded async
@@ -58,14 +60,12 @@ class ProjectScopeDrawer extends Component {
       processing,
       fireProjectDirty,
       fireProjectDirtyUndo,
-      isSuperUser,
-      currentMemberRole,
       productTemplates,
       productCategories,
       onRequestChange,
     } = this.props
 
-    const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
+    const editPriv = hasPermission(PERMISSIONS.EDIT_PROJECT_SPECIFICATION)
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
     const finalSummaryIndex = _.findIndex(_.get(template, 'sections', []), {
       id: 'summary-final'
@@ -122,7 +122,7 @@ class ProjectScopeDrawer extends Component {
               updateAttachment={this.updateProjectAttachment}
               removeAttachment={this.removeProjectAttachment}
               attachmentsStorePath={attachmentsStorePath}
-              canManageAttachments={!!currentMemberRole}
+              canManageAttachments={hasPermission(PERMISSIONS.EDIT_PROJECT_SPECIFICATION)}
               productTemplates={productTemplates}
               productCategories={productCategories}
               currentWizardStep={currentWizardStep}

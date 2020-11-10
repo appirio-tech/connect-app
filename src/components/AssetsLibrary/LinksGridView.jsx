@@ -22,7 +22,7 @@ import {
 } from '../../config/constants'
 import FilterColHeader from './FilterColHeader'
 import { hasPermission } from '../../helpers/permissions'
-import PERMISSIONS from '../../config/permissions'
+import { PERMISSIONS } from '../../config/permissions'
 
 let selectedLink
 let clearing = false

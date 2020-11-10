@@ -1,7 +1,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import { formatNumberWithCommas } from '../../../../helpers/format'
-import PERMISSIONS from '../../../../config/permissions'
+import { PERMISSIONS } from '../../../../config/permissions'
 import { hasPermission } from '../../../../helpers/permissions'
 import './ProjectBudgetReport.scss'
 

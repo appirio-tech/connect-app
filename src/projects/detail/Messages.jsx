@@ -4,11 +4,10 @@ import MessagesContainer from './containers/MessagesContainer'
 
 require('./Messages.scss')
 
-const Messages = ({ location, project, currentMemberRole, route, params }) => (
+const Messages = ({ location, project, route, params }) => (
   <MessagesContainer
     location={ location }
     project={ project }
-    currentMemberRole={ currentMemberRole }
     route={ route }
     params={ params }
   />

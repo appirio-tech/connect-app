@@ -4,24 +4,7 @@ import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import _ from 'lodash'
 import {
-  PROJECT_ROLE_COPILOT,
-  PROJECT_ROLE_CUSTOMER,
   PROJECT_ROLE_MANAGER,
-  ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN,
-  ROLE_CONNECT_COPILOT,
-  ROLE_CONNECT_COPILOT_MANAGER,
-  ROLE_CONNECT_MANAGER,
-  ROLE_CONNECT_ACCOUNT_MANAGER,
-  PROJECT_ROLE_ACCOUNT_MANAGER,
-  ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE,
-  ROLE_PRESALES,
-  ROLE_ACCOUNT_EXECUTIVE,
-  ROLE_PROGRAM_MANAGER,
-  ROLE_PROJECT_MANAGER,
-  ROLE_SOLUTION_ARCHITECT,
-  PROJECT_ROLE_PROJECT_MANAGER,
-  PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_ACCOUNT_EXECUTIVE
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import {
@@ -87,11 +70,15 @@ class TeamManagementContainer extends Component {
     this.setState({isUserLeaving: isLeaving})
   }
 
-  onJoinConfirm(role) {
+  /**
+   * Member joins themself.
+   *
+   * Currently only used to by managers to join Topcoder Team.
+   *
+   * @param {string} role role to join with
+   */
+  onJoinConfirm(role = PROJECT_ROLE_MANAGER) {
     const { currentUser, projectId, addProjectMember } = this.props
-    let defaultRole = PROJECT_ROLE_MANAGER
-    if (currentUser.isCopilot) defaultRole = PROJECT_ROLE_COPILOT
-    role = role || defaultRole
     addProjectMember(
       projectId,
       {userId: currentUser.userId, role}
@@ -129,31 +116,6 @@ class TeamManagementContainer extends Component {
     this.props.updateProjectMember(this.props.projectId, memberId, item)
   }
 
-  anontateMemberProps() {
-    const {members} = this.props
-    // fill project members from state.members object
-    return _.map(members, m => {
-      if (!m.userId && !m.role) return m
-      // map role
-      if (m.role === PROJECT_ROLE_COPILOT) {
-        m.isCopilot = true
-      } else if (m.role === PROJECT_ROLE_CUSTOMER) {
-        m.isCustomer = true
-        m.isPrimary = m.isPrimary || false
-      } else if ([
-        PROJECT_ROLE_MANAGER,
-        PROJECT_ROLE_ACCOUNT_MANAGER,
-        PROJECT_ROLE_ACCOUNT_EXECUTIVE,
-        PROJECT_ROLE_PROJECT_MANAGER,
-        PROJECT_ROLE_PROGRAM_MANAGER,
-        PROJECT_ROLE_SOLUTION_ARCHITECT
-      ].includes(m.role)) {
-        m.isManager = true
-      }
-      return m
-    })
-  }
-
   onSelectedMembersUpdate(selectedMembers) {
     this.setState({selectedMembers})
   }
@@ -186,7 +148,6 @@ class TeamManagementContainer extends Component {
 
 
   render() {
-    const projectMembers = this.anontateMemberProps()
     const {projectTeamInvites, topcoderTeamInvites, copilotTeamInvites } = this.props
     return (
       <div>
@@ -199,7 +160,7 @@ class TeamManagementContainer extends Component {
           processingInvites={this.props.processingInvites}
           error={this.props.error}
           currentUser={this.props.currentUser}
-          members={projectMembers}
+          members={this.props.members}
           allMembers={this.props.allMembers}
           projectTeamInvites={projectTeamInvites}
           topcoderTeamInvites={topcoderTeamInvites}
@@ -223,31 +184,19 @@ class TeamManagementContainer extends Component {
   }
 }
 
-const mapStateToProps = ({loadUser, members, projectState}) => {
-  const adminRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-  const powerUserRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-  const managerRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_MANAGER, ROLE_PROGRAM_MANAGER, ROLE_PROJECT_MANAGER, ROLE_SOLUTION_ARCHITECT]
-  const accountManagerRoles = [ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_BUSINESS_DEVELOPMENT_REPRESENTATIVE, ROLE_PRESALES, ROLE_ACCOUNT_EXECUTIVE]
-  return {
-    currentUser: {
-      userId: parseInt(loadUser.user.id),
-      isCopilot: _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT) > -1,
-      isAdmin: _.intersection(loadUser.user.roles, adminRoles).length > 0,
-      isManager: loadUser.user.roles.some((role) => managerRoles.indexOf(role) !== -1),
-      isCustomer: !loadUser.user.roles.some((role) => powerUserRoles.indexOf(role) !== -1),
-      isCopilotManager: _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT_MANAGER) > -1,
-      isAccountManager: loadUser.user.roles.some((role) => accountManagerRoles.indexOf(role) !== -1),
-    },
-    allMembers: _.values(members.members),
-    processingInvites: projectState.processingInvites,
-    processingMembers: projectState.processingMembers,
-    updatingMemberIds: projectState.updatingMemberIds,
-    error: projectState.error,
-    topcoderTeamInvites: _.filter(projectState.project.invites, i => i.role !== 'customer' && i.role !== 'copilot'),
-    copilotTeamInvites: _.filter(projectState.project.invites, i => i.role === 'copilot'),
-    projectTeamInvites: _.filter(projectState.project.invites, i => i.role === 'customer')
-  }
-}
+const mapStateToProps = ({loadUser, members, projectState}) => ({
+  currentUser: {
+    userId: parseInt(loadUser.user.id),
+  },
+  allMembers: _.values(members.members),
+  processingInvites: projectState.processingInvites,
+  processingMembers: projectState.processingMembers,
+  updatingMemberIds: projectState.updatingMemberIds,
+  error: projectState.error,
+  topcoderTeamInvites: _.filter(projectState.project.invites, i => i.role !== 'customer' && i.role !== 'copilot'),
+  copilotTeamInvites: _.filter(projectState.project.invites, i => i.role === 'copilot'),
+  projectTeamInvites: _.filter(projectState.project.invites, i => i.role === 'customer')
+})
 
 const mapDispatchToProps = {
   addProjectMember,
@@ -266,9 +215,6 @@ TeamManagementContainer.propTypes = {
   members: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentUser: PropTypes.shape({
     userId: PropTypes.number.isRequired,
-    isManager: PropTypes.bool,
-    isCustomer: PropTypes.bool,
-    isCopilot: PropTypes.bool
   }).isRequired,
   allMembers: PropTypes.arrayOf(PropTypes.object).isRequired,
   projectId: PropTypes.number.isRequired,

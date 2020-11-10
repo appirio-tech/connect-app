@@ -29,7 +29,7 @@ import {
   EVENT_TYPE,
 } from '../../../config/constants'
 import Sticky from '../../../components/Sticky'
-import PERMISSIONS from '../../../config/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 import { hasPermission } from '../../../helpers/permissions'
 
 import './AssetsLibraryContainer.scss'
@@ -58,7 +58,7 @@ class AssetsLibraryContainer extends React.Component {
 
     // if the user is a customer and its not a direct link to a particular phase
     // then by default expand all phases which are active
-    if (_.isEmpty(location.hash) && this.props.isCustomerUser) {
+    if (_.isEmpty(location.hash) && hasPermission(PERMISSIONS.EXPAND_ACTIVE_PHASES_BY_DEFAULT)) {
       _.forEach(this.props.phases, phase => {
         if (phase.status === PHASE_STATUS_ACTIVE) {
           expandProjectPhase(phase.id)
@@ -76,9 +76,6 @@ class AssetsLibraryContainer extends React.Component {
   render() {
     const {
       project,
-      isSuperUser,
-      isManageUser,
-      currentMemberRole,
       feeds,
       isFeedsLoading,
       phases,
@@ -93,11 +90,8 @@ class AssetsLibraryContainer extends React.Component {
     const leftArea = (
       <ProjectInfoContainer
         location={location}
-        currentMemberRole={currentMemberRole}
         phases={phases}
         project={project}
-        isSuperUser={isSuperUser}
-        isManageUser={isManageUser}
         feeds={feeds}
         isFeedsLoading={isFeedsLoading}
         productsTimelines={productsTimelines}
@@ -131,11 +125,8 @@ class AssetsLibraryContainer extends React.Component {
         </TwoColsLayout.Sidebar>
         <TwoColsLayout.Content>
           <AssetsInfoContainer
-            currentMemberRole={currentMemberRole}
             phases={phases}
             project={project}
-            isSuperUser={isSuperUser}
-            isManageUser={isManageUser}
             feeds={feeds}
             phasesTopics={phasesTopics}
           />
@@ -147,10 +138,7 @@ class AssetsLibraryContainer extends React.Component {
 }
 
 AssetsLibraryContainer.propTypes = {
-  currentMemberRole: PT.string.isRequired,
   isProcessing: PT.bool.isRequired,
-  isSuperUser: PT.bool.isRequired,
-  isManageUser: PT.bool.isRequired,
   project: PT.object.isRequired,
   phases: PT.array.isRequired,
   productsTimelines: PT.object.isRequired,

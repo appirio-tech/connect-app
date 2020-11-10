@@ -15,7 +15,7 @@ import FormsyBtnGroup from '../../../../../components/BtnGroup/FormsyBtnGroup'
 import ISOCountries from '../../../../../helpers/ISOCountries'
 import { formatPhone } from '../../../../../helpers/utils'
 import { hasPermission } from '../../../../../helpers/permissions'
-import PERMISSIONS from '../../../../../config/permissions'
+import { PERMISSIONS } from '../../../../../config/permissions'
 import { TOPCODER_CONNECT_TERMS_URL } from '../../../../../config/constants'
 import './ProfileSettingsForm.scss'
 

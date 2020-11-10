@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import FileList from '../../../components/FileList/FileList'
 import AddFiles from '../../../components/FileList/AddFiles'
-import { getProjectRoleForCurrentUser } from '../../../helpers/projectHelper'
 import { uploadProjectAttachments, discardAttachments, changeAttachmentPermission } from '../../actions/projectAttachment'
 import AddFilePermission from '../../../components/FileList/AddFilePermissions'
 import { ATTACHMENT_TYPE_FILE } from '../../../config/constants'
@@ -50,12 +49,6 @@ class FileListContainer extends Component {
       }
       this.props.addAttachment(attachment)
     })
-  }
-
-  canManageFiles() {
-    const { currentUserId, project } = this.props
-    const role = getProjectRoleForCurrentUser({ currentUserId, project })
-    return !!role
   }
 
   render() {

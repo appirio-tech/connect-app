@@ -17,10 +17,6 @@ import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndica
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import MetaDataPanel from '../components/MetaDataPanel'
-import {
-  ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN,
-} from '../../../config/constants'
 import _ from 'lodash'
 
 import './MetaDataContainer.scss'
@@ -45,7 +41,6 @@ class ProductCategoryDetails extends React.Component {
       updateProjectsMetadata,
       templates,
       isLoading,
-      isAdmin,
       match,
     } = this.props
     const productCategories = templates.productCategories
@@ -57,7 +52,6 @@ class ProductCategoryDetails extends React.Component {
         <div className={isLoading ? 'hide' : ''}>
           <MetaDataPanel
             templates={templates}
-            isAdmin={isAdmin}
             metadataType="productCategory"
             metadata={productCategory}
             loadProjectsMetadata={loadProjectsMetadata}
@@ -75,7 +69,6 @@ class ProductCategoryDetails extends React.Component {
 
 
 ProductCategoryDetails.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
   loadProjectsMetadata: PropTypes.func.isRequired,
   deleteProductCategory: PropTypes.func.isRequired,
   createProductCategory: PropTypes.func.isRequired,
@@ -83,17 +76,12 @@ ProductCategoryDetails.propTypes = {
 }
 
 
-const mapStateToProps = ({ templates, loadUser }) => {
-  const powerUserRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-
-  return {
-    templates,
-    isLoading: templates.isLoading,
-    isRemoving: templates.isRemoving,
-    currentUser: loadUser.user,
-    isAdmin: _.intersection(loadUser.user.roles, powerUserRoles).length !== 0
-  }
-}
+const mapStateToProps = ({ templates, loadUser }) => ({
+  templates,
+  isLoading: templates.isLoading,
+  isRemoving: templates.isRemoving,
+  currentUser: loadUser.user,
+})
 
 const mapDispatchToProps = {
   loadProjectsMetadata,

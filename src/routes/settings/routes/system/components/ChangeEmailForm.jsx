@@ -14,6 +14,8 @@ const TCFormFields = FormsyForm.Fields
 const Formsy = FormsyForm.Formsy
 import './ChangeEmailForm.scss'
 import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
+import { hasPermission } from '../../../../../helpers/permissions'
+import { PERMISSIONS } from '../../../../../config/permissions'
 
 class ChangeEmailForm extends React.Component {
   constructor(props) {
@@ -96,7 +98,7 @@ class ChangeEmailForm extends React.Component {
   }
 
   render() {
-    const { settings, checkingEmail, checkedEmail, isEmailAvailable, isEmailChanging, emailSubmitted, isCustomer} = this.props
+    const { settings, checkingEmail, checkedEmail, isEmailAvailable, isEmailChanging, emailSubmitted} = this.props
     const { currentEmail, isValid, isFocused } = this.state
     const currentEmailAvailable = checkedEmail === currentEmail && isEmailAvailable
     const isCheckingCurrentEmail = checkingEmail === currentEmail
@@ -138,7 +140,7 @@ class ChangeEmailForm extends React.Component {
               validationErrors={{
                 isEmail: 'Provide a correct email'
               }}
-              disabled={isEmailChanging || !isCustomer}
+              disabled={isEmailChanging || !hasPermission(PERMISSIONS.UPDATE_USER_EMAIL)}
               ref={(ref) => this.emailRef = ref}
             />
             { isFocused && isCheckingCurrentEmail && (
@@ -178,7 +180,6 @@ ChangeEmailForm.propTypes = {
   checkingEmailError: PropTypes.string,
   isEmailAvailable: PropTypes.bool,
   isEmailChanging: PropTypes.bool,
-  isCustomer: PropTypes.bool
 }
 
 export default ChangeEmailForm

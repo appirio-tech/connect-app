@@ -3,19 +3,19 @@
  */
 import React from 'react'
 import PT from 'prop-types'
-import { PROFILE_FIELDS_CONFIG } from '../../config/constants'
 import ProfileSettingsForm from '../../routes/settings/routes/profile/components/ProfileSettingsForm'
-import { getDefaultTopcoderRole } from '../../helpers/permissions'
+import { getDefaultTopcoderRole, hasPermission } from '../../helpers/permissions'
 import { timezones } from 'appirio-tech-react-components/constants/timezones'
+import { getUserProfileFieldsConfig } from '../../helpers/tcHelpers'
+import { PERMISSIONS } from '../../config/permissions'
 
 const IncompleteUserProfile = ({
   profileSettings,
   saveProfileSettings,
-  isTopcoderUser,
   user,
   ...restProps
 }) => {
-  const fieldsConfig = isTopcoderUser ? PROFILE_FIELDS_CONFIG.TOPCODER : PROFILE_FIELDS_CONFIG.CUSTOMER
+  const fieldsConfig = getUserProfileFieldsConfig()
   // never show avatar
   delete fieldsConfig.avatar
   // config the form to only show required fields which doesn't have the value yet
@@ -40,7 +40,7 @@ const IncompleteUserProfile = ({
     console.log('Auto-detected timezone', prefilledProfileSettings.settings.timeZone)
   }
 
-  if (isTopcoderUser) {
+  if (!hasPermission(PERMISSIONS.VIEW_USER_PROFILE_AS_CUSTOMER)) {
     // We don't ask Topcoder User for "Company Name" and "Title"
     // but server requires them, so if they are not yet defined, we set them automatically
     if (!profileSettings.settings.companyName) {
@@ -71,7 +71,6 @@ const IncompleteUserProfile = ({
 IncompleteUserProfile.propTypes = {
   profileSettings: PT.object.isRequired,
   saveProfileSettings: PT.func.isRequired,
-  isTopcoderUser: PT.bool.isRequired,
   user: PT.object.isRequired,
 }
 
