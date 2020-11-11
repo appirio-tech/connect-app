@@ -28,7 +28,7 @@ import XMartIcon from '../../../../../assets/icons/x-mark.svg'
 
 import { MILESTONE_STATUS, SCREEN_BREAKPOINT_MD } from '../../../../../config/constants'
 
-import PERMISSIONS from '../../../../../config/permissions'
+import { PERMISSIONS } from '../../../../../config/permissions'
 import {hasPermission} from '../../../../../helpers/permissions'
 
 import './Milestone.scss'
@@ -103,17 +103,17 @@ class Milestone extends React.Component {
   }
 
   isActualStartDateEditable() {
-    const { milestone, currentUser } = this.props
+    const { milestone } = this.props
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
-    return (isActive || isCompleted) && currentUser.isAdmin
+    return (isActive || isCompleted) && hasPermission(PERMISSIONS.EDIT_MILESTONE_ACTUAL_START_COMPLETION_DATES)
 
   }
 
   isCompletionDateEditable() {
-    const { milestone, currentUser } = this.props
+    const { milestone } = this.props
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
-    return isCompleted && currentUser.isAdmin
+    return isCompleted && hasPermission(PERMISSIONS.EDIT_MILESTONE_ACTUAL_START_COMPLETION_DATES)
   }
 
   updateMilestoneWithData(values) {

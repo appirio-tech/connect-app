@@ -5,6 +5,8 @@ import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
 import { DOMAIN } from '../../../config/constants'
 import './UpdateUserInfo.scss'
 import IncompleteUserProfile from '../../../components/IncompleteUserProfile/IncompleteUserProfile'
+import { hasPermission } from '../../../helpers/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 
 class UpdateUserInfo extends Component {
   constructor(props) {
@@ -22,7 +24,6 @@ class UpdateUserInfo extends Component {
     const {
       profileSettings,
       saveProfileSettings,
-      isTopcoderUser,
       closeUserSettings,
       user,
     } = this.props
@@ -48,14 +49,13 @@ class UpdateUserInfo extends Component {
           <IncompleteUserProfile
             profileSettings={profileSettings}
             saveProfileSettings={saveProfileSettings}
-            isTopcoderUser={isTopcoderUser}
             user={user}
             submitButton="Send My Request"
             showBackButton
             onBack={closeUserSettings}
             buttonExtraClassName="tc-btn-md"
           />
-          {!isTopcoderUser && (
+          {hasPermission(PERMISSIONS.VIEW_USER_PROFILE_AS_CUSTOMER) && (
             <p styleName="bottom-note">
               Were you looking to join Topcoder’s freelancer community and
               participate in work? <a href={`//www.${DOMAIN}`}>Click here</a>
@@ -74,7 +74,6 @@ UpdateUserInfo.defaultProps = {
 UpdateUserInfo.propTypes = {
   profileSettings: PT.object.isRequired,
   isMissingUserInfo: PT.bool.isRequired,
-  isTopcoderUser: PT.bool.isRequired,
   closeUserSettings: PT.func,
 }
 

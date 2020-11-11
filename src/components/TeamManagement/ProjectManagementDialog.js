@@ -5,7 +5,7 @@ import moment from 'moment'
 import Modal from 'react-modal'
 import XMarkIcon from '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
-import PERMISSIONS from '../../config/permissions'
+import { PERMISSIONS } from '../../config/permissions'
 
 import { hasPermission } from '../../helpers/permissions'
 import {getAvatarResized, getFullNameWithFallback} from '../../helpers/tcHelpers'
@@ -88,10 +88,10 @@ class ProjectManagementDialog extends React.Component {
 
   render() {
     const {
-      members, currentUser, isMember, removeMember, removeInvite,
+      members, currentUser, removeMember, removeInvite,
       onCancel, projectTeamInvites = [], selectedMembers, processingInvites,
     } = this.props
-    const showRemove = currentUser.isAdmin || (!currentUser.isCopilot && isMember)
+    const canManageCustomerTeam = hasPermission(PERMISSIONS.MANAGE_CUSTOMER_TEAM)
     const showSuggestions = hasPermission(PERMISSIONS.SEE_MEMBER_SUGGESTIONS)
     let i = 0
     return (
@@ -111,7 +111,7 @@ class ProjectManagementDialog extends React.Component {
 
           <div className="dialog-body">
             {(members.map((member) => {
-              if (!member.isCustomer) {
+              if (!hasPermission(PERMISSIONS.BE_LISTED_IN_CUSTOMER_TEAM, { user: member})) {
                 return null
               }
               i++
@@ -138,7 +138,7 @@ class ProjectManagementDialog extends React.Component {
                       </span>
                     </div>
                   </div>
-                  {showRemove && <div className="member-remove" onClick={remove}>
+                  {canManageCustomerTeam && <div className="member-remove" onClick={remove}>
                     {(currentUser.userId === member.userId) ? 'Leave' : 'Remove'}
                   </div>}
                 </div>
@@ -169,7 +169,7 @@ class ProjectManagementDialog extends React.Component {
                       { (!hasUserId) && <span className="member-email">{invite.email}</span>}
                     </span>
                   </div>
-                  {showRemove && <div className="member-remove" onClick={remove}>
+                  {canManageCustomerTeam && <div className="member-remove" onClick={remove}>
                     Remove
                     <span className="email-date">
                       Invited {moment(invite.createdAt).format('MMM D, YY')}
@@ -178,35 +178,38 @@ class ProjectManagementDialog extends React.Component {
                 </div>
               )
             }))}
+            {i === 0 && !canManageCustomerTeam && <div className="dialog-no-members" />}
           </div>
 
-          <div className="input-container">
-            <div className="hint">invite more people</div>
-            <AutocompleteInputContainer
-              placeholder="Enter email address(es) or user handles"
-              onUpdate={this.onChange}
-              currentUser={currentUser}
-              selectedMembers={selectedMembers}
-              disabled={processingInvites || (!currentUser.isAdmin && !isMember)}
-              showSuggestions={showSuggestions}
-            />
-            {this.state.showAlreadyMemberError && <div className="error-message">
-              Project Member(s) can't be invited again. Please remove them from list.
-            </div>}
-            { this.state.errorMessage  && <div className="error-message">
-              {this.state.errorMessage}
-            </div> }
-            <button
-              className="tc-btn tc-btn-primary tc-btn-md"
-              type="submit"
-              disabled={processingInvites || this.state.showAlreadyMemberError || selectedMembers.length === 0}
-              onClick={this.props.sendInvite}
-            >
-              Send Invite
-            </button>
-          </div>
+          {canManageCustomerTeam && (
+            <div className="input-container">
+              <div className="hint">invite more people</div>
+              <AutocompleteInputContainer
+                placeholder="Enter email address(es) or user handles"
+                onUpdate={this.onChange}
+                currentUser={currentUser}
+                selectedMembers={selectedMembers}
+                disabled={processingInvites}
+                showSuggestions={showSuggestions}
+              />
+              {this.state.showAlreadyMemberError && <div className="error-message">
+                Project Member(s) can't be invited again. Please remove them from list.
+              </div>}
+              { this.state.errorMessage  && <div className="error-message">
+                {this.state.errorMessage}
+              </div> }
+              <button
+                className="tc-btn tc-btn-primary tc-btn-md"
+                type="submit"
+                disabled={processingInvites || this.state.showAlreadyMemberError || selectedMembers.length === 0}
+                onClick={this.props.sendInvite}
+              >
+                Send Invite
+              </button>
+            </div>
+          )}
+          {!canManageCustomerTeam && <div className="dialog-placeholder" />}
         </div>
-
       </Modal>
     )
   }

@@ -17,6 +17,8 @@ import { MILESTONE_STATUS  } from '../../../../../../config/constants'
 import { getMilestoneStatusText, getDaysLeft, getTotalDays, getProgressPercent } from '../../../../../../helpers/milestoneHelper'
 
 import './MilestoneTypeFinalFixes.scss'
+import { hasPermission } from '../../../../../../helpers/permissions'
+import { PERMISSIONS } from '../../../../../../config/permissions'
 
 class MilestoneTypeFinalFixes extends React.Component {
   constructor(props) {
@@ -86,7 +88,6 @@ class MilestoneTypeFinalFixes extends React.Component {
     const {
       milestone,
       theme,
-      currentUser,
       extensionRequestDialog,
       extensionRequestButton,
       extensionRequestConfirmation,
@@ -104,6 +105,7 @@ class MilestoneTypeFinalFixes extends React.Component {
 
     const progressPercent = getProgressPercent(totalDays, daysLeft)
     const { showExtensionRequestSection } = this.state
+    const canManage = hasPermission(PERMISSIONS.MANAGE_MILESTONE)
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -134,7 +136,7 @@ class MilestoneTypeFinalFixes extends React.Component {
           </DotIndicator>
         ))}
 
-        {isActive && !currentUser.isCustomer && (
+        {isActive && canManage && (
           <DotIndicator hideLine>
             <LinkList
               links={links}
@@ -174,7 +176,7 @@ class MilestoneTypeFinalFixes extends React.Component {
         {
           isActive &&
           !extensionRequestDialog &&
-          !currentUser.isCustomer && showExtensionRequestSection &&
+          canManage && showExtensionRequestSection &&
         (
           <DotIndicator hideLine>
             <div styleName="top-space">

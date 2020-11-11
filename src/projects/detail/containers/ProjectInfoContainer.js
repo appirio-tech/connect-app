@@ -12,9 +12,6 @@ import { loadProjectPlan } from '../../actions/projectPlan'
 import { getProjectNavLinks } from '../../../helpers/projectHelper'
 import { getProjectTemplateByKey, containsFAQ } from '../../../helpers/templates'
 import {
-  PROJECT_ROLE_OWNER,
-  PROJECT_ROLE_COPILOT,
-  PROJECT_ROLE_MANAGER,
   DIRECT_PROJECT_URL,
   SALESFORCE_PROJECT_LEAD_LINK,
   PROJECT_STATUS_CANCELLED,
@@ -22,11 +19,8 @@ import {
   PROJECT_STATUS_COMPLETED,
   PHASE_STATUS_REVIEWED,
   PHASE_STATUS_ACTIVE,
-  PROJECT_ROLE_PROJECT_MANAGER,
-  PROJECT_ROLE_PROGRAM_MANAGER,
-  PROJECT_ROLE_SOLUTION_ARCHITECT,
 } from '../../../config/constants'
-import PERMISSIONS from '../../../config/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 import { hasPermission } from '../../../helpers/permissions'
 import Panel from '../../../components/Panel/Panel'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
@@ -425,7 +419,7 @@ class ProjectInfoContainer extends React.Component {
 
   render() {
     const { showDeleteConfirm } = this.state
-    const { project, currentMemberRole, isSuperUser, phases, hideInfo, hideMembers,
+    const { project, phases, hideInfo, hideMembers,
       productsTimelines, isProjectProcessing, notifications, projectTemplates } = this.props
 
     const projectTemplateId = project.templateId
@@ -436,15 +430,7 @@ class ProjectInfoContainer extends React.Component {
 
     // const isTaaS = PROJECT_CATEGORY_TAAS === projectTemplate.category
     let directLinks = null
-    // check if direct links need to be added
-    const isMemberOrCopilot = _.indexOf([
-      PROJECT_ROLE_COPILOT,
-      PROJECT_ROLE_MANAGER,
-      PROJECT_ROLE_PROJECT_MANAGER,
-      PROJECT_ROLE_PROGRAM_MANAGER,
-      PROJECT_ROLE_SOLUTION_ARCHITECT
-    ], currentMemberRole) > -1
-    if (isMemberOrCopilot || isSuperUser) {
+    if (hasPermission(PERMISSIONS.VIEW_PROJECT_SPECIAL_LINKS)) {
       directLinks = []
       // if(!isTaaS)
       //   directLinks.push({name: 'Launch Work Manager', href: `${WORK_MANAGER_APP}/${project.id}/challenges`})
@@ -456,7 +442,7 @@ class ProjectInfoContainer extends React.Component {
       directLinks.push({name: 'Salesforce Lead', href: `${SALESFORCE_PROJECT_LEAD_LINK}${project.id}`})
     }
 
-    const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER && project.status === 'draft'
+    const canDeleteProject = hasPermission(PERMISSIONS.DELETE_DRAFT_PROJECT) && project.status === 'draft'
 
     const projectNotReadNotifications = filterReadNotifications(filterNotificationsByProjectId(notifications, project.id))
     const notReadMessageNotifications = filterTopicAndPostChangedNotifications(projectNotReadNotifications, /^(?:MESSAGES|PRIMARY)$/)
@@ -482,14 +468,7 @@ class ProjectInfoContainer extends React.Component {
     })
 
     const canEdit = (
-      project.status !== PROJECT_STATUS_COMPLETED && (isSuperUser || (currentMemberRole
-      && (_.indexOf([
-        PROJECT_ROLE_COPILOT,
-        PROJECT_ROLE_MANAGER,
-        PROJECT_ROLE_PROJECT_MANAGER,
-        PROJECT_ROLE_PROGRAM_MANAGER,
-        PROJECT_ROLE_SOLUTION_ARCHITECT
-      ], currentMemberRole) > -1)))
+      project.status !== PROJECT_STATUS_COMPLETED && hasPermission(PERMISSIONS.EDIT_PROJECT_STATUS)
     )
 
     const progress = _.get(process, 'percent', 0)
@@ -522,12 +501,10 @@ class ProjectInfoContainer extends React.Component {
             <ProjectInfo
               project={project}
               phases={phases}
-              currentMemberRole={currentMemberRole}
               canDeleteProject={canDeleteProject}
               onDeleteProject={this.onDeleteProject}
               onChangeStatus={this.onChangeStatus}
               directLinks={directLinks}
-              isSuperUser={isSuperUser}
               productsTimelines = {productsTimelines}
               onSubmitForReview={this.onSubmitForReview}
               isProjectProcessing={isProjectProcessing}
@@ -573,7 +550,6 @@ class ProjectInfoContainer extends React.Component {
                 projectCanBeActive={projectCanBeActive}
                 showText
                 withoutLabel
-                currentMemberRole={currentMemberRole}
                 canEdit={canEdit}
                 unifiedHeader={false}
                 onChangeStatus={this.onChangeStatus}
@@ -611,13 +587,10 @@ class ProjectInfoContainer extends React.Component {
 }
 
 ProjectInfoContainer.PropTypes = {
-  currentMemberRole: PropTypes.string,
   phases: PropTypes.array,
   feeds: PropTypes.array,
   phasesTopics: PropTypes.array,
   project: PropTypes.object.isRequired,
-  isSuperUser: PropTypes.bool,
-  isManageUser: PropTypes.bool,
   productsTimelines : PropTypes.object.isRequired,
   isProjectPlan: PropTypes.bool,
   isProjectProcessing: PropTypes.bool,

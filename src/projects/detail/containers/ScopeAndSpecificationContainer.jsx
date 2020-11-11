@@ -19,16 +19,8 @@ import {
   SCREEN_BREAKPOINT_MD,
   PROJECT_ATTACHMENTS_FOLDER,
   EVENT_TYPE,
-  PROJECT_ROLE_OWNER,
-  PROJECT_ROLE_CUSTOMER,
-  PROJECT_ROLE_MANAGER,
-  PROJECT_ROLE_ACCOUNT_MANAGER,
   PROJECT_FEED_TYPE_PRIMARY,
   PROJECT_FEED_TYPE_MESSAGES,
-  PROJECT_ROLE_ACCOUNT_EXECUTIVE,
-  PROJECT_ROLE_PROJECT_MANAGER,
-  PROJECT_ROLE_PROGRAM_MANAGER,
-  PROJECT_ROLE_SOLUTION_ARCHITECT
 } from '../../../config/constants'
 import {
   updateProject,
@@ -40,7 +32,7 @@ import {
   cancelScopeChange,
   activateScopeChange
 } from '../../actions/project'
-import PERMISSIONS from '../../../config/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 import { hasPermission } from '../../../helpers/permissions'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
@@ -121,42 +113,27 @@ class SpecificationContainer extends Component {
     const {
       project,
       projectNonDirty,
-      currentMemberRole,
-      isSuperUser,
       processing,
       template,
       allProductTemplates,
       productCategories,
       currentUserId,
       phases,
-      isManageUser,
       feeds,
       productsTimelines,
       isFeedsLoading,
       phasesTopics,
       isProcessing
     } = this.props
-    const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
-    const isCustomer = _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
-    const isManager = currentMemberRole && [
-      PROJECT_ROLE_MANAGER,
-      PROJECT_ROLE_ACCOUNT_MANAGER,
-      PROJECT_ROLE_ACCOUNT_EXECUTIVE,
-      PROJECT_ROLE_PROJECT_MANAGER,
-      PROJECT_ROLE_PROGRAM_MANAGER,
-      PROJECT_ROLE_SOLUTION_ARCHITECT
-    ].indexOf(currentMemberRole) > -1
+    const editPriv = hasPermission(PERMISSIONS.EDIT_PROJECT_SPECIFICATION)
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
 
     const leftArea = (
       <ProjectInfoContainer
         location={location}
-        currentMemberRole={currentMemberRole}
         project={project}
         phases={phases}
-        isSuperUser={isSuperUser}
-        isManageUser={isManageUser}
         feeds={feeds}
         isFeedsLoading={isFeedsLoading}
         productsTimelines={productsTimelines}
@@ -205,12 +182,11 @@ class SpecificationContainer extends Component {
             updateAttachment={this.updateProjectAttachment}
             removeAttachment={this.removeProjectAttachment}
             attachmentsStorePath={attachmentsStorePath}
-            canManageAttachments={!!currentMemberRole}
+            canManageAttachments={editPriv}
             productTemplates={allProductTemplates}
             productCategories={productCategories}
             showHidden
             pendingScopeChange={pendingScopeChange}
-            isCustomer={isCustomer}
           />
           {
             pendingScopeChange &&
@@ -221,9 +197,6 @@ class SpecificationContainer extends Component {
               onReject={() => this.rejectScopeChange(pendingScopeChange)}
               onCancel={() => this.cancelScopeChange(pendingScopeChange)}
               onActivate={() => this.activateScopeChange(pendingScopeChange)}
-              isManager={isManager}
-              isCustomer={isCustomer}
-              isAdmin={isSuperUser}
               isRequestor={pendingScopeChange.createdBy === currentUserId}
             />
           }
@@ -235,7 +208,6 @@ class SpecificationContainer extends Component {
 
 SpecificationContainer.propTypes = {
   project: PropTypes.object.isRequired,
-  currentMemberRole: PropTypes.string,
   processing: PropTypes.bool,
   productTemplates: PropTypes.array.isRequired,
   allProductTemplates: PropTypes.array.isRequired,

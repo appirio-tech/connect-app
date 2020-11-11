@@ -30,7 +30,7 @@ import {
   ATTACHMENT_TYPE_FILE,
 } from '../../../config/constants'
 import AddLink from '../../../components/AssetsLibrary/AddLink'
-import PERMISSIONS from '../../../config/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 import { hasPermission } from '../../../helpers/permissions'
 import {
   addProjectAttachment, updateProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission,
@@ -494,8 +494,7 @@ class AssetsInfoContainer extends React.Component {
   }
 
   getLinksAndAttachments() {
-    const { project, isSuperUser, phases, feeds,
-      isManageUser, phasesTopics, canAccessPrivatePosts } = this.props
+    const { project, phases, feeds, phasesTopics, canAccessPrivatePosts } = this.props
 
     let attachments = _.filter(project.attachments, a => a.type === ATTACHMENT_TYPE_FILE)
     // merges the product attachments to show in the links menu
@@ -526,7 +525,7 @@ class AssetsInfoContainer extends React.Component {
     // get list of phase topic in same order as phases
     // note: for old projects which doesn't have phases we return an empty array
     const visiblePhases = phases && phases.filter((phase) => (
-      isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
+      hasPermission(PERMISSIONS.VIEW_DRAFT_PHASES) || phase.status !== PHASE_STATUS_DRAFT
     )) || []
 
     const phaseFeeds = _.compact(
@@ -707,12 +706,12 @@ class AssetsInfoContainer extends React.Component {
   }
 
   render() {
-    const { project, currentMemberRole, isSuperUser, projectTemplates, hideLinks,
+    const { project, projectTemplates, hideLinks,
       attachmentsAwaitingPermission, addProjectAttachment, discardAttachments, attachmentPermissions, attachmentTags,
       changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment, assetsMembers } = this.props
     const { ifModalOpen } = this.state
 
-    const canManageLinks = !!currentMemberRole || isSuperUser
+    const canManageLinks = hasPermission(PERMISSIONS.MANAGE_PROJECT_ASSETS)
 
     let devices = []
     const primaryTarget = _.get(project, 'details.appDefinition.primaryTarget')
@@ -805,7 +804,7 @@ class AssetsInfoContainer extends React.Component {
     let showAddNewButton = false
     if (activeAssetsType === 'Files' && enableFileUpload) {
       showAddNewButton = true
-    } else if (activeAssetsType === 'Links' && canManageLinks) {
+    } else if (activeAssetsType === 'Links') {
       showAddNewButton = true
     }
 
@@ -913,13 +912,10 @@ class AssetsInfoContainer extends React.Component {
 }
 
 AssetsInfoContainer.PropTypes = {
-  currentMemberRole: PropTypes.string,
   phases: PropTypes.array,
   feeds: PropTypes.array,
   phasesTopics: PropTypes.array,
   project: PropTypes.object.isRequired,
-  isSuperUser: PropTypes.bool,
-  isManageUser: PropTypes.bool,
   canAccessPrivatePosts: PropTypes.bool.isRequired,
 }
 

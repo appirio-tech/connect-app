@@ -3,8 +3,6 @@ import moment from 'moment'
 import { findProduct } from '../config/projectWizard'
 
 import {
-  PROJECT_ROLE_CUSTOMER,
-  PROJECT_ROLE_OWNER,
   PHASE_STATUS_ACTIVE,
   PHASE_STATUS_COMPLETED,
   PHASE_STATUS_REVIEWED,
@@ -22,19 +20,6 @@ import FAQIcon from '../assets/icons/faq.svg'
 import InvisibleIcon from '../assets/icons/invisible.svg'
 
 import { formatNumberWithCommas } from './format'
-
-export const getProjectRoleForCurrentUser = ({currentUserId, project}) => {
-  let role = null
-  if (project) {
-    const member = _.find(project.members, m => m.userId === currentUserId)
-    if (member) {
-      role = member.role
-      if (role === PROJECT_ROLE_CUSTOMER && member.isPrimary)
-        role = PROJECT_ROLE_OWNER
-    }
-  }
-  return role
-}
 
 /**
  * Format ProjectProgress props
@@ -288,7 +273,7 @@ export function getProjectNavLinks(project, projectId, renderFAQs) {
     messagesTab,
     { label: 'Specification', to: `/projects/${projectId}/specification`, Icon: ScopeIcon, iconClassName: 'fill' },
   ]
-  
+
   if (renderFAQs) {
     const faqTab = { label: 'FAQ', to: `/projects/${projectId}/faqs`, Icon: FAQIcon, iconClassName: 'fill' }
     navLinks.push(faqTab)

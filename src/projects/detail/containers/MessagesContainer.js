@@ -24,6 +24,8 @@ import {
   TC_SYSTEM_USERID,
   SCREEN_BREAKPOINT_MD,
 } from '../../../config/constants'
+import { hasPermission } from '../../../helpers/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 
 const SYSTEM_USER = {
   handle: CODER_BOT_USERID,
@@ -427,11 +429,8 @@ class MessagesView extends React.Component {
   getSidebarContent() {
     const {
       location,
-      currentMemberRole,
       project,
       phases,
-      isSuperUser,
-      isManageUser,
       productsTimelines,
       phasesTopics,
       isProcessing
@@ -440,11 +439,8 @@ class MessagesView extends React.Component {
     const leftArea = (
       <ProjectInfoContainer
         location={location}
-        currentMemberRole={currentMemberRole}
         project={project}
         phases={phases}
-        isSuperUser={isSuperUser}
-        isManageUser={isManageUser}
         productsTimelines={productsTimelines}
         phasesTopics={phasesTopics}
         isProjectProcessing={isProcessing}
@@ -471,12 +467,12 @@ class MessagesView extends React.Component {
 
   render() {
     const {threads, isCreateNewMessage, showEmptyState, scrollPosition} = this.state
-    const { currentUser, isCreatingFeed, currentMemberRole, error } = this.props
+    const { currentUser, isCreatingFeed, error } = this.props
     const leftArea = this.getSidebarContent()
     const activeThread = threads.filter((item) => item.isActive)[0]
     const onLeaveMessage = this.onLeave() || ''
     const renderRightPanel = () => {
-      if (!!currentMemberRole && (isCreateNewMessage || !threads.length)) {
+      if (hasPermission(PERMISSIONS.CREATE_TOPICS) && (isCreateNewMessage || !threads.length)) {
         return (
           <NewPost
             currentUser={currentUser}
@@ -492,7 +488,7 @@ class MessagesView extends React.Component {
         return (
           <MessageDetails
             {...activeThread}
-            allowAddingComment={activeThread.allowComments && !!currentMemberRole}
+            allowAddingComment={activeThread.allowComments && hasPermission(PERMISSIONS.CREATE_POSTS)}
             onLoadMoreMessages={this.onShowAllComments.bind(this, activeThread.id)}
             onNewMessageChange={this.onNewMessageChange}
             onAddNewMessage={this.onAddNewMessage.bind(this, activeThread.id)}
@@ -529,7 +525,7 @@ class MessagesView extends React.Component {
                 onAdd={this.onNewThreadClick}
                 threads={threads}
                 onSelect={this.onThreadSelect}
-                showAddButton={!!currentMemberRole}
+                showAddButton={hasPermission(PERMISSIONS.CREATE_TOPICS)}
                 showEmptyState={showEmptyState && !threads.length}
                 scrollPosition={scrollPosition}
               />

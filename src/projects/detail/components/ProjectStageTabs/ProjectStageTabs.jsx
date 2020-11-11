@@ -1,14 +1,14 @@
 import React from 'react'
 
 import GenericMenu from '../../../../components/GenericMenu'
+import { PERMISSIONS } from '../../../../config/permissions'
+import { hasPermission } from '../../../../helpers/permissions'
 
 import './ProjectStageTabs.scss'
 
 const ProjectStageTabs = ({
   activeTab,
   hasTimeline,
-  isManageUser,
-  isSuperUser,
   onTabClick,
   hasNotifications,
 }) => {
@@ -31,7 +31,7 @@ const ProjectStageTabs = ({
   })
 
   // show specification tab for everybody expect of customers
-  if (isManageUser || isSuperUser) {
+  if (hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)) {
     tabs.push({
       onClick: () => onTabClick('specification'),
       label: 'Specification',

@@ -10,7 +10,7 @@ import RichTextArea from '../RichTextArea/RichTextArea'
 import NotificationsReader from '../../components/NotificationsReader'
 import IconButton from '../IconButton/IconButton'
 
-import { EVENT_TYPE, PROJECT_FEED_TYPE_MESSAGES, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
+import { EVENT_TYPE, PROJECT_FEED_TYPE_MESSAGES } from '../../config/constants'
 
 import XMarkIcon from '../../assets/icons/x-mark.svg'
 import FullscreenIcon from '../../assets/icons/ui-fullscreen.svg'
@@ -20,6 +20,8 @@ import CloseIcon from 'appirio-tech-react-components/components/Icons/CloseIcon'
 import MoreIcon from '../../assets/icons/more.svg'
 
 import './Feed.scss'
+import { hasPermission } from '../../helpers/permissions'
+import { PERMISSIONS } from '../../config/permissions'
 
 class Feed extends React.Component {
   constructor(props) {
@@ -95,7 +97,7 @@ class Feed extends React.Component {
   }
 
   filterProjectMembers(projectMembers, isPrivate) {
-    return isPrivate ? _.pickBy(projectMembers, pm => pm.role !== PROJECT_ROLE_CUSTOMER) : projectMembers
+    return isPrivate ? _.filter(projectMembers, member => hasPermission(PERMISSIONS.ACCESS_PRIVATE_POST, { user: member })) : projectMembers
   }
 
   render() {

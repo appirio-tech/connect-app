@@ -14,6 +14,8 @@ import MobileMenuToggle from '../MobileMenu/MobileMenuToggle'
 import { projectSuggestions, loadProjects, setInfiniteAutoload } from '../../projects/actions/loadProjects'
 import { loadProjectsMetadata } from '../../actions/templates'
 import { getNewProjectLink } from '../../helpers/projectHelper'
+import { hasPermission } from '../../helpers/permissions'
+import { PERMISSIONS } from '../../config/permissions'
 
 class ProjectsToolBar extends Component {
 
@@ -144,7 +146,7 @@ class ProjectsToolBar extends Component {
   }
 
   render() {
-    const { renderLogoSection, userMenu, userRoles, isPowerUser, user, mobileMenu, location, orgConfig } = this.props
+    const { renderLogoSection, userMenu, userRoles, user, mobileMenu, location, orgConfig } = this.props
     const { isMobileMenuOpen, isMobileSearchVisible } = this.state
     const isLoggedIn = !!(userRoles && userRoles.length)
 
@@ -158,9 +160,9 @@ class ProjectsToolBar extends Component {
         />
         <div className="primary-toolbar">
           { renderLogoSection() }
-          { isLoggedIn && !isPowerUser && <div className="projects-title-mobile">MY PROJECTS</div> }
+          { isLoggedIn && !hasPermission(PERMISSIONS.SEARCH_PROJECTS) && <div className="projects-title-mobile">MY PROJECTS</div> }
           {
-            isLoggedIn && !!isPowerUser &&
+            isLoggedIn && hasPermission(PERMISSIONS.SEARCH_PROJECTS) &&
             <div className="search-widget">
               <SearchBar
                 hideSuggestionsWhenEmpty

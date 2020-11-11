@@ -2,7 +2,6 @@ import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
 import { withRouter } from 'react-router-dom'
-import { getProjectRoleForCurrentUser } from '../../../helpers/projectHelper'
 import ProjectCardHeader from './ProjectCardHeader'
 import ProjectCardBody from './ProjectCardBody'
 import ProjectManagerAvatars from '../../list/components/Projects/ProjectManagerAvatars'
@@ -12,7 +11,6 @@ import './ProjectCard.scss'
 function ProjectCard({ project, disabled, currentUser, history, onChangeStatus, projectTemplates, unreadMentionsCount, callInviteRequest, isAcceptingInvite }) {
   const className = `ProjectCard ${ disabled ? 'disabled' : 'enabled'}`
   if (!project) return null
-  const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
   // check whether is the project's member
   const isMember = _.some(project.members, m => (m.userId === currentUser.userId && m.deletedAt === null))
   // check whether has pending invition
@@ -34,7 +32,6 @@ function ProjectCard({ project, disabled, currentUser, history, onChangeStatus, 
       <div className="card-body">
         <ProjectCardBody
           project={project}
-          currentMemberRole={currentMemberRole}
           onChangeStatus={onChangeStatus}
           showLink
           showLinkURL={projectDetailsURL}
@@ -68,7 +65,6 @@ ProjectCard.defaultTypes = {
 
 ProjectCard.propTypes = {
   project: PT.object.isRequired,
-  currentMemberRole: PT.string,
   projectTemplates: PT.array.isRequired,
   unreadMentionsCount: PT.number.isRequired,
   callInviteRequest: PT.func,

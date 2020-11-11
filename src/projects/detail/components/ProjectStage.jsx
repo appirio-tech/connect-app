@@ -22,6 +22,8 @@ import ProductTimelineContainer from '../containers/ProductTimelineContainer'
 import PostsContainer from '../../../components/Posts'
 import NotificationsReader from '../../../components/NotificationsReader'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import { hasPermission } from '../../../helpers/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 
 const enhance = spinnerWhileLoading(props => !props.processing)
 const EnhancedEditProjectForm = enhance(EditProjectForm)
@@ -161,10 +163,7 @@ class ProjectStage extends React.Component{
       project,
       productTemplates,
       productCategories,
-      currentMemberRole,
       isProcessing,
-      isSuperUser,
-      isManageUser,
       updateProduct,
       fireProductDirty,
       fireProductDirtyUndo,
@@ -210,7 +209,6 @@ class ProjectStage extends React.Component{
       <PhaseCard
         attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, _.get(phasesTopics[tag], 'topic', {}), timeline)}
         projectStatus={project.status}
-        isManageUser={isManageUser}
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
         timeline={timeline}
         hasUnseen={hasAnyNotifications}
@@ -224,8 +222,6 @@ class ProjectStage extends React.Component{
           <ProjectStageTabs
             activeTab={currentActiveTab}
             onTabClick={this.onTabClick}
-            isSuperUser={isSuperUser}
-            isManageUser={isManageUser}
             hasTimeline={hasTimeline}
             hasNotifications={hasNotifications}
           />
@@ -250,7 +246,7 @@ class ProjectStage extends React.Component{
                 template={template}
                 productTemplates={productTemplates}
                 productCategories={productCategories}
-                isEdittable={isSuperUser || !!currentMemberRole}
+                isEdittable={hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)}
                 submitHandler={(model) => updateProduct(project.id, phase.id, product.id, model)}
                 saving={isProcessing}
                 fireProjectDirty={(values) => fireProductDirty(phase.id, product.id, values)}
@@ -259,7 +255,7 @@ class ProjectStage extends React.Component{
                 updateAttachment={this.updateProductAttachment}
                 removeAttachment={this.removeProductAttachment}
                 attachmentsStorePath={attachmentsStorePath}
-                canManageAttachments={!!currentMemberRole}
+                canManageAttachments={hasPermission(PERMISSIONS.EDIT_PROJECT_SPECIFICATION)}
                 disableAutoScrolling
               />
             </div>
@@ -272,7 +268,6 @@ class ProjectStage extends React.Component{
 
 ProjectStage.defaultProps = {
   activeTab: '',
-  currentMemberRole: null,
 }
 
 ProjectStage.propTypes = {
@@ -283,9 +278,7 @@ ProjectStage.propTypes = {
   productCategories: PT.array.isRequired,
   productsTimelines: PT.object,
   phasesTopics: PT.object,
-  currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,
-  isSuperUser: PT.bool.isRequired,
   updateProduct: PT.func.isRequired,
   fireProductDirty: PT.func.isRequired,
   fireProductDirtyUndo: PT.func.isRequired,

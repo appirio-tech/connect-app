@@ -7,28 +7,20 @@ import editableProjectStatus from '../../../components/ProjectStatus/editablePro
 import {
   PROJECT_STATUS_ACTIVE,
   PROJECT_STATUS_COMPLETED,
-  PROJECT_ROLE_COPILOT,
-  PROJECT_ROLE_MANAGER,
-  PROJECT_ROLE_PROGRAM_MANAGER, PROJECT_ROLE_SOLUTION_ARCHITECT, PROJECT_ROLE_PROJECT_MANAGER
 } from '../../../config/constants'
 import './ProjectCardBody.scss'
 import _ from 'lodash'
+import { hasPermission } from '../../../helpers/permissions'
+import { PERMISSIONS } from '../../../config/permissions'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
-function ProjectCardBody({ project, currentMemberRole, descLinesCount = 8,
-  onChangeStatus, isSuperUser, showLink, showLinkURL, canEditStatus = true, hideStatus, history }) {
+function ProjectCardBody({ project, descLinesCount = 8,
+  onChangeStatus, showLink, showLinkURL, canEditStatus = true, hideStatus, history }) {
   if (!project) return null
 
   const canEdit = canEditStatus && (
-    project.status !== PROJECT_STATUS_COMPLETED && (isSuperUser || (currentMemberRole
-    && (_.indexOf([
-      PROJECT_ROLE_COPILOT,
-      PROJECT_ROLE_MANAGER,
-      PROJECT_ROLE_PROGRAM_MANAGER,
-      PROJECT_ROLE_PROJECT_MANAGER,
-      PROJECT_ROLE_SOLUTION_ARCHITECT,
-    ], currentMemberRole) > -1)))
+    project.status !== PROJECT_STATUS_COMPLETED && hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)
   )
 
   const goToProjectDetails = (evt, showLinkURL, projectDetailsURL) => {
@@ -59,7 +51,6 @@ function ProjectCardBody({ project, currentMemberRole, descLinesCount = 8,
             status={project.status}
             showText
             withoutLabel
-            currentMemberRole={currentMemberRole}
             canEdit={canEdit}
             unifiedHeader={false}
             onChangeStatus={onChangeStatus}
@@ -80,7 +71,6 @@ ProjectCardBody.defaultTypes = {
 
 ProjectCardBody.propTypes = {
   project: PT.object.isRequired,
-  currentMemberRole: PT.string,
   showLink: PT.bool,
   showLinkURL: PT.string,
   canEditStatus: PT.bool,

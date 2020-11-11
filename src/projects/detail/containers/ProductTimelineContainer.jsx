@@ -24,13 +24,6 @@ import {
   submitFinalFixesRequest,
 } from '../../actions/productsTimelines'
 
-import {
-  ROLE_CONNECT_COPILOT,
-  ROLE_CONNECT_MANAGER,
-  ROLE_CONNECT_ADMIN,
-  ROLE_ADMINISTRATOR,
-} from '../../../config/constants'
-
 class ProductTimelineContainer extends React.Component {
   constructor(props) {
     super(props)
@@ -52,10 +45,6 @@ class ProductTimelineContainer extends React.Component {
 ProductTimelineContainer.propTypes = {
   currentUser: PT.shape({
     userId: PT.number.isRequired,
-    isCopilot: PT.bool.isRequired,
-    isManager: PT.bool.isRequired,
-    isAdmin: PT.bool.isRequired,
-    isCustomer: PT.bool.isRequired,
   }).isRequired,
   isLoading: PT.bool,
   timeline: PT.object,
@@ -64,32 +53,14 @@ ProductTimelineContainer.propTypes = {
   extendProductMilestone: PT.func.isRequired,
 }
 
-const mapStateToProps = ({ productsTimelines, loadUser }, props) => {
-  const adminRoles = [
-    ROLE_ADMINISTRATOR,
-    ROLE_CONNECT_ADMIN,
-  ]
-
-  const powerUserRoles = [
-    ROLE_CONNECT_COPILOT,
-    ROLE_CONNECT_MANAGER,
-    ROLE_ADMINISTRATOR,
-    ROLE_CONNECT_ADMIN,
-  ]
-
-  return {
-    timeline: _.get(productsTimelines[props.product.id], 'timeline'),
-    isLoading: _.get(productsTimelines[props.product.id], 'isLoading', false),
-    phaseId: props.product.phaseId,
-    currentUser: {
-      userId: parseInt(loadUser.user.id, 10),
-      isCopilot: _.includes(loadUser.user.roles, ROLE_CONNECT_COPILOT),
-      isManager: _.includes(loadUser.user.roles, ROLE_CONNECT_MANAGER),
-      isAdmin: _.intersection(loadUser.user.roles, adminRoles).length > 0,
-      isCustomer:  _.intersection(loadUser.user.roles, powerUserRoles).length === 0,
-    },
-  }
-}
+const mapStateToProps = ({ productsTimelines, loadUser }, props) => ({
+  timeline: _.get(productsTimelines[props.product.id], 'timeline'),
+  isLoading: _.get(productsTimelines[props.product.id], 'isLoading', false),
+  phaseId: props.product.phaseId,
+  currentUser: {
+    userId: parseInt(loadUser.user.id, 10),
+  },
+})
 
 const mapDispatchToProps = {
   updateProductMilestone,
