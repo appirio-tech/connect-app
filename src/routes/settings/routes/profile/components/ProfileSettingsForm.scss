@@ -191,6 +191,25 @@
   vertical-align: top;
 }
 
+a.fieldLabelText {
+  color: $tc-dark-blue-110;
+}
+
+.terms-field {
+  align-items: center;
+  display: flex;
+  padding: 7px 0;
+
+  > span {
+    display: inline-block;
+    color: $tc-gray-60;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 20px;
+    padding: 5px 0;
+  }
+}
+
 .warningText {
   margin: 5px auto;
   @include roboto;

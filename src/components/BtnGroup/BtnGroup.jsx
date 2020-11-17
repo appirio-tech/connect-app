@@ -45,7 +45,7 @@ class BtnGroup extends React.Component {
 
 BtnGroup.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType(PropTypes.string, PropTypes.number, PropTypes.bool).isRequired,
     text: PropTypes.string.isRequired
   })).isRequired,
   onChange: PropTypes.func
