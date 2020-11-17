@@ -84,7 +84,7 @@
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^13.4.0",
-    "appirio-tech-react-components": "git+https://github.com/appirio-tech/react-components.git#feature/connectv2-dev",
+    "appirio-tech-react-components": "git+https://github.com/appirio-tech/react-components.git#feature/connectv2",
     "axios": "^0.19.2",
     "brace": "^0.11.1",
     "classnames": "^2.2.3",
