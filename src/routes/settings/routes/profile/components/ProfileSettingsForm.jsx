@@ -11,10 +11,12 @@ const TCFormFields = FormsyForm.Fields
 const Formsy = FormsyForm.Formsy
 import ProfileSettingsAvatar from './ProfileSettingsAvatar'
 import FormsySelect from '../../../../../components/Select/FormsySelect'
+import FormsyBtnGroup from '../../../../../components/BtnGroup/FormsyBtnGroup'
 import ISOCountries from '../../../../../helpers/ISOCountries'
 import { formatPhone } from '../../../../../helpers/utils'
 import { hasPermission } from '../../../../../helpers/permissions'
 import { PERMISSIONS } from '../../../../../config/permissions'
+import { TOPCODER_CONNECT_TERMS_URL } from '../../../../../config/constants'
 import './ProfileSettingsForm.scss'
 
 const countries = _.orderBy(ISOCountries, ['name'], ['asc']).map((country) => ({
@@ -382,8 +384,36 @@ class ProfileSettingsForm extends Component {
             </div>
           </div>
         )}
+        {!_.isUndefined(fieldsConfig.termsAccepted) && (
+          <div className="field">
+            <div className="label">
+              <a styleName="fieldLabelText" href={TOPCODER_CONNECT_TERMS_URL} target="_blank">Topcoder Terms</a>&nbsp;
+              {fieldsConfig.termsAccepted && <sup styleName="requiredMarker">*</sup>}
+            </div>
+            <div className="input-field">
+              <div styleName="terms-field">
+                {_.isNil(this.props.values.settings.termsAccepted) ? (
+                  <FormsyBtnGroup
+                    name="termsAccepted"
+                    items={[
+                      { value: true, text: 'Accept' },
+                      { value: false, text: 'Reject' }
+                    ]}
+                    validations={{
+                      isRequired: fieldsConfig.timeZone
+                    }}
+                    validationErrors={{
+                      isRequired: 'Please accept or decline Topcoder Terms'
+                    }}
+                  />
+                ) : (
+                  <span>{this.props.values.settings.termsAccepted ? 'Accepted' : 'Rejected'}</span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
         <div className="controls">
-
           {showBackButton && (
             <button
               className={`tc-btn tc-btn-default btn-back ${buttonExtraClassName}`}

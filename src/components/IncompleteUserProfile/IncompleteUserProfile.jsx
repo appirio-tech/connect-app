@@ -20,7 +20,7 @@ const IncompleteUserProfile = ({
   delete fieldsConfig.avatar
   // config the form to only show required fields which doesn't have the value yet
   const missingFieldsConfig = _.reduce(fieldsConfig, (acc, isFieldRequired, fieldKey) => {
-    if (isFieldRequired && !_.get(profileSettings, `settings.${fieldKey}`)) {
+    if (isFieldRequired && _.isNil(_.get(profileSettings, `settings.${fieldKey}`))) {
       acc[fieldKey] = isFieldRequired
     }
     return acc

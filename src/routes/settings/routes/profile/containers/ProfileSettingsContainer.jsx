@@ -23,6 +23,14 @@ class ProfileSettingsContainer extends Component {
     const { profileSettings, saveProfileSettings, uploadProfilePhoto, user } = this.props
     const fieldsConfig = getUserProfileFieldsConfig()
 
+    // prefill some fields of the profile
+    const prefilledProfileSettings = _.cloneDeep(profileSettings)
+
+    // at the moment we don't let users to update their business email, so in case it's not set, use registration email
+    if (fieldsConfig.businessEmail && !profileSettings.settings.businessEmail) {
+      prefilledProfileSettings.settings.businessEmail = user.email
+    }
+
     return (
       <SettingsPanel
         title="My Profile"
@@ -30,7 +38,7 @@ class ProfileSettingsContainer extends Component {
       >
         <ProfileSettingsFormEnhanced
           user={user}
-          values={profileSettings}
+          values={prefilledProfileSettings}
           saveSettings={saveProfileSettings}
           uploadPhoto={uploadProfilePhoto}
           fieldsConfig={fieldsConfig}

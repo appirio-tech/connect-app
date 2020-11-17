@@ -138,7 +138,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['feature/unified-permissions']
+              only: ['feature/unified-permissions', 'feature/accept-reject-terms-in-profile']
 
       - deployProd:
           context : org-global
