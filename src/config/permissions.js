@@ -228,6 +228,21 @@ export const PERMISSIONS = {
     ]
   },
 
+  REMOVE_COPILOTS: {
+    meta: {
+      group: 'Project Members',
+      title: 'Remove Copilots',
+      description: 'Remove copilots form the project.',
+    },
+    projectRoles: [
+      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_COPILOT, PROJECT_ROLE_CUSTOMER])
+    ],
+    topcoderRoles: [
+      ...TOPCODER_ADMINS,
+      ROLE_CONNECT_COPILOT_MANAGER
+    ]
+  },
+
   MANAGE_TOPCODER_TEAM: {
     meta: {
       group: 'Project Members',
