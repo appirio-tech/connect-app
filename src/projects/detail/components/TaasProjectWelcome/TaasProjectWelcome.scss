@@ -1,0 +1,18 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import '../../../../styles/includes';
+
+.container {
+  @include stand-alone-item-shadow;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  background-color: $tc-white;
+  border-radius: $card-border-radius;
+  margin-top: 4 * $base-unit;
+  padding: 10 * $base-unit;
+  height: 400px;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    border-radius: 0;
+  }
+}
