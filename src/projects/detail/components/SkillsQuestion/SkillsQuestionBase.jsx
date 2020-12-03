@@ -4,7 +4,7 @@ import SkillsCheckboxGroup from './SkillsCheckboxGroup'
 import Select from '../../../../components/Select/Select'
 import './SkillsQuestion.scss'
 import { axiosInstance as axios } from '../../../../api/requestInterceptor'
-import { TC_API_URL } from '../../../../config/constants'
+import { TC_API_URL, SKILL_PROVIDER_ID } from '../../../../config/constants'
 import { createFilter } from 'react-select'
 
 let cachedOptions
@@ -21,6 +21,9 @@ let cachedOptions
  * @returns {Array} available options
  */
 const getAvailableOptions = (categoriesMapping, selectedCategories, skillsCategories, options) => {
+  // NOTE:
+  // Disable filtering skills by categories for now, because V5 Skills API doesn't have categories for now.
+  /*
   let mappedCategories
   if (categoriesMapping) {
     mappedCategories = _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
@@ -31,6 +34,7 @@ const getAvailableOptions = (categoriesMapping, selectedCategories, skillsCatego
   if (mappedCategories) {
     return options.filter(option => _.intersection((option.categories || []).map(c => c.toLowerCase()), mappedCategories).length > 0)
   }
+  */
   return options
 }
 
@@ -48,9 +52,9 @@ class SkillsQuestion extends React.PureComponent {
 
   componentWillMount() {
     if (!cachedOptions) {
-      axios.get(`${TC_API_URL}/v3/tags/?domain=SKILLS&status=APPROVED`)
+      axios.get(`${TC_API_URL}/v5/skills?skillProviderId=${SKILL_PROVIDER_ID}&perPage=100`)
         .then(resp => {
-          const options = _.get(resp.data, 'result.content', {})
+          const options = _.get(resp, 'data', [])
 
           cachedOptions = options
           this.updateOptions(options)

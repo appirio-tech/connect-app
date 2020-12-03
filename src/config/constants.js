@@ -717,6 +717,7 @@ export const PROJECT_ATTACHMENTS_FOLDER = process.env.PROJECT_ATTACHMENTS_FOLDER
 export const FILE_PICKER_ACCEPT = process.env.FILE_PICKER_ACCEPT || ['.bmp', '.gif', '.jpg', '.tex', '.xls', '.xlsx', '.doc', '.docx', '.zip', '.txt', '.pdf', '.png', '.ppt', '.pptx', '.rtf', '.csv']
 
 export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
+export const SKILL_PROVIDER_ID = process.env.SKILL_PROVIDER_ID || '9cc0795a-6e12-4c84-9744-15858dba1861'
 /*
  * URLs
  */
