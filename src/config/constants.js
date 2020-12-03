@@ -1094,3 +1094,13 @@ export const PROFILE_FIELDS_CONFIG = {
     // businessPhone: false,
   }
 }
+
+/**
+ * The type of the project for talent as a service app.
+ */
+export const PROJECT_TYPE_TALENT_AS_A_SERVICE = 'talent-as-a-service'
+
+/**
+ * URL to the Topcoder TaaS App
+ */
+export const TAAS_APP_URL = process.env.TAAS_APP_URL || 'https://mfe.topcoder-dev.com/taas'

@@ -552,7 +552,7 @@ class ProjectWizard extends Component {
   }
 
   render() {
-    const { processing, showModal, userRoles, projectTemplates, projectTypes, projectId, match, templates } = this.props
+    const { processing, showModal, userRoles, projectTemplates, projectTypes, projectId, match, templates, location } = this.props
     const { project, dirtyProject, wizardStep } = this.state
     const params = match.params
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/new-project/`
@@ -605,9 +605,8 @@ class ProjectWizard extends Component {
         />
         <div />
         <ProjectSubmitted
-          project={ project }
+          location={location}
           projectTemplates={ projectTemplates }
-          dirtyProject={ dirtyProject }
           params={ params }
           projectId={ projectId }
         />
