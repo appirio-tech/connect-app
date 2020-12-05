@@ -7,28 +7,34 @@ import {
   CONNECT_DOMAIN, PROJECT_TYPE_TALENT_AS_A_SERVICE, TAAS_APP_URL
 } from '../../../config/constants'
 
+/**
+ * Build project URL based on the `type` query param in URL.
+ *
+ * @param {String} projectId project id
+ */
+const formatProjectURL = (projectId) => {
+  const { type } = qs.parse(window.location.search)
+
+  const url = type === PROJECT_TYPE_TALENT_AS_A_SERVICE
+    // if the project type is TaaS, then use link to TaaS App
+    ? `${TAAS_APP_URL}/myteams/${projectId}`
+    // otherwise use link inside Connect App
+    : `${CONNECT_DOMAIN}/projects/${projectId}`
+
+  return url
+}
+
 class ProjectSubmitted extends React.Component {
   constructor(props) {
     super(props)
 
-    const { type } = qs.parse(props.location.search)
-    const projectId = props.params.status || props.projectId
-
-    const url = type === PROJECT_TYPE_TALENT_AS_A_SERVICE
-      // if the project type is TaaS, then use link to TaaS App
-      ? `${TAAS_APP_URL}/myteams/${projectId}`
-      // otherwise use link inside Connect App
-      : `${CONNECT_DOMAIN}/projects/${projectId}`
-
     this.copyToClipboard = this.copyToClipboard.bind(this)
-    this.state = {
-      url
-    }
   }
 
   copyToClipboard() {
+    const url = formatProjectURL(this.props.params.status || this.props.projectId)
     const textField = document.createElement('textarea')
-    textField.innerText = `${this.state.url}`
+    textField.innerText = `${url}`
     document.body.appendChild(textField)
     textField.select()
     document.execCommand('copy')
@@ -36,6 +42,8 @@ class ProjectSubmitted extends React.Component {
   }
 
   render() {
+    const url = formatProjectURL(this.props.params.status || this.props.projectId)
+
     return (
       <div className="ProjectSubmitted flex column middle center tc-ui">
         <div className="container flex column middle center">
@@ -48,11 +56,11 @@ class ProjectSubmitted extends React.Component {
             Use the link below to share your project with members of your team. You can also access all your Topcoder projects in one place from your Connect project dashboard.
           </div>
           <div className="project-link-container flex row middle center">
-            <a href={this.state.url}>{this.state.url}</a>
+            <a href={url}>{url}</a>
           </div>
           <div className="button-container flex row middle center">
             <a type="button" onClick={this.copyToClipboard} className="copy-link-btn tc-btn tc-btn-sm tc-btn-default flex middle center" disabled={false}>Copy link</a>
-            <a href={this.state.url} type="button" className="go-to-project-dashboard-btn tc-btn tc-btn-sm tc-btn-primary flex middle center" disabled={false}>Go to project dashboard</a>
+            <a href={url} type="button" className="go-to-project-dashboard-btn tc-btn tc-btn-sm tc-btn-primary flex middle center" disabled={false}>Go to project dashboard</a>
           </div>
         </div>
       </div>
@@ -61,7 +69,6 @@ class ProjectSubmitted extends React.Component {
 }
 
 ProjectSubmitted.defaultProps = {
-  vm: {},
   params: {},
 }
 
