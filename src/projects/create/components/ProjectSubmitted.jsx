@@ -4,7 +4,7 @@ import qs from 'query-string'
 
 require('./ProjectSubmitted.scss')
 import {
-  CONNECT_DOMAIN, PROJECT_TYPE_TALENT_AS_A_SERVICE, TAAS_APP_URL
+  CONNECT_DOMAIN, CONNECT_MAIN_PAGE_URL, PROJECT_TYPE_TALENT_AS_A_SERVICE, TAAS_APP_URL
 } from '../../../config/constants'
 
 /**
@@ -19,7 +19,7 @@ const formatProjectURL = (projectId) => {
     // if the project type is TaaS, then use link to TaaS App
     ? `${TAAS_APP_URL}/myteams/${projectId}`
     // otherwise use link inside Connect App
-    : `${CONNECT_DOMAIN}/projects/${projectId}`
+    : `/projects/${projectId}`
 
   return url
 }
@@ -34,7 +34,7 @@ class ProjectSubmitted extends React.Component {
   copyToClipboard() {
     const url = formatProjectURL(this.props.params.status || this.props.projectId)
     const textField = document.createElement('textarea')
-    textField.innerText = `${url}`
+    textField.innerText = `${CONNECT_MAIN_PAGE_URL}${url}`
     document.body.appendChild(textField)
     textField.select()
     document.execCommand('copy')
@@ -56,7 +56,7 @@ class ProjectSubmitted extends React.Component {
             Use the link below to share your project with members of your team. You can also access all your Topcoder projects in one place from your Connect project dashboard.
           </div>
           <div className="project-link-container flex row middle center">
-            <a href={url}>{url}</a>
+            <a href={url}>{CONNECT_DOMAIN}{url}</a>
           </div>
           <div className="button-container flex row middle center">
             <a type="button" onClick={this.copyToClipboard} className="copy-link-btn tc-btn tc-btn-sm tc-btn-default flex middle center" disabled={false}>Copy link</a>
