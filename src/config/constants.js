@@ -723,7 +723,7 @@ export const SKILL_PROVIDER_ID = process.env.SKILL_PROVIDER_ID || '9cc0795a-6e12
  */
 export const DOMAIN = process.env.domain || 'topcoder.com'
 export const CONNECT_DOMAIN = `connect.${DOMAIN}`
-export const CONNECT_MAIN_PAGE_URL = `http://connect.${DOMAIN}`
+export const CONNECT_MAIN_PAGE_URL = `https://connect.${DOMAIN}`
 export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
 export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || `https://accounts-auth0.${DOMAIN}`
 export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL || `https://accounts-auth0.${DOMAIN}`
