@@ -52,7 +52,7 @@ class SkillsQuestion extends React.PureComponent {
 
   componentWillMount() {
     if (!cachedOptions) {
-      axios.get(`${TC_API_URL}/v5/skills?skillProviderId=${SKILL_PROVIDER_ID}&perPage=100`)
+      axios.get(`${TC_API_URL}/v5/skills?skillProviderId=${SKILL_PROVIDER_ID}&perPage=100&orderBy=name`)
         .then(resp => {
           const options = _.get(resp, 'data', [])
 
