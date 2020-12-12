@@ -717,13 +717,12 @@ export const PROJECT_ATTACHMENTS_FOLDER = process.env.PROJECT_ATTACHMENTS_FOLDER
 export const FILE_PICKER_ACCEPT = process.env.FILE_PICKER_ACCEPT || ['.bmp', '.gif', '.jpg', '.tex', '.xls', '.xlsx', '.doc', '.docx', '.zip', '.txt', '.pdf', '.png', '.ppt', '.pptx', '.rtf', '.csv']
 
 export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
-export const SKILL_PROVIDER_ID = process.env.SKILL_PROVIDER_ID || '9cc0795a-6e12-4c84-9744-15858dba1861'
 /*
  * URLs
  */
 export const DOMAIN = process.env.domain || 'topcoder.com'
 export const CONNECT_DOMAIN = `connect.${DOMAIN}`
-export const CONNECT_MAIN_PAGE_URL = `https://connect.${DOMAIN}`
+export const CONNECT_MAIN_PAGE_URL = `http://connect.${DOMAIN}`
 export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
 export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || `https://accounts-auth0.${DOMAIN}`
 export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL || `https://accounts-auth0.${DOMAIN}`
@@ -1094,13 +1093,3 @@ export const PROFILE_FIELDS_CONFIG = {
     // businessPhone: false,
   }
 }
-
-/**
- * The type of the project for talent as a service app.
- */
-export const PROJECT_TYPE_TALENT_AS_A_SERVICE = 'talent-as-a-service'
-
-/**
- * URL to the Topcoder TaaS App
- */
-export const TAAS_APP_URL = process.env.TAAS_APP_URL || 'https://mfe.topcoder-dev.com/taas'

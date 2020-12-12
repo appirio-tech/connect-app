@@ -36,7 +36,6 @@ import SystemFeed from '../../../components/Feed/SystemFeed'
 import ProjectScopeDrawer from '../components/ProjectScopeDrawer'
 import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
-import TaasProjectWelcome from '../components/TaasProjectWelcome'
 import NotificationsReader from '../../../components/NotificationsReader'
 import { hasPermission } from '../../../helpers/permissions'
 import { getProjectTemplateById } from '../../../helpers/templates'
@@ -57,7 +56,6 @@ import {
   PHASE_STATUS_DRAFT,
   SCREEN_BREAKPOINT_MD,
   CODER_BOT_USERID,
-  PROJECT_TYPE_TALENT_AS_A_SERVICE,
 } from '../../../config/constants'
 
 const SYSTEM_USER = {
@@ -162,8 +160,6 @@ class DashboardContainer extends React.Component {
 
     const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
 
-    const isTaasProject = project.type === PROJECT_TYPE_TALENT_AS_A_SERVICE
-
     const leftArea = (
       <ProjectInfoContainer
         location={location}
@@ -208,65 +204,59 @@ class DashboardContainer extends React.Component {
         </TwoColsLayout.Sidebar>
 
         <TwoColsLayout.Content>
-          {isTaasProject ? (
-            <TaasProjectWelcome projectId={project.id} />
-          ) : (
-            <div>
-              {unreadProjectUpdate.length > 0 &&
-                <SystemFeed
-                  messages={sortedUnreadProjectUpdates}
-                  user={SYSTEM_USER}
-                  onNotificationRead={this.onNotificationRead}
-                />
-              }
-              {/* <button type="button" onClick={this.toggleDrawer}>Toggle drawer</button> */}
-              {!!estimationQuestion &&
-                <ProjectEstimation
-                  onClick={this.toggleDrawer}
-                  question={estimationQuestion}
-                  template={template}
-                  project={project}
-                  showPrice={!_.get(template, 'hidePrice')}
-                  theme="dashboard"
-                />
-              }
-              {/* The following containerStyle and overlayStyle are needed for shrink drawer and overlay size for not
-                  covering sidebar and topbar
-              */}
-              <ProjectScopeDrawer
-                open={this.state.open}
-                containerStyle={{top: '60px', height: 'calc(100% - 60px)', display: 'flex', flexDirection: 'column' }}
-                overlayStyle={{top: '60px', left: '280px'}}
-                onRequestChange={(open) => this.setState({open})}
-                project={project}
-                template={template}
-                updateProject={updateProject}
-                processing={isProcessing}
-                fireProjectDirty={fireProjectDirty}
-                fireProjectDirtyUndo= {fireProjectDirtyUndo}
-                addProjectAttachment={addProjectAttachment}
-                updateProjectAttachment={updateProjectAttachment}
-                removeProjectAttachment={removeProjectAttachment}
-                productTemplates={productTemplates}
-                productCategories={productCategories}
-              />
+          {unreadProjectUpdate.length > 0 &&
+            <SystemFeed
+              messages={sortedUnreadProjectUpdates}
+              user={SYSTEM_USER}
+              onNotificationRead={this.onNotificationRead}
+            />
+          }
+          {/* <button type="button" onClick={this.toggleDrawer}>Toggle drawer</button> */}
+          {!!estimationQuestion &&
+            <ProjectEstimation
+              onClick={this.toggleDrawer}
+              question={estimationQuestion}
+              template={template}
+              project={project}
+              showPrice={!_.get(template, 'hidePrice')}
+              theme="dashboard"
+            />
+          }
+          {/* The following containerStyle and overlayStyle are needed for shrink drawer and overlay size for not
+              covering sidebar and topbar
+           */}
+          <ProjectScopeDrawer
+            open={this.state.open}
+            containerStyle={{top: '60px', height: 'calc(100% - 60px)', display: 'flex', flexDirection: 'column' }}
+            overlayStyle={{top: '60px', left: '280px'}}
+            onRequestChange={(open) => this.setState({open})}
+            project={project}
+            template={template}
+            updateProject={updateProject}
+            processing={isProcessing}
+            fireProjectDirty={fireProjectDirty}
+            fireProjectDirtyUndo= {fireProjectDirtyUndo}
+            addProjectAttachment={addProjectAttachment}
+            updateProjectAttachment={updateProjectAttachment}
+            removeProjectAttachment={removeProjectAttachment}
+            productTemplates={productTemplates}
+            productCategories={productCategories}
+          />
 
-              {visiblePhases && visiblePhases.length > 0 ? (
-                <ProjectStages
-                  {...{
-                    ...this.props,
-                    phases: visiblePhases,
-                    phasesNonDirty: visiblePhasesNonDirty,
-                  }}
-                />
-              ) : (
-                <ProjectPlanEmpty />
-              )}
-              {isProjectLive && hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)  && !isLoadingPhases && (<div styleName="add-button-container">
-                <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
-              </div>)}
-            </div>
+          {visiblePhases && visiblePhases.length > 0 ? (
+            <ProjectStages
+              {...{
+                ...this.props,
+                phases: visiblePhases,
+                phasesNonDirty: visiblePhasesNonDirty,
+              }}
+            />
+          ) : (
+            <ProjectPlanEmpty />
           )}
+          {isProjectLive && hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)  && !isLoadingPhases && (<div styleName="add-button-container">
+            <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
+          </div>)}
         </TwoColsLayout.Content>
       </TwoColsLayout>
     )

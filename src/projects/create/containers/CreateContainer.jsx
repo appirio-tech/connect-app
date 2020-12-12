@@ -124,12 +124,11 @@ class CreateContainer extends React.Component {
         projectId: nextProjectId,
         isProjectDirty: false
       }, () => {
-        const type = _.get(this.state, 'updatedProject.type')
         // go to submitted state
         console.log('go to submitted state')
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
         window.localStorage.removeItem(LS_INCOMPLETE_WIZARD)
-        this.props.history.push('/new-project/submitted/' + nextProjectId + (type ? `?type=${type}` : ''))
+        this.props.history.push('/new-project/submitted/' + nextProjectId)
       })
 
     } else if (this.state.creatingProject !== nextProps.processing) {
