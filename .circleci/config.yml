@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev']
+              only: ['dev', 'feature/taas-jobs-2']
 
       - deployTest01:
           context : org-global
