@@ -11,6 +11,7 @@ export function getSkills() {
   cachedSkillsAsPromise = cachedSkillsAsPromise || getAllSkills().catch(ex => {
     console.error('Error loading skills', ex)
     cachedSkillsAsPromise = null
+    return [];
   })
 
   return cachedSkillsAsPromise
