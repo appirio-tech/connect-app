@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'feature/taas-jobs-2']
+              only: ['dev']
 
       - deployTest01:
           context : org-global
@@ -136,7 +136,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['feature/unified-permissions', 'feature/accept-reject-terms-in-profile']
+              only: ['feature/taas-jobs-2']
 
       - deployProd:
           context : org-global
