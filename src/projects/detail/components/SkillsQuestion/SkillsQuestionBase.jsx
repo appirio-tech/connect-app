@@ -3,11 +3,8 @@ import _ from 'lodash'
 import SkillsCheckboxGroup from './SkillsCheckboxGroup'
 import Select from '../../../../components/Select/Select'
 import './SkillsQuestion.scss'
-import { axiosInstance as axios } from '../../../../api/requestInterceptor'
-import { TC_API_URL, SKILL_PROVIDER_ID } from '../../../../config/constants'
 import { createFilter } from 'react-select'
-
-let cachedOptions
+import { getSkills } from '../../../../api/skills'
 
 /**
  * If `categoriesMapping` is defined - filter options using selected categories.
@@ -42,7 +39,7 @@ class SkillsQuestion extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      options: cachedOptions || [],
+      options: [],
       availableOptions: [],
       customOptionValue: '',
     }
@@ -51,20 +48,13 @@ class SkillsQuestion extends React.PureComponent {
   }
 
   componentWillMount() {
-    if (!cachedOptions) {
-      axios.get(`${TC_API_URL}/v5/skills?skillProviderId=${SKILL_PROVIDER_ID}&perPage=100&orderBy=name`)
-        .then(resp => {
-          const options = _.get(resp, 'data', [])
-
-          cachedOptions = options.map((option) => ({
-            skillId: option.id,
-            name: option.name
-          }))
-          this.updateOptions(cachedOptions)
-        })
-    } else {
-      this.updateOptions(cachedOptions)
-    }
+    getSkills().then(skills => {
+      const options = skills.map(skill => ({
+        skillId: skill.id,
+        name: skill.name
+      }))
+      this.updateOptions(options)
+    })
   }
 
   componentWillReceiveProps(nextProps) {
