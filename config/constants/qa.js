@@ -51,5 +51,5 @@ module.exports = {
   TC_CDN_URL: process.env.TC_CDN_URL,
 
   SKILL_PROVIDER_ID: '9cc0795a-6e12-4c84-9744-15858dba1861',
-  TAAS_APP_URL: 'https://mfe.topcoder-dev.com/taas'
+  TAAS_APP_URL: 'https://platform.topcoder-dev.com/taas'
 }

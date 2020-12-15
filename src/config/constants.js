@@ -1103,4 +1103,4 @@ export const PROJECT_TYPE_TALENT_AS_A_SERVICE = 'talent-as-a-service'
 /**
  * URL to the Topcoder TaaS App
  */
-export const TAAS_APP_URL = process.env.TAAS_APP_URL || 'https://mfe.topcoder-dev.com/taas'
+export const TAAS_APP_URL = process.env.TAAS_APP_URL || 'https://platform.topcoder-dev.com/taas'
