@@ -25,6 +25,7 @@ import DotIndicator from '../DotIndicator'
 import MobilePage from '../../../../../components/MobilePage/MobilePage'
 import MediaQuery from 'react-responsive'
 import XMartIcon from '../../../../../assets/icons/x-mark.svg'
+import TrashIcon from  '../../../../../assets/icons/icon-trash.svg'
 
 import { MILESTONE_STATUS, SCREEN_BREAKPOINT_MD } from '../../../../../config/constants'
 
@@ -32,11 +33,27 @@ import { PERMISSIONS } from '../../../../../config/permissions'
 import {hasPermission} from '../../../../../helpers/permissions'
 
 import './Milestone.scss'
+
+const TYPE_OPTIONS = [
+  {
+    title: 'Reporting',
+    value: 'generic-work',
+  },
+  {
+    title: 'Deliverable Review',
+    value: 'add-links',
+  },
+  {
+    title: 'Final Deliverable Review',
+    value: 'delivery-dev',
+  },
+]
+
 class Milestone extends React.Component {
   constructor(props) {
     super(props)
 
-    this.deletePost = this.deletePost.bind(this)
+    this.onDeleteClick = this.onDeleteClick.bind(this)
     this.hoverHeader = this.hoverHeader.bind(this)
     this.unHoverHeader = this.unHoverHeader.bind(this)
     this.toggleEditLink = this.toggleEditLink.bind(this)
@@ -118,9 +135,15 @@ class Milestone extends React.Component {
 
   updateMilestoneWithData(values) {
     const { milestone, updateMilestone } = this.props
+    if (values.type === 'Deprecated type') {
+      values.type = milestone.type
+    }
+
     const milestoneData = {
       ...values
     }
+    milestoneData.startDate = moment.utc(new Date(values.startDate))
+    milestoneData.endDate = moment.utc(new Date(values.endDate))
     if (values.actualStartDate) {
       milestoneData.actualStartDate = moment.utc(new Date(values.actualStartDate))
     }
@@ -190,6 +213,7 @@ class Milestone extends React.Component {
     }
     completeMilestone(milestone.id, updatedProps)
   }
+
   completeFinalFixesMilestone(updatedProps = {}) {
     const { completeFinalFixesMilestone, milestone } = this.props
 
@@ -216,14 +240,50 @@ class Milestone extends React.Component {
     submitFinalFixesRequest(milestone.id, finalFixRequests)
   }
 
+  onDeleteClick() {
+    const { milestone, updateMilestone } = this.props
+
+    if (confirm(`Are you sure you want to delete milestone '${milestone.name}'?`)) {
+      updateMilestone(milestone.id, null)
+    }
+  }
+
+  getSelectOptions() {
+    const {
+      milestone,
+    } = this.props
+    const option =  _.find(TYPE_OPTIONS, (o) => o.value === milestone.type)
+    const options = _.clone(TYPE_OPTIONS)
+    if (!option) {
+      options.push(
+        {
+          title: 'Deprecated type',
+          value: milestone.type
+        }
+      )
+
+    }
+    return options
+  }
+
+  getSelectLabel(type) {
+    const option =  _.find(TYPE_OPTIONS, (o) => o.value === type)
+    if (!option) {
+      return 'Deprecated type'
+    }
+    return option.title
+  }
+
+
   render() {
     const {
       milestone,
+      index,
       currentUser,
       previousMilestone,
     } = this.props
     const { isEditing, isMobileEditing } = this.state
-
+    const disabledType = milestone.status !== MILESTONE_STATUS.DRAFT
     const isPlanned = milestone.status === MILESTONE_STATUS.PLANNED
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
@@ -234,94 +294,137 @@ class Milestone extends React.Component {
     const isUpdating = milestone.isUpdating
     const isActualDateEditable = this.isActualStartDateEditable()
     const isCompletionDateEditable = this.isCompletionDateEditable()
+
+    const hideDelete = index === 0 && milestone.type === 'generic-work'
+
     const editForm = (
       <Form
-        fields={[{
-          label: 'Name',
-          placeholder: 'Name',
-          name: 'name',
-          value: milestone.name,
-          type: 'text',
-          validations: {
-            isRequired: true
+        fields={[
+          disabledType?
+
+            {
+              label: 'Type',
+              disabled: true,
+              name: 'type',
+              value: this.getSelectLabel(milestone.type),
+              type: 'text',
+              validations: {
+                isRequired: true
+              },
+            }
+            :{
+              label: 'Type',
+              placeholder: 'Type',
+              options: this.getSelectOptions(),
+              name: 'type',
+              value: milestone.type,
+              type: 'select',
+              disabled: true,
+              validations: {
+                isRequired: true
+              },
+              validationError: 'Type is required',
+            },
+          {
+            label: 'Name',
+            placeholder: 'Name',
+            name: 'name',
+            value: milestone.name,
+            type: 'text',
+            validations: {
+              isRequired: true
+            },
+            validationError: 'Name is required',
           },
-          validationError: 'Name is required',
-        }, {
-          type: 'number',
-          placeholder: 'Duration',
-          label: 'Duration',
-          name: 'duration',
-          value: milestone.duration || 0,
-          validations: {
-            isRequired: true
+
+          {
+            label: 'Start Date',
+            placeholder: 'start date',
+            name: 'startDate',
+            value: moment.utc(milestone.startDate).format('YYYY-MM-DD'),
+            type: 'date',
+            validations: {
+              isRequired: true
+            },
+            validationError: 'start date is required',
           },
-          validationError: 'Duration is required',
-          disabled: isCompleted
-        }, {
-          label: 'Planned text',
-          placeholder: 'Planned text',
-          name: 'plannedText',
-          value: milestone.plannedText,
-          type: 'textarea',
-          autoResize: true,
-          validations: {
-            isRequired: true
+          {
+            label: 'End Date',
+            placeholder: 'end date',
+            name: 'endDate',
+            value: moment.utc(milestone.end).format('YYYY-MM-DD'),
+            type: 'date',
+            validations: {
+              isRequired: true
+            },
+            validationError: 'end date is required',
           },
-          validationError: 'Planned text is required',
-        }, {
-          label: 'Active text',
-          placeholder: 'Active text',
-          name: 'activeText',
-          value: milestone.activeText,
-          type: 'textarea',
-          autoResize: true,
-          validations: {
-            isRequired: true
-          },
-          validationError: 'Active text is required',
-        }, {
-          label: 'Blocked text',
-          placeholder: 'Blocked text',
-          name: 'blockedText',
-          value: milestone.blockedText,
-          type: 'textarea',
-          autoResize: true,
-          validations: {
-            isRequired: true
-          },
-          validationError: 'Blocked text is required',
-        }, {
-          label: 'Completed text',
-          placeholder: 'Completed text',
-          name: 'completedText',
-          value: milestone.completedText,
-          type: 'textarea',
-          autoResize: true,
-          validations: {
-            isRequired: true
-          },
-          validationError: 'Completed text is required',
-        }, ...( isActualDateEditable && [{
-          label: 'Actual Start date',
-          placeholder: 'Actual Start date',
-          name: 'actualStartDate',
-          value: moment.utc(milestone.actualStartDate).format('YYYY-MM-DD'),
-          type: 'date',
-          validations: {
-            isRequired: true
-          },
-          validationError: 'Actual Start date is required',
-        }]), ...( isCompletionDateEditable && [{
-          label: 'Completion date',
-          placeholder: 'Completion date',
-          name: 'completionDate',
-          value: moment.utc(milestone.completionDate).format('YYYY-MM-DD'),
-          type: 'date',
-          validations: {
-            isRequired: true
-          },
-          validationError: 'Completion date is required',
-        }])]}
+
+          {
+            label: 'Planned text',
+            placeholder: 'Planned text',
+            name: 'plannedText',
+            value: milestone.plannedText,
+            type: 'textarea',
+            autoResize: true,
+            validations: {
+              isRequired: true
+            },
+            validationError: 'Planned text is required',
+          }, {
+            label: 'Active text',
+            placeholder: 'Active text',
+            name: 'activeText',
+            value: milestone.activeText,
+            type: 'textarea',
+            autoResize: true,
+            validations: {
+              isRequired: true
+            },
+            validationError: 'Active text is required',
+          }, {
+            label: 'Blocked text',
+            placeholder: 'Blocked text',
+            name: 'blockedText',
+            value: milestone.blockedText,
+            type: 'textarea',
+            autoResize: true,
+            validations: {
+              isRequired: true
+            },
+            validationError: 'Blocked text is required',
+          }, {
+            label: 'Completed text',
+            placeholder: 'Completed text',
+            name: 'completedText',
+            value: milestone.completedText,
+            type: 'textarea',
+            autoResize: true,
+            validations: {
+              isRequired: true
+            },
+            validationError: 'Completed text is required',
+          }, ...( isActualDateEditable && [{
+            label: 'Actual Start date',
+            placeholder: 'Actual Start date',
+            name: 'actualStartDate',
+            value: moment.utc(milestone.actualStartDate).format('YYYY-MM-DD'),
+            type: 'date',
+            validations: {
+              isRequired: true
+            },
+            validationError: 'Actual Start date is required',
+          }]), ...( isCompletionDateEditable && [{
+            label: 'Completion date',
+            placeholder: 'Completion date',
+            name: 'completionDate',
+            value: moment.utc(milestone.completionDate).format('YYYY-MM-DD'),
+            type: 'date',
+            validations: {
+              isRequired: true
+            },
+            validationError: 'Completion date is required',
+          }])]}
         onCancelClick={this.closeEditForm}
         onSubmit={this.updateMilestoneWithData}
         onChange={this.milestoneEditorChanged}
@@ -380,7 +483,8 @@ class Milestone extends React.Component {
           }
 
           {isEditing && !isUpdating && (
-            <div>
+            <div styleName="edit-form">
+              {hideDelete ? null:  <i onClick={this.onDeleteClick} title="trash"><TrashIcon /></i> }
               {editForm}
             </div>
           )}
@@ -502,6 +606,7 @@ Milestone.propTypes = {
   currentUser: PT.object.isRequired,
   extendMilestone: PT.func.isRequired,
   milestone: PT.object.isRequired,
+  index: PT.number.isRequired,
   submitFinalFixesRequest: PT.func.isRequired,
   updateMilestone: PT.func.isRequired,
 }

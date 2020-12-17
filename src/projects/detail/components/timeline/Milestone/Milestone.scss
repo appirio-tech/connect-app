@@ -10,7 +10,13 @@
     height: auto;
   }
 
+  :global(.error + p) {
+    position: relative !important;
+  }
 
+  :global(.dropdown-wrap) {
+    margin-bottom: 10px;
+  }
 
   @include roboto;
   a {
@@ -305,5 +311,16 @@
 
   form {
     flex: 1;
+  }
+}
+
+.edit-form {
+  position: relative;
+  >i {
+    position: absolute;
+    right: 25px;
+    top: 20px;
+    cursor: pointer;
+
   }
 }

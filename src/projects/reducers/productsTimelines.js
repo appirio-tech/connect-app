@@ -6,6 +6,7 @@ import {
   LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_PENDING,
   LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_SUCCESS,
   LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE,
+  CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS,
   UPDATE_PRODUCT_MILESTONE_PENDING,
   UPDATE_PRODUCT_MILESTONE_SUCCESS,
   UPDATE_PRODUCT_MILESTONE_FAILURE,
@@ -129,6 +130,21 @@ export const productsTimelines = (state=initialState, action) => {
   const { type, payload, meta } = action
 
   switch (type) {
+  case CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS: {
+    const {timeline, milestones} = action.payload
+
+    timeline.milestones = milestones
+
+    return update(state, {
+      [timeline.referenceId]: {
+        $set: {
+          isLoading: false,
+          timeline,
+          error: false
+        }
+      }
+    })
+  }
 
   case LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_PENDING:
     // if already have previously loaded timeline, just update some props

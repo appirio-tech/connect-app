@@ -28,7 +28,9 @@ import {
   PHASE_STATUS_COMPLETED,
   BULK_UPDATE_PRODUCT_MILESTONES,
 } from '../../config/constants'
-import { processUpdateMilestone } from '../../helpers/milestoneHelper'
+import { processUpdateMilestone,
+  processDeleteMilestone
+} from '../../helpers/milestoneHelper'
 
 /**
  * Get the next milestone in the list, which is not hidden
@@ -110,7 +112,12 @@ export function updateProductMilestone(productId, timelineId, milestoneId, updat
     const timeline = getState().productsTimelines[productId].timeline
     const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
     const milestone = timeline.milestones[milestoneIdx]
-    const updatedTimelineMilestones = processUpdateMilestone(milestone, updatedProps, timeline.milestones).updatedTimelineMilestones
+    let updatedTimelineMilestones
+    if (!updatedProps) {
+      updatedTimelineMilestones = processDeleteMilestone(milestoneIdx, timeline.milestones)
+    } else  {
+      updatedTimelineMilestones = processUpdateMilestone(milestone, updatedProps, timeline.milestones).updatedTimelineMilestones
+    }
 
     dispatch({
       type: UPDATE_PRODUCT_MILESTONE_PENDING,

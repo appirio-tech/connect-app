@@ -113,10 +113,11 @@ class Timeline extends React.Component {
             id={`phase-${phaseId}-timeline-${timeline.id}`}
             criteria={buildPhaseTimelineNotificationsCriteria(timeline)}
           />
-          {_.reject(orderedMilestones, { hidden: true }).map((milestone) => (
+          {_.reject(orderedMilestones, { hidden: true }).map((milestone, index) => (
             <Milestone
               key={milestone.id}
               currentUser={currentUser}
+              index={index}
               milestone={milestone}
               updateMilestone={this.updateMilestone}
               completeMilestone={this.completeMilestone}
