@@ -2,6 +2,8 @@ import _ from 'lodash'
 import Alert from 'react-s-alert'
 /* eslint-disable no-unused-vars */
 import {
+  // bulk phase and milestones
+  CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS,
   // Project
   CREATE_PROJECT_STAGE_SUCCESS,
   CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE,
@@ -80,6 +82,12 @@ export default function(state = {}, action) {
     return state
   }
 
+  case CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS: {
+    //delay time for reload stage list of project after creating state
+    setTimeout(() => { Alert.success('Added New Phase To Project') }, 2000)
+
+    return state
+  }
   case CREATE_PROJECT_STAGE_SUCCESS: {
 
     //delay time for reload stage list of project after creating state

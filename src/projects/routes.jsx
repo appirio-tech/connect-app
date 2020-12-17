@@ -12,7 +12,6 @@ import MessagesTabContainer from './detail/containers/MessagesTabContainer'
 import Scope from './detail/containers/ScopeContainer'
 import ProjectSummaryReport from './detail/containers/ProjectSummaryReportContainer'
 import AssetsLibrary from './detail/containers/AssetsLibraryContainer'
-import ProjectAddPhaseContainer from './detail/containers/ProjectAddPhaseContainer'
 import ProjectMessages from './detail/Messages'
 import CoderBot from '../components/CoderBot/CoderBot'
 import SpecificationContainer from './detail/containers/SpecificationContainer'
@@ -57,7 +56,6 @@ const ProjectDetailWithAuth = requiresAuthentication(() =>
     />
     <Route path="/projects/:projectId/reports" render={() => <ProjectDetail component={ProjectSummaryReport} />} />
     <Route path="/projects/:projectId/assets" render={() => <ProjectDetail component={AssetsLibrary} />} />
-    <Route path="/projects/:projectId/add-phase" render={() => <ProjectDetail component={ProjectAddPhaseContainer} />} />
     <Route path="/projects/:projectId/discussions/:discussionId?" render={() => <ProjectDetail component={ProjectMessages} />} />
     <Route path="/projects/:projectId/faqs" render={() => <ProjectDetail component={ProjectFAQContainer} />} />
     <Route render={() => <CoderBot code={404}/>} />

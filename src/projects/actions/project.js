@@ -19,6 +19,7 @@ import {
   getProjectMemberInvites,
 } from '../../api/projectMemberInvites'
 import {
+  updateMilestones,
   createTimeline,
 } from '../../api/timelines'
 import {
@@ -65,6 +66,7 @@ import {
   PHASE_STATUS_DRAFT,
   LOAD_PROJECT_MEMBERS,
   LOAD_PROJECT_MEMBER_INVITES,
+  CREATE_PROJECT_PHASE_TIMELINE_MILESTONES,
   LOAD_PROJECT_MEMBER
 } from '../../config/constants'
 import {
@@ -328,6 +330,41 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
   })
 }
 
+
+/**
+ * Create phase and product and milestones for the project
+ *
+ * @param {Object} project         project
+ * @param {Object} projectTemplate project template
+ * @param {String} status          (optional) project/phase status
+ * @param {Object} startDate       phase startDate
+ * @param {Object} endDate         phase endDate
+ * @param {Array}  milestones      milestones
+ *
+ * @return {Promise} project
+ */
+function createPhaseAndMilestonesRequest(project, projectTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate, milestones) {
+  return createProjectPhaseAndProduct(project, projectTemplate, status, startDate, endDate).then(({timeline, phase, project, product}) => {
+    return updateMilestones(timeline.id, milestones).then((data) => ({
+      phase,
+      project,
+      product,
+      timeline,
+      milestones: data
+    }))
+  })
+}
+
+
+export function createPhaseAndMilestones(project, projectTemplate, status, startDate, endDate, milestones) {
+  return (dispatch) => {
+    return dispatch({
+      type: CREATE_PROJECT_PHASE_TIMELINE_MILESTONES,
+      payload: createPhaseAndMilestonesRequest(project, projectTemplate, status, startDate, endDate, milestones)
+    })
+  }
+}
+
 export function deleteProjectPhase(projectId, phaseId) {
   return (dispatch) => {
     return dispatch({
@@ -433,11 +470,9 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
     const phaseStartDate = timeline ? timeline.startDate : phase.startDate
     const startDateChanged = updatedProps.startDate ? updatedProps.startDate.diff(phaseStartDate) : null
     const phaseActivated = phaseStatusChanged && updatedProps.status === PHASE_STATUS_ACTIVE
-    if (phaseActivated) {
-      const duration = updatedProps.duration ? updatedProps.duration : phase.duration
-      updatedProps.startDate = moment().utc().hours(0).minutes(0).seconds(0).milliseconds(0).format('YYYY-MM-DD')
-      updatedProps.endDate = moment(updatedProps.startDate).add(duration - 1, 'days').format('YYYY-MM-DD')
-    }
+
+    updatedProps.startDate = moment(updatedProps.startDate).format('YYYY-MM-DD')
+    updatedProps.endDate = moment(updatedProps.endDate).format('YYYY-MM-DD')
 
     return dispatch({
       type: UPDATE_PHASE,

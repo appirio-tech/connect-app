@@ -7,8 +7,17 @@
 import React from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom'
-import './DashboardContainer.scss'
+import { withRouter } from 'react-router-dom'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+import FormFieldDropdow from '../components/timeline/FormFieldDropdown'
+import moment from 'moment'
+const Formsy = FormsyForm.Formsy
+const TCFormFields = FormsyForm.Fields
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
+import GenericMenu from '../../../components/GenericMenu'
+import TrashIcon from  '../../../assets/icons/icon-trash.svg'
+
+import styles from './DashboardContainer.scss'
 
 import {
   filterReadNotifications,
@@ -25,6 +34,7 @@ import {
   expandProjectPhase,
   collapseProjectPhase,
   collapseAllProjectPhases,
+  createPhaseAndMilestones
 } from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
@@ -67,15 +77,51 @@ const SYSTEM_USER = {
   photoURL: require('../../../assets/images/avatar-coder.svg')
 }
 
+const TYPE_OPTIONS = [
+  {
+    title: 'Reporting',
+    value: 'generic-work',
+  },
+  {
+    title: 'Deliverable Review',
+    value: 'add-links',
+  },
+  {
+    title: 'Final Deliverable Review',
+    value: 'delivery-dev',
+  },
+]
+
 class DashboardContainer extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      publishClicked: false,
+      isAddButtonClicked: false,
+      addMilestonesButtonClicked: false,
+      canSubmit: false,
       open: false,
+      milestones: [{
+        type: 'generic-work',
+        title: 'Reporting',
+        startDate: moment.utc().format('YYYY-MM-DD'),
+        endDate: moment.utc().add(3, 'days').format('YYYY-MM-DD')
+      }]
     }
     this.onNotificationRead = this.onNotificationRead.bind(this)
     this.toggleDrawer = this.toggleDrawer.bind(this)
+    this.onAddClick = this.onAddClick.bind(this)
+    this.onCancelClick = this.onCancelClick.bind(this)
+
+    this.onPublishClick = this.onPublishClick.bind(this)
+    this.onFormSubmit = this.onFormSubmit.bind(this)
+    this.enableButton = this.enableButton.bind(this)
+    this.disableButton = this.disableButton.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+
+    this.onDeleteMilestoneClick = this.onDeleteMilestoneClick.bind(this)
+    this.onAddMilestoneClick = this.onAddMilestoneClick.bind(this)
   }
 
   onNotificationRead(notification) {
@@ -111,11 +157,323 @@ class DashboardContainer extends React.Component {
     }))
   }
 
+  onPublishClick() {
+    this.setState({
+      publishClicked: true,
+    })
+  }
+
+  onCancelClick() {
+    this.setState( {
+      isAddButtonClicked: false
+    })
+    this.setState({
+      milestones: [{
+        type: 'generic-work',
+        title: 'Reporting',
+        startDate: moment.utc().format('YYYY-MM-DD'),
+        endDate: moment.utc().add(3, 'days').format('YYYY-MM-DD')
+      }]
+    })
+  }
+  onAddClick() {
+    this.setState( {
+      isAddButtonClicked: true
+    })
+  }
+
+  enableButton() {
+    this.setState( { canSubmit: true })
+  }
+
+  disableButton() {
+    this.setState({ canSubmit: false })
+  }
+
+  onFormSubmit(model) {
+
+    const { project, createPhaseAndMilestones } = this.props
+    const { publishClicked, addMilestonesButtonClicked } = this.state
+
+    const phaseData = {
+      title: model.title,
+      startDate: moment(model.startDate),
+      endDate: moment(model.endDate),
+    }
+
+    const milestones = []
+    _.forEach(_.keys(_.omit(model, ['title', 'startDate', 'endDate'])), (k) => {
+      const arrs =  k.match(/(\w+)_(\d+)/)
+      const arrIndex = arrs[2]
+      const objKey = arrs[1] === 'title'? 'name': arrs[1]
+      if (!milestones[arrIndex]) {
+        milestones[arrIndex] = {}
+      }
+      milestones[arrIndex][objKey] = model[k]
+    })
+
+    _.forEach(milestones, (m) => {
+      m.status = 'reviewed'
+      // TODO  add mock data
+      m.duration = 1
+      m.order = 1
+      m.hidden =false
+      m.completedText = 'completed text'
+      m.activeText = 'active text'
+      m.description = 'description'
+      m.plannedText ='planned text'
+      m.details = {}
+      m.blockedText = 'blocked text'
+    })
+
+    const projectTemplate = {
+      name: phaseData.title,
+      id:166,
+    }
+    if (publishClicked) {
+      createPhaseAndMilestones(project, projectTemplate, 'active', phaseData.startDate, phaseData.endDate, milestones)
+    } else {
+      createPhaseAndMilestones(project, projectTemplate, 'draft', phaseData.startDate, phaseData.endDate, milestones)
+    }
+    this.setState({
+      publishClicked: false,
+      isAddButtonClicked: false
+    })
+  }
+
+  isChanged() {
+    // We check if this.refs.form exists because this may be called before the
+    // first render, in which case it will be undefined.
+    return (this.refs.form && this.refs.form.isChanged())
+  }
+  /**
+   * Handles the change event of the form.
+   *
+   * @param change changed form model in flattened form
+   * @param isChanged flag that indicates if form actually changed from initial model values
+   */
+  handleChange(change) {
+    const {
+      milestones
+    } = this.state
+
+
+    // omit phase fields
+    _.forEach(_.keys(_.omit(change, ['title', 'startDate', 'endDate'])), (k) => {
+      const arrs =  k.match(/(\w+)_(\d+)/)
+      const arrIndex = arrs[2]
+      const objKey = arrs[1]
+      if(change[k] && change[k] !== milestones[arrIndex][objKey]) {
+        milestones[arrIndex][objKey] = change[k]
+        // set default title with option type
+        if (objKey === 'type' && !milestones[arrIndex]['title']) {
+          milestones[arrIndex]['title'] = this.getOptionType(change[k])
+        }
+      }
+    })
+
+
+    this.setState({milestones})
+  }
+
+  getOptionType(val) {
+    return _.find(TYPE_OPTIONS, (v) => v.value === val).title
+  }
+
+  onDeleteMilestoneClick(index) {
+    const {
+      milestones
+    } = this.state
+    milestones.splice(index, 1)
+    this.setState({
+      milestones
+    })
+  }
+
+  onAddMilestoneClick() {
+    const {
+      milestones
+    } = this.state
+
+    const defaultData = {
+      startDate: moment(_.last(milestones).endDate).format('YYYY-MM-DD'),
+      endDate: moment(_.last(milestones).endDate).add(3, 'days').format('YYYY-MM-DD')
+    }
+    milestones.push(defaultData)
+
+    this.setState({
+      addMilestonesButtonClicked: true,
+      milestones
+    })
+  }
+
+  renderMilestones() {
+
+    const {
+      isCreatingPhase
+    } = this.props
+    const {
+      milestones
+    } = this.state
+
+    const ms = _.map(milestones, (m, index) => {
+      return (
+        <div styleName="milestone-item">
+          <div styleName="title-label-layer">
+            <FormFieldDropdow
+              // theme={`${styles['input-row']}`}
+              validations={{isRequired: true}}
+              validationError={'Please, select type'}
+              required
+              options={TYPE_OPTIONS}
+              label="TYPE"
+              type="select"
+              name={`type_${index}`}
+              value={milestones[index].type}
+            />
+          </div>
+          <div styleName="label-layer">
+            <TCFormFields.TextInput
+              wrapperClass={`${styles['input-row']}`}
+              validationError={'Please, enter title'}
+              label="title"
+              type="text"
+              name={`title_${index}`}
+              value={milestones[index].title}
+            />
+          </div>
+          <div styleName="label-layer">
+            <TCFormFields.TextInput
+              wrapperClass={`${styles['input-row']}`}
+
+              validations={{isRequired: true}}
+              validationError={'Please, enter start date'}
+              required
+              label="Start Date"
+              type="date"
+              name={`startDate_${index}`}
+              value={milestones[index].startDate}
+            />
+          </div>
+          <div styleName="label-layer">
+            <TCFormFields.TextInput
+              wrapperClass={`${styles['input-row']}`}
+              validations={{isRequired: true}}
+              validationError={'Please, enter end date'}
+              required
+              label="End Date"
+              type="date"
+              name={`endDate_${index}`}
+              value={milestones[index].endDate}
+            />
+          </div>
+          <i className="icon-trash" onClick={() => this.onDeleteMilestoneClick(index)} title="trash"><TrashIcon /></i>
+        </div>
+      )
+    })
+    return (
+      <div styleName="add-milestone-form">
+        {ms}
+        <div styleName="add-milestone-wrapper">
+          <button
+            type="button"
+            onClick={this.onAddMilestoneClick}
+            className="tc-btn tc-btn-primary tc-btn-sm"
+            disabled={(!this.isChanged() || isCreatingPhase) || !this.state.canSubmit}
+          >Add Milestone</button>
+        </div>
+      </div>
+    )
+
+  }
+  renderTab() {
+    const tabs = [
+      {
+        onClick: () => {},
+        label: 'Timeline',
+        isActive: true,
+        hasNotifications: false,
+      }]
+    return (
+      <div styleName="tab-container">
+        <GenericMenu navLinks={tabs} />
+      </div>
+    )
+  }
+  renderAddingForm() {
+    const {
+      isCreatingPhase
+    } = this.props
+    return (
+      <div styleName="add-phase-form">
+        <Formsy.Form
+          ref="form"
+          onInvalid={this.disableButton}
+          onValid={this.enableButton}
+          onValidSubmit={this.onFormSubmit}
+          onChange={ this.handleChange }
+        >
+          <div styleName="form">
+            <div styleName="title-label-layer">
+              <TCFormFields.TextInput
+                wrapperClass={`${styles['input-row']}`}
+                validations={{isRequired: true}}
+                validationError={'Please, enter title'}
+                required
+                label="Title"
+                type="text"
+                name="title"
+                value={''}
+                maxLength={48}
+              />
+            </div>
+            <div styleName="label-layer">
+              <TCFormFields.TextInput
+                wrapperClass={`${styles['input-row']}`}
+                validations={{isRequired: true}}
+                validationError={'Please, enter start date'}
+                required
+                label="Start Date"
+                type="date"
+                name="startDate"
+                value={moment.utc().format('YYYY-MM-DD')}
+              />
+              <TCFormFields.TextInput
+                wrapperClass={`${styles['input-row']}`}
+                validations={{isRequired: true}}
+                validationError={'Please, enter end date'}
+                required
+                label="End Date"
+                type="date"
+                name="endDate"
+                value={moment.utc().add(3, 'days').format('YYYY-MM-DD')}
+              />
+            </div>
+            {this.renderTab()}
+            {this.renderMilestones()}
+            <div styleName="group-bottom">
+              <button onClick={this.onCancelClick} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
+              <button className="tc-btn tc-btn-primary tc-btn-sm"
+                type="submit" disabled={(!this.isChanged() || isCreatingPhase) || !this.state.canSubmit}
+              >Save Draft</button>
+              <button
+                onClick={this.onPublishClick}
+                className="tc-btn tc-btn-primary tc-btn-sm"
+                type="submit" disabled={(!this.isChanged() || isCreatingPhase) || !this.state.canSubmit}
+              >Publish</button>
+            </div>
+          </div>
+        </Formsy.Form>
+      </div>
+    )
+
+  }
   render() {
     const {
       project,
       phases,
       phasesNonDirty,
+      isCreatingPhase,
       isLoadingPhases,
       notifications,
       productTemplates,
@@ -135,6 +493,9 @@ class DashboardContainer extends React.Component {
       location,
       estimationQuestion,
     } = this.props
+    const {
+      isAddButtonClicked
+    } = this.state
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
 
     let template
@@ -262,9 +623,16 @@ class DashboardContainer extends React.Component {
               ) : (
                 <ProjectPlanEmpty />
               )}
-              {isProjectLive && hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)  && !isLoadingPhases && (<div styleName="add-button-container">
-                <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
+              {isCreatingPhase? <LoadingIndicator/>: null}
+
+              {!isAddButtonClicked && isProjectLive && !isCreatingPhase && hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)  && !isLoadingPhases && (<div styleName="add-button-container">
+                <button
+                  onClick={this.onAddClick}
+                  className="tc-btn tc-btn-primary tc-btn-sm action-btn"
+                // type="submit"
+                >Add New Phase</button>
               </div>)}
+              {!isCreatingPhase && isAddButtonClicked? this.renderAddingForm(): null}
             </div>
           )}
         </TwoColsLayout.Content>
@@ -281,6 +649,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
   }
 
   return {
+    isCreatingPhase: projectState.isCreatingPhase,
     notifications: notifications.notifications,
     productTemplates: templates.productTemplates,
     projectTemplates: templates.projectTemplates,
@@ -300,6 +669,7 @@ const mapDispatchToProps = {
   toggleNotificationRead,
   toggleBundledNotificationRead,
   updateProduct,
+  createPhaseAndMilestones,
   fireProductDirty,
   fireProductDirtyUndo,
   addProductAttachment,

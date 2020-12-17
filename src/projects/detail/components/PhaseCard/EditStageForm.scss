@@ -35,14 +35,26 @@
   display: inline-block;
   width: 50%;
 
-  :global .dropdown-wrap {
-    width: auto;
-    margin-left: 0px;
+  :global  {
+
+    .dropdown-wrap {
+      width: auto;
+      margin-left: 0px;
+    }
+
+    .error-message {
+      width:calc(100% - 170px)!important;
+      margin: -5px 0 10px;
+      float: right;
+    }
+
   }
   input {
     display: inline-block;
     width:calc(100% - 170px)!important;
   }
+
+
   label {
     float: left;
     margin: 0px 10px 10px;
@@ -149,6 +161,7 @@
     float: none;
     .input-row {
       width: 100%;
+
     }
   }
   .label-layer,
@@ -163,12 +176,19 @@
       position: relative;
       top: 0;
     }
-    :global .dropdown-wrap {
-      width: 100%;
-      margin-left: 0px;
-      height: 40px;
-      div {
-        padding: 0 5px!important;
+    :global {
+      .dropdown-wrap {
+        width: 100%;
+        margin-left: 0px;
+        height: 40px;
+        div {
+          padding: 0 5px!important;
+        }
+      }
+
+      .error-message {
+        width: 100% !important;
+        float: initial;
       }
     }
     div {
