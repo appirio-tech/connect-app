@@ -19,6 +19,8 @@ import {
   PROJECT_STATUS_COMPLETED,
   PHASE_STATUS_REVIEWED,
   PHASE_STATUS_ACTIVE,
+  PROJECT_CATEGORY_TAAS,
+  WORK_MANAGER_APP
 } from '../../../config/constants'
 import { PERMISSIONS } from '../../../config/permissions'
 import { hasPermission } from '../../../helpers/permissions'
@@ -428,12 +430,13 @@ class ProjectInfoContainer extends React.Component {
       ? _.find(projectTemplates, pt => pt.id === projectTemplateId)
       : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
 
-    // const isTaaS = PROJECT_CATEGORY_TAAS === projectTemplate.category
+    const isTaaS = PROJECT_CATEGORY_TAAS === projectTemplate.category
     let directLinks = null
     if (hasPermission(PERMISSIONS.VIEW_PROJECT_SPECIAL_LINKS)) {
       directLinks = []
-      // if(!isTaaS)
-      //   directLinks.push({name: 'Launch Work Manager', href: `${WORK_MANAGER_APP}/${project.id}/challenges`})
+      if (!isTaaS) {
+        directLinks.push({name: 'Launch Work Manager', href: `${WORK_MANAGER_APP}/${project.id}/challenges`})
+      }
       if (project.directProjectId) {
         directLinks.push({name: 'Project in Topcoder Direct', href: `${DIRECT_PROJECT_URL}${project.directProjectId}`})
       } else {
