@@ -150,7 +150,7 @@
     "remarkable": "^1.7.4",
     "sanitize-html": "^1.27.4",
     "svg-react-loader": "^0.4.5",
-    "tc-auth-lib": "topcoder-platform/tc-auth-lib#1.0.3",
+    "tc-auth-lib": "topcoder-platform/tc-auth-lib#1.0.4",
     "tc-ui": "git+https://github.com/appirio-tech/tc-ui.git#feature/connectv2",
     "tlds": "^1.191.0",
     "topcoder-react-utils": "0.0.39",
