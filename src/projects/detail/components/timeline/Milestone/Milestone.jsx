@@ -27,27 +27,13 @@ import MediaQuery from 'react-responsive'
 import XMartIcon from '../../../../../assets/icons/x-mark.svg'
 import TrashIcon from  '../../../../../assets/icons/icon-trash.svg'
 
-import { MILESTONE_STATUS, SCREEN_BREAKPOINT_MD } from '../../../../../config/constants'
+import { MILESTONE_STATUS, SCREEN_BREAKPOINT_MD, PHASE_TYPE_OPTIONS } from '../../../../../config/constants'
 
 import { PERMISSIONS } from '../../../../../config/permissions'
 import {hasPermission} from '../../../../../helpers/permissions'
 
 import './Milestone.scss'
 
-const TYPE_OPTIONS = [
-  {
-    title: 'Reporting',
-    value: 'generic-work',
-  },
-  {
-    title: 'Deliverable Review',
-    value: 'add-links',
-  },
-  {
-    title: 'Final Deliverable Review',
-    value: 'delivery-dev',
-  },
-]
 
 class Milestone extends React.Component {
   constructor(props) {
@@ -252,8 +238,8 @@ class Milestone extends React.Component {
     const {
       milestone,
     } = this.props
-    const option =  _.find(TYPE_OPTIONS, (o) => o.value === milestone.type)
-    const options = _.clone(TYPE_OPTIONS)
+    const option =  _.find(PHASE_TYPE_OPTIONS, (o) => o.value === milestone.type)
+    const options = _.clone(PHASE_TYPE_OPTIONS)
     if (!option) {
       options.push(
         {
@@ -267,7 +253,7 @@ class Milestone extends React.Component {
   }
 
   getSelectLabel(type) {
-    const option =  _.find(TYPE_OPTIONS, (o) => o.value === type)
+    const option =  _.find(PHASE_TYPE_OPTIONS, (o) => o.value === type)
     if (!option) {
       return 'Deprecated type'
     }
@@ -283,7 +269,6 @@ class Milestone extends React.Component {
       previousMilestone,
     } = this.props
     const { isEditing, isMobileEditing } = this.state
-    const disabledType = milestone.status !== MILESTONE_STATUS.DRAFT
     const isPlanned = milestone.status === MILESTONE_STATUS.PLANNED
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
@@ -295,13 +280,12 @@ class Milestone extends React.Component {
     const isActualDateEditable = this.isActualStartDateEditable()
     const isCompletionDateEditable = this.isCompletionDateEditable()
 
-    const hideDelete = index === 0 && milestone.type === 'generic-work'
+    const isFirstReportingType = index === 0 && milestone.type === 'generic-work'
 
     const editForm = (
       <Form
         fields={[
-          disabledType?
-
+          isFirstReportingType ?
             {
               label: 'Type',
               disabled: true,
@@ -484,7 +468,7 @@ class Milestone extends React.Component {
 
           {isEditing && !isUpdating && (
             <div styleName="edit-form">
-              {hideDelete ? null:  <i onClick={this.onDeleteClick} title="trash"><TrashIcon /></i> }
+              {isFirstReportingType ? null:  <i onClick={this.onDeleteClick} title="trash"><TrashIcon /></i> }
               {editForm}
             </div>
           )}

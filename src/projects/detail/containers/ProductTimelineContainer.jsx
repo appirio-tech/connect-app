@@ -17,6 +17,7 @@ import { connect } from 'react-redux'
 import Timeline from '../components/timeline/Timeline'
 
 import {
+  createProductMilestone,
   updateProductMilestone,
   completeProductMilestone,
   completeFinalFixesMilestone,
@@ -64,6 +65,7 @@ const mapStateToProps = ({ productsTimelines, loadUser }, props) => ({
 
 const mapDispatchToProps = {
   updateProductMilestone,
+  createProductMilestone,
   completeProductMilestone,
   completeFinalFixesMilestone,
   extendProductMilestone,

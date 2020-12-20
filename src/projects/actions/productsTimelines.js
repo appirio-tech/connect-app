@@ -23,6 +23,7 @@ import {
   SUBMIT_FINAL_FIXES_REQUEST_PENDING,
   SUBMIT_FINAL_FIXES_REQUEST_SUCCESS,
   SUBMIT_FINAL_FIXES_REQUEST_FAILURE,
+  CREATE_TIMELINE_MILESTONE,
   MILESTONE_STATUS,
   UPDATE_PRODUCT_TIMELINE,
   PHASE_STATUS_COMPLETED,
@@ -31,6 +32,8 @@ import {
 import { processUpdateMilestone,
   processDeleteMilestone
 } from '../../helpers/milestoneHelper'
+
+
 
 /**
  * Get the next milestone in the list, which is not hidden
@@ -61,6 +64,27 @@ function getNextNotHiddenMilestone(milestones, currentMilestoneIndex) {
  */
 function checkIfLastMilestone(milestones, milestoneIdx) {
   return _.slice(milestones, milestoneIdx + 1).filter(m => !m.hidden).length === 0
+}
+
+
+/**
+ * bulk create proudct milestones
+ *
+ * @param {Object} timeline     timeline object
+ * @param {Array}  milestones   milestones
+ */
+export function createProductMilestone(timeline, milestones) {
+  return (dispatch) => {
+
+    milestones = milestones.map(item => _.omit(item, ['timelineId', 'error', 'isUpdating', 'statusHistory']))
+    return dispatch({
+      type: CREATE_TIMELINE_MILESTONE,
+      payload: updateMilestones(timeline.id, milestones),
+      meta: {
+        timeline 
+      }
+    })
+  }
 }
 
 /**
