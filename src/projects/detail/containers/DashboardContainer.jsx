@@ -179,8 +179,6 @@ class DashboardContainer extends React.Component {
 
     const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
 
-    const isTaasProject = project.type === PROJECT_TYPE_TALENT_AS_A_SERVICE
-
     const leftArea = (
       <ProjectInfoContainer
         location={location}
