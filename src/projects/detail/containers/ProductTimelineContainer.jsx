@@ -23,6 +23,7 @@ import {
   completeFinalFixesMilestone,
   extendProductMilestone,
   submitFinalFixesRequest,
+  submitDeliverableFinalFixesRequest,
 } from '../../actions/productsTimelines'
 
 class ProductTimelineContainer extends React.Component {
@@ -70,6 +71,7 @@ const mapDispatchToProps = {
   completeFinalFixesMilestone,
   extendProductMilestone,
   submitFinalFixesRequest,
+  submitDeliverableFinalFixesRequest,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductTimelineContainer)

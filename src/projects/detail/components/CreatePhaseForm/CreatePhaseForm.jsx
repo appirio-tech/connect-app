@@ -6,7 +6,7 @@ import PT from 'prop-types'
 import moment from 'moment'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 import FormsySelect from '../../../../components/Select/FormsySelect'
-import {  PHASE_TYPE_OPTIONS } from '../../../../config/constants'
+import {  MILESTONE_TYPE, MILESTONE_TYPE_OPTIONS } from '../../../../config/constants'
 import GenericMenu from '../../../../components/GenericMenu'
 import TrashIcon from  '../../../../assets/icons/icon-trash.svg'
 import  styles from './CreatePhaseForm.scss'
@@ -14,7 +14,7 @@ import  styles from './CreatePhaseForm.scss'
 const Formsy = FormsyForm.Formsy
 const TCFormFields = FormsyForm.Fields
 
-const phaseOptions = _.map(PHASE_TYPE_OPTIONS, o => ({label: o.title, value: o.value}))
+const phaseOptions = _.map(MILESTONE_TYPE_OPTIONS, o => ({label: o.title, value: o.value}))
 
 class CreatePhaseForm extends React.Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class CreatePhaseForm extends React.Component {
       isAddButtonClicked: false,
       canSubmit: false,
       milestones: [{
-        type: 'generic-work',
+        type: MILESTONE_TYPE.REPORTING,
         title: 'Reporting',
         startDate: moment.utc().format('YYYY-MM-DD'),
         endDate: moment.utc().add(3, 'days').format('YYYY-MM-DD')
@@ -55,7 +55,7 @@ class CreatePhaseForm extends React.Component {
       publishClicked: false,
       isAddButtonClicked: false,
       milestones: [{
-        type: 'generic-work',
+        type: MILESTONE_TYPE.REPORTING,
         title: 'Reporting',
         startDate: moment.utc().format('YYYY-MM-DD'),
         endDate: moment.utc().add(3, 'days').format('YYYY-MM-DD')
@@ -202,7 +202,7 @@ class CreatePhaseForm extends React.Component {
               <FormsySelect
                 name={`type_${index}`}
                 value={milestones[index].type}
-                isDisabled={index === 0} 
+                isDisabled={index === 0}
                 options={phaseOptions}
                 // onChange={this.onCountryChange}
                 placeholder="Select Type"
@@ -431,4 +431,4 @@ CreatePhaseForm.propTypes = {
   onSubmit: PT.func.isRequired,
 }
 
-export default CreatePhaseForm 
+export default CreatePhaseForm

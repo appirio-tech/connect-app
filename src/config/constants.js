@@ -1117,22 +1117,30 @@ export const PROJECT_TYPE_TALENT_AS_A_SERVICE = 'talent-as-a-service'
  */
 export const TAAS_APP_URL = process.env.TAAS_APP_URL || 'https://mfe.topcoder-dev.com/taas'
 
-
 /**
- *  Phase type
- *
+ *  Milestone Type Options
  */
-export const PHASE_TYPE_OPTIONS = [
+export const MILESTONE_TYPE_OPTIONS = [
   {
     title: 'Reporting',
-    value: 'generic-work',
+    value: 'reporting',
   },
   {
     title: 'Deliverable Review',
-    value: 'add-links',
+    value: 'deliverable-review',
   },
   {
     title: 'Final Deliverable Review',
-    value: 'delivery-dev',
+    value: 'final-deliverable-review',
   },
 ]
+
+/**
+ * Milestone Types
+ */
+export const MILESTONE_TYPE = {
+  REPORTING: 'reporting',
+  DELIVERABLE_REVIEW: 'deliverable-review',
+  FINAL_DELIVERABLE_REVIEW: 'final-deliverable-review',
+  DELIVERABLE_FINAL_FIXES: 'deliverable-final-fixes'
+}

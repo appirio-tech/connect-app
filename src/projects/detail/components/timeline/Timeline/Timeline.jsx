@@ -30,6 +30,7 @@ class Timeline extends React.Component {
     this.completeFinalFixesMilestone = this.completeFinalFixesMilestone.bind(this)
     this.extendMilestone = this.extendMilestone.bind(this)
     this.submitFinalFixesRequest = this.submitFinalFixesRequest.bind(this)
+    this.submitDeliverableFinalFixesRequest = this.submitDeliverableFinalFixesRequest.bind(this)
   }
 
   componentWillReceiveProps() {
@@ -124,6 +125,16 @@ class Timeline extends React.Component {
     submitFinalFixesRequest(product.id, timeline.id, milestoneId, finalFixRequests)
   }
 
+  submitDeliverableFinalFixesRequest(milestoneId, finalFixesRequest) {
+    const {
+      product,
+      submitDeliverableFinalFixesRequest,
+      timeline,
+    } = this.props
+
+    submitDeliverableFinalFixesRequest(product.id, timeline.id, milestoneId, finalFixesRequest)
+  }
+
   render() {
     const {
       currentUser,
@@ -157,6 +168,7 @@ class Timeline extends React.Component {
               extendMilestone={this.extendMilestone}
               submitFinalFixesRequest={this.submitFinalFixesRequest}
               completeFinalFixesMilestone={this.completeFinalFixesMilestone}
+              submitDeliverableFinalFixesRequest={this.submitDeliverableFinalFixesRequest}
               //$TODO convert the below logic more optimized way
               previousMilestone={_.find(orderedMilestones, m => m.order === milestone.order-1) &&
                _.find(orderedMilestones, m => m.order === milestone.order-1).type}
@@ -185,6 +197,7 @@ Timeline.propType = {
   createTimelineMilestone: PT.func.isRequired,
   completeProductMilestone: PT.func.isRequired,
   extendProductMilestone: PT.func.isRequired,
+  submitDeliverableFinalFixesRequest: PT.func.isRequired,
 }
 
 export default Timeline

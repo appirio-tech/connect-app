@@ -21,13 +21,15 @@ import MilestoneTypeFinalDesigns from '../milestones/MilestoneTypeFinalDesigns'
 import MilestoneTypeDelivery from '../milestones/MilestoneTypeDelivery'
 import MilestoneTypeFinalFixes from '../milestones/MilestoneTypeFinalFixes'
 import MilestoneTypeAddLinks from '../milestones/MilestoneTypeAddLinks'
+import MilestoneTypeReporting from '../milestones/MilestoneTypeReporting'
+import MilestoneTypeDeliverableReview from '../milestones/MilestoneTypeDeliverableReview'
 import DotIndicator from '../DotIndicator'
 import MobilePage from '../../../../../components/MobilePage/MobilePage'
 import MediaQuery from 'react-responsive'
 import XMartIcon from '../../../../../assets/icons/x-mark.svg'
 import TrashIcon from  '../../../../../assets/icons/icon-trash.svg'
 
-import { MILESTONE_STATUS, SCREEN_BREAKPOINT_MD, PHASE_TYPE_OPTIONS } from '../../../../../config/constants'
+import { MILESTONE_STATUS, SCREEN_BREAKPOINT_MD, MILESTONE_TYPE_OPTIONS, MILESTONE_TYPE } from '../../../../../config/constants'
 
 import { PERMISSIONS } from '../../../../../config/permissions'
 import {hasPermission} from '../../../../../helpers/permissions'
@@ -51,6 +53,7 @@ class Milestone extends React.Component {
     this.completeFinalFixesMilestone = this.completeFinalFixesMilestone.bind(this)
     this.extendMilestone = this.extendMilestone.bind(this)
     this.submitFinalFixesRequest = this.submitFinalFixesRequest.bind(this)
+    this.submitDeliverableFinalFixesRequest = this.submitDeliverableFinalFixesRequest.bind(this)
     this.milestoneEditorChanged = this.milestoneEditorChanged.bind(this)
 
     this.state = {
@@ -166,7 +169,7 @@ class Milestone extends React.Component {
     }
   }
 
-  updateMilestoneContent(contentProps, metaDataProps) {
+  updateMilestoneContent(contentProps, metaDataProps, status) {
     const { updateMilestone, milestone } = this.props
 
     const updatedMilestone = {
@@ -181,6 +184,10 @@ class Milestone extends React.Component {
           ...metaDataProps
         }
       }
+    }
+
+    if (status) {
+      updatedMilestone.status = status
     }
 
     updateMilestone(milestone.id, updatedMilestone)
@@ -226,6 +233,12 @@ class Milestone extends React.Component {
     submitFinalFixesRequest(milestone.id, finalFixRequests)
   }
 
+  submitDeliverableFinalFixesRequest(finalFixesRequest) {
+    const { submitDeliverableFinalFixesRequest, milestone } = this.props
+
+    submitDeliverableFinalFixesRequest(milestone.id, finalFixesRequest)
+  }
+
   onDeleteClick() {
     const { milestone, updateMilestone } = this.props
 
@@ -238,8 +251,8 @@ class Milestone extends React.Component {
     const {
       milestone,
     } = this.props
-    const option =  _.find(PHASE_TYPE_OPTIONS, (o) => o.value === milestone.type)
-    const options = _.clone(PHASE_TYPE_OPTIONS)
+    const option =  _.find(MILESTONE_TYPE_OPTIONS, (o) => o.value === milestone.type)
+    const options = _.clone(MILESTONE_TYPE_OPTIONS)
     if (!option) {
       options.push(
         {
@@ -253,7 +266,7 @@ class Milestone extends React.Component {
   }
 
   getSelectLabel(type) {
-    const option =  _.find(PHASE_TYPE_OPTIONS, (o) => o.value === type)
+    const option =  _.find(MILESTONE_TYPE_OPTIONS, (o) => o.value === type)
     if (!option) {
       return 'Deprecated type'
     }
@@ -280,7 +293,7 @@ class Milestone extends React.Component {
     const isActualDateEditable = this.isActualStartDateEditable()
     const isCompletionDateEditable = this.isCompletionDateEditable()
 
-    const isFirstReportingType = index === 0 && milestone.type === 'generic-work'
+    const isFirstReportingType = index === 0 && milestone.type === MILESTONE_TYPE.REPORTING
 
     const editForm = (
       <Form
@@ -417,6 +430,7 @@ class Milestone extends React.Component {
         disableSubmitButton={this.state.disableSubmit}
       />
     )
+
     return (
       <div styleName="timeline-post">
         {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing && !isCompleted) ? 'hover ' : '')} />)}
@@ -579,6 +593,24 @@ class Milestone extends React.Component {
               />
             )
           }
+
+          {!isEditing && !isUpdating && milestone.type === MILESTONE_TYPE.REPORTING && (
+            <MilestoneTypeReporting
+              milestone={milestone}
+              updateMilestoneContent={this.updateMilestoneContent}
+              currentUser={currentUser}
+            />
+          )}
+
+          {!isEditing && !isUpdating && (milestone.type === MILESTONE_TYPE.DELIVERABLE_REVIEW || milestone.type === MILESTONE_TYPE.FINAL_DELIVERABLE_REVIEW || milestone.type === MILESTONE_TYPE.DELIVERABLE_FINAL_FIXES) && (
+            <MilestoneTypeDeliverableReview
+              milestone={milestone}
+              currentUser={currentUser}
+              updateMilestoneContent={this.updateMilestoneContent}
+              submitDeliverableFinalFixesRequest={this.submitDeliverableFinalFixesRequest}
+              completeMilestone={this.completeMilestone}
+            />
+          )}
         </div>
       </div>
     )
@@ -593,6 +625,7 @@ Milestone.propTypes = {
   index: PT.number.isRequired,
   submitFinalFixesRequest: PT.func.isRequired,
   updateMilestone: PT.func.isRequired,
+  submitDeliverableFinalFixesRequest: PT.func.isRequired,
 }
 
 export default Milestone

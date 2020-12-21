@@ -5,7 +5,7 @@ import React from 'react'
 import PT from 'prop-types'
 import moment from 'moment'
 
-import {  PHASE_TYPE_OPTIONS } from '../../../../../config/constants'
+import { MILESTONE_TYPE, MILESTONE_TYPE_OPTIONS } from '../../../../../config/constants'
 import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
 import Form from '../Form'
 import './CreateMilestoneForm.scss'
@@ -16,7 +16,7 @@ class CreateMilestoneForm extends React.Component {
 
     this.state = {
       isEditing: false,
-      type: 'generic-work',
+      type: MILESTONE_TYPE.REPORTING,
       title: 'Reporting',
       startDate: moment.utc().format('YYYY-MM-DD'),
       endDate: moment.utc().add(3, 'days').format('YYYY-MM-DD')
@@ -77,7 +77,7 @@ class CreateMilestoneForm extends React.Component {
           {
             label: 'Type',
             placeholder: 'Type',
-            options: PHASE_TYPE_OPTIONS,
+            options: MILESTONE_TYPE_OPTIONS,
             name: 'type',
             value: type,
             type: 'select',
@@ -135,5 +135,5 @@ CreateMilestoneForm.propTypes = {
   onSubmit: PT.func.isRequired,
 }
 
-export default CreateMilestoneForm 
+export default CreateMilestoneForm
 

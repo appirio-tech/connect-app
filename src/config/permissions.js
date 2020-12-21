@@ -718,7 +718,7 @@ export const PERMISSIONS = {
       title: 'Accept final delivery',
     },
     projectRoles: [
-      PROJECT_ROLE_CUSTOMER,
+      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_COPILOT])
     ],
     topcoderRoles: [
       ...TOPCODER_ADMINS,

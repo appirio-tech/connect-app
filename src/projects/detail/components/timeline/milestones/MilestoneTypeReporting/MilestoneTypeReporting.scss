@@ -1,0 +1,25 @@
+@import '../../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+.milestone-post {
+  @include roboto;
+  font-size: 15px;
+  
+  .btns-container {
+    margin-top: 8px;
+    > *:not(:first-child) {
+      margin-left: 8px;
+    }
+  }
+
+  .report-textarea {
+    height: unset;
+    margin-top: 8px;
+  }
+
+  .view-report-text {
+    margin-top: 8px;
+    white-space: pre-wrap;
+  }
+
+}

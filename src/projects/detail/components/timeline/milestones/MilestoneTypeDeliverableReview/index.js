@@ -1,0 +1,2 @@
+import MilestoneTypeDeliverableReview from './MilestoneTypeDeliverableReview'
+export default MilestoneTypeDeliverableReview
