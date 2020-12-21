@@ -29,6 +29,7 @@ import {
   BULK_UPDATE_PRODUCT_MILESTONES,
 } from '../../config/constants'
 import { processUpdateMilestone } from '../../helpers/milestoneHelper'
+import moment from 'moment'
 
 /**
  * Get the next milestone in the list, which is not hidden
@@ -441,6 +442,82 @@ export function completeFinalFixesMilestone(productId, timelineId, milestoneId, 
     }).catch((error) => {
       dispatch({
         type: COMPLETE_PRODUCT_MILESTONE_FAILURE,
+        payload: error,
+        meta: { productId, milestoneId }
+      })
+      throw error
+    })
+  }
+}
+
+/**
+ * Mark the milestone as 'completed' and append a 'deliverable-final-fixes' milestone after it
+ * @param {Number} productId    product id
+ * @param {Number} timelineId   timeline id
+ * @param {Number} milestoneId  milestone id
+ * @param {String} finalFixRequest final fixes request text
+ */
+export function submitDeliverableFinalFixesRequest(productId, timelineId, milestoneId, finalFixRequest) {
+  return (dispatch, getState) => {
+    const state = getState()
+    const timeline = state.productsTimelines[productId].timeline
+    const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
+    const milestone = timeline.milestones[milestoneIdx]
+
+    let updatedTimelineMilestones = [
+      ...timeline.milestones,
+    ]
+
+    updatedTimelineMilestones = processUpdateMilestone(
+      milestone, {
+        status: MILESTONE_STATUS.COMPLETED,
+      }, updatedTimelineMilestones
+    ).updatedTimelineMilestones
+
+    const finalFixesMilestone = {
+      type: 'deliverable-final-fixes',
+      startDate: milestone.endDate,
+      endDate: moment(milestone.endDate).add(3, 'day').toISOString(),
+      status: MILESTONE_STATUS.ACTIVE,
+      details: {
+        content: {
+          finalFixesRequest: finalFixRequest,
+        }
+      },
+      name: 'Final Fixes',
+      duration: 3,
+      order: timeline.milestones.length + 1,
+      hidden: false,
+      completedText: 'completed text',
+      activeText: 'active text',
+      description: 'description',
+      plannedText: 'planned text',
+      blockedText: 'blocked text',
+    }
+    
+    updatedTimelineMilestones.splice(milestoneIdx + 1, 0, finalFixesMilestone)
+
+    dispatch({
+      type: SUBMIT_FINAL_FIXES_REQUEST_PENDING,
+      meta: { productId, milestoneId }
+    })
+
+    const milestones = updatedTimelineMilestones.map(milestone => _.omit(milestone, ['timelineId', 'error', 'isUpdating', 'statusHistory']))
+
+    return dispatch({
+      type: BULK_UPDATE_PRODUCT_MILESTONES,
+      payload: updateMilestones(timelineId, milestones),
+      meta: {
+        productId,
+      }
+    }).then(() => {
+      dispatch({
+        type: SUBMIT_FINAL_FIXES_REQUEST_SUCCESS,
+        meta: { productId, milestoneId }
+      })
+    }).catch((error) => {
+      dispatch({
+        type: SUBMIT_FINAL_FIXES_REQUEST_FAILURE,
         payload: error,
         meta: { productId, milestoneId }
       })
