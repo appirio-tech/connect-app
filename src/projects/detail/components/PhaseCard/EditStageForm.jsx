@@ -53,6 +53,7 @@ class EditStageForm extends React.Component {
 
   cancelActivatingPhase() {
     this.setState({
+      publishClicked: false,
       showActivatingWarning: false,
     })
   }
@@ -137,7 +138,7 @@ class EditStageForm extends React.Component {
     this.props.firePhaseDirtyUndo()
     this.setState({
       showPhaseOverlapWarning: false,
-      phaseIsdirty: false
+      phaseIsdirty: false,
     })
     this.props.cancel()
   }
@@ -306,7 +307,7 @@ class EditStageForm extends React.Component {
                     <button
                       onClick={this.onPublishClick}
                       className="tc-btn tc-btn-primary tc-btn-sm"
-                      type="submit" disabled={(!this.isChanged() || isUpdating) || !this.state.canSubmit}
+                      type="submit" disabled={ isUpdating || !this.state.canSubmit}
                     >Publish</button>
                   ) : null}
                 </div>

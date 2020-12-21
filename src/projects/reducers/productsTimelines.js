@@ -17,6 +17,9 @@ import {
   COMPLETE_PRODUCT_MILESTONE_PENDING,
   COMPLETE_PRODUCT_MILESTONE_SUCCESS,
   COMPLETE_PRODUCT_MILESTONE_FAILURE,
+  CREATE_TIMELINE_MILESTONE_PENDING,
+  CREATE_TIMELINE_MILESTONE_SUCCESS,
+  CREATE_TIMELINE_MILESTONE_FAILURE,
   EXTEND_PRODUCT_MILESTONE_PENDING,
   EXTEND_PRODUCT_MILESTONE_SUCCESS,
   EXTEND_PRODUCT_MILESTONE_FAILURE,
@@ -142,6 +145,36 @@ export const productsTimelines = (state=initialState, action) => {
           timeline,
           error: false
         }
+      }
+    })
+  }
+
+  case CREATE_TIMELINE_MILESTONE_PENDING: {
+    const {timeline} = action.meta
+    return update(state, {
+      [timeline.referenceId]: {
+        isLoading: {$set: true}
+      }
+    })
+  }
+
+  case CREATE_TIMELINE_MILESTONE_SUCCESS: {
+    const {timeline} = action.meta
+
+    timeline.milestones = action.payload 
+
+    return update(state, {
+      [timeline.referenceId]: {
+        isLoading: {$set: false},
+        timeline: {$set: timeline}
+      }
+    })
+  }
+  case CREATE_TIMELINE_MILESTONE_FAILURE: {
+    const {timeline} = action.meta
+    return update(state, {
+      [timeline.referenceId]: {
+        isLoading: {$set: false}
       }
     })
   }

@@ -84,6 +84,11 @@ export const SET_PROJECTS_SEARCH_CRITERIA = 'SET_PROJECTS_SEARCH_CRITERIA'
 export const SET_PROJECTS_INFINITE_AUTOLOAD = 'SET_PROJECTS_INFINITE_AUTOLOAD'
 export const SET_PROJECTS_LIST_VIEW = 'SET_PROJECTS_LIST_VIEW'
 
+// milestones
+export const CREATE_TIMELINE_MILESTONE = 'CREATE_TIMELINE_MILESTONE'
+export const CREATE_TIMELINE_MILESTONE_SUCCESS = 'CREATE_TIMELINE_MILESTONE_SUCCESS'
+export const CREATE_TIMELINE_MILESTONE_FAILURE = 'CREATE_TIMELINE_MILESTONE_FAILURE'
+export const CREATE_TIMELINE_MILESTONE_PENDING = 'CREATE_TIMELINE_MILESTONE_PENDING'
 
 // project phases and timeline and milestones
 export const CREATE_PROJECT_PHASE_TIMELINE_MILESTONES             = 'CREATE_PROJECT_PHASE_TIMELINE_MILESTONES'
@@ -899,7 +904,6 @@ export const POSTS_BUNDLE_TIME_DIFF = 1000 * 60 * 10 // 10 min difference
 export const MILESTONE_STATUS = {
   UNPLANNED: 'in_review',
   PLANNED: 'reviewed',
-  DRAFT: 'draft',
   ACTIVE: 'active',
   BLOCKED: 'paused',
   COMPLETED: 'completed',
@@ -1112,3 +1116,23 @@ export const PROJECT_TYPE_TALENT_AS_A_SERVICE = 'talent-as-a-service'
  * URL to the Topcoder TaaS App
  */
 export const TAAS_APP_URL = process.env.TAAS_APP_URL || 'https://mfe.topcoder-dev.com/taas'
+
+
+/**
+ *  Phase type
+ *
+ */
+export const PHASE_TYPE_OPTIONS = [
+  {
+    title: 'Reporting',
+    value: 'generic-work',
+  },
+  {
+    title: 'Deliverable Review',
+    value: 'add-links',
+  },
+  {
+    title: 'Final Deliverable Review',
+    value: 'delivery-dev',
+  },
+]

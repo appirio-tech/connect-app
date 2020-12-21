@@ -1,11 +1,9 @@
-@import '../../../styles/includes';
 @import '~tc-ui/src/styles/tc-includes';
 
 .add-button-container {
   text-align: center;
   margin-top: 10px;
 }
-
 
 .form {
   > .title-label-layer {
@@ -221,6 +219,7 @@
   }
 }
 
+
 .tab-container {
   border-top: 1px solid $tc-gray-10;
   border-bottom: 1px solid $tc-gray-10;
@@ -316,3 +315,5 @@
 
   }
 }
+
+

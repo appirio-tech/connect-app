@@ -57,6 +57,8 @@ import {
   EXTEND_PRODUCT_MILESTONE_SUCCESS,
   SUBMIT_FINAL_FIXES_REQUEST_FAILURE,
   SUBMIT_FINAL_FIXES_REQUEST_SUCCESS,
+  CREATE_TIMELINE_MILESTONE_SUCCESS,
+  CREATE_TIMELINE_MILESTONE_FAILURE,
   // Scope changes
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS,
   CREATE_SCOPE_CHANGE_REQUEST_FAILURE,
@@ -83,9 +85,7 @@ export default function(state = {}, action) {
   }
 
   case CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS: {
-    //delay time for reload stage list of project after creating state
-    setTimeout(() => { Alert.success('Added New Phase To Project') }, 2000)
-
+    Alert.success('Project phase created.')
     return state
   }
   case CREATE_PROJECT_STAGE_SUCCESS: {
@@ -106,6 +106,13 @@ export default function(state = {}, action) {
     Alert.success('Project deleted.')
     return state
 
+  case CREATE_TIMELINE_MILESTONE_SUCCESS: 
+    Alert.success('Milestone created.')
+    return state
+
+  case CREATE_TIMELINE_MILESTONE_FAILURE: 
+    Alert.error('Unable to create milestone')
+    return state
   case COMPLETE_PRODUCT_MILESTONE_SUCCESS:
     Alert.success('Milestone is completed.')
     return state

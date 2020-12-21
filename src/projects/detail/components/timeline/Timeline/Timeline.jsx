@@ -8,8 +8,10 @@ import _ from 'lodash'
 import Milestone from '../Milestone'
 import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
 import NotificationsReader from '../../../../../components/NotificationsReader'
+import CreateMilestoneForm from '../CreateMilestoneForm'
 
 import { buildPhaseTimelineNotificationsCriteria } from '../../../../../routes/notifications/constants/notifications'
+import './Timeline.scss'
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -17,10 +19,13 @@ class Timeline extends React.Component {
 
     this.state = {
       height: 0,
+      isEditing: false
     }
     this.updateHeight = this.updateHeight.bind(this)
 
+    this.onAddClick = this.onAddClick.bind(this)
     this.updateMilestone = this.updateMilestone.bind(this)
+    this.createMilestone = this.createMilestone.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
     this.completeFinalFixesMilestone = this.completeFinalFixesMilestone.bind(this)
     this.extendMilestone = this.extendMilestone.bind(this)
@@ -41,6 +46,23 @@ class Timeline extends React.Component {
     }
   }
 
+  onCancelClick() {
+    this.setState({
+      isEditing: true
+    })
+  }
+  onSubmitClick() {
+    this.setState({
+      isEditing: false
+    })
+  }
+  onAddClick() {
+    this.setState({
+      isEditing: true
+    })
+  }
+
+
   updateMilestone(milestoneId, values) {
     const {
       product,
@@ -51,6 +73,17 @@ class Timeline extends React.Component {
     updateProductMilestone(product.id, timeline.id, milestoneId, values)
   }
 
+  createMilestone(milestone) {
+    const {
+      createProductMilestone,
+      timeline,
+    } = this.props
+
+    const orderedMilestones = timeline.milestones ? _.orderBy(timeline.milestones, ['order']) : []
+    milestone.order = orderedMilestones.length ?  _.last(orderedMilestones).order + 1 : 1
+    
+    createProductMilestone(timeline, [...timeline.milestones, milestone])
+  }
   completeMilestone(milestoneId, updatedProps = {}) {
     const {
       product,
@@ -130,6 +163,9 @@ class Timeline extends React.Component {
               project={project}
             />
           ))}
+          <CreateMilestoneForm 
+            onSubmit={this.createMilestone}
+          />
         </div>
       )
     }
@@ -144,7 +180,9 @@ Timeline.propType = {
   isLoading: PT.bool,
   product: PT.object.isRequired,
   timeline: PT.object.isRequired,
+  createProductMilestone: PT.func.isRequired,
   updateProductMilestone: PT.func.isRequired,
+  createTimelineMilestone: PT.func.isRequired,
   completeProductMilestone: PT.func.isRequired,
   extendProductMilestone: PT.func.isRequired,
 }
