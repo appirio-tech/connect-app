@@ -60,7 +60,6 @@ import {
   PHASE_STATUS_DRAFT,
   SCREEN_BREAKPOINT_MD,
   CODER_BOT_USERID,
-  PROJECT_TYPE_TALENT_AS_A_SERVICE,
 } from '../../../config/constants'
 
 const SYSTEM_USER = {
