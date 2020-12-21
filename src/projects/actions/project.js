@@ -67,7 +67,8 @@ import {
   LOAD_PROJECT_MEMBERS,
   LOAD_PROJECT_MEMBER_INVITES,
   CREATE_PROJECT_PHASE_TIMELINE_MILESTONES,
-  LOAD_PROJECT_MEMBER
+  LOAD_PROJECT_MEMBER,
+  ES_REINDEX_DELAY
 } from '../../config/constants'
 import {
   updateProductMilestone,
@@ -76,6 +77,7 @@ import {
 import {
   getPhaseActualData,
 } from '../../helpers/projectHelper'
+import { delay } from '../../helpers/utils'
 
 /**
  * Expand phase and optionaly expand particular tab
@@ -345,13 +347,16 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
  */
 function createPhaseAndMilestonesRequest(project, projectTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate, milestones) {
   return createProjectPhaseAndProduct(project, projectTemplate, status, startDate, endDate).then(({timeline, phase, project, product}) => {
-    return updateMilestones(timeline.id, milestones).then((data) => ({
+    // we have to add delay before creating milestones in newly created timeline
+    // to make sure timeline is created in ES, otherwise it may happen that we would try to add milestones
+    // into timeline before timeline existent in ES
+    return delay(ES_REINDEX_DELAY).then(() => updateMilestones(timeline.id, milestones).then((data) => ({
       phase,
       project,
       product,
       timeline,
       milestones: data
-    }))
+    })))
   })
 }
 
