@@ -150,6 +150,7 @@ class Timeline extends React.Component {
     } else {
       //Ordering milestones wrt "order" before rendering
       const orderedMilestones = timeline.milestones ? _.orderBy(timeline.milestones, ['order']) : []
+      const allShowMilestones = _.reject(orderedMilestones, { hidden: true })
       return (
         <div ref={ div => { this.div = div } }>
           <NotificationsReader 
@@ -157,7 +158,7 @@ class Timeline extends React.Component {
             id={`phase-${phaseId}-timeline-${timeline.id}`}
             criteria={buildPhaseTimelineNotificationsCriteria(timeline)}
           />
-          {_.reject(orderedMilestones, { hidden: true }).map((milestone, index) => (
+          {allShowMilestones.map((milestone, index) => (
             <Milestone
               key={milestone.id}
               currentUser={currentUser}
@@ -176,6 +177,7 @@ class Timeline extends React.Component {
             />
           ))}
           <CreateMilestoneForm 
+            previousMilestone={_.last(allShowMilestones)}
             onSubmit={this.createMilestone}
           />
         </div>
