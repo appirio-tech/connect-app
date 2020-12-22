@@ -313,8 +313,8 @@ class EditStageForm extends React.Component {
                 </div>
               ) : (
                 <div styleName="message">
-                  <h4 styleName="message-title">You are about to activate the phase</h4>
-                  <p styleName="message-text">This action will permanently change the status of your phase to Active and cannot be undone.</p>
+                  <h4 styleName="message-title">You are about to publish the phase</h4>
+                  <p styleName="message-text">This action will permanently publish your phase and cannot be undone.</p>
                   <div styleName="group-bottom">
                     <button
                       className="tc-btn tc-btn-default tc-btn-sm"
