@@ -87,16 +87,16 @@ class MilestoneTypeReporting extends React.Component {
 
     return (
       <div styleName={cn('milestone-post', theme)}>
-        <DotIndicator hideDot>
+        <DotIndicator hideFirstLine>
           <MilestoneDescription description={getMilestoneStatusText(milestone)} />
         </DotIndicator>
 
         {/* Report Edit */}
         {isEditingReport && (
-          <div>
+          <DotIndicator hideLine>
             <textarea rows="10" className="tc-textarea" styleName="report-textarea" type="text" onChange={this.onReportTextChange} value={reportText}/>
             <div className="flex center" styleName="btns-container">
-              <button type="button" className="tc-btn tc-btn-default" onClick={this.onClickCancelProvideReport}>Cancel</button>  
+              <button type="button" className="tc-btn tc-btn-default" onClick={this.onClickCancelProvideReport}>Cancel</button>
               {
                 isCompleted ? (
                   <button type="button" className="tc-btn tc-btn-primary" onClick={this.onClickSaveReport} disabled={!reportText}>Save changes</button>
@@ -105,14 +105,14 @@ class MilestoneTypeReporting extends React.Component {
                 )
               }
             </div>
-          </div>
+          </DotIndicator>
         )}
 
         {/*
           Active status
          */}
         {isActive && (
-          <div>
+          <DotIndicator hideLine>
             {canManage && (
               !isEditingReport && (
                 <div className="flex center" styleName="btns-container">
@@ -120,21 +120,21 @@ class MilestoneTypeReporting extends React.Component {
                 </div>
               )
             )}
-          </div>
+          </DotIndicator>
         )}
 
         {/* Completed status */}
         {isCompleted && !isEditingReport && (
-          <div>
+          <DotIndicator hideLine>
             <div styleName="view-report-text">{_.get(milestone, 'details.content.report', '')}</div>
             {
               canManage && (
                 <div className="flex center" styleName="btns-container">
-                  <button type="button" className="tc-btn tc-btn-default" onClick={this.onClickProvideReport}>Edit</button>  
+                  <button type="button" className="tc-btn tc-btn-default" onClick={this.onClickProvideReport}>Edit</button>
                 </div>
               )
             }
-          </div>
+          </DotIndicator>
         )}
 
       </div>

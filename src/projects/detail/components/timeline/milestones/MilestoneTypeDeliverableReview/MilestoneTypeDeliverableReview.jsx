@@ -207,11 +207,11 @@ class MilestoneTypeDeliverableReview extends React.Component {
 
     return (
       <div styleName={cn('milestone-post', theme)}>
-        <DotIndicator hideDot>
+        <DotIndicator hideFirstLine>
           <MilestoneDescription description={getMilestoneStatusText(milestone)} />
         </DotIndicator>
 
-        <div>
+        <DotIndicator hideLine>
           <div className="flex column middle" styleName="btns-container-vertical">
 
             {/* For milestone type of 'deliverable-final-fixes' specifically */}
@@ -346,8 +346,7 @@ class MilestoneTypeDeliverableReview extends React.Component {
               )
             )
           )}
-        </div>
-
+        </DotIndicator>
       </div>
     )
   }
