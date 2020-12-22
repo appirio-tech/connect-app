@@ -12,6 +12,8 @@ import CreateMilestoneForm from '../CreateMilestoneForm'
 
 import { buildPhaseTimelineNotificationsCriteria } from '../../../../../routes/notifications/constants/notifications'
 import './Timeline.scss'
+import { hasPermission } from '../../../../../helpers/permissions'
+import { PERMISSIONS } from '../../../../../config/permissions'
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -82,7 +84,7 @@ class Timeline extends React.Component {
 
     const orderedMilestones = timeline.milestones ? _.orderBy(timeline.milestones, ['order']) : []
     milestone.order = orderedMilestones.length ?  _.last(orderedMilestones).order + 1 : 1
-    
+
     createProductMilestone(timeline, [...timeline.milestones, milestone])
   }
   completeMilestone(milestoneId, updatedProps = {}) {
@@ -144,6 +146,8 @@ class Timeline extends React.Component {
       project,
     } = this.props
 
+    const canAddeMilestone = hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)
+
     if (isLoading || _.some(timeline.milestones, 'isUpdating')) {
       const divHeight = `${this.state.height}px`
       return (<div style={{ height: divHeight, minHeight: divHeight }}><LoadingIndicator /></div>)
@@ -153,7 +157,7 @@ class Timeline extends React.Component {
       const allShowMilestones = _.reject(orderedMilestones, { hidden: true })
       return (
         <div ref={ div => { this.div = div } }>
-          <NotificationsReader 
+          <NotificationsReader
             key="notifications-reader"
             id={`phase-${phaseId}-timeline-${timeline.id}`}
             criteria={buildPhaseTimelineNotificationsCriteria(timeline)}
@@ -176,10 +180,12 @@ class Timeline extends React.Component {
               project={project}
             />
           ))}
-          <CreateMilestoneForm 
-            previousMilestone={_.last(allShowMilestones)}
-            onSubmit={this.createMilestone}
-          />
+          {canAddeMilestone && (
+            <CreateMilestoneForm
+              previousMilestone={_.last(allShowMilestones)}
+              onSubmit={this.createMilestone}
+            />
+          )}
         </div>
       )
     }
