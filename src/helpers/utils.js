@@ -2,6 +2,7 @@
   Helper util functions
  */
 import _ from 'lodash'
+import moment from 'moment'
 
 /**
  * Finds the difference between two objects.
@@ -147,4 +148,28 @@ export const formatPhone = (phone) => {
   }else{
     return '+' + phone
   }
+}
+
+/**
+ * Validates if object has valid start and end dates
+ *
+ * @param {object} values
+ * @param {string} values.startDate start date
+ * @param {string} values.endDate end date
+ *
+ * @returns {boolean} is valid
+ */
+export const isValidStartEndDates = (values) => {
+  const { startDate, endDate } = values
+  // if no dates, don't validate
+  if (!startDate || !endDate) {
+    return false
+  }
+
+  const momentStartDate = moment(startDate)
+  const momentEndDate = moment(endDate)
+
+  const isValid =  momentStartDate.isSameOrBefore(momentEndDate, 'days')
+
+  return isValid
 }

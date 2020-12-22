@@ -18,6 +18,7 @@ import { PHASE_STATUS_COMPLETED, PHASE_STATUS_ACTIVE, PHASE_STATUS_DRAFT } from 
 import DeletePhase from './DeletePhase'
 import { hasPermission } from '../../../../helpers/permissions'
 import { PERMISSIONS } from '../../../../config/permissions'
+import { isValidStartEndDates } from '../../../../helpers/utils'
 
 const moment = extendMoment(Moment)
 
@@ -278,8 +279,14 @@ class EditStageForm extends React.Component {
               <div styleName="label-layer">
                 <TCFormFields.TextInput
                   wrapperClass={`${styles['input-row']}`}
-                  validations={{isRequired: true}}
+                  validations={{
+                    isRequired: true,
+                    isValidStartEndDates
+                  }}
                   validationError={'Please, enter start date'}
+                  validationErrors={{
+                    isValidStartEndDates: 'Start date cannot be after end date'
+                  }}
                   required
                   label="Start Date"
                   type="date"
@@ -288,8 +295,14 @@ class EditStageForm extends React.Component {
                 />
                 <TCFormFields.TextInput
                   wrapperClass={`${styles['input-row']}`}
-                  validations={{isRequired: true}}
+                  validations={{
+                    isRequired: true,
+                    isValidStartEndDates
+                  }}
                   validationError={'Please, enter end date'}
+                  validationErrors={{
+                    isValidStartEndDates: 'End date cannot be before start date'
+                  }}
                   required
                   label="End Date"
                   type="date"

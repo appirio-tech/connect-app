@@ -33,6 +33,7 @@ import { MILESTONE_STATUS, SCREEN_BREAKPOINT_MD, MILESTONE_TYPE_OPTIONS, MILESTO
 
 import { PERMISSIONS } from '../../../../../config/permissions'
 import {hasPermission} from '../../../../../helpers/permissions'
+import { isValidStartEndDates } from '../../../../../helpers/utils'
 
 import './Milestone.scss'
 
@@ -341,9 +342,13 @@ class Milestone extends React.Component {
             value: moment.utc(milestone.startDate).format('YYYY-MM-DD'),
             type: 'date',
             validations: {
-              isRequired: true
+              isRequired: true,
+              isValidStartEndDates
             },
-            validationError: 'start date is required',
+            validationError: 'Please, enter start date',
+            validationErrors: {
+              isValidStartEndDates: 'Start date cannot be after end date'
+            }
           },
           {
             label: 'End Date',
@@ -352,9 +357,13 @@ class Milestone extends React.Component {
             value: moment.utc(milestone.end).format('YYYY-MM-DD'),
             type: 'date',
             validations: {
-              isRequired: true
+              isRequired: true,
+              isValidStartEndDates
             },
-            validationError: 'end date is required',
+            validationError: 'Please, enter end date',
+            validationErrors: {
+              isValidStartEndDates: 'End date cannot be before start date'
+            }
           },
 
           {

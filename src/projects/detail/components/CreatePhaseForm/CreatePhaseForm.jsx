@@ -10,27 +10,63 @@ import {  MILESTONE_TYPE, MILESTONE_TYPE_OPTIONS, MILESTONE_STATUS } from '../..
 import GenericMenu from '../../../../components/GenericMenu'
 import TrashIcon from  '../../../../assets/icons/icon-trash.svg'
 import  styles from './CreatePhaseForm.scss'
+import { isValidStartEndDates } from '../../../../helpers/utils'
 
 const Formsy = FormsyForm.Formsy
 const TCFormFields = FormsyForm.Fields
 
 const phaseOptions = _.map(MILESTONE_TYPE_OPTIONS, o => ({label: o.title, value: o.value}))
 
+/**
+ * Get milestone data from the formzy model by index
+ *
+ * @param {Object} model formzy flat model
+ * @param {Number} index milestone index
+ */
+const getMilestoneModelByIndex = (model, index) => {
+  let milestoneModel
+
+  // omit phase fields
+  _.forEach(_.keys(_.omit(model, ['title', 'startDate', 'endDate'])), (key) => {
+    const keyMatches = key.match(/(\w+)_(\d+)/)
+
+    if (keyMatches.length !== 3) {
+      return
+    }
+
+    const arrIndex = Number(keyMatches[2])
+    const objKey = keyMatches[1]
+
+    if (arrIndex === index) {
+      if (!milestoneModel) {
+        milestoneModel = {}
+      }
+
+      milestoneModel[objKey] = model[key]
+    }
+  })
+
+  return milestoneModel
+}
+
+const defaultState = {
+  publishClicked: false,
+  isAddButtonClicked: false,
+  canSubmit: false,
+  milestones: [{
+    pseudoId: _.uniqueId('milestone_'), // we need this to use for unique React `key` (using `index` might lead to issues)
+    type: MILESTONE_TYPE.REPORTING,
+    name: 'Reporting',
+    startDate: moment.utc().format('YYYY-MM-DD'),
+    endDate: moment.utc().add(3, 'days').format('YYYY-MM-DD')
+  }]
+}
+
 class CreatePhaseForm extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      publishClicked: false,
-      isAddButtonClicked: false,
-      canSubmit: false,
-      milestones: [{
-        type: MILESTONE_TYPE.REPORTING,
-        title: 'Reporting',
-        startDate: moment.utc().format('YYYY-MM-DD'),
-        endDate: moment.utc().add(3, 'days').format('YYYY-MM-DD')
-      }]
-    }
+    this.state = _.cloneDeep(defaultState)
 
     this.onAddClick = this.onAddClick.bind(this)
     this.onCancelClick = this.onCancelClick.bind(this)
@@ -51,21 +87,13 @@ class CreatePhaseForm extends React.Component {
   }
 
   resetStatus() {
-    this.setState({
-      publishClicked: false,
-      isAddButtonClicked: false,
-      milestones: [{
-        type: MILESTONE_TYPE.REPORTING,
-        title: 'Reporting',
-        startDate: moment.utc().format('YYYY-MM-DD'),
-        endDate: moment.utc().add(3, 'days').format('YYYY-MM-DD')
-      }]
-    })
+    this.setState(_.cloneDeep(defaultState))
   }
 
   onCancelClick() {
     this.resetStatus()
   }
+
   onAddClick() {
     this.setState( {
       isAddButtonClicked: true
@@ -88,7 +116,7 @@ class CreatePhaseForm extends React.Component {
 
   onFormSubmit(model) {
     const {onSubmit} = this.props
-    const { publishClicked } = this.state
+    const { publishClicked, milestones } = this.state
 
     const phaseData = {
       title: model.title,
@@ -96,18 +124,9 @@ class CreatePhaseForm extends React.Component {
       endDate: moment(model.endDate),
     }
 
-    const milestones = []
-    _.forEach(_.keys(_.omit(model, ['title', 'startDate', 'endDate'])), (k) => {
-      const arrs =  k.match(/(\w+)_(\d+)/)
-      const arrIndex = arrs[2]
-      const objKey = arrs[1] === 'title'? 'name': arrs[1]
-      if (!milestones[arrIndex]) {
-        milestones[arrIndex] = {}
-      }
-      milestones[arrIndex][objKey] = model[k]
-    })
+    const apiMilestones = milestones.map((milestone, index) => getMilestoneModelByIndex(model, index))
 
-    _.forEach(milestones, (m, index) => {
+    _.forEach(apiMilestones, (m, index) => {
       m.status = 'reviewed'
       m.order = index + 1
       // TODO  add mock data
@@ -122,43 +141,42 @@ class CreatePhaseForm extends React.Component {
     })
 
     if (publishClicked) {
-      milestones[0].status= MILESTONE_STATUS.ACTIVE
-      onSubmit('active', phaseData, milestones)
+      apiMilestones[0].status= MILESTONE_STATUS.ACTIVE
+      onSubmit('active', phaseData, apiMilestones)
     } else {
-      onSubmit('draft', phaseData, milestones)
+      onSubmit('draft', phaseData, apiMilestones)
     }
     this.resetStatus()
   }
+
   /**
    * Handles the change event of the form.
    *
    * @param change changed form model in flattened form
-   * @param isChanged flag that indicates if form actually changed from initial model values
    */
   handleChange(change) {
     const {
       milestones
     } = this.state
 
-    
-    const newMilestones = _.cloneDeep(milestones)
+    // update all milestones in state from the Formzy model
+    const newMilestones = milestones.map((milestone, index) => {
+      const milestoneModel = getMilestoneModelByIndex(change, index)
 
-    // omit phase fields
-    _.forEach(_.keys(_.omit(change, ['title', 'startDate', 'endDate'])), (k) => {
-      const arrs =  k.match(/(\w+)_(\d+)/)
-      const arrIndex = arrs[2]
-      const objKey = arrs[1]
-      if(change[k] !== milestones[arrIndex][objKey]) {
-        // set default title with option type
-        if (objKey === 'type' && change[k] && !milestones[arrIndex]['title']) {
-          newMilestones[arrIndex]['title'] = this.getOptionType(change[k])
-        }
-        newMilestones[arrIndex][objKey] = change[k]
+      const updatedMilestone = {
+        ...milestone,  // keep all additional values we might keep in state
+        ...milestoneModel
       }
+
+      // if milestone has empty `name` then set it equal to the type textual value
+      if (milestoneModel.type && !milestoneModel.name) {
+        updatedMilestone.name = this.getOptionType(milestoneModel.type)
+      }
+
+      return updatedMilestone
     })
 
-
-    this.setState({milestones: newMilestones})
+    this.setState({ milestones: newMilestones })
   }
 
   getOptionType(val) {
@@ -169,9 +187,10 @@ class CreatePhaseForm extends React.Component {
     const {
       milestones
     } = this.state
-    milestones.splice(index, 1)
+
     this.setState({
-      milestones
+      // delete without mutation
+      milestones: _.filter(milestones, (m, i) => i !== index)
     })
   }
 
@@ -180,14 +199,19 @@ class CreatePhaseForm extends React.Component {
       milestones
     } = this.state
 
-    const defaultData = {
+    const newMilestone = {
+      pseudoId: _.uniqueId('milestone_'), // we need this to use for unique React `key` (using `index` might lead to issues)
+      name: '',
       startDate: moment(_.last(milestones).endDate).format('YYYY-MM-DD'),
       endDate: moment(_.last(milestones).endDate).add(3, 'days').format('YYYY-MM-DD')
     }
-    milestones.push(defaultData)
 
     this.setState({
-      milestones
+      // add without mutation
+      milestones: [
+        ...milestones,
+        newMilestone
+      ]
     })
   }
 
@@ -198,7 +222,7 @@ class CreatePhaseForm extends React.Component {
 
     const ms = _.map(milestones, (m, index) => {
       return (
-        <div styleName="milestone-item">
+        <div styleName="milestone-item" key={m.pseudoId}>
           <div styleName="title-label-layer">
             <div styleName="input-row">
               <label className="tc-label">Type</label>
@@ -220,18 +244,24 @@ class CreatePhaseForm extends React.Component {
           <div styleName="label-layer">
             <TCFormFields.TextInput
               wrapperClass={`${styles['input-row']}`}
-              validationError={'Please, enter title'}
-              label="title"
+              validationError={'Please, enter name'}
+              label="Name"
               type="text"
-              name={`title_${index}`}
-              value={milestones[index].title}
+              name={`name_${index}`}
+              value={milestones[index].name}
             />
           </div>
           <div styleName="label-layer">
             <TCFormFields.TextInput
               wrapperClass={`${styles['input-row']}`}
-              validations={{isRequired: true}}
+              validations={{
+                isRequired: true,
+                isValidStartEndDates: (values) => isValidStartEndDates(getMilestoneModelByIndex(values, index))
+              }}
               validationError={'Please, enter start date'}
+              validationErrors={{
+                isValidStartEndDates: 'Start date cannot be after end date'
+              }}
               required
               label="Start Date"
               type="date"
@@ -242,8 +272,14 @@ class CreatePhaseForm extends React.Component {
           <div styleName="label-layer">
             <TCFormFields.TextInput
               wrapperClass={`${styles['input-row']}`}
-              validations={{isRequired: true}}
+              validations={{
+                isRequired: true,
+                isValidStartEndDates: (values) => isValidStartEndDates(getMilestoneModelByIndex(values, index))
+              }}
               validationError={'Please, enter end date'}
+              validationErrors={{
+                isValidStartEndDates: 'End date cannot be before start date'
+              }}
               required
               label="End Date"
               type="date"
@@ -257,6 +293,7 @@ class CreatePhaseForm extends React.Component {
         </div>
       )
     })
+
     return (
       <div styleName="add-milestone-form">
         {ms}
@@ -269,8 +306,8 @@ class CreatePhaseForm extends React.Component {
         </div>
       </div>
     )
-
   }
+
   renderTab() {
     const tabs = [
       {
@@ -284,71 +321,6 @@ class CreatePhaseForm extends React.Component {
         <GenericMenu navLinks={tabs} />
       </div>
     )
-  }
-  renderAddingForm() {
-    return (
-      <div styleName="add-phase-form">
-        <Formsy.Form
-          ref="form"
-          onInvalid={this.disableButton}
-          onValid={this.enableButton}
-          onValidSubmit={this.onFormSubmit}
-          onChange={ this.handleChange }
-        >
-          <div styleName="form">
-            <div styleName="title-label-layer">
-              <TCFormFields.TextInput
-                wrapperClass={`${styles['input-row']}`}
-                validations={{isRequired: true}}
-                validationError={'Please, enter title'}
-                required
-                label="Title"
-                type="text"
-                name="title"
-                value={''}
-                maxLength={48}
-              />
-            </div>
-            <div styleName="label-layer">
-              <TCFormFields.TextInput
-                wrapperClass={`${styles['input-row']}`}
-                validations={{isRequired: true}}
-                validationError={'Please, enter start date'}
-                required
-                label="Start Date"
-                type="date"
-                name="startDate"
-                value={moment.utc().format('YYYY-MM-DD')}
-              />
-              <TCFormFields.TextInput
-                wrapperClass={`${styles['input-row']}`}
-                validations={{isRequired: true}}
-                validationError={'Please, enter end date'}
-                required
-                label="End Date"
-                type="date"
-                name="endDate"
-                value={moment.utc().add(3, 'days').format('YYYY-MM-DD')}
-              />
-            </div>
-            {this.renderTab()}
-            {this.renderMilestones()}
-            <div styleName="group-bottom">
-              <button onClick={this.onCancelClick} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
-              <button className="tc-btn tc-btn-primary tc-btn-sm"
-                type="submit" disabled={!this.isChanged() || !this.state.canSubmit}
-              >Save Draft</button>
-              <button
-                onClick={this.onPublishClick}
-                className="tc-btn tc-btn-primary tc-btn-sm"
-                type="submit" disabled={!this.isChanged() || !this.state.canSubmit}
-              >Publish</button>
-            </div>
-          </div>
-        </Formsy.Form>
-      </div>
-    )
-
   }
 
   render() {
@@ -391,8 +363,14 @@ class CreatePhaseForm extends React.Component {
             <div styleName="label-layer">
               <TCFormFields.TextInput
                 wrapperClass={`${styles['input-row']}`}
-                validations={{isRequired: true}}
+                validations={{
+                  isRequired: true,
+                  isValidStartEndDates
+                }}
                 validationError={'Please, enter start date'}
+                validationErrors={{
+                  isValidStartEndDates: 'Start date cannot be after end date'
+                }}
                 required
                 label="Start Date"
                 type="date"
@@ -401,8 +379,14 @@ class CreatePhaseForm extends React.Component {
               />
               <TCFormFields.TextInput
                 wrapperClass={`${styles['input-row']}`}
-                validations={{isRequired: true}}
+                validations={{
+                  isRequired: true,
+                  isValidStartEndDates
+                }}
                 validationError={'Please, enter end date'}
+                validationErrors={{
+                  isValidStartEndDates: 'End date cannot be before start date'
+                }}
                 required
                 label="End Date"
                 type="date"

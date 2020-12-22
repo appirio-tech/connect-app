@@ -8,6 +8,7 @@ import moment from 'moment'
 import { MILESTONE_TYPE_OPTIONS } from '../../../../../config/constants'
 import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
 import Form from '../Form'
+import { isValidStartEndDates } from '../../../../../helpers/utils'
 import './CreateMilestoneForm.scss'
 
 class CreateMilestoneForm extends React.Component {
@@ -87,7 +88,7 @@ class CreateMilestoneForm extends React.Component {
       })
       if (!title) {
         this.setState({
-          title: values['type'] 
+          title: values['type']
         })
       }
     }
@@ -119,7 +120,7 @@ class CreateMilestoneForm extends React.Component {
             type: 'select',
           },
           {
-            label: 'Title',
+            label: 'Name',
             placeholder: 'Name',
             name: 'name',
             value: title,
@@ -132,9 +133,13 @@ class CreateMilestoneForm extends React.Component {
             value: startDate,
             type: 'date',
             validations: {
-              isRequired: true
+              isRequired: true,
+              isValidStartEndDates
             },
-            validationError: 'start date is required',
+            validationError: 'Please, enter end date',
+            validationErrors: {
+              isValidStartEndDates: 'End date cannot be before start date'
+            }
           },
           {
             label: 'End Date',
@@ -143,9 +148,13 @@ class CreateMilestoneForm extends React.Component {
             value: endDate,
             type: 'date',
             validations: {
-              isRequired: true
+              isRequired: true,
+              isValidStartEndDates
             },
-            validationError: 'end date is required',
+            validationError: 'Please, enter end date',
+            validationErrors: {
+              isValidStartEndDates: 'End date cannot be before start date'
+            }
           }
         ]}
         onCancelClick={this.cancelEdit}
