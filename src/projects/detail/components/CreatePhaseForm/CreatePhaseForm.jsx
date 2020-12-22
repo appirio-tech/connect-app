@@ -6,7 +6,7 @@ import PT from 'prop-types'
 import moment from 'moment'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 import FormsySelect from '../../../../components/Select/FormsySelect'
-import {  MILESTONE_TYPE, MILESTONE_TYPE_OPTIONS } from '../../../../config/constants'
+import {  MILESTONE_TYPE, MILESTONE_TYPE_OPTIONS, MILESTONE_STATUS } from '../../../../config/constants'
 import GenericMenu from '../../../../components/GenericMenu'
 import TrashIcon from  '../../../../assets/icons/icon-trash.svg'
 import  styles from './CreatePhaseForm.scss'
@@ -122,6 +122,7 @@ class CreatePhaseForm extends React.Component {
     })
 
     if (publishClicked) {
+      milestones[0].status= MILESTONE_STATUS.ACTIVE
       onSubmit('active', phaseData, milestones)
     } else {
       onSubmit('draft', phaseData, milestones)
@@ -139,23 +140,25 @@ class CreatePhaseForm extends React.Component {
       milestones
     } = this.state
 
+    
+    const newMilestones = _.cloneDeep(milestones)
 
     // omit phase fields
     _.forEach(_.keys(_.omit(change, ['title', 'startDate', 'endDate'])), (k) => {
       const arrs =  k.match(/(\w+)_(\d+)/)
       const arrIndex = arrs[2]
       const objKey = arrs[1]
-      if(change[k] && change[k] !== milestones[arrIndex][objKey]) {
+      if(change[k] !== milestones[arrIndex][objKey]) {
         // set default title with option type
-        if (objKey === 'type' && !milestones[arrIndex]['type']) {
-          milestones[arrIndex]['title'] = this.getOptionType(change[k])
+        if (objKey === 'type' && change[k] && !milestones[arrIndex]['title']) {
+          newMilestones[arrIndex]['title'] = this.getOptionType(change[k])
         }
-        milestones[arrIndex][objKey] = change[k]
+        newMilestones[arrIndex][objKey] = change[k]
       }
     })
 
 
-    this.setState({milestones})
+    this.setState({milestones: newMilestones})
   }
 
   getOptionType(val) {

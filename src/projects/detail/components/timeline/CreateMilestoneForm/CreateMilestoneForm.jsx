@@ -5,7 +5,7 @@ import React from 'react'
 import PT from 'prop-types'
 import moment from 'moment'
 
-import { MILESTONE_TYPE, MILESTONE_TYPE_OPTIONS } from '../../../../../config/constants'
+import { MILESTONE_TYPE_OPTIONS } from '../../../../../config/constants'
 import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
 import Form from '../Form'
 import './CreateMilestoneForm.scss'
@@ -14,22 +14,29 @@ class CreateMilestoneForm extends React.Component {
   constructor(props) {
     super(props)
 
+    const {previousMilestone} = props
     this.state = {
       isEditing: false,
-      type: MILESTONE_TYPE.REPORTING,
-      title: 'Reporting',
-      startDate: moment.utc().format('YYYY-MM-DD'),
-      endDate: moment.utc().add(3, 'days').format('YYYY-MM-DD')
+      type: '',
+      title: '',
+      startDate: moment.utc(previousMilestone.endDate).format('YYYY-MM-DD'),
+      endDate: moment.utc(previousMilestone.endDate).add(3, 'days').format('YYYY-MM-DD')
     }
 
     this.submitForm = this.submitForm.bind(this)
     this.cancelEdit = this.cancelEdit.bind(this)
     this.onAddClick = this.onAddClick.bind(this)
+    this.changeForm = this.changeForm.bind(this)
   }
 
   cancelEdit() {
+    const {previousMilestone} = this.props
     this.setState({
-      isEditing: false
+      isEditing: false,
+      type: '',
+      title: '',
+      startDate: moment.utc(previousMilestone.endDate).format('YYYY-MM-DD'),
+      endDate: moment.utc(previousMilestone.endDate).add(3, 'days').format('YYYY-MM-DD')
     })
   }
 
@@ -56,6 +63,35 @@ class CreateMilestoneForm extends React.Component {
     values.blockedText = 'blocked text'
     onSubmit(values)
   }
+  changeForm(values) {
+    const { type, title, startDate, endDate } = this.state
+    if (values['name'] !== title) {
+      this.setState({
+        title: values['name']
+      })
+    }
+    if (values['startDate'] !== startDate) {
+      this.setState({
+        startDate: values['startDate']
+      })
+    }
+    if (values['endDate'] !== endDate) {
+      this.setState({
+        endDate: values['endDate']
+      })
+    }
+    // set title when select type and title is empty
+    if (values['type'] !== type) {
+      this.setState({
+        type: values['type']
+      })
+      if (!title) {
+        this.setState({
+          title: values['type'] 
+        })
+      }
+    }
+  }
 
   render() {
     const { isAdding, isEditing, type, title, startDate, endDate } = this.state
@@ -76,7 +112,7 @@ class CreateMilestoneForm extends React.Component {
         fields={[
           {
             label: 'Type',
-            placeholder: 'Type',
+            placeholder:'Select Type',
             options: MILESTONE_TYPE_OPTIONS,
             name: 'type',
             value: type,
@@ -88,12 +124,7 @@ class CreateMilestoneForm extends React.Component {
             name: 'name',
             value: title,
             type: 'text',
-            validations: {
-              isRequired: true
-            },
-            validationError: 'Name is required',
           },
-
           {
             label: 'Start Date',
             placeholder: 'start date',
@@ -119,7 +150,9 @@ class CreateMilestoneForm extends React.Component {
         ]}
         onCancelClick={this.cancelEdit}
         onSubmit={this.submitForm}
+        onChange={this.changeForm}
         submitButtonTitle="Create Milestone"
+        disableSubmitButton={!type}
       />
     )
 
@@ -133,6 +166,7 @@ class CreateMilestoneForm extends React.Component {
 
 CreateMilestoneForm.propTypes = {
   onSubmit: PT.func.isRequired,
+  previousMilestone: PT.object.isRequired
 }
 
 export default CreateMilestoneForm
