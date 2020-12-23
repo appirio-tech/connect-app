@@ -1112,24 +1112,6 @@ export const PROJECT_TYPE_TALENT_AS_A_SERVICE = 'talent-as-a-service'
 export const TAAS_APP_URL = process.env.TAAS_APP_URL || 'https://mfe.topcoder-dev.com/taas'
 
 /**
- *  Milestone Type Options
- */
-export const MILESTONE_TYPE_OPTIONS = [
-  {
-    title: 'Reporting',
-    value: 'reporting',
-  },
-  {
-    title: 'Deliverable Review',
-    value: 'deliverable-review',
-  },
-  {
-    title: 'Final Deliverable Review',
-    value: 'final-deliverable-review',
-  },
-]
-
-/**
  * Milestone Types
  */
 export const MILESTONE_TYPE = {
@@ -1150,8 +1132,25 @@ export const MILESTONE_TYPE = {
   DELIVERY: 'delivery'
 }
 
+/**
+ *  Milestone Type Options
+ */
+export const MILESTONE_TYPE_OPTIONS = [
+  {
+    title: 'Reporting',
+    value: MILESTONE_TYPE.REPORTING,
+  },
+  {
+    title: 'Deliverable Review',
+    value: MILESTONE_TYPE.DELIVERABLE_REVIEW,
+  },
+  {
+    title: 'Final Deliverable Review',
+    value: MILESTONE_TYPE.FINAL_DELIVERABLE_REVIEW,
+  },
+]
 
 /**
  *  project template id
  */
-export const PROJECT_TEMPLATE_ID = 166
+export const PHASE_PRODUCT_TEMPLATE_ID = process.env.PHASE_PRODUCT_TEMPLATE_ID

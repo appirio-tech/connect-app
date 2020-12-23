@@ -19,6 +19,7 @@ import {
   MILESTONE_STATUS,
   MIN_WINNER_DESIGNS,
   DEFAULT_ADDITIONAL_DESIGN_COST,
+  MILESTONE_TYPE 
 } from '../../../../../../config/constants'
 
 import './MilestoneTypeFinalDesigns.scss'
@@ -36,7 +37,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
       additionalDesignCost: _.get(props, 'milestone.details.metadata.additionalDesignCost', DEFAULT_ADDITIONAL_DESIGN_COST),
       selectedLinks: [],
       places: _.fill(Array(requiredWinnersCount), -1), // produces array like [-1, -1, -1, ... , -1]
-      isLinksProvided: _.get(props.milestone, 'details.prevMilestoneType') === 'add-links',
+      isLinksProvided: _.get(props.milestone, 'details.prevMilestoneType') === MILESTONE_TYPE.ADD_LINKS,
       isShowCompleteConfirmMessage: false,
       isShowCustomerCompleteConfirmMessage: false,
     }

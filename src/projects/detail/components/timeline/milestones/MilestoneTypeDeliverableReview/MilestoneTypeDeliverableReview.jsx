@@ -15,6 +15,7 @@ import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
 import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 
 import {
+  MILESTONE_TYPE,
   MILESTONE_STATUS
 } from '../../../../../../config/constants'
 
@@ -215,7 +216,7 @@ class MilestoneTypeDeliverableReview extends React.Component {
           <div className="flex column middle" styleName="btns-container-vertical">
 
             {/* For milestone type of 'deliverable-final-fixes' specifically */}
-            {milestone.type === 'deliverable-final-fixes' && (
+            {milestone.type === MILESTONE_TYPE.DELIVERABLE_FINAL_FIXES && (
               <div styleName="fullwidth">
                 <div styleName="view-report-text">{milestoneDeliverableFinalFixesRequest}</div>
               </div>
@@ -250,7 +251,7 @@ class MilestoneTypeDeliverableReview extends React.Component {
             )}
 
             {/* Feedback link */}
-            {milestone.type !== 'deliverable-final-fixes' && (
+            {milestone.type !== MILESTONE_TYPE.DELIVERABLE_FINAL_FIXES && (
               isAddingFeedbackLink ? (
                 <div styleName="fullwidth">
                   <LinkItemForm
@@ -319,7 +320,7 @@ class MilestoneTypeDeliverableReview extends React.Component {
           </div>
 
           {/* For milestone types other than 'final-deliverable-review' specifically */}
-          {milestone.type !== 'final-deliverable-review' && (
+          {milestone.type !== MILESTONE_TYPE.FINAL_DELIVERABLE_REVIEW && (
             isActive && canAcceptFinalDelivery && (
               <div className="flex center" styleName="review-complete-btn-container">
                 <button type="button" className="tc-btn tc-btn-primary" onClick={this.onClickReviewComplete} disabled={milestoneSubmissionLinks.length === 0}>Review Complete</button>
@@ -328,7 +329,7 @@ class MilestoneTypeDeliverableReview extends React.Component {
           )}
 
           {/* For milestone type of 'final-deliverable-review' specifically */}
-          {milestone.type === 'final-deliverable-review' && (
+          {milestone.type === MILESTONE_TYPE.FINAL_DELIVERABLE_REVIEW && (
             isActive && canAcceptFinalDelivery && (
               isAdddingFinalFixesRequest ? (
                 <div styleName="fullwidth">
