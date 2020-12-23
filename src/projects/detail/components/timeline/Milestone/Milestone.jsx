@@ -294,7 +294,7 @@ class Milestone extends React.Component {
     const isActualDateEditable = this.isActualStartDateEditable()
     const isCompletionDateEditable = this.isCompletionDateEditable()
 
-    const disableDelete = index === 0 && milestone.type === MILESTONE_TYPE.REPORTING 
+    const disableDelete = index === 0 && milestone.type === MILESTONE_TYPE.REPORTING || milestone.status !== MILESTONE_STATUS.PLANNED
     const disableType = index === 0 && milestone.type === MILESTONE_TYPE.REPORTING || milestone.status !== MILESTONE_STATUS.PLANNED
 
     const editForm = (
