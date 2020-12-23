@@ -294,12 +294,13 @@ class Milestone extends React.Component {
     const isActualDateEditable = this.isActualStartDateEditable()
     const isCompletionDateEditable = this.isCompletionDateEditable()
 
-    const isFirstReportingType = index === 0 && milestone.type === MILESTONE_TYPE.REPORTING
+    const disableDelete = index === 0 && milestone.type === MILESTONE_TYPE.REPORTING 
+    const disableType = index === 0 && milestone.type === MILESTONE_TYPE.REPORTING || milestone.status !== MILESTONE_STATUS.PLANNED
 
     const editForm = (
       <Form
         fields={[
-          isFirstReportingType ?
+          disableType ?
             {
               label: 'Type',
               disabled: true,
@@ -491,7 +492,7 @@ class Milestone extends React.Component {
 
           {isEditing && !isUpdating && (
             <div styleName="edit-form">
-              {isFirstReportingType ? null:  <i onClick={this.onDeleteClick} title="trash"><TrashIcon /></i> }
+              {disableDelete ? null:  <i onClick={this.onDeleteClick} title="trash"><TrashIcon /></i> }
               {editForm}
             </div>
           )}
@@ -519,7 +520,7 @@ class Milestone extends React.Component {
 
           {isUpdating && <DotIndicator><LoadingIndicator /></DotIndicator>}
 
-          {!isEditing && !isUpdating && milestone.type === 'phase-specification' && (
+          {!isEditing && !isUpdating && milestone.type === MILESTONE_TYPE.PHASE_SPECIFICATION && (
             <MilestoneTypePhaseSpecification
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
@@ -529,7 +530,7 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && (milestone.type === 'community-work' || milestone.type === 'community-review' || milestone.type === 'generic-work') && (
+          {!isEditing && !isUpdating && (milestone.type === MILESTONE_TYPE.COMMUNITY_WORK || milestone.type === MILESTONE_TYPE.COMMUNITY_REVIEW || milestone.type === MILESTONE_TYPE.GENERIC_WORK) && (
             <MilestoneTypeProgress
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
@@ -539,7 +540,7 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && milestone.type === 'checkpoint-review' && (
+          {!isEditing && !isUpdating && milestone.type === MILESTONE_TYPE.CHECKPOINT_REVIEW && (
             <MilestoneTypeCheckpointReview
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
@@ -549,7 +550,7 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && milestone.type === 'add-links' && (
+          {!isEditing && !isUpdating && milestone.type === MILESTONE_TYPE.ADD_LINKS && (
             <MilestoneTypeAddLinks
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
@@ -559,7 +560,7 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && milestone.type === 'final-designs' && (
+          {!isEditing && !isUpdating && milestone.type === MILESTONE_TYPE.FINAL_DESIGNS && (
             <MilestoneTypeFinalDesigns
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
@@ -569,7 +570,7 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && milestone.type === 'final-fix' && (
+          {!isEditing && !isUpdating && milestone.type === MILESTONE_TYPE.FINAL_FIX && (
             <MilestoneTypeFinalFixes
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
@@ -584,11 +585,11 @@ class Milestone extends React.Component {
             !isEditing &&
             !isUpdating &&
             (
-              milestone.type === 'delivery-dev' ||
-              milestone.type === 'delivery-design' ||
+              milestone.type === MILESTONE_TYPE.DELIVERY_DEV ||
+              milestone.type === MILESTONE_TYPE.DELIVERY_DESIGN ||
               // TODO this is a temporary fallback for already created milestones in DEV backend
               // this is just to keep already created milestones working and can be removed when we don't touch such projects anymore
-              milestone.type === 'delivery'
+              milestone.type === MILESTONE_TYPE.DELIVERY
             ) &&
             (
               <MilestoneTypeDelivery

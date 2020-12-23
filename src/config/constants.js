@@ -236,11 +236,6 @@ export const CREATE_PROJECT_PENDING   = 'CREATE_PROJECT_PENDING'
 export const CREATE_PROJECT_SUCCESS   = 'CREATE_PROJECT_SUCCESS'
 export const CREATE_PROJECT_FAILURE   = 'CREATE_PROJECT_FAILURE'
 
-export const CREATE_PROJECT_STAGE           = 'CREATE_PROJECT_STAGE'
-export const CREATE_PROJECT_STAGE_PENDING   = 'CREATE_PROJECT_STAGE_PENDING'
-export const CREATE_PROJECT_STAGE_SUCCESS   = 'CREATE_PROJECT_STAGE_SUCCESS'
-export const CREATE_PROJECT_STAGE_FAILURE   = 'CREATE_PROJECT_STAGE_FAILURE'
-
 export const UPDATE_PROJECT           = 'UPDATE_PROJECT'
 export const UPDATE_PROJECT_PENDING   = 'UPDATE_PROJECT_PENDING'
 export const UPDATE_PROJECT_SUCCESS   = 'UPDATE_PROJECT_SUCCESS'
@@ -1141,5 +1136,22 @@ export const MILESTONE_TYPE = {
   REPORTING: 'reporting',
   DELIVERABLE_REVIEW: 'deliverable-review',
   FINAL_DELIVERABLE_REVIEW: 'final-deliverable-review',
-  DELIVERABLE_FINAL_FIXES: 'deliverable-final-fixes'
+  DELIVERABLE_FINAL_FIXES: 'deliverable-final-fixes',
+  PHASE_SPECIFICATION:'phase-specification',
+  COMMUNITY_WORK: 'ommunity-work',
+  COMMUNITY_REVIEW: 'community-review',
+  GENERIC_WORK: 'generic-work',
+  CHECKPOINT_REVIEW: 'checkpoint-review',
+  ADD_LINKS: 'add-links',
+  FINAL_DESIGNS: 'final-designs',
+  FINAL_FIX: 'final-fix',
+  DELIVERY_DEV: 'delivery-dev',
+  DELIVERY_DESIGN: 'delivery-design',
+  DELIVERY: 'delivery'
 }
+
+
+/**
+ *  project template id
+ */
+export const PROJECT_TEMPLATE_ID = 166

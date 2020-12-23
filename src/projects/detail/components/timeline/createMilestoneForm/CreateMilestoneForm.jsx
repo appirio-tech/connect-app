@@ -53,8 +53,8 @@ class CreateMilestoneForm extends React.Component {
     // TODO
     // mock data
     values.status = 'reviewed'
+    values.duration = moment(values.endDate).diff(moment(values.startDate), 'days') + 1
     // TODO  add mock data
-    values.duration = 1
     values.hidden =false
     values.completedText = 'completed text'
     values.activeText = 'active text'
@@ -64,6 +64,11 @@ class CreateMilestoneForm extends React.Component {
     values.blockedText = 'blocked text'
     onSubmit(values)
   }
+
+  getOptionType(val) {
+    return _.find(MILESTONE_TYPE_OPTIONS, (v) => v.value === val).title
+  }
+
   changeForm(values) {
     const { type, title, startDate, endDate } = this.state
     if (values['name'] !== title) {
@@ -88,7 +93,7 @@ class CreateMilestoneForm extends React.Component {
       })
       if (!title) {
         this.setState({
-          title: values['type']
+          title: this.getOptionType(values['type'])
         })
       }
     }

@@ -129,8 +129,8 @@ class CreatePhaseForm extends React.Component {
     _.forEach(apiMilestones, (m, index) => {
       m.status = 'reviewed'
       m.order = index + 1
+      m.duration = moment(m.endDate).diff(moment(m.startDate), 'days') + 1
       // TODO  add mock data
-      m.duration = 1
       m.hidden =false
       m.completedText = 'completed text'
       m.activeText = 'active text'

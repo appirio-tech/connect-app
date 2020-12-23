@@ -30,7 +30,6 @@ import {
   LOAD_PROJECT,
   LOAD_PROJECT_MEMBER_INVITE,
   CREATE_PROJECT,
-  CREATE_PROJECT_STAGE,
   CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT,
   DELETE_PROJECT,
@@ -74,9 +73,6 @@ import {
   updateProductMilestone,
   updateProductTimeline
 } from './productsTimelines'
-import {
-  getPhaseActualData,
-} from '../../helpers/projectHelper'
 import { delay } from '../../helpers/utils'
 
 /**
@@ -271,31 +267,6 @@ function createProductsTimelineAndMilestone(project) {
     return Promise.all(products.map(createTimelineAndMilestoneForProduct)).then(() => project)
   } else {
     console.log('We did not receive the phases for the project. Hence timeline and milestones are not created')
-  }
-}
-
-export function createProduct(project, productTemplate, phases, timelines) {
-  // get endDates + 1 day for all the phases if there are any phases
-  const phaseEndDatesPlusOne = (phases || []).map((phase) => {
-    const productId = _.get(phase, 'products[0].id', -1)
-    const timeline = _.get(timelines, `${productId}.timeline`, null)
-
-    const phaseActualData = getPhaseActualData(phase, timeline)
-
-    return phaseActualData.endDate.add(1, 'day')
-  })
-
-  const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
-  const startDate = _.max([...phaseEndDatesPlusOne, today])
-
-  // assumes 10 days as default duration, ideally we could store it at template level
-  const endDate = moment(startDate).add((10 - 1), 'days')
-
-  return (dispatch) => {
-    return dispatch({
-      type: CREATE_PROJECT_STAGE,
-      payload: createProjectPhaseAndProduct(project, productTemplate, PHASE_STATUS_DRAFT, startDate, endDate)
-    })
   }
 }
 
