@@ -1138,7 +1138,7 @@ export const MILESTONE_TYPE = {
   FINAL_DELIVERABLE_REVIEW: 'final-deliverable-review',
   DELIVERABLE_FINAL_FIXES: 'deliverable-final-fixes',
   PHASE_SPECIFICATION:'phase-specification',
-  COMMUNITY_WORK: 'ommunity-work',
+  COMMUNITY_WORK: 'community-work',
   COMMUNITY_REVIEW: 'community-review',
   GENERIC_WORK: 'generic-work',
   CHECKPOINT_REVIEW: 'checkpoint-review',
