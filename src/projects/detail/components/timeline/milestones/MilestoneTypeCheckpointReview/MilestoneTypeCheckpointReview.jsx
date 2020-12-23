@@ -17,6 +17,7 @@ import { getMilestoneStatusText, getDaysLeft, getTotalDays, getProgressPercent, 
 import {
   MILESTONE_STATUS,
   MIN_CHECKPOINT_REVIEW_DESIGNS,
+  MILESTONE_TYPE,
 } from '../../../../../../config/constants'
 
 import './MilestoneTypeCheckpointReview.scss'
@@ -29,7 +30,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
 
     this.state = {
       selectedLinks: [],
-      isLinksProvided: _.get(props.milestone, 'details.prevMilestoneType') === 'add-links',
+      isLinksProvided: _.get(props.milestone, 'details.prevMilestoneType') === MILESTONE_TYPE.ADD_LINKS,
       isSelectWarningVisible: false,
       isShowCompleteConfirmMessage: false,
     }

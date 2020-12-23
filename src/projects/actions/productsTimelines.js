@@ -24,6 +24,7 @@ import {
   SUBMIT_FINAL_FIXES_REQUEST_SUCCESS,
   SUBMIT_FINAL_FIXES_REQUEST_FAILURE,
   CREATE_TIMELINE_MILESTONE,
+  MILESTONE_TYPE,
   MILESTONE_STATUS,
   UPDATE_PRODUCT_TIMELINE,
   PHASE_STATUS_COMPLETED,
@@ -226,10 +227,10 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
         prevMilestoneContent: completedMilestone.details.content,
         prevMilestoneType: completedMilestone.type,
       }
-      if ( ((nextMilestone.type === 'checkpoint-review' || nextMilestone.type === 'final-designs') // case # 2
-        && completedMilestone.type === 'add-links' ) ||
-        ((nextMilestone.type === 'delivery-design' || nextMilestone.type === 'delivery-dev') // case # 4
-          && completedMilestone.type !== 'final-fix' ) ) {
+      if ( ((nextMilestone.type === MILESTONE_TYPE.CHECKPOINT_REVIEW || nextMilestone.type === MILESTONE_TYPE.FINAL_DESIGNS) // case # 2
+        && completedMilestone.type === MILESTONE_TYPE.ADD_LINKS ) ||
+        ((nextMilestone.type === MILESTONE_TYPE.DELIVERY_DESIGN || nextMilestone.type === MILESTONE_TYPE.DELIVERY_DEV) // case # 4
+          && completedMilestone.type !== MILESTONE_TYPE.FINAL_FIX) ) {
         details.metadata = {
           ..._.get(nextMilestone.details, 'metadata', {}),
           waitingForCustomer: true
@@ -343,7 +344,7 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
 
     let finalFixesMilestone = timeline.milestones[milestoneIdx - 1]
 
-    if (!finalFixesMilestone || finalFixesMilestone.type !== 'final-fix') {
+    if (!finalFixesMilestone || finalFixesMilestone.type !== MILESTONE_TYPE.FINAL_FIX) {
       throw new Error('Cannot find final-fix milestone.')
     }
 
@@ -506,7 +507,7 @@ export function submitDeliverableFinalFixesRequest(productId, timelineId, milest
     ).updatedTimelineMilestones
 
     const finalFixesMilestone = {
-      type: 'deliverable-final-fixes',
+      type: MILESTONE_TYPE.DELIVERABLE_FINAL_FIXES,
       startDate: milestone.endDate,
       endDate: moment(milestone.endDate).add(3, 'day').toISOString(),
       status: MILESTONE_STATUS.ACTIVE,
