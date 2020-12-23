@@ -29,7 +29,7 @@ The message service will be started at 8001 port.
 Login to postgres either by install psql locally, or entering the postgres docker container:
 
 ```shell
-psql messages coder -h local.topcoder-dev.com
+psql messages coder -h localhost
 ```
 
 And execute the following statement:
