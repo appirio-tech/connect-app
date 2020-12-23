@@ -5,7 +5,6 @@ import {
   // bulk phase and milestones
   CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS,
   // Project
-  CREATE_PROJECT_STAGE_SUCCESS,
   CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE,
   UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
@@ -86,13 +85,6 @@ export default function(state = {}, action) {
 
   case CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS: {
     Alert.success('Project phase created.')
-    return state
-  }
-  case CREATE_PROJECT_STAGE_SUCCESS: {
-
-    //delay time for reload stage list of project after creating state
-    setTimeout(() => { Alert.success('Added New Stage To Project') }, 2000)
-
     return state
   }
 

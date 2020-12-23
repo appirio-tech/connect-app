@@ -60,6 +60,7 @@ import {
   PHASE_STATUS_DRAFT,
   SCREEN_BREAKPOINT_MD,
   CODER_BOT_USERID,
+  PROJECT_TEMPLATE_ID,
 } from '../../../config/constants'
 
 const SYSTEM_USER = {
@@ -119,7 +120,7 @@ class DashboardContainer extends React.Component {
 
     const projectTemplate = {
       name: phase.title,
-      id:166,
+      id: PROJECT_TEMPLATE_ID,
     }
 
     createPhaseAndMilestones(project, projectTemplate, type, phase.startDate, phase.endDate, milestones)
