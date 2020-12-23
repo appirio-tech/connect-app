@@ -47,7 +47,6 @@ import {
   PHASE_DIRTY,
   PHASE_DIRTY_UNDO,
   PROJECT_STATUS_IN_REVIEW,
-  PHASE_STATUS_REVIEWED,
   PROJECT_STATUS_REVIEWED,
   PROJECT_STATUS_ACTIVE,
   EXPAND_PROJECT_PHASE,
@@ -74,6 +73,8 @@ import {
   updateProductTimeline
 } from './productsTimelines'
 import { delay } from '../../helpers/utils'
+import { hasPermission } from '../../helpers/permissions'
+import { PERMISSIONS } from '../../config/permissions'
 
 /**
  * Expand phase and optionaly expand particular tab
@@ -505,24 +506,12 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
     }).then(() => {
       const project = state.projectState.project
 
-      // if one phase moved to REVIEWED status, make project IN_REVIEW too
-      if (
-        _.includes([PROJECT_STATUS_DRAFT], project.status) &&
-        phase.status !== PHASE_STATUS_REVIEWED &&
-        updatedProps.status === PHASE_STATUS_REVIEWED
-      ) {
-        dispatch(
-          updateProject(projectId, {
-            status: PHASE_STATUS_REVIEWED
-          }, true)
-        )
-      }
-
       // if one phase moved to ACTIVE status, make project ACTIVE too
       if (
         _.includes([PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_REVIEWED], project.status) &&
         phase.status !== PHASE_STATUS_ACTIVE &&
-        updatedProps.status === PHASE_STATUS_ACTIVE
+        updatedProps.status === PHASE_STATUS_ACTIVE &&
+        hasPermission(PERMISSIONS.EDIT_PROJECT_STATUS_TO_ACTIVE)
       ) {
         dispatch(
           updateProject(projectId, {

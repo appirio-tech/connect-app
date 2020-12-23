@@ -73,6 +73,7 @@ import {
   ROLE_PROJECT_MANAGER,
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_COPILOT_MANAGER,
+  MANAGER_ROLES,
 } from './constants'
 /* eslint-enable no-unused-vars  */
 
@@ -614,6 +615,19 @@ export const PERMISSIONS = {
     },
     projectRoles: [
       ..._.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
+    ],
+    topcoderRoles: [
+      ...TOPCODER_ADMINS,
+    ]
+  },
+
+  EDIT_PROJECT_STATUS_TO_ACTIVE: {
+    meta: {
+      group: 'Project Details',
+      title: 'Edit project status (to active)',
+    },
+    projectRoles: [
+      ...MANAGER_ROLES,
     ],
     topcoderRoles: [
       ...TOPCODER_ADMINS,
