@@ -233,7 +233,7 @@ class PhaseCard extends React.Component {
                               >
                                 <span className="progress-text">{progressInPercent}% <span className="unit">completed</span></span>
                               </ProjectProgress>
-
+                              {statusDetails.name}
                             </div>
                           </div>)
                     }
