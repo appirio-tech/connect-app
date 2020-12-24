@@ -87,7 +87,9 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline
     posts,
     phaseIndex,
     phase,
-    progressInPercent
+    progressInPercent,
+    actualStartDate: startDate,
+    actualEndDate: endDate,
   }
 }
 
