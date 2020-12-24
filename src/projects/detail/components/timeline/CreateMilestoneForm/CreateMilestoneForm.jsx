@@ -15,13 +15,14 @@ class CreateMilestoneForm extends React.Component {
   constructor(props) {
     super(props)
 
-    const {previousMilestone} = props
+    const { previousMilestone } = props
+    const startDate = previousMilestone ? moment.utc(previousMilestone.completionDate || previousMilestone.endDate) : moment.utc()
     this.state = {
       isEditing: false,
       type: '',
       name: '',
-      startDate: moment.utc(previousMilestone.endDate).format('YYYY-MM-DD'),
-      endDate: moment.utc(previousMilestone.endDate).add(3, 'days').format('YYYY-MM-DD')
+      startDate: startDate.format('YYYY-MM-DD'),
+      endDate: startDate.add(3, 'days').format('YYYY-MM-DD')
     }
 
     this.submitForm = this.submitForm.bind(this)
@@ -31,14 +32,15 @@ class CreateMilestoneForm extends React.Component {
   }
 
   cancelEdit() {
-    const {previousMilestone} = this.props
-    this.setState({
+    const { previousMilestone } = this.props
+    const startDate = previousMilestone ? moment.utc(previousMilestone.completionDate || previousMilestone.endDate) : moment.utc()
+    this.state = {
       isEditing: false,
       type: '',
       name: '',
-      startDate: moment.utc(previousMilestone.endDate).format('YYYY-MM-DD'),
-      endDate: moment.utc(previousMilestone.endDate).add(3, 'days').format('YYYY-MM-DD')
-    })
+      startDate: startDate.format('YYYY-MM-DD'),
+      endDate: startDate.add(3, 'days').format('YYYY-MM-DD')
+    }
   }
 
   onAddClick() {
@@ -58,7 +60,7 @@ class CreateMilestoneForm extends React.Component {
       ...values,
 
       // auto-generated values
-      order: previousMilestone.order + 1,
+      order: previousMilestone ? previousMilestone.order + 1 : 1,
       duration: moment(values.endDate).diff(moment(values.startDate), 'days') + 1,
     }
 
@@ -181,7 +183,7 @@ class CreateMilestoneForm extends React.Component {
 
 CreateMilestoneForm.propTypes = {
   onSubmit: PT.func.isRequired,
-  previousMilestone: PT.object.isRequired
+  previousMilestone: PT.object
 }
 
 export default CreateMilestoneForm
