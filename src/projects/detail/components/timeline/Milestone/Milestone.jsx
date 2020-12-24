@@ -125,9 +125,6 @@ class Milestone extends React.Component {
 
   updateMilestoneWithData(values) {
     const { milestone, updateMilestone } = this.props
-    if (values.type === 'Deprecated type') {
-      values.type = milestone.type
-    }
 
     const milestoneData = {
       ...values
@@ -256,9 +253,9 @@ class Milestone extends React.Component {
     const option =  _.find(MILESTONE_TYPE_OPTIONS, (o) => o.value === milestone.type)
     const options = _.clone(MILESTONE_TYPE_OPTIONS)
     if (!option) {
-      options.push(
+      options.unshift(
         {
-          title: 'Deprecated type',
+          title: `Deprecated type <${milestone.type}>`,
           value: milestone.type
         }
       )
@@ -266,15 +263,6 @@ class Milestone extends React.Component {
     }
     return options
   }
-
-  getSelectLabel(type) {
-    const option =  _.find(MILESTONE_TYPE_OPTIONS, (o) => o.value === type)
-    if (!option) {
-      return 'Deprecated type'
-    }
-    return option.title
-  }
-
 
   render() {
     const {
