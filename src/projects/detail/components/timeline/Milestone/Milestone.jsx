@@ -355,7 +355,7 @@ class Milestone extends React.Component {
             label: 'End Date',
             placeholder: 'end date',
             name: 'endDate',
-            value: moment.utc(milestone.end).format('YYYY-MM-DD'),
+            value: moment.utc(milestone.endDate).format('YYYY-MM-DD'),
             type: 'date',
             validations: {
               isRequired: true,
