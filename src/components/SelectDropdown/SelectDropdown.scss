@@ -43,8 +43,10 @@
   z-index: 10;
 }
 
-.dropdown-disabled {
+:global(.SelectDropdown).dropdown-disabled {
   margin-left: 0;
+  margin-bottom: 2 * $base_unit;
+  padding: 2 * $base_unit + 2px 0; // +2px instead of border
   width: 100%;
 
   :global(.tc-link) {

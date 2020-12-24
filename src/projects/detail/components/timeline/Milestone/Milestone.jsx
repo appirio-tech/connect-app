@@ -300,30 +300,19 @@ class Milestone extends React.Component {
     const editForm = (
       <Form
         fields={[
-          disableType ?
-            {
-              label: 'Type',
-              disabled: true,
-              name: 'type',
-              value: this.getSelectLabel(milestone.type),
-              type: 'text',
-              validations: {
-                isRequired: true
-              },
-            }
-            :{
-              label: 'Type',
-              placeholder: 'Type',
-              options: this.getSelectOptions(),
-              name: 'type',
-              value: milestone.type,
-              type: 'select',
-              disabled: true,
-              validations: {
-                isRequired: true
-              },
-              validationError: 'Type is required',
+          {
+            label: 'Type',
+            placeholder: 'Type',
+            options: this.getSelectOptions(),
+            name: 'type',
+            value: milestone.type,
+            type: 'select',
+            disabled: disableType,
+            validations: {
+              isRequired: true
             },
+            validationError: 'Type is required',
+          },
           {
             label: 'Name',
             placeholder: 'Name',
@@ -366,7 +355,6 @@ class Milestone extends React.Component {
               isValidStartEndDates: 'End date cannot be before start date'
             }
           },
-
           {
             label: 'Planned text',
             placeholder: 'Planned text',

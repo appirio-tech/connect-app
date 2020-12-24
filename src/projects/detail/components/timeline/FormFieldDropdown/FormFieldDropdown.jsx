@@ -9,7 +9,7 @@ import SelectDropdown from '../../../../../components/SelectDropdown/SelectDropd
 
 import './FormFieldDropdown.scss'
 
-const FormFieldDropdown = ({ name, value, options, label, theme }) => (
+const FormFieldDropdown = ({ name, value, options, label, theme, disabled }) => (
   <div styleName={cn('milestone-post', theme)}>
     <div styleName="col-left">
       <div styleName="label-title">{label}</div>
@@ -20,6 +20,7 @@ const FormFieldDropdown = ({ name, value, options, label, theme }) => (
         value={value}
         theme="default"
         options={options}
+        disabled={disabled}
       />
     </div>
   </div>
@@ -28,6 +29,7 @@ const FormFieldDropdown = ({ name, value, options, label, theme }) => (
 FormFieldDropdown.defaultProps = {
   value: '',
   theme: '',
+  disabled: false,
 }
 
 FormFieldDropdown.propTypes = {
@@ -39,6 +41,7 @@ FormFieldDropdown.propTypes = {
     value: PT.string.isRequired,
   })),
   theme: PT.string,
+  disabled: PT.bool,
 }
 
 export default FormFieldDropdown
