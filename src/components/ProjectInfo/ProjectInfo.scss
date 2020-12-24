@@ -29,7 +29,7 @@
         width: 52px;
         padding-left: 4 * $base-unit;
         margin-bottom: 2 * $base-unit;
-  
+
         .spacing {
           margin-top: 5 * $base-unit;
         }
@@ -69,6 +69,7 @@
       padding-right: 4 * $base_unit;
       display: flex;
       flex-direction: column;
+      min-width: 0;
     }
 
     .project-status-header {
@@ -142,6 +143,7 @@
   margin-top: 20px;
   text-overflow: ellipsis;
   overflow: hidden;
+  word-wrap: break-word;
 }
 
 .project-status-bottom {
