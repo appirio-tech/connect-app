@@ -138,6 +138,7 @@ class CreatePhaseForm extends React.Component {
 
     if (publishClicked) {
       apiMilestones[0].status = MILESTONE_STATUS.ACTIVE
+      apiMilestones[0].actualStartDate = moment().toISOString()
       onSubmit('active', phaseData, apiMilestones)
     } else {
       onSubmit('draft', phaseData, apiMilestones)
