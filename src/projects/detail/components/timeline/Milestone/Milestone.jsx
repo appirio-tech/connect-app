@@ -134,6 +134,7 @@ class Milestone extends React.Component {
     }
     milestoneData.startDate = moment.utc(new Date(values.startDate))
     milestoneData.endDate = moment.utc(new Date(values.endDate))
+    milestone.duration = milestoneData.endDate.diff(milestoneData.startDate, 'days') + 1
     if (values.actualStartDate) {
       milestoneData.actualStartDate = moment.utc(new Date(values.actualStartDate))
     }
