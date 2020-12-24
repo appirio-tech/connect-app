@@ -1151,6 +1151,52 @@ export const MILESTONE_TYPE_OPTIONS = [
 ]
 
 /**
+ * Default values for newly created milestones.
+ */
+export const MILESTONE_DEFAULT_VALUES = {
+  [MILESTONE_TYPE.REPORTING]: {
+    description: 'description',
+    plannedText: 'The delivery team will provide an update on your progress.',
+    activeText: 'The delivery team will provide an update on your progress.',
+    blockedText: 'The delivery team will provide an update on your progress.',
+    completedText: 'The delivery team will provide an update on your progress.',
+    details: {},
+    hidden: false,
+    status: MILESTONE_STATUS.PLANNED
+  },
+  [MILESTONE_TYPE.DELIVERABLE_REVIEW]: {
+    description: 'description',
+    plannedText: 'The delivery team plans to share in-progress deliverables on this date for your review.',
+    activeText: 'Your review and feedback on in-progress deliverables is required.',
+    blockedText: 'Your in-progress deliverables have been blocked. Work with your delivery team to understand the next steps.',
+    completedText: 'Thank you for your review of the in-progress deliverables. Your feedback will inform your final deliverables.',
+    details: {},
+    hidden: false,
+    status: MILESTONE_STATUS.PLANNED
+  },
+  [MILESTONE_TYPE.FINAL_DELIVERABLE_REVIEW]: {
+    description: 'description',
+    plannedText: 'The delivery team plans to share the final deliverables on this date for your review.',
+    activeText: 'Your review and feedback on the final deliverables is required.',
+    blockedText: 'Your final deliverables have been blocked. Work with your delivery team to understand the next steps.',
+    completedText: 'Your final deliverables are complete.',
+    details: {},
+    hidden: false,
+    status: MILESTONE_STATUS.PLANNED
+  },
+  [MILESTONE_TYPE.DELIVERABLE_FINAL_FIXES]: {
+    description: 'description',
+    plannedText: 'The delivery team plans to share the final deliverables on this date for your review.',
+    activeText: 'Your review and feedback on the final deliverables is required.',
+    blockedText: 'Your final deliverables have been blocked. Work with your delivery team to understand the next steps.',
+    completedText: 'Your final deliverables are complete.',
+    details: {},
+    hidden: false,
+    status: MILESTONE_STATUS.PLANNED
+  },
+}
+
+/**
  *  project template id
  */
 export const PHASE_PRODUCT_TEMPLATE_ID = process.env.PHASE_PRODUCT_TEMPLATE_ID

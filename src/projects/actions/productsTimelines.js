@@ -29,8 +29,9 @@ import {
   UPDATE_PRODUCT_TIMELINE,
   PHASE_STATUS_COMPLETED,
   BULK_UPDATE_PRODUCT_MILESTONES,
+  MILESTONE_DEFAULT_VALUES,
 } from '../../config/constants'
-import { 
+import {
   processUpdateMilestone,
   processDeleteMilestone
 } from '../../helpers/milestoneHelper'
@@ -83,7 +84,7 @@ export function createProductMilestone(timeline, milestones) {
       type: CREATE_TIMELINE_MILESTONE,
       payload: updateMilestones(timeline.id, milestones),
       meta: {
-        timeline 
+        timeline
       }
     })
   }
@@ -507,6 +508,7 @@ export function submitDeliverableFinalFixesRequest(productId, timelineId, milest
     ).updatedTimelineMilestones
 
     const finalFixesMilestone = {
+      ...MILESTONE_DEFAULT_VALUES[MILESTONE_TYPE.DELIVERABLE_FINAL_FIXES],
       type: MILESTONE_TYPE.DELIVERABLE_FINAL_FIXES,
       startDate: milestone.endDate,
       endDate: moment(milestone.endDate).add(3, 'day').toISOString(),
@@ -519,14 +521,8 @@ export function submitDeliverableFinalFixesRequest(productId, timelineId, milest
       name: 'Final Fixes',
       duration: 3,
       order: timeline.milestones.length + 1,
-      hidden: false,
-      completedText: 'completed text',
-      activeText: 'active text',
-      description: 'description',
-      plannedText: 'planned text',
-      blockedText: 'blocked text',
     }
-    
+
     updatedTimelineMilestones.splice(milestoneIdx + 1, 0, finalFixesMilestone)
 
     dispatch({

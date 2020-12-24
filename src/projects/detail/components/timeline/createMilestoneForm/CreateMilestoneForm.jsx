@@ -5,7 +5,7 @@ import React from 'react'
 import PT from 'prop-types'
 import moment from 'moment'
 
-import { MILESTONE_TYPE_OPTIONS } from '../../../../../config/constants'
+import { MILESTONE_DEFAULT_VALUES, MILESTONE_TYPE_OPTIONS } from '../../../../../config/constants'
 import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
 import Form from '../Form'
 import { isValidStartEndDates } from '../../../../../helpers/utils'
@@ -19,7 +19,7 @@ class CreateMilestoneForm extends React.Component {
     this.state = {
       isEditing: false,
       type: '',
-      title: '',
+      name: '',
       startDate: moment.utc(previousMilestone.endDate).format('YYYY-MM-DD'),
       endDate: moment.utc(previousMilestone.endDate).add(3, 'days').format('YYYY-MM-DD')
     }
@@ -35,7 +35,7 @@ class CreateMilestoneForm extends React.Component {
     this.setState({
       isEditing: false,
       type: '',
-      title: '',
+      name: '',
       startDate: moment.utc(previousMilestone.endDate).format('YYYY-MM-DD'),
       endDate: moment.utc(previousMilestone.endDate).add(3, 'days').format('YYYY-MM-DD')
     })
@@ -48,21 +48,21 @@ class CreateMilestoneForm extends React.Component {
   }
 
   submitForm(values) {
-    const { onSubmit } = this.props
+    const { onSubmit, previousMilestone } = this.props
 
-    // TODO
-    // mock data
-    values.status = 'reviewed'
-    values.duration = moment(values.endDate).diff(moment(values.startDate), 'days') + 1
-    // TODO  add mock data
-    values.hidden =false
-    values.completedText = 'completed text'
-    values.activeText = 'active text'
-    values.description = 'description'
-    values.plannedText ='planned text'
-    values.details = {}
-    values.blockedText = 'blocked text'
-    onSubmit(values)
+    const apiValues = {
+      // default values
+      ...MILESTONE_DEFAULT_VALUES[values.type],
+
+      // values from the form
+      ...values,
+
+      // auto-generated values
+      order: previousMilestone.order + 1,
+      duration: moment(values.endDate).diff(moment(values.startDate), 'days') + 1,
+    }
+
+    onSubmit(apiValues)
   }
 
   getOptionType(val) {
@@ -70,10 +70,10 @@ class CreateMilestoneForm extends React.Component {
   }
 
   changeForm(values) {
-    const { type, title, startDate, endDate } = this.state
-    if (values['name'] !== title) {
+    const { type, name, startDate, endDate } = this.state
+    if (values['name'] !== name) {
       this.setState({
-        title: values['name']
+        name: values['name']
       })
     }
     if (values['startDate'] !== startDate) {
@@ -86,21 +86,21 @@ class CreateMilestoneForm extends React.Component {
         endDate: values['endDate']
       })
     }
-    // set title when select type and title is empty
+    // set name when select type and name is empty
     if (values['type'] !== type) {
       this.setState({
         type: values['type']
       })
-      if (!title) {
+      if (!name) {
         this.setState({
-          title: this.getOptionType(values['type'])
+          name: this.getOptionType(values['type'])
         })
       }
     }
   }
 
   render() {
-    const { isAdding, isEditing, type, title, startDate, endDate } = this.state
+    const { isAdding, isEditing, type, name, startDate, endDate } = this.state
     if(isAdding) {
       return (
         <LoadingIndicator />
@@ -128,7 +128,7 @@ class CreateMilestoneForm extends React.Component {
             label: 'Name',
             placeholder: 'Name',
             name: 'name',
-            value: title,
+            value: name,
             type: 'text',
           },
           {
@@ -165,8 +165,9 @@ class CreateMilestoneForm extends React.Component {
         onCancelClick={this.cancelEdit}
         onSubmit={this.submitForm}
         onChange={this.changeForm}
-        submitButtonTitle="Create Milestone"
+        submitButtonTitle="Add Milestone"
         disableSubmitButton={!type}
+        title="Add Milestone"
       />
     )
 

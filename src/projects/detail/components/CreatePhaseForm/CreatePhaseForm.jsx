@@ -6,7 +6,7 @@ import PT from 'prop-types'
 import moment from 'moment'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 import FormsySelect from '../../../../components/Select/FormsySelect'
-import {  MILESTONE_TYPE, MILESTONE_TYPE_OPTIONS, MILESTONE_STATUS } from '../../../../config/constants'
+import {  MILESTONE_TYPE, MILESTONE_TYPE_OPTIONS, MILESTONE_STATUS, MILESTONE_DEFAULT_VALUES } from '../../../../config/constants'
 import GenericMenu from '../../../../components/GenericMenu'
 import TrashIcon from  '../../../../assets/icons/icon-trash.svg'
 import  styles from './CreatePhaseForm.scss'
@@ -124,24 +124,20 @@ class CreatePhaseForm extends React.Component {
       endDate: moment(model.endDate),
     }
 
-    const apiMilestones = milestones.map((milestone, index) => getMilestoneModelByIndex(model, index))
+    const apiMilestones = milestones.map((milestone, index) => ({
+      // default values
+      ...MILESTONE_DEFAULT_VALUES[milestone.type],
 
-    _.forEach(apiMilestones, (m, index) => {
-      m.status = 'reviewed'
-      m.order = index + 1
-      m.duration = moment(m.endDate).diff(moment(m.startDate), 'days') + 1
-      // TODO  add mock data
-      m.hidden =false
-      m.completedText = 'completed text'
-      m.activeText = 'active text'
-      m.description = 'description'
-      m.plannedText ='planned text'
-      m.details = {}
-      m.blockedText = 'blocked text'
-    })
+      // values from the form
+      ...getMilestoneModelByIndex(model, index),
+
+      // auto-generated values
+      order: index + 1,
+      duration: moment(milestone.endDate).diff(moment(milestone.startDate), 'days') + 1
+    }))
 
     if (publishClicked) {
-      apiMilestones[0].status= MILESTONE_STATUS.ACTIVE
+      apiMilestones[0].status = MILESTONE_STATUS.ACTIVE
       onSubmit('active', phaseData, apiMilestones)
     } else {
       onSubmit('draft', phaseData, apiMilestones)
