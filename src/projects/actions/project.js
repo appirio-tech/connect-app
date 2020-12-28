@@ -467,8 +467,12 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
     const startDateChanged = updatedProps.startDate ? updatedProps.startDate.diff(phaseStartDate) : null
     const phaseActivated = phaseStatusChanged && updatedProps.status === PHASE_STATUS_ACTIVE
 
-    updatedProps.startDate = moment(updatedProps.startDate).format('YYYY-MM-DD')
-    updatedProps.endDate = moment(updatedProps.endDate).format('YYYY-MM-DD')
+    if (updatedProps.startDate) {
+      updatedProps.startDate = moment(updatedProps.startDate).format('YYYY-MM-DD')
+    }
+    if (updatedProps.endDate) {
+      updatedProps.endDate = moment(updatedProps.endDate).format('YYYY-MM-DD')
+    }
 
     return dispatch({
       type: UPDATE_PHASE,
