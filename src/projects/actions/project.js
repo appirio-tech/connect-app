@@ -3,7 +3,6 @@ import moment from 'moment'
 import { flatten, unflatten } from 'flat'
 import { getProjectById,
   createProject as createProjectAPI,
-  createProjectWithStatus as createProjectWithStatusAPI,
   updateProject as updateProjectAPI,
   deleteProject as deleteProjectAPI,
   deleteProjectPhase as deleteProjectPhaseAPI,
@@ -275,16 +274,16 @@ function createProductsTimelineAndMilestone(project) {
  * Create phase and product for the project
  *
  * @param {Object} project         project
- * @param {Object} projectTemplate project template
+ * @param {Object} productTemplate product template
  * @param {String} status          (optional) project/phase status
  *
  * @return {Promise} project
  */
-export function createProjectPhaseAndProduct(project, projectTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate) {
+export function createProjectPhaseAndProduct(project, productTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate) {
   const param = {
     status,
-    name: projectTemplate.name,
-    productTemplateId: projectTemplate.id
+    name: productTemplate.name,
+    productTemplateId: productTemplate.id
   }
   if (startDate) {
     param['startDate'] = startDate.format('YYYY-MM-DD')
@@ -309,7 +308,7 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
  * Create phase and product and milestones for the project
  *
  * @param {Object} project         project
- * @param {Object} projectTemplate project template
+ * @param {Object} productTemplate product template
  * @param {String} status          (optional) project/phase status
  * @param {Object} startDate       phase startDate
  * @param {Object} endDate         phase endDate
@@ -317,8 +316,8 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
  *
  * @return {Promise} project
  */
-function createPhaseAndMilestonesRequest(project, projectTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate, milestones) {
-  return createProjectPhaseAndProduct(project, projectTemplate, status, startDate, endDate).then(({timeline, phase, project, product}) => {
+function createPhaseAndMilestonesRequest(project, productTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate, milestones) {
+  return createProjectPhaseAndProduct(project, productTemplate, status, startDate, endDate).then(({timeline, phase, project, product}) => {
     // we have to add delay before creating milestones in newly created timeline
     // to make sure timeline is created in ES, otherwise it may happen that we would try to add milestones
     // into timeline before timeline existent in ES
@@ -332,12 +331,11 @@ function createPhaseAndMilestonesRequest(project, projectTemplate, status = PHAS
   })
 }
 
-
-export function createPhaseAndMilestones(project, projectTemplate, status, startDate, endDate, milestones) {
+export function createPhaseAndMilestones(project, productTemplate, status, startDate, endDate, milestones) {
   return (dispatch, getState) => {
     return dispatch({
       type: CREATE_PROJECT_PHASE_TIMELINE_MILESTONES,
-      payload: createPhaseAndMilestonesRequest(project, projectTemplate, status, startDate, endDate, milestones)
+      payload: createPhaseAndMilestonesRequest(project, productTemplate, status, startDate, endDate, milestones)
     }).then(() => {
       const state = getState()
       const project = state.projectState.project
@@ -551,19 +549,6 @@ export function updateProduct(projectId, phaseId, productId, updatedProps) {
     return dispatch({
       type: UPDATE_PRODUCT,
       payload: updateProductAPI(projectId, phaseId, productId, updatedProps)
-    })
-  }
-}
-
-export function createProjectWithStatus(newProject, status, projectTemplate) {
-  return (dispatch) => {
-    return dispatch({
-      type: CREATE_PROJECT,
-      payload: createProjectWithStatusAPI(newProject, status)
-        .then((project) => {
-          return createProjectPhaseAndProduct(project, projectTemplate, status)
-            .then(() => project)
-        })
     })
   }
 }

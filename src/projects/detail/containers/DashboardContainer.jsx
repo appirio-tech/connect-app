@@ -118,12 +118,12 @@ class DashboardContainer extends React.Component {
   onFormSubmit(type, phase, milestones) {
     const { project, createPhaseAndMilestones } = this.props
 
-    const projectTemplate = {
+    const productTemplate = {
       name: phase.title,
       id: PHASE_PRODUCT_TEMPLATE_ID,
     }
 
-    createPhaseAndMilestones(project, projectTemplate, type, phase.startDate, phase.endDate, milestones)
+    createPhaseAndMilestones(project, productTemplate, type, phase.startDate, phase.endDate, milestones)
   }
 
 
