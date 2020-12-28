@@ -252,14 +252,6 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
       payload: updateMilestones(timelineId, milestones),
       meta: { productId }
     }).then(() => {
-      const milestoneIdx = _.findIndex(updatedTimelineMilestones, { id: milestoneId })
-      const isLastMilestone = checkIfLastMilestone(updatedTimelineMilestones, milestoneIdx)
-      if (isLastMilestone){
-        const phaseIndex = _.findIndex(state.projectState.phases, p => p.products[0].id === productId)
-        const phase = state.projectState.phases[phaseIndex]
-        dispatch(updatePhase(state.projectState.project.id, phase.id, {status: PHASE_STATUS_COMPLETED}, phaseIndex))
-      }
-
       dispatch({
         type: COMPLETE_PRODUCT_MILESTONE_SUCCESS,
         meta: { productId, milestoneId }
