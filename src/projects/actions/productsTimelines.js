@@ -56,20 +56,6 @@ function getNextNotHiddenMilestone(milestones, currentMilestoneIndex) {
   return milestones[index]
 }
 
-
-/**
- * Check if the milestone is last non-hidden milestone in the timeline or no
- *
- * @param {Object} milestones     timeline's milestones
- * @param {Number} milestoneIdx milestone index
- *
- * @returns {Boolean} true if milestone is last non-hidden
- */
-function checkIfLastMilestone(milestones, milestoneIdx) {
-  return _.slice(milestones, milestoneIdx + 1).filter(m => !m.hidden).length === 0
-}
-
-
 /**
  * bulk create proudct milestones
  *
