@@ -102,7 +102,7 @@ class MilestoneTypeDeliverableReview extends React.Component {
 
     const submissionLinks = [..._.get(milestone, 'details.content.submissionLinks', [])]
 
-    values.type = 'marvelapp'
+    values.type = 'zip'
 
     if (typeof linkIndex === 'number') {
       submissionLinks.splice(linkIndex, 1, values)
