@@ -511,7 +511,7 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
         _.includes([PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_REVIEWED], project.status) &&
         phase.status !== PHASE_STATUS_ACTIVE &&
         updatedProps.status === PHASE_STATUS_ACTIVE &&
-        hasPermission(PERMISSIONS.EDIT_PROJECT_STATUS_TO_ACTIVE)
+        hasPermission(PERMISSIONS.EDIT_PROJECT_STATUS)
       ) {
         dispatch(
           updateProject(projectId, {

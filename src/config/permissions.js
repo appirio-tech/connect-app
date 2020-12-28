@@ -621,19 +621,6 @@ export const PERMISSIONS = {
     ]
   },
 
-  EDIT_PROJECT_STATUS_TO_ACTIVE: {
-    meta: {
-      group: 'Project Details',
-      title: 'Edit project status (to active)',
-    },
-    projectRoles: [
-      ...MANAGER_ROLES,
-    ],
-    topcoderRoles: [
-      ...TOPCODER_ADMINS,
-    ]
-  },
-
   VIEW_PROJECT_SPECIAL_LINKS: {
     meta: {
       group: 'Project Details',
