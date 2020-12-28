@@ -14,7 +14,7 @@ import MilestoneDescription from '../../MilestoneDescription'
 import MilestoneDelayNotification from '../../MilestoneDelayNotification'
 import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 import { hasPermission } from '../../../../../../helpers/permissions'
-import { MILESTONE_STATUS } from '../../../../../../config/constants'
+import { MILESTONE_STATUS, MILESTONE_TYPE } from '../../../../../../config/constants'
 
 import './MilestoneTypeDelivery.scss'
 import { PERMISSIONS } from '../../../../../../config/permissions'
@@ -23,19 +23,19 @@ import { PERMISSIONS } from '../../../../../../config/permissions'
   Acceptance dialogue messages based on the milestone type
 */
 const acceptDialogue = {
-  'delivery-dev': {
+  [MILESTONE_TYPE.DELIVERY_DEV]: {
     title: 'Code acceptance',
     text: 'Do you need any refinement on winner’s code before we deliver you the final source files? Some refinement or final fixes outside the project scope may cost you additional payment',
     button: 'Accept code',
   },
-  'delivery-design': {
+  [MILESTONE_TYPE.DELIVERY_DESIGN]: {
     title: 'Design acceptance',
     text: 'Do you need any refinement on winner’s design before we deliver you the final source files? Some refinement or final fixes outside the project scope may cost you additional payment',
     button: 'Accept design',
   },
   // TODO this is a temporary fallback for already created milestones in DEV backend
   // this is just to keep already created milestones working and can be removed when we don't touch such projects anymore
-  delivery: {
+  [MILESTONE_TYPE.DELIVERY]: {
     title: 'Work acceptance',
     text: 'Do you need any refinement on winner’s work before we deliver you the final source files? Some refinement or final fixes outside the project scope may cost you additional payment',
     button: 'Accept work',
@@ -194,7 +194,7 @@ class MilestoneTypeDelivery extends React.Component {
 
     const canSubmitFinalFixes = _.some(finalFixRequests, (finalFixRequest) => !!finalFixRequest.value)
 
-    const isFinalFixPresent = previousMilestone === 'final-fix'
+    const isFinalFixPresent = previousMilestone === MILESTONE_TYPE.FINAL_FIX
     let links = ''
     const deliveryButtons = [{ title: acceptDialogue[milestone.type].button, onClick: this.acceptDesign, type: 'primary' }]
     if(isFinalFixPresent) {

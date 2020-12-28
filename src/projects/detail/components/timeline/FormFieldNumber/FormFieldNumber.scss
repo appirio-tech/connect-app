@@ -24,15 +24,6 @@
     .tc-file-field__inputs.error + p {
       margin-bottom: 2 * $base-unit;
     }
-
-    input:not([type="checkbox"]).tc-file-field__inputs.error:focus {
-      /* have to use !important because it is defined initially like that */
-      border-color: $tc-dark-blue-70 !important;
-    }
-
-    .tc-file-field__inputs.error:focus + p {
-      display: none;
-    }
   }
 
   .col-left {

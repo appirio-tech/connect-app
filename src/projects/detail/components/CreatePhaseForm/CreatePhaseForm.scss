@@ -1,24 +1,18 @@
-@import '../../../../styles/includes';
 @import '~tc-ui/src/styles/tc-includes';
-.container {
-  background: $tc-gray-neutral-light;
-  padding: 10px;
-  border-radius: 6px;
-  @include roboto;
-}
 
-:global .Tooltip {
-  .tooltip-container {
-    .tooltip-content-container {
-      padding: 15px!important;
-    }
-  }
+.add-button-container {
+  text-align: center;
+  margin-top: 10px;
 }
 
 .form {
-  :global .error-message {
-    color: $tc-orange-70;
-    border: 1px solid $tc-orange-30;
+  > .title-label-layer {
+    padding: 0 10px;
+
+    + div {
+      padding: 0 10px;
+    }
+
   }
 }
 
@@ -64,7 +58,7 @@
     white-space: nowrap;
     display: block;
     width: 150px;
-    
+
   }
 
   input:not([type="checkbox"]):disabled {
@@ -104,7 +98,6 @@
 }
 
 .title-label-layer {
-  
   .input-row {
     width: 100%;
     input {
@@ -191,9 +184,6 @@
         float: initial;
       }
     }
-    div {
-      padding: 0!important;
-    }
     input {
       width: 100%!important;
       display: block;
@@ -225,3 +215,102 @@
     }
   }
 }
+
+
+.tab-container {
+  border-top: 1px solid $tc-gray-10;
+  border-bottom: 1px solid $tc-gray-10;
+
+  + div > div:first-child {
+    &::before {
+      visibility: hidden;
+    }
+  }
+}
+
+.milestone-item {
+  position: relative;
+  margin: 0 10px;
+
+  &::before {
+    content: '';
+    height: 1px;
+    background-color: $tc-gray-10;
+    display: block;
+    margin: 0px -10px 10px;
+  }
+
+  > div {
+    width: 90%;
+  }
+
+  > i {
+    position: absolute;
+    top: 20px;
+    right: 17px;
+    cursor: pointer;
+  }
+}
+
+.add-milestone-wrapper {
+    text-align: center;
+    padding: 10px 0 30px;
+    border-bottom: 1px solid #aaaaab;
+}
+
+.add-phase-form {
+  margin-top: 10px;
+  padding-top: 10px;
+  background-color: $tc-white;
+  border-radius: 6px;
+  box-shadow: 0 1px 1px 0 $tc-gray-10;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    border-radius: 0;
+  }
+}
+
+.add-milestone-form {
+  margin-top: 10px;
+
+  .input-row {
+    width: 100%;
+  }
+
+  > div > div:first-child {
+    margin-bottom: 10px;
+    > div {
+      display: initial;
+      >div:first-child {
+        float: left;
+        margin: 0px 10px 10px;
+        text-align: right;
+        height: 40px;
+        line-height: 40px;
+        white-space: nowrap;
+        display: block;
+        width: 150px;
+
+        @media screen and (max-width: 1023px) {
+          margin: initial;
+          > div {
+            text-align:left;
+          }
+        }
+      }
+      >div:last-child {
+        display: inline-block;
+        width: calc(100% - 170px) !important;
+
+        @media screen and (max-width: 1023px) {
+          width: 100% !important;
+        }
+      }
+
+    }
+
+
+  }
+}
+
+

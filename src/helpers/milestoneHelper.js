@@ -55,7 +55,7 @@ function mergeJsonObjects(targetObj, sourceObj) {
 
 function updateMilestone(milestone, updatedProps) {
   const entityToUpdate = updatedProps
-  const durationChanged = entityToUpdate.duration && entityToUpdate.duration !== milestone.duration
+
   const statusChanged = entityToUpdate.status && entityToUpdate.status !== milestone.status
   const completionDateChanged = entityToUpdate.completionDate
     && !_.isEqual(milestone.completionDate, entityToUpdate.completionDate)
@@ -64,14 +64,11 @@ function updateMilestone(milestone, updatedProps) {
   // Merge JSON fields
   entityToUpdate.details = mergeJsonObjects(milestone.details, entityToUpdate.details)
 
-  let actualStartDateCanged = false
   // if status has changed
   if (statusChanged) {
     // if status has changed to be completed, set the compeltionDate if not provided
     if (entityToUpdate.status === MILESTONE_STATUS.COMPLETED) {
       entityToUpdate.completionDate = entityToUpdate.completionDate ? entityToUpdate.completionDate : today.toISOString()
-      entityToUpdate.duration = moment.utc(entityToUpdate.completionDate)
-        .diff(entityToUpdate.actualStartDate, 'days') + 1
     }
     // if status has changed to be active, set the startDate to today
     if (entityToUpdate.status === MILESTONE_STATUS.ACTIVE) {
@@ -79,25 +76,11 @@ function updateMilestone(milestone, updatedProps) {
       // entityToUpdate.startDate = today
       // should update actual start date
       entityToUpdate.actualStartDate = today.toISOString()
-      actualStartDateCanged = true
     }
-  }
-
-  // Updates the end date of the milestone if:
-  // 1. if duration of the milestone is udpated, update its end date
-  // OR
-  // 2. if actual start date is updated, updating the end date of the activated milestone because
-  // early or late start of milestone, we are essentially changing the end schedule of the milestone
-  if (durationChanged || actualStartDateCanged) {
-    const updatedStartDate = actualStartDateCanged ? entityToUpdate.actualStartDate : milestone.startDate
-    const updatedDuration = _.get(entityToUpdate, 'duration', milestone.duration)
-    entityToUpdate.endDate = moment.utc(updatedStartDate).add(updatedDuration - 1, 'days').toDate().toISOString()
   }
 
   // if completionDate has changed
   if (!statusChanged && completionDateChanged) {
-    entityToUpdate.duration = moment.utc(entityToUpdate.completionDate)
-      .diff(entityToUpdate.actualStartDate, 'days') + 1
     entityToUpdate.status = MILESTONE_STATUS.COMPLETED
   }
 
@@ -141,7 +124,7 @@ function updateComingMilestones(origMilestone, updMilestone, timelineMilestones)
     }
 
     // Calculate the endDate, and update it if different
-    const endDate = moment.utc(updateProps.startDate || milestone.startDate).add(milestone.duration - 1, 'days').toDate().toISOString()
+    const endDate = moment.utc(updateProps.endDate || milestone.endDate).toDate().toISOString()
     if (!_.isEqual(milestone.endDate, endDate)) {
       updateProps.endDate = endDate
       updateProps.updatedBy = updMilestone.updatedBy
@@ -176,7 +159,6 @@ function cascadeMilestones(originalMilestone, updatedMilestone, timelineMileston
 
   // we need to recalculate change in fields because we update some fields before making actual update
   const needToCascade = !_.isEqual(original.completionDate, updated.completionDate) // completion date changed
-    || original.duration !== updated.duration // duration changed
     || original.actualStartDate !== updated.actualStartDate // actual start date updated
 
   if (needToCascade) {
@@ -198,4 +180,9 @@ export const processUpdateMilestone = (milestone, updatedProps, timelineMileston
   updatedTimelineMilestones = cascadeMilestones(milestone, updatedMilestone, updatedTimelineMilestones)
 
   return { updatedMilestone, updatedTimelineMilestones }
+}
+
+
+export const processDeleteMilestone = (index, timelineMilestones) => {
+  return update(timelineMilestones, {$splice:[ [index, 1]]})
 }

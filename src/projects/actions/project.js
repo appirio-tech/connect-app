@@ -3,7 +3,6 @@ import moment from 'moment'
 import { flatten, unflatten } from 'flat'
 import { getProjectById,
   createProject as createProjectAPI,
-  createProjectWithStatus as createProjectWithStatusAPI,
   updateProject as updateProjectAPI,
   deleteProject as deleteProjectAPI,
   deleteProjectPhase as deleteProjectPhaseAPI,
@@ -19,6 +18,7 @@ import {
   getProjectMemberInvites,
 } from '../../api/projectMemberInvites'
 import {
+  updateMilestones,
   createTimeline,
 } from '../../api/timelines'
 import {
@@ -29,7 +29,6 @@ import {
   LOAD_PROJECT,
   LOAD_PROJECT_MEMBER_INVITE,
   CREATE_PROJECT,
-  CREATE_PROJECT_STAGE,
   CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT,
   DELETE_PROJECT,
@@ -47,7 +46,6 @@ import {
   PHASE_DIRTY,
   PHASE_DIRTY_UNDO,
   PROJECT_STATUS_IN_REVIEW,
-  PHASE_STATUS_REVIEWED,
   PROJECT_STATUS_REVIEWED,
   PROJECT_STATUS_ACTIVE,
   EXPAND_PROJECT_PHASE,
@@ -65,15 +63,17 @@ import {
   PHASE_STATUS_DRAFT,
   LOAD_PROJECT_MEMBERS,
   LOAD_PROJECT_MEMBER_INVITES,
-  LOAD_PROJECT_MEMBER
+  CREATE_PROJECT_PHASE_TIMELINE_MILESTONES,
+  LOAD_PROJECT_MEMBER,
+  ES_REINDEX_DELAY
 } from '../../config/constants'
 import {
   updateProductMilestone,
   updateProductTimeline
 } from './productsTimelines'
-import {
-  getPhaseActualData,
-} from '../../helpers/projectHelper'
+import { delay } from '../../helpers/utils'
+import { hasPermission } from '../../helpers/permissions'
+import { PERMISSIONS } from '../../config/permissions'
 
 /**
  * Expand phase and optionaly expand particular tab
@@ -270,45 +270,20 @@ function createProductsTimelineAndMilestone(project) {
   }
 }
 
-export function createProduct(project, productTemplate, phases, timelines) {
-  // get endDates + 1 day for all the phases if there are any phases
-  const phaseEndDatesPlusOne = (phases || []).map((phase) => {
-    const productId = _.get(phase, 'products[0].id', -1)
-    const timeline = _.get(timelines, `${productId}.timeline`, null)
-
-    const phaseActualData = getPhaseActualData(phase, timeline)
-
-    return phaseActualData.endDate.add(1, 'day')
-  })
-
-  const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
-  const startDate = _.max([...phaseEndDatesPlusOne, today])
-
-  // assumes 10 days as default duration, ideally we could store it at template level
-  const endDate = moment(startDate).add((10 - 1), 'days')
-
-  return (dispatch) => {
-    return dispatch({
-      type: CREATE_PROJECT_STAGE,
-      payload: createProjectPhaseAndProduct(project, productTemplate, PHASE_STATUS_DRAFT, startDate, endDate)
-    })
-  }
-}
-
 /**
  * Create phase and product for the project
  *
  * @param {Object} project         project
- * @param {Object} projectTemplate project template
+ * @param {Object} productTemplate product template
  * @param {String} status          (optional) project/phase status
  *
  * @return {Promise} project
  */
-export function createProjectPhaseAndProduct(project, projectTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate) {
+export function createProjectPhaseAndProduct(project, productTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate) {
   const param = {
     status,
-    name: projectTemplate.name,
-    productTemplateId: projectTemplate.id
+    name: productTemplate.name,
+    productTemplateId: productTemplate.id
   }
   if (startDate) {
     param['startDate'] = startDate.format('YYYY-MM-DD')
@@ -326,6 +301,62 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
       timeline,
     }))
   })
+}
+
+
+/**
+ * Create phase and product and milestones for the project
+ *
+ * @param {Object} project         project
+ * @param {Object} productTemplate product template
+ * @param {String} status          (optional) project/phase status
+ * @param {Object} startDate       phase startDate
+ * @param {Object} endDate         phase endDate
+ * @param {Array}  milestones      milestones
+ *
+ * @return {Promise} project
+ */
+function createPhaseAndMilestonesRequest(project, productTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate, milestones) {
+  return createProjectPhaseAndProduct(project, productTemplate, status, startDate, endDate).then(({timeline, phase, project, product}) => {
+    // we have to add delay before creating milestones in newly created timeline
+    // to make sure timeline is created in ES, otherwise it may happen that we would try to add milestones
+    // into timeline before timeline existent in ES
+    return delay(ES_REINDEX_DELAY).then(() => updateMilestones(timeline.id, milestones).then((data) => ({
+      phase,
+      project,
+      product,
+      timeline,
+      milestones: data
+    })))
+  })
+}
+
+export function createPhaseAndMilestones(project, productTemplate, status, startDate, endDate, milestones) {
+  return (dispatch, getState) => {
+    return dispatch({
+      type: CREATE_PROJECT_PHASE_TIMELINE_MILESTONES,
+      payload: createPhaseAndMilestonesRequest(project, productTemplate, status, startDate, endDate, milestones)
+    }).then(() => {
+      const state = getState()
+      const project = state.projectState.project
+
+      console.log('project.status', project.status)
+      console.log('status', status)
+
+      // if phase is created as ACTIVE, move project to ACTIVE too
+      if (
+        _.includes([PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_REVIEWED], project.status) &&
+        status === PHASE_STATUS_ACTIVE &&
+        hasPermission(PERMISSIONS.EDIT_PROJECT_STATUS)
+      ) {
+        dispatch(
+          updateProject(project.id, {
+            status: PROJECT_STATUS_ACTIVE
+          }, true)
+        )
+      }
+    })
+  }
 }
 
 export function deleteProjectPhase(projectId, phaseId) {
@@ -433,10 +464,12 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
     const phaseStartDate = timeline ? timeline.startDate : phase.startDate
     const startDateChanged = updatedProps.startDate ? updatedProps.startDate.diff(phaseStartDate) : null
     const phaseActivated = phaseStatusChanged && updatedProps.status === PHASE_STATUS_ACTIVE
-    if (phaseActivated) {
-      const duration = updatedProps.duration ? updatedProps.duration : phase.duration
-      updatedProps.startDate = moment().utc().hours(0).minutes(0).seconds(0).milliseconds(0).format('YYYY-MM-DD')
-      updatedProps.endDate = moment(updatedProps.startDate).add(duration - 1, 'days').format('YYYY-MM-DD')
+
+    if (updatedProps.startDate) {
+      updatedProps.startDate = moment(updatedProps.startDate).format('YYYY-MM-DD')
+    }
+    if (updatedProps.endDate) {
+      updatedProps.endDate = moment(updatedProps.endDate).format('YYYY-MM-DD')
     }
 
     return dispatch({
@@ -494,24 +527,12 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
     }).then(() => {
       const project = state.projectState.project
 
-      // if one phase moved to REVIEWED status, make project IN_REVIEW too
-      if (
-        _.includes([PROJECT_STATUS_DRAFT], project.status) &&
-        phase.status !== PHASE_STATUS_REVIEWED &&
-        updatedProps.status === PHASE_STATUS_REVIEWED
-      ) {
-        dispatch(
-          updateProject(projectId, {
-            status: PHASE_STATUS_REVIEWED
-          }, true)
-        )
-      }
-
       // if one phase moved to ACTIVE status, make project ACTIVE too
       if (
         _.includes([PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_REVIEWED], project.status) &&
         phase.status !== PHASE_STATUS_ACTIVE &&
-        updatedProps.status === PHASE_STATUS_ACTIVE
+        updatedProps.status === PHASE_STATUS_ACTIVE &&
+        hasPermission(PERMISSIONS.EDIT_PROJECT_STATUS)
       ) {
         dispatch(
           updateProject(projectId, {
@@ -528,19 +549,6 @@ export function updateProduct(projectId, phaseId, productId, updatedProps) {
     return dispatch({
       type: UPDATE_PRODUCT,
       payload: updateProductAPI(projectId, phaseId, productId, updatedProps)
-    })
-  }
-}
-
-export function createProjectWithStatus(newProject, status, projectTemplate) {
-  return (dispatch) => {
-    return dispatch({
-      type: CREATE_PROJECT,
-      payload: createProjectWithStatusAPI(newProject, status)
-        .then((project) => {
-          return createProjectPhaseAndProduct(project, projectTemplate, status)
-            .then(() => project)
-        })
     })
   }
 }

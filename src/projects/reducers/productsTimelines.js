@@ -6,6 +6,7 @@ import {
   LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_PENDING,
   LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_SUCCESS,
   LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE,
+  CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS,
   UPDATE_PRODUCT_MILESTONE_PENDING,
   UPDATE_PRODUCT_MILESTONE_SUCCESS,
   UPDATE_PRODUCT_MILESTONE_FAILURE,
@@ -16,13 +17,15 @@ import {
   COMPLETE_PRODUCT_MILESTONE_PENDING,
   COMPLETE_PRODUCT_MILESTONE_SUCCESS,
   COMPLETE_PRODUCT_MILESTONE_FAILURE,
+  CREATE_TIMELINE_MILESTONE_PENDING,
+  CREATE_TIMELINE_MILESTONE_SUCCESS,
+  CREATE_TIMELINE_MILESTONE_FAILURE,
   EXTEND_PRODUCT_MILESTONE_PENDING,
   EXTEND_PRODUCT_MILESTONE_SUCCESS,
   EXTEND_PRODUCT_MILESTONE_FAILURE,
   SUBMIT_FINAL_FIXES_REQUEST_PENDING,
   SUBMIT_FINAL_FIXES_REQUEST_SUCCESS,
   SUBMIT_FINAL_FIXES_REQUEST_FAILURE,
-  CREATE_PROJECT_STAGE_SUCCESS,
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -129,6 +132,51 @@ export const productsTimelines = (state=initialState, action) => {
   const { type, payload, meta } = action
 
   switch (type) {
+  case CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS: {
+    const {timeline, milestones} = action.payload
+
+    timeline.milestones = milestones
+
+    return update(state, {
+      [timeline.referenceId]: {
+        $set: {
+          isLoading: false,
+          timeline,
+          error: false
+        }
+      }
+    })
+  }
+
+  case CREATE_TIMELINE_MILESTONE_PENDING: {
+    const {timeline} = action.meta
+    return update(state, {
+      [timeline.referenceId]: {
+        isLoading: {$set: true}
+      }
+    })
+  }
+
+  case CREATE_TIMELINE_MILESTONE_SUCCESS: {
+    const {timeline} = action.meta
+
+    timeline.milestones = action.payload 
+
+    return update(state, {
+      [timeline.referenceId]: {
+        isLoading: {$set: false},
+        timeline: {$set: timeline}
+      }
+    })
+  }
+  case CREATE_TIMELINE_MILESTONE_FAILURE: {
+    const {timeline} = action.meta
+    return update(state, {
+      [timeline.referenceId]: {
+        isLoading: {$set: false}
+      }
+    })
+  }
 
   case LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_PENDING:
     // if already have previously loaded timeline, just update some props
@@ -151,31 +199,6 @@ export const productsTimelines = (state=initialState, action) => {
         },
       })
     )
-
-
-  case CREATE_PROJECT_STAGE_SUCCESS: {
-    const timeline = payload.timeline
-    const product = payload.product
-
-    // if there is timeline for the product
-    if (timeline) {
-      // sort milestones by order as server doesn't do it
-      timeline.milestones = _.sortBy(timeline.milestones, 'order')
-    }
-
-    if (timeline && product) {
-      return update(state, {
-        [product.id]: {
-          $set: {
-            isLoading: false,
-            timeline,
-            error: false
-          }
-        }
-      })
-    }
-    return state
-  }
 
   case LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_SUCCESS: {
     const timeline = payload

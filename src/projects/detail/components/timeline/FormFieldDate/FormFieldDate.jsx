@@ -30,16 +30,6 @@ FormFieldDate.defaultProps = {
 }
 
 FormFieldDate.propTypes = {
-  endDate: PT.shape({
-    label: PT.string.isRequired,
-    name: PT.string.isRequired,
-    value: PT.string,
-  }),
-  startDate: PT.shape({
-    label: PT.string.isRequired,
-    name: PT.string.isRequired,
-    value: PT.string,
-  }),
   theme: PT.string,
 
 }
