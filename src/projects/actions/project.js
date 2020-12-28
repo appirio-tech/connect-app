@@ -334,10 +334,29 @@ function createPhaseAndMilestonesRequest(project, projectTemplate, status = PHAS
 
 
 export function createPhaseAndMilestones(project, projectTemplate, status, startDate, endDate, milestones) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     return dispatch({
       type: CREATE_PROJECT_PHASE_TIMELINE_MILESTONES,
       payload: createPhaseAndMilestonesRequest(project, projectTemplate, status, startDate, endDate, milestones)
+    }).then(() => {
+      const state = getState()
+      const project = state.projectState.project
+
+      console.log('project.status', project.status)
+      console.log('status', status)
+
+      // if phase is created as ACTIVE, move project to ACTIVE too
+      if (
+        _.includes([PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_REVIEWED], project.status) &&
+        status === PHASE_STATUS_ACTIVE &&
+        hasPermission(PERMISSIONS.EDIT_PROJECT_STATUS)
+      ) {
+        dispatch(
+          updateProject(project.id, {
+            status: PROJECT_STATUS_ACTIVE
+          }, true)
+        )
+      }
     })
   }
 }
