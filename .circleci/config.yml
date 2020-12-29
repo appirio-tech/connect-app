@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'feature/generic-phases-with-new-milestone-types']
+              only: ['dev']
 
       - deployTest01:
           context : org-global
