@@ -43,7 +43,7 @@ module.exports = {
   PREDIX_PROGRAM_ID         : 3448,
   IBM_COGNITIVE_PROGRAM_ID  : 3449,
   HEAP_ANALYTICS_APP_ID     : '638908330',
-  PHASE_PRODUCT_TEMPLATE_ID : 33,
+  PHASE_PRODUCT_TEMPLATE_ID : 67,
 
   TC_NOTIFICATION_URL: 'https://api.topcoder.com/v5/notifications',
   CONNECT_MESSAGE_API_URL: 'https://api.topcoder.com/v5',
