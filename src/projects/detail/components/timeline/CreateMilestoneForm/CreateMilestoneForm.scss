@@ -1,0 +1,17 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.button-container {
+  text-align: center;
+  padding: 20px 0;
+}
+
+form {
+  > div:nth-child(2) > div:first-child  {
+    :global  {
+      .dropdown-wrap {
+        margin-bottom: 10px;
+      }
+    } 
+  }
+}
+

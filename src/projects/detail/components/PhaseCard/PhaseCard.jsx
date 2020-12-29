@@ -9,6 +9,7 @@ import { connect } from 'react-redux'
 import MediaQuery from 'react-responsive'
 import cn from 'classnames'
 import TextTruncate from 'react-text-truncate'
+import moment from 'moment'
 
 import {
   PHASE_STATUS,
@@ -19,6 +20,7 @@ import {
   PROJECT_STATUS_CANCELLED,
   SCREEN_BREAKPOINT_MD,
   EVENT_TYPE,
+  PHASE_STATUS_REVIEWED,
 } from '../../../../config/constants'
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
@@ -33,6 +35,39 @@ import { PERMISSIONS } from '../../../../config/permissions'
 import {hasPermission} from '../../../../helpers/permissions'
 
 import './PhaseCard.scss'
+
+/**
+ * Get visual phase status based on
+ * - phase status
+ * - current date
+ * - timeline and milestones dates (actualStartDate, actualEndDate)
+ *
+ * @returns {string} visual
+ */
+const getVisualPhaseStatus = (attr) => {
+  // if model doesn't have status, fallback for DRAFT
+  let status = attr.status ? attr.status : PHASE_STATUS_DRAFT
+
+  // if model has status which is not supported by the UI, fallback to DRAFT too
+  status = _.find(PHASE_STATUS, s => s.value === status) ? status : PHASE_STATUS_DRAFT
+
+  // by default visual status is same like status in model
+  let visualStatus = status
+  const now = moment()
+
+  // if phase in active status, then we would show visual status based on the current time
+  if (status === PHASE_STATUS_ACTIVE) {
+    if (now.isBefore(attr.actualStartDate, 'day')) {
+      visualStatus = PHASE_STATUS_REVIEWED // i. e. planned status
+    } else if (now.isAfter(attr.actualEndDate, 'day')) {
+      visualStatus = PHASE_STATUS_COMPLETED
+    } else {
+      visualStatus = PHASE_STATUS_ACTIVE
+    }
+  }
+
+  return visualStatus
+}
 
 class PhaseCard extends React.Component {
   constructor(props) {
@@ -95,8 +130,7 @@ class PhaseCard extends React.Component {
     } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
-    let status = attr && attr.status ? attr.status : PHASE_STATUS_DRAFT
-    status = _.find(PHASE_STATUS, s => s.value === status) ? status : PHASE_STATUS_DRAFT
+    const status = getVisualPhaseStatus(attr)
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
     const phaseEditable =
@@ -199,7 +233,7 @@ class PhaseCard extends React.Component {
                               >
                                 <span className="progress-text">{progressInPercent}% <span className="unit">completed</span></span>
                               </ProjectProgress>
-
+                              {statusDetails.name}
                             </div>
                           </div>)
                     }

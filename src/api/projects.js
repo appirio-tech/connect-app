@@ -184,26 +184,6 @@ export function createPhaseProduct(projectId, phaseId, product) {
     .then( resp => resp.data)
 }
 
-export function createProjectWithStatus(projectProps, status) {
-  // Phase out discussions
-  // TODO: Remove this once none of the active projects
-  // have the discussions tab enabled
-  projectProps.details.hideDiscussions = true
-
-  return axios.post(`${PROJECTS_API_URL}/v5/projects/`, projectProps)
-    .then( resp => resp.data)
-    .then(project => {
-      const updatedProps = { status }
-      const projectId = project.id
-      return axios.patch(`${PROJECTS_API_URL}/v5/projects/${projectId}/`, updatedProps)
-        .then(resp => resp.data)
-        .catch(error => { // eslint-disable-line no-unused-vars
-          // return created project even if status update fails to prevent error page
-          return project
-        })
-    })
-}
-
 export function deleteProject(projectId) {
   return axios.delete(`${PROJECTS_API_URL}/v5/projects/${projectId}/`)
     .then(() => {

@@ -92,6 +92,7 @@ class ProjectManagementDialog extends React.Component {
       onCancel, copilotTeamInvites = [], selectedMembers, processingInvites,
     } = this.props
     const canManageCopilots = hasPermission(PERMISSIONS.MANAGE_COPILOTS)
+    const canRemoveCopilots = hasPermission(PERMISSIONS.REMOVE_COPILOTS)
     const showSuggestions = hasPermission(PERMISSIONS.SEE_MEMBER_SUGGESTIONS)
     let i = 0
     return (
@@ -138,7 +139,7 @@ class ProjectManagementDialog extends React.Component {
                       </span>
                     </div>
                   </div>
-                  {canManageCopilots && <div className="member-remove" onClick={remove}>
+                  {(canManageCopilots || canRemoveCopilots) && <div className="member-remove" onClick={remove}>
                     {(currentUser.userId === member.userId) ? 'Leave' : 'Remove'}
                   </div>}
                 </div>
@@ -169,7 +170,7 @@ class ProjectManagementDialog extends React.Component {
                       { (!hasUserId) && <span className="member-email">{invite.email}</span>}
                     </span>
                   </div>
-                  {canManageCopilots && <div className="member-remove" onClick={remove}>
+                  {(canManageCopilots || canRemoveCopilots) && <div className="member-remove" onClick={remove}>
                     Remove
                     <span className="email-date">
                       Invited {moment(invite.createdAt).format('MMM D, YY')}

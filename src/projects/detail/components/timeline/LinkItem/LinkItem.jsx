@@ -88,6 +88,9 @@ class LinkItem extends React.Component {
     // fallback to no-type if type is not supported to avoid errors due to lack of styles
     const type = _.includes(supportedTypes, link.type) ? link.type : ''
 
+    // if URL doesn't have protocol, then add `https`
+    const url = link.url.match(/^[a-zA-Z]{3,}:\/\/.+/) ? link.url : `https://${link.url}`
+
     return (
       <div
         styleName={cn(
@@ -102,7 +105,7 @@ class LinkItem extends React.Component {
           <div styleName="label-layer">
             <div styleName="link-item-text-group">
               <a
-                href={link.url}
+                href={url}
                 styleName={cn('title', type)}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -112,7 +115,7 @@ class LinkItem extends React.Component {
 
               <div styleName="link-wrapper">
                 <a
-                  href={link.url}
+                  href={url}
                   styleName="link"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -132,7 +135,7 @@ class LinkItem extends React.Component {
 
               {!!link.isDownloadable && !updateLink && !deleteLink && !onSelectChange && (
                 <a
-                  href={link.url}
+                  href={url}
                   styleName="button download"
                   target="_blank"
                   rel="noopener noreferrer"

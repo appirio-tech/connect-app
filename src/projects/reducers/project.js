@@ -1,6 +1,7 @@
 import {
-  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_MEMBER_INVITE_PENDING, LOAD_PROJECT_MEMBER_INVITE_FAILURE, LOAD_PROJECT_MEMBER_INVITE_SUCCESS, LOAD_PROJECT_FAILURE,
-  CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CREATE_PROJECT_STAGE_PENDING, CREATE_PROJECT_STAGE_SUCCESS, CREATE_PROJECT_STAGE_FAILURE, CLEAR_LOADED_PROJECT,
+  CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_PENDING, CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS, CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_FAILURE,
+  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_MEMBER_INVITE_PENDING, LOAD_PROJECT_MEMBER_INVITE_SUCCESS, LOAD_PROJECT_FAILURE,
+  CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT_PENDING, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   DELETE_PROJECT_PENDING, DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
   ADD_PROJECT_ATTACHMENT_PENDING, ADD_PROJECT_ATTACHMENT_SUCCESS, ADD_PROJECT_ATTACHMENT_FAILURE,
@@ -145,6 +146,20 @@ function getProductInPhases(phases, phaseId, productId) {
 export const projectState = function (state=initialState, action) {
 
   switch (action.type) {
+  case CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_PENDING:
+    return Object.assign({}, state, {
+      isCreatingPhase: true
+    })
+  case CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS: {
+    const { phase, product } = action.payload
+    phase.products = [product]
+    return update(state, {
+      phases: { $push: [phase] },
+      phasesNonDirty: { $push: [_.cloneDeep(phase)] },
+      isCreatingPhase: { $set: false },
+    })
+  }
+
   case EXPAND_PROJECT_PHASE: {
     const { phaseId, tab } = action.payload
     const currentPhaseTab = state.phasesStates[phaseId] || {}
@@ -312,25 +327,6 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
-  case CREATE_PROJECT_STAGE_SUCCESS: {
-    // as we additionally loaded products to the phase object we have to keep them
-    // note that we keep them as they are without creation a new copy
-    const phase = {
-      ...action.payload.phase,
-      products: [action.payload.product]
-    }
-    const phaseNonDirty = {
-      // for non-dirty version we make sure that dont' have the same objects with phase
-      ..._.cloneDeep(action.payload.phase),
-      products: [_.cloneDeep(action.payload.product)]
-    }
-    return update(state, {
-      processing: { $set: false },
-      phases: { $push: [phase] },
-      phasesNonDirty: { $push: [phaseNonDirty] }
-    })
-  }
-
   case UPDATE_PHASE_SUCCESS: {
     // as we additionally loaded products to the phase object we have to keep them
     // note that we keep them as they are without creation a new copy
@@ -462,7 +458,6 @@ export const projectState = function (state=initialState, action) {
   }
 
   // Create & Edit project
-  case CREATE_PROJECT_STAGE_PENDING:
   case CREATE_PROJECT_PENDING:
   case DELETE_PROJECT_PENDING:
   case UPDATE_PROJECT_PENDING:
@@ -870,7 +865,6 @@ export const projectState = function (state=initialState, action) {
   }
 
   case LOAD_PROJECT_FAILURE:
-  case CREATE_PROJECT_STAGE_FAILURE:
   case CREATE_PROJECT_FAILURE:
   case DELETE_PROJECT_FAILURE:
   case UPDATE_PROJECT_FAILURE:
@@ -889,8 +883,9 @@ export const projectState = function (state=initialState, action) {
   case ADD_PRODUCT_ATTACHMENT_FAILURE:
   case REMOVE_PRODUCT_ATTACHMENT_FAILURE:
   case DELETE_PROJECT_PHASE_FAILURE:
-  case LOAD_PROJECT_MEMBER_INVITE_FAILURE:
+  case CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_FAILURE:
     return Object.assign({}, state, {
+      isCreatingPhase: false,
       isLoading: false,
       processing: false,
       processingMembers: false,

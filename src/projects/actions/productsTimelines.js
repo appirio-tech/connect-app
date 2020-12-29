@@ -23,12 +23,20 @@ import {
   SUBMIT_FINAL_FIXES_REQUEST_PENDING,
   SUBMIT_FINAL_FIXES_REQUEST_SUCCESS,
   SUBMIT_FINAL_FIXES_REQUEST_FAILURE,
+  CREATE_TIMELINE_MILESTONE,
+  MILESTONE_TYPE,
   MILESTONE_STATUS,
   UPDATE_PRODUCT_TIMELINE,
   PHASE_STATUS_COMPLETED,
   BULK_UPDATE_PRODUCT_MILESTONES,
+  MILESTONE_DEFAULT_VALUES,
 } from '../../config/constants'
-import { processUpdateMilestone } from '../../helpers/milestoneHelper'
+import {
+  processUpdateMilestone,
+  processDeleteMilestone
+} from '../../helpers/milestoneHelper'
+import moment from 'moment'
+
 
 /**
  * Get the next milestone in the list, which is not hidden
@@ -48,17 +56,24 @@ function getNextNotHiddenMilestone(milestones, currentMilestoneIndex) {
   return milestones[index]
 }
 
-
 /**
- * Check if the milestone is last non-hidden milestone in the timeline or no
+ * bulk create proudct milestones
  *
- * @param {Object} milestones     timeline's milestones
- * @param {Number} milestoneIdx milestone index
- *
- * @returns {Boolean} true if milestone is last non-hidden
+ * @param {Object} timeline     timeline object
+ * @param {Array}  milestones   milestones
  */
-function checkIfLastMilestone(milestones, milestoneIdx) {
-  return _.slice(milestones, milestoneIdx + 1).filter(m => !m.hidden).length === 0
+export function createProductMilestone(timeline, milestones) {
+  return (dispatch) => {
+
+    milestones = milestones.map(item => _.omit(item, ['timelineId', 'error', 'isUpdating', 'statusHistory']))
+    return dispatch({
+      type: CREATE_TIMELINE_MILESTONE,
+      payload: updateMilestones(timeline.id, milestones),
+      meta: {
+        timeline
+      }
+    })
+  }
 }
 
 /**
@@ -110,7 +125,12 @@ export function updateProductMilestone(productId, timelineId, milestoneId, updat
     const timeline = getState().productsTimelines[productId].timeline
     const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
     const milestone = timeline.milestones[milestoneIdx]
-    const updatedTimelineMilestones = processUpdateMilestone(milestone, updatedProps, timeline.milestones).updatedTimelineMilestones
+    let updatedTimelineMilestones
+    if (!updatedProps) {
+      updatedTimelineMilestones = processDeleteMilestone(milestoneIdx, timeline.milestones)
+    } else  {
+      updatedTimelineMilestones = processUpdateMilestone(milestone, updatedProps, timeline.milestones).updatedTimelineMilestones
+    }
 
     dispatch({
       type: UPDATE_PRODUCT_MILESTONE_PENDING,
@@ -194,10 +214,10 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
         prevMilestoneContent: completedMilestone.details.content,
         prevMilestoneType: completedMilestone.type,
       }
-      if ( ((nextMilestone.type === 'checkpoint-review' || nextMilestone.type === 'final-designs') // case # 2
-        && completedMilestone.type === 'add-links' ) ||
-        ((nextMilestone.type === 'delivery-design' || nextMilestone.type === 'delivery-dev') // case # 4
-          && completedMilestone.type !== 'final-fix' ) ) {
+      if ( ((nextMilestone.type === MILESTONE_TYPE.CHECKPOINT_REVIEW || nextMilestone.type === MILESTONE_TYPE.FINAL_DESIGNS) // case # 2
+        && completedMilestone.type === MILESTONE_TYPE.ADD_LINKS ) ||
+        ((nextMilestone.type === MILESTONE_TYPE.DELIVERY_DESIGN || nextMilestone.type === MILESTONE_TYPE.DELIVERY_DEV) // case # 4
+          && completedMilestone.type !== MILESTONE_TYPE.FINAL_FIX) ) {
         details.metadata = {
           ..._.get(nextMilestone.details, 'metadata', {}),
           waitingForCustomer: true
@@ -218,14 +238,6 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
       payload: updateMilestones(timelineId, milestones),
       meta: { productId }
     }).then(() => {
-      const milestoneIdx = _.findIndex(updatedTimelineMilestones, { id: milestoneId })
-      const isLastMilestone = checkIfLastMilestone(updatedTimelineMilestones, milestoneIdx)
-      if (isLastMilestone){
-        const phaseIndex = _.findIndex(state.projectState.phases, p => p.products[0].id === productId)
-        const phase = state.projectState.phases[phaseIndex]
-        dispatch(updatePhase(state.projectState.project.id, phase.id, {status: PHASE_STATUS_COMPLETED}, phaseIndex))
-      }
-
       dispatch({
         type: COMPLETE_PRODUCT_MILESTONE_SUCCESS,
         meta: { productId, milestoneId }
@@ -311,7 +323,7 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
 
     let finalFixesMilestone = timeline.milestones[milestoneIdx - 1]
 
-    if (!finalFixesMilestone || finalFixesMilestone.type !== 'final-fix') {
+    if (!finalFixesMilestone || finalFixesMilestone.type !== MILESTONE_TYPE.FINAL_FIX) {
       throw new Error('Cannot find final-fix milestone.')
     }
 
@@ -441,6 +453,77 @@ export function completeFinalFixesMilestone(productId, timelineId, milestoneId, 
     }).catch((error) => {
       dispatch({
         type: COMPLETE_PRODUCT_MILESTONE_FAILURE,
+        payload: error,
+        meta: { productId, milestoneId }
+      })
+      throw error
+    })
+  }
+}
+
+/**
+ * Mark the milestone as 'completed' and append a 'deliverable-final-fixes' milestone after it
+ * @param {Number} productId    product id
+ * @param {Number} timelineId   timeline id
+ * @param {Number} milestoneId  milestone id
+ * @param {String} finalFixRequest final fixes request text
+ */
+export function submitDeliverableFinalFixesRequest(productId, timelineId, milestoneId, finalFixRequest) {
+  return (dispatch, getState) => {
+    const state = getState()
+    const timeline = state.productsTimelines[productId].timeline
+    const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
+    const milestone = timeline.milestones[milestoneIdx]
+
+    let updatedTimelineMilestones = [
+      ...timeline.milestones,
+    ]
+
+    updatedTimelineMilestones = processUpdateMilestone(
+      milestone, {
+        status: MILESTONE_STATUS.COMPLETED,
+      }, updatedTimelineMilestones
+    ).updatedTimelineMilestones
+
+    const finalFixesMilestone = {
+      ...MILESTONE_DEFAULT_VALUES[MILESTONE_TYPE.DELIVERABLE_FINAL_FIXES],
+      type: MILESTONE_TYPE.DELIVERABLE_FINAL_FIXES,
+      startDate: milestone.endDate,
+      endDate: moment(milestone.endDate).add(3, 'day').toISOString(),
+      status: MILESTONE_STATUS.ACTIVE,
+      details: {
+        content: {
+          finalFixesRequest: finalFixRequest,
+        }
+      },
+      name: 'Final Fixes',
+      duration: 3,
+      order: timeline.milestones.length + 1,
+    }
+
+    updatedTimelineMilestones.splice(milestoneIdx + 1, 0, finalFixesMilestone)
+
+    dispatch({
+      type: SUBMIT_FINAL_FIXES_REQUEST_PENDING,
+      meta: { productId, milestoneId }
+    })
+
+    const milestones = updatedTimelineMilestones.map(milestone => _.omit(milestone, ['timelineId', 'error', 'isUpdating', 'statusHistory']))
+
+    return dispatch({
+      type: BULK_UPDATE_PRODUCT_MILESTONES,
+      payload: updateMilestones(timelineId, milestones),
+      meta: {
+        productId,
+      }
+    }).then(() => {
+      dispatch({
+        type: SUBMIT_FINAL_FIXES_REQUEST_SUCCESS,
+        meta: { productId, milestoneId }
+      })
+    }).catch((error) => {
+      dispatch({
+        type: SUBMIT_FINAL_FIXES_REQUEST_FAILURE,
         payload: error,
         meta: { productId, milestoneId }
       })
