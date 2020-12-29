@@ -67,6 +67,12 @@ function updateMilestone(state, productId, milestoneId, dirtyMilestone, shouldRe
   if (!state[productId].timeline) return state
   const milestoneIdx = _.findIndex(state[productId].timeline.milestones, { id: milestoneId })
 
+  // this method could be called during BULK MILESTONE UPDATE during milestone deleting
+  // so if we cannot find it anymore, don't do anything
+  if (milestoneIdx === -1) {
+    return state
+  }
+
   const updatedMilestone = shouldReplace
     ? dirtyMilestone
     : update(state[productId].timeline.milestones[milestoneIdx], dirtyMilestone)
@@ -160,7 +166,7 @@ export const productsTimelines = (state=initialState, action) => {
   case CREATE_TIMELINE_MILESTONE_SUCCESS: {
     const {timeline} = action.meta
 
-    timeline.milestones = action.payload 
+    timeline.milestones = action.payload
 
     return update(state, {
       [timeline.referenceId]: {
