@@ -17,11 +17,13 @@ import { connect } from 'react-redux'
 import Timeline from '../components/timeline/Timeline'
 
 import {
+  createProductMilestone,
   updateProductMilestone,
   completeProductMilestone,
   completeFinalFixesMilestone,
   extendProductMilestone,
   submitFinalFixesRequest,
+  submitDeliverableFinalFixesRequest,
 } from '../../actions/productsTimelines'
 
 class ProductTimelineContainer extends React.Component {
@@ -64,10 +66,12 @@ const mapStateToProps = ({ productsTimelines, loadUser }, props) => ({
 
 const mapDispatchToProps = {
   updateProductMilestone,
+  createProductMilestone,
   completeProductMilestone,
   completeFinalFixesMilestone,
   extendProductMilestone,
   submitFinalFixesRequest,
+  submitDeliverableFinalFixesRequest,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductTimelineContainer)

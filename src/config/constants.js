@@ -84,6 +84,18 @@ export const SET_PROJECTS_SEARCH_CRITERIA = 'SET_PROJECTS_SEARCH_CRITERIA'
 export const SET_PROJECTS_INFINITE_AUTOLOAD = 'SET_PROJECTS_INFINITE_AUTOLOAD'
 export const SET_PROJECTS_LIST_VIEW = 'SET_PROJECTS_LIST_VIEW'
 
+// milestones
+export const CREATE_TIMELINE_MILESTONE = 'CREATE_TIMELINE_MILESTONE'
+export const CREATE_TIMELINE_MILESTONE_SUCCESS = 'CREATE_TIMELINE_MILESTONE_SUCCESS'
+export const CREATE_TIMELINE_MILESTONE_FAILURE = 'CREATE_TIMELINE_MILESTONE_FAILURE'
+export const CREATE_TIMELINE_MILESTONE_PENDING = 'CREATE_TIMELINE_MILESTONE_PENDING'
+
+// project phases and timeline and milestones
+export const CREATE_PROJECT_PHASE_TIMELINE_MILESTONES             = 'CREATE_PROJECT_PHASE_TIMELINE_MILESTONES'
+export const CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_FAILURE     = 'CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_FAILURE'
+export const CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS     = 'CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS'
+export const CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_PENDING     = 'CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_PENDING'
+
 
 // Delete project
 export const DELETE_PROJECT             = 'DELETE_PROJECT'
@@ -223,11 +235,6 @@ export const CREATE_PROJECT           = 'CREATE_PROJECT'
 export const CREATE_PROJECT_PENDING   = 'CREATE_PROJECT_PENDING'
 export const CREATE_PROJECT_SUCCESS   = 'CREATE_PROJECT_SUCCESS'
 export const CREATE_PROJECT_FAILURE   = 'CREATE_PROJECT_FAILURE'
-
-export const CREATE_PROJECT_STAGE           = 'CREATE_PROJECT_STAGE'
-export const CREATE_PROJECT_STAGE_PENDING   = 'CREATE_PROJECT_STAGE_PENDING'
-export const CREATE_PROJECT_STAGE_SUCCESS   = 'CREATE_PROJECT_STAGE_SUCCESS'
-export const CREATE_PROJECT_STAGE_FAILURE   = 'CREATE_PROJECT_STAGE_FAILURE'
 
 export const UPDATE_PROJECT           = 'UPDATE_PROJECT'
 export const UPDATE_PROJECT_PENDING   = 'UPDATE_PROJECT_PENDING'
@@ -588,20 +595,20 @@ export const PHASE_STATUS_PAUSED = 'paused'
 
 export const PROJECT_STATUS = [
   // {color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
-  {color: 'gray', name: 'In review', fullName: 'Project is in review', value: PROJECT_STATUS_IN_REVIEW, order: 3, dropDownOrder: 2 },
-  {color: 'gray', name: 'Reviewed', fullName: 'Project is reviewed', value: PROJECT_STATUS_REVIEWED, order: 4, dropDownOrder: 3 },
-  {color: 'green', name: 'Active', fullName: 'Project is active', value: PROJECT_STATUS_ACTIVE, order: 1, dropDownOrder: 4 },
-  {color: 'black', name: 'Completed', fullName: 'Project is completed', value: PROJECT_STATUS_COMPLETED, order: 5, dropDownOrder: 5 },
-  {color: 'black', name: 'Cancelled', fullName: 'Project is canceled', value: PROJECT_STATUS_CANCELLED, order: 6, dropDownOrder: 6 },
-  {color: 'red', name: 'Paused', fullName: 'Project is paused', value: PROJECT_STATUS_PAUSED, order: 7, dropDownOrder: 7 }
+  {color: 'gray', name: 'In review', fullName: 'Project is in review', value: PROJECT_STATUS_IN_REVIEW, order: 3, dropDownOrder: 2, isSpecial: true },
+  {color: 'gray', name: 'Reviewed', fullName: 'Project is reviewed', value: PROJECT_STATUS_REVIEWED, order: 4, dropDownOrder: 3, isSpecial: true },
+  {color: 'green', name: 'Active', fullName: 'Project is active', value: PROJECT_STATUS_ACTIVE, order: 1, dropDownOrder: 4, isSpecial: false },
+  {color: 'black', name: 'Completed', fullName: 'Project is completed', value: PROJECT_STATUS_COMPLETED, order: 5, dropDownOrder: 5, isSpecial: false },
+  {color: 'black', name: 'Cancelled', fullName: 'Project is canceled', value: PROJECT_STATUS_CANCELLED, order: 6, dropDownOrder: 6, isSpecial: true },
+  {color: 'red', name: 'Paused', fullName: 'Project is paused', value: PROJECT_STATUS_PAUSED, order: 7, dropDownOrder: 7, isSpecial: true }
 ]
 
 export const PHASE_STATUS = [
   {color: 'gray', name: 'Draft', fullName: 'Phase is in draft', value: PHASE_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
   // {color: 'gray', name: 'In review', fullName: 'Phase is in review', value: PHASE_STATUS_IN_REVIEW, order: 3, dropDownOrder: 2 },
   {color: 'gray', name: 'Planned', fullName: 'Phase is reviewed', value: PHASE_STATUS_REVIEWED, order: 4, dropDownOrder: 3 },
-  {color: 'green', name: 'In Progress', fullName: 'Phase is active', value: PHASE_STATUS_ACTIVE, order: 1, dropDownOrder: 4 },
-  {color: 'black', name: 'Delivered', fullName: 'Phase is completed', value: PHASE_STATUS_COMPLETED, order: 5, dropDownOrder: 5 },
+  {color: 'green', name: 'Active', fullName: 'Phase is active', value: PHASE_STATUS_ACTIVE, order: 1, dropDownOrder: 4 },
+  {color: 'black', name: 'Completed', fullName: 'Phase is completed', value: PHASE_STATUS_COMPLETED, order: 5, dropDownOrder: 5 },
   // {color: 'black', name: 'Cancelled', fullName: 'Phase is canceled', value: PHASE_STATUS_CANCELLED, order: 6, dropDownOrder: 6 },
   // {color: 'red', name: 'Paused', fullName: 'Phase is paused', value: PHASE_STATUS_PAUSED, order: 7, dropDownOrder: 7 }
 ]
@@ -717,13 +724,12 @@ export const PROJECT_ATTACHMENTS_FOLDER = process.env.PROJECT_ATTACHMENTS_FOLDER
 export const FILE_PICKER_ACCEPT = process.env.FILE_PICKER_ACCEPT || ['.bmp', '.gif', '.jpg', '.tex', '.xls', '.xlsx', '.doc', '.docx', '.zip', '.txt', '.pdf', '.png', '.ppt', '.pptx', '.rtf', '.csv']
 
 export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
-export const SKILL_PROVIDER_ID = process.env.SKILL_PROVIDER_ID || '9cc0795a-6e12-4c84-9744-15858dba1861'
 /*
  * URLs
  */
 export const DOMAIN = process.env.domain || 'topcoder.com'
 export const CONNECT_DOMAIN = `connect.${DOMAIN}`
-export const CONNECT_MAIN_PAGE_URL = `https://connect.${DOMAIN}`
+export const CONNECT_MAIN_PAGE_URL = `http://connect.${DOMAIN}`
 export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
 export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || `https://accounts-auth0.${DOMAIN}`
 export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL || `https://accounts-auth0.${DOMAIN}`
@@ -1104,3 +1110,93 @@ export const PROJECT_TYPE_TALENT_AS_A_SERVICE = 'talent-as-a-service'
  * URL to the Topcoder TaaS App
  */
 export const TAAS_APP_URL = process.env.TAAS_APP_URL || 'https://platform.topcoder-dev.com/taas'
+
+/**
+ * Milestone Types
+ */
+export const MILESTONE_TYPE = {
+  REPORTING: 'reporting',
+  DELIVERABLE_REVIEW: 'deliverable-review',
+  FINAL_DELIVERABLE_REVIEW: 'final-deliverable-review',
+  DELIVERABLE_FINAL_FIXES: 'deliverable-final-fixes',
+  PHASE_SPECIFICATION:'phase-specification',
+  COMMUNITY_WORK: 'community-work',
+  COMMUNITY_REVIEW: 'community-review',
+  GENERIC_WORK: 'generic-work',
+  CHECKPOINT_REVIEW: 'checkpoint-review',
+  ADD_LINKS: 'add-links',
+  FINAL_DESIGNS: 'final-designs',
+  FINAL_FIX: 'final-fix',
+  DELIVERY_DEV: 'delivery-dev',
+  DELIVERY_DESIGN: 'delivery-design',
+  DELIVERY: 'delivery'
+}
+
+/**
+ *  Milestone Type Options
+ */
+export const MILESTONE_TYPE_OPTIONS = [
+  {
+    title: 'Reporting',
+    value: MILESTONE_TYPE.REPORTING,
+  },
+  {
+    title: 'Deliverable Review',
+    value: MILESTONE_TYPE.DELIVERABLE_REVIEW,
+  },
+  {
+    title: 'Final Deliverable Review',
+    value: MILESTONE_TYPE.FINAL_DELIVERABLE_REVIEW,
+  },
+]
+
+/**
+ * Default values for newly created milestones.
+ */
+export const MILESTONE_DEFAULT_VALUES = {
+  [MILESTONE_TYPE.REPORTING]: {
+    description: 'description',
+    plannedText: 'The delivery team will provide an update on your progress.',
+    activeText: 'The delivery team will provide an update on your progress.',
+    blockedText: 'The delivery team will provide an update on your progress.',
+    completedText: 'The delivery team will provide an update on your progress.',
+    details: {},
+    hidden: false,
+    status: MILESTONE_STATUS.PLANNED
+  },
+  [MILESTONE_TYPE.DELIVERABLE_REVIEW]: {
+    description: 'description',
+    plannedText: 'The delivery team plans to share in-progress deliverables on this date for your review.',
+    activeText: 'Your review and feedback on in-progress deliverables is required.',
+    blockedText: 'Your in-progress deliverables have been blocked. Work with your delivery team to understand the next steps.',
+    completedText: 'Thank you for your review of the in-progress deliverables. Your feedback will inform your final deliverables.',
+    details: {},
+    hidden: false,
+    status: MILESTONE_STATUS.PLANNED
+  },
+  [MILESTONE_TYPE.FINAL_DELIVERABLE_REVIEW]: {
+    description: 'description',
+    plannedText: 'The delivery team plans to share the final deliverables on this date for your review.',
+    activeText: 'Your review and feedback on the final deliverables is required.',
+    blockedText: 'Your final deliverables have been blocked. Work with your delivery team to understand the next steps.',
+    completedText: 'Your final deliverables are complete.',
+    details: {},
+    hidden: false,
+    status: MILESTONE_STATUS.PLANNED
+  },
+  [MILESTONE_TYPE.DELIVERABLE_FINAL_FIXES]: {
+    description: 'description',
+    plannedText: 'The delivery team plans to share the final deliverables on this date for your review.',
+    activeText: 'Your review and feedback on the final deliverables is required.',
+    blockedText: 'Your final deliverables have been blocked. Work with your delivery team to understand the next steps.',
+    completedText: 'Your final deliverables are complete.',
+    details: {},
+    hidden: false,
+    status: MILESTONE_STATUS.PLANNED
+  },
+}
+
+/**
+ *  project template id
+ */
+export const PHASE_PRODUCT_TEMPLATE_ID = process.env.PHASE_PRODUCT_TEMPLATE_ID

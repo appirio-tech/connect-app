@@ -4,13 +4,17 @@ import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import cn from 'classnames'
 import _ from 'lodash'
 import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import {
   PROJECT_STATUS,
   PROJECT_STATUS_COMPLETED,
   PROJECT_STATUS_CANCELLED,
-  PROJECT_STATUS_DRAFT
+  PROJECT_STATUS_DRAFT,
+  TOOLTIP_DEFAULT_DELAY
 } from '../../config/constants'
 import CarretDownNormal9px from '../../assets/icons/arrow-9px-carret-down-normal.svg'
+import { hasPermission } from '../../helpers/permissions'
+import { PERMISSIONS } from '../../config/permissions'
 
 
 const hocStatusDropdown = (CompositeComponent, statusList) => {
@@ -55,24 +59,33 @@ const hocStatusDropdown = (CompositeComponent, statusList) => {
               <div className="status-header">Project Status</div>
               <ul>
                 {
-                  statusList.sort((a, b) => a.order - b.order).map((item) =>
-                    (
-                      <div key={item.value} className="tooltip-target">
-                        <li>
-                          <a
-                            href="javascript:"
-                            className={cn('status-option', 'status-' + item.value, { active: item.value === status, disabled: item.disabled })}
-                            onClick={(e) => {
-                              if (!item.disabled)
-                                onItemSelect(item.value, e)
-                            }}
-                          >
-                            <CompositeComponent status={item} showText />
-                          </a>
-                        </li>
-                      </div>
+                  statusList.sort((a, b) => a.order - b.order).map((item) => {
+                    const selectItem = (
+                      <li key={item.value}>
+                        <a
+                          href="javascript:"
+                          className={cn('status-option', 'status-' + item.value, { active: item.value === status, disabled: item.disabled })}
+                          onClick={(e) => {
+                            if (!item.disabled)
+                              onItemSelect(item.value, e)
+                          }}
+                        >
+                          <CompositeComponent status={item} showText />
+                        </a>
+                      </li>
                     )
-                  )
+
+                    return item.toolTipMessage ? (
+                      <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY} key={item.value} usePortal>
+                        <div className="tooltip-target">
+                          {selectItem}
+                        </div>
+                        <div className="tooltip-body">
+                          {item.toolTipMessage}
+                        </div>
+                      </Tooltip>
+                    ) : selectItem
+                  })
                 }
               </ul>
             </div>
@@ -132,10 +145,29 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
   }
 
   getProjectStatusDropdownValues(status) {
-    if (status === PROJECT_STATUS_DRAFT) {
-      return [{color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT, order: 2, dropDownOrder: 1 }].concat(PROJECT_STATUS)
+    const statusList = status === PROJECT_STATUS_DRAFT
+      // if current status, is "Draft" which is deprecated, then show it on the list
+      ? [{color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT, order: 2, dropDownOrder: 1 }].concat(PROJECT_STATUS)
+      // otherwise don't show deprecated status
+      : PROJECT_STATUS
+
+    if (hasPermission(PERMISSIONS.EDIT_PROJECT_STATUS_TO_SPECIAL)) {
+      return statusList
+    } else {
+      return statusList.map((statusOption) => {
+        // if option is not special anyone can choose it
+        // also, don't disable special option, if it's the current value
+        if (!statusOption.isSpecial || statusOption.value === status) {
+          return statusOption
+        }
+
+        return {
+          ...statusOption,
+          disabled: true,
+          toolTipMessage: 'Only managers and admins can change to this status'
+        }
+      })
     }
-    return PROJECT_STATUS
   }
 
   render() {

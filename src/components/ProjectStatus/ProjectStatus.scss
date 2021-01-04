@@ -8,7 +8,7 @@
   .ProjectStatus {
     position: relative;
     height: $status-height;
-  
+
     .status-icon {
       position: relative;
       display: inline-block;
@@ -16,14 +16,14 @@
       width: 4 * $base-unit;
       height: 4 * $base-unit;
       // top: 3px;
-  
+
       i {
         display: block;
         width: 4 * $base-unit;
         height: 4 * $base-unit;
       }
     }
-  
+
     .status-label {
       position: relative;
       @include tc-label-xs;
@@ -33,7 +33,7 @@
       margin-left: 10px;
     }
   }
-  
+
   .EditableProjectStatus {
     &.modal-active {
       .modal-overlay {
@@ -59,7 +59,7 @@
     .status-label {
       vertical-align: top;
     }
-  
+
     .status-header {
       display: flex;
       // position: absolute;
@@ -70,19 +70,19 @@
       user-select: none;
       border-radius: $base-unit*4;
       cursor: default;
-  
+
       .caret {
         display: none;
       }
-  
+
       &.editable {
         cursor: pointer;
-  
+
         &:hover {
           &::after {
           }
         }
-  
+
         .caret {
           // content: '';
           // z-index: 3;
@@ -97,7 +97,7 @@
           path {
             stroke: $tc-gray-70;
           }
-  
+
           .Icon {
             width: 100%;
             height: 100%;
@@ -105,17 +105,17 @@
           }
         }
       }
-  
-  
+
+
       &.unified-header {
         background-color: $tc-gray-40;
-  
+
         .status-label {
           color: $tc-white;
         }
       }
     }
-  
+
     .status-label {
       position: relative;
       @include tc-label-xs;
@@ -123,7 +123,7 @@
       padding-right: $base-unit;
       margin-left: 10px;
     }
-  
+
     // Stylize the dropdown elements
     .status-dropdown {
       min-width: 150px;
@@ -138,12 +138,12 @@
       right: -10px;
       z-index: 20;
       transition: 250ms all;
-  
+
       &.dropdown-up {
         top: auto;
         bottom: 0;
       }
-  
+
       .status-header {
         @include roboto-medium;
         font-size: $tc-label-md;
@@ -154,7 +154,7 @@
         margin-bottom: 2px;
         white-space: nowrap;
       }
-  
+
       .status-option {
         display: flex;
         @include roboto-medium;
@@ -163,19 +163,37 @@
         line-height: 30px;
         padding: 0 20px;
         white-space: nowrap;
-  
+
         &:hover {
           background: $tc-dark-blue-10;
         }
-  
+
         &.active {
           background: $tc-gray-10;
         }
-  
+
+        &.disabled {
+          &,
+          &:hover,
+          &:active,
+          &:focus {
+            background: transparent;
+            cursor: default;
+
+            .status-label {
+              color: $tc-gray-30;
+            }
+
+            svg {
+              opacity: 0.5;
+            }
+          }
+        }
+
         svg {
           margin-top: 7px;
         }
-  
+
         .status-label {
           color: $tc-gray-80;
           line-height: 30px;
@@ -185,4 +203,4 @@
     }
   }
 }
-  
+

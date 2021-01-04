@@ -49,12 +49,6 @@ class TopBarContainer extends React.Component {
 
   render() {
 
-    const location = this.props.location.pathname
-    if (location && (location.substr(location.lastIndexOf('/') + 1) === 'add-phase')) {
-      return (
-        <div />
-      )
-    }
     const { user, toolbar, userRoles } = this.props
     const userHandle  = _.get(user, 'handle')
     const bigPhotoURL = _.get(user, 'photoURL')

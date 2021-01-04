@@ -14,34 +14,25 @@ const TCFormFields = FormsyForm.Fields
 // import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
 import { updatePhase as updatePhaseAction, firePhaseDirty, firePhaseDirtyUndo } from '../../../actions/project'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
-import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
-import { PHASE_STATUS_COMPLETED, PHASE_STATUS, PHASE_STATUS_ACTIVE, PHASE_STATUS_DRAFT } from '../../../../config/constants'
-import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
-import { TOOLTIP_DEFAULT_DELAY } from '../../../../config/constants'
-import { getPhaseActualData } from '../../../../helpers/projectHelper'
+import { PHASE_STATUS_COMPLETED, PHASE_STATUS_ACTIVE, PHASE_STATUS_DRAFT } from '../../../../config/constants'
 import DeletePhase from './DeletePhase'
 import { hasPermission } from '../../../../helpers/permissions'
 import { PERMISSIONS } from '../../../../config/permissions'
+import { isValidStartEndDates } from '../../../../helpers/utils'
 
 const moment = extendMoment(Moment)
-const phaseStatuses = PHASE_STATUS.map(ps => ({
-  title: ps.name,
-  value: ps.value,
-}))
 
 class EditStageForm extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      publishClicked: false,
       isUpdating: false,
       isEdittable: (_.get(props, 'phase.status') !== PHASE_STATUS_COMPLETED) || (_.get(props, 'canEditCompletedPhase')),
-      disableActiveStatusFields: _.get(props, 'phase.status') !== PHASE_STATUS_ACTIVE,
       showPhaseOverlapWarning: false,
       phaseIsdirty: false,
       showActivatingWarning: false,
-      // we have to control phase status separately, so we can restore its when we need
-      selectedPhaseStatus: _.get(props, 'phase.status')
     }
     this.submitValue = this.submitValue.bind(this)
     this.enableButton = this.enableButton.bind(this)
@@ -52,7 +43,7 @@ class EditStageForm extends React.Component {
     this.showActivatingWarning = this.showActivatingWarning.bind(this)
     this.cancelActivatingPhase = this.cancelActivatingPhase.bind(this)
     this.onFormSubmit = this.onFormSubmit.bind(this)
-    this.updateSelectedPhaseStatus = this.updateSelectedPhaseStatus.bind(this)
+    this.onPublishClick = this.onPublishClick.bind(this)
   }
 
   showActivatingWarning() {
@@ -62,23 +53,9 @@ class EditStageForm extends React.Component {
   }
 
   cancelActivatingPhase() {
-    const phaseStatus = _.get(this.props, 'phase.status')
     this.setState({
+      publishClicked: false,
       showActivatingWarning: false,
-      // to restore phase status first we change selected value to nothing
-      // and after will again put initial value, this will force SelectDropdown to change
-      // to initial value
-      selectedPhaseStatus: '',
-    }, () => {
-      this.setState({
-        selectedPhaseStatus: phaseStatus,
-      })
-    })
-  }
-
-  updateSelectedPhaseStatus(selectedOption) {
-    this.setState({
-      selectedPhaseStatus: selectedOption.value,
     })
   }
 
@@ -86,15 +63,7 @@ class EditStageForm extends React.Component {
     this.setState({
       isUpdating: nextProps.isUpdating,
       isEdittable: nextProps.phase.status !== PHASE_STATUS_COMPLETED || nextProps.canEditCompletedPhase,
-      disableActiveStatusFields: nextProps.phase.status !== PHASE_STATUS_ACTIVE,
     })
-
-    // update selected phase status if it was updated at the props
-    const prevPhaseStatus = _.get(this.props, 'phase.status')
-    const nextPhaseStatus = _.get(nextProps, 'phase.status')
-    if (nextPhaseStatus && prevPhaseStatus !== nextPhaseStatus) {
-      this.setState({ selectedPhaseStatus: nextPhaseStatus })
-    }
   }
 
   componentDidMount() {
@@ -108,26 +77,35 @@ class EditStageForm extends React.Component {
 
   submitValue(model) {
     const { phase, phaseIndex, updatePhaseAction } = this.props
+    const {
+      publishClicked
+    } = this.state
     const updatedStartDate = moment.utc(new Date(model.startDate))
-    const duration = model.duration ? model.duration : 1
-    const endDate = model.status === PHASE_STATUS_COMPLETED ? moment.utc(new Date()) : moment.utc(updatedStartDate).add(duration - 1, 'days')
+    const updatedEndDate = model.status === PHASE_STATUS_COMPLETED ? moment.utc(new Date()) : moment.utc(model.endDate)
+    let newStatus = phase.status
+    if (publishClicked && phase.status === PHASE_STATUS_DRAFT) {
+      newStatus = PHASE_STATUS_ACTIVE
+    }
     const updateParam = _.assign({}, model, {
       startDate: updatedStartDate,
-      endDate: endDate || '',
-      duration
+      endDate: updatedEndDate || '',
+      status: newStatus
     })
-    this.setState({isUpdating: true})
+    this.setState({
+      isUpdating: true,
+      publishClicked: false
+    })
     updatePhaseAction(phase.projectId, phase.id, updateParam, phaseIndex)
   }
 
   onFormSubmit(model) {
     const { phase } = this.props
-    const { showActivatingWarning } = this.state
+    const { showActivatingWarning, publishClicked } = this.state
 
     if (
       !showActivatingWarning &&
-      phase.status !== PHASE_STATUS_ACTIVE &&
-      model.status === PHASE_STATUS_ACTIVE
+      publishClicked &&
+      phase.status === PHASE_STATUS_DRAFT
     ) {
       this.showActivatingWarning()
     } else {
@@ -161,11 +139,19 @@ class EditStageForm extends React.Component {
     this.props.firePhaseDirtyUndo()
     this.setState({
       showPhaseOverlapWarning: false,
-      phaseIsdirty: false
+      phaseIsdirty: false,
     })
     this.props.cancel()
   }
 
+  /**
+   * when in draft status, click publish button
+   */
+  onPublishClick() {
+    this.setState({
+      publishClicked: true,
+    })
+  }
   /**
    * Handles the change event of the form.
    *
@@ -175,10 +161,12 @@ class EditStageForm extends React.Component {
   handleChange(change) {
     const { phases, phase, phaseIndex } = this.props
     let showPhaseOverlapWarning = false
-    // if start date's day or duration is updated for a phase, we need to update other phases dates accordingly
-    const phaseDay = moment.utc(new Date(phase.startDate)).format('DD')
-    const changedDay = moment.utc(new Date(change.startDate)).format('DD')
-    if (phaseDay !== changedDay || phase.duration !== change.duration) {
+    // if start date's start day or end day is updated for a phase, we need to update other phases dates accordingly
+    const phaseStartDay = moment.utc(new Date(phase.startDate)).format('YYYY-MM-DD')
+    const changedStartDay = moment.utc(new Date(change.startDate)).format('YYYY-MM-DD')
+    const phaseEndDay = moment.utc(new Date(phase.endDate)).format('YYYY-MM-DD')
+    const changedEndDay = moment.utc(new Date(change.endDate)).format('YYYY-MM-DD')
+    if (phaseStartDay !== changedStartDay || phaseEndDay !== changedEndDay) {
       // console.log('Need to sync phases')
       const reqChanges = this.checkOverlappingPhases(phases, phase, phaseIndex, change)
       //console.log('reqChanges : ', reqChanges)
@@ -191,7 +179,6 @@ class EditStageForm extends React.Component {
       // console.log('No need to sync phases')
     }
     this.setState({
-      disableActiveStatusFields: change.status !== PHASE_STATUS_ACTIVE,
       showPhaseOverlapWarning
     })
     if (this.isChanged()) {
@@ -206,8 +193,8 @@ class EditStageForm extends React.Component {
   }
 
   checkOverlappingPhases(phases, refPhase, refPhaseIndex, updatedPhase) {
-    // if startDate or duration is not set in the current update, we don't need to do anything
-    if (!updatedPhase.startDate || !updatedPhase.duration) return false
+    // if startDate or endDate is not set in the current update, we don't need to do anything
+    if (!updatedPhase.startDate || !updatedPhase.endDate) return false
     //Possible mutations
     //!date,!duration //both changed
     //!date,duration //date changed
@@ -215,13 +202,13 @@ class EditStageForm extends React.Component {
     const phasesToBeUpdated = []
     let overLapping = false
     const updatedPhaseStartDate = updatedPhase ? moment(new Date(updatedPhase.startDate)) : null
-    const updatedPhaseEndDate = updatedPhase ? moment(new Date(updatedPhase.startDate)).add(updatedPhase.duration - 1, 'days') : null
+    const updatedPhaseEndDate = updatedPhase ? moment(new Date(updatedPhase.endDate)) : null
     const updatedPhaseRange = moment().range(updatedPhaseStartDate, updatedPhaseEndDate)
     for(let i =0; i < phases.length; i++) {
       overLapping = false
       if(i !== refPhaseIndex) {
         const currentStartDate = moment(new Date(phases[i].startDate))
-        const currentEndDate = moment(new Date(phases[i].startDate)).add(phases[i].duration - 1, 'days')
+        const currentEndDate = moment(new Date(phases[i].endDate))
         const currentPhaseRange = moment().range(currentStartDate, currentEndDate)
         if(currentPhaseRange.contains(updatedPhaseStartDate)) {
           overLapping = true
@@ -246,20 +233,14 @@ class EditStageForm extends React.Component {
   }
 
   render() {
-    const { phase, isUpdating, timeline, deleteProjectPhase } = this.props
-    const { isEdittable, showPhaseOverlapWarning, showActivatingWarning, selectedPhaseStatus } = this.state
+    const { phase, isUpdating, deleteProjectPhase } = this.props
+    const { isEdittable, showPhaseOverlapWarning, showActivatingWarning } = this.state
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment.utc(startDate).format('YYYY-MM-DD')
-    const hasTimeline = !!timeline
+    let endDate = phase.endDate ? new Date(phase.endDate) : new Date()
+    endDate = moment.utc(endDate).format('YYYY-MM-DD')
     const canDelete = phase.status !== PHASE_STATUS_ACTIVE && phase.status !== PHASE_STATUS_COMPLETED
-    // don't allow to selected completed status if product has timeline
-    const activePhaseStatuses = phaseStatuses.map((status) => ({
-      ...status,
-      disabled: hasTimeline && status.value === PHASE_STATUS_COMPLETED,
-      toolTipMessage: (hasTimeline && status.value === PHASE_STATUS_COMPLETED) ? 'Once activated, phase delivery is controlled by the milestones.': null,
-    }))
-
-    const { progress, duration } = getPhaseActualData(phase, timeline)
+    const isDraft = phase.status === PHASE_STATUS_DRAFT
 
     return (
       <div styleName="container">
@@ -282,71 +263,51 @@ class EditStageForm extends React.Component {
                 Warning: You are about to manually change the start/end date of this phase, Please ensure the start and end dates of all subsequent phases (where applicable) are updated in line with this change.
               </div> }
               <div styleName="title-label-layer">
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Title" type="text" name="name" value={phase.name} maxLength={48} />
-              </div>
-              <div styleName="label-layer">
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Start Date" type="date" name="startDate" value={startDate} />
                 <TCFormFields.TextInput
                   wrapperClass={`${styles['input-row']}`}
-                  label="Duration (days)"
-                  type="number"
-                  name="duration"
-                  value={duration}
-                  minValue={0 /*
-                  if we set it as 1, if duration is in readonly mode with value 0
-                  then in Webkit browsers we would get an error:
-                  "An invalid form control with is not focusable."
-                  so if we want to set it to 1, we have fix that error somehow first */}
-                  readonly={hasTimeline}
-                  readonlyValueTooltip="Phase duration is controlled by duration of individual milestones"
+
+                  validations={{isRequired: true}}
+                  validationError={'Please, enter title'}
+                  required
+                  label="Title"
+                  type="text"
+                  name="name"
+                  value={phase.name}
+                  maxLength={48}
                 />
               </div>
               <div styleName="label-layer">
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Paid to date (US$)" type="number" name="spentBudget" value={phase.spentBudget} disabled={this.state.disableActiveStatusFields} minValue={0}/>
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Price (US$)" type="number" name="budget" value={phase.budget} minValue={0}/>
-              </div>
-              <div styleName="label-layer">
-                {hasTimeline && phase.status === PHASE_STATUS_ACTIVE ? (
-                  <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
-                    <div className="tooltip-target">
-                      <div styleName="input-row">
-                        <label className="tc-label">Status</label>
-                        <SelectDropdown
-                          name="status"
-                          value={selectedPhaseStatus}
-                          theme="default"
-                          options={activePhaseStatuses}
-                          disabled={hasTimeline && phase.status === PHASE_STATUS_ACTIVE}
-                        />
-                      </div>
-                    </div>
-                    <div className="tooltip-body">
-                      Phase status is controlled by statuses of individual milestones
-                    </div>
-                  </Tooltip>
-                ) : (
-                  <div styleName="input-row">
-                    <label className="tc-label">Status</label>
-                    <SelectDropdown
-                      name="status"
-                      value={selectedPhaseStatus}
-                      theme="default"
-                      options={activePhaseStatuses}
-                      disabled={hasTimeline && phase.status === PHASE_STATUS_ACTIVE}
-                    />
-                  </div>
-                )}
-
                 <TCFormFields.TextInput
                   wrapperClass={`${styles['input-row']}`}
-                  disabled={this.state.disableActiveStatusFields}
-                  label="Progress (%)"
-                  type="number"
-                  name="progress"
-                  value={phase.status === PHASE_STATUS_DRAFT ? 0 : progress}
-                  minValue={0}
-                  readonly={hasTimeline}
-                  readonlyValueTooltip="Phase progress is controlled by progress of individual milestones"
+                  validations={{
+                    isRequired: true,
+                    isValidStartEndDates
+                  }}
+                  validationError={'Please, enter start date'}
+                  validationErrors={{
+                    isValidStartEndDates: 'Start date cannot be after end date'
+                  }}
+                  required
+                  label="Start Date"
+                  type="date"
+                  name="startDate"
+                  value={startDate}
+                />
+                <TCFormFields.TextInput
+                  wrapperClass={`${styles['input-row']}`}
+                  validations={{
+                    isRequired: true,
+                    isValidStartEndDates
+                  }}
+                  validationError={'Please, enter end date'}
+                  validationErrors={{
+                    isValidStartEndDates: 'End date cannot be before start date'
+                  }}
+                  required
+                  label="End Date"
+                  type="date"
+                  name="endDate"
+                  value={endDate}
                 />
               </div>
               {!showActivatingWarning ? (
@@ -354,12 +315,19 @@ class EditStageForm extends React.Component {
                   <button onClick={this.onCancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
                   <button className="tc-btn tc-btn-primary tc-btn-sm"
                     type="submit" disabled={(!this.isChanged() || isUpdating) || !this.state.canSubmit}
-                  >Update Phase</button>
+                  >Save Changes</button>
+                  {isDraft ? (
+                    <button
+                      onClick={this.onPublishClick}
+                      className="tc-btn tc-btn-primary tc-btn-sm"
+                      type="submit" disabled={ isUpdating || !this.state.canSubmit}
+                    >Publish</button>
+                  ) : null}
                 </div>
               ) : (
                 <div styleName="message">
-                  <h4 styleName="message-title">You are about to activate the phase</h4>
-                  <p styleName="message-text">This action will permanently change the status of your phase to Active and cannot be undone.</p>
+                  <h4 styleName="message-title">You are about to publish the phase</h4>
+                  <p styleName="message-text">This action will permanently publish your phase and cannot be undone.</p>
                   <div styleName="group-bottom">
                     <button
                       className="tc-btn tc-btn-default tc-btn-sm"

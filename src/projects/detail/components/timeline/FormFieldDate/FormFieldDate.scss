@@ -13,21 +13,10 @@
       margin-bottom: 12 * $base-unit;
     }
 
-    input:not([type="checkbox"]).tc-file-field__inputs.error:focus {
-      /* have to use !important because it is defined initially like that */
-      border-color: $tc-dark-blue-70 !important;
-      margin-bottom: 2 * $base-unit;
-    }
-
     .tc-file-field__inputs.error + p {
-      position: absolute;
       margin-bottom: 2 * $base-unit;
       margin-top: - 10 * $base-unit;
       min-width: 100%;
-    }
-
-    .tc-file-field__inputs.error:focus + p {
-      display: none;
     }
   }
 
