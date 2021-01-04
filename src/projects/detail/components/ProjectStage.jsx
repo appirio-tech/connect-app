@@ -11,6 +11,7 @@ import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
 import {
   PROJECT_ATTACHMENTS_FOLDER,
+  PHASE_PRODUCT_TEMPLATE_ID,
 } from '../../../config/constants'
 import { filterNotificationsByPosts, filterReadNotifications, filterNotificationsByCriteria } from '../../../routes/notifications/helpers/notifications'
 import { buildPhaseTimelineNotificationsCriteria, buildPhaseSpecifiationNotificationsCriteria } from '../../../routes/notifications/constants/notifications'
@@ -206,6 +207,7 @@ class ProjectStage extends React.Component{
     }
 
     const hasAnyNotifications = _.some(_.values(hasNotifications), _.identity)
+    const isPhaseProductTemplate = product.templateId === PHASE_PRODUCT_TEMPLATE_ID
 
     return (
       <PhaseCard
@@ -226,6 +228,7 @@ class ProjectStage extends React.Component{
             onTabClick={this.onTabClick}
             hasTimeline={hasTimeline}
             hasNotifications={hasNotifications}
+            hideSpecTab={!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) || isPhaseProductTemplate}
           />
 
           {currentActiveTab === 'timeline' &&
