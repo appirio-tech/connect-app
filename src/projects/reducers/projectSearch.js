@@ -6,6 +6,7 @@ import {
   SET_PROJECTS_LIST_VIEW,
   PROJECT_LIST_DEFAULT_CRITERIA,
   PROJECT_SORT,
+  UPDATE_PROJECT_SUCCESS,
   DELETE_PROJECT_SUCCESS,
   ACCEPT_OR_REFUSE_INVITE_SUCCESS,
   ADMIN_ROLES,
@@ -157,6 +158,13 @@ export default function(state = initialState, action) {
       projectsListView: action.payload
     })
 
+  case UPDATE_PROJECT_SUCCESS: {
+    const { projects } = state
+    const projectIndex = _.findIndex(projects, {id: action.payload.id})
+    return update(state, {
+      projects: { $splice: [[projectIndex, 1, action.payload]] }
+    })
+  }
   case DELETE_PROJECT_SUCCESS: {
     return Object.assign({}, state, {
       refresh: true
