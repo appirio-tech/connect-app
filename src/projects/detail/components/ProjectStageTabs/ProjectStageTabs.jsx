@@ -1,8 +1,6 @@
 import React from 'react'
 
 import GenericMenu from '../../../../components/GenericMenu'
-import { PERMISSIONS } from '../../../../config/permissions'
-import { hasPermission } from '../../../../helpers/permissions'
 
 import './ProjectStageTabs.scss'
 
@@ -11,6 +9,7 @@ const ProjectStageTabs = ({
   hasTimeline,
   onTabClick,
   hasNotifications,
+  hideSpecTab,
 }) => {
   const tabs = []
 
@@ -30,8 +29,8 @@ const ProjectStageTabs = ({
     hasNotifications: hasNotifications.posts,
   })
 
-  // show specification tab for everybody expect of customers
-  if (hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)) {
+  // hide specification tab if customers or generic phase
+  if (!hideSpecTab) {
     tabs.push({
       onClick: () => onTabClick('specification'),
       label: 'Specification',
