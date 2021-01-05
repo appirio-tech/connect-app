@@ -73,8 +73,12 @@ class Projects extends Component {
     }
   }
   onChangeStatus(projectId, status, reason) {
-    const { updateProject } = this.props
+    const { updateProject, projects } = this.props
     const delta = {status}
+    const currentStatus = _.find(projects, {id: projectId}).status
+    if (status === currentStatus) {
+      return
+    }
     const pId = projectId || this.props.project.id
     if (reason && status === PROJECT_STATUS_CANCELLED) {
       delta.cancelReason = reason
