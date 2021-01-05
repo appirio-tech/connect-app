@@ -159,10 +159,13 @@ export default function(state = initialState, action) {
     })
 
   case UPDATE_PROJECT_SUCCESS: {
+    // only update status
     const { projects } = state
     const projectIndex = _.findIndex(projects, {id: action.payload.id})
+    const newProject = {...projects[projectIndex], status: action.payload.status}
+
     return update(state, {
-      projects: { $splice: [[projectIndex, 1, action.payload]] }
+      projects: { $splice: [[projectIndex, 1, newProject]] }
     })
   }
   case DELETE_PROJECT_SUCCESS: {
