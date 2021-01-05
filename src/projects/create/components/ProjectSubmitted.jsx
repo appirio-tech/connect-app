@@ -2,28 +2,12 @@ import React from 'react'
 import PT from 'prop-types'
 
 require('./ProjectSubmitted.scss')
-import {
-  CONNECT_DOMAIN
-} from '../../../config/constants'
-
 class ProjectSubmitted extends React.Component {
   constructor(props) {
     super(props)
-
-    this.copyToClipboard = this.copyToClipboard.bind(this)
     this.state = {
-      domain: `${CONNECT_DOMAIN}/`,
       url: `projects/${props.params.status || props.projectId}`
     }
-  }
-
-  copyToClipboard() {
-    const textField = document.createElement('textarea')
-    textField.innerText = `${this.state.domain}${this.state.url}`
-    document.body.appendChild(textField)
-    textField.select()
-    document.execCommand('copy')
-    textField.remove()
   }
 
   render() {
@@ -31,19 +15,24 @@ class ProjectSubmitted extends React.Component {
       <div className="ProjectSubmitted flex column middle center tc-ui">
         <div className="container flex column middle center">
           <div className="title">Congratulations!</div>
-          <div className="sub-title">Your project has been submitted</div>
+          <div className="sub-title">Your project has been created</div>
           <div className="content">
-            A member of our team will be reaching out to you shortly to finalize the scope and build your project plan.
+            Topcoder will be contacting you soon to discuss your project proposal. 
             <br />
             <br />
-            Use the link below to share your project with members of your team. You can also access all your Topcoder projects in one place from your Connect project dashboard.
-          </div>
-          <div className="project-link-container flex row middle center">
-            { `${this.state.domain}${this.state.url}` }
+            <span>
+In the meantime, get a jump on the process by inviting your coworkers to your project and securely share any detailed requirements documents you have inside your project.
+            </span>
           </div>
           <div className="button-container flex row middle center">
-            <a type="button" onClick={this.copyToClipboard} className="copy-link-btn tc-btn tc-btn-sm tc-btn-default flex middle center" disabled={false}>Copy link</a>
-            <a href={this.state.url} type="button" className="go-to-project-dashboard-btn tc-btn tc-btn-sm tc-btn-primary flex middle center" disabled={false}>Go to project dashboard</a>
+            <a type="button" href={this.state.url} className="go-to-project-btn tc-btn tc-btn-sm tc-btn-default flex middle center" disabled={false}>
+              Go to Project
+              <small>Invite your team members and share requirements</small>
+            </a>
+            <a href="projects" type="button" className="go-to-project-dashboard-btn tc-btn tc-btn-sm tc-btn-primary flex middle center" disabled={false}>
+              All Projects
+              <small>View all of your projects</small>
+            </a>
           </div>
         </div>
       </div>
