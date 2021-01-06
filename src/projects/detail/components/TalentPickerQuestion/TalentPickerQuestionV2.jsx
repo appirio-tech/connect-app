@@ -70,6 +70,7 @@ class TalentPickerQuestionV2 extends Component {
   getDefaultValue() {
     const { options } = this.props
     return options.map((o) => ({
+      roleTitle: o.roleTitle,
       role: o.role,
       people: '0',
       duration: '0',
@@ -96,13 +97,16 @@ class TalentPickerQuestionV2 extends Component {
   }
 
   insertRole(index, role) {
-    const { getValue } = this.props
+    const { getValue, options } = this.props
     let values = getValue() || this.getDefaultValue()
+
+    const roleOption = _.find(options, { role })
 
     values = [
       ...values.slice(0, index),
       {
         role,
+        roleTitle: roleOption.roleTitle,
         people: '0',
         duration: '0',
         skills: [],

@@ -74,7 +74,7 @@ class SkillsQuestion extends React.PureComponent {
     this.setState({ options })
     this.updateAvailableOptions(this.props, options)
     if (onSkillsLoaded) {
-      onSkillsLoaded(options.map((option) => _.pick(option, ['id', 'name'])))
+      onSkillsLoaded(options)
     }
   }
 
@@ -90,7 +90,6 @@ class SkillsQuestion extends React.PureComponent {
 
     // if have a mapping for categories, then filter options, otherwise use all options
     const availableOptions = getAvailableOptions(categoriesMapping, selectedCategories, skillsCategories, options)
-      .map(option => _.pick(option, ['id', 'name']))
     this.setState({ availableOptions })
   }
 
@@ -179,17 +178,17 @@ class SkillsQuestion extends React.PureComponent {
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
 
     let currentValues = getValue() || []
-    // remove from currentValues not available options but still keep created custom options without id
-    currentValues = currentValues.filter(skill => _.some(availableOptions, skill) || !skill.id)
+    // remove from currentValues not available options but still keep created custom options without skillId
+    currentValues = currentValues.filter(skill => _.some(availableOptions, skill) || !skill.skillId)
 
     const questionDisabled = isFormDisabled() || disabled || (selectedCategories.length === 0 && _.isUndefined(skillsCategories))
     const hasError = !isPristine() && !isValid()
     const errorMessage = getErrorMessage() || validationError
 
-    const checkboxGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.id) > -1)
-    const checkboxGroupValues = currentValues.filter(val => _.some(checkboxGroupOptions, option => option.id === val.id ))
+    const checkboxGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.skillId) > -1)
+    const checkboxGroupValues = currentValues.filter(val => _.some(checkboxGroupOptions, option => option.skillId === val.skillId ))
 
-    const selectGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.id) === -1)
+    const selectGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.skillId) === -1)
     if (customOptionValue) {
       selectGroupOptions.unshift({ name: customOptionValue })
     }
