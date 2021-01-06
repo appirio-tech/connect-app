@@ -270,17 +270,17 @@ class DashboardContainer extends React.Component {
                 productCategories={productCategories}
               />
 
-                  {visiblePhases && visiblePhases.length > 0 ? (
-                    <ProjectStages
-                      {...{
-                        ...this.props,
-                        phases: visiblePhases,
-                        phasesNonDirty: visiblePhasesNonDirty,
-                      }}
-                    />
-                  ) : (
-                    <ProjectPlanEmpty />
-                  )}
+              {visiblePhases && visiblePhases.length > 0 ? (
+                <ProjectStages
+                  {...{
+                    ...this.props,
+                    phases: visiblePhases,
+                    phasesNonDirty: visiblePhasesNonDirty,
+                  }}
+                />
+              ) : (
+                <ProjectPlanEmpty />
+              )}
               {isCreatingPhase? <LoadingIndicator/>: null}
               {isProjectLive && !isCreatingPhase && hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)  && !isLoadingPhases && (
                 <CreatePhaseForm
