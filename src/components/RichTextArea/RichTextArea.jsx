@@ -396,8 +396,10 @@ class RichTextArea extends React.Component {
     const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating,
       isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic, hasPrivateSwitch, canUploadAttachment, attachments, textAreaOnly } = this.props
     const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading, isPrivate, isAddLinkOpen, rawFiles, files} = this.state
+    const emptyStringRegex = /^[\s\n\u200B]*$/g // empty string with space, new line, zero width space character
+    
     let canSubmit = (disableTitle || titleValue.trim())
-      && (disableContent || editorState.getCurrentContent().hasText())
+      && (disableContent || !emptyStringRegex.test(currentMDContent))
     if (editMode && canSubmit) {
       canSubmit = (!disableTitle && titleValue !== this.props.oldTitle) || (!disableContent && oldMDContent !== currentMDContent)
         || (rawFiles.length > 0 || (attachments && files.length < attachments.length))
