@@ -191,6 +191,10 @@ class ProjectInfoContainer extends React.Component {
   }
 
   onChangeStatus(projectId, status, reason) {
+    const {project} = this.props
+    if (project.status === status) {
+      return
+    }
     const delta = {status}
     if (reason && status === PROJECT_STATUS_CANCELLED) {
       delta.cancelReason = reason
