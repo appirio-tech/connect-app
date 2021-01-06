@@ -30,8 +30,8 @@ module.exports = {
   TCO17_URL          : 'https://tco17.topcoder-dev.com',
   TCO_HOME_URL       : 'https://www.topcoder-dev.com/tco',
 
-  ACCOUNTS_APP_URL             : 'http://localhost:5000',
-  ACCOUNTS_APP_CONNECTOR_URL   : 'http://localhost:5000',
+  ACCOUNTS_APP_URL             : 'https://accounts-auth0.topcoder-dev.com',
+  ACCOUNTS_APP_CONNECTOR_URL   : 'https://accounts-auth0.topcoder-dev.com',
 
   FILE_PICKER_API_KEY: process.env.FILE_PICKER_API_KEY_DEV,
   FILE_PICKER_SUBMISSION_CONTAINER_NAME: 'submission-staging-dev',
