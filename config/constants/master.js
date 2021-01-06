@@ -56,6 +56,5 @@ module.exports = {
   CONTENTFUL_DELIVERY_KEY : process.env.CONTENTFUL_DELIVERY_KEY,
   CONTENTFUL_SPACE_ID : process.env.CONTENTFUL_SPACE_ID,
 
-  SKILL_PROVIDER_ID: 'e8467a61-7e20-4ed2-a839-c6340d90f408',
   TAAS_APP_URL: 'https://platform.topcoder.com/taas'
 }

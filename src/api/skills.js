@@ -1,4 +1,4 @@
-import { TC_API_URL, SKILL_PROVIDER_ID } from '../config/constants'
+import { TC_API_URL } from '../config/constants'
 import { axiosInstance as axios } from './requestInterceptor'
 
 const skillPageSize = 100
@@ -45,5 +45,5 @@ function getAllSkills() {
  * @param {number} page The page number to load
  */
 function getSkillsPage(page) {
-  return axios.get(`${TC_API_URL}/v5/skills?skillProviderId=${SKILL_PROVIDER_ID}&perPage=${skillPageSize}&orderBy=name&page=${page}`)
+  return axios.get(`${TC_API_URL}/v5/taas-teams/skills?perPage=${skillPageSize}&orderBy=name&page=${page}`)
 }

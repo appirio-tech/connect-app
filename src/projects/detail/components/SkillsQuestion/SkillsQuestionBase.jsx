@@ -18,6 +18,9 @@ import { getSkills } from '../../../../api/skills'
  * @returns {Array} available options
  */
 const getAvailableOptions = (categoriesMapping, selectedCategories, skillsCategories, options) => {
+  // NOTE:
+  // Disable filtering skills by categories for now, because V5 Skills API doesn't have categories for now.
+  /*
   let mappedCategories
   if (categoriesMapping) {
     mappedCategories = _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
@@ -28,6 +31,7 @@ const getAvailableOptions = (categoriesMapping, selectedCategories, skillsCatego
   if (mappedCategories) {
     return options.filter(option => _.intersection((option.categories || []).map(c => c.toLowerCase()), mappedCategories).length > 0)
   }
+  */
   return options
 }
 
