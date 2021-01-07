@@ -57,7 +57,8 @@ class JobsPickerQuestion extends Component {
       skills: [],
       workLoad: { value: null, title: 'Select Workload'},
       description: '',
-      _key: Date.now()
+      // we need unique key for proper rendering of the component list
+      _key: _.uniqueId('job_key_')
     }]
   }
 
@@ -90,7 +91,8 @@ class JobsPickerQuestion extends Component {
         skills: [],
         workLoad: { value: null, title: 'Select Workload'},
         description: '',
-        _key: Date.now()
+        // we need unique key for proper rendering of the component list
+        _key: _.uniqueId('job_key_')
       },
       ...values.slice(index)
     ]
