@@ -31,14 +31,14 @@ class JobsPickerQuestion extends Component {
           return true
         }
         return _.some(value, (v) => {
-          return v.name.length  && v.people !== '0' && v.duration !== '0' && v.skills.length > 0 && v.workLoad.value !== null && v.role.value !== null && v.jobDescription.length
+          return v.title.length  && v.people !== '0' && v.duration !== '0' && v.skills.length > 0 && v.workLoad.value !== null && v.role.value !== null && v.description.length
         }) // validation body
       },
       noPartialFillsExist: (formValues, value) => {
         return _.every(value, v => {
 
-          const isOneValueFilled = v.name.length > 0 || v.people > 0 || v.duration > 0 || (v.skills && v.skills.length) || (v.jobDescription && v.jobDescription.length) || (v.workLoad && v.workLoad.value !== null) || (v.role && v.role.value !== null)
-          const isAllValuesFilled = v.name.length > 0 && v.people > 0 && v.duration > 0 && v.skills && v.skills.length && v.jobDescription.length && v.workLoad.value !== null && v.role.value !== null
+          const isOneValueFilled = v.title.length > 0 || v.people > 0 || v.duration > 0 || (v.skills && v.skills.length) || (v.description && v.description.length) || (v.workLoad && v.workLoad.value !== null) || (v.role && v.role.value !== null)
+          const isAllValuesFilled = v.title.length > 0 && v.people > 0 && v.duration > 0 && v.skills && v.skills.length && v.description.length && v.workLoad.value !== null && v.role.value !== null
           // If one value is filled, all values should be filled to make this row valid. Partial fill is not valid
           const isRowValid = !isOneValueFilled || isAllValuesFilled
           return isRowValid
@@ -50,16 +50,15 @@ class JobsPickerQuestion extends Component {
 
   getDefaultValue() {
     return [{
-      name: '',
+      title: '',
       role: { value: null, title: 'Select Role'},
       people: '0',
       duration: '0',
       skills: [],
       workLoad: { value: null, title: 'Select Workload'},
-      jobDescription: '',
+      description: '',
       _key: Date.now()
-    }
-    ]
+    }]
   }
 
   onChange(value) {
@@ -84,13 +83,13 @@ class JobsPickerQuestion extends Component {
     values = [
       ...values.slice(0, index),
       {
-        name: '',
+        title: '',
         role: { value: null, title: 'Select Role'},
         people: '0',
         duration: '0',
         skills: [],
         workLoad: { value: null, title: 'Select Workload'},
-        jobDescription: '',
+        description: '',
         _key: Date.now()
       },
       ...values.slice(index)

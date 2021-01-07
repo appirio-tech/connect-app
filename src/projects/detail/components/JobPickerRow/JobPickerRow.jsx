@@ -21,10 +21,10 @@ class JobPickerRow extends React.PureComponent {
     this.handlePeopleChange = this.handlePeopleChange.bind(this)
     this.handleDurationChange = this.handleDurationChange.bind(this)
     this.handleSkillChange = this.handleSkillChange.bind(this)
-    this.handleJobNameChange = this.handleJobNameChange.bind(this)
+    this.handleJobTitleChange = this.handleJobTitleChange.bind(this)
     this.handleRoleChange = this.handleRoleChange.bind(this)
     this.handleWorkloadChange = this.handleWorkloadChange.bind(this)
-    this.handleJobDescriptionChange = this.handleJobDescriptionChange.bind(this)
+    this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
 
     this.resetPeople = this.resetPeople.bind(this)
     this.resetDuration = this.resetDuration.bind(this)
@@ -48,8 +48,8 @@ class JobPickerRow extends React.PureComponent {
       { value: 'qa-engineer', title: 'QA Engineer'}
     ]
   }
-  handleJobNameChange(evt) {
-    this.props.onChange(this.props.rowIndex, 'name', evt.target.value)
+  handleJobTitleChange(evt) {
+    this.props.onChange(this.props.rowIndex, 'title', evt.target.value)
   }
   handlePeopleChange(evt) {
     this.props.onChange(this.props.rowIndex, 'people', evt.target.value)
@@ -71,8 +71,8 @@ class JobPickerRow extends React.PureComponent {
     this.props.onChange(this.props.rowIndex, 'role', evt)
   }
 
-  handleJobDescriptionChange(evt) {
-    this.props.onChange(this.props.rowIndex, 'jobDescription', evt.target.value)
+  handleDescriptionChange(evt) {
+    this.props.onChange(this.props.rowIndex, 'description', evt.target.value)
   }
 
   resetDuration() {
@@ -101,8 +101,8 @@ class JobPickerRow extends React.PureComponent {
 
   render() {
     const { value, rowIndex } = this.props
-    const isRowIncomplete = value.name.length > 0 || value.people > 0 || value.duration > 0 || (value.skills && value.skills.length)
-      ||(value.role && value.role.value !== null) ||(value.workLoad && value.workLoad.value !== null) || (value.jobDescription.length >  0)
+    const isRowIncomplete = value.title.length > 0 || value.people > 0 || value.duration > 0 || (value.skills && value.skills.length)
+      ||(value.role && value.role.value !== null) ||(value.workLoad && value.workLoad.value !== null) || (value.description.length >  0)
 
     /* Different columns are defined here and used in componsing mobile/desktop views below */
     const titleColumn = (
@@ -114,10 +114,11 @@ class JobPickerRow extends React.PureComponent {
           <input
             type="text"
             maxLength={100}
-            value={value.name}
-            className={cn('tc-file-field__inputs', { error: isRowIncomplete && !value.name })}
-            name="name"
-            onChange={this.handleJobNameChange}
+            value={value.title}
+            className={cn('tc-file-field__inputs', { error: isRowIncomplete && !value.title })}
+            name="title"
+            onChange={this.handleJobTitleChange}
+            placeholder="Job Title"
           />
         </div>
       </div>
@@ -214,7 +215,7 @@ class JobPickerRow extends React.PureComponent {
     const roleColumn = (
       <div styleName="col col-duration">
         <label className="tc-label" styleName="label">
-         Role 
+         Role
         </label>
         <SelectDropdown
           name="role"
@@ -225,18 +226,18 @@ class JobPickerRow extends React.PureComponent {
         />
       </div>
     )
-    const jobDescriptionColumn = (
+    const descriptionColumn = (
       <div styleName="col col-skill-selection">
         <label className="tc-label" styleName="label">
           Job Description
         </label>
         <div styleName="job-description">
           <textarea
-            className={`job-textarea ${isRowIncomplete && !value.jobDescription ? 'error' : 'empty'}`}
-            onChange={this.handleJobDescriptionChange}
+            className={`job-textarea ${isRowIncomplete && !value.description ? 'error' : 'empty'}`}
+            onChange={this.handleDescriptionChange}
             placeholder="Job Description"
             type="text"
-            value={value.jobDescription || ''}
+            value={value.description || ''}
           />
         </div>
       </div>
@@ -258,7 +259,7 @@ class JobPickerRow extends React.PureComponent {
           {workLoadColumn}
         </div>
         <div styleName="inner-row">
-          {jobDescriptionColumn}
+          {descriptionColumn}
         </div>
 
         <div styleName="inner-row">{skillSelectionColumn}</div>
@@ -274,7 +275,7 @@ JobPickerRow.propTypes = {
   onDeleteRow: PT.func.isRequired,
   value: PT.shape({
     people: PT.string.isRequired,
-    name: PT.string,
+    title: PT.string,
     duration: PT.string.isRequired,
     skills: PT.array,
   }),
