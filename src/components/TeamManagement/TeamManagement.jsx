@@ -112,6 +112,7 @@ class TeamManagement extends React.Component {
     const topcoderTeamManageAction = hasPermission(PERMISSIONS.MANAGE_TOPCODER_TEAM)
     const copilotTeamManageAction = hasPermission(PERMISSIONS.MANAGE_COPILOTS)
     const copilotRemoveAction = hasPermission(PERMISSIONS.REMOVE_COPILOTS)
+    const copilotViewAction = hasPermission(PERMISSIONS.VIEW_COPILOTS)
     const canRequestCopilot = hasPermission(PERMISSIONS.REQUEST_COPILOTS)
     const canJoinTopcoderTeam = !currentMember && hasPermission(PERMISSIONS.JOIN_TOPCODER_TEAM)
 
@@ -192,9 +193,9 @@ class TeamManagement extends React.Component {
         <div className="projects-team">
           <div className="title">
             <span styleName="title-text">Copilot</span>
-            {(copilotTeamManageAction || copilotRemoveAction) &&
+            {(copilotTeamManageAction || copilotRemoveAction || copilotViewAction) &&
               <span className="title-action" onClick={() => onShowCopilotDialog(true)}>
-                Manage
+                {(copilotTeamManageAction || copilotRemoveAction) ? 'Manage' : 'View'}
               </span>
             }
           </div>

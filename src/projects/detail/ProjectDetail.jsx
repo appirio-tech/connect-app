@@ -42,7 +42,7 @@ const showCoderBotIfError = (hasError) => {
   return branch(
     (props) => {
       if (props.error.code === 403 && props.error.msg.includes('Copilot')) {
-        const messageGenerator = `${props.error.msg.replace('Copilot: ', '')}. If things don’t work or you’re sure it is Coder’s fault, send us a note at <a href="support@topcoder.com">support@topcoder.com</a> and we’ll fix it for you.`
+        const messageGenerator = `${props.error.msg.replace('Copilot: ', '')}. If things don’t work or you’re sure it is Coder’s fault, send us a note at <a href="mailto:support@topcoder.com">support@topcoder.com</a> and we’ll fix it for you.`
         component = compose(
           withProps({code:403, message: messageGenerator})
         )
@@ -52,6 +52,13 @@ const showCoderBotIfError = (hasError) => {
         component = compose(
           withProps({ code:props.error.code })
         )
+        // also show error if project has `templateId` which points to the Project Template which is not found
+      } else if (!_.isNil(props.project.templateId) && props.projectTemplate === null) {
+        component = compose(
+          withProps({ code: 400, message: `Project Template (id ${props.project.templateId}) for this project is not found. Please, send us a note at <a href="mailto:support@topcoder.com">support@topcoder.com</a> and we’ll fix it for you.` })
+        )
+        // mark as `hasError`
+        return true
       }
       return hasError(props)
     },
@@ -69,7 +76,7 @@ const spinner = spinnerWhileLoading(props =>
     // first check that there are no error, before checking project properties
     props.error && props.error.type === LOAD_PROJECT_FAILURE || props.error.type === ACCEPT_OR_REFUSE_INVITE_FAILURE ||
     // old project or has projectTemplate loaded
-    ((props.project && props.project.version !== 'v3') || props.projectTemplate)
+    ((props.project && props.project.version !== 'v3') || !_.isUndefined(props.projectTemplate))
     // has all product templates loaded (earlier it was checking project specific product templates only
     // which can be empty when we have empty project plan config for the template)
     && props.allProductTemplates.length > 0
@@ -302,8 +309,8 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
     project: projectState.project,
     projectNonDirty: projectState.projectNonDirty,
     projectTemplate: (templateId && projectTemplates) ? (
-      getProjectTemplateById(projectTemplates, templateId)
-    ) : null,
+      getProjectTemplateById(projectTemplates, templateId) || null // `null` means project template is not found
+    ) : undefined, // `undefined` means the list of project templates is not yet loaded
     productTemplates: (projectTemplates && productTemplates) ? (
       getProjectProductTemplates(
         productTemplates,

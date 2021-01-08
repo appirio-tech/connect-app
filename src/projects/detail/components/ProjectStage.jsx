@@ -11,6 +11,7 @@ import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
 import {
   PROJECT_ATTACHMENTS_FOLDER,
+  PHASE_PRODUCT_TEMPLATE_ID,
 } from '../../../config/constants'
 import { filterNotificationsByPosts, filterReadNotifications, filterNotificationsByCriteria } from '../../../routes/notifications/helpers/notifications'
 import { buildPhaseTimelineNotificationsCriteria, buildPhaseSpecifiationNotificationsCriteria } from '../../../routes/notifications/constants/notifications'
@@ -206,6 +207,10 @@ class ProjectStage extends React.Component{
     }
 
     const hasAnyNotifications = _.some(_.values(hasNotifications), _.identity)
+    // we don't want to show Specification tab anymore
+    // we still show it for old phases created with various Product Templates
+    // but all new phases created with one new Generic Product Template we don't show it anymore
+    const isGenericPhase = product.templateId === PHASE_PRODUCT_TEMPLATE_ID
 
     return (
       <PhaseCard
@@ -226,6 +231,7 @@ class ProjectStage extends React.Component{
             onTabClick={this.onTabClick}
             hasTimeline={hasTimeline}
             hasNotifications={hasNotifications}
+            hideSpecTab={!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) || isGenericPhase}
           />
 
           {currentActiveTab === 'timeline' &&
