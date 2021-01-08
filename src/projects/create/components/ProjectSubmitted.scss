@@ -31,7 +31,8 @@
 
       .content {
         color: $tc-gray-100;
-        font-size: 15px;
+        text-align: center;
+        font-size: 20px;
         font-weight: 400;
         margin-top: 50px;
         line-height: 25px;
@@ -56,8 +57,22 @@
       }
 
       .button-container {
-        margin-top: 30px;
-        .copy-link-btn {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        a {
+          display: flex;
+          flex-direction: column;
+          height: 60px;
+          padding: 20px 10px;
+          line-height: 20px;
+          font-size: 20px;
+          margin-top: 30px;
+          small {
+            font-size: 12px;
+          }
+        }
+        .go-to-project-btn {
           margin-left: 10px;
           margin-right: 10px;
         }

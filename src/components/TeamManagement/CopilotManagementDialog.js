@@ -139,7 +139,7 @@ class ProjectManagementDialog extends React.Component {
                       </span>
                     </div>
                   </div>
-                  {(canManageCopilots || canRemoveCopilots) && <div className="member-remove" onClick={remove}>
+                  {(canManageCopilots || canRemoveCopilots || (currentUser.userId === member.userId)) && <div className="member-remove" onClick={remove}>
                     {(currentUser.userId === member.userId) ? 'Leave' : 'Remove'}
                   </div>}
                 </div>

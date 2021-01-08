@@ -72,9 +72,11 @@
   margin-top: 20px;
   padding: 5px 0;
 
-
-
   :global {
+    .status-dropdown a.active {
+      cursor: default;
+    }
+
     .panel {
       // avoid double padding for editable project status
       padding: 0;

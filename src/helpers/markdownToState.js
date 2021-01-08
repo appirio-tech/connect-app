@@ -1,5 +1,6 @@
 import {convertFromRaw} from 'draft-js'
 import sanitizeHtml from 'sanitize-html'
+import Alert from 'react-s-alert'
 const Remarkable = require('remarkable')
 
 // Block level items, key is Remarkable's key for them, value returned is
@@ -257,6 +258,11 @@ function markdownToState(markdown, options = {}) {
   const BlockEntities = Object.assign({}, DefaultBlockEntities, options.blockEntities || {})
   const BlockStyles = Object.assign({}, DefaultBlockStyles, options.blockStyles || {})
 
+  // when there is no content, add empty paragraph
+  if (parsedData.length === 0) {
+    blocks.push(getNewBlock(BlockTypes['paragraph_open']()))
+  }
+
   parsedData.forEach((item) => {
 
     if (item.type === 'bullet_list_open') {
@@ -347,10 +353,26 @@ function markdownToState(markdown, options = {}) {
     }, DefaultBlockType)
   }
 
-  return convertFromRaw({
-    entityMap,
-    blocks,
-  })
+  let result
+  try {
+    result = convertFromRaw({
+      entityMap,
+      blocks,
+    })
+  } catch(error) {
+    // If any error occurs set value to plain text
+    const plainTextBlock = getNewBlock(BlockTypes['paragraph_open']())
+    plainTextBlock.text = markdown
+
+    result = convertFromRaw({
+      entityMap: [],
+      blocks: [plainTextBlock],
+    })
+
+    Alert.warning('Some message could not be rendered properly, please contact Topcoder Support')
+  }
+
+  return result
 }
 
 export default markdownToState

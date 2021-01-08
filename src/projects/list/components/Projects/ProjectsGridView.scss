@@ -101,6 +101,10 @@ $screen-one-column: 720px;
         // width: 40px;
         position: relative;
 
+        .status-dropdown a.active {
+          cursor: default;
+        }
+
         .modal-active {
           position: absolute;
           top: 0;

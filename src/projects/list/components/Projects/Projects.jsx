@@ -73,8 +73,12 @@ class Projects extends Component {
     }
   }
   onChangeStatus(projectId, status, reason) {
-    const { updateProject } = this.props
+    const { updateProject, projects } = this.props
     const delta = {status}
+    const currentStatus = _.find(projects, {id: projectId}).status
+    if (status === currentStatus) {
+      return
+    }
     const pId = projectId || this.props.project.id
     if (reason && status === PROJECT_STATUS_CANCELLED) {
       delta.cancelReason = reason
@@ -331,11 +335,7 @@ class Projects extends Component {
   }
 }
 
-const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templates, notifications }) => {
-  if (projectState.project && projectState.project.id && projectSearch.projects) {
-    const index = _.findIndex(projectSearch.projects, {id: projectState.project.id})
-    projectSearch.projects.splice(index, 1, projectState.project)
-  }
+const mapStateToProps = ({ projectSearch, members, loadUser, templates, notifications }) => {
   const defaultListView = hasPermission(PERMISSIONS.SEE_GRID_VIEW_BY_DEFAULT) ? PROJECTS_LIST_VIEW.GRID : PROJECTS_LIST_VIEW.CARD
   return {
     currentUser : {

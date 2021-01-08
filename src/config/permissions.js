@@ -243,6 +243,15 @@ export const PERMISSIONS = {
     ]
   },
 
+  VIEW_COPILOTS: {
+    meta: {
+      group: 'Project Members',
+      title: 'View Copilot Team',
+      description: 'Who should view Copilot Team.',
+    },
+    projectRoles: [PROJECT_ROLE_COPILOT],
+  },
+
   MANAGE_TOPCODER_TEAM: {
     meta: {
       group: 'Project Members',
