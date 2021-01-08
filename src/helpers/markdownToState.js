@@ -259,7 +259,7 @@ function markdownToState(markdown, options = {}) {
 
   // when there is no content, add empty paragraph
   if (parsedData.length === 0) {
-    blocks.push(getNewBlock(BlockTypes['paragraph_open']()));
+    blocks.push(getNewBlock(BlockTypes['paragraph_open']()))
   }
 
   parsedData.forEach((item) => {
@@ -357,7 +357,7 @@ function markdownToState(markdown, options = {}) {
     result = convertFromRaw({
       entityMap,
       blocks,
-    });
+    })
   } catch(error) {
     // If any error occurs set value to plain text
     const plainTextBlock = getNewBlock(BlockTypes['paragraph_open']())
