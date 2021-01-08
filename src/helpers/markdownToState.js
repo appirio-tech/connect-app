@@ -1,6 +1,5 @@
 import {convertFromRaw} from 'draft-js'
 import sanitizeHtml from 'sanitize-html'
-import Alert from 'react-s-alert'
 const Remarkable = require('remarkable')
 
 // Block level items, key is Remarkable's key for them, value returned is
@@ -353,7 +352,7 @@ function markdownToState(markdown, options = {}) {
     }, DefaultBlockType)
   }
 
-  let result;
+  let result
   try {
     result = convertFromRaw({
       entityMap,
@@ -361,18 +360,16 @@ function markdownToState(markdown, options = {}) {
     });
   } catch(error) {
     // If any error occurs set value to plain text
-    const plainTextBlock = getNewBlock(BlockTypes['paragraph_open']());
+    const plainTextBlock = getNewBlock(BlockTypes['paragraph_open']())
     plainTextBlock.text = markdown;
     
     result = convertFromRaw({
       entityMap: [],
       blocks: [plainTextBlock],
     });
-
-    Alert.warning('Some message could not be rendered properly, please contact Topcoder Support')
   }
 
-  return result;
+  return result
 }
 
 export default markdownToState

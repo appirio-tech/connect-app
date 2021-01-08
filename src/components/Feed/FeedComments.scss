@@ -32,6 +32,14 @@
   padding-bottom: 2 * $base-unit;
 }
 
+.comment-render-error {
+  border: 1px dashed $tc-orange-70;
+  color: $tc-orange-70;
+  text-align: center;
+  padding: 2px;
+  margin-top: 5px;
+}
+
 .load-more {
   background-color: $tc-white;
   padding: 2 * $base-unit 0 $base-unit;
