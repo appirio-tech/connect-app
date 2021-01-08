@@ -187,7 +187,7 @@ class FeedComments extends React.Component {
             This message could not be rendered properly, please contact Topcoder Support.
           </p>
         </div>
-      );
+      )
     }
   }
 

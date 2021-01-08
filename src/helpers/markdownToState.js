@@ -361,12 +361,12 @@ function markdownToState(markdown, options = {}) {
   } catch(error) {
     // If any error occurs set value to plain text
     const plainTextBlock = getNewBlock(BlockTypes['paragraph_open']())
-    plainTextBlock.text = markdown;
+    plainTextBlock.text = markdown
     
     result = convertFromRaw({
       entityMap: [],
       blocks: [plainTextBlock],
-    });
+    })
   }
 
   return result
