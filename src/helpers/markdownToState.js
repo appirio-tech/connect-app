@@ -260,7 +260,7 @@ function markdownToState(markdown, options = {}) {
 
   // when there is no content, add empty paragraph
   if (parsedData.length === 0) {
-    blocks.push(getNewBlock(BlockTypes['paragraph_open']()));
+    blocks.push(getNewBlock(BlockTypes['paragraph_open']()))
   }
 
   parsedData.forEach((item) => {
@@ -353,26 +353,26 @@ function markdownToState(markdown, options = {}) {
     }, DefaultBlockType)
   }
 
-  let result;
+  let result
   try {
     result = convertFromRaw({
       entityMap,
       blocks,
-    });
+    })
   } catch(error) {
     // If any error occurs set value to plain text
-    const plainTextBlock = getNewBlock(BlockTypes['paragraph_open']());
-    plainTextBlock.text = markdown;
-    
+    const plainTextBlock = getNewBlock(BlockTypes['paragraph_open']())
+    plainTextBlock.text = markdown
+
     result = convertFromRaw({
       entityMap: [],
       blocks: [plainTextBlock],
-    });
+    })
 
     Alert.warning('Some message could not be rendered properly, please contact Topcoder Support')
   }
 
-  return result;
+  return result
 }
 
 export default markdownToState
