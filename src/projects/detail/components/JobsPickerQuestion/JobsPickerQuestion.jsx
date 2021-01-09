@@ -17,6 +17,24 @@ class JobsPickerQuestion extends Component {
     this.insertJob = this.insertJob.bind(this)
     this.removeJob = this.removeJob.bind(this)
     this.setValidator(props)
+
+    const { getValue } = props
+    let values = getValue() 
+    if (values) {
+      values = _.map(values, (v) => {
+        return {
+          ...v,
+          // we need unique key for proper rendering of the component list
+          _key: _.uniqueId('job_key_')
+        }
+      })
+    }else {
+      values = this.getDefaultValue()
+    }
+
+    this.state = {
+      values 
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -62,57 +80,52 @@ class JobsPickerQuestion extends Component {
     }]
   }
 
-  onChange(value) {
+  onChange(values) {
     const {setValue, name} = this.props
 
-    setValue(value)
-    this.props.onChange(name, value)
+    this.setState({values})
+    // remove unique _key
+    const newValues = _.map(values, (v) => {
+      const cloneV = {...v}
+      delete cloneV['_key']
+      return cloneV
+    })
+    setValue(newValues)
+    this.props.onChange(name, newValues)
   }
 
   handleValueChange(index, field, value) {
-    const { getValue } = this.props
-    let values = getValue() || this.getDefaultValue()
-    values = [...values.slice(0, index), { ...values[index], [field]: value }, ...values.slice(index + 1)]
-
+    let {values} = this.state
+    const currentValue = values[index]
+    currentValue[field] = value
+    values = [...values.slice(0, index), {...currentValue}, ...values.slice(index + 1)]
     this.onChange(values)
   }
 
   insertJob(index) {
-    const { getValue } = this.props
-    let values = getValue() || this.getDefaultValue()
+    let {values} = this.state
 
     values = [
       ...values.slice(0, index),
-      {
-        title: '',
-        role: { value: null, title: 'Select Role'},
-        people: '0',
-        duration: '0',
-        skills: [],
-        workLoad: { value: null, title: 'Select Workload'},
-        description: '',
-        // we need unique key for proper rendering of the component list
-        _key: _.uniqueId('job_key_')
-      },
+      ...this.getDefaultValue(),
       ...values.slice(index)
     ]
     this.onChange(values)
   }
 
   removeJob(index) {
-    const { getValue } = this.props
-    let values = getValue() || this.getDefaultValue()
+    let {values} = this.state
     values = [...values.slice(0, index), ...values.slice(index + 1)]
     this.onChange(values)
   }
 
   render() {
-    const { wrapperClass, getValue } = this.props
+    const { wrapperClass } = this.props
     const errorMessage =
       this.props.getErrorMessage() || this.props.validationError
     const hasError = !this.props.isPristine() && !this.props.isValid()
 
-    const values = getValue() || this.getDefaultValue()
+    const {values} = this.state
 
     return (
       <div className={cn(wrapperClass)}>
