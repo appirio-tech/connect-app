@@ -11,11 +11,11 @@ class ProjectSubmitted extends React.Component {
   /**
    * Build project URL based on the `type` query param in URL.
    *
-   * @param {boolean} isTaas   
+   * @param {boolean} isTaas
    * @param {String} projectId project id
    */
   getProjectUrl(isTaas, projectId = '') {
-    const url = isTaas 
+    const url = isTaas
       // if the project type is TaaS, then use link to TaaS App
       ? `${TAAS_APP_URL}/myteams/${projectId}`
       // otherwise use link inside Connect App
@@ -28,7 +28,7 @@ class ProjectSubmitted extends React.Component {
     const { type } = qs.parse(window.location.search)
     const isTaas  = type === PROJECT_TYPE_TALENT_AS_A_SERVICE
 
-    const projectId = this.props.params.status || this.props.projectId 
+    const projectId = this.props.params.status || this.props.projectId
 
     const project = {
       headerSubTitle: 'Your project has been created',
@@ -69,7 +69,7 @@ In the meantime, get a jump on the process by inviting your coworkers to your pr
       rightButton: {
         header: 'All Projects',
         subText: 'View all of your projects',
-        url: this.getProjectUrl(isTaas)
+        url: this.getProjectUrl(false) // also showing link to Connect App Project List
       },
     }
 
@@ -79,7 +79,7 @@ In the meantime, get a jump on the process by inviting your coworkers to your pr
   render() {
 
     const {
-      headerSubTitle, 
+      headerSubTitle,
       textBody,
       leftButton,
       rightButton
