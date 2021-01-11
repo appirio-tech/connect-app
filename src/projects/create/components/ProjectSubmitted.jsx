@@ -43,14 +43,14 @@ In the meantime, get a jump on the process by inviting your coworkers to your pr
         </div>
       ),
       leftButton: {
-        header: 'Go to Project',
-        subText: 'Invite your team members and share requirements',
-        url: this.getProjectUrl(isTaas, projectId)
-      },
-      rightButton: {
         header: 'All Projects',
         subText: 'View all of your projects',
         url: this.getProjectUrl(isTaas)
+      },
+      rightButton: {
+        header: 'Go to Project',
+        subText: 'Invite your team members and share requirements',
+        url: this.getProjectUrl(isTaas, projectId)
       },
     }
 
@@ -62,14 +62,14 @@ In the meantime, get a jump on the process by inviting your coworkers to your pr
         </div>
       ),
       leftButton: {
-        header: 'View Talent Request',
-        subText: 'Modify your request and track fulfillment',
-        url: this.getProjectUrl(isTaas, projectId)
-      },
-      rightButton: {
         header: 'All Projects',
         subText: 'View all of your projects',
         url: this.getProjectUrl(false) // also showing link to Connect App Project List
+      },
+      rightButton: {
+        header: 'View Talent Request',
+        subText: 'Modify your request and track fulfillment',
+        url: this.getProjectUrl(isTaas, projectId)
       },
     }
 
@@ -92,11 +92,11 @@ In the meantime, get a jump on the process by inviting your coworkers to your pr
           <div className="sub-title">{headerSubTitle}</div>
           {textBody}
           <div className="button-container flex row middle center">
-            <a type="button" href={leftButton.url} className="go-to-project-btn tc-btn tc-btn-sm tc-btn-default flex middle center" disabled={false}>
+            <a type="button" href={leftButton.url} className="go-to-project-btn tc-btn tc-btn-sm tc-btn-default flex middle center">
               {leftButton.header}
               <small>{leftButton.subText}</small>
             </a>
-            <a href={rightButton.url} type="button" className="go-to-project-dashboard-btn tc-btn tc-btn-sm tc-btn-primary flex middle center" disabled={false}>
+            <a href={rightButton.url} type="button" className="go-to-project-dashboard-btn tc-btn tc-btn-sm tc-btn-primary flex middle center">
               {rightButton.header}
               <small>{rightButton.subText}</small>
             </a>
