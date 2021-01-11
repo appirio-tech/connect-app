@@ -176,6 +176,21 @@ class FeedComments extends React.Component {
     }
   }
 
+  convertMdToHtml(markdown) {
+    try {
+      return (<div dangerouslySetInnerHTML={{__html: markdownToHTML(markdown)}} />)
+    } catch (e) {
+      return  ( 
+        <div>
+          <p>{markdown}</p>
+          <p styleName="comment-render-error">
+            This message could not be rendered properly, please contact Topcoder Support.
+          </p>
+        </div>
+      )
+    }
+  }
+
   render() {
     const {
       currentUser, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
@@ -325,7 +340,7 @@ class FeedComments extends React.Component {
           canDelete={comments && (idx !== comments.length - 1)} // cannot delete the first post which is now shown as a last one
           commentAnchorPrefix={commentAnchorPrefix}
         >
-          <div dangerouslySetInnerHTML={{__html: markdownToHTML(itemContent)}} />
+          { this.convertMdToHtml(itemContent) }
         </Comment>
       )
     })
