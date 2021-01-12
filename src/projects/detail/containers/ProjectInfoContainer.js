@@ -434,7 +434,7 @@ class ProjectInfoContainer extends React.Component {
       ? _.find(projectTemplates, pt => pt.id === projectTemplateId)
       : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
 
-    const isTaaS = PROJECT_CATEGORY_TAAS === projectTemplate.category
+    const isTaaS = projectTemplate && PROJECT_CATEGORY_TAAS === projectTemplate.category
     let directLinks = null
     if (hasPermission(PERMISSIONS.VIEW_PROJECT_SPECIAL_LINKS)) {
       directLinks = []
