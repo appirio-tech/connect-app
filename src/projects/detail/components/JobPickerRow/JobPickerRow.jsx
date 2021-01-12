@@ -101,8 +101,8 @@ class JobPickerRow extends React.PureComponent {
 
   render() {
     const { value, rowIndex } = this.props
-    const isRowIncomplete = value.title.length > 0 || value.people > 0 || value.duration > 0 || (value.skills && value.skills.length)
-      ||(value.role && value.role.value !== null) ||(value.workLoad && value.workLoad.value !== null) || (value.description.length >  0)
+    const isRowIncomplete = value.title.trim().length > 0 || value.people > 0 || value.duration > 0 || (value.skills && value.skills.length)
+      ||(value.role && value.role.value !== null) ||(value.workLoad && value.workLoad.value !== null) || (value.description.trim().length >  0)
 
     /* Different columns are defined here and used in componsing mobile/desktop views below */
     const titleColumn = (
@@ -115,7 +115,7 @@ class JobPickerRow extends React.PureComponent {
             type="text"
             maxLength={100}
             value={value.title}
-            className={cn('tc-file-field__inputs', { error: isRowIncomplete && !value.title })}
+            className={cn('tc-file-field__inputs', { error: isRowIncomplete && !value.title.trim() })}
             name="title"
             onChange={this.handleJobTitleChange}
             placeholder="Job Title"
@@ -233,7 +233,7 @@ class JobPickerRow extends React.PureComponent {
         </label>
         <div styleName="job-description">
           <textarea
-            className={`job-textarea ${isRowIncomplete && !value.description ? 'error' : 'empty'}`}
+            className={`job-textarea ${isRowIncomplete && !value.description.trim() ? 'error' : 'empty'}`}
             onChange={this.handleDescriptionChange}
             placeholder="Job Description"
             type="text"
