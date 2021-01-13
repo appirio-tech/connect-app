@@ -54,12 +54,8 @@ class JobsPickerQuestion extends Component {
       },
       noPartialFillsExist: (formValues, value) => {
         return _.every(value, v => {
-
-          const isOneValueFilled = v.title.trim().length > 0 || v.people > 0 || v.duration > 0 || (v.skills && v.skills.length) || v.description.trim().length || (v.workLoad && v.workLoad.value !== null) || (v.role && v.role.value !== null)
           const isAllValuesFilled = v.title.trim().length > 0 && v.people > 0 && v.duration > 0 && v.skills && v.skills.length && v.description.trim().length && v.workLoad.value !== null && v.role.value !== null
-          // If one value is filled, all values should be filled to make this row valid. Partial fill is not valid
-          const isRowValid = !isOneValueFilled || isAllValuesFilled
-          return isRowValid
+          return isAllValuesFilled 
         })
       }
     }
