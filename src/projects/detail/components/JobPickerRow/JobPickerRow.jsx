@@ -14,6 +14,8 @@ const always = () => true
 const never = () => false
 const emptyError = () => ''
 
+const MAX_NUMBER = Math.pow(2, 31) - 1
+
 class JobPickerRow extends React.PureComponent {
   constructor(props) {
     super(props)
@@ -117,6 +119,7 @@ class JobPickerRow extends React.PureComponent {
             value={value.title}
             className={cn('tc-file-field__inputs', { error: isRowIncomplete && !value.title.trim() })}
             name="title"
+            maxLength="128"
             onChange={this.handleJobTitleChange}
             placeholder="Job Title"
           />
@@ -147,7 +150,7 @@ class JobPickerRow extends React.PureComponent {
         <PositiveNumberInput
           styleName="noMargin"
           className={cn('tc-file-field__inputs', { error: isRowIncomplete && value.people <= 0 })}
-          max={10000}
+          max={MAX_NUMBER}
           value={value.people || ''}
           onChange={this.handlePeopleChange}
           onBlur={this.resetPeople}
@@ -163,7 +166,7 @@ class JobPickerRow extends React.PureComponent {
         <PositiveNumberInput
           styleName="noMargin"
           className={cn('tc-file-field__inputs', {error: isRowIncomplete && value.duration <= 0 })}
-          max={10000}
+          max={MAX_NUMBER}
           value={value.duration || ''}
           onChange={this.handleDurationChange}
           onBlur={this.resetDuration}
