@@ -241,7 +241,7 @@ class TeamManagement extends React.Component {
               <div styleName="button-container">
                 <a
                   className="join-btn"
-                  href="https://topcoder.typeform.com/to/YJ7AL4p8#handle=xxxxx&projecturl=xxxxx" target="_blank"
+                  href="https://topcoder.typeform.com/to/YJ7AL4p8#handle=xxxxx&projectid=xxxxx" target="_blank"
                 >
                   Request Copilot
                 </a>
