@@ -44,26 +44,31 @@ class EditProjectDefaultsForm extends React.Component {
     }
   }
 
-  async handleSubmit() {
+  handleSubmit() {
     const {updateProject} = this.props
     const {id, terms} = this.props.project
     const newHasNda = !this.state.hasNda
     if (newHasNda) {
-      await updateProject(id, {
+      updateProject(id, {
         terms: [...new Set([...terms, DEFAULT_NDA_UUID])]
-      }, true)
+      }, true).then(() => {
+        this.setState({
+          hasNda: this.props.project.terms.indexOf(DEFAULT_NDA_UUID) >= 0
+        })
+      })
     } else {
       const newTerms = [...terms]
       if (newTerms.indexOf(DEFAULT_NDA_UUID) >= 0) {
         newTerms.splice(newTerms.indexOf(DEFAULT_NDA_UUID), 1)
-        await updateProject(id, {
+        updateProject(id, {
           terms: newTerms
-        }, true)
+        }, true).then(() => {
+          this.setState({
+            hasNda: this.props.project.terms.indexOf(DEFAULT_NDA_UUID) >= 0
+          })
+        })
       }
     }
-    this.setState({
-      hasNda: this.props.project.terms.indexOf(DEFAULT_NDA_UUID) >= 0
-    })
   }
 
   render() {
@@ -109,7 +114,7 @@ class EditProjectDefaultsForm extends React.Component {
               type="submit"
               disabled={!this.state.enableButton}
             >
-              Submit
+              Save
             </button>
           </div>
         </Formsy.Form>

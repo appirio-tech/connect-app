@@ -59,7 +59,7 @@ const ProjectDetailWithAuth = requiresAuthentication(() =>
     <Route path="/projects/:projectId/assets" render={() => <ProjectDetail component={AssetsLibrary} />} />
     <Route path="/projects/:projectId/discussions/:discussionId?" render={() => <ProjectDetail component={ProjectMessages} />} />
     <Route path="/projects/:projectId/faqs" render={() => <ProjectDetail component={ProjectFAQContainer} />} />
-    <Route path="/projects/:projectId/projectDefaults" render={() => <ProjectDetail component={ProjectDefaultsContainer} />} />
+    <Route path="/projects/:projectId/settings" render={() => <ProjectDetail component={ProjectDefaultsContainer} />} />
     <Route render={() => <CoderBot code={404}/>} />
   </Switch>)
 )
