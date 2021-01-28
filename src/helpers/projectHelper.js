@@ -1,6 +1,8 @@
 import _ from 'lodash'
 import moment from 'moment'
 import { findProduct } from '../config/projectWizard'
+import { PERMISSIONS } from 'config/permissions'
+import { hasPermission } from 'helpers/permissions'
 
 import {
   PHASE_STATUS_ACTIVE,
@@ -17,6 +19,7 @@ import MessagesIcon from '../assets/icons/v.2.5/icon-messages.svg'
 import ReportsIcon from '../assets/icons/v.2.5/icon-reports.svg'
 import AssetsLibraryIcon from '../assets/icons/v.2.5/icon-assets-library.svg'
 import FAQIcon from '../assets/icons/faq.svg'
+import AccountSecurityIcon from 'assets/icons/v.2.5/icon-account-security.svg'
 import InvisibleIcon from '../assets/icons/invisible.svg'
 
 import { formatNumberWithCommas } from './format'
@@ -278,5 +281,12 @@ export function getProjectNavLinks(project, projectId, renderFAQs) {
     const faqTab = { label: 'FAQ', to: `/projects/${projectId}/faqs`, Icon: FAQIcon, iconClassName: 'fill' }
     navLinks.push(faqTab)
   }
+
+  const searchParams = new URLSearchParams(window.location.search)
+
+  if (searchParams.get('beta') === 'true' && hasPermission(PERMISSIONS.VIEW_PROJECT_DEFAULTS)) {
+    navLinks.push({ label: 'Project Defaults', to: `/projects/${projectId}/projectDefaults`, Icon: AccountSecurityIcon, iconClassName: 'stroke' })
+  }
+
   return navLinks
 }

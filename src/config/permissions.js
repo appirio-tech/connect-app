@@ -770,6 +770,18 @@ export const PERMISSIONS = {
       ...TOPCODER_ADMINS,
     ]
   },
+
+  VIEW_PROJECT_DEFAULTS: {
+    meta: {
+    },
+    projectRoles: [
+      ..._.difference(PROJECT_ALL, PROJECT_ROLE_CUSTOMER)
+    ],
+    topcoderRoles: [
+      ...TOPCODER_ADMINS,
+      ..._.difference(TOPCODER_ALL, ROLE_TOPCODER_USER)
+    ]
+  }
 }
 
 /**

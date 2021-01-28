@@ -5,6 +5,8 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PT from 'prop-types'
+import { PERMISSIONS } from 'config/permissions'
+import { hasPermission } from 'helpers/permissions'
 
 import GenericMenu from 'components/GenericMenu'
 
@@ -24,7 +26,7 @@ const SecondaryToolBarContainer = ({
     { label: 'Messages', to: `/projects/${match.params.projectId}/messages` },
     { label: 'Scope', to: `/projects/${match.params.projectId}/scope` },
     { label: 'Project Plan', to: `/projects/${match.params.projectId}/plan` },
-    { label: 'Assets Library', to: `/projects/${match.params.projectId}/assets` },
+    { label: 'Assets Library', to: `/projects/${match.params.projectId}/assets` }
   ] : [
     { label: 'Dashboard', to: `/projects/${match.params.projectId}` },
     { label: 'Specification', to: `/projects/${match.params.projectId}/specification` },
@@ -34,6 +36,13 @@ const SecondaryToolBarContainer = ({
   // if discussions are not hidden for it
   if (!isProjectLoading && project && project.details && !project.details.hideDiscussions) {
     navLinks.push({ label: 'Discussions', to: `/projects/${match.params.projectId}/discussions` })
+  }
+
+
+  const searchParams = new URLSearchParams(window.location.search)
+
+  if (searchParams.get('beta') === 'true' && hasPermission(PERMISSIONS.VIEW_PROJECT_DEFAULTS) && project.version === 'v3') {
+    navLinks.push({ label: 'Project Defaults', to: `/projects/${match.params.projectId}/projectDefaults` })
   }
 
   return (
