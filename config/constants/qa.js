@@ -49,5 +49,7 @@ module.exports = {
   TC_SYSTEM_USERID: process.env.QA_TC_SYSTEM_USERID,
   MAINTENANCE_MODE: process.env.QA_MAINTENANCE_MODE,
 
-  TC_CDN_URL: process.env.TC_CDN_URL
+  TC_CDN_URL: process.env.TC_CDN_URL,
+
+  DEFAULT_NDA_UUID: 'e5811a7b-43d1-407a-a064-69e5015b4900'
 }

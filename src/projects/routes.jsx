@@ -17,6 +17,7 @@ import CoderBot from '../components/CoderBot/CoderBot'
 import SpecificationContainer from './detail/containers/SpecificationContainer'
 import { requiresAuthentication } from '../components/AuthenticatedComponent'
 import ProjectFAQContainer from './detail/containers/ProjectFAQContainer'
+import ProjectDefaultsContainer from './detail/containers/ProjectDefaultsContainer'
 
 const FileDownloadWithAuth = requiresAuthentication(FileDownload)
 
@@ -58,6 +59,7 @@ const ProjectDetailWithAuth = requiresAuthentication(() =>
     <Route path="/projects/:projectId/assets" render={() => <ProjectDetail component={AssetsLibrary} />} />
     <Route path="/projects/:projectId/discussions/:discussionId?" render={() => <ProjectDetail component={ProjectMessages} />} />
     <Route path="/projects/:projectId/faqs" render={() => <ProjectDetail component={ProjectFAQContainer} />} />
+    <Route path="/projects/:projectId/projectDefaults" render={() => <ProjectDetail component={ProjectDefaultsContainer} />} />
     <Route render={() => <CoderBot code={404}/>} />
   </Switch>)
 )
