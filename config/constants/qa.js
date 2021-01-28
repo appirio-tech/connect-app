@@ -51,5 +51,6 @@ module.exports = {
 
   TC_CDN_URL: process.env.TC_CDN_URL,
 
+  TAAS_APP_URL: 'https://platform.topcoder-dev.com/taas',
   DEFAULT_NDA_UUID: 'e5811a7b-43d1-407a-a064-69e5015b4900'
 }
