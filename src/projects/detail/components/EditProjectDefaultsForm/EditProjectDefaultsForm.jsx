@@ -83,7 +83,7 @@ class EditProjectDefaultsForm extends React.Component {
       }
     ]
 
-    if (this.state.isLoading) return null;
+    if (this.state.isLoading) return null
 
     return (
       <div className="edit-project-defaults-form">
