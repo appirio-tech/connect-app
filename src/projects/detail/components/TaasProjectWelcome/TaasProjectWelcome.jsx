@@ -1,5 +1,5 @@
 import React from 'react'
-import { TAAS_APP_URL } from '../../../../../config/constants/dev'
+import { TAAS_APP_URL } from '../../../../config/constants'
 import './TaasProjectWelcome.scss'
 
 const TaasProjectWelcome = ({ projectId }) => {
