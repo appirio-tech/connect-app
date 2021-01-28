@@ -33,6 +33,7 @@ const TYPE = {
   SELECT_DROPDOWN: 'select-dropdown',
   TALENT_PICKER: 'talent-picker',
   TALENT_PICKER_V2: 'talent-picker-v2',
+  JOBS_PICKER: 'jobs-picker',
 }
 
 /**
@@ -179,6 +180,9 @@ class Accordion extends React.Component {
       const getRoleName = (role) => _.find(options, { role }).roleTitle
       const totalPeoplePerRole = _.mapValues(_.groupBy(value, v => v.role), valuesUnderGroup => _.sumBy(valuesUnderGroup, v => Number(v.people)))
       return _.toPairs(totalPeoplePerRole).filter(([, people]) => people > 0).map(([role, people]) => `${getRoleName(role)}: ${people}`).join(', ')
+    }
+    case TYPE.JOBS_PICKER: {
+      return _.map(value, 'title').join(', ')
     }
     default: return value
     }

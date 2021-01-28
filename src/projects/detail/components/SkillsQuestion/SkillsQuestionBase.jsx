@@ -3,11 +3,8 @@ import _ from 'lodash'
 import SkillsCheckboxGroup from './SkillsCheckboxGroup'
 import Select from '../../../../components/Select/Select'
 import './SkillsQuestion.scss'
-import { axiosInstance as axios } from '../../../../api/requestInterceptor'
-import { TC_API_URL } from '../../../../config/constants'
 import { createFilter } from 'react-select'
-
-let cachedOptions
+import { getSkills } from '../../../../api/skills'
 
 /**
  * If `categoriesMapping` is defined - filter options using selected categories.
@@ -21,6 +18,9 @@ let cachedOptions
  * @returns {Array} available options
  */
 const getAvailableOptions = (categoriesMapping, selectedCategories, skillsCategories, options) => {
+  // NOTE:
+  // Disable filtering skills by categories for now, because V5 Skills API doesn't have categories for now.
+  /*
   let mappedCategories
   if (categoriesMapping) {
     mappedCategories = _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
@@ -31,6 +31,7 @@ const getAvailableOptions = (categoriesMapping, selectedCategories, skillsCatego
   if (mappedCategories) {
     return options.filter(option => _.intersection((option.categories || []).map(c => c.toLowerCase()), mappedCategories).length > 0)
   }
+  */
   return options
 }
 
@@ -38,7 +39,7 @@ class SkillsQuestion extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      options: cachedOptions || [],
+      options: [],
       availableOptions: [],
       customOptionValue: '',
     }
@@ -47,17 +48,13 @@ class SkillsQuestion extends React.PureComponent {
   }
 
   componentWillMount() {
-    if (!cachedOptions) {
-      axios.get(`${TC_API_URL}/v3/tags/?domain=SKILLS&status=APPROVED`)
-        .then(resp => {
-          const options = _.get(resp.data, 'result.content', {})
-
-          cachedOptions = options
-          this.updateOptions(options)
-        })
-    } else {
-      this.updateOptions(cachedOptions)
-    }
+    getSkills().then(skills => {
+      const options = skills.map(skill => ({
+        skillId: skill.id,
+        name: skill.name
+      }))
+      this.updateOptions(options)
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -77,7 +74,7 @@ class SkillsQuestion extends React.PureComponent {
     this.setState({ options })
     this.updateAvailableOptions(this.props, options)
     if (onSkillsLoaded) {
-      onSkillsLoaded(options.map((option) => _.pick(option, ['id', 'name'])))
+      onSkillsLoaded(options)
     }
   }
 
@@ -93,7 +90,6 @@ class SkillsQuestion extends React.PureComponent {
 
     // if have a mapping for categories, then filter options, otherwise use all options
     const availableOptions = getAvailableOptions(categoriesMapping, selectedCategories, skillsCategories, options)
-      .map(option => _.pick(option, ['id', 'name']))
     this.setState({ availableOptions })
   }
 
@@ -182,17 +178,17 @@ class SkillsQuestion extends React.PureComponent {
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
 
     let currentValues = getValue() || []
-    // remove from currentValues not available options but still keep created custom options without id
-    currentValues = currentValues.filter(skill => _.some(availableOptions, skill) || !skill.id)
+    // remove from currentValues not available options but still keep created custom options without skillId
+    currentValues = currentValues.filter(skill => _.some(availableOptions, skill) || !skill.skillId)
 
     const questionDisabled = isFormDisabled() || disabled || (selectedCategories.length === 0 && _.isUndefined(skillsCategories))
     const hasError = !isPristine() && !isValid()
     const errorMessage = getErrorMessage() || validationError
 
-    const checkboxGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.id) > -1)
-    const checkboxGroupValues = currentValues.filter(val => _.some(checkboxGroupOptions, option => option.id === val.id ))
+    const checkboxGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.skillId) > -1)
+    const checkboxGroupValues = currentValues.filter(val => _.some(checkboxGroupOptions, option => option.skillId === val.skillId ))
 
-    const selectGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.id) === -1)
+    const selectGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.skillId) === -1)
     if (customOptionValue) {
       selectGroupOptions.unshift({ name: customOptionValue })
     }

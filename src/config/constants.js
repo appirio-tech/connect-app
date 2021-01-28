@@ -729,7 +729,7 @@ export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
  */
 export const DOMAIN = process.env.domain || 'topcoder.com'
 export const CONNECT_DOMAIN = `connect.${DOMAIN}`
-export const CONNECT_MAIN_PAGE_URL = `http://connect.${DOMAIN}`
+export const CONNECT_MAIN_PAGE_URL = `https://connect.${DOMAIN}`
 export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
 export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || `https://accounts-auth0.${DOMAIN}`
 export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL || `https://accounts-auth0.${DOMAIN}`
@@ -1109,7 +1109,7 @@ export const PROJECT_TYPE_TALENT_AS_A_SERVICE = 'talent-as-a-service'
 /**
  * URL to the Topcoder TaaS App
  */
-export const TAAS_APP_URL = process.env.TAAS_APP_URL || 'https://mfe.topcoder-dev.com/taas'
+export const TAAS_APP_URL = process.env.TAAS_APP_URL || 'https://platform.topcoder-dev.com/taas'
 
 /**
  * Milestone Types

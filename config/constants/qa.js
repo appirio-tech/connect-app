@@ -49,5 +49,7 @@ module.exports = {
   TC_SYSTEM_USERID: process.env.QA_TC_SYSTEM_USERID,
   MAINTENANCE_MODE: process.env.QA_MAINTENANCE_MODE,
 
-  TC_CDN_URL: process.env.TC_CDN_URL
+  TC_CDN_URL: process.env.TC_CDN_URL,
+
+  TAAS_APP_URL: 'https://platform.topcoder-dev.com/taas'
 }

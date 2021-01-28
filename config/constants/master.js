@@ -54,5 +54,7 @@ module.exports = {
 
   DASHBOARD_FAQ_CONTENT_ID : process.env.DASHBOARD_FAQ_CONTENT_ID,
   CONTENTFUL_DELIVERY_KEY : process.env.CONTENTFUL_DELIVERY_KEY,
-  CONTENTFUL_SPACE_ID : process.env.CONTENTFUL_SPACE_ID
+  CONTENTFUL_SPACE_ID : process.env.CONTENTFUL_SPACE_ID,
+
+  TAAS_APP_URL: 'https://platform.topcoder.com/taas'
 }

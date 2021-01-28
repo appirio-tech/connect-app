@@ -605,9 +605,6 @@ class ProjectWizard extends Component {
         />
         <div />
         <ProjectSubmitted
-          project={ project }
-          projectTemplates={ projectTemplates }
-          dirtyProject={ dirtyProject }
           params={ params }
           projectId={ projectId }
         />
