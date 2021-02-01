@@ -6,7 +6,7 @@ import RadioGroup from 'appirio-tech-react-components/components/Formsy/RadioGro
 import SpecQuestionList from '../SpecQuestionList/SpecQuestionList'
 import Accordion from '../Accordion/Accordion'
 import { updateProject } from '../../../actions/project'
-import { DEFAULT_NDA_UUID } from '../../../../../config/constants'
+import { DEFAULT_NDA_UUID } from '../../../../config/constants'
 
 import './EditProjectDefaultsForm.scss'
 
