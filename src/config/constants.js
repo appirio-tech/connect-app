@@ -1200,3 +1200,5 @@ export const MILESTONE_DEFAULT_VALUES = {
  *  project template id
  */
 export const PHASE_PRODUCT_TEMPLATE_ID = process.env.PHASE_PRODUCT_TEMPLATE_ID
+
+export const DEFAULT_NDA_UUID = process.env.DEFAULT_NDA_UUID
