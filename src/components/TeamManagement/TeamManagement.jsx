@@ -97,7 +97,7 @@ class TeamManagement extends React.Component {
       onDeleteInvite, isShowTopcoderDialog, onShowTopcoderDialog, processingInvites, processingMembers,
       onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, onAcceptOrRefuse, error,
       onSelectedMembersUpdate, selectedMembers, allMembers, updatingMemberIds, onShowCopilotDialog, copilotTeamInvites,
-      isShowCopilotDialog, onCopilotInviteSend,
+      isShowCopilotDialog, onCopilotInviteSend, projectId,
     } = this.props
 
     const {
@@ -114,6 +114,7 @@ class TeamManagement extends React.Component {
     const copilotRemoveAction = hasPermission(PERMISSIONS.REMOVE_COPILOTS)
     const copilotViewAction = hasPermission(PERMISSIONS.VIEW_COPILOTS)
     const canRequestCopilot = hasPermission(PERMISSIONS.REQUEST_COPILOTS)
+    const copilotRequestLink = `https://topcoder.typeform.com/to/YJ7AL4p8#handle=${currentUser.handle}&projectid=${projectId}`
     const canJoinTopcoderTeam = !currentMember && hasPermission(PERMISSIONS.JOIN_TOPCODER_TEAM)
 
     const sortedMembers = members
@@ -241,7 +242,7 @@ class TeamManagement extends React.Component {
               <div styleName="button-container">
                 <a
                   className="join-btn"
-                  href="https://docs.google.com/forms/d/e/1FAIpQLSeZ7UXDd4XGOISHLs-zLaZwKliTySlbfso5px71tRTePfRj3Q/viewform" target="_blank"
+                  href={copilotRequestLink} target="_blank"
                 >
                   Request Copilot
                 </a>
@@ -474,6 +475,8 @@ TeamManagement.propTypes = {
   currentUser: PropTypes.shape({
     userId: PropTypes.number.isRequired,
   }).isRequired,
+
+  projectId: PropTypes.number.isRequired,
 
   /**
    * The list of all project members

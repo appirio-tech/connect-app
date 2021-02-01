@@ -1,0 +1,48 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .edit-project-defaults-form {
+    background-color: white;
+    .container {
+      padding: 50px 0 70px 0;
+      margin: 0 50px 20px 50px;
+    }
+    .radio-group-options {
+      flex-direction: column;
+    }
+
+    .radio label {
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .radio-group-options .radio {
+      margin: 0 0 10px 0;
+      background-color: $tc-gray-neutral-light;
+      padding: 10px;
+      border-radius: 4px;
+      display: block;
+
+      &:first-child {
+        margin-top: 10px;
+      }
+    }
+
+    .radio-group-options .radio.selected {
+      background-color: $tc-dark-blue-10;
+    }
+
+    .radio-group-options .radio-option-price {
+      float: right;
+      font-size: 15px;
+      color: $tc-gray-100;
+    }
+
+    .radio-option-description {
+      color: $tc-gray-70;
+      font-size: 13px;
+      margin-top: 10px;
+      line-height: 20px;
+    }
+  }
+}
