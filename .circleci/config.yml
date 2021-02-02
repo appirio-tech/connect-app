@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev']
+              only: ['dev', 'feature/add_msg_for_taas_projects']
 
       - deployTest01:
           context : org-global
