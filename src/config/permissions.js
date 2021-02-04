@@ -678,6 +678,20 @@ export const PERMISSIONS = {
     ],
   },
 
+  VIEW_PROJECT_DEFAULTS: {
+    meta: {
+      group: 'Project Details',
+      title: 'View Project Defaults Tab',
+    },
+    projectRoles: [
+      ..._.difference(PROJECT_ALL, PROJECT_ROLE_CUSTOMER)
+    ],
+    topcoderRoles: [
+      ...TOPCODER_ADMINS,
+      ROLE_CONNECT_MANAGER
+    ]
+  },
+
   /*
     Scope Change Requests
    */
@@ -768,18 +782,6 @@ export const PERMISSIONS = {
     },
     topcoderRoles: [
       ...TOPCODER_ADMINS,
-    ]
-  },
-
-  VIEW_PROJECT_DEFAULTS: {
-    meta: {
-    },
-    projectRoles: [
-      ..._.difference(PROJECT_ALL, PROJECT_ROLE_CUSTOMER)
-    ],
-    topcoderRoles: [
-      ...TOPCODER_ADMINS,
-      ..._.difference(TOPCODER_ALL, ROLE_TOPCODER_USER)
     ]
   }
 }

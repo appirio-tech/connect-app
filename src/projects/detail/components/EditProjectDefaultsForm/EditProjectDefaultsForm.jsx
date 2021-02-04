@@ -79,7 +79,7 @@ class EditProjectDefaultsForm extends React.Component {
               type="submit"
               disabled={!this.state.enableButton}
             >
-              Submit
+              Save
             </button>
           </div>
         </Formsy.Form>

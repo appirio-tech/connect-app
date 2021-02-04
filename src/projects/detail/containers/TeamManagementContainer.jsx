@@ -148,11 +148,12 @@ class TeamManagementContainer extends Component {
 
 
   render() {
-    const {projectTeamInvites, topcoderTeamInvites, copilotTeamInvites } = this.props
+    const {projectTeamInvites, topcoderTeamInvites, copilotTeamInvites, projectId } = this.props
     return (
       <div>
         <TeamManagement
           {...this.state}
+          projectId={projectId}
           history={this.props.history}
           onUserInviteAction={this.onUserInviteAction}
           processingMembers={this.props.processingMembers}
@@ -187,6 +188,7 @@ class TeamManagementContainer extends Component {
 const mapStateToProps = ({loadUser, members, projectState}) => ({
   currentUser: {
     userId: parseInt(loadUser.user.id),
+    handle: loadUser.user.handle
   },
   allMembers: _.values(members.members),
   processingInvites: projectState.processingInvites,
