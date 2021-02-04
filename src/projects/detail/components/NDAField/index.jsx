@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import { HOC as hoc } from 'formsy-react'
 import _ from 'lodash'
 import Accordion from '../Accordion/Accordion'
@@ -14,7 +14,7 @@ class NDAField extends React.Component {
   }
 
   handleChange(value) {
-    const {name, value: propsValue, onChange} = this.props
+    const {name, value: propsValue, onChange, setValue} = this.props
     const newValue = [...propsValue]
     const idx = newValue.indexOf(DEFAULT_NDA_UUID)
     if (idx >= 0 && (value === 'no')) {
@@ -22,6 +22,7 @@ class NDAField extends React.Component {
     } else if (value === 'yes' && idx < 0) {
       newValue.push(DEFAULT_NDA_UUID)
     }
+    setValue(newValue)
     onChange({[name]: newValue})
   }
 
@@ -55,6 +56,17 @@ class NDAField extends React.Component {
       </SpecQuestionList>
     )
   }
+}
+
+NDAField.propTypes = {
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  setValue: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired
+}
+
+NDAField.defaultProps = {
+  onChange: () => {}
 }
 
 export default hoc(NDAField)

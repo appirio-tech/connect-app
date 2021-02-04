@@ -4,6 +4,7 @@ import _ from 'lodash'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 import { updateProject } from '../../../actions/project'
+import SpecQuestionList from '../SpecQuestionList/SpecQuestionList'
 import NDAField from '../NDAField'
 
 import './EditProjectDefaultsForm.scss'
@@ -23,6 +24,12 @@ class EditProjectDefaultsForm extends React.Component {
 
   componentDidMount() {
     this.setState({isLoading: false, project: this.props.project})
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!_.isEqual(prevProps.project, this.props.project)) {
+      this.setState({project: this.props.project})
+    }
   }
 
   handleChange(changed) {
@@ -67,11 +74,12 @@ class EditProjectDefaultsForm extends React.Component {
           onChange={this.handleChange}
         >
           <div className="container">
-            <NDAField
-              onChange={this.handleChange}
-              name="terms"
-              value={this.state.project.terms}
-            />
+            <SpecQuestionList>
+              <NDAField
+                name="terms"
+                value={this.state.project.terms}
+              />
+            </SpecQuestionList>
           </div>
           <div className="section-footer section-footer-spec">
             <button
