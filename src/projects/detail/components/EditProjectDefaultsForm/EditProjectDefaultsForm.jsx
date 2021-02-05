@@ -4,7 +4,6 @@ import _ from 'lodash'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 import { updateProject } from '../../../actions/project'
-import SpecQuestionList from '../SpecQuestionList/SpecQuestionList'
 import NDAField from '../NDAField'
 
 import './EditProjectDefaultsForm.scss'
@@ -47,25 +46,22 @@ class EditProjectDefaultsForm extends React.Component {
     }
   }
 
-  async handleSubmit() {
+  handleSubmit() {
     const {updateProject} = this.props
     const {id} = this.props.project
-    try {
-      const updateProjectObj = Object.keys(this.state.project)
-        .filter(key => !_.isEqual(this.props.project[key], this.state.project[key]))
-        .reduce((acc, curr) => {
-          acc[curr] = this.state.project[curr]
-          return acc;
-        }, {})
-      await updateProject(id, updateProjectObj)
-      this.setState({enableButton: false})
-    } catch (err) {
-      console.error(err)
-    }
+    const updateProjectObj = Object.keys(this.state.project)
+      .filter(key => !_.isEqual(this.props.project[key], this.state.project[key]))
+      .reduce((acc, curr) => {
+        acc[curr] = this.state.project[curr]
+        return acc
+      }, {})
+    updateProject(id, updateProjectObj)
+      .then(() => this.setState({enableButton: false}))
+      .catch(console.error)
   }
 
   render() {
-    if (this.state.isLoading) return null;
+    if (this.state.isLoading) return null
 
     return (
       <div className="edit-project-defaults-form">
@@ -74,12 +70,10 @@ class EditProjectDefaultsForm extends React.Component {
           onChange={this.handleChange}
         >
           <div className="container">
-            <SpecQuestionList>
-              <NDAField
-                name="terms"
-                value={this.state.project.terms}
-              />
-            </SpecQuestionList>
+            <NDAField
+              name="terms"
+              value={this.state.project.terms}
+            />
           </div>
           <div className="section-footer section-footer-spec">
             <button

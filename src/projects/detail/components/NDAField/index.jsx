@@ -1,9 +1,7 @@
 import React, { PropTypes } from 'react'
 import { HOC as hoc } from 'formsy-react'
 import _ from 'lodash'
-import Accordion from '../Accordion/Accordion'
 import RadioGroup from 'appirio-tech-react-components/components/Formsy/RadioGroup'
-import SpecQuestionList from '../SpecQuestionList/SpecQuestionList'
 import { DEFAULT_NDA_UUID } from '../../../../../config/constants'
 
 class NDAField extends React.Component {
@@ -38,22 +36,15 @@ class NDAField extends React.Component {
       }
     ]
     return (
-      <SpecQuestionList>
-        <Accordion
-          title="Enforce Topcoder NDA"
-          type="radio-group"
+      <fieldset>
+        <legend>Enforce Topcoder NDA</legend>
+        <RadioGroup
+          name="nda"
           options={opts}
-        >
-          <SpecQuestionList.Item>
-            <RadioGroup
-              name="nda"
-              options={opts}
-              value={_.includes(this.props.value, DEFAULT_NDA_UUID) ? 'yes' : 'no'}
-              setValue={this.handleChange}
-            />
-          </SpecQuestionList.Item>
-        </Accordion>
-      </SpecQuestionList>
+          value={_.includes(this.props.value, DEFAULT_NDA_UUID) ? 'yes' : 'no'}
+          setValue={this.handleChange}
+        />
+      </fieldset>
     )
   }
 }
