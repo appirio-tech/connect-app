@@ -71,6 +71,7 @@ class GroupsField extends React.Component {
         <FormsySelect
           name="groups-field"
           isMulti
+          heightAuto
           onInputChange={this.handleInputChange}
           onChange={this.handleChange}
           value={this.state.groups}
