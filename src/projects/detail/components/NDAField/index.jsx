@@ -51,7 +51,7 @@ class NDAField extends React.Component {
 
 NDAField.propTypes = {
   name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.array.isRequired,
   setValue: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired
 }

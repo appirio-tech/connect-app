@@ -5,6 +5,7 @@ import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 import { updateProject } from '../../../actions/project'
 import NDAField from '../NDAField'
+import GroupsField from '../GroupsField'
 
 import './EditProjectDefaultsForm.scss'
 
@@ -39,9 +40,10 @@ class EditProjectDefaultsForm extends React.Component {
     }, {})
     const project = _.assign({}, this.state.project, reqProjectState)
     this.setState({project})
-    if (!_.isEqual(this.state.project, this.props.project) && !this.state.enableButton) {
+    const isProjectEqual = _.isEqual(this.state.project, this.props.project)
+    if (!isProjectEqual && !this.state.enableButton) {
       this.setState({enableButton: true})
-    } else if (this.state.enableButton !== false) {
+    } else if (isProjectEqual && this.state.enableButton !== false) {
       this.setState({enableButton: false})
     }
   }
@@ -73,6 +75,10 @@ class EditProjectDefaultsForm extends React.Component {
             <NDAField
               name="terms"
               value={this.state.project.terms}
+            />
+            <GroupsField
+              name="groups"
+              value={this.state.project.groups}
             />
           </div>
           <div className="section-footer section-footer-spec">
