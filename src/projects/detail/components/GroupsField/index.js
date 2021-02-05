@@ -26,12 +26,6 @@ class GroupsField extends React.Component {
     this.updateGroups()
   }
 
-  componentDidUpdate(prevProps) {
-    if (!_.isEqual(prevProps.value, this.props.value)) {
-      this.updateGroups()
-    }
-  }
-
   updateGroups() {
     if (this.props.value && this.props.value.length > 0) {
       Promise.all(
@@ -73,7 +67,7 @@ class GroupsField extends React.Component {
   render() {
     return (
       <div className={styles.container}>
-        <div className={styles.fieldName}>Groups Field</div>
+        <div className={styles.fieldName}>Intended Work Groups</div>
         <FormsySelect
           name="groups-field"
           isMulti
