@@ -17,7 +17,7 @@ import {
 } from '../config/constants'
 import { getFreshToken, configureConnector, decodeToken } from 'tc-auth-lib'
 import { getUserProfile } from '../api/users'
-import { getUserGroups } from '../api/groups'
+import { fetchGroups } from '../api/groups'
 import { getOrgConfig } from '../api/orgConfig'
 import { EventTypes } from 'redux-segment'
 
@@ -147,7 +147,10 @@ export function loadUserFailure(dispatch) {
  */
 function loadGroups(dispatch, userId) {
   if (userId) {
-    getUserGroups(userId, 'user').then((groups) => {
+    fetchGroups({
+      memberId: userId,
+      membershipType: 'user'
+    }).then((groups) => {
       const groupIds = _.compact(_.uniq([
         // get old and new ids as organizations may refer to any of them
         ..._.map(groups, 'oldId'),

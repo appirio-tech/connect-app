@@ -1,12 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import _ from 'lodash'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
-import RadioGroup from 'appirio-tech-react-components/components/Formsy/RadioGroup'
-import SpecQuestionList from '../SpecQuestionList/SpecQuestionList'
-import Accordion from '../Accordion/Accordion'
 import { updateProject } from '../../../actions/project'
-import { DEFAULT_NDA_UUID } from '../../../../config/constants'
+import NDAField from '../NDAField'
+import GroupsField from '../GroupsField'
 
 import './EditProjectDefaultsForm.scss'
 
@@ -15,7 +14,6 @@ class EditProjectDefaultsForm extends React.Component {
     super(props)
 
     this.state = {
-      hasNda: false,
       enableButton: false,
       isLoading: true
     }
@@ -25,64 +23,46 @@ class EditProjectDefaultsForm extends React.Component {
   }
 
   componentDidMount() {
-    const {terms} = this.props.project
-    if (terms.indexOf(DEFAULT_NDA_UUID) >= 0) {
-      this.setState({hasNda: true})
-    }
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, project: this.props.project})
   }
 
-  handleChange({nda}) {
-    if ((nda === 'yes') !== this.state.hasNda) {
-      if (this.state.enableButton !== true) {
-        this.setState({enableButton: true})
-      }
-    } else {
-      if (this.state.enableButton !== false) {
-        this.setState({enableButton: false})
-      }
+  componentDidUpdate(prevProps) {
+    if (!_.isEqual(prevProps.project, this.props.project)) {
+      this.setState({project: this.props.project})
+    }
+  }
+
+  handleChange(changed) {
+    const keys = _.intersection(Object.keys(changed), Object.keys(this.state.project))
+    const reqProjectState = keys.reduce((acc, curr) => {
+      acc[curr] = changed[curr]
+      return acc
+    }, {})
+    const project = _.assign({}, this.state.project, reqProjectState)
+    this.setState({project})
+    const isProjectEqual = _.isEqual(this.state.project, this.props.project)
+    if (!isProjectEqual && !this.state.enableButton) {
+      this.setState({enableButton: true})
+    } else if (isProjectEqual && this.state.enableButton !== false) {
+      this.setState({enableButton: false})
     }
   }
 
   handleSubmit() {
     const {updateProject} = this.props
-    const {id, terms} = this.props.project
-    const newHasNda = !this.state.hasNda
-    if (newHasNda) {
-      updateProject(id, {
-        terms: [...new Set([...terms, DEFAULT_NDA_UUID])]
-      }, true).then(() => {
-        this.setState({
-          hasNda: this.props.project.terms.indexOf(DEFAULT_NDA_UUID) >= 0
-        })
-      })
-    } else {
-      const newTerms = [...terms]
-      if (newTerms.indexOf(DEFAULT_NDA_UUID) >= 0) {
-        newTerms.splice(newTerms.indexOf(DEFAULT_NDA_UUID), 1)
-        updateProject(id, {
-          terms: newTerms
-        }, true).then(() => {
-          this.setState({
-            hasNda: this.props.project.terms.indexOf(DEFAULT_NDA_UUID) >= 0
-          })
-        })
-      }
-    }
+    const {id} = this.props.project
+    const updateProjectObj = Object.keys(this.state.project)
+      .filter(key => !_.isEqual(this.props.project[key], this.state.project[key]))
+      .reduce((acc, curr) => {
+        acc[curr] = this.state.project[curr]
+        return acc
+      }, {})
+    updateProject(id, updateProjectObj)
+      .then(() => this.setState({enableButton: false}))
+      .catch(console.error)
   }
 
   render() {
-    const opts = [
-      {
-        value: 'yes',
-        label: 'Yes'
-      },
-      {
-        value: 'no',
-        label: 'No'
-      }
-    ]
-
     if (this.state.isLoading) return null
 
     return (
@@ -92,21 +72,14 @@ class EditProjectDefaultsForm extends React.Component {
           onChange={this.handleChange}
         >
           <div className="container">
-            <SpecQuestionList>
-              <Accordion
-                title="Enforce Topcoder NDA"
-                type="radio-group"
-                options={opts}
-              >
-                <SpecQuestionList.Item>
-                  <RadioGroup
-                    name="nda"
-                    options={opts}
-                    value={this.state.hasNda ? 'yes' : 'no'}
-                  />
-                </SpecQuestionList.Item>
-              </Accordion>
-            </SpecQuestionList>
+            <NDAField
+              name="terms"
+              value={this.state.project.terms}
+            />
+            <GroupsField
+              name="groups"
+              value={this.state.project.groups}
+            />
           </div>
           <div className="section-footer section-footer-spec">
             <button

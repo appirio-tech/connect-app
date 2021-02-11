@@ -772,6 +772,7 @@ export const CONNECT_USER = {
 export const PROJECT_MAX_COLORS = 5
 
 export const AUTOCOMPLETE_TRIGGER_LENGTH = 3
+export const AUTOCOMPLETE_DEBOUNCE_TIME_MS = 150
 
 // Toggle this flag to enable/disable maintenance mode
 export const MAINTENANCE_MODE = process.env.MAINTENANCE_MODE
