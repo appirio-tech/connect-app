@@ -684,7 +684,7 @@ export const PERMISSIONS = {
       title: 'View Project Defaults Tab',
     },
     projectRoles: [
-      ..._.difference(PROJECT_ALL, PROJECT_ROLE_CUSTOMER)
+      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
     ],
     topcoderRoles: [
       ...TOPCODER_ADMINS,
