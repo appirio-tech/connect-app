@@ -67,7 +67,7 @@ class GroupsField extends React.Component {
   render() {
     return (
       <div className={styles.container}>
-        <div className={styles.fieldName}>Intended Work Groups</div>
+        <div>Intended Work Groups</div>
         <FormsySelect
           name="groups-field"
           isMulti
