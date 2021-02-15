@@ -2,7 +2,7 @@ import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL } from '../config/constants'
 
 /**
- * Get a user groups based on it's member id and membership type
+ * Get billing accounts based on project id
  *
  * @param {String} projectId Id of the project
  *

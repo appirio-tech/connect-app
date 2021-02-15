@@ -26,11 +26,10 @@ class BillingAccountField extends React.Component {
       .then(() => {
         if (this.props.billingAccountId) {
           this.setState(state => {
-            const filteredArray = state.billingAccounts.filter(
-              ({tcBillingAccountId}) =>
-                tcBillingAccountId === this.props.billingAccountId
-            )
-            if (filteredArray.length === 0) {
+            const existentBillingAccount = _.find(state.billingAccounts, {
+              tcBillingAccountId: this.props.billingAccountId
+            })
+            if (!existentBillingAccount) {
               const billingAccountObj = {
                 name: '<Assigned Account>',
                 tcBillingAccountId: this.props.billingAccountId
@@ -41,7 +40,7 @@ class BillingAccountField extends React.Component {
               }
             } else {
               return {
-                selectedBillingAccount: this.mapOpts(filteredArray[0])
+                selectedBillingAccount: this.mapOpts(existentBillingAccount)
               }
             }
           })
@@ -63,27 +62,22 @@ class BillingAccountField extends React.Component {
   }
 
   render() {
-    const mapOpts = opt => ({
-      label: `${opt.name} (${opt.tcBillingAccountId})`,
-      value: opt.tcBillingAccountId
-    })
     return (
       <div className={styles.container}>
-        <div>Choose a Billing Account</div>
+        <div className={styles.fieldName}>Choose a Billing Account</div>
         <Select
           placeholder={
             this.state.billingAccounts.length > 0 
               ? 'Select billing account'
               : 'No Billing Account Available'
           }
-          heightAuto
           onChange={this.handleChange}
           value={this.state.selectedBillingAccount}
-          options={this.state.billingAccounts.map(mapOpts)}
+          options={this.state.billingAccounts.map(this.mapOpts)}
           isDisabled={this.state.billingAccounts.length === 0}
         />
         <a
-          className="tc-link"
+          className={styles.manageBillingAccountLink}
           href={`${SALESFORCE_PROJECT_LEAD_LINK}${this.props.projectId}`}
           target="_blank"
           rel="noopener noreferrer"

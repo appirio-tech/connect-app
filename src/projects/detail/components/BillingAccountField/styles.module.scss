@@ -1,5 +1,15 @@
+@import '~tc-ui/src/styles/tc-includes';
+
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  .fieldName {
+    margin-bottom: 10px;
+  }
+  .manageBillingAccountLink {
+    display: block;
+    color: $tc-dark-blue-110;
+    margin-top: 10px;
+    &:hover {
+      color: inherit;
+    }
+  }
 }
