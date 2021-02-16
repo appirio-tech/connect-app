@@ -67,7 +67,7 @@ class BillingAccountField extends React.Component {
         <div className={styles.fieldName}>Choose a Billing Account</div>
         <Select
           placeholder={
-            this.state.billingAccounts.length > 0 
+            this.state.billingAccounts.length > 0
               ? 'Select billing account'
               : 'No Billing Account Available'
           }
@@ -76,14 +76,16 @@ class BillingAccountField extends React.Component {
           options={this.state.billingAccounts.map(this.mapOpts)}
           isDisabled={this.state.billingAccounts.length === 0}
         />
-        <a
-          className={styles.manageBillingAccountLink}
-          href={`${SALESFORCE_PROJECT_LEAD_LINK}${this.props.projectId}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Manage the billing account in Salesforce
-        </a>
+        <div className={styles.manageBillingAccountLinkWrapper}>
+          <a
+            className={styles.manageBillingAccountLink}
+            href={`${SALESFORCE_PROJECT_LEAD_LINK}${this.props.projectId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Manage the billing account in Salesforce
+          </a>
+        </div>
       </div>
     )
   }

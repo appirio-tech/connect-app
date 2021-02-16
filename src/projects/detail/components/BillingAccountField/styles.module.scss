@@ -4,12 +4,17 @@
   .fieldName {
     margin-bottom: 10px;
   }
+
+  .manageBillingAccountLinkWrapper {
+    margin-top: 5px;
+  }
+
   .manageBillingAccountLink {
-    display: block;
     color: $tc-dark-blue-110;
-    margin-top: 10px;
+    font-size: 12px;
+
     &:hover {
-      color: inherit;
+      color: $tc-dark-blue-110;
     }
   }
 }
