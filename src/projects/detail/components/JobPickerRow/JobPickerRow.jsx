@@ -161,7 +161,7 @@ class JobPickerRow extends React.PureComponent {
     const durationColumn = (
       <div styleName="col col-duration">
         <label className="tc-label" styleName="label">
-          Duration (months)
+          Duration (weeks)
         </label>
         <PositiveNumberInput
           styleName="noMargin"
