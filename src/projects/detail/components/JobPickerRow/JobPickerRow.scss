@@ -86,22 +86,15 @@
     display: block;
   }
    
-  .job-description textarea,
-  .job-textarea[type="text"] {
-    &.empty {
-      color: $tc-gray-30;
+  .job-description {
+    &.error {
+      :global {
+        .CodeMirror {
+          border:1px solid $tc-red-70;
+        }
+      }
     }
-    min-height : 90px;
-  
-    @include placeholder {
-      @include roboto;
-      color: $tc-gray-30;
-      text-transform: none;
-      font-style: italic;
-      font-size: $base-unit*3;
-      line-height: $base-unit*4;
-    }
-  }  
+  }
 }
 
 .col-role-container {
