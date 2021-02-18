@@ -84,7 +84,7 @@ class EditProjectDefaultsForm extends React.Component {
             <BillingAccountField
               name="billingAccountId"
               projectId={this.state.project.id}
-              billingAccountId={this.state.project.billingAccountId}
+              value={this.state.project.billingAccountId}
             />
           </div>
           <div className="section-footer section-footer-spec">
