@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import styles from './MarkdownText.scss'
 import PropTypes from 'prop-types'
 import EasyMDE from 'easymde'
-import marked from 'marked'
-import cn from 'classnames'
-import _ from 'lodash'
+import { markdownToHTML } from '../../helpers/markdownToState'
 
 class MarkdownText extends Component {
   constructor (props) {
@@ -13,7 +11,8 @@ class MarkdownText extends Component {
       isChanged: false
     }
     this.blurTheField = this.blurTheField.bind(this)
-    this.updateDescriptionThrottled = _.throttle(this.updateDescription.bind(this), 10000) // 10s
+    this.updateDescriptionThrottled = this.updateDescription.bind(this)
+    // this.updateDescriptionThrottled = _.throttle(this.updateDescription.bind(this), 10000) // 10s
   }
 
   blurTheField () {
@@ -41,13 +40,13 @@ class MarkdownText extends Component {
         }
       })
     } else {
-      this.ref.current.innerHTML = value ? marked(value) : ''
+      this.ref.current.innerHTML = value ? markdownToHTML(value) : ''
     }
   }
 
   render () {
-    const { isPrivate, readOnly, placeholder, className } = this.props
-    return (<div className={cn(className, styles.editor, { [styles.isPrivate]: isPrivate })}>
+    const { readOnly, placeholder } = this.props
+    return (<div className={styles.editor}>
       {readOnly ? (
         <div ref="textarea" />
       ) : (
@@ -61,14 +60,12 @@ class MarkdownText extends Component {
 }
 
 MarkdownText.defaultProps = {
-  isPrivate: false,
   readOnly: false
 }
 
 MarkdownText.propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string,
-  isPrivate: PropTypes.bool,
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool
 }
