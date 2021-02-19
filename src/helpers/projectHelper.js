@@ -284,8 +284,8 @@ export function getProjectNavLinks(project, projectId, renderFAQs) {
 
   const searchParams = new URLSearchParams(window.location.search)
 
-  if (searchParams.get('beta') === 'true' && hasPermission(PERMISSIONS.VIEW_PROJECT_DEFAULTS)) {
-    navLinks.push({ label: 'Project Defaults', to: `/projects/${projectId}/settings`, Icon: AccountSecurityIcon, iconClassName: 'stroke' })
+  if (searchParams.get('beta') === 'true' && hasPermission(PERMISSIONS.VIEW_PROJECT_SETTINGS)) {
+    navLinks.push({ label: 'Project Settings', to: `/projects/${projectId}/settings`, Icon: AccountSecurityIcon, iconClassName: 'stroke' })
   }
 
   return navLinks

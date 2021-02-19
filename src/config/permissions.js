@@ -678,10 +678,10 @@ export const PERMISSIONS = {
     ],
   },
 
-  VIEW_PROJECT_DEFAULTS: {
+  VIEW_PROJECT_SETTINGS: {
     meta: {
       group: 'Project Details',
-      title: 'View Project Defaults Tab',
+      title: 'View Project Settings Tab',
     },
     projectRoles: [
       ..._.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
