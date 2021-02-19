@@ -282,9 +282,7 @@ export function getProjectNavLinks(project, projectId, renderFAQs) {
     navLinks.push(faqTab)
   }
 
-  const searchParams = new URLSearchParams(window.location.search)
-
-  if (searchParams.get('beta') === 'true' && hasPermission(PERMISSIONS.VIEW_PROJECT_SETTINGS)) {
+  if (hasPermission(PERMISSIONS.VIEW_PROJECT_SETTINGS)) {
     navLinks.push({ label: 'Project Settings', to: `/projects/${projectId}/settings`, Icon: AccountSecurityIcon, iconClassName: 'stroke' })
   }
 
