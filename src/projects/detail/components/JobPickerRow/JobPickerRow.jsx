@@ -6,7 +6,6 @@ import IconX from '../../../../assets/icons/ui-16px-1_bold-remove.svg'
 import IconAdd from '../../../../assets/icons/ui-16px-1_bold-add.svg'
 import SkillsQuestion from '../SkillsQuestion/SkillsQuestionBase'
 import PositiveNumberInput from '../../../../components/PositiveNumberInput/PositiveNumberInput'
-import MarkdownText from  '../../../../components/MarkdownText/MarkdownText'
 import SelectDropdown from 'appirio-tech-react-components/components/SelectDropdown/SelectDropdown'
 
 import styles from './JobPickerRow.scss'
@@ -74,8 +73,8 @@ class JobPickerRow extends React.PureComponent {
     this.props.onChange(this.props.rowIndex, 'role', evt)
   }
 
-  handleDescriptionChange(value) {
-    this.props.onChange(this.props.rowIndex, 'description', value)
+  handleDescriptionChange(evt) {
+    this.props.onChange(this.props.rowIndex, 'description', evt.target.value)
   }
 
   resetDuration() {
@@ -235,11 +234,13 @@ class JobPickerRow extends React.PureComponent {
         <label className="tc-label" styleName="label">
           Job Description
         </label>
-        <div styleName={`job-description ${isRowIncomplete && !value.description.trim() ? 'error' : ''}`} >
-          <MarkdownText 
-            value={value.description || ''}
+        <div styleName="job-description">
+          <textarea
+            className={`job-textarea ${isRowIncomplete && !value.description.trim() ? 'error' : 'empty'}`}
             onChange={this.handleDescriptionChange}
             placeholder="Job Description"
+            type="text"
+            value={value.description || ''}
           />
         </div>
       </div>
