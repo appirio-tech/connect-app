@@ -136,7 +136,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['feature/taas-jobs-2']
+              only: ['feature/markdown-editor']
 
       - deployProd:
           context : org-global
