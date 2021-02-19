@@ -9,7 +9,13 @@
   display: flex;
 
   :global {
-    .EasyMDEContainer {
+    .EasyMDEContainer-readonly {
+      border: 1px solid #aaaaab;
+      border-radius: 4px;
+      padding: 0 10px;
+    }
+
+    .EasyMDEContainer, .EasyMDEContainer-readonly {
       display: flex;
       width: 100%;
       flex-direction: column;

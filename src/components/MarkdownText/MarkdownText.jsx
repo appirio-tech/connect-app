@@ -7,17 +7,7 @@ import { markdownToHTML } from '../../helpers/markdownToState'
 class MarkdownText extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      isChanged: false
-    }
-    this.blurTheField = this.blurTheField.bind(this)
-    this.updateDescriptionThrottled = this.updateDescription.bind(this)
-    // this.updateDescriptionThrottled = _.throttle(this.updateDescription.bind(this), 10000) // 10s
-  }
-
-  blurTheField () {
-    const { onChange } = this.props
-    onChange(this.easymde.value())
+    this.updateDescription = this.updateDescription.bind(this)
   }
 
   updateDescription () {
@@ -30,17 +20,10 @@ class MarkdownText extends Component {
     if (!readOnly) {
       this.easymde = new EasyMDE({ element: this.refs.textarea, initialValue: value })
       this.easymde.codemirror.on('change', () => {
-        this.setState({ isChanged: true })
-        this.updateDescriptionThrottled(this.easymde.value())
-      })
-      this.easymde.codemirror.on('blur', () => {
-        if (this.state.isChanged) {
-          this.setState({ isChanged: false })
-          this.blurTheField()
-        }
+        this.updateDescription()
       })
     } else {
-      this.ref.current.innerHTML = value ? markdownToHTML(value) : ''
+      this.refs.textarea.innerHTML = value ? markdownToHTML(value) : ''
     }
   }
 
@@ -48,7 +31,7 @@ class MarkdownText extends Component {
     const { readOnly, placeholder } = this.props
     return (<div className={styles.editor}>
       {readOnly ? (
-        <div ref="textarea" />
+        <div ref="textarea" className="EasyMDEContainer-readonly"/>
       ) : (
         <textarea
           ref="textarea" 
