@@ -6,6 +6,7 @@ import _ from 'lodash'
 import { render } from 'react-dom'
 import { SEGMENT_KEY } from './config/constants'
 import App from './App'
+import 'easymde/dist/easymde.min.css'
 
 import 'styles/main.scss'
 
