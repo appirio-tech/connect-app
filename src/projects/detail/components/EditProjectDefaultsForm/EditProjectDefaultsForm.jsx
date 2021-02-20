@@ -110,6 +110,6 @@ const mapDispatchToProps = {
 
 export default protectComponent(
   connect(null, mapDispatchToProps)(EditProjectDefaultsForm),
-  PERMISSIONS.VIEW_PROJECT_DEFAULTS,
-  'Project Defaults'
+  PERMISSIONS.VIEW_PROJECT_SETTINGS,
+  'Project Settings'
 )
