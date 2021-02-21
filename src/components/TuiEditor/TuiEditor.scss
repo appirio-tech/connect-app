@@ -35,11 +35,6 @@
       list-style: none;
     }    
 
-    // hide 'wysiwyg' and 'markdown' bottom selection
-    .tui-editor-defaultUI .te-mode-switch-section {
-      display: none !important
-    }
-
     // hide uplodd file
     .tui-editor-popup{
         box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.26);

@@ -12,6 +12,7 @@ const DescriptionField = (props) => (
     {...props}
     previewStyle="vertical"
     height="400px"
+    hideModeSwitch
     initialEditType="wysiwyg"
     initialValue={props.value}
   />
