@@ -45,6 +45,11 @@
 }
 
 .col {
+  :global {
+    .error > .tui-editor-defaultUI {
+      border: 1px solid #ff5b52
+    }
+  }
   padding: 4px 7.5px;
   flex-grow: 0;
   flex-shrink: 0;

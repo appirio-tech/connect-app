@@ -1,0 +1,55 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.editor {
+  background: red;
+
+  > div {
+    h1 {
+      all: revert;
+      font-size: 24px;
+    }
+  } 
+
+  b, 
+  i,
+  s, 
+  hr,
+  blockquote,
+  ul,
+  li,
+  ol,
+  table,
+  thead,
+  tr,
+  th,
+  img,
+  a,
+  code,
+  pre {
+    all: revert;
+  }
+
+  :global {
+    .te-heading-add ul {
+      list-style: none;
+    }    
+
+    .tui-editor-defaultUI .te-mode-switch-section {
+      display: none !important
+    }
+
+    // hide uplodd file
+    .tui-editor-popup{
+        box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.26);
+    }
+
+    .te-popup-add-image .te-tab button, .te-popup-add-image .te-file-type{
+      display: none !important;
+    }
+
+    .te-popup-add-image .te-url-type{
+      display: block !important;
+    }
+
+  }
+}
