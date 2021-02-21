@@ -30,10 +30,12 @@
   }
 
   :global {
+    // add style for heading list in  headings selection popup, because 'all:revert' has been setted before
     .te-heading-add ul {
       list-style: none;
     }    
 
+    // hide 'wysiwyg' and 'markdown' bottom selection
     .tui-editor-defaultUI .te-mode-switch-section {
       display: none !important
     }

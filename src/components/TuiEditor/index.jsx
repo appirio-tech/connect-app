@@ -1,15 +1,20 @@
-// wrap toast-ui editor with react and support react 15
+/*
+ *  TuiEditor 
+ *  wrap toast-ui editor with react and support react 15
+ */
+
 import React from 'react'
+import PropTypes from 'prop-types'
 import Editor from '@toast-ui/editor'
 import styles from './TuiEditor.scss'
 import cn from 'classnames'
 import 'codemirror/lib/codemirror.css'
 import '@toast-ui/editor/dist/toastui-editor.css'
 
-export default class extends React.Component {
+class TuiEditor extends React.Component {
   constructor(props) {
     super(props)
-    this.onValueChange = this.onValueChange.bind(this)
+    this.handleValueChange = this.handleValueChange.bind(this)
   }
 
   getRootElement() {
@@ -33,7 +38,7 @@ export default class extends React.Component {
   componentDidMount() {
     const props = {
       ...this.props,
-      onChange: this.onValueChange
+      onChange: this.handleValueChange
     }
     this.editorInst = new Editor({
       el: this.refs.rootEl,
@@ -42,9 +47,9 @@ export default class extends React.Component {
     this.bindEventHandlers(props)
   }
 
-  onValueChange(){
-    if (this.props.valueChange) {
-      this.props.valueChange(this.getInstance().getMarkdown())
+  handleValueChange(){
+    if (this.props.onChange) {
+      this.props.onChange(this.getInstance().getMarkdown())
     }
   }
 
@@ -63,7 +68,7 @@ export default class extends React.Component {
     if (this.props.className !== className) {
       return true
     }
-    this.bindEventHandlers(nextProps, this.props)
+    // this.bindEventHandlers(nextProps, this.props)
 
     return false
   }
@@ -72,3 +77,14 @@ export default class extends React.Component {
     return <div ref="rootEl" className={cn(styles.editor, this.props.className)} />
   }
 }
+
+
+TuiEditor.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  previewStyle: PropTypes.string.isRequired,
+  height: PropTypes.string.isRequired,
+  initialEditType: PropTypes.string.isRequired,
+  initialValue: PropTypes.string,
+}
+
+export default TuiEditor

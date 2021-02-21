@@ -238,7 +238,7 @@ class JobPickerRow extends React.PureComponent {
         </label>
         <DescriptionField
           className={`${isRowIncomplete && !value.description.trim() ? 'error' : ''}`}
-          valueChange={this.handleDescriptionChange}
+          onChange={this.handleDescriptionChange}
           placeholder="Job Description"
           value={value.description || ''}
         />
