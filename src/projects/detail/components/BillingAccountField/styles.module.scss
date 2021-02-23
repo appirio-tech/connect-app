@@ -1,0 +1,20 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  .fieldName {
+    margin-bottom: 10px;
+  }
+
+  .manageBillingAccountLinkWrapper {
+    margin-top: 5px;
+  }
+
+  .manageBillingAccountLink {
+    color: $tc-dark-blue-110;
+    font-size: 12px;
+
+    &:hover {
+      color: $tc-dark-blue-110;
+    }
+  }
+}

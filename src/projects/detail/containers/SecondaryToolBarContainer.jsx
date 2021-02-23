@@ -38,11 +38,8 @@ const SecondaryToolBarContainer = ({
     navLinks.push({ label: 'Discussions', to: `/projects/${match.params.projectId}/discussions` })
   }
 
-
-  const searchParams = new URLSearchParams(window.location.search)
-
-  if (searchParams.get('beta') === 'true' && hasPermission(PERMISSIONS.VIEW_PROJECT_DEFAULTS) && project.version === 'v3') {
-    navLinks.push({ label: 'Project Defaults', to: `/projects/${match.params.projectId}/projectDefaults` })
+  if (hasPermission(PERMISSIONS.VIEW_PROJECT_SETTINGS) && project.version === 'v3') {
+    navLinks.push({ label: 'Project Settings', to: `/projects/${match.params.projectId}/settings` })
   }
 
   return (

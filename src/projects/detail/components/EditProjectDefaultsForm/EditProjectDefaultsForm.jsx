@@ -6,6 +6,9 @@ const Formsy = FormsyForm.Formsy
 import { updateProject } from '../../../actions/project'
 import NDAField from '../NDAField'
 import GroupsField from '../GroupsField'
+import BillingAccountField from '../BillingAccountField'
+import {PERMISSIONS} from '../../../../config/permissions'
+import protectComponent from '../../../../helpers/protectComponent'
 
 import './EditProjectDefaultsForm.scss'
 
@@ -40,7 +43,7 @@ class EditProjectDefaultsForm extends React.Component {
     }, {})
     const project = _.assign({}, this.state.project, reqProjectState)
     this.setState({project})
-    const isProjectEqual = _.isEqual(this.state.project, this.props.project)
+    const isProjectEqual = _.isEqual(project, this.props.project)
     if (!isProjectEqual && !this.state.enableButton) {
       this.setState({enableButton: true})
     } else if (isProjectEqual && this.state.enableButton !== false) {
@@ -80,6 +83,11 @@ class EditProjectDefaultsForm extends React.Component {
               name="groups"
               value={this.state.project.groups}
             />
+            <BillingAccountField
+              name="billingAccountId"
+              projectId={this.state.project.id}
+              value={this.state.project.billingAccountId}
+            />
           </div>
           <div className="section-footer section-footer-spec">
             <button
@@ -100,4 +108,8 @@ const mapDispatchToProps = {
   updateProject
 }
 
-export default connect(null, mapDispatchToProps)(EditProjectDefaultsForm)
+export default protectComponent(
+  connect(null, mapDispatchToProps)(EditProjectDefaultsForm),
+  PERMISSIONS.VIEW_PROJECT_SETTINGS,
+  'Project Settings'
+)
