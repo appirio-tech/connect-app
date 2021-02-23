@@ -90,7 +90,8 @@ class BillingAccountField extends React.Component {
           options={this.state.billingAccounts}
           isDisabled={this.state.billingAccounts.length === 0}
         />
-        <div className={styles.manageBillingAccountLinkWrapper}>
+        {/* Hide this link because we haven't implemented a required page in SFDC yet */}
+        {/* <div className={styles.manageBillingAccountLinkWrapper}>
           <a
             className={styles.manageBillingAccountLink}
             href={`${SALESFORCE_PROJECT_LEAD_LINK}${this.props.projectId}`}
@@ -99,7 +100,7 @@ class BillingAccountField extends React.Component {
           >
             Manage the billing account in Salesforce
           </a>
-        </div>
+        </div> */}
       </div>
     )
   }
