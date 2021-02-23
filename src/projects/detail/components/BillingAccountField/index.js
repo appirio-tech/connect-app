@@ -3,7 +3,7 @@ import {HOC as hoc} from 'formsy-react'
 
 import Select from '../../../../components/Select/Select'
 import {fetchBillingAccounts} from '../../../../api/billingAccounts'
-import {SALESFORCE_PROJECT_LEAD_LINK} from '../../../../config/constants'
+// import {SALESFORCE_PROJECT_LEAD_LINK} from '../../../../config/constants'
 
 import styles from './styles.module.scss'
 
