@@ -1,5 +1,5 @@
 /*
- *  TuiEditor 
+ *  TuiEditor
  *  wrap toast-ui editor with react and support react 15
  */
 
@@ -132,7 +132,7 @@ TuiEditor.propTypes = {
   // use default htmlSanitizer
   useDefaultHTMLSanitizer: PropTypes.bool,
   // toolbar items.
-  toolbarItems: PropTypes.arrayOf(PropTypes.object),
+  toolbarItems: PropTypes.arrayOf(PropTypes.oneOfType(PropTypes.object, PropTypes.string)),
   // Array of plugins. A plugin can be either a function or an array in the form of [function, options].
   plugins: PropTypes.arrayOf(PropTypes.object),
   // Using extended Autolinks specified in GFM spec

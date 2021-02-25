@@ -8,11 +8,11 @@
       all: revert;
       font-size: 24px;
     }
-  } 
+  }
 
-  b, 
+  b,
   i,
-  s, 
+  s,
   hr,
   blockquote,
   ul,
@@ -33,7 +33,7 @@
     // add style for heading list in  headings selection popup, because 'all:revert' has been setted before
     .te-heading-add ul {
       list-style: none;
-    }    
+    }
 
     // hide uplodd file
     .tui-editor-popup{

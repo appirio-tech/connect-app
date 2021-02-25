@@ -1,0 +1,18 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.description-editor {
+  :global {
+    .tui-editor-contents {
+      code {
+        background-color: transparent;
+        color: inherit;
+      }
+
+      pre {
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+      }
+    }
+  }
+}
