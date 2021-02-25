@@ -136,7 +136,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['feature/taas-jobs-2']
+              only: ['hotfix/taas-job-editor-improvements']
 
       - deployProd:
           context : org-global
