@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { HOC as hoc } from 'formsy-react'
 import _ from 'lodash'
 import RadioGroup from 'appirio-tech-react-components/components/Formsy/RadioGroup'
-import { DEFAULT_NDA_UUID } from '../../../../../config/constants'
+import { DEFAULT_NDA_UUID } from '../../../../config/constants'
 
 class NDAField extends React.Component {
   constructor(props) {
