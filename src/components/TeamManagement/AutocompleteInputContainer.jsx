@@ -11,6 +11,10 @@ class AutocompleteInputContainer extends React.Component {
   constructor(props) {
     super(props)
     this.debounceTimer = null
+    this.state = {
+      // field input value
+      inputValue: ''
+    }
 
     this.clearUserSuggestions = this.clearUserSuggestions.bind(this)
   }
@@ -27,7 +31,11 @@ class AutocompleteInputContainer extends React.Component {
     }
   }
 
-  onInputChange(inputValue) {
+  onInputChange(inputValue, reason) {
+    // for keeping inputValue
+    if (reason.action === 'input-blur' || reason.action === 'menu-close') {
+      return 
+    }
     const indexOfSpace = inputValue.indexOf(' ')
     const indexOfSemiColon = inputValue.indexOf(';')
 
@@ -36,6 +44,7 @@ class AutocompleteInputContainer extends React.Component {
       return ''
     }
 
+    this.setState({inputValue})
     if (indexOfSpace >= 1 || indexOfSemiColon >= 1 ) {
       inputValue = inputValue.substring(0, inputValue.length -1 )
       this.onUpdate([...this.props.selectedMembers, {label: inputValue, value: inputValue}])
@@ -69,9 +78,11 @@ class AutocompleteInputContainer extends React.Component {
   render() {
 
     const { placeholder, currentUser, selectedMembers, disabled } = this.props
+    const {inputValue} = this.state
 
     return (
       <AutocompleteInput
+        inputValue={inputValue}
         placeholder={placeholder ? placeholder:''}
         onInputChange={this.onInputChange.bind(this)}
         onUpdate={this.onUpdate.bind(this)}
