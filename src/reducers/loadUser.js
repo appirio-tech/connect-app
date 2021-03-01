@@ -2,6 +2,7 @@ import _ from 'lodash'
 import {
   LOAD_USER_SUCCESS,
   LOAD_USER_FAILURE,
+  LOAD_USER_CREDENTIAL_SUCCESS,
   LOAD_ORG_CONFIG_SUCCESS,
   LOAD_ORG_CONFIG_FAILURE,
   SAVE_PROFILE_PHOTO_SUCCESS,
@@ -18,6 +19,10 @@ export const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
 
+  case LOAD_USER_CREDENTIAL_SUCCESS:
+    return Object.assign({}, state, {
+      credential: action.payload.credential
+    })
   case LOAD_USER_SUCCESS:
     return Object.assign({}, state, {
       isLoading : false,

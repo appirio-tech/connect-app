@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import spinnerWhileLoading from '../../../../../components/LoadingSpinner'
 import SettingsPanel from '../../../components/SettingsPanel'
 import { checkEmailAvailability, changeEmail, changePassword, getSystemSettings, resetPassword } from '../../../actions'
+import { getUserCredential } from '../../../../../actions/loadUser'
 import { requiresAuthentication } from '../../../../../components/AuthenticatedComponent'
 import SystemSettingsForm from '../components/SystemSettingsForm'
 import './SystemSettingsContainer.scss'
@@ -16,7 +17,13 @@ const FormEnhanced = enhance(SystemSettingsForm)
 
 class SystemSettingsContainer extends Component {
   componentDidMount() {
-    this.props.getSystemSettings()
+    const {
+      getSystemSettings,
+      getUserCredential,
+      user
+    } = this.props
+    getSystemSettings()
+    getUserCredential(user.userId)
   }
 
   render() {
@@ -41,11 +48,13 @@ const SystemSettingsContainerWithAuth = requiresAuthentication(SystemSettingsCon
 
 const mapStateToProps = ({ settings, loadUser }) => ({
   systemSettings: settings.system,
-  user: loadUser.user
+  user: loadUser.user,
+  usingSsoService: _.get(loadUser, 'credential.hasPassword', false) === false,
 })
 
 const mapDispatchToProps = {
   getSystemSettings,
+  getUserCredential, 
   checkEmailAvailability,
   changeEmail,
   changePassword,

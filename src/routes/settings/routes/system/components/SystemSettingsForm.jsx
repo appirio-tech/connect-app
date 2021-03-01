@@ -9,7 +9,7 @@ const TCFormFields = FormsyForm.Fields
 
 class SystemSettingsForm extends Component {
   render() {
-    const { changePassword, checkEmailAvailability, changeEmail, systemSettings, resetPassword } = this.props
+    const { changePassword, checkEmailAvailability, changeEmail, systemSettings, resetPassword, usingSsoService } = this.props
     return (
       <div styleName="system-settings-container">
 
@@ -40,20 +40,28 @@ class SystemSettingsForm extends Component {
             checkEmailAvailability={checkEmailAvailability}
             onSubmit={(email) => changeEmail(email)}
             {...systemSettings}
+            disabled={usingSsoService? true: systemSettings.disabled === true}
           />
+
+          {usingSsoService ? <div styleName="error-message">
+            Since you joined Topcoder using your &lt;SSO Service&gt; account,
+            any email updates will need to be handled by logging in to
+            your &lt;SSO Service&gt; account.
+          </div>: null}
         </div>
 
-        <div styleName="section-heading">
+        {!usingSsoService ?
+          <div styleName="section-heading">
           Retrieve or change your password
-        </div>
+          </div>: null}
 
-        <div className="form">
+        {!usingSsoService ? <div className="form">
           <ChangePasswordForm
             onSubmit={(data) => changePassword(data)}
             onReset={() => resetPassword()}
             {...systemSettings}
           />
-        </div>
+        </div>: null}
       </div>
     )
   }

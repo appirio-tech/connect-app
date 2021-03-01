@@ -17,6 +17,23 @@ export function getUserProfile(handle) {
     })
 }
 
+
+/**
+ * Gets credential for the specified user id.
+ *
+ * NOTE: Only admins are authorized to use the underlying endpoint.
+ *
+ * @param {Number} userId The user id
+ * @return {Promise} Resolves to the linked accounts array.
+ */
+export  function getCredential(userId) {
+  return axios.get(`${TC_API_URL}/v3/users/${userId}?fields=credential`)
+    .then(resp => {
+      return _.get(resp.data, 'result.content', {})
+    })
+}
+
+
 /**
  * Update user profile
  *
