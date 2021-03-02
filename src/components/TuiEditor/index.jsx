@@ -33,6 +33,12 @@ class TuiEditor extends React.Component {
         this.editorInst.off(eventName)
         this.editorInst.on(eventName, props[key])
       })
+
+    // always add `https` to the links if link was added without `http` or `https`
+    this.editorInst.on('convertorAfterHtmlToMarkdownConverted', (inputMarkdown) => {
+      const outputMarkdown = inputMarkdown.replace(/\[([^\]]*)\]\((?!https?)([^)]+)\)/g, '[$1](https://$2)')
+      return outputMarkdown
+    })
   }
 
   componentDidMount() {
@@ -45,6 +51,17 @@ class TuiEditor extends React.Component {
       ...props
     })
     this.bindEventHandlers(props)
+  }
+
+  componentWillUnmount() {
+    Object.keys(this.props)
+      .filter((key) => /^on[A-Z][a-zA-Z]+/.test(key))
+      .forEach((key) => {
+        const eventName = key[2].toLowerCase() + key.slice(3)
+        this.editorInst.off(eventName)
+      })
+
+    this.editorInst.off('convertorAfterHtmlToMarkdownConverted')
   }
 
   handleValueChange(){
@@ -68,7 +85,11 @@ class TuiEditor extends React.Component {
     if (this.props.className !== className) {
       return true
     }
-    // this.bindEventHandlers(nextProps, this.props)
+
+    // this looks like a bed idea to re-subscribe all the event on each re-render
+    // also, note, that we had to disable this.editorInst.off(eventName);
+    // otherwise popup for choosing Headings never closes
+    // this.bindEventHandlers(nextProps, this.props);
 
     return false
   }
