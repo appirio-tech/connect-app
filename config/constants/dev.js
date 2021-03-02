@@ -38,6 +38,7 @@ module.exports = {
   FILE_PICKER_ACCEPT: process.env.FILE_PICKER_ACCEPT_DEV,
 
   SALESFORCE_PROJECT_LEAD_LINK: 'https://c.cs18.visual.force.com/apex/ConnectLead?connectProjectId=',
+  SALESFORCE_BILLING_ACCOUNT_LINK: 'https://c.cs18.visual.force.com/apex/baredirect?id=',
 
   CONNECT_SEGMENT_KEY: process.env.DEV_SEGMENT_KEY,
   PREDIX_PROGRAM_ID         : 3448,
