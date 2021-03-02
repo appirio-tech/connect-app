@@ -46,9 +46,7 @@ class JobPickerRow extends React.PureComponent {
       { value: 'designer', title: 'Designer'},
       { value: 'software-developer', title: 'Software Developer'},
       { value: 'data-scientist', title: 'Data Scientist'},
-      { value: 'data-engineer', title: 'Data Engineer'},
-      { value: 'qa', title: 'QA Tester'},
-      { value: 'qa-engineer', title: 'QA Engineer'}
+      { value: 'data-engineer', title: 'Data Engineer'}
     ]
   }
   handleJobTitleChange(evt) {
