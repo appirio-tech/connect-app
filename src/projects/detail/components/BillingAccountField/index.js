@@ -72,7 +72,7 @@ class BillingAccountField extends React.Component {
 
   handleChange(value) {
     this.setState({ selectedBillingAccount: value })
-    this.props.setValue(value.value)
+    this.props.setValue(value ? value.value : null)
   }
 
   render() {
@@ -89,6 +89,7 @@ class BillingAccountField extends React.Component {
           value={this.state.selectedBillingAccount}
           options={this.state.billingAccounts}
           isDisabled={this.state.billingAccounts.length === 0}
+          showDropdownIndicator
         />
         {/* Hide this link because we haven't implemented a required page in SFDC yet */}
         {/* <div className={styles.manageBillingAccountLinkWrapper}>

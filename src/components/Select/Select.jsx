@@ -36,6 +36,7 @@ const Select = (props) => {
         createOptionPosition="first"
         className={containerclass}
         classNamePrefix="react-select"
+        isClearable
       />
     )
   }
