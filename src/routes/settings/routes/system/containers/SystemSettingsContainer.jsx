@@ -12,7 +12,7 @@ import { requiresAuthentication } from '../../../../../components/AuthenticatedC
 import SystemSettingsForm from '../components/SystemSettingsForm'
 import './SystemSettingsContainer.scss'
 
-const enhance = spinnerWhileLoading(props => !props.systemSettings.isLoading)
+const enhance = spinnerWhileLoading(props => !props.systemSettings.isLoading && !props.isLoadingCredential)
 const FormEnhanced = enhance(SystemSettingsForm)
 
 class SystemSettingsContainer extends Component {
@@ -49,6 +49,7 @@ const SystemSettingsContainerWithAuth = requiresAuthentication(SystemSettingsCon
 const mapStateToProps = ({ settings, loadUser }) => ({
   systemSettings: settings.system,
   user: loadUser.user,
+  isLoadingCredential: loadUser.isLoadingCredential,
   usingSsoService: _.get(loadUser, 'credential.hasPassword', false) === false,
 })
 

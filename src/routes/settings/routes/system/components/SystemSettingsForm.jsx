@@ -40,28 +40,33 @@ class SystemSettingsForm extends Component {
             checkEmailAvailability={checkEmailAvailability}
             onSubmit={(email) => changeEmail(email)}
             {...systemSettings}
-            disabled={usingSsoService? true: systemSettings.disabled === true}
+            usingSsoService={usingSsoService}
           />
 
-          {usingSsoService ? <div styleName="error-message">
-            Since you joined Topcoder using your &lt;SSO Service&gt; account,
-            any email updates will need to be handled by logging in to
-            your &lt;SSO Service&gt; account.
-          </div>: null}
+          {usingSsoService && (
+            <div styleName="error-message">
+              Since you joined Topcoder using your &lt;SSO Service&gt; account,
+              any email updates will need to be handled by logging in to
+              your &lt;SSO Service&gt; account.
+            </div>
+          )}
         </div>
 
-        {!usingSsoService ?
+        {!usingSsoService&& (
           <div styleName="section-heading">
           Retrieve or change your password
-          </div>: null}
+          </div>
+        )}
 
-        {!usingSsoService ? <div className="form">
-          <ChangePasswordForm
-            onSubmit={(data) => changePassword(data)}
-            onReset={() => resetPassword()}
-            {...systemSettings}
-          />
-        </div>: null}
+        {!usingSsoService && (
+          <div className="form">
+            <ChangePasswordForm
+              onSubmit={(data) => changePassword(data)}
+              onReset={() => resetPassword()}
+              {...systemSettings}
+            />
+          </div>
+        )}
       </div>
     )
   }
