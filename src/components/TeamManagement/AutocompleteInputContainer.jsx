@@ -69,13 +69,20 @@ class AutocompleteInputContainer extends React.Component {
     this.clearUserSuggestions()
   }
 
-  handleInputBlur() {
-    const innerSelectInstance = this.selectInstance.select.select
-    const focusedOption = innerSelectInstance.state.focusedOption
-    // current input value
-    const inputValue =  this.selectInstance.state.inputValue
-    if (inputValue && focusedOption) {
-      innerSelectInstance.selectOption(focusedOption)
+  handleInputBlur(event) {
+    const {
+      selectedMembers
+    } = this.props
+    const value = event.target.value
+    const innerSelectInstance = this.selectInstance.select
+
+    if (value) {
+      const hasExist = _.find(selectedMembers, ({label}) => label === value)
+      if (!hasExist) {
+        // format new option from input value
+        const newOption = {value, label: value}
+        innerSelectInstance.select.selectOption(newOption)
+      }
     }
   }
 
