@@ -16,8 +16,7 @@ class AutocompleteInput extends React.Component {
     const {
       placeholder,
       selectedMembers,
-      disabled,
-      inputValue
+      disabled
     } = this.props
 
     return (
@@ -28,7 +27,6 @@ class AutocompleteInput extends React.Component {
           showDropdownIndicator={false}
           createOption
           placeholder={placeholder}
-          inputValue={inputValue}
           value={selectedMembers}
           onInputChange={this.props.onInputChange}
           onChange={this.props.onUpdate}
@@ -43,7 +41,6 @@ class AutocompleteInput extends React.Component {
 AutocompleteInput.defaultProps = {
   placeholder: 'Enter one or more user handles',
   selectedMembers: [],
-  inputValue: '',
   disabled: false
 }
 
@@ -73,11 +70,6 @@ AutocompleteInput.propTypes = {
    * The flag if component is disabled
    */
   disabled: PropTypes.bool,
-
-  /**
-   * The inputValue for the input field
-   */
-  inputValue: PropTypes.string,
 }
 
 export default AutocompleteInput
