@@ -88,14 +88,8 @@ class TopBarContainer extends React.Component {
           { label: 'Account and security', link: '/settings/account' },
           { label: 'Notification settings', link: '/settings/notifications' },
         ]
-      }, {
-        items: [
-          { label: 'About', link: 'https://www.topcoder.com/company/', absolute: true },
-          { label: 'Contact us', link: 'https://www.topcoder.com/contact-us/', absolute: true },
-          { label: 'Privacy', link: 'https://www.topcoder.com/privacy-policy/', absolute: true },
-          { label: 'Terms', link: 'https://connect.topcoder.com/terms', absolute: true },
-        ]
-      }, {
+      }, 
+      {
         items: [
           { label: 'Log Out', link: logoutLink, absolute: true, onClick: logoutClick },
         ]
