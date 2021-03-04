@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import {HOC as hoc} from 'formsy-react'
 
 import Select from '../../../../components/Select/Select'
@@ -14,7 +15,7 @@ import styles from './styles.module.scss'
  * @returns {{ label: string, value: number }} option for Select
  */
 const buildOption = (billingAccountObj) => ({
-  label: `${billingAccountObj.name} (${billingAccountObj.tcBillingAccountId})`,
+  label: `${billingAccountObj.name} (${billingAccountObj.tcBillingAccountId}) ${billingAccountObj.endDate ? ' - '+ moment(billingAccountObj.endDate).format('DD MMM YYYY'): ''}`,
   value: billingAccountObj.tcBillingAccountId
 })
 
