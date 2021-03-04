@@ -4,7 +4,7 @@ import {HOC as hoc} from 'formsy-react'
 
 import Select from '../../../../components/Select/Select'
 import {fetchBillingAccounts} from '../../../../api/billingAccounts'
-// import {SALESFORCE_PROJECT_LEAD_LINK} from '../../../../config/constants'
+import {SALESFORCE_BILLING_ACCOUNT_LINK} from '../../../../config/constants'
 
 import styles from './styles.module.scss'
 
@@ -92,17 +92,18 @@ class BillingAccountField extends React.Component {
           isDisabled={this.state.billingAccounts.length === 0}
           showDropdownIndicator
         />
-        {/* Hide this link because we haven't implemented a required page in SFDC yet */}
-        {/* <div className={styles.manageBillingAccountLinkWrapper}>
-          <a
-            className={styles.manageBillingAccountLink}
-            href={`${SALESFORCE_PROJECT_LEAD_LINK}${this.props.projectId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+        {this.state.selectedBillingAccount && (
+          <div className={styles.manageBillingAccountLinkWrapper}>
+            <a
+              className={styles.manageBillingAccountLink}
+              href={`${SALESFORCE_BILLING_ACCOUNT_LINK}${this.state.selectedBillingAccount.value}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
             Manage the billing account in Salesforce
-          </a>
-        </div> */}
+            </a>
+          </div>
+        )}
       </div>
     )
   }

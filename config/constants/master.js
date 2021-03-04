@@ -39,6 +39,7 @@ module.exports = {
   FILE_PICKER_ACCEPT: process.env.FILE_PICKER_ACCEPT_PROD,
 
   SALESFORCE_PROJECT_LEAD_LINK: 'https://topcoder.my.salesforce.com/apex/ConnectLead?connectProjectId=',
+  SALESFORCE_BILLING_ACCOUNT_LINK: 'https://topcoder.my.salesforce.com/apex/baredirect?id=',
   CONNECT_SEGMENT_KEY: process.env.PROD_SEGMENT_KEY,
   PREDIX_PROGRAM_ID         : 3448,
   IBM_COGNITIVE_PROGRAM_ID  : 3449,
