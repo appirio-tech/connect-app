@@ -90,16 +90,18 @@ class BillingAccountField extends React.Component {
           options={this.state.billingAccounts}
           isDisabled={this.state.billingAccounts.length === 0}
         />
-        {this.state.selectedBillingAccount ? <div className={styles.manageBillingAccountLinkWrapper}>
-          <a
-            className={styles.manageBillingAccountLink}
-            href={`${SALESFORCE_BILLING_ACCOUNT_LINK}${this.state.selectedBillingAccount.value}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+        {this.state.selectedBillingAccount && (
+          <div className={styles.manageBillingAccountLinkWrapper}>
+            <a
+              className={styles.manageBillingAccountLink}
+              href={`${SALESFORCE_BILLING_ACCOUNT_LINK}${this.state.selectedBillingAccount.value}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
             Manage the billing account in Salesforce
-          </a>
-        </div>: null }
+            </a>
+          </div>
+        )}
       </div>
     )
   }
