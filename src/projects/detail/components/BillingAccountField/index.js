@@ -15,7 +15,7 @@ import styles from './styles.module.scss'
  * @returns {{ label: string, value: number }} option for Select
  */
 const buildOption = (billingAccountObj) => ({
-  label: `${billingAccountObj.name} (${billingAccountObj.tcBillingAccountId}) - ${moment(billingAccountObj.endDate).format('DD MMM YYYY')}`,
+  label: `${billingAccountObj.name} (${billingAccountObj.tcBillingAccountId}) ${billingAccountObj.endDate ? ' - '+ moment(billingAccountObj.endDate).format('DD MMM YYYY'): ''}`,
   value: billingAccountObj.tcBillingAccountId
 })
 
