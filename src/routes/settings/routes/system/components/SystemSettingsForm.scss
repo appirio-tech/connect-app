@@ -4,6 +4,19 @@
   display: flex;
   flex-direction: column;
   padding-bottom: 30px;
+
+  .error-message {
+    @include roboto-medium;
+
+    display: block;
+    border-radius: 5px;
+    background-color: $tc-red-10;
+    color: $tc-red-110;
+    font-size: 15px;
+    padding: 15px;
+    margin: 15px 40px;
+    line-height: 20px;
+  }
 }
 
 .username {
@@ -40,6 +53,7 @@
 
   .input-container {
     flex-grow: 1;
+
 
     @media screen and (max-width: $screen-md - 1px) {
       width: 100%;
