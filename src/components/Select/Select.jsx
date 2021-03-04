@@ -26,6 +26,7 @@ const Select = (props) => {
         {...props}
         createOptionPosition="first"
         className={containerclass}
+        ref={props.createSelectRef}
         classNamePrefix="react-select"
       />
     )

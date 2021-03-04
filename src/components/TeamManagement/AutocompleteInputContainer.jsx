@@ -11,8 +11,11 @@ class AutocompleteInputContainer extends React.Component {
   constructor(props) {
     super(props)
     this.debounceTimer = null
+    this.selectInstance = null
 
     this.clearUserSuggestions = this.clearUserSuggestions.bind(this)
+    this.handleInputBlur = this.handleInputBlur.bind(this)
+    this.createSelectRef = this.createSelectRef.bind(this)
   }
 
   /**
@@ -66,13 +69,29 @@ class AutocompleteInputContainer extends React.Component {
     this.clearUserSuggestions()
   }
 
+  handleInputBlur() {
+    const innerSelectInstance = this.selectInstance.select.select
+    const focusedOption = innerSelectInstance.state.focusedOption
+    // current input value
+    const inputValue =  this.selectInstance.state.inputValue
+    if (inputValue && focusedOption) {
+      innerSelectInstance.selectOption(focusedOption)
+    }
+  }
+
+  createSelectRef(ref) {
+    this.selectInstance = ref
+  }
+
   render() {
 
     const { placeholder, currentUser, selectedMembers, disabled } = this.props
 
     return (
       <AutocompleteInput
+        createSelectRef={this.createSelectRef}
         placeholder={placeholder ? placeholder:''}
+        onBlur={this.handleInputBlur}
         onInputChange={this.onInputChange.bind(this)}
         onUpdate={this.onUpdate.bind(this)}
         suggestedMembers={this.props.suggestedMembers}
