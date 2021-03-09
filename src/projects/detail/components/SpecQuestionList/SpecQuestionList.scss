@@ -12,6 +12,10 @@
   }
 
   .spec-question-list-item {
+    &.question-type-jobs-picker {
+      margin-left: -12.5px;
+      margin-right: -12.5px;
+    }
     padding: 0;
     margin-bottom: 30px;
 
@@ -170,7 +174,7 @@
         .dropdown-wrap.default {
           background: $tc-gray-neutral-light;
           border-color: $tc-gray-20;
-          max-width: 300px;
+          max-width: 352px;
           margin-left: 0px;
           
           &.error {
