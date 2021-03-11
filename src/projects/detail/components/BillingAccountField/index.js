@@ -1,9 +1,10 @@
 import React from 'react'
+import moment from 'moment'
 import {HOC as hoc} from 'formsy-react'
 
 import Select from '../../../../components/Select/Select'
 import {fetchBillingAccounts} from '../../../../api/billingAccounts'
-// import {SALESFORCE_PROJECT_LEAD_LINK} from '../../../../config/constants'
+import {SALESFORCE_BILLING_ACCOUNT_LINK} from '../../../../config/constants'
 
 import styles from './styles.module.scss'
 
@@ -14,7 +15,7 @@ import styles from './styles.module.scss'
  * @returns {{ label: string, value: number }} option for Select
  */
 const buildOption = (billingAccountObj) => ({
-  label: `${billingAccountObj.name} (${billingAccountObj.tcBillingAccountId})`,
+  label: `${billingAccountObj.name} (${billingAccountObj.tcBillingAccountId}) ${billingAccountObj.endDate ? ' - '+ moment(billingAccountObj.endDate).format('DD MMM YYYY'): ''}`,
   value: billingAccountObj.tcBillingAccountId
 })
 
@@ -72,7 +73,7 @@ class BillingAccountField extends React.Component {
 
   handleChange(value) {
     this.setState({ selectedBillingAccount: value })
-    this.props.setValue(value.value)
+    this.props.setValue(value ? value.value : null)
   }
 
   render() {
@@ -89,18 +90,20 @@ class BillingAccountField extends React.Component {
           value={this.state.selectedBillingAccount}
           options={this.state.billingAccounts}
           isDisabled={this.state.billingAccounts.length === 0}
+          showDropdownIndicator
         />
-        {/* Hide this link because we haven't implemented a required page in SFDC yet */}
-        {/* <div className={styles.manageBillingAccountLinkWrapper}>
-          <a
-            className={styles.manageBillingAccountLink}
-            href={`${SALESFORCE_PROJECT_LEAD_LINK}${this.props.projectId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+        {this.state.selectedBillingAccount && (
+          <div className={styles.manageBillingAccountLinkWrapper}>
+            <a
+              className={styles.manageBillingAccountLink}
+              href={`${SALESFORCE_BILLING_ACCOUNT_LINK}${this.state.selectedBillingAccount.value}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
             Manage the billing account in Salesforce
-          </a>
-        </div> */}
+            </a>
+          </div>
+        )}
       </div>
     )
   }

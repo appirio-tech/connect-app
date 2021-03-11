@@ -7,6 +7,12 @@ import { getCookie } from '../helpers/cookie'
 export const LOAD_USER_SUCCESS     = 'LOAD_USER_SUCCESS'
 export const LOAD_USER_FAILURE     = 'LOAD_USER_FAILURE'
 
+export const LOAD_USER_CREDENTIAL     = 'LOAD_USER_CREDENTIAL'
+export const LOAD_USER_CREDENTIAL_PENDING     = 'LOAD_USER_CREDENTIAL_PENDING'
+export const LOAD_USER_CREDENTIAL_SUCCESS     = 'LOAD_USER_CREDENTIAL_SUCCESS'
+export const LOAD_USER_CREDENTIAL_FAILURE     = 'LOAD_USER_CREDENTIAL_FAILURE'
+
+
 // Load organization configs
 export const LOAD_ORG_CONFIG_SUCCESS     = 'LOAD_ORG_CONFIG_SUCCESS'
 export const LOAD_ORG_CONFIG_FAILURE     = 'LOAD_ORG_CONFIG_FAILURE'
@@ -738,6 +744,7 @@ export const TC_API_URL = `https://api.${DOMAIN}`
 export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?formData.projectId=`
 export const WORK_MANAGER_APP = `https://challenges.${DOMAIN}/projects`
 export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
+export const SALESFORCE_BILLING_ACCOUNT_LINK = process.env.SALESFORCE_BILLING_ACCOUNT_LINK
 export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
 // Uncomment if you run TC Notifications locally
 // export const TC_NOTIFICATION_URL = 'http://localstho:4000/v5/notifications'

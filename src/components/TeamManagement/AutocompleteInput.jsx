@@ -16,14 +16,18 @@ class AutocompleteInput extends React.Component {
     const {
       placeholder,
       selectedMembers,
-      disabled
+      createSelectRef,
+      disabled,
+      onBlur
     } = this.props
 
     return (
       <div className="autocomplete-wrapper">
         <Select
           isMulti
+          onBlur={onBlur}
           closeMenuOnSelect
+          createSelectRef={createSelectRef}
           showDropdownIndicator={false}
           createOption
           placeholder={placeholder}
@@ -41,6 +45,7 @@ class AutocompleteInput extends React.Component {
 AutocompleteInput.defaultProps = {
   placeholder: 'Enter one or more user handles',
   selectedMembers: [],
+  createSelectRef: () => {},
   disabled: false
 }
 
@@ -49,6 +54,16 @@ AutocompleteInput.propTypes = {
    * Callback fired when selected members are updated
    */
   onUpdate: PropTypes.func,
+
+  /**
+   * Callback fired when input blur
+   */
+  onBlur: PropTypes.func,
+
+  /**
+   * Callback for pass select Ref to parent component
+   */
+  createSelectRef : PropTypes.func,
 
   /**
    * The current logged in user in the app.

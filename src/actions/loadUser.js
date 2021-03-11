@@ -3,6 +3,8 @@ import {
   ACCOUNTS_APP_CONNECTOR_URL,
   LOAD_USER_SUCCESS,
   LOAD_USER_FAILURE,
+  LOAD_USER_CREDENTIAL,
+  LOAD_USER_CREDENTIAL_FAILURE,
   LOAD_ORG_CONFIG_SUCCESS,
   LOAD_ORG_CONFIG_FAILURE,
   ROLE_ADMINISTRATOR,
@@ -16,7 +18,7 @@ import {
   ROLE_PRESALES, ROLE_PROJECT_MANAGER, ROLE_SOLUTION_ARCHITECT
 } from '../config/constants'
 import { getFreshToken, configureConnector, decodeToken } from 'tc-auth-lib'
-import { getUserProfile } from '../api/users'
+import { getUserProfile, getCredential } from '../api/users'
 import { fetchGroups } from '../api/groups'
 import { getOrgConfig } from '../api/orgConfig'
 import { EventTypes } from 'redux-segment'
@@ -25,6 +27,18 @@ configureConnector({
   connectorUrl: ACCOUNTS_APP_CONNECTOR_URL,
   frameId: 'tc-accounts-iframe'
 })
+
+export function getUserCredential(userId) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_USER_CREDENTIAL,
+      payload: getCredential(userId)
+    }).catch((err) => {
+      console.log(err)
+      dispatch({ type: LOAD_USER_CREDENTIAL_FAILURE })
+    })
+  }
+}
 
 export function loadUser() {
   return ((dispatch, getState) => {
@@ -125,9 +139,9 @@ export function loadUserSuccess(dispatch, token) {
       loadGroups(dispatch, currentUser.userId)
     })
       .catch((err) => {
-      // if we fail to load user's profile, still dispatch user load success
-      // ideally it shouldn't happen, but if it is, we can render the page
-      // without profile information
+        // if we fail to load user's profile, still dispatch user load success
+        // ideally it shouldn't happen, but if it is, we can render the page
+        // without profile information
         console.log(err)
         dispatch({ type: LOAD_USER_SUCCESS, user : currentUser })
       })
@@ -161,7 +175,7 @@ function loadGroups(dispatch, userId) {
       }
     })
       .catch((err) => {
-      // if we fail to load groups
+        // if we fail to load groups
         console.log(err)
       })
   }

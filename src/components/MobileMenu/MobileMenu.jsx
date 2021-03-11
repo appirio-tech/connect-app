@@ -52,7 +52,7 @@ const MobileMenu = ({ user, onClose, menu }) => {
             </ul>
           ))}
         </div>
-        <div styleName="footer">Topcoder &copy; 2018</div>
+        <div styleName="footer">Topcoder &copy; {new Date().getFullYear()}</div>
       </div>
     </MobilePage>
   )
