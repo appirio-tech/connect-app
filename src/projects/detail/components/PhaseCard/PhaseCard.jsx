@@ -139,6 +139,8 @@ class PhaseCard extends React.Component {
         hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)
         && ( status !== PHASE_STATUS_COMPLETED || hasPermission(PERMISSIONS.MANAGE_COMPLETED_PHASE) )
       )
+    const searchParams = new URLSearchParams(window.location.search)
+    const isBetaMode = searchParams.get('beta') === 'true'
 
     return (
       <div styleName={'phase-card ' + (isExpanded ? ' expanded ' : ' ')} id={`phase-${phaseId}`}>
@@ -155,7 +157,7 @@ class PhaseCard extends React.Component {
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => (matches || !isExpanded ? (
               <div>
-                <div styleName={cn('static-view', { 'has-unseen': hasUnseen && !isExpanded })} onClick={!this.state.isEditting && this.toggleCardView }>
+                <div styleName={cn('static-view', { 'has-unseen': hasUnseen && !isExpanded, 'beta-mode' : isBetaMode })} onClick={!isBetaMode && !this.state.isEditting && this.toggleCardView }>
                   <div styleName="col">
                     <div styleName="project-details">
                       <div styleName="project-ico">
@@ -176,7 +178,7 @@ class PhaseCard extends React.Component {
                       <div styleName="meta-list">
                         <span styleName="meta">{attr.duration}</span>
                         <span styleName="meta">{attr.startEndDates}</span>
-                        {attr.posts && <span styleName="meta">{attr.posts}</span>}
+                        {!isBetaMode && attr.posts && <span styleName="meta">{attr.posts}</span>}
                       </div>
                     </div>
                   </div>
@@ -239,7 +241,7 @@ class PhaseCard extends React.Component {
                     }
                   </div>
 
-                  {!this.state.isEditting && (<a styleName="toggle-arrow" />
+                  {!isBetaMode && !this.state.isEditting && (<a styleName="toggle-arrow" />
                   )}
 
                   {status && status === PHASE_STATUS_ACTIVE &&

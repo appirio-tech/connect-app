@@ -67,6 +67,9 @@
       width: 8px;
     }
   }
+  .beta-mode {
+    cursor: default;
+  }
   .col {
     &:nth-child(1) {
       flex: 1 500px;

@@ -225,50 +225,52 @@ class ProjectStage extends React.Component{
         expandProjectPhase={expandProjectPhase}
         project={project}
       >
-        <div id={projectPhaseAnchor}>
-          <ProjectStageTabs
-            activeTab={currentActiveTab}
-            onTabClick={this.onTabClick}
-            hasTimeline={hasTimeline}
-            hasNotifications={hasNotifications}
-            hideSpecTab={!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) || isGenericPhase}
-          />
+        { project.version === 'v3' &&
+          <div id={projectPhaseAnchor}>
+            <ProjectStageTabs
+              activeTab={currentActiveTab}
+              onTabClick={this.onTabClick}
+              hasTimeline={hasTimeline}
+              hasNotifications={hasNotifications}
+              hideSpecTab={!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) || isGenericPhase}
+            />
 
-          {currentActiveTab === 'timeline' &&
-            <ProductTimelineContainer product={product} project={project} />
-          }
+            {currentActiveTab === 'timeline' &&
+              <ProductTimelineContainer product={product} project={project} />
+            }
 
-          {currentActiveTab === 'posts' && (
-            <PostsContainer tag={tag} postUrlTemplate={`phase-${phase.id}-posts-{{postId}}`} />
-          )}
+            {currentActiveTab === 'posts' && (
+              <PostsContainer tag={tag} postUrlTemplate={`phase-${phase.id}-posts-{{postId}}`} />
+            )}
 
-          {currentActiveTab === 'specification' &&
-            <div className="two-col-content content">
-              <NotificationsReader
-                id={`phase-${phase.id}-specification`}
-                criteria={buildPhaseSpecifiationNotificationsCriteria(phase)}
-              />
-              <EnhancedEditProjectForm
-                project={product}
-                projectNonDirty={productNonDirty}
-                template={template}
-                productTemplates={productTemplates}
-                productCategories={productCategories}
-                isEdittable={hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)}
-                submitHandler={(model) => updateProduct(project.id, phase.id, product.id, model)}
-                saving={isProcessing}
-                fireProjectDirty={(values) => fireProductDirty(phase.id, product.id, values)}
-                fireProjectDirtyUndo= {fireProductDirtyUndo}
-                addAttachment={this.addProductAttachment}
-                updateAttachment={this.updateProductAttachment}
-                removeAttachment={this.removeProductAttachment}
-                attachmentsStorePath={attachmentsStorePath}
-                canManageAttachments={hasPermission(PERMISSIONS.EDIT_PROJECT_SPECIFICATION)}
-                disableAutoScrolling
-              />
-            </div>
-          }
-        </div>
+            {currentActiveTab === 'specification' &&
+              <div className="two-col-content content">
+                <NotificationsReader
+                  id={`phase-${phase.id}-specification`}
+                  criteria={buildPhaseSpecifiationNotificationsCriteria(phase)}
+                />
+                <EnhancedEditProjectForm
+                  project={product}
+                  projectNonDirty={productNonDirty}
+                  template={template}
+                  productTemplates={productTemplates}
+                  productCategories={productCategories}
+                  isEdittable={hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)}
+                  submitHandler={(model) => updateProduct(project.id, phase.id, product.id, model)}
+                  saving={isProcessing}
+                  fireProjectDirty={(values) => fireProductDirty(phase.id, product.id, values)}
+                  fireProjectDirtyUndo= {fireProductDirtyUndo}
+                  addAttachment={this.addProductAttachment}
+                  updateAttachment={this.updateProductAttachment}
+                  removeAttachment={this.removeProductAttachment}
+                  attachmentsStorePath={attachmentsStorePath}
+                  canManageAttachments={hasPermission(PERMISSIONS.EDIT_PROJECT_SPECIFICATION)}
+                  disableAutoScrolling
+                />
+              </div>
+            }
+          </div>
+        }
       </PhaseCard>
     )
   }
