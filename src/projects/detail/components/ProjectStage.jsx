@@ -216,6 +216,7 @@ class ProjectStage extends React.Component{
       <PhaseCard
         attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, _.get(phasesTopics[tag], 'topic', {}), timeline)}
         projectStatus={project.status}
+        projectVersion={project.version}
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
         timeline={timeline}
         hasUnseen={hasAnyNotifications}

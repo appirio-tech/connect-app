@@ -276,6 +276,16 @@ class EditStageForm extends React.Component {
                   maxLength={48}
                 />
               </div>
+              <div styleName="description-label-layer">
+                <TCFormFields.TextInput
+                  wrapperClass={`${styles['input-row']}`}
+                  label="Description"
+                  type="text"
+                  name="description"
+                  value={phase.description}
+                  maxLength={255}
+                />
+              </div>
               <div styleName="label-layer">
                 <TCFormFields.TextInput
                   wrapperClass={`${styles['input-row']}`}

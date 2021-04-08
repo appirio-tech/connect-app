@@ -245,8 +245,10 @@ class CreateContainer extends React.Component {
       }
       _.set(project, 'details.utm.google', googleAnalytics)
     }
+    const searchParams = new URLSearchParams(window.location.search)
+    const isBetaMode = searchParams.get('beta') === 'true'
     if (projectTemplate) {
-      project.version = 'v3'
+      project.version = isBetaMode ? 'v3' : 'v4'
       project.templateId = projectTemplate.id
       project.type = projectTemplate.category
     }

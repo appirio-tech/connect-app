@@ -178,6 +178,7 @@ function getProjectPhasesWithProducts(projectId) {
       'endDate',
       'id',
       'name',
+      'description',
       'progress',
       'projectId',
       'spentBudget',
@@ -283,6 +284,7 @@ export function createProjectPhaseAndProduct(project, productTemplate, status = 
   const param = {
     status,
     name: productTemplate.name,
+    description: productTemplate.description,
     productTemplateId: productTemplate.id
   }
   if (startDate) {

@@ -122,6 +122,7 @@ class DashboardContainer extends React.Component {
 
     const productTemplate = {
       name: phase.title,
+      description: phase.description,
       id: PHASE_PRODUCT_TEMPLATE_ID,
     }
 
@@ -284,6 +285,7 @@ class DashboardContainer extends React.Component {
               {isCreatingPhase? <LoadingIndicator/>: null}
               {isProjectLive && !isCreatingPhase && hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)  && !isLoadingPhases && (
                 <CreatePhaseForm
+                  projectVersion={parseInt((project.version || 'v2').substring(1))}
                   onSubmit={this.onFormSubmit}
                 />
               )}
