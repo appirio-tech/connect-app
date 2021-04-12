@@ -129,6 +129,8 @@ class CreatePhaseForm extends React.Component {
       // default values
       ...MILESTONE_DEFAULT_VALUES[milestone.type],
       ..._.omit(milestone, 'pseudoId'),
+      startDate: model.startDate,
+      endDate: model.endDate,
 
       // values from the form
       ...getMilestoneModelByIndex(model, index),
@@ -328,8 +330,8 @@ class CreatePhaseForm extends React.Component {
     const { isAddButtonClicked } = this.state
     const { projectVersion } = this.props
 
-    const searchParams = new URLSearchParams(window.location.search)
-    const isBetaMode = searchParams.get('beta') === 'true'
+    // const searchParams = new URLSearchParams(window.location.search)
+    // const isBetaMode = searchParams.get('beta') === 'true'
 
     if (!isAddButtonClicked) {
       return (
@@ -409,8 +411,8 @@ class CreatePhaseForm extends React.Component {
                 value={moment.utc().add(3, 'days').format('YYYY-MM-DD')}
               />
             </div>
-            { !isBetaMode && projectVersion !== 4 && this.renderTab()}
-            { !isBetaMode && projectVersion !== 4 && this.renderMilestones()}
+            { projectVersion !== 4 && this.renderTab()}
+            { projectVersion !== 4 && this.renderMilestones()}
             <div styleName="group-bottom">
               <button onClick={this.onCancelClick} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
               <button className="tc-btn tc-btn-primary tc-btn-sm"

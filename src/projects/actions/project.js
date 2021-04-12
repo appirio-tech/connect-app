@@ -466,6 +466,7 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
     const phaseStartDate = timeline ? timeline.startDate : phase.startDate
     const startDateChanged = updatedProps.startDate ? updatedProps.startDate.diff(phaseStartDate) : null
     const phaseActivated = phaseStatusChanged && updatedProps.status === PHASE_STATUS_ACTIVE
+    const projectVersion = state.projectState.project.version
 
     if (updatedProps.startDate) {
       updatedProps.startDate = moment(updatedProps.startDate).format('YYYY-MM-DD')
@@ -496,7 +497,7 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
         // - phase's status is changed to active
         // - there is not active milestone alreay (this can happen when phase is made active more than once
         // e.g. Active => Paused => Active)
-        if (timeline && !activeMilestone && phaseActivated ) {
+        if (projectVersion !== 'v4' && timeline && !activeMilestone && phaseActivated ) {
           dispatch(
             updateProductMilestone(
               productId,

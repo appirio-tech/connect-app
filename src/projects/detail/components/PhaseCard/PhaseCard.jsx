@@ -44,7 +44,7 @@ import './PhaseCard.scss'
  *
  * @returns {string} visual
  */
-const getVisualPhaseStatus = (attr) => {
+const getVisualPhaseStatus = (attr, projectVersion) => {
   // if model doesn't have status, fallback for DRAFT
   let status = attr.status ? attr.status : PHASE_STATUS_DRAFT
 
@@ -62,6 +62,12 @@ const getVisualPhaseStatus = (attr) => {
     } else if (now.isAfter(attr.actualEndDate, 'day')) {
       visualStatus = PHASE_STATUS_COMPLETED
     } else {
+      visualStatus = PHASE_STATUS_ACTIVE
+    }
+  }
+
+  if (projectVersion == 'v4') {
+    if (status === PHASE_STATUS_ACTIVE) {
       visualStatus = PHASE_STATUS_ACTIVE
     }
   }
@@ -131,7 +137,7 @@ class PhaseCard extends React.Component {
     } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
-    const status = getVisualPhaseStatus(attr)
+    const status = getVisualPhaseStatus(attr, projectVersion)
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
     const phaseEditable =
