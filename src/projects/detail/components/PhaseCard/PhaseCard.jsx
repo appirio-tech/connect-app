@@ -66,7 +66,7 @@ const getVisualPhaseStatus = (attr, projectVersion) => {
     }
   }
 
-  if (projectVersion == 'v4') {
+  if (projectVersion === 'v4') {
     if (status === PHASE_STATUS_ACTIVE) {
       visualStatus = PHASE_STATUS_ACTIVE
     }
