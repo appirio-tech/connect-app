@@ -159,7 +159,7 @@ export function getPhaseActualData(phase, timeline) {
     progress = phase.progress ? phase.progress : 0
 
     // if start date and duration are set, use them to calculate endDate
-    if (startDate && duration > 0) {
+    if (!endDate && startDate && duration > 0) {
       endDate = startDate.clone().add(duration, 'days')
     }
     // default to today if start date not set
@@ -170,7 +170,6 @@ export function getPhaseActualData(phase, timeline) {
     if (!endDate) {
       endDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
     }
-    console.log(startDate)
     // re-caclulate the duration of the phase
     duration = endDate.diff(startDate, 'days') + 1
 

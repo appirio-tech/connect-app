@@ -28,7 +28,8 @@ import {
   expandProjectPhase,
   collapseProjectPhase,
   collapseAllProjectPhases,
-  createPhaseAndMilestones
+  createPhaseAndMilestones,
+  createPhaseWithoutTimeline,
 } from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
@@ -118,15 +119,18 @@ class DashboardContainer extends React.Component {
   }
 
   onFormSubmit(type, phase, milestones) {
-    const { project, createPhaseAndMilestones } = this.props
+    const { project, createPhaseAndMilestones, createPhaseWithoutTimeline } = this.props
 
     const productTemplate = {
       name: phase.title,
       description: phase.description,
       id: PHASE_PRODUCT_TEMPLATE_ID,
     }
-
-    createPhaseAndMilestones(project, productTemplate, type, phase.startDate, phase.endDate, milestones)
+    if (project.version === 'v4') {
+      createPhaseWithoutTimeline(project, productTemplate, type, phase.startDate, phase.endDate)
+    } else {
+      createPhaseAndMilestones(project, productTemplate, type, phase.startDate, phase.endDate, milestones)
+    }
   }
 
 
@@ -326,6 +330,7 @@ const mapDispatchToProps = {
   toggleBundledNotificationRead,
   updateProduct,
   createPhaseAndMilestones,
+  createPhaseWithoutTimeline,
   fireProductDirty,
   fireProductDirtyUndo,
   addProductAttachment,
