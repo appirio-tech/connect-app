@@ -44,9 +44,13 @@
     }
 
   }
-  input {
+  input, textarea {
     display: inline-block;
     width:calc(100% - 170px)!important;
+  }
+
+  textarea {
+    min-height: 70px;
   }
 
 

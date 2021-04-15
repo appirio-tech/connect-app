@@ -368,10 +368,10 @@ class CreatePhaseForm extends React.Component {
               />
             </div>
             <div styleName="description-label-layer">
-              <TCFormFields.TextInput
+              <TCFormFields.Textarea
+                autoResize
                 wrapperClass={`${styles['input-row']}`}
                 label="Description"
-                type="text"
                 name="description"
                 value={''}
                 maxLength={255}

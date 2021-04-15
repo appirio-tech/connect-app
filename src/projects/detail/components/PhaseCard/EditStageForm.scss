@@ -33,7 +33,7 @@
 
 .input-row {
   display: inline-block;
-  width: 50%;
+  width: 45%;
 
   :global  {
 
@@ -51,7 +51,7 @@
   }
   input, textarea {
     display: inline-block;
-    width:calc(100% - 170px)!important;
+    width:calc(100% - 170px);
   }
 
   textarea{
@@ -158,6 +158,40 @@
   }
 }
 
+.label-layer {
+  .input-row:nth-child(1) {
+    input {
+      width: calc(100% - 170px);
+    }
+  }
+
+  .input-row:nth-child(2) {
+    width: 35%;
+
+    label {
+      width: 75px;
+    }
+
+    input{
+      width: calc(100% - 100px);
+    }
+  }
+  
+  .input-row:nth-child(3) {
+    width: 20%;
+
+    label {
+      width: 70px;
+      padding-right: 0;
+    }
+
+    input{
+      width: calc(100% - 90px);
+      font-size: 13px;
+    }
+  }
+}
+
 // screen < 1024px
 @media screen and (max-width: 1023px) {
   .label-layer:nth-child(4) > :global(.Tooltip) {
@@ -171,7 +205,7 @@
   .label-layer,
   .input-row {
     display: block;
-    width: 100%;
+    width: 100% !important;
     input:not([type="checkbox"]):disabled {
       width: 100%;
     }
@@ -198,12 +232,12 @@
     div {
       padding: 0!important;
     }
-    input {
+    input, textarea {
       width: 100%!important;
       display: block;
     }
     label {
-      width: 100%;
+      width: 100% !important;
       display: block;
       text-align: left;
       margin: 0;

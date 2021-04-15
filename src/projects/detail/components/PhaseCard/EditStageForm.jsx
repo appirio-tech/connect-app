@@ -241,6 +241,8 @@ class EditStageForm extends React.Component {
     endDate = moment.utc(endDate).format('YYYY-MM-DD')
     const canDelete = phase.status !== PHASE_STATUS_ACTIVE && phase.status !== PHASE_STATUS_COMPLETED
     const isDraft = phase.status === PHASE_STATUS_DRAFT
+    const duration = moment.utc(endDate).diff(startDate, 'days')
+    console.log(duration)
 
     return (
       <div styleName="container">
@@ -276,16 +278,18 @@ class EditStageForm extends React.Component {
                   maxLength={48}
                 />
               </div>
-              <div styleName="description-label-layer">
-                <TCFormFields.Textarea
-                  autoResize
-                  wrapperClass={`${styles['input-row']}`}
-                  label="Description"
-                  name="description"
-                  value={phase.description}
-                  maxLength={255}
-                />
-              </div>
+              {phase.description && (
+                <div styleName="description-label-layer">
+                  <TCFormFields.Textarea
+                    autoResize
+                    wrapperClass={`${styles['input-row']}`}
+                    label="Description"
+                    name="description"
+                    value={phase.description}
+                    maxLength={255}
+                  />
+                </div>
+              )}
               <div styleName="label-layer">
                 <TCFormFields.TextInput
                   wrapperClass={`${styles['input-row']}`}
@@ -318,6 +322,14 @@ class EditStageForm extends React.Component {
                   type="date"
                   name="endDate"
                   value={endDate}
+                />
+                <TCFormFields.TextInput
+                  wrapperClass={`${styles['input-row']}`}
+                  disabled
+                  label="Duration"
+                  type="text"
+                  name="duration"
+                  value={`${duration} days`}
                 />
               </div>
               {!showActivatingWarning ? (

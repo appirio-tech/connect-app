@@ -21,6 +21,7 @@ import {
   SCREEN_BREAKPOINT_MD,
   EVENT_TYPE,
   PHASE_STATUS_REVIEWED,
+  PROJECT_ROLE_CUSTOMER
 } from '../../../../config/constants'
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
@@ -139,6 +140,7 @@ class PhaseCard extends React.Component {
 
     const status = getVisualPhaseStatus(attr, projectVersion)
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
+    const currentRole = this.props.currentUserRoles[2]
 
     const phaseEditable =
       ( projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED )
@@ -224,7 +226,7 @@ class PhaseCard extends React.Component {
                   }
 
                   <div styleName="col hide-md">
-                    {status && (isSimplePlan || status !== PHASE_STATUS_ACTIVE) &&
+                    {status && (isSimplePlan || status !== PHASE_STATUS_ACTIVE) && currentRole !== PROJECT_ROLE_CUSTOMER &&
                           (<div styleName="status-details">
                             <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                               {statusDetails.name}
@@ -232,7 +234,7 @@ class PhaseCard extends React.Component {
                           </div>)
                     }
 
-                    { !isSimplePlan && status && status === PHASE_STATUS_ACTIVE &&
+                    { !isSimplePlan && status && status === PHASE_STATUS_ACTIVE && currentRole !== PROJECT_ROLE_CUSTOMER &&
                           (<div styleName="status-details">
                             <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                               <ProjectProgress
