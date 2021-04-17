@@ -89,7 +89,8 @@ class EditStageForm extends React.Component {
     const updateParam = _.assign({}, model, {
       startDate: updatedStartDate,
       endDate: updatedEndDate || '',
-      status: newStatus
+      status: newStatus,
+      duration: moment.utc(updatedEndDate).diff(updatedStartDate, 'days')
     })
     this.setState({
       isUpdating: true,

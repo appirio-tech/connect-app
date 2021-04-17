@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Auth0</title>
+    <meta charset="utf-8" />
+    <script language="javascript" type="text/javascript" src="./setupAuth0WithRedirect.js"></script>
+</head>
+
+<body>
+    Loaded...redirecting to auth0.(see browser console log)
+    <script>
+        window.onload = authSetup;
+    </script>
+    <a href="?retUrl=http://localhost:3000" >Login</a>
+</body>
+
+</html>
