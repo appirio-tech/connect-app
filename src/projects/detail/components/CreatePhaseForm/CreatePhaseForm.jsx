@@ -120,7 +120,7 @@ class CreatePhaseForm extends React.Component {
 
     const phaseData = {
       title: model.title,
-      description: model.description,
+      description: model.description || ' ',
       startDate: moment(model.startDate),
       endDate: moment(model.endDate),
     }

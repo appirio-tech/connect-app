@@ -76,6 +76,7 @@ class EditStageForm extends React.Component {
   }
 
   submitValue(model) {
+    console.log(model)
     const { phase, phaseIndex, updatePhaseAction } = this.props
     const {
       publishClicked
@@ -87,6 +88,7 @@ class EditStageForm extends React.Component {
       newStatus = PHASE_STATUS_ACTIVE
     }
     const updateParam = _.assign({}, model, {
+      description: model.description || ' ',
       startDate: updatedStartDate,
       endDate: updatedEndDate || '',
       status: newStatus,
@@ -286,7 +288,7 @@ class EditStageForm extends React.Component {
                     wrapperClass={`${styles['input-row']}`}
                     label="Description"
                     name="description"
-                    value={phase.description}
+                    value={phase.description.trim()}
                     maxLength={255}
                   />
                 </div>
