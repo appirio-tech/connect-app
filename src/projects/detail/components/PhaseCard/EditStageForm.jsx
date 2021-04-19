@@ -288,7 +288,7 @@ class EditStageForm extends React.Component {
                     wrapperClass={`${styles['input-row']}`}
                     label="Description"
                     name="description"
-                    value={phase.description.trim()}
+                    value={phase.description ? phase.description.trim() : ''}
                     maxLength={255}
                   />
                 </div>

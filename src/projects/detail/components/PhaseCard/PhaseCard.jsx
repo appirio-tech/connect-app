@@ -183,7 +183,7 @@ class PhaseCard extends React.Component {
                         {phaseEditable && !this.state.isEditting && (<a styleName="edit-btn" onClick={this.toggleEditView} />
                         )}
                       </div>
-                      {attr.phase.description.trim().length > 0 && <div styleName="project-description">{attr.phase.description}</div>}
+                      {attr.phase.description && attr.phase.description.trim().length > 0 && <div styleName="project-description">{attr.phase.description}</div>}
                       <div styleName="meta-list">
                         <span styleName="meta">{attr.duration}</span>
                         <span styleName="meta">{attr.startEndDates}</span>
