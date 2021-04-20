@@ -270,7 +270,7 @@ export function getProjectNavLinks(project, projectId, renderFAQs) {
     messagesTab = { label: 'Messages', to: `/projects/${projectId}/messages`, Icon: MessagesIcon, iconClassName: 'stroke', exact: false }
   }
   // choose set of menu links based on the project version
-  const navLinks = project.version === 'v3' ? [
+  const navLinks = ['v3', 'v4'].includes(project.version) ? [
     { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
     messagesTab,
     { label: 'Scope', to: `/projects/${projectId}/scope`, Icon: ScopeIcon, iconClassName: 'fill' },
