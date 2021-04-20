@@ -150,6 +150,8 @@ class PhaseCard extends React.Component {
     // const searchParams = new URLSearchParams(window.location.search)
     const isSimplePlan = projectVersion === 'v4'
 
+    console.log(hasPermission(PERMISSIONS.MANAGE_COMPLETED_PHASE));
+
     return (
       <div styleName={'phase-card ' + (isExpanded ? ' expanded ' : ' ')} id={`phase-${phaseId}`}>
         <NotificationsReader
@@ -225,7 +227,7 @@ class PhaseCard extends React.Component {
                   }
 
                   <div styleName="col hide-md">
-                    {status && (isSimplePlan || status !== PHASE_STATUS_ACTIVE) && !this.props.currentUserRoles.includes(PROJECT_ROLE_CUSTOMER) && this.props.currentUserRoles.length > 2 &&
+                    {status && (isSimplePlan || status !== PHASE_STATUS_ACTIVE) && !hasPermission(PERMISSIONS.EXPAND_ACTIVE_PHASES_BY_DEFAULT) &&
                           (<div styleName="status-details">
                             <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                               {statusDetails.name}
@@ -233,7 +235,7 @@ class PhaseCard extends React.Component {
                           </div>)
                     }
 
-                    { !isSimplePlan && status && status === PHASE_STATUS_ACTIVE && !this.props.currentUserRoles.includes(PROJECT_ROLE_CUSTOMER) && this.props.currentUserRoles.length > 2 &&
+                    { !isSimplePlan && status && status === PHASE_STATUS_ACTIVE && !hasPermission(PERMISSIONS.EXPAND_ACTIVE_PHASES_BY_DEFAULT) &&
                           (<div styleName="status-details">
                             <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                               <ProjectProgress
