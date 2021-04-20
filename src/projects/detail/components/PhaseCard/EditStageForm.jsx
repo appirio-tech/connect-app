@@ -76,7 +76,6 @@ class EditStageForm extends React.Component {
   }
 
   submitValue(model) {
-    console.log(model)
     const { phase, phaseIndex, updatePhaseAction } = this.props
     const {
       publishClicked
@@ -91,8 +90,7 @@ class EditStageForm extends React.Component {
       description: model.description || ' ',
       startDate: updatedStartDate,
       endDate: updatedEndDate || '',
-      status: newStatus,
-      duration: moment.utc(updatedEndDate).diff(updatedStartDate, 'days')
+      status: newStatus
     })
     this.setState({
       isUpdating: true,
@@ -102,6 +100,7 @@ class EditStageForm extends React.Component {
   }
 
   onFormSubmit(model) {
+    console.log(model)
     const { phase } = this.props
     const { showActivatingWarning, publishClicked } = this.state
 
@@ -244,8 +243,6 @@ class EditStageForm extends React.Component {
     endDate = moment.utc(endDate).format('YYYY-MM-DD')
     const canDelete = phase.status !== PHASE_STATUS_ACTIVE && phase.status !== PHASE_STATUS_COMPLETED
     const isDraft = phase.status === PHASE_STATUS_DRAFT
-    const duration = moment.utc(endDate).diff(startDate, 'days')
-    console.log(duration)
 
     return (
       <div styleName="container">
@@ -325,14 +322,6 @@ class EditStageForm extends React.Component {
                   type="date"
                   name="endDate"
                   value={endDate}
-                />
-                <TCFormFields.TextInput
-                  wrapperClass={`${styles['input-row']}`}
-                  disabled
-                  label="Duration"
-                  type="text"
-                  name="duration"
-                  value={`${duration} days`}
                 />
               </div>
               {!showActivatingWarning ? (
