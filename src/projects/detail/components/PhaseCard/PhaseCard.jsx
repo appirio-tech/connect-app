@@ -225,7 +225,7 @@ class PhaseCard extends React.Component {
                   }
 
                   <div styleName="col hide-md">
-                    {status && (isSimplePlan || status !== PHASE_STATUS_ACTIVE) && !this.props.currentUserRoles.includes(PROJECT_ROLE_CUSTOMER) &&
+                    {status && (isSimplePlan || status !== PHASE_STATUS_ACTIVE) && !this.props.currentUserRoles.includes(PROJECT_ROLE_CUSTOMER) && this.props.currentUserRoles.length > 2 &&
                           (<div styleName="status-details">
                             <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                               {statusDetails.name}
@@ -233,7 +233,7 @@ class PhaseCard extends React.Component {
                           </div>)
                     }
 
-                    { !isSimplePlan && status && status === PHASE_STATUS_ACTIVE && !this.props.currentUserRoles.includes(PROJECT_ROLE_CUSTOMER) &&
+                    { !isSimplePlan && status && status === PHASE_STATUS_ACTIVE && !this.props.currentUserRoles.includes(PROJECT_ROLE_CUSTOMER) && this.props.currentUserRoles.length > 2 &&
                           (<div styleName="status-details">
                             <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                               <ProjectProgress
