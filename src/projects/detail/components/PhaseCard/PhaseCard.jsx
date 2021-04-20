@@ -150,8 +150,6 @@ class PhaseCard extends React.Component {
     // const searchParams = new URLSearchParams(window.location.search)
     const isSimplePlan = projectVersion === 'v4'
 
-    console.log(hasPermission(PERMISSIONS.MANAGE_COMPLETED_PHASE));
-
     return (
       <div styleName={'phase-card ' + (isExpanded ? ' expanded ' : ' ')} id={`phase-${phaseId}`}>
         <NotificationsReader
