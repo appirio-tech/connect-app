@@ -224,7 +224,7 @@ class PhaseCard extends React.Component {
                   }
 
                   <div styleName="col hide-md">
-                    {status && (isSimplePlan || status !== PHASE_STATUS_ACTIVE) && !hasPermission(PERMISSIONS.EXPAND_ACTIVE_PHASES_BY_DEFAULT) &&
+                    {status && (isSimplePlan || status !== PHASE_STATUS_ACTIVE) && hasPermission(PERMISSIONS.SHOW_PHASE_STATUS) &&
                           (<div styleName="status-details">
                             <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                               {statusDetails.name}
@@ -232,7 +232,7 @@ class PhaseCard extends React.Component {
                           </div>)
                     }
 
-                    { !isSimplePlan && status && status === PHASE_STATUS_ACTIVE && !hasPermission(PERMISSIONS.EXPAND_ACTIVE_PHASES_BY_DEFAULT) &&
+                    { !isSimplePlan && status && status === PHASE_STATUS_ACTIVE && hasPermission(PERMISSIONS.SHOW_PHASE_STATUS) &&
                           (<div styleName="status-details">
                             <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                               <ProjectProgress
