@@ -57,13 +57,13 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline
   } = getPhaseActualData(phase, timeline)
 
   const duration = `${plannedDuration} day${plannedDuration !== 1 ? 's' : ''}`
-  let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
-  // appends end date to the start date only if end date is greater than start date
-  startEndDates += startDate && endDate && endDate.diff(startDate, 'days') > 0 ? `-${endDate.format('MMM D')}` : ''
-  // extracts the start date's month string plus white space
-  const monthStr = startEndDates.substr(0, 4)
-  // replaces the second occurrence of the month part i.e. removes the end date's month part
-  startEndDates = startEndDates.lastIndexOf(monthStr) !== 0 ? startEndDates.replace(`-${monthStr}`, '-') : startEndDates
+  // let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
+  // // appends end date to the start date only if end date is greater than start date
+  // startEndDates += startDate && endDate && endDate.diff(startDate, 'days') > 0 ? `-${endDate.format('MMM D')}` : ''
+  // // extracts the start date's month string plus white space
+  // const monthStr = startEndDates.substr(0, 4)
+  // // replaces the second occurrence of the month part i.e. removes the end date's month part
+  // startEndDates = startEndDates.lastIndexOf(monthStr) !== 0 ? startEndDates.replace(`-${monthStr}`, '-') : startEndDates
 
   const actualPrice = phase.spentBudget
   let paidStatus = 'Quoted'
@@ -81,7 +81,7 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline
     icon,
     title,
     duration,
-    startEndDates,
+    // startEndDates,
     price,
     paidStatus,
     status,
