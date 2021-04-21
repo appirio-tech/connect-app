@@ -169,7 +169,7 @@ class ProjectDetail extends Component {
     // if project version not v3 , URL /scope redirect to /specification
     if(project
       && project.version
-      && project.version !== 'v3'
+      && !['v3', 'v4'].includes(project.version)
       && project.id === parseInt(match.params.projectId)
       &&  this.props.history.location.pathname.indexOf('/scope') !== -1 ){
       this.props.history.push(this.props.history.location.pathname.replace('/scope', '/specification'))
