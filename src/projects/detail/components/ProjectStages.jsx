@@ -43,8 +43,8 @@ function formatPhaseCardListFooterProps(phases, productsTimelines) {
   const minStartDate = startDates.length > 0 ? moment.min(startDates) : null
   const maxEndDate = endDates.length > 0 ? moment.max(endDates) : null
 
-  let startEndDates = minStartDate ? `${minStartDate.format('MMM D')}` : ''
-  startEndDates += minStartDate && maxEndDate ? `–${maxEndDate.format('MMM D')}` : ''
+  // let startEndDates = minStartDate ? `${minStartDate.format('MMM D')}` : ''
+  // startEndDates += minStartDate && maxEndDate ? `–${maxEndDate.format('MMM D')}` : ''
 
   const totalPrice = _.sumBy(filteredPhases, 'budget')
 
@@ -54,7 +54,9 @@ function formatPhaseCardListFooterProps(phases, productsTimelines) {
 
   return {
     duration,
-    startEndDates,
+    // startEndDates,
+    minStartDate,
+    maxEndDate,
     price
   }
 }
