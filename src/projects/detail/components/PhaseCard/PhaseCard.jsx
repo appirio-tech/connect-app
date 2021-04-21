@@ -20,8 +20,7 @@ import {
   PROJECT_STATUS_CANCELLED,
   SCREEN_BREAKPOINT_MD,
   EVENT_TYPE,
-  PHASE_STATUS_REVIEWED,
-  PROJECT_ROLE_CUSTOMER
+  PHASE_STATUS_REVIEWED
 } from '../../../../config/constants'
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
