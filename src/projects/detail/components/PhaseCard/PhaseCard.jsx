@@ -233,7 +233,7 @@ class PhaseCard extends React.Component {
                           </div>)
                     }
 
-                    { status && status === PHASE_STATUS_ACTIVE && (!isSimplePlan || hasPermission(PERMISSIONS.SHOW_PHASE_STATUS)) &&
+                    { !isSimplePlan && status && status === PHASE_STATUS_ACTIVE &&
                           (<div styleName="status-details">
                             <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                               <ProjectProgress
