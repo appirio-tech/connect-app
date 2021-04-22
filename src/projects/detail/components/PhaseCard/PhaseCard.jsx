@@ -233,17 +233,19 @@ class PhaseCard extends React.Component {
                           </div>)
                     }
 
-                    { !isSimplePlan && status && status === PHASE_STATUS_ACTIVE &&
+                    { status && status === PHASE_STATUS_ACTIVE && (!isSimplePlan || hasPermission(PERMISSIONS.SHOW_PHASE_STATUS)) &&
                           (<div styleName="status-details">
                             <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
-                              <ProjectProgress
+                              { !isSimplePlan &&
+                              (<ProjectProgress
                                 title=""
                                 viewType={ProjectProgress.ViewTypes.CIRCLE}
                                 percent={progressInPercent}
                                 thickness={7}
                               >
                                 <span className="progress-text">{progressInPercent}% <span className="unit">completed</span></span>
-                              </ProjectProgress>
+                              </ProjectProgress>)
+                              }
                               {statusDetails.name}
                             </div>
                           </div>)
