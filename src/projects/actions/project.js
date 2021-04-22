@@ -65,7 +65,8 @@ import {
   LOAD_PROJECT_MEMBER_INVITES,
   CREATE_PROJECT_PHASE_TIMELINE_MILESTONES,
   LOAD_PROJECT_MEMBER,
-  ES_REINDEX_DELAY
+  ES_REINDEX_DELAY,
+  CREATE_PROJECT_PHASE
 } from '../../config/constants'
 import {
   updateProductMilestone,
@@ -178,6 +179,7 @@ function getProjectPhasesWithProducts(projectId) {
       'endDate',
       'id',
       'name',
+      'description',
       'progress',
       'projectId',
       'spentBudget',
@@ -273,16 +275,20 @@ function createProductsTimelineAndMilestone(project) {
 /**
  * Create phase and product for the project
  *
- * @param {Object} project         project
- * @param {Object} productTemplate product template
- * @param {String} status          (optional) project/phase status
+ * @param {Object}  project         project
+ * @param {Object}  productTemplate product template
+ * @param {String}  status          (optional) project/phase status
+ * @param {Date}    startDate       start date of the phase
+ * @param {Date}    endDate         end date of the phase
+ * @param {Boolean} createTimeline  flag to indicate if we need to create timeline for the phase
  *
  * @return {Promise} project
  */
-export function createProjectPhaseAndProduct(project, productTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate) {
+export function createProjectPhaseAndProduct(project, productTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate, createTimeline = true) {
   const param = {
     status,
     name: productTemplate.name,
+    description: productTemplate.description,
     productTemplateId: productTemplate.id
   }
   if (startDate) {
@@ -293,13 +299,21 @@ export function createProjectPhaseAndProduct(project, productTemplate, status = 
   }
 
   return createProjectPhase(project.id, param).then((phase) => {
-    // we also wait until timeline is created as we will load it for the phase after creation
-    return createTimelineAndMilestoneForProduct(phase.products[0], phase).then((timeline) => ({
-      project,
-      phase,
-      product:phase.products[0],
-      timeline,
-    }))
+    if (createTimeline) {
+      // we also wait until timeline is created as we will load it for the phase after creation
+      return createTimelineAndMilestoneForProduct(phase.products[0], phase).then((timeline) => ({
+        project,
+        phase,
+        product:phase.products[0],
+        timeline,
+      }))
+    } else {
+      return Promise.resolve({
+        project,
+        phase,
+        product:phase.products[0]
+      })
+    }
   })
 }
 
@@ -331,6 +345,25 @@ function createPhaseAndMilestonesRequest(project, productTemplate, status = PHAS
   })
 }
 
+/**
+ * Creates phase and product only, without timeline and milestone. Introduced with project plan simplification
+ * work where we removed timeline and milestones for projects with version v4
+ * @param {*} project 
+ * @param {*} productTemplate 
+ * @param {*} status 
+ * @param {*} startDate 
+ * @param {*} endDate 
+ */
+export function createPhaseWithoutTimeline(project, productTemplate, status, startDate, endDate) {
+  return (dispatch) => {
+    console.log(CREATE_PROJECT_PHASE)
+    return dispatch({
+      type: CREATE_PROJECT_PHASE,
+      payload: createProjectPhaseAndProduct(project, productTemplate, status, startDate, endDate, false)
+    })
+  }
+}
+
 export function createPhaseAndMilestones(project, productTemplate, status, startDate, endDate, milestones) {
   return (dispatch, getState) => {
     return dispatch({
@@ -339,9 +372,6 @@ export function createPhaseAndMilestones(project, productTemplate, status, start
     }).then(() => {
       const state = getState()
       const project = state.projectState.project
-
-      console.log('project.status', project.status)
-      console.log('status', status)
 
       // if phase is created as ACTIVE, move project to ACTIVE too
       if (
@@ -464,6 +494,7 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
     const phaseStartDate = timeline ? timeline.startDate : phase.startDate
     const startDateChanged = updatedProps.startDate ? updatedProps.startDate.diff(phaseStartDate) : null
     const phaseActivated = phaseStatusChanged && updatedProps.status === PHASE_STATUS_ACTIVE
+    const projectVersion = state.projectState.project.version
 
     if (updatedProps.startDate) {
       updatedProps.startDate = moment(updatedProps.startDate).format('YYYY-MM-DD')
@@ -494,7 +525,7 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
         // - phase's status is changed to active
         // - there is not active milestone alreay (this can happen when phase is made active more than once
         // e.g. Active => Paused => Active)
-        if (timeline && !activeMilestone && phaseActivated ) {
+        if (projectVersion !== 'v4' && timeline && !activeMilestone && phaseActivated ) {
           dispatch(
             updateProductMilestone(
               productId,

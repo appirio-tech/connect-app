@@ -33,7 +33,7 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
       }
 
       // for new projects load phases, products, project template and product templates
-      if (project.version === 'v3') {
+      if (['v3', 'v4'].indexOf(project.version) !== -1) {
         promises.push(
           dispatch(loadProjectPlan(projectId, userIds))
         )

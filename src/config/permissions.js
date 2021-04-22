@@ -199,6 +199,20 @@ export const PERMISSIONS = {
     ],
   },
 
+  SHOW_PHASE_STATUS: {
+    meta: {
+      group: 'Project Plan',
+      title: 'Show project phase status',
+    },
+    projectRoles: [
+      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
+    ],
+    topcoderRoles: [
+      ROLE_CONNECT_MANAGER,
+      ...TOPCODER_ADMINS,
+    ],
+  },
+
   /*
     Project Members
   */

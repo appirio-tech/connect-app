@@ -6,7 +6,8 @@
 }
 
 .form {
-  > .title-label-layer {
+  > .title-label-layer,
+    .description-label-layer {
     padding: 0 10px;
 
     + div {
@@ -43,9 +44,13 @@
     }
 
   }
-  input {
+  input, textarea {
     display: inline-block;
     width:calc(100% - 170px)!important;
+  }
+
+  textarea {
+    min-height: 70px;
   }
 
 
@@ -97,7 +102,10 @@
   }
 }
 
-.title-label-layer {
+.title-label-layer,
+.description-label-layer {
+  position: relative;
+
   .input-row {
     width: 100%;
     input {
@@ -109,6 +117,15 @@
       width: 150px;
     }
   }
+
+  .description-sub-label {
+    font-style: italic; 
+    text-align: right; 
+    margin-bottom: 10px; 
+    margin-top: -10px;
+    color: $tc-gray-50; 
+    font-size: 11px;
+  }
 }
 
 .group-bottom {
@@ -118,7 +135,9 @@
     justify-content: center;
     align-items: center;
     margin-top: 20px;
+    padding-top: 20px;
     padding-bottom: 20px;
+    border-top: 1px solid $tc-gray-10;
 
     button {
       margin: 0 5px 0 5px;

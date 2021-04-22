@@ -57,13 +57,13 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline
   } = getPhaseActualData(phase, timeline)
 
   const duration = `${plannedDuration} day${plannedDuration !== 1 ? 's' : ''}`
-  let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
-  // appends end date to the start date only if end date is greater than start date
-  startEndDates += startDate && endDate && endDate.diff(startDate, 'days') > 0 ? `-${endDate.format('MMM D')}` : ''
-  // extracts the start date's month string plus white space
-  const monthStr = startEndDates.substr(0, 4)
-  // replaces the second occurrence of the month part i.e. removes the end date's month part
-  startEndDates = startEndDates.lastIndexOf(monthStr) !== 0 ? startEndDates.replace(`-${monthStr}`, '-') : startEndDates
+  // let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
+  // // appends end date to the start date only if end date is greater than start date
+  // startEndDates += startDate && endDate && endDate.diff(startDate, 'days') > 0 ? `-${endDate.format('MMM D')}` : ''
+  // // extracts the start date's month string plus white space
+  // const monthStr = startEndDates.substr(0, 4)
+  // // replaces the second occurrence of the month part i.e. removes the end date's month part
+  // startEndDates = startEndDates.lastIndexOf(monthStr) !== 0 ? startEndDates.replace(`-${monthStr}`, '-') : startEndDates
 
   const actualPrice = phase.spentBudget
   let paidStatus = 'Quoted'
@@ -81,7 +81,7 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline
     icon,
     title,
     duration,
-    startEndDates,
+    // startEndDates,
     price,
     paidStatus,
     status,
@@ -216,6 +216,7 @@ class ProjectStage extends React.Component{
       <PhaseCard
         attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, _.get(phasesTopics[tag], 'topic', {}), timeline)}
         projectStatus={project.status}
+        projectVersion={project.version}
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
         timeline={timeline}
         hasUnseen={hasAnyNotifications}
@@ -225,50 +226,52 @@ class ProjectStage extends React.Component{
         expandProjectPhase={expandProjectPhase}
         project={project}
       >
-        <div id={projectPhaseAnchor}>
-          <ProjectStageTabs
-            activeTab={currentActiveTab}
-            onTabClick={this.onTabClick}
-            hasTimeline={hasTimeline}
-            hasNotifications={hasNotifications}
-            hideSpecTab={!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) || isGenericPhase}
-          />
+        { project.version === 'v3' &&
+          <div id={projectPhaseAnchor}>
+            <ProjectStageTabs
+              activeTab={currentActiveTab}
+              onTabClick={this.onTabClick}
+              hasTimeline={hasTimeline}
+              hasNotifications={hasNotifications}
+              hideSpecTab={!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) || isGenericPhase}
+            />
 
-          {currentActiveTab === 'timeline' &&
-            <ProductTimelineContainer product={product} project={project} />
-          }
+            {currentActiveTab === 'timeline' &&
+              <ProductTimelineContainer product={product} project={project} />
+            }
 
-          {currentActiveTab === 'posts' && (
-            <PostsContainer tag={tag} postUrlTemplate={`phase-${phase.id}-posts-{{postId}}`} />
-          )}
+            {currentActiveTab === 'posts' && (
+              <PostsContainer tag={tag} postUrlTemplate={`phase-${phase.id}-posts-{{postId}}`} />
+            )}
 
-          {currentActiveTab === 'specification' &&
-            <div className="two-col-content content">
-              <NotificationsReader
-                id={`phase-${phase.id}-specification`}
-                criteria={buildPhaseSpecifiationNotificationsCriteria(phase)}
-              />
-              <EnhancedEditProjectForm
-                project={product}
-                projectNonDirty={productNonDirty}
-                template={template}
-                productTemplates={productTemplates}
-                productCategories={productCategories}
-                isEdittable={hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)}
-                submitHandler={(model) => updateProduct(project.id, phase.id, product.id, model)}
-                saving={isProcessing}
-                fireProjectDirty={(values) => fireProductDirty(phase.id, product.id, values)}
-                fireProjectDirtyUndo= {fireProductDirtyUndo}
-                addAttachment={this.addProductAttachment}
-                updateAttachment={this.updateProductAttachment}
-                removeAttachment={this.removeProductAttachment}
-                attachmentsStorePath={attachmentsStorePath}
-                canManageAttachments={hasPermission(PERMISSIONS.EDIT_PROJECT_SPECIFICATION)}
-                disableAutoScrolling
-              />
-            </div>
-          }
-        </div>
+            {currentActiveTab === 'specification' &&
+              <div className="two-col-content content">
+                <NotificationsReader
+                  id={`phase-${phase.id}-specification`}
+                  criteria={buildPhaseSpecifiationNotificationsCriteria(phase)}
+                />
+                <EnhancedEditProjectForm
+                  project={product}
+                  projectNonDirty={productNonDirty}
+                  template={template}
+                  productTemplates={productTemplates}
+                  productCategories={productCategories}
+                  isEdittable={hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)}
+                  submitHandler={(model) => updateProduct(project.id, phase.id, product.id, model)}
+                  saving={isProcessing}
+                  fireProjectDirty={(values) => fireProductDirty(phase.id, product.id, values)}
+                  fireProjectDirtyUndo= {fireProductDirtyUndo}
+                  addAttachment={this.addProductAttachment}
+                  updateAttachment={this.updateProductAttachment}
+                  removeAttachment={this.removeProductAttachment}
+                  attachmentsStorePath={attachmentsStorePath}
+                  canManageAttachments={hasPermission(PERMISSIONS.EDIT_PROJECT_SPECIFICATION)}
+                  disableAutoScrolling
+                />
+              </div>
+            }
+          </div>
+        }
       </PhaseCard>
     )
   }
