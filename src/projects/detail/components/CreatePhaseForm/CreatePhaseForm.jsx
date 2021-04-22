@@ -376,6 +376,7 @@ class CreatePhaseForm extends React.Component {
                 value={''}
                 maxLength={255}
               />
+              <label styleName="description-sub-label">255 character maximum</label>
             </div>
             <div styleName="label-layer">
               <TCFormFields.TextInput

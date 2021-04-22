@@ -288,6 +288,7 @@ class EditStageForm extends React.Component {
                     value={phase.description ? phase.description.trim() : ''}
                     maxLength={255}
                   />
+                  <label styleName="description-sub-label">255 character maximum</label>
                 </div>
               )}
               <div styleName="label-layer">
