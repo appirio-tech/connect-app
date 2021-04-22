@@ -18,8 +18,8 @@ const PhaseCardListFooter = ({
         <div styleName="total">Total:</div>
         <div styleName="meta-list">
           <span styleName="meta"><label>Duration:</label>{duration}</span>
-          <span styleName="meta"><label>Start Date:</label>{minStartDate.format('YYYY-MM-DD')}</span>
-          <span styleName="meta"><label>End Date:</label>{maxEndDate.format('YYYY-MM-DD')}</span>
+          <span styleName="meta"><label>Start Date:</label>{minStartDate ? minStartDate.format('YYYY-MM-DD') : 'N/A'}</span>
+          <span styleName="meta"><label>End Date:</label>{maxEndDate ? maxEndDate.format('YYYY-MM-DD') : 'N/A'}</span>
         </div>
       </div>
       {parseInt(price, 10) > 0 &&  <div styleName="price">price</div> }
