@@ -104,6 +104,8 @@
 
 .title-label-layer,
 .description-label-layer {
+  position: relative;
+
   .input-row {
     width: 100%;
     input {
@@ -114,6 +116,15 @@
       display: inline-block;
       width: 150px;
     }
+  }
+
+  .description-sub-label {
+    font-style: italic; 
+    text-align: right; 
+    margin-bottom: 10px; 
+    margin-top: -10px;
+    color: $tc-gray-50; 
+    font-size: 11px;
   }
 }
 
