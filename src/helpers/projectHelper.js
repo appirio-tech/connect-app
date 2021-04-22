@@ -158,14 +158,20 @@ export function getPhaseActualData(phase, timeline) {
     duration = phase.duration ? phase.duration : 0
     progress = phase.progress ? phase.progress : 0
 
-    if (startDate) {
+    // if start date and duration are set, use them to calculate endDate
+    if (!endDate && startDate && duration > 0) {
       endDate = startDate.clone().add(duration, 'days')
-    } else {
+    }
+    // default to today if start date not set
+    if (!startDate) {
       startDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
     }
+    // default to today if end date not set
     if (!endDate) {
       endDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
     }
+    // re-caclulate the duration of the phase
+    duration = endDate.diff(startDate, 'days') + 1
 
   // if phase's product has timeline get data from timeline
   } else {
@@ -264,7 +270,7 @@ export function getProjectNavLinks(project, projectId, renderFAQs) {
     messagesTab = { label: 'Messages', to: `/projects/${projectId}/messages`, Icon: MessagesIcon, iconClassName: 'stroke', exact: false }
   }
   // choose set of menu links based on the project version
-  const navLinks = project.version === 'v3' ? [
+  const navLinks = ['v3', 'v4'].includes(project.version) ? [
     { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardIcon, iconClassName: 'stroke' },
     messagesTab,
     { label: 'Scope', to: `/projects/${projectId}/scope`, Icon: ScopeIcon, iconClassName: 'fill' },

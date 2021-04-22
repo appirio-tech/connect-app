@@ -15,7 +15,7 @@ function ProjectCard({ project, disabled, currentUser, history, onChangeStatus, 
   const isMember = _.some(project.members, m => (m.userId === currentUser.userId && m.deletedAt === null))
   // check whether has pending invition
   const isInvited = _.some(project.invites, m => ((m.userId === currentUser.userId || m.email === currentUser.email) && !m.deletedAt && m.status === 'pending'))
-  const projectDetailsURL = project.version === 'v3'
+  const projectDetailsURL = ['v3', 'v4'].includes(project.version)
     ? `/projects/${project.id}/scope`
     : `/projects/${project.id}/specification`
 

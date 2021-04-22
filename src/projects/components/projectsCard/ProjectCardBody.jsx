@@ -32,7 +32,7 @@ function ProjectCardBody({ project, descLinesCount = 8,
 
   const progress = _.get(process, 'percent', 0)
 
-  const projectDetailsURL = project.version === 'v3'
+  const projectDetailsURL = ['v3', 'v4'].includes(project.version)
     ? `/projects/${project.id}/scope`
     : `/projects/${project.id}/specification`
 

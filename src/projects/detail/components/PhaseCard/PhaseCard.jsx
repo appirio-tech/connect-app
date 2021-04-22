@@ -20,7 +20,7 @@ import {
   PROJECT_STATUS_CANCELLED,
   SCREEN_BREAKPOINT_MD,
   EVENT_TYPE,
-  PHASE_STATUS_REVIEWED,
+  PHASE_STATUS_REVIEWED
 } from '../../../../config/constants'
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
@@ -44,7 +44,7 @@ import './PhaseCard.scss'
  *
  * @returns {string} visual
  */
-const getVisualPhaseStatus = (attr) => {
+const getVisualPhaseStatus = (attr, projectVersion) => {
   // if model doesn't have status, fallback for DRAFT
   let status = attr.status ? attr.status : PHASE_STATUS_DRAFT
 
@@ -62,6 +62,12 @@ const getVisualPhaseStatus = (attr) => {
     } else if (now.isAfter(attr.actualEndDate, 'day')) {
       visualStatus = PHASE_STATUS_COMPLETED
     } else {
+      visualStatus = PHASE_STATUS_ACTIVE
+    }
+  }
+
+  if (projectVersion === 'v4') {
+    if (status === PHASE_STATUS_ACTIVE) {
       visualStatus = PHASE_STATUS_ACTIVE
     }
   }
@@ -127,10 +133,11 @@ class PhaseCard extends React.Component {
       hasUnseen,
       phaseId,
       isExpanded,
+      projectVersion,
     } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
-    const status = getVisualPhaseStatus(attr)
+    const status = getVisualPhaseStatus(attr, projectVersion)
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
     const phaseEditable =
@@ -139,6 +146,8 @@ class PhaseCard extends React.Component {
         hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)
         && ( status !== PHASE_STATUS_COMPLETED || hasPermission(PERMISSIONS.MANAGE_COMPLETED_PHASE) )
       )
+    // const searchParams = new URLSearchParams(window.location.search)
+    const isSimplePlan = projectVersion === 'v4'
 
     return (
       <div styleName={'phase-card ' + (isExpanded ? ' expanded ' : ' ')} id={`phase-${phaseId}`}>
@@ -155,7 +164,7 @@ class PhaseCard extends React.Component {
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => (matches || !isExpanded ? (
               <div>
-                <div styleName={cn('static-view', { 'has-unseen': hasUnseen && !isExpanded })} onClick={!this.state.isEditting && this.toggleCardView }>
+                <div styleName={cn('static-view', { 'has-unseen': hasUnseen && !isExpanded, 'simple-plan' : isSimplePlan })} onClick={!isSimplePlan && !this.state.isEditting && this.toggleCardView }>
                   <div styleName="col">
                     <div styleName="project-details">
                       <div styleName="project-ico">
@@ -173,10 +182,12 @@ class PhaseCard extends React.Component {
                         {phaseEditable && !this.state.isEditting && (<a styleName="edit-btn" onClick={this.toggleEditView} />
                         )}
                       </div>
+                      {attr.phase.description && attr.phase.description.trim().length > 0 && <div styleName="project-description">{attr.phase.description}</div>}
                       <div styleName="meta-list">
-                        <span styleName="meta">{attr.duration}</span>
-                        <span styleName="meta">{attr.startEndDates}</span>
-                        {attr.posts && <span styleName="meta">{attr.posts}</span>}
+                        <span styleName="meta"><label>Duration:</label>{attr.duration}</span>
+                        <span styleName="meta"><label>Start Date:</label>{attr.actualStartDate.format('YYYY-MM-DD')}</span>
+                        <span styleName="meta"><label>End Date:</label>{attr.actualEndDate.format('YYYY-MM-DD')}</span>
+                        {!isSimplePlan && attr.posts && <span styleName="meta">{attr.posts}</span>}
                       </div>
                     </div>
                   </div>
@@ -201,7 +212,7 @@ class PhaseCard extends React.Component {
                         </div>)
                   }
 
-                  {status && status === PHASE_STATUS_ACTIVE &&
+                  { status && status === PHASE_STATUS_ACTIVE &&
                         (<div styleName="col show-md">
                           <div styleName="price-details">
                             <h5>{attr.price}</h5>
@@ -214,7 +225,7 @@ class PhaseCard extends React.Component {
                   }
 
                   <div styleName="col hide-md">
-                    {status && status !== PHASE_STATUS_ACTIVE &&
+                    {status && status !== PHASE_STATUS_ACTIVE && (!isSimplePlan || hasPermission(PERMISSIONS.SHOW_PHASE_STATUS)) &&
                           (<div styleName="status-details">
                             <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                               {statusDetails.name}
@@ -222,24 +233,26 @@ class PhaseCard extends React.Component {
                           </div>)
                     }
 
-                    {status && status === PHASE_STATUS_ACTIVE &&
+                    { status && status === PHASE_STATUS_ACTIVE && (!isSimplePlan || hasPermission(PERMISSIONS.SHOW_PHASE_STATUS)) &&
                           (<div styleName="status-details">
                             <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
-                              <ProjectProgress
-                                title=""
-                                viewType={ProjectProgress.ViewTypes.CIRCLE}
-                                percent={progressInPercent}
-                                thickness={7}
-                              >
-                                <span className="progress-text">{progressInPercent}% <span className="unit">completed</span></span>
-                              </ProjectProgress>
+                              { !isSimplePlan && (
+                                <ProjectProgress
+                                  title=""
+                                  viewType={ProjectProgress.ViewTypes.CIRCLE}
+                                  percent={progressInPercent}
+                                  thickness={7}
+                                >
+                                  <span className="progress-text">{progressInPercent}% <span className="unit">completed</span></span>
+                                </ProjectProgress>
+                              )}
                               {statusDetails.name}
                             </div>
                           </div>)
                     }
                   </div>
 
-                  {!this.state.isEditting && (<a styleName="toggle-arrow" />
+                  { !isSimplePlan && !this.state.isEditting && (<a styleName="toggle-arrow" />
                   )}
 
                   {status && status === PHASE_STATUS_ACTIVE &&

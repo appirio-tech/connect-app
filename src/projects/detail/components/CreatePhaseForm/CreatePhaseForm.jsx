@@ -27,7 +27,7 @@ const getMilestoneModelByIndex = (model, index) => {
   let milestoneModel
 
   // omit phase fields
-  _.forEach(_.keys(_.omit(model, ['title', 'startDate', 'endDate'])), (key) => {
+  _.forEach(_.keys(_.omit(model, ['title', 'description', 'startDate', 'endDate'])), (key) => {
     const keyMatches = key.match(/(\w+)_(\d+)/)
 
     if (keyMatches.length !== 3) {
@@ -120,6 +120,7 @@ class CreatePhaseForm extends React.Component {
 
     const phaseData = {
       title: model.title,
+      description: model.description || ' ',
       startDate: moment(model.startDate),
       endDate: moment(model.endDate),
     }
@@ -127,6 +128,9 @@ class CreatePhaseForm extends React.Component {
     const apiMilestones = milestones.map((milestone, index) => ({
       // default values
       ...MILESTONE_DEFAULT_VALUES[milestone.type],
+      ..._.omit(milestone, 'pseudoId'),
+      startDate: model.startDate,
+      endDate: model.endDate,
 
       // values from the form
       ...getMilestoneModelByIndex(model, index),
@@ -152,12 +156,14 @@ class CreatePhaseForm extends React.Component {
    * @param change changed form model in flattened form
    */
   handleChange(change) {
-    const {
-      milestones
-    } = this.state
+    const { projectVersion } = this.props
+    // DO NOT update milestones state if project version is 4
+    if (projectVersion === 4) return
+    const { milestones } = this.state
 
     // update all milestones in state from the Formzy model
     const newMilestones = milestones.map((milestone, index) => {
+
       const milestoneModel = getMilestoneModelByIndex(change, index)
 
       const updatedMilestone = {
@@ -216,7 +222,7 @@ class CreatePhaseForm extends React.Component {
     const {
       milestones
     } = this.state
-
+    
     const ms = _.map(milestones, (m, index) => {
       return (
         <div styleName="milestone-item" key={m.pseudoId}>
@@ -322,6 +328,10 @@ class CreatePhaseForm extends React.Component {
 
   render() {
     const { isAddButtonClicked } = this.state
+    const { projectVersion } = this.props
+
+    // const searchParams = new URLSearchParams(window.location.search)
+    // const isBetaMode = searchParams.get('beta') === 'true'
 
     if (!isAddButtonClicked) {
       return (
@@ -357,6 +367,17 @@ class CreatePhaseForm extends React.Component {
                 maxLength={48}
               />
             </div>
+            <div styleName="description-label-layer">
+              <TCFormFields.Textarea
+                autoResize
+                wrapperClass={`${styles['input-row']}`}
+                label="Description"
+                name="description"
+                value={''}
+                maxLength={255}
+              />
+              <label styleName="description-sub-label">255 character maximum</label>
+            </div>
             <div styleName="label-layer">
               <TCFormFields.TextInput
                 wrapperClass={`${styles['input-row']}`}
@@ -391,8 +412,8 @@ class CreatePhaseForm extends React.Component {
                 value={moment.utc().add(3, 'days').format('YYYY-MM-DD')}
               />
             </div>
-            {this.renderTab()}
-            {this.renderMilestones()}
+            { projectVersion !== 4 && this.renderTab()}
+            { projectVersion !== 4 && this.renderMilestones()}
             <div styleName="group-bottom">
               <button onClick={this.onCancelClick} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
               <button className="tc-btn tc-btn-primary tc-btn-sm"
@@ -413,6 +434,7 @@ class CreatePhaseForm extends React.Component {
 
 CreatePhaseForm.propTypes = {
   onSubmit: PT.func.isRequired,
+  projectVersion: PT.number,
 }
 
 export default CreatePhaseForm

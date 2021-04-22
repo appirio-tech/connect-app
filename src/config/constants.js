@@ -96,6 +96,12 @@ export const CREATE_TIMELINE_MILESTONE_SUCCESS = 'CREATE_TIMELINE_MILESTONE_SUCC
 export const CREATE_TIMELINE_MILESTONE_FAILURE = 'CREATE_TIMELINE_MILESTONE_FAILURE'
 export const CREATE_TIMELINE_MILESTONE_PENDING = 'CREATE_TIMELINE_MILESTONE_PENDING'
 
+// project phases
+export const CREATE_PROJECT_PHASE             = 'CREATE_PROJECT_PHASE'
+export const CREATE_PROJECT_PHASE_FAILURE     = 'CREATE_PROJECT_PHASE_FAILURE'
+export const CREATE_PROJECT_PHASE_SUCCESS     = 'CREATE_PROJECT_PHASE_SUCCESS'
+export const CREATE_PROJECT_PHASE_PENDING     = 'CREATE_PROJECT_PHASE_PENDING'
+
 // project phases and timeline and milestones
 export const CREATE_PROJECT_PHASE_TIMELINE_MILESTONES             = 'CREATE_PROJECT_PHASE_TIMELINE_MILESTONES'
 export const CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_FAILURE     = 'CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_FAILURE'
@@ -613,7 +619,7 @@ export const PHASE_STATUS = [
   {color: 'gray', name: 'Draft', fullName: 'Phase is in draft', value: PHASE_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
   // {color: 'gray', name: 'In review', fullName: 'Phase is in review', value: PHASE_STATUS_IN_REVIEW, order: 3, dropDownOrder: 2 },
   {color: 'gray', name: 'Planned', fullName: 'Phase is reviewed', value: PHASE_STATUS_REVIEWED, order: 4, dropDownOrder: 3 },
-  {color: 'green', name: 'Active', fullName: 'Phase is active', value: PHASE_STATUS_ACTIVE, order: 1, dropDownOrder: 4 },
+  {color: 'green', name: 'Published', fullName: 'Phase is active', value: PHASE_STATUS_ACTIVE, order: 1, dropDownOrder: 4 },
   {color: 'black', name: 'Completed', fullName: 'Phase is completed', value: PHASE_STATUS_COMPLETED, order: 5, dropDownOrder: 5 },
   // {color: 'black', name: 'Cancelled', fullName: 'Phase is canceled', value: PHASE_STATUS_CANCELLED, order: 6, dropDownOrder: 6 },
   // {color: 'red', name: 'Paused', fullName: 'Phase is paused', value: PHASE_STATUS_PAUSED, order: 7, dropDownOrder: 7 }

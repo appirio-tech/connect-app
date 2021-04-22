@@ -68,7 +68,8 @@ import {
   APPROVE_SCOPE_CHANGE_FAILURE,
   REJECT_SCOPE_CHANGE_FAILURE,
   CANCEL_SCOPE_CHANGE_FAILURE,
-  ACTIVATE_SCOPE_CHANGE_FAILURE
+  ACTIVATE_SCOPE_CHANGE_FAILURE,
+  CREATE_PROJECT_PHASE_SUCCESS
 } from '../config/constants'
 /* eslint-enable no-unused-vars */
 
@@ -83,7 +84,8 @@ export default function(state = {}, action) {
     return state
   }
 
-  case CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS: {
+  case CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS:
+  case CREATE_PROJECT_PHASE_SUCCESS: {
     Alert.success('Project phase created.')
     return state
   }

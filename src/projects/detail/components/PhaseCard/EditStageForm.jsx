@@ -87,6 +87,7 @@ class EditStageForm extends React.Component {
       newStatus = PHASE_STATUS_ACTIVE
     }
     const updateParam = _.assign({}, model, {
+      description: model.description || ' ',
       startDate: updatedStartDate,
       endDate: updatedEndDate || '',
       status: newStatus
@@ -99,6 +100,7 @@ class EditStageForm extends React.Component {
   }
 
   onFormSubmit(model) {
+    console.log(model)
     const { phase } = this.props
     const { showActivatingWarning, publishClicked } = this.state
 
@@ -276,6 +278,19 @@ class EditStageForm extends React.Component {
                   maxLength={48}
                 />
               </div>
+              {phase.description && (
+                <div styleName="description-label-layer">
+                  <TCFormFields.Textarea
+                    autoResize
+                    wrapperClass={`${styles['input-row']}`}
+                    label="Description"
+                    name="description"
+                    value={phase.description ? phase.description.trim() : ''}
+                    maxLength={255}
+                  />
+                  <label styleName="description-sub-label">255 character maximum</label>
+                </div>
+              )}
               <div styleName="label-layer">
                 <TCFormFields.TextInput
                   wrapperClass={`${styles['input-row']}`}

@@ -51,14 +51,17 @@
 
 .meta-list {
   .meta {
-    &::after {
-      content: " • ";
+    color: $tc-gray-30;
+    margin-left: 10px;
+
+    label { 
       display: inline-block;
-      margin: 0 $base-unit;
+      color: $tc-white;
+      margin-right: 5px;
     }
 
-    &:last-child::after {
-      display: none;
+    &:first-child {
+      margin-left: 0px;
     }
 
     &.meta-dark {
