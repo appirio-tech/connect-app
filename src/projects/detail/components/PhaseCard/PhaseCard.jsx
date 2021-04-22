@@ -185,8 +185,8 @@ class PhaseCard extends React.Component {
                       {attr.phase.description && attr.phase.description.trim().length > 0 && <div styleName="project-description">{attr.phase.description}</div>}
                       <div styleName="meta-list">
                         <span styleName="meta"><label>Duration:</label>{attr.duration}</span>
-                        <span styleName="meta"><label>Start Date:</label>{attr.actualStartDate.format('YYYY-MM-DD')}</span>
-                        <span styleName="meta"><label>End Date:</label>{attr.actualEndDate.format('YYYY-MM-DD')}</span>
+                        <span styleName="meta"><label>Start Date:</label>{attr.actualStartDate ? attr.actualStartDate.format('YYYY-MM-DD') : 'N/A'}</span>
+                        <span styleName="meta"><label>End Date:</label>{attr.actualEndDate ? attr.actualEndDate.format('YYYY-MM-DD') : 'N/A'}</span>
                         {!isSimplePlan && attr.posts && <span styleName="meta">{attr.posts}</span>}
                       </div>
                     </div>
