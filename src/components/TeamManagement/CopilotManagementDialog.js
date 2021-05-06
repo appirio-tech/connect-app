@@ -182,7 +182,7 @@ class ProjectManagementDialog extends React.Component {
             {i === 0 && !canManageCopilots && <div className="dialog-no-members" />}
           </div>
 
-          {canManageCopilots && (
+          {(canManageCopilots || canRemoveCopilots) && (
             <div className="input-container">
               <div className="hint">invite more copilots</div>
               <AutocompleteInputContainer
