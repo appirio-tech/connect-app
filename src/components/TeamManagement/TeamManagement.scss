@@ -457,6 +457,10 @@
         display: flex;
         flex-wrap: wrap;
         flex-direction: column;
+
+        div {
+          align-items: center;
+        }
       }
     }
   }
