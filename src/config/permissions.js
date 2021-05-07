@@ -252,6 +252,17 @@ export const PERMISSIONS = {
     projectRoles: [PROJECT_ROLE_COPILOT],
   },
 
+  INVITE_COPILOTS: {
+    meta: {
+      group: 'Project Members',
+      title: 'Invite Copilots',
+      description: 'Invite copilots to the project.',
+    },
+    topcoderRoles: [
+      ...TOPCODER_ADMINS
+    ]
+  },
+
   MANAGE_TOPCODER_TEAM: {
     meta: {
       group: 'Project Members',

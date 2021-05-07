@@ -93,6 +93,7 @@ class ProjectManagementDialog extends React.Component {
     } = this.props
     const canManageCopilots = hasPermission(PERMISSIONS.MANAGE_COPILOTS)
     const canRemoveCopilots = hasPermission(PERMISSIONS.REMOVE_COPILOTS)
+    const canInviteCopilots = hasPermission(PERMISSIONS.INVITE_COPILOTS)
     const showSuggestions = hasPermission(PERMISSIONS.SEE_MEMBER_SUGGESTIONS)
     let i = 0
     return (
@@ -182,7 +183,7 @@ class ProjectManagementDialog extends React.Component {
             {i === 0 && !canManageCopilots && <div className="dialog-no-members" />}
           </div>
 
-          {(canManageCopilots || canRemoveCopilots) && (
+          {canInviteCopilots && (
             <div className="input-container">
               <div className="hint">invite more copilots</div>
               <AutocompleteInputContainer
@@ -209,7 +210,7 @@ class ProjectManagementDialog extends React.Component {
               </button>
             </div>
           )}
-          {!canManageCopilots && <div className="dialog-placeholder" />}
+          {!canInviteCopilots && <div className="dialog-placeholder" />}
         </div>
 
       </Modal>
