@@ -93,7 +93,6 @@ class ProjectManagementDialog extends React.Component {
     } = this.props
     const canManageCopilots = hasPermission(PERMISSIONS.MANAGE_COPILOTS)
     const canRemoveCopilots = hasPermission(PERMISSIONS.REMOVE_COPILOTS)
-    const canInviteCopilots = hasPermission(PERMISSIONS.INVITE_COPILOTS)
     const showSuggestions = hasPermission(PERMISSIONS.SEE_MEMBER_SUGGESTIONS)
     let i = 0
     return (
