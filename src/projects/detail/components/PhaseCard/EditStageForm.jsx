@@ -86,8 +86,10 @@ class EditStageForm extends React.Component {
     if (publishClicked && phase.status === PHASE_STATUS_DRAFT) {
       newStatus = PHASE_STATUS_ACTIVE
     }
+    if (!model.description.trim()) {
+      delete model.description
+    }
     const updateParam = _.assign({}, model, {
-      description: model.description || ' ',
       startDate: updatedStartDate,
       endDate: updatedEndDate || '',
       status: newStatus
@@ -285,7 +287,7 @@ class EditStageForm extends React.Component {
                     wrapperClass={`${styles['input-row']}`}
                     label="Description"
                     name="description"
-                    value={phase.description ? phase.description.trim() : ''}
+                    value={phase.description}
                     maxLength={255}
                   />
                   <label styleName="description-sub-label">255 character maximum</label>
