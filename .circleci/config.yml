@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'feature/project-plan-simplification-0']
+              only: ['dev', 'feature/cf-2.20']
 
       - deployTest01:
           context : org-global
