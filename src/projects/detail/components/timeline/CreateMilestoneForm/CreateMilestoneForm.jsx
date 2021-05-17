@@ -34,13 +34,13 @@ class CreateMilestoneForm extends React.Component {
   cancelEdit() {
     const { previousMilestone } = this.props
     const startDate = previousMilestone ? moment.utc(previousMilestone.completionDate || previousMilestone.endDate) : moment.utc()
-    this.state = {
+    this.setState({
       isEditing: false,
       type: '',
       name: '',
       startDate: startDate.format('YYYY-MM-DD'),
       endDate: startDate.add(3, 'days').format('YYYY-MM-DD')
-    }
+    })
   }
 
   onAddClick() {
