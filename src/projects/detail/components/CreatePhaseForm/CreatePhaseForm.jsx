@@ -120,9 +120,12 @@ class CreatePhaseForm extends React.Component {
 
     const phaseData = {
       title: model.title,
-      description: model.description || ' ',
       startDate: moment(model.startDate),
       endDate: moment(model.endDate),
+    }
+
+    if (model.description.trim()) {
+      phaseData.description = model.description
     }
 
     const apiMilestones = milestones.map((milestone, index) => ({
