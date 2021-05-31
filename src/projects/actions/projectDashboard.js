@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { loadProject, loadProjectInvite, loadProjectMembers, loadProjectMemberInvites } from './project'
+import { loadProject, loadProjectBillingAccount, loadProjectInvite, loadProjectMembers, loadProjectMemberInvites } from './project'
 import { loadProjectPlan } from './projectPlan'
 import { loadProjectsMetadata } from '../../actions/templates'
 import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
@@ -27,10 +27,13 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
         //dispatch(loadMembers(userIds)),
         dispatch(loadProjectMembers(projectId)),
         dispatch(loadProjectMemberInvites(projectId))
+
       ]
       if (isOnlyLoadProjectInfo) {
         promises = []
       }
+      // load project billingAccounts
+      promises.push(dispatch(loadProjectBillingAccount(projectId)))
 
       // for new projects load phases, products, project template and product templates
       if (['v3', 'v4'].indexOf(project.version) !== -1) {
