@@ -8,3 +8,7 @@ npm-debug.log
 .history
 .build-info
 .idea
+
+# e2e test case
+connect-automation/temp
+connect-automation/test-results
