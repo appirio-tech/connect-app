@@ -18,6 +18,7 @@ class ProjectDefaultsContainer extends Component {
       isProcessing,
       feeds,
       isFeedsLoading,
+      isBillingAccountExpired,
       productsTimelines,
       phasesTopics,
       location,
@@ -54,7 +55,7 @@ class ProjectDefaultsContainer extends Component {
           </MediaQuery>
         </TwoColsLayout.Sidebar>
         <TwoColsLayout.Content>
-          <EditProjectDefaultsForm project={this.props.project} />
+          <EditProjectDefaultsForm project={this.props.project} isBillingAccountExpired={isBillingAccountExpired} />
         </TwoColsLayout.Content>
       </TwoColsLayout>
     )
@@ -68,6 +69,7 @@ const mapStateToProps = ({ loadUser, projectState, projectTopics, topics }) => {
 
   return {
     user: loadUser.user,
+    isBillingAccountExpired: projectState.isBillingAccountExpired,
     isProcessing: projectState.processing,
     phases: projectState.phases,
     phasesNonDirty: projectState.phasesNonDirty,

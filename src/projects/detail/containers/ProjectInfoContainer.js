@@ -83,6 +83,7 @@ class ProjectInfoContainer extends React.Component {
       !_.isEqual(nextProps.feeds, this.props.feeds) ||
       !_.isEqual(nextProps.phases, this.props.phases) ||
       !_.isEqual(nextProps.productsTimelines, this.props.productsTimelines) ||
+      !_.isEqual(nextProps.isBillingAccountExpired, this.props.isBillingAccountExpired) ||
       !_.isEqual(nextProps.phasesTopics, this.props.phasesTopics) ||
       !_.isEqual(nextProps.isFeedsLoading, this.props.isFeedsLoading) ||
       !_.isEqual(nextProps.isProjectProcessing, this.props.isProjectProcessing) ||
@@ -426,7 +427,7 @@ class ProjectInfoContainer extends React.Component {
   render() {
     const { showDeleteConfirm } = this.state
     const { project, phases, hideInfo, hideMembers,
-      productsTimelines, isProjectProcessing, notifications, projectTemplates } = this.props
+      productsTimelines, isProjectProcessing, notifications, projectTemplates, isBillingAccountExpired } = this.props
 
     const projectTemplateId = project.templateId
     const projectTemplateKey = _.get(project, 'details.products[0]')
@@ -457,7 +458,7 @@ class ProjectInfoContainer extends React.Component {
     const notReadAssetsNotifications = filterFileAndLinkChangedNotifications(projectNotReadNotifications)
 
     const renderFAQs = containsFAQ(projectTemplate)
-    const navLinks = getProjectNavLinks(project, project.id, renderFAQs).map((navLink) => {
+    const navLinks = getProjectNavLinks(project, project.id, renderFAQs, isBillingAccountExpired).map((navLink) => {
       if (navLink.label === 'Messages') {
         navLink.count = notReadMessageNotifications.length
         navLink.toolTipText = 'New messages'
@@ -593,10 +594,11 @@ ProjectInfoContainer.PropTypes = {
   canAccessPrivatePosts: PropTypes.bool.isRequired,
 }
 
-const mapStateToProps = ({ templates, notifications }) => {
+const mapStateToProps = ({ templates, projectState, notifications }) => {
   const canAccessPrivatePosts = hasPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
   return ({
     projectTemplates : templates.projectTemplates,
+    isBillingAccountExpired: projectState.isBillingAccountExpired,
     canAccessPrivatePosts,
     notifications: notifications.notifications,
   })

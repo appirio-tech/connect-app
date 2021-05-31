@@ -2,6 +2,8 @@ import _ from 'lodash'
 import Alert from 'react-s-alert'
 /* eslint-disable no-unused-vars */
 import {
+  // billing account
+  LOAD_PROJECT_BILLING_ACCOUNT_SUCCESS,
   // bulk phase and milestones
   CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS,
   // Project
@@ -167,6 +169,11 @@ export default function(state = {}, action) {
 
   case CANCEL_SCOPE_CHANGE_FAILURE:
     Alert.error('Unable to Cancel the Scope Change')
+    return state
+  case LOAD_PROJECT_BILLING_ACCOUNT_SUCCESS:
+    if (!action.payload.data.active) {
+      Alert.error('The billing account of this project is expired, please update it.')
+    }
     return state
 
   case ACTIVATE_SCOPE_CHANGE_SUCCESS:

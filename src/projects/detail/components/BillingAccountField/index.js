@@ -77,6 +77,8 @@ class BillingAccountField extends React.Component {
   }
 
   render() {
+
+    const {isExpired} = this.props
     const placeholder = this.state.billingAccounts.length > 0
       ? 'Select billing account'
       : 'No Billing Account Available'
@@ -92,6 +94,7 @@ class BillingAccountField extends React.Component {
           isDisabled={this.state.billingAccounts.length === 0}
           showDropdownIndicator
         />
+        {isExpired && <span className="error-message">Expired</span>}
         {this.state.selectedBillingAccount && (
           <div className={styles.manageBillingAccountLinkWrapper}>
             <a
