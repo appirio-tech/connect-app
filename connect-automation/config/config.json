@@ -1,0 +1,26 @@
+{
+  "env": "dev",
+  "username": "mailmemakar402",
+  "password": "P@ssw0rd",
+  "customerRole": {
+    "email": "topcoderconnect+Customer@gmail.com",
+    "password": "appirio123"
+  },
+  "copilotRole": {
+    "email": "topcoderconnect+Copilot@gmail.com",
+    "password": "appirio123"
+  },
+  "copilotManagerRole": {
+    "email": "topcoderconnect+CopilotManager@gmail.com",
+    "password": "appirio123"
+  },
+  "homePageUrl": "https://connect.topcoder-dev.com/",
+  "loginUrl": "https://auth.topcoder-dev.com",
+  "redirectLoginUrl": "https://accounts-auth0.topcoder-dev.com/?regSource=tcBusiness&retUrl=https://connect.topcoder-dev.com",
+  "logoutUrl": "https://accounts-auth0.topcoder-dev.com/?logout=true&retUrl=https://connect.topcoder-dev.com",
+  "myProfileUrl": "https://connect.topcoder-dev.com/settings/profile",
+  "notificationSettingsUrl": "https://connect.topcoder-dev.com/settings/notifications",
+  "accountAndSecurityUrl": "https://connect.topcoder-dev.com/settings/account",
+  "notificationsUrl": "https://connect.topcoder-dev.com/notifications",
+  "allProjectsUrl": "https://connect.topcoder-dev.com/projects"
+}
