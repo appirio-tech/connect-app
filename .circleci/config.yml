@@ -170,9 +170,9 @@ workflows:
           context : org-global
           requires:
             - build-dev
-          filters:
+          filters: &filters-dev
             branches:
-              only: ['dev', 'feature/cf-2.20']
+              only: ['dev', 'connect-automation']
 
       - deployTest01:
           context : org-global
@@ -189,3 +189,17 @@ workflows:
           filters:
             branches:
               only: master
+
+  Smoke Testing:
+    when:
+      and:
+        - << pipeline.parameters.run_smoketesting >>
+    jobs:
+      - Hold [Smoke-Testing]:
+          type: approval
+      - Smoke-Testing-On-Dev:
+          context : org-global
+          requires:
+            - Hold [Smoke-Testing]
+          filters:
+            <<: *filters-dev
