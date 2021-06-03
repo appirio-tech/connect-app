@@ -9,21 +9,30 @@ parameters:
 
 defaults: &defaults
     docker:
-      - image: docker:17.11.0-ce-git
+      - image: node:14
+
 deploy_defaults: &deploy_defaults
     docker:
       - image: cibuilds/aws
+
 test_defaults: &test_defaults
     docker:
       - image: docker:17.11.0-ce-git
+
 install_dependency: &install_dependency
           name: Installation of build and deployment dependencies.
           command: |
-            apk update
-            apk add --no-cache bash openssl curl
-            apk upgrade
-            apk add --no-cache jq py-pip sudo
-            sudo pip install awscli --upgrade
+            apt update
+            apt install jq -y
+            apt install python-dev python-pip -y
+            pip install awscli --upgrade
+install_test_dependency: &install_test_dependency
+          name: Installation of build and deployment dependencies.
+          command: |
+            apt update
+            apt install jq -y
+            apt install python-dev python-pip -y
+            pip install awscli --upgrade
 install_deploysuite: &install_deploysuite
           name: Installation of install_deploysuite.
           command: |
@@ -90,7 +99,7 @@ smoke_testing: &smoke_testing
       # Initialization.
       - checkout
       - setup_remote_docker
-      - run: *install_dependency
+      - run: *install_test_dependency
       - run: *install_deploysuite
       # Restoration of node_modules from cache.
       - restore_cache: *restore_cache_settings_for_build
