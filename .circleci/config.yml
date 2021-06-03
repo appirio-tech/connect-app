@@ -29,10 +29,11 @@ install_dependency: &install_dependency
 install_test_dependency: &install_test_dependency
           name: Installation of build and deployment dependencies.
           command: |
-            apt update
-            apt install jq -y
-            apt install python-dev python-pip -y
-            pip install awscli --upgrade
+            apk update
+            apk add --no-cache bash openssl curl
+            apk upgrade
+            apk add --no-cache jq py-pip sudo
+            sudo pip install awscli --upgrade
 install_deploysuite: &install_deploysuite
           name: Installation of install_deploysuite.
           command: |
