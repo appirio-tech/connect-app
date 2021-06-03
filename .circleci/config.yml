@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 parameters:
     run_smoketesting:
         default: false
@@ -197,7 +197,7 @@ workflows:
     jobs:
       - Hold [Smoke-Testing]:
           type: approval
-      - Smoke-Testing-On-Dev:
+      - smoke-testing-dev:
           context : org-global
           requires:
             - Hold [Smoke-Testing]
