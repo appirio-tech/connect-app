@@ -9,10 +9,12 @@ parameters:
 
 defaults: &defaults
     docker:
-      - image: node:14
+      - image: docker:17.11.0-ce-git
+
 deploy_defaults: &deploy_defaults
     docker:
       - image: cibuilds/aws
+
 install_dependency: &install_dependency
           name: Installation of build and deployment dependencies.
           command: |
