@@ -117,7 +117,7 @@ smoke_testing: &smoke_testing
             source buildenvvar
             ./connect-automation/smoketest.sh
       - store_artifacts:
-          path: /connect-automation/test-results
+          path: ./connect-automation/test-results
 
 jobs:
   build-dev:
