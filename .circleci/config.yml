@@ -9,12 +9,13 @@ parameters:
 
 defaults: &defaults
     docker:
-      - image: docker:17.11.0-ce-git
-
+      - image: node:14
 deploy_defaults: &deploy_defaults
     docker:
       - image: cibuilds/aws
-
+test_defaults: &test_defaults
+    docker:
+      - image: docker:17.11.0-ce-git
 install_dependency: &install_dependency
           name: Installation of build and deployment dependencies.
           command: |
@@ -148,7 +149,7 @@ jobs:
     steps: *deploy_steps
 
   smoke-testing-dev:
-    <<: *defaults
+    <<: *test_defaults
     environment:
       DEPLOY_ENV: "DEV"
       LOGICAL_ENV: "dev"
