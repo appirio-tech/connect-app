@@ -35,12 +35,12 @@ exports.config = {
 
   specs: [
     '../temp/test-suites/profile-update/my-profile.spec.js',
-    '../temp/test-suites/profile-update/left-menu.spec.js',
-    '../temp/test-suites/profile-update/user-profile-menu.spec.js',
-    '../temp/test-suites/profile-update/footer-menu.spec.js',
-    '../temp/test-suites/project-creation-flow/create-project.spec.js',
-    '../temp/test-suites/project-creation-flow/invite-copilot.spec.js',
-    '../temp/test-suites/project-creation-flow/projects.spec.js',
+    // '../temp/test-suites/profile-update/left-menu.spec.js',
+    // '../temp/test-suites/profile-update/user-profile-menu.spec.js',
+    // '../temp/test-suites/profile-update/footer-menu.spec.js',
+    // '../temp/test-suites/project-creation-flow/create-project.spec.js',
+    // '../temp/test-suites/project-creation-flow/invite-copilot.spec.js',
+    // '../temp/test-suites/project-creation-flow/projects.spec.js',
     //'../temp/test-suites/phase-creation-flow/create-new-phase.spec.js'
   ],
 
