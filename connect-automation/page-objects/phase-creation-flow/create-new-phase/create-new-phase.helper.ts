@@ -21,15 +21,7 @@ export class CreateNewPhaseHelper {
   public static async verifyCreateNewPhase(formData: IPhaseCreationData) {
     await this.clickOnAddNewPhaseButton();
     await this.fillCreatePhaseForm(formData.title, formData.daysBetweenStartAndEndDate);
-    // Fill report form
-    await this.fillMilestoneForm(0, formData.reportName);
-    await this.createNewPhasePageObject.addMilestoneButton.click();
-    // Fill deliverable review form
-    await this.fillMilestoneForm(1, formData.deliverableReviewName, 'Deliverable Review');
-    await this.createNewPhasePageObject.addMilestoneButton.click();
-    // Fill final deliverable review form
-    await this.fillMilestoneForm(2, formData.finalDeliverableReviewName, 'Final Deliverable Review');
-    
+
     await BrowserHelper.sleep(3000);
     await this.createNewPhasePageObject.publishButton.click();
 
@@ -73,37 +65,6 @@ export class CreateNewPhaseHelper {
     // Fill end date field
     const endDate = moment().add(daysBetweenStartAndEndDate, 'days').format(CommonHelper.dateFormat());
     await this.createNewPhasePageObject.endDateInput().sendKeys(endDate);
-    logger.info(`Filled end date field with: ${endDate.slice(2)}`);
-  }
-
-  /**
-   * Create and Fill milestone form
-   * @param appendix numeric indicator of added milestone form
-   * @param name name field 
-   * @param type type field
-   */
-  private static async fillMilestoneForm(appendix: number, name: string, type?: string, ) {
-    await BrowserHelper.sleep(3000);
-    if (type) {
-      const types = await this.createNewPhasePageObject.allTypeInput();
-      await types[appendix].click();
-      await BrowserHelper.sleep(500);
-      await this.createNewPhasePageObject.getOptionFromTypeDropdown(type).click();
-    }
-    // Fill name field
-    const nameInput = this.createNewPhasePageObject.nameInput(appendix.toString());
-    await nameInput.clear();
-    await nameInput.sendKeys(name);
-    logger.info(`Filled name field with: ${name}`);
-
-    // Fill start date field
-    const startDate = moment().format(CommonHelper.dateFormat());
-    await this.createNewPhasePageObject.startDateInput(appendix.toString()).sendKeys(startDate);
-    logger.info(`Filled start date field with: ${startDate.slice(2)}`);
-
-    // Fill end date field
-    const endDate = moment().add(1, 'days').format(CommonHelper.dateFormat());
-    await this.createNewPhasePageObject.endDateInput(appendix.toString()).sendKeys(endDate);
     logger.info(`Filled end date field with: ${endDate.slice(2)}`);
   }
 }
