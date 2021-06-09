@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment'
+import _ from 'lodash'
 import {HOC as hoc} from 'formsy-react'
 
 import Select from '../../../../components/Select/Select'
@@ -27,6 +28,8 @@ class BillingAccountField extends React.Component {
       isLoading: true,
       billingAccounts: [],
       selectedBillingAccount: null,
+      defaultBillingAccount: null,
+      isDefaultBillingAccountExpired: false,
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -60,6 +63,10 @@ class BillingAccountField extends React.Component {
             })
 
             billingAccounts = [selectedBillingAccount, ...billingAccounts]
+            this.setState({
+              defaultBillingAccount: selectedBillingAccount,
+              isDefaultBillingAccountExpired: this.props.isExpired
+            })
           }
         }
 
@@ -74,11 +81,16 @@ class BillingAccountField extends React.Component {
   handleChange(value) {
     this.setState({ selectedBillingAccount: value })
     this.props.setValue(value ? value.value : null)
+    this.props.setBillingAccountExpired && this.props.setBillingAccountExpired(this.isCurrentBillingAccountExpired(value))
+  }
+
+  isCurrentBillingAccountExpired(nextSelectedBillingAccount) {
+    const {defaultBillingAccount, isDefaultBillingAccountExpired, selectedBillingAccount} = this.state
+    return isDefaultBillingAccountExpired && _.get(defaultBillingAccount, 'value') === _.get(nextSelectedBillingAccount || selectedBillingAccount, 'value')
   }
 
   render() {
 
-    const {isExpired} = this.props
     const placeholder = this.state.billingAccounts.length > 0
       ? 'Select billing account'
       : 'No Billing Account Available'
@@ -94,7 +106,7 @@ class BillingAccountField extends React.Component {
           isDisabled={this.state.billingAccounts.length === 0}
           showDropdownIndicator
         />
-        {isExpired && <span className="error-message">Expired</span>}
+        {this.isCurrentBillingAccountExpired() &&  <span className="error-message">Expired</span>}
         {this.state.selectedBillingAccount && (
           <div className={styles.manageBillingAccountLinkWrapper}>
             <a

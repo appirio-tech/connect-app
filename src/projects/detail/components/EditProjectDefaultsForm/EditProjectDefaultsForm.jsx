@@ -18,11 +18,13 @@ class EditProjectDefaultsForm extends React.Component {
 
     this.state = {
       enableButton: false,
-      isLoading: true
+      isLoading: true,
+      isBillingAccountExpired: false,
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.setBillingAccountExpired = this.setBillingAccountExpired.bind(this)
   }
 
   componentDidMount() {
@@ -35,6 +37,11 @@ class EditProjectDefaultsForm extends React.Component {
     }
   }
 
+  setBillingAccountExpired(value) {
+    this.setState({
+      isBillingAccountExpired: value
+    })
+  }
   handleChange(changed) {
     const keys = _.intersection(Object.keys(changed), Object.keys(this.state.project))
     const reqProjectState = keys.reduce((acc, curr) => {
@@ -88,13 +95,14 @@ class EditProjectDefaultsForm extends React.Component {
               projectId={this.state.project.id}
               isExpired={this.props.isBillingAccountExpired}
               value={this.state.project.billingAccountId}
+              setBillingAccountExpired={this.setBillingAccountExpired}
             />
           </div>
           <div className="section-footer section-footer-spec">
             <button
               className="tc-btn tc-btn-primary tc-btn-md"
               type="submit"
-              disabled={!this.state.enableButton}
+              disabled={this.state.isBillingAccountExpired || !this.state.enableButton}
             >
               Save
             </button>
