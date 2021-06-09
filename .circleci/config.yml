@@ -128,7 +128,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'feature/cf-2.20']
+              only: ['dev', 'feature/billing_account_protection']
 
       - deployTest01:
           context : org-global
