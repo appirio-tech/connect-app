@@ -20,6 +20,7 @@ import ReportsIcon from '../assets/icons/v.2.5/icon-reports.svg'
 import AssetsLibraryIcon from '../assets/icons/v.2.5/icon-assets-library.svg'
 import FAQIcon from '../assets/icons/faq.svg'
 import AccountSecurityIcon from 'assets/icons/v.2.5/icon-account-security.svg'
+import WarningIcon from '../assets/icons/v.2.5/icon-warning.svg'
 import InvisibleIcon from '../assets/icons/invisible.svg'
 
 import { formatNumberWithCommas } from './format'
@@ -259,8 +260,9 @@ export function getNewProjectLink(orgConfigs) {
  * Get the list of navigation links for project details view
  * @param {Object} project - The project object
  * @param {string} projectId - The project id
+ * @param {boolean} isBillingAccountExpired - is billingAccount expired
  */
-export function getProjectNavLinks(project, projectId, renderFAQs) {
+export function getProjectNavLinks(project, projectId, renderFAQs, isBillingAccountExpired) {
   let messagesTab = null
   // `Discussions` items can be added as soon as project is loaded
   // if discussions are not hidden for it
@@ -289,7 +291,11 @@ export function getProjectNavLinks(project, projectId, renderFAQs) {
   }
 
   if (hasPermission(PERMISSIONS.VIEW_PROJECT_SETTINGS)) {
-    navLinks.push({ label: 'Project Settings', to: `/projects/${projectId}/settings`, Icon: AccountSecurityIcon, iconClassName: 'stroke' })
+    if (!isBillingAccountExpired) {
+      navLinks.push({ label: 'Project Settings', to: `/projects/${projectId}/settings`, Icon: AccountSecurityIcon, iconClassName: 'stroke' })
+    }else {
+      navLinks.push({ label: <span>Project Settings <WarningIcon style={{position: 'absolute', marginLeft: '5px'}}/></span>, to: `/projects/${projectId}/settings`, Icon: AccountSecurityIcon, iconClassName: 'stroke' })
+    }
   }
 
   return navLinks

@@ -13,6 +13,7 @@ import { getProjectById,
   createScopeChangeRequest as createScopeChangeRequestAPI,
   updateScopeChangeRequest as updateScopeChangeRequestAPI,
 } from '../../api/projects'
+import {fetchBillingAccount} from '../../api/billingAccounts'
 import {
   getProjectInviteById,
   getProjectMemberInvites,
@@ -26,6 +27,7 @@ import {
 } from '../../api/projectMembers'
 // import { loadProductTimelineWithMilestones } from './productsTimelines'
 import {
+  LOAD_PROJECT_BILLING_ACCOUNT,
   LOAD_PROJECT,
   LOAD_PROJECT_MEMBER_INVITE,
   CREATE_PROJECT,
@@ -657,6 +659,15 @@ export function loadProjectMembers(projectId) {
     return dispatch({
       type: LOAD_PROJECT_MEMBERS,
       payload: getProjectMembers(projectId)
+    })
+  }
+}
+
+export function loadProjectBillingAccount(projectId) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_PROJECT_BILLING_ACCOUNT,
+      payload: fetchBillingAccount(projectId)
     })
   }
 }
