@@ -1,6 +1,7 @@
 import {
   CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_PENDING, CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS, CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_FAILURE,
   LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_MEMBER_INVITE_PENDING, LOAD_PROJECT_MEMBER_INVITE_SUCCESS, LOAD_PROJECT_FAILURE,
+  LOAD_PROJECT_BILLING_ACCOUNT_SUCCESS, LOAD_PROJECT_BILLING_ACCOUNT_FAILURE,
   CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT_PENDING, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   DELETE_PROJECT_PENDING, DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
@@ -36,6 +37,7 @@ export function getEmptyProjectObject() {
 
 const initialState = {
   isLoading: true,
+  isBillingAccountExpired: false,
   processing: false,
   processingMembers: false,
   updatingMemberIds: [],
@@ -151,6 +153,16 @@ export const projectState = function (state=initialState, action) {
     return Object.assign({}, state, {
       isCreatingPhase: true
     })
+  case LOAD_PROJECT_BILLING_ACCOUNT_SUCCESS:
+    return {
+      ...state,
+      isBillingAccountExpired: !action.payload.data.active,
+    }
+  case LOAD_PROJECT_BILLING_ACCOUNT_FAILURE:
+    return {
+      ...state,
+      isBillingAccountExpired: false,
+    }
   case CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS:
   case CREATE_PROJECT_PHASE_SUCCESS: {
     const { phase, product } = action.payload

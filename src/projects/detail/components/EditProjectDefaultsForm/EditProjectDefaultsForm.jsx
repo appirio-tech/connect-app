@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import _ from 'lodash'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
-import { updateProject } from '../../../actions/project'
+import { updateProject, loadProjectBillingAccount } from '../../../actions/project'
 import NDAField from '../NDAField'
 import GroupsField from '../GroupsField'
 import BillingAccountField from '../BillingAccountField'
@@ -18,11 +18,13 @@ class EditProjectDefaultsForm extends React.Component {
 
     this.state = {
       enableButton: false,
-      isLoading: true
+      isLoading: true,
+      isBillingAccountExpired: false,
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.setBillingAccountExpired = this.setBillingAccountExpired.bind(this)
   }
 
   componentDidMount() {
@@ -35,6 +37,11 @@ class EditProjectDefaultsForm extends React.Component {
     }
   }
 
+  setBillingAccountExpired(value) {
+    this.setState({
+      isBillingAccountExpired: value
+    })
+  }
   handleChange(changed) {
     const keys = _.intersection(Object.keys(changed), Object.keys(this.state.project))
     const reqProjectState = keys.reduce((acc, curr) => {
@@ -52,7 +59,7 @@ class EditProjectDefaultsForm extends React.Component {
   }
 
   handleSubmit() {
-    const {updateProject} = this.props
+    const {updateProject, loadProjectBillingAccount} = this.props
     const {id} = this.props.project
     const updateProjectObj = Object.keys(this.state.project)
       .filter(key => !_.isEqual(this.props.project[key], this.state.project[key]))
@@ -61,7 +68,7 @@ class EditProjectDefaultsForm extends React.Component {
         return acc
       }, {})
     updateProject(id, updateProjectObj)
-      .then(() => this.setState({enableButton: false}))
+      .then(() => this.setState({enableButton: false})).then(() => loadProjectBillingAccount(id))
       .catch(console.error)
   }
 
@@ -86,14 +93,16 @@ class EditProjectDefaultsForm extends React.Component {
             <BillingAccountField
               name="billingAccountId"
               projectId={this.state.project.id}
+              isExpired={this.props.isBillingAccountExpired}
               value={this.state.project.billingAccountId}
+              setBillingAccountExpired={this.setBillingAccountExpired}
             />
           </div>
           <div className="section-footer section-footer-spec">
             <button
               className="tc-btn tc-btn-primary tc-btn-md"
               type="submit"
-              disabled={!this.state.enableButton}
+              disabled={this.state.isBillingAccountExpired || !this.state.enableButton}
             >
               Save
             </button>
@@ -105,7 +114,8 @@ class EditProjectDefaultsForm extends React.Component {
 }
 
 const mapDispatchToProps = {
-  updateProject
+  updateProject,
+  loadProjectBillingAccount
 }
 
 export default protectComponent(
