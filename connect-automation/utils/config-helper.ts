@@ -105,4 +105,11 @@ export const ConfigHelper = {
   getCopilotManagerUser() {
     return this.getConfig().copilotManagerRole;
   },
+
+  /**
+   * Get Given Project URL
+   */
+   getGivenProjectUrl(): string {
+    return this.getConfig().givenProjectUrl;
+  },
 };

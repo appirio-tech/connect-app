@@ -1,5 +1,4 @@
 import moment = require('moment');
-import { BrowserStack } from 'protractor/built/driverProviders';
 import { BrowserHelper, ElementHelper } from 'topcoder-testing-lib';
 import * as appconfig from '../../config/app-config.json';
 import { logger } from '../../logger/logger';
@@ -27,8 +26,8 @@ const waitUntil = async (
     (isPageLoad
       ? appconfig.LoggerErrors.PageLoad
       : appconfig.LoggerErrors.ElementVisibilty) +
-      '.' +
-      extraMessage
+    '.' +
+    extraMessage
   );
 };
 
@@ -108,8 +107,8 @@ export const CommonHelper = {
       (isPageLoad
         ? appconfig.LoggerErrors.PageLoad
         : appconfig.LoggerErrors.ElementPresence) +
-        '.' +
-        extraMessage
+      '.' +
+      extraMessage
     );
   },
 
@@ -323,5 +322,49 @@ export const CommonHelper = {
    */
   get createPhasePageTitle() {
     return ElementHelper.getElementByClassName('_2edGvU');
+  },
+
+  /**
+   * Wait for Page Element to be displayed
+   */
+  async waitForElementToGetDisplayed(element) {
+    await CommonHelper.waitUntilVisibilityOf(
+      () => element,
+      'Wait for Element To get Displayed',
+      true
+    );
+    return element;
+  },
+
+  /**
+   * Get Alert Box
+   */
+  get getAlertBox() {
+    BrowserHelper.sleep(1000);
+    return ElementHelper.getElementByXPath('//div[@class="s-alert-box-inner"]/span');
+  },
+
+  /**
+   * Checks if element is present or not on page
+   * 
+   * @param identifierType Type of Identifier
+   * @param identifierValue Identifier Value to search
+   * 
+   * @returns Either True or False
+   */
+   async isElementPresent(identifierType: string, identifierValue: string) {
+     let isElementPresent = true;
+     let element: TcElementImpl;
+     try {
+       switch(identifierType.toLowerCase()) {
+         case 'xpath': element = ElementHelper.getElementByXPath(identifierValue); break;
+       }
+       const isElementDisplayed = await element.isDisplayed();
+       const isElementEnabled = await element.isEnabled();
+       isElementPresent = (isElementDisplayed && isElementEnabled) ? true: false;
+     } catch(error) {
+       isElementPresent = false;
+     }
+     return isElementPresent;
   },
 };

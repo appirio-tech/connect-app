@@ -42,5 +42,23 @@
       "deliverableReviewName": "Deliverable Review 1",
       "finalDeliverableReviewName": "Final Deliverable Review 1"
     }
+  },
+  "projectSettings": {
+    "enforceTopcoderNDA": "Yes",
+    "intendedWorkGroups": "Hide Challenges",
+    "projectUpdatedMessage": "PROJECT UPDATED.",
+    "tagName": "Tag1",
+    "newFileAdditionMessage": "ADDED ATTACHMENT TO THE PROJECT SUCCESSFULLY",
+    "attachmentUpdationSuccessMessage": "UPDATED ATTACHMENT SUCCESSFULLY",
+    "deletePopupTitle": "You're about to delete a File",
+    "deletePopupMessage": "Your team might need this link, are you sure you want to delete it? This action can't be undone.",
+    "attachmentRemovalMessage": "REMOVED ATTACHMENT SUCCESSFULLY",
+    "linkAttachmentSuccessMessage": "ADDED ATTACHMENT TO THE PROJECT SUCCESSFULLY",
+    "deleteLinkPopupTitle": "You're about to delete a link",
+    "editAttachmentWindowTitle": "You're about to edit an attachment",
+    "assetsLibraryTitle": "Title1",
+    "addALinkURL": "https://www.google.com",
+    "editLinkWindowTitle": "You're about to edit a link",
+    "discussionTitle": "Message1"
   }
 }

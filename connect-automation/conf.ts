@@ -41,7 +41,8 @@ exports.config = {
     '../temp/test-suites/project-creation-flow/create-project.spec.js',
     '../temp/test-suites/project-creation-flow/invite-copilot.spec.js',
     '../temp/test-suites/project-creation-flow/projects.spec.js',
-    '../temp/test-suites/phase-creation-flow/create-new-phase.spec.js'
+    '../temp/test-suites/phase-creation-flow/create-new-phase.spec.js',
+    '../temp/test-suites/project-settings-flow/project-settings.spec.js'
   ],
 
   // Options to be passed to Jasmine.

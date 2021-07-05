@@ -11,7 +11,7 @@ Chrome Browser
   `npm install`
 
 - To run tests
-  `cd connect-app-e2e-test`
+  `cd connect-automation`
   `npm run test`
 
 - Test results are generated in test-results/ folder
