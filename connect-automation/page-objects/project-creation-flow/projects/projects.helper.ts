@@ -45,7 +45,7 @@ export class ProjectsHelper {
    * @param searchProject object for search
    */
   public static async verifyProjectSearch(searchProject: ISearchProject) {
-    await BrowserHelper.sleep(8000);
+    await BrowserHelper.sleep(3000);
     const allProjectsBeforeSearch = await this.projectsPageObject.projectTitles();
     const beforeSearchLength = allProjectsBeforeSearch.length;
     const firstProjectBeforeSearch = await allProjectsBeforeSearch[0].getText();
@@ -129,6 +129,7 @@ export class ProjectsHelper {
    * @param searchTerm search term
    */
   private static async verifyProjectWithRef(searchTerm: string) {
+    await BrowserHelper.sleep(5000);
     const ref = await this.projectsPageObject.refText.getText();
     expect(ref).toBe(searchTerm);
 
