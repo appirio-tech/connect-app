@@ -23,5 +23,6 @@
   "accountAndSecurityUrl": "https://connect.topcoder-dev.com/settings/account",
   "notificationsUrl": "https://connect.topcoder-dev.com/notifications",
   "allProjectsUrl": "https://connect.topcoder-dev.com/projects",
-  "givenProjectUrl": "https://connect.topcoder-dev.com/projects/18013"
+  "givenProjectUrl": "https://connect.topcoder-dev.com/projects/18013",
+  "expiredProjectUrl": "https://connect.topcoder-dev.com/projects/17236"
 }
