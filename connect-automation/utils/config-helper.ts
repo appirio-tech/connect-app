@@ -112,4 +112,11 @@ export const ConfigHelper = {
    getGivenProjectUrl(): string {
     return this.getConfig().givenProjectUrl;
   },
+
+  /**
+   * Get Expired Project URL
+   */
+   getExpiredProjectUrl(): string {
+    return this.getConfig().expiredProjectUrl;
+  },
 };

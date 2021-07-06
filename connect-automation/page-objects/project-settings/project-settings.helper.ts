@@ -14,9 +14,10 @@ export class ProjectSettingsPageHelper {
 
 	/**
 	 * Open Home page
+	 * @param expired
 	 */
-	public static async open() {
-		await ProjectSettingsPageObject.open();
+	public static async open(expired = false) {
+		await ProjectSettingsPageObject.open(expired);
 		await CommonHelper.waitForPageDisplayed();
 		await BrowserHelper.sleep(10000);
 		await CommonHelper.waitForElementToGetDisplayed(this.projectSettingsPageObject.getProjectMenu('Project Settings'));

@@ -5,9 +5,11 @@ import { ConfigHelper } from '../../utils/config-helper';
 export class ProjectSettingsPageObject {
 	/**
 	 * Open the Given Project URL
+	 * @param expired 
 	 */
-	public static async open() {
-		await BrowserHelper.open(ConfigHelper.getGivenProjectUrl());
+	public static async open(expired = false) {
+		const url = expired ? ConfigHelper.getExpiredProjectUrl() : ConfigHelper.getGivenProjectUrl()
+		await BrowserHelper.open(url);
 		logger.info('User navigated to Project Page');
 	}
 
