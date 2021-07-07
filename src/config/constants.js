@@ -764,6 +764,7 @@ export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_
 
 export const TC_CDN_URL = process.env.TC_CDN_URL || `https://community-app.${DOMAIN}/api/cdn/public`
 
+export const TYPEFORM_URL = process.env.TYPEFORM_URL || 'https://topcoder.typeform.com/to/vgqiBXdk'
 export const RESET_PASSWORD_URL = `https://accounts.${DOMAIN}/member/reset-password`
 export const VERIFY_EMAIL_URL = `http://www.${DOMAIN}/settings/account/changeEmail`
 export const TOPCODER_CONNECT_TERMS_URL = `https://connect.${DOMAIN}/terms`

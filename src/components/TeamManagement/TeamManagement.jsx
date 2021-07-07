@@ -9,6 +9,7 @@ import MemberItem from './MemberItem'
 import AddIcon from  '../../assets/icons/icon-ui-bold-add.svg'
 import Dialog from './Dialog'
 import { PERMISSIONS } from '../../config/permissions'
+import { TYPEFORM_URL } from '../../config/constants'
 import {hasPermission} from '../../helpers/permissions'
 import { getFullNameWithFallback } from '../../helpers/tcHelpers'
 
@@ -213,8 +214,13 @@ class TeamManagement extends React.Component {
                 return null
               }
 
+              let feedback = ''
+              if (member.handle !== currentUser.handle) {
+                feedback = `${TYPEFORM_URL}#copilot=${member.handle}&projectid=${projectId}&submitter=${currentUser.handle}`
+              }
+
               return (
-                <MemberItem usr={member} id={i} key={i} previewAvatar size={40}/>
+                <MemberItem usr={member} id={i} key={i} previewAvatar size={40} feedback={feedback} />
               )
             })}
             {copilotTeamInvites.map((invite, i) => {

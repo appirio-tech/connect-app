@@ -32,6 +32,7 @@ module.exports = {
 
   ACCOUNTS_APP_URL             : 'https://accounts.topcoder-qa.com/#!/member',
   ACCOUNTS_APP_CONNECTOR_URL   : 'https://accounts.topcoder-qa.com/connector.html',
+  TYPEFORM_URL      : 'https://topcoder.typeform.com/to/vgqiBXdk',
 
   FILE_PICKER_API_KEY: process.env.FILE_PICKER_API_KEY_QA,
   FILE_PICKER_SUBMISSION_CONTAINER_NAME: 'submission-staging-qa',
