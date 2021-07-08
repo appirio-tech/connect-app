@@ -22,11 +22,17 @@
 }
 
 .feed-back {
-  color: #0681ff;
   position: absolute;
   font-size: 12px;
   right: 0px;
   top: 4px;
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: 15px;
+    margin-top: -2px;
+  }
 }
 
 .member-detail {
