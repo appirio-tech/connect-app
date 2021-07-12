@@ -103,7 +103,7 @@ const ConnectTerms = () => (
 
         <li className="heading">
           <h2>PRIVACY.</h2>
-          <p>User agrees to comply with all terms of the Topcoder Privacy Policy available at <a href="https://www.topcoder.com/community/how-it-works/privacy-policy/">http://www.topcoder.com/community/how-it-works/privacy-policy/</a></p>
+          <p>User agrees to comply with all terms of the Topcoder Privacy Policy available at <a href="https://www.topcoder.com/policy">https://www.topcoder.com/policy</a></p>
         </li>
 
         <li className="heading">
