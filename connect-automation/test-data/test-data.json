@@ -1,0 +1,64 @@
+{
+  "userProfile": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "title": "programmer",
+    "country": "Nepal",
+    "countryCode": "+977",
+    "countryAbbr": "NPL",
+    "companyUrl": "www.topcoder.com",
+    "localTimezone": "Africa/Accra",
+    "startTime": "9:00",
+    "endTime": "18:00",
+    "businessPhoneCountry": "India",
+    "businessPhoneCountryCode": "+91"
+  },
+  "projectData": {
+    "appName": "Automation",
+    "appDescription": "This project is created by automated test",
+    "answers": {
+      "beforeWeStart": "I am just exploring my options",
+      "whatDoYouNeed": "Development & QA",
+      "willYourAppNeedMoreScreen": "Yes",
+      "howManyScreens": "45-60 screens",
+      "whereShouldAppWork": "Web Browser",
+      "howShouldAppWorks": "I want a web app that is installable on desktops."
+    },
+    "notes": "Notes from test"
+  },
+  "inviteCopilot": {
+    "copilotHandle": "TCConnCopilot"
+  },
+  "searchProject": {
+    "searchByName": "taas",
+    "searchByRef": "cjamedit",
+    "searchByHandle": "mailmemakar402"
+  },
+  "phaseCreation": {
+    "formData": {
+      "title": "Dev Phase",
+      "daysBetweenStartAndEndDate": 3,
+      "reportName": "Reporting 1",
+      "deliverableReviewName": "Deliverable Review 1",
+      "finalDeliverableReviewName": "Final Deliverable Review 1"
+    }
+  },
+  "projectSettings": {
+    "enforceTopcoderNDA": "Yes",
+    "intendedWorkGroups": "Hide Challenges",
+    "projectUpdatedMessage": "PROJECT UPDATED.",
+    "tagName": "Tag1",
+    "newFileAdditionMessage": "ADDED ATTACHMENT TO THE PROJECT SUCCESSFULLY",
+    "attachmentUpdationSuccessMessage": "UPDATED ATTACHMENT SUCCESSFULLY",
+    "deletePopupTitle": "You're about to delete a File",
+    "deletePopupMessage": "Your team might need this link, are you sure you want to delete it? This action can't be undone.",
+    "attachmentRemovalMessage": "REMOVED ATTACHMENT SUCCESSFULLY",
+    "linkAttachmentSuccessMessage": "ADDED ATTACHMENT TO THE PROJECT SUCCESSFULLY",
+    "deleteLinkPopupTitle": "You're about to delete a link",
+    "editAttachmentWindowTitle": "You're about to edit an attachment",
+    "assetsLibraryTitle": "Title1",
+    "addALinkURL": "https://www.google.com",
+    "editLinkWindowTitle": "You're about to edit a link",
+    "discussionTitle": "Message1"
+  }
+}

@@ -5,6 +5,7 @@
   flex-direction: row;
   min-height: 51px;
   width: 100%;
+  position: relative;
 
   & + & {
     margin-top: 2 * $base-unit;
@@ -17,6 +18,20 @@
     &:global(.customer-data .tooltip-content-container){
       width: 440px;
     }
+  }
+}
+
+.feed-back {
+  position: absolute;
+  font-size: 12px;
+  right: 0px;
+  top: 4px;
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: 15px;
+    margin-top: -2px;
   }
 }
 
