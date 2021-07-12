@@ -33,6 +33,7 @@ module.exports = {
 
   ACCOUNTS_APP_URL             : 'https://accounts-auth0.topcoder.com',
   ACCOUNTS_APP_CONNECTOR_URL   : 'https://accounts-auth0.topcoder.com',
+  TYPEFORM_URL      : 'https://topcoder.typeform.com/to/vgqiBXdk',
 
   FILE_PICKER_API_KEY: process.env.FILE_PICKER_API_KEY_PROD,
   FILE_PICKER_SUBMISSION_CONTAINER_NAME: 'submission-staging-prod',

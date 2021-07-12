@@ -5,12 +5,13 @@ require('moment-timezone')
 import UserTooltip from '../User/UserTooltip'
 import SunIcon from '../../assets/icons/daylight.svg'
 import MoonIcon from '../../assets/icons/moon.svg'
+import FAQIcon from '../../assets/icons/faq.svg'
 import { getFullNameWithFallback } from '../../helpers/tcHelpers'
 import './MemberItem.scss'
 
 const  MemberItem  = (props) => {
 
-  const {usr, showEmailOnly} = props
+  const {usr, showEmailOnly, feedback} = props
 
   const userFullName = getFullNameWithFallback(usr)
   const workingHourStart = _.get(usr, 'workingHourStart')
@@ -64,6 +65,7 @@ const  MemberItem  = (props) => {
   return (
     <div styleName="container">
       <UserTooltip {...props} localTimeInfo={localTimeInfoEl}/>
+      {feedback && <span styleName="feed-back"> <a href={feedback} target="_blank"><FAQIcon/></a></span>}
       <div styleName="member-detail">
         <div styleName="member-name">{showEmailOnly? email :userFullName}</div>
         {localWhStart && localWhEnd && <div styleName="wk-hour">WH: {localWhStart} - {localWhEnd} {localTimeOffsetFormat}</div>}
@@ -84,6 +86,7 @@ MemberItem.propTypes = {
     PropTypes.number
   ]).isRequired,
   previewAvatar: PropTypes.bool,
+  feedback: PropTypes.string,
   showEmailOnly: PropTypes.bool,
   size: PropTypes.number
 }
