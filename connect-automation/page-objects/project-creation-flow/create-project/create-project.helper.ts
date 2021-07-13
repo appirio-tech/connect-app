@@ -1,6 +1,7 @@
 import { BrowserHelper } from 'topcoder-testing-lib';
+import { ConfigHelper } from '../../../utils/config-helper';
 import { CommonHelper } from '../../common-page/common.helper';
-import { IAnswers, IProjectData } from './create-project.model';
+import { IAnswers, IProjectData, ITaasData } from './create-project.model';
 import { CreateProjectPageObject } from './create-project.po';
 
 export class CreateProjectPageHelper {
@@ -29,8 +30,8 @@ export class CreateProjectPageHelper {
 
     await this.clickNewProjectButton();
     await this.navigateToViewSolutions();
-    await this.clickOnDesignDevelopmentDeploymentButton();
-    await this.fillBeforeWeStartForm(projectData.answers);
+    await this.clickOnSelectButton();
+    await this.fillBeforeWeStartForm(projectData.answers, 'Basic Details');
     await this.fillBasicDetailsForm(
       appNameWithDate,
       projectData.appDescription
@@ -38,6 +39,29 @@ export class CreateProjectPageHelper {
     await this.fillAppDefinitionForm(projectData);
     await this.saveProject();
     await this.goToYourProject(appNameWithDate);
+  }
+
+  /**
+   * verify whether the current user can create a TAAS project
+   */
+   public static async verifyTaasProject(taasData: ITaasData) {
+    await this.clickNewProjectButton();
+    await this.navigateToTopTalent();
+    await this.clickOnSelectButton();
+    await this.fillBeforeWeStartForm(taasData.answers, 'Talent as a Service: Getting Started');
+    await this.fillTaasProjectTitleForm(taasData.title);
+    await this.verifyAddJobItem();
+    await this.verifyDeleteJobItem();
+    await this.fillJobForm(taasData);
+    await this.fillTalentRequirementForm(taasData.answers, 'Your Talent Requirements');
+    await this.fillRequirementForm(taasData.answers, taasData.email);
+
+    await this.createProjectPageObject.submitJobRequest.click();
+    await CommonHelper.verifySuccessAlert(`PROJECT '${taasData.title.toUpperCase()}' CREATED`);
+
+    await this.createProjectPageObject.viewTalentRequestButton.click();
+    await BrowserHelper.sleep(10000);
+    await CommonHelper.verifyPageUrl(ConfigHelper.getPlatformUrl());
   }
 
   private static createProjectPageObject: CreateProjectPageObject;
@@ -101,9 +125,18 @@ export class CreateProjectPageHelper {
   }
 
   /**
+   * Click on "Tap Into Top Talen" under "TAAS" section
+   */
+  private static async navigateToTopTalent() {
+    await this.createProjectPageObject.tapIntoTopTalent.click();
+    const title = await this.createProjectPageObject.solutionCatalogTitle.getText();
+    expect(title).toBe('ENGAGE TALENT');
+  }
+
+  /**
    * Click on "Select" button under Design, Development and Deployment.
    */
-  private static async clickOnDesignDevelopmentDeploymentButton() {
+  private static async clickOnSelectButton() {
     const selectButton = await this.createProjectPageObject.selectButton();
     await selectButton.click();
     await this.verifyFormDisplayed('Before we start');
@@ -112,14 +145,29 @@ export class CreateProjectPageHelper {
   /**
    * Fill Before We Start form
    * @param answers answers object defined by test data
+   * @param formTitle form title to be expected
    */
-  private static async fillBeforeWeStartForm(answers: IAnswers) {
+  private static async fillBeforeWeStartForm(answers: IAnswers, formTitle: string) {
     const { beforeWeStart } = answers;
     await CommonHelper.selectInputByContainingText(beforeWeStart);
 
     await this.createProjectPageObject.nextButton.click();
 
-    await this.verifyFormDisplayed('Basic Details');
+    await this.verifyFormDisplayed(formTitle);
+  }
+
+  /**
+   * Fill Before We Start form
+   * @param answers answers object defined by test data
+   * @param formTitle form title to be expected
+   */
+  private static async fillTalentRequirementForm(answers: IAnswers, formTitle: string) {
+    const { startDate } = answers;
+    await CommonHelper.selectInputByContainingText(startDate);
+
+    await this.createProjectPageObject.nextButton.click();
+
+    await this.verifyFormDisplayed(formTitle);
   }
 
   /**
@@ -136,6 +184,69 @@ export class CreateProjectPageHelper {
     await this.createProjectPageObject.nextButton.click();
 
     await this.verifyFormDisplayed('App Definition');
+  }
+
+  /**
+   * Fill Taas Project title, then click next
+   * @param title taas application title
+   */
+  private static async fillTaasProjectTitleForm(title: string) {
+    const name = this.createProjectPageObject.appNameInput;
+    await CommonHelper.fillInputField(name, title);
+    await this.createProjectPageObject.nextButton.click();
+
+    await this.verifyFormDisplayed('Your Talent Requirements');
+  }
+
+  /**
+   * Fill Requirement Form, then click next
+   * @param title taas application title
+   * @param email
+   */
+  private static async fillRequirementForm(answers: IAnswers, email: string) {
+    const { requirement } = answers;
+    await CommonHelper.selectInputByContainingText(requirement);
+
+    await this.createProjectPageObject.emailInput.click();
+    await this.createProjectPageObject.emailInput.sendKeys(email);
+
+    await this.createProjectPageObject.nextButton.click();
+  }
+
+  /**
+   * Fill Taas Job Form
+   * @param taasData
+   */
+  private static async fillJobForm(taasData: ITaasData) {
+    const { jobTitle, numOfPeople, duration, description } = taasData;
+
+    const titleEl = this.createProjectPageObject.titleInput;
+    await CommonHelper.fillInputField(titleEl, jobTitle);
+
+    const numberInputs = await this.createProjectPageObject.numberInputEls();
+    await CommonHelper.fillInputField(numberInputs[0], numOfPeople + '');
+    await CommonHelper.fillInputField(numberInputs[1], duration + '');
+
+    const dropdownInputs = await this.createProjectPageObject.dropdownEls();
+    await dropdownInputs[0].click();
+    let dropdownOptions = await this.createProjectPageObject.dropdownOptions();
+    await dropdownOptions[1].click();
+
+    await dropdownInputs[1].click();
+    dropdownOptions = await this.createProjectPageObject.dropdownOptions();
+    await BrowserHelper.sleep(200);
+    await dropdownOptions[6].click();
+
+    await this.createProjectPageObject.editorTextarea.click();
+    await this.createProjectPageObject.editorTextareaInput.sendKeys(description);
+
+    await this.createProjectPageObject.skillsInput.click();
+    await BrowserHelper.sleep(2500);
+    await this.createProjectPageObject.multiSelectOption.click();
+
+    await this.createProjectPageObject.nextButton.click();
+
+    await this.verifyFormDisplayed('Your Talent Requirements');
   }
 
   /**
@@ -190,5 +301,23 @@ export class CreateProjectPageHelper {
     await CommonHelper.waitForProjectTitle();
 
     expect(await CommonHelper.projectTitle().getText()).toBe(appName);
+  }
+
+  /**
+   * Add job item and verify Add Job Item
+   */
+  private static async verifyAddJobItem() {
+    await this.createProjectPageObject.plusIcon.click();
+    let jobFormNumber = await this.createProjectPageObject.taasJobForm();
+    expect(jobFormNumber.length).toBe(2);
+  }
+
+  /**
+   * Delete job item and verify Deletion of Job Item
+   */
+  private static async verifyDeleteJobItem() {
+    await this.createProjectPageObject.deleteIcon.click();
+    const jobFormNumber = await this.createProjectPageObject.taasJobForm();
+    expect(jobFormNumber.length).toBe(1);
   }
 }

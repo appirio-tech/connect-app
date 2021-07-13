@@ -34,6 +34,13 @@ export class CreateProjectPageObject {
   }
 
   /**
+   * Get Tap Into Top Talent button from Create Project Page
+   */
+  public get tapIntoTopTalent() {
+    return ElementHelper.getElementByButtonText('Tap Into Top Talent');
+  }
+
+  /**
    * Get Solution Catalog Page's title element
    */
   public get solutionCatalogTitle() {
@@ -75,6 +82,20 @@ export class CreateProjectPageObject {
   }
 
   /**
+   * Get Submit Job Request button
+   */
+  public get submitJobRequest() {
+    return ElementHelper.getElementByButtonText('Submit job request');
+  }
+
+  /**
+   * Get view Talent Request button
+   */
+  public get viewTalentRequestButton() {
+    return ElementHelper.getElementByCss('.go-to-project-dashboard-btn');
+  }
+
+  /**
    * Get Current Form Page's title element
    */
   public get formPageTitle() {
@@ -105,6 +126,20 @@ export class CreateProjectPageObject {
   }
 
   /**
+   * Get job title element
+   */
+  public get titleInput() {
+    return ElementHelper.getElementByName('title');
+  }
+
+  /**
+   * Get email input element
+   */
+  public get emailInput() {
+    return ElementHelper.getElementByName('details.taasDefinition.hiringManager');
+  }
+
+  /**
    * Get Draft Project title
    */
   public get draftProject() {
@@ -126,12 +161,85 @@ export class CreateProjectPageObject {
   }
 
   /**
+   * Get plus icon
+   */
+  public get plusIcon() {
+    return ElementHelper.getElementByClassName('ZALPRV');
+  }
+
+  /**
+   * Get delete icon
+   */
+  public get deleteIcon() {
+    return ElementHelper.getElementByCss('.ZALPRV._1SfKng');
+  }
+
+  /**
+   * Get taas job form
+   */
+  public async taasJobForm() {
+    return ElementHelper.getAllElementsByClassName('_3mAtc-');
+  }
+
+  /**
    * Get sub title
    */
   public get subTitle() {
     return ElementHelper.getElementContainingText(
       'Your project has been created'
     );
+  }
+
+  /**
+   * Get number input elements
+   */
+  public async numberInputEls() {
+    const els = await ElementHelper.getAllElementsByCss('.tc-file-field__inputs.trlMaU');
+    return els;
+  }
+
+  /**
+   * Get dropdown elements
+   */
+  public async dropdownEls() {
+    const els = await ElementHelper.getAllElementsByCss('.dropdown-wrap.SelectDropdown.default');
+    return els;
+  }
+
+  /**
+   * Get dropdown options
+   */
+  public async dropdownOptions() {
+    const els = await ElementHelper.getAllElementsByClassName('dropdown-menu-list-item');
+    return els;
+  }
+
+  /**
+   * Get editor textarea
+   */
+  public get editorTextarea() {
+    return ElementHelper.getElementByClassName('te-editor-section');
+  }
+
+  /**
+   * Get editor textarea input
+   */
+  public get editorTextareaInput() {
+    return ElementHelper.getElementByCss('.tui-editor-contents.tui-editor-contents-placeholder');
+  }
+
+  /**
+   * Get skills input
+   */
+  public get skillsInput() {
+    return ElementHelper.getElementByCss('.css-1hwfws3.react-select__value-container.react-select__value-container--is-multi');
+  }
+
+  /**
+   * Get multi select option
+   */
+  public get multiSelectOption() {
+    return ElementHelper.getElementByCss('.css-fk865s-option.react-select__option');
   }
 
   /**
