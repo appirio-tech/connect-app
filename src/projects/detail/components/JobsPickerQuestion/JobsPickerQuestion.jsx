@@ -5,6 +5,7 @@ import cn from 'classnames'
 
 import JobPickerRow from '../JobPickerRow/JobPickerRow.jsx'
 import './JobsPickerQuestion.scss'
+import { TAAS_MIN_JOB_DURATION } from '../../../../config/constants.js'
 
 class JobsPickerQuestion extends Component {
 
@@ -19,7 +20,7 @@ class JobsPickerQuestion extends Component {
     this.setValidator(props)
 
     const { getValue } = props
-    let values = getValue() 
+    let values = getValue()
     if (values) {
       values = _.map(values, (v) => {
         return {
@@ -33,7 +34,7 @@ class JobsPickerQuestion extends Component {
     }
 
     this.state = {
-      values 
+      values
     }
   }
 
@@ -49,13 +50,13 @@ class JobsPickerQuestion extends Component {
           return true
         }
         return _.some(value, (v) => {
-          return v.title.trim().length  && v.people !== '0' && v.duration !== '0' && v.skills.length > 0 && v.workLoad.value !== null && v.role.value !== null && v.description.trim().length
+          return v.title.trim().length  && v.people !== '0' && parseInt(v.duration, 10) >= TAAS_MIN_JOB_DURATION && v.skills.length > 0 && v.workLoad.value !== null && v.role.value !== null && v.description.trim().length
         }) // validation body
       },
       noPartialFillsExist: (formValues, value) => {
         return _.every(value, v => {
-          const isAllValuesFilled = v.title.trim().length > 0 && v.people > 0 && v.duration > 0 && v.skills && v.skills.length && v.description.trim().length && v.workLoad.value !== null && v.role.value !== null
-          return isAllValuesFilled 
+          const isAllValuesFilled = v.title.trim().length > 0 && v.people > 0 && v.duration >= TAAS_MIN_JOB_DURATION && v.skills && v.skills.length && v.description.trim().length && v.workLoad.value !== null && v.role.value !== null
+          return isAllValuesFilled
         })
       }
     }
