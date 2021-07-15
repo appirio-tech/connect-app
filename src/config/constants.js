@@ -1224,3 +1224,8 @@ export const MILESTONE_DEFAULT_VALUES = {
 export const PHASE_PRODUCT_TEMPLATE_ID = process.env.PHASE_PRODUCT_TEMPLATE_ID
 
 export const DEFAULT_NDA_UUID = process.env.DEFAULT_NDA_UUID
+
+/**
+ * The minimal duration of a TaaS Job in weeks
+ */
+export const TAAS_MIN_JOB_DURATION = 4

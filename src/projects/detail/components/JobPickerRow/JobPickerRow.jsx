@@ -10,6 +10,7 @@ import SelectDropdown from 'appirio-tech-react-components/components/SelectDropd
 import DescriptionField from '../DescriptionField'
 
 import styles from './JobPickerRow.scss'
+import { TAAS_MIN_JOB_DURATION } from '../../../../config/constants'
 
 const always = () => true
 const never = () => false
@@ -102,7 +103,7 @@ class JobPickerRow extends React.PureComponent {
 
   render() {
     const { value, rowIndex } = this.props
-    const isRowIncomplete = value.title.trim().length > 0 || value.people > 0 || value.duration > 0 || (value.skills && value.skills.length)
+    const isRowIncomplete = value.title.trim().length > 0 || value.people > 0 || value.duration >= TAAS_MIN_JOB_DURATION || (value.skills && value.skills.length)
       ||(value.role && value.role.value !== null) ||(value.workLoad && value.workLoad.value !== null) || (value.description.trim().length >  0)
 
     /* Different columns are defined here and used in componsing mobile/desktop views below */
@@ -164,12 +165,14 @@ class JobPickerRow extends React.PureComponent {
         </label>
         <PositiveNumberInput
           styleName="noMargin"
-          className={cn('tc-file-field__inputs', {error: isRowIncomplete && value.duration <= 0 })}
+          className={cn('tc-file-field__inputs', {error: isRowIncomplete && value.duration < TAAS_MIN_JOB_DURATION })}
           max={MAX_NUMBER}
+          min={TAAS_MIN_JOB_DURATION}
           value={value.duration || ''}
           onChange={this.handleDurationChange}
           onBlur={this.resetDuration}
         />
+        {isRowIncomplete && value.duration < TAAS_MIN_JOB_DURATION ? <p className="error-message">Please, choose at least {TAAS_MIN_JOB_DURATION} weeks</p> : null}
       </div>
     )
 
