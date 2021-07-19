@@ -29,4 +29,8 @@ describe('Connect App - Create Project Tests:', () => {
   it('[TC_001] should verify whether the current user can create a Design, Development & Deployment project', async () => {
     await CreateProjectPageHelper.verifyProjectCreation(testData.projectData);
   });
+
+  it('[TC_006] should verify whether the current user can create a TAAS project', async () => {
+    await CreateProjectPageHelper.verifyTaasProject(testData.taas);
+  });
 });
