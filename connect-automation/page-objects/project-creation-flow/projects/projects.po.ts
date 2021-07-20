@@ -13,13 +13,6 @@ export class ProjectsPageObject {
   }
 
   /**
-   * Get Join Project Button
-   */
-  public get joinProjectButton() {
-    return ElementHelper.getElementByButtonText('Join project');
-  }
-
-  /**
    * Get Search Input
    */
   public get searchInput() {

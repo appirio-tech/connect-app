@@ -30,7 +30,7 @@ export class ProjectsHelper {
     await BrowserHelper.sleep(4000);
 
     // Click on Join Project button
-    await this.projectsPageObject.joinProjectButton.click();
+    await CommonHelper.joinProjectButton.click();
     const alertElement = CommonHelper.alertBox();
     await CommonHelper.waitForSuccessAlert(alertElement);
 
