@@ -225,7 +225,7 @@ class CreatePhaseForm extends React.Component {
     const {
       milestones
     } = this.state
-    
+
     const ms = _.map(milestones, (m, index) => {
       return (
         <div styleName="milestone-item" key={m.pseudoId}>

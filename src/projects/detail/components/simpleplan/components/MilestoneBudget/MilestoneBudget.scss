@@ -1,0 +1,35 @@
+@import '~styles/variables';
+
+.progress-bar {
+  position: relative;
+  padding-bottom: 6px;
+
+  .text {
+    @include roboto;
+    font-size: 9px;
+    line-height: 12px;
+    color: $tc-gray-20;
+  }
+
+  .background,
+  .progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 6px;
+  }
+
+  .background {
+    background-color: $tc-gray-20;
+    border-color:  $tc-gray-20;
+  }
+
+  .progress {
+    background-color: $tc-green-110;
+    border-color: $tc-green-110;
+    transform-origin: left;
+  }
+}

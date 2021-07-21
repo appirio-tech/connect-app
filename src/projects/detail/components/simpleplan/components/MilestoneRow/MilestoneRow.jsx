@@ -1,0 +1,348 @@
+/**
+ * View / edit milestone record
+ */
+import React from 'react'
+import PT from 'prop-types'
+import moment from 'moment'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+import _ from 'lodash'
+import { isValidStartEndDates } from '../../../../../../helpers/utils'
+import FormsySelect from '../../../../../../components/Select/FormsySelect'
+import MilestoneCopilots from '../MilestoneCopilots'
+import MilestoneStatus from '../MilestoneStatus'
+import MilestoneBudget from '../MilestoneBudget'
+import MilestoneDeleteButton from '../MilestoneDeleteButton'
+import * as formatHelper from '../helpers/format'
+import * as constants from '../../../../../../config/constants'
+import IconCheck from '../../../../../../assets/icons/icon-check-thin.svg'
+import IconXMark from '../../../../../../assets/icons/icon-x-mark-thin.svg'
+import IconPencil from '../../../../../../assets/icons/icon-ui-pencil.svg'
+
+import IconDots from '../../../../../../assets/icons/icon-dots.svg'
+
+import styles from './MilestoneRow.scss'
+
+const TCFormFields = FormsyForm.Fields
+
+const phaseStatusOptions = [
+  {
+    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_DRAFT),
+    value: constants.PHASE_STATUS_DRAFT,
+  },
+  {
+    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_IN_REVIEW),
+    value: constants.PHASE_STATUS_IN_REVIEW,
+  },
+  {
+    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_REVIEWED),
+    value: constants.PHASE_STATUS_REVIEWED,
+  },
+  {
+    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_ACTIVE),
+    value: constants.PHASE_STATUS_ACTIVE,
+  },
+  {
+    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_COMPLETED),
+    value: constants.PHASE_STATUS_COMPLETED,
+  },
+  {
+    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_CANCELLED),
+    value: constants.PHASE_STATUS_CANCELLED,
+  },
+  {
+    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_PAUSED),
+    value: constants.PHASE_STATUS_PAUSED,
+  },
+]
+
+function MilestoneRow({
+  milestone,
+  rowId,
+  onChange,
+  onSave,
+  onRemove,
+  onDiscard,
+  projectMembers,
+  allMilestones,
+  isCreatingRow,
+  isProjectLive
+}) {
+  const copilotIds = _.get(milestone, 'details.copilots', [])
+  const copilots = copilotIds.map(userId => projectMembers.find(member => member.userId === userId)).filter(Boolean)
+  const edit = milestone.edit
+
+  let milestoneRef
+  let startDateRef
+  let endDateRef
+  let budgetRef
+
+  return edit ? (
+    <tr styleName="milestone-row">
+      <td styleName="checkbox">
+        <TCFormFields.Checkbox
+          name={`select-${rowId}`}
+          value={milestone.selected}
+          onChange={(_, value) => {
+            onChange({ ...milestone, selected: value })
+          }}
+        />
+      </td>
+      <td styleName="milestone">
+        <TCFormFields.TextInput
+          validations={{
+            isRequired: true,
+            checkDuplicatedTitles(values) {
+              const existingTitles = allMilestones
+                .filter(i => i.id !== milestone.id)
+                .map(i => i.name.toLowerCase())
+              const inputtingTitle = values[`title-${rowId}`].toLowerCase()
+              return existingTitles.indexOf(inputtingTitle) === -1
+            }
+          }}
+          validationError={'Please, enter name'}
+          validationErrors={{
+            checkDuplicatedTitles: 'Milestone name already exists'
+          }}
+          required
+          type="text"
+          name={`title-${rowId}`}
+          value={milestone.name}
+          maxLength={48}
+          onChange={(_, value) => {
+            if (!milestone.origin) {
+              milestone.origin = {...milestone }
+            }
+            onChange({...milestone, name: value })
+          }}
+          wrapperClass={styles.textInput}
+          innerRef={ref => milestoneRef = ref}
+        />
+      </td>
+      <td styleName="description">
+        <TCFormFields.Textarea
+          name={`description-${rowId}`}
+          value={milestone.description}
+          maxLength={255}
+          onChange={(_, value) => {
+            if (!milestone.origin) {
+              milestone.origin = {...milestone}
+            }
+            onChange({...milestone, description: value })
+          }}
+          wrapperClass={styles.textArea}
+          autoResize={false}
+          rows={1}
+        />
+      </td>
+      <td styleName="start-date">
+        <TCFormFields.TextInput
+          validations={{
+            isRequired: true,
+            isValidStartEndDatesForRow(values) {
+              return isValidStartEndDates({
+                startDate: values[`startDate-${rowId}`],
+                endDate: values[`endDate-${rowId}`],
+              })
+            }
+          }}
+          validationError={'Please, enter start date'}
+          validationErrors={{
+            isValidStartEndDatesForRow: 'Start date cannot be after end date'
+          }}
+          required
+          type="date"
+          name={`startDate-${rowId}`}
+          value={moment(milestone.startDate).format('YYYY-MM-DD')}
+          onChange={(_, value) => {
+            if (!milestone.origin) {
+              milestone.origin = {...milestone}
+            }
+            onChange({...milestone, startDate: value })
+          }}
+          wrapperClass={`${styles.textInput} ${styles.dateInput}`}
+          innerRef={ref => startDateRef = ref}
+        />
+      </td>
+      <td styleName="end-date">
+        <TCFormFields.TextInput
+          validations={{
+            isRequired: true,
+            isValidStartEndDatesForRow(values) {
+              return isValidStartEndDates({
+                startDate: values[`startDate-${rowId}`],
+                endDate: values[`endDate-${rowId}`],
+              })
+            }
+          }}
+          validationError={'Please, enter end date'}
+          validationErrors={{
+            isValidStartEndDatesForRow: 'End date cannot be before start date'
+          }}
+          required
+          type="date"
+          name={`endDate-${rowId}`}
+          value={moment(milestone.endDate).format('YYYY-MM-DD')}
+          onChange={(_, value) => {
+            if (!milestone.origin) {
+              milestone.origin = {...milestone}
+            }
+            onChange({...milestone, endDate: value })
+          }}
+          wrapperClass={`${styles.textInput} ${styles.dateInput}`}
+          innerRef={ref => endDateRef = ref}
+        />
+      </td>
+      <td styleName="status">
+        <FormsySelect
+          name={`status-${rowId}`}
+          options={phaseStatusOptions}
+          onChange={(selectedOption) => {
+            if (!milestone.origin) {
+              milestone.origin = {...milestone}
+            }
+            onChange({...milestone, status: selectedOption.value })
+          }}
+          value={phaseStatusOptions.find(option => option.value === milestone.status)}
+          isSearchable={false}
+        />
+      </td>
+      <td styleName="budget">
+        <TCFormFields.TextInput
+          validations={{
+            isRequired: true,
+          }}
+          validationError={'Please, enter budget'}
+          required
+          type="number"
+          name={`budget-${rowId}`}
+          value={milestone.budget}
+          onChange={(_, value) => {
+            if (!milestone.origin) {
+              milestone.origin = {...milestone}
+            }
+            onChange({...milestone, budget: value })
+          }}
+          wrapperClass={styles.textInput}
+          innerRef={ref => budgetRef = ref}
+        />
+      </td>
+      <td styleName="copilots">
+        <MilestoneCopilots
+          edit
+          copilots={copilots}
+          projectMembers={projectMembers}
+          onAdd={(member) => {
+            if (!milestone.origin) {
+              milestone.origin = {...milestone}
+            }
+            const details = milestone.details
+            const copilotIdsUpdated = copilots.map(copilot => copilot.userId).concat(member.userId)
+            onChange({...milestone, details: { ...details, copilots: copilotIdsUpdated } })
+          }}
+          onRemove={(member) => {
+            if (!milestone.origin) {
+              milestone.origin = {...milestone}
+            }
+            const details = milestone.details
+            const copilotIdsUpdated = copilots.filter(copilot => copilot.userId !== member.userId).map(copilot => copilot.userId)
+            onChange({...milestone, details: { ...details, copilots: copilotIdsUpdated } })
+          }}
+        />
+      </td>
+      <td styleName="action">
+        <div styleName="inline-menu">
+          <button
+            type="submit"
+            className="tc-btn tc-btn-link"
+            styleName="icon-button"
+            onClick={() => {
+              if (milestoneRef.props.isValid()
+                && startDateRef.props.isValid()
+                && endDateRef.props.isValid()
+                && budgetRef.props.isValid()
+              ) {
+                onSave(milestone.id)
+              }
+            }}
+          >
+            <IconCheck />
+          </button>
+          <button
+            type="button"
+            className="tc-btn tc-btn-link"
+            styleName="icon-button"
+            onClick={() => {
+              if (isCreatingRow) {
+                onDiscard(milestone.id)
+              } else {
+                onChange({ ...(milestone.origin || milestone), edit: false })
+              }
+            }}
+          >
+            <IconXMark />
+          </button>
+        </div>
+      </td>
+    </tr>
+  ) : (
+    <tr styleName="milestone-row">
+      <td styleName="checkbox">
+        <TCFormFields.Checkbox
+          name={`select-${rowId}`}
+          value={milestone.selected}
+          onChange={(_, value) => {
+            onChange({ ...milestone, selected: value })
+          }}
+        />
+      </td>
+      <td styleName="milestone">{milestone.name}</td>
+      <td styleName="description">{milestone.description}</td>
+      <td styleName="start-date">{moment(milestone.startDate).format('MM-DD-YYYY')}</td>
+      <td styleName="end-date">{moment(milestone.endDate).format('MM-DD-YYYY')}</td>
+      <td styleName="status"><MilestoneStatus status={milestone.status} /></td>
+      <td styleName="budget"><MilestoneBudget spent={milestone.spentBudget} budget={milestone.budget} /></td>
+      <td styleName="copilots">
+        <MilestoneCopilots copilots={copilots} />
+      </td>
+      <td styleName="action">
+        <div styleName="inline-menu">
+          {isProjectLive && [
+            <button
+              type="button"
+              className="tc-btn tc-btn-link"
+              styleName="icon-button"
+              onClick={() => {
+                onChange({ ...milestone, edit: true })
+              }}
+            >
+              <IconPencil />
+            </button>,
+            <MilestoneDeleteButton
+              onDelete={() => {
+                onRemove(milestone.id)
+              }}
+            />
+          ]}
+          <button type="button" className="tc-btn tc-btn-link" styleName="icon-button">
+            <IconDots />
+          </button>
+        </div>
+      </td>
+    </tr>
+  )
+}
+
+MilestoneRow.propTypes = {
+  milestone: PT.shape(),
+  rowId: PT.string,
+  onChange: PT.func,
+  onSave: PT.func,
+  onRemove: PT.func,
+  onDiscard: PT.func,
+  projectMembers: PT.arrayOf(PT.shape()),
+  allMilestones: PT.arrayOf(PT.shape()),
+  isCreatingRow: PT.bool,
+  isProjectLive: PT.bool,
+}
+
+export default MilestoneRow

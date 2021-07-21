@@ -1,0 +1,20 @@
+@import '~styles/variables';
+
+.milestone-status {
+  @include roboto-bold;
+
+  display: inline-block;
+  padding: 4px 15px;
+  color: $tc-white;
+  font-size: $tc-label-xxs;
+  line-height: 16px;
+  border-radius: 20px;
+
+  &.draft { background-color: $tc-gray-20; }
+  &.in_review { background-color: $tc-gray-20; }
+  &.reviewed { background-color: $tc-gray-20; }
+  &.active { background-color: $tc-green-100; }
+  &.completed { background-color: $tc-black; }
+  &.cancelled { background-color: $tc-black; }
+  &.paused { background-color: $tc-red-100; }
+}

@@ -29,6 +29,7 @@ const Layout = (props) => {
         </div>
         <Footer />
         <GatewayDest name="fullscreen-page" className="mobile-page-gateway" />
+        <GatewayDest name="right-sidebar" className="right-sidebar-container" />
       </div>
     )
   }

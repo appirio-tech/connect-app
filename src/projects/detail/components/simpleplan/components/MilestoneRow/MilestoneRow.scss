@@ -1,0 +1,152 @@
+@import '~styles/variables';
+
+.milestone-row {
+  @include roboto;
+  font-size: $tc-body-sm;
+  color: $tc-gray-60;
+
+  .icon-button{
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    border: 0;
+  }
+
+  .checkbox {}
+
+  .milestone {}
+
+  .description {}
+
+  .start-date {
+    white-space: nowrap;
+  }
+
+  .end-date {
+    white-space: nowrap;
+  }
+
+  .status {}
+
+  .budget {
+    padding-right: 10px;
+  }
+
+  .copilots {}
+
+  .action {}
+}
+
+.textInput {
+  position: relative;
+
+  :global {
+    .tc-label {
+      display: none;
+    }
+    .tc-file-field__inputs {
+      height: 25px;
+      margin-bottom: 0;
+      font-size: $tc-body-sm;
+      line-height: 16px;
+    }
+    .error-message {
+      position: absolute;
+      top: 100%;
+      width: fit-content;
+      min-width: 145px;
+      z-index: 1;
+    }
+  }
+}
+
+.textArea {
+  :global {
+    .tc-label {
+      display: none;
+    }
+    .tc-textarea {
+      height: 25px;
+      max-width: 140px;
+      min-height: 25px;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-bottom: 0;
+      overflow: hidden;
+      resize: vertical;
+      font-size: $tc-body-sm;
+      line-height: 25px;
+    }
+  }
+}
+
+.dateInput {
+  :global {
+    .tc-file-field__inputs {
+      padding: 0;
+
+      &::-webkit-calendar-picker-indicator {
+        width: 16px;
+        margin: 0;
+      }
+
+      @media screen and (max-width: 1024px) {
+        max-width: 90px;
+      }
+    }
+  }
+}
+
+.status {
+  :global {
+    .react-select__control {
+      height: auto;
+      min-height: 25px;
+      overflow: hidden;
+
+      .react-select__value-container {
+        height: auto;
+        padding-top: 0;
+        padding-bottom: 0;
+
+        input {
+          margin-bottom: 0;
+        }
+      }
+      .react-select__single-value {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      .react-select__indicators {
+        display: flex;
+      }
+      .react-select__indicator-separator {
+        display: none;
+      }
+      .react-select__dropdown-indicator {
+        display: flex;
+      }
+    }
+    .react-select__menu {
+      min-width: 100px;
+    }
+  }
+}
+
+.budget {
+  :global {
+    .tc-file-field__inputs {
+      padding-right: 0;
+    }
+  }
+}
+
+.action {
+  .inline-menu {
+    display: flex;
+
+    > *:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+}

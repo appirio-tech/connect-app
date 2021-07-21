@@ -1,0 +1,75 @@
+@import '~styles/variables';
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 15px 0 20px;
+
+  .primary-button {
+    margin-left: 12px;
+  }
+
+  .icon-button {
+    padding: 0 10px;
+    border: 0;
+  }
+
+  .separator {
+    width: 1px;
+    height: 15px;
+    margin-left: 20px;
+    background-color: $tc-gray-50;
+  }
+}
+
+.view-mode {
+  &.active {
+    svg path {
+      fill: $tc-green-110;
+    }
+  }
+}
+
+.table-container {
+  padding-left: 5px;
+  padding-right: 10px;
+  background-color: $tc-white;
+  border-radius: 3 * $corner-radius;
+}
+
+.milestones-table {
+  width: 100%;
+
+  th,
+  td {
+    text-align: left;
+    vertical-align: middle;
+
+    &:not(:first-child) {
+      padding-left: 5px;
+    }
+  }
+
+  td {
+    padding: 10px 0;
+    border-top: 1px solid rgba($tc-gray-60, .64);
+  }
+
+  :global {
+    .checkbox-group-item {
+      margin: 0;
+      transform: scale(60%);
+
+      > .tc-checkbox {
+        > label {
+          border-radius: 3 * $corner-radius;
+        }
+      }
+
+      > label {
+        display: none;
+      }
+    }
+  }
+}

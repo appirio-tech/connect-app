@@ -1,0 +1,103 @@
+@import '~styles/variables';
+
+.project-details-widget {
+  padding: 20px 25px;
+  font-size: $tc-body-md;
+  background-color: $tc-white;
+  border-radius: 3 * $corner-radius;
+
+  .title {
+    @include roboto-medium;
+
+    padding-bottom: 20px;
+    font-size: $tc-heading-md;
+    border-bottom: 2px solid $tc-gray-05;
+  }
+
+  .body {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 15px;
+
+    @media screen and (max-width: 1024px - 1px) {
+      flex-wrap: wrap;
+    }
+  }
+
+  .detail-item {
+    margin-right: 25px;
+
+    &:last-child {
+      margin-right: 0px;
+    }
+
+    &.description {
+      flex-grow: 1;
+      line-height: 1.5;
+
+      @media screen and (max-width: 1024px - 1px) {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+    }
+    &.dates {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 75px;
+      max-height: 70px;
+
+      .caption {
+        margin-bottom: 2px;
+      }
+    }
+    &.progress,
+    &.budget,
+    &.team {
+      min-width: 50px;
+    }
+  }
+
+  .caption {
+    @include roboto-bold;
+    font-size: $tc-label-md;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .text {
+    font-size: $tc-label-sm;
+  }
+
+  .project-progress,
+  .project-budget {
+    position: relative;
+    width: 54px;
+    height: 54px;
+
+    .value {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      @include roboto-bold;
+      font-size: $tc-label-md;
+    }
+  }
+
+  :global {
+    .CircularProgressbar {
+      width: 100%;
+      height: 100%;
+
+      .CircularProgressbar-trail {
+        stroke-width: 10px;
+      }
+
+      .CircularProgressbar-path {
+        stroke-width: 10px;
+      }
+    }
+  }
+}

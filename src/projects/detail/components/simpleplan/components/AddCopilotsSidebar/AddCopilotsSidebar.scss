@@ -1,0 +1,99 @@
+@import '~styles/variables';
+
+.button-close {
+  padding: 0 10px;
+  margin-left: auto;
+  margin-right: -10px;
+  border: 0;
+}
+
+.add-copilots-sidebar {
+  width: 100%;
+  height: 100%;
+  color: $tc-gray-90;
+  background-color: $tc-white;
+  box-shadow: 0 3px 12px rgba(#000, .16);
+
+  .title,
+  .select-copilot,
+  .copilot-list {
+    padding: 10px 15px 10px 25px;
+  }
+
+  .title {
+    @include roboto-bold;
+
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .select-copilot {
+    border-top: 1px solid $tc-gray-05;
+
+
+    .label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: $tc-label-md;
+      line-height: 16px;
+    }
+
+    .add-button {
+      margin-top: 15px;
+    }
+
+    :global {
+      .react-select__control {
+        @include roboto-light;
+        font-size: $tc-body-sm;
+
+        .react-select__indicators,
+        .react-select__indicator-separator,
+        .react-select__dropdown-indicator {
+          display: flex;
+        }
+        .react-select__clear-indicator {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .copilot-list {
+    padding-top: 25px;
+
+    &:not(:empty) {
+      border-top: 1px solid $tc-gray-05;
+    }
+  }
+}
+
+.member-details {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+  color: $tc-gray-90;
+
+  .name-and-handle {
+    margin-left: 10px;
+    font-size: $tc-body-sm;
+
+    .fullname {
+      font-weight: bold;
+    }
+
+    .handle {
+      &::before {
+        content: ' ';
+      }
+    }
+  }
+
+  .close-button {
+    padding: 0 10px;
+    margin-left: auto;
+    color: inherit;
+  }
+}

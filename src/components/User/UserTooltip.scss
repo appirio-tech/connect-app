@@ -49,6 +49,15 @@
         }
       }
 
+      &.size-50 {
+        .tooltip-target {
+          .Avatar {
+            height: 50px;
+            width: 50px;
+          }
+        }
+      }
+
       .stack-avatar-0 {
         z-index: 3;
       }

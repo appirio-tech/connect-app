@@ -1,0 +1,14 @@
+@import '~styles/variables';
+
+.milestone-row {
+  @include roboto-bold;
+
+  font-size: $tc-label-sm;
+  color: $tc-gray-60;
+  line-height: 15px;
+
+  th {
+    padding-top: 20px;
+    padding-bottom: 15px;
+  }
+}

@@ -286,12 +286,14 @@ function createProductsTimelineAndMilestone(project) {
  *
  * @return {Promise} project
  */
-export function createProjectPhaseAndProduct(project, productTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate, createTimeline = true) {
+export function createProjectPhaseAndProduct(project, productTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate, createTimeline = true, budget, details) {
   const param = {
     status,
     name: productTemplate.name,
     description: productTemplate.description,
-    productTemplateId: productTemplate.id
+    productTemplateId: productTemplate.id,
+    budget,
+    details,
   }
   if (startDate) {
     param['startDate'] = startDate.format('YYYY-MM-DD')
@@ -356,12 +358,12 @@ function createPhaseAndMilestonesRequest(project, productTemplate, status = PHAS
  * @param {*} startDate 
  * @param {*} endDate 
  */
-export function createPhaseWithoutTimeline(project, productTemplate, status, startDate, endDate) {
+export function createPhaseWithoutTimeline(project, productTemplate, status, startDate, endDate, budget, details) {
   return (dispatch) => {
     console.log(CREATE_PROJECT_PHASE)
     return dispatch({
       type: CREATE_PROJECT_PHASE,
-      payload: createProjectPhaseAndProduct(project, productTemplate, status, startDate, endDate, false)
+      payload: createProjectPhaseAndProduct(project, productTemplate, status, startDate, endDate, false, budget, details)
     })
   }
 }
@@ -505,75 +507,78 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
       updatedProps.endDate = moment(updatedProps.endDate).format('YYYY-MM-DD')
     }
 
+    let result
     return dispatch({
       type: UPDATE_PHASE,
       payload: updatePhaseAPI(projectId, phaseId, updatedProps, phaseIndex).then()
-    }).then(() => {
+    })
+      .then(res => result = res)
+      .then(() => {
       // finds active milestone, if exists in timeline
-      const activeMilestone = timeline ? _.find(timeline.milestones, m => m.status === PHASE_STATUS_ACTIVE) : null
-      // this will be done after updating timeline (if timeline update is required)
-      // or immediately if timeline update is not required
-      // update product milestone strictly after updating timeline
-      // otherwise it could happened like this:
-      // - send request to update timeline
-      // - send request to update milestone
-      // - get updated milestone
-      // - get updated timeline (without updated milestone)
-      // so otherwise we can end up with the timeline without updated milestone
-      const optionallyUpdateFirstMilestone = () => {
+        const activeMilestone = timeline ? _.find(timeline.milestones, m => m.status === PHASE_STATUS_ACTIVE) : null
+        // this will be done after updating timeline (if timeline update is required)
+        // or immediately if timeline update is not required
+        // update product milestone strictly after updating timeline
+        // otherwise it could happened like this:
+        // - send request to update timeline
+        // - send request to update milestone
+        // - get updated milestone
+        // - get updated timeline (without updated milestone)
+        // so otherwise we can end up with the timeline without updated milestone
+        const optionallyUpdateFirstMilestone = () => {
         // update first product milestone only if
         // - there is a milestone, obviously
         // - phase's status is changed
         // - phase's status is changed to active
         // - there is not active milestone alreay (this can happen when phase is made active more than once
         // e.g. Active => Paused => Active)
-        if (projectVersion !== 'v4' && timeline && !activeMilestone && phaseActivated ) {
+          if (projectVersion !== 'v4' && timeline && !activeMilestone && phaseActivated ) {
+            dispatch(
+              updateProductMilestone(
+                productId,
+                timeline.id,
+                timeline.milestones[0].id,
+                {status:MILESTONE_STATUS.ACTIVE}
+              )
+            )
+          }
+        }
+
+        if (timeline && (startDateChanged || phaseActivated)) {
           dispatch(
-            updateProductMilestone(
+            updateProductTimeline(
               productId,
               timeline.id,
-              timeline.milestones[0].id,
-              {status:MILESTONE_STATUS.ACTIVE}
+              {
+                name: timeline.name,
+                startDate: updatedProps.startDate,
+                reference: timeline.reference,
+                referenceId: timeline.referenceId,
+              }
             )
-          )
+          ).then(optionallyUpdateFirstMilestone)
+        } else {
+          optionallyUpdateFirstMilestone()
         }
-      }
 
-      if (timeline && (startDateChanged || phaseActivated)) {
-        dispatch(
-          updateProductTimeline(
-            productId,
-            timeline.id,
-            {
-              name: timeline.name,
-              startDate: updatedProps.startDate,
-              reference: timeline.reference,
-              referenceId: timeline.referenceId,
-            }
-          )
-        ).then(optionallyUpdateFirstMilestone)
-      } else {
-        optionallyUpdateFirstMilestone()
-      }
+        // update project caused by phase updates
+      }).then(() => {
+        const project = state.projectState.project
 
-    // update project caused by phase updates
-    }).then(() => {
-      const project = state.projectState.project
-
-      // if one phase moved to ACTIVE status, make project ACTIVE too
-      if (
-        _.includes([PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_REVIEWED], project.status) &&
+        // if one phase moved to ACTIVE status, make project ACTIVE too
+        if (
+          _.includes([PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_REVIEWED], project.status) &&
         phase.status !== PHASE_STATUS_ACTIVE &&
         updatedProps.status === PHASE_STATUS_ACTIVE &&
         hasPermission(PERMISSIONS.EDIT_PROJECT_STATUS)
-      ) {
-        dispatch(
-          updateProject(projectId, {
-            status: PROJECT_STATUS_ACTIVE
-          }, true)
-        )
-      }
-    })
+        ) {
+          dispatch(
+            updateProject(projectId, {
+              status: PROJECT_STATUS_ACTIVE
+            }, true)
+          )
+        }
+      }).then(() => result)
   }
 }
 
