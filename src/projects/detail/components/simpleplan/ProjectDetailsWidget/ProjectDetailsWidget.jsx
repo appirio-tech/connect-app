@@ -6,12 +6,12 @@ import PT from 'prop-types'
 import moment from 'moment'
 import * as constants from '../../../../../config/constants'
 import ProjectProgress from '../../../../../components/ProjectProgress/ProjectProgress'
-import ProjectManagerAvatars from '../../../../list/components/Projects/ProjectManagerAvatars'
+import ProjectMemeberAvatars from '../components/ProjectMemberAvatars'
 
 import './ProjectDetailsWidget.scss'
 
 
-function ProjectDetailsWidget({project, phases}) {
+function ProjectDetailsWidget({ project, phases }) {
   const startDate = moment.min(phases.map(phase => moment(phase.startDate)))
   const endDate = moment.max(phases.map(phase => moment(phase.endDate)))
   const budget = phases.reduce((sum, phase) => sum + phase.budget, 0)
@@ -41,20 +41,26 @@ function ProjectDetailsWidget({project, phases}) {
         <div styleName="detail-item progress">
           <span styleName="caption">Progress</span>
           <div styleName="project-progress">
-            <ProjectProgress viewType={ProjectProgress.ViewTypes.CIRCLE} percent={numTotal !== 0 ? numCompleted / numTotal * 100 : 0 } />
+            <ProjectProgress
+              viewType={ProjectProgress.ViewTypes.CIRCLE}
+              percent={numTotal !== 0 ? numCompleted / numTotal * 100 : 0 }
+            />
             <span styleName="value">{`${numCompleted}/${numTotal}`}</span>
           </div>
         </div>
         <div styleName="detail-item budget">
           <span styleName="caption">Budget</span>
           <div styleName="project-budget">
-            <ProjectProgress viewType={ProjectProgress.ViewTypes.CIRCLE} percent={budget !== 0 ? spent / budget * 100 : 0 } />
+            <ProjectProgress
+              viewType={ProjectProgress.ViewTypes.CIRCLE}
+              percent={budget !== 0 ? spent / budget * 100 : 0 }
+            />
             <span styleName="value">{`$${formatBudget(budget)}`}</span>
           </div>
         </div>
         <div styleName="detail-item team">
           <span styleName="caption">Team</span>
-          <ProjectManagerAvatars managers={project.members} maxShownNum={5} size={50} />
+          <ProjectMemeberAvatars members={project.members} maxShownNum={5} size={50} />
         </div>
       </div>
     </div>
@@ -68,8 +74,17 @@ ProjectDetailsWidget.propTypes = {
 
 export default ProjectDetailsWidget
 
+/*
+ * Returns formatted text without rounding
+ * 100.9 -> '$100'
+ * 1100.9 -> '1.1K'
+ * 111900.9 -> '111K'
+ */
 function formatBudget(value) {
-  return value < 1000
-    ? `${Math.floor(value)}`
-    : `${(value / 1000).toFixed(1)}K`
+  if (value < 100000) {
+    return value < 1000
+      ? `${Math.floor(value)}`
+      : `${Math.floor(value / 1000 * 10) / 10}K`
+  }
+  return `${Math.floor(value / 1000)}K`
 }

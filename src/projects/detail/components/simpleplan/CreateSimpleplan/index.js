@@ -1,2 +1,2 @@
-import CreateSimpleplan from './CreateSimpleplan'
-export default CreateSimpleplan
+import CreateSimplePlan from './CreateSimplePlan'
+export default CreateSimplePlan

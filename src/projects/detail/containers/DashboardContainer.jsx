@@ -49,8 +49,9 @@ import { getProjectTemplateById } from '../../../helpers/templates'
 import { PERMISSIONS } from '../../../config/permissions'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo, updatePhase } from '../../actions/project'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
+import { loadMembers } from '../../../actions/members'
 import ProjectEstimation from '../../create/components/ProjectEstimation'
-import CreateSimpleplan from '../components/simpleplan/CreateSimpleplan'
+import CreateSimplePlan from '../components/SimplePlan/CreateSimplePlan'
 
 import {
   PHASE_STATUS_ACTIVE,
@@ -161,6 +162,8 @@ class DashboardContainer extends React.Component {
       removeProjectAttachment,
       location,
       estimationQuestion,
+      loadMembers,
+      members,
     } = this.props
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
 
@@ -300,122 +303,146 @@ class DashboardContainer extends React.Component {
                   )}
                 </div>
               ) : (
-                <div styleName="simpleplan">
-                  {!isCreatingPhase && hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) && !isLoadingPhases && (
-                    <CreateSimpleplan
-                      isProjectLive={isProjectLive}
-                      project={project}
-                      phases={phases}
-                      milestones={this.state.createGameplanPhases || phases}
-                      onChangeMilestones={(milestones) => {
-                        this.setState({createGameplanPhases: milestones})
-                      }}
-                      onSaveMilestone={(id) => {
-                        const { createGameplanPhases } = this.state
-                        const index = createGameplanPhases.findIndex(phase => phase.id === id)
-                        const phase = createGameplanPhases[index]
+                <div styleName="simple-plan">
+                  {((!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) && (!visiblePhases || visiblePhases.length === 0))
+                    || (hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) &&
+                      (!phases || phases.length === 0) &&
+                      (!this.state.createGameplanPhases || this.state.createGameplanPhases.length === 0))
+                  ) && (
+                    <div styleName="welcome-message">
+                      <ProjectPlanEmpty version="v4" />
+                    </div>
+                  )}
+                  {(() => {
+                    // is loading
+                    if (isCreatingPhase || isLoadingPhases) {
+                      return null
+                    }
 
-                        if (`${phase.id}`.startsWith('new-milestone')) {
-                          const productTemplate = {
-                            name: phase.name,
-                            id: PHASE_PRODUCT_TEMPLATE_ID,
-                          }
+                    // hide milestones form if customer and no visible milestones
+                    if (!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) && visiblePhases && visiblePhases.length === 0) {
+                      return null
+                    }
 
-                          if (phase.description && phase.description.trim()) {
-                            productTemplate.description = phase.description.trim()
-                          }
+                    return (
+                      <CreateSimplePlan
+                        members={members}
+                        loadMembers={loadMembers}
+                        isProjectLive={isProjectLive}
+                        isCustomer={!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)}
+                        project={project}
+                        phases={phases}
+                        milestones={this.state.createGameplanPhases || phases}
+                        onChangeMilestones={(milestones) => {
+                          this.setState({createGameplanPhases: milestones})
+                        }}
+                        onSaveMilestone={(id) => {
+                          const { createGameplanPhases } = this.state
+                          const index = createGameplanPhases.findIndex(phase => phase.id === id)
+                          const phase = createGameplanPhases[index]
 
-                          this.props.createPhaseWithoutTimeline(
-                            project,
-                            productTemplate,
-                            phase.status,
-                            moment.utc(phase.startDate),
-                            moment.utc(phase.endDate),
-                            phase.budget,
-                            phase.details
-                          ).then(({ action }) => {
-                            // reload phase
-                            const updatedCreateGameplanPhases = [...createGameplanPhases]
+                          if (`${phase.id}`.startsWith('new-milestone')) {
+                            const productTemplate = {
+                              name: phase.name,
+                              id: PHASE_PRODUCT_TEMPLATE_ID,
+                            }
+
+                            if (phase.description && phase.description.trim()) {
+                              productTemplate.description = phase.description.trim()
+                            }
+
+                            this.props.createPhaseWithoutTimeline(
+                              project,
+                              productTemplate,
+                              phase.status,
+                              moment.utc(phase.startDate),
+                              moment.utc(phase.endDate),
+                              phase.budget,
+                              phase.details
+                            ).then(({ action }) => {
+                              // reload phase
+                              const updatedCreateGameplanPhases = [...createGameplanPhases]
+                              updatedCreateGameplanPhases.splice(index, 1, {
+                                ...action.payload.phase,
+                                selected: phase.selected
+                              })
+                              this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
+                            })
+                          } else {
+                            const updateParam =  {
+                              name: phase.name,
+                              startDate: moment.utc(phase.startDate),
+                              endDate: moment.utc(phase.endDate),
+                              status: phase.status,
+                              budget: phase.budget,
+                            }
+
+                            if (phase.description && phase.description.trim()) {
+                              updateParam.description = phase.description.trim()
+                            }
+
+                            if (phase.details) {
+                              updateParam.details = phase.details
+                            }
+
+                            this.props.updatePhase(
+                              phase.projectId,
+                              phase.id,
+                              updateParam
+                            ).then(({ action }) => {
+                              const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
+                              const idx = updatedCreateGameplanPhases.findIndex(phase => phase.id === action.payload.id)
+
+                              // reload phase
+                              updatedCreateGameplanPhases.splice(idx, 1, {
+                                ...action.payload,
+                                edit: this.state.createGameplanPhases[idx].edit,
+                                selected: this.state.createGameplanPhases[idx].selected,
+                              })
+                              this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
+                            })
+
+                            // toggle edit
+                            const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
                             updatedCreateGameplanPhases.splice(index, 1, {
-                              ...action.payload.phase,
+                              ...phase,
+                              edit: false,
                               selected: phase.selected
                             })
                             this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
+                          }
+                        }}
+                        onRemoveMilestone={(id) => {
+                          const { createGameplanPhases } = this.state
+                          let index
+                          let projectId
+
+                          if (createGameplanPhases) {
+                            index = createGameplanPhases.findIndex(phase => phase.id === id)
+                            projectId = createGameplanPhases[index].projectId
+                          } else {
+                            index = phases.findIndex(phase => phase.id === id)
+                            projectId = phases[index].projectId
+                          }
+
+                          this.props.deleteProjectPhase(
+                            projectId,
+                            id
+                          ).then(() => {
+                            if (!this.state.createGameplanPhases) {
+                              return
+                            }
+
+                            // remove phase
+                            const index = this.state.createGameplanPhases.findIndex(phase => phase.id === id)
+                            const newGameplanPhases = [...this.state.createGameplanPhases]
+                            newGameplanPhases.splice(index, 1)
+                            this.setState({createGameplanPhases: newGameplanPhases})
                           })
-                        } else {
-                          const updateParam =  {
-                            name: phase.name,
-                            startDate: moment.utc(phase.startDate),
-                            endDate: moment.utc(phase.endDate),
-                            status: phase.status,
-                            budget: phase.budget,
-                          }
-
-                          if (phase.description && phase.description.trim()) {
-                            updateParam.description = phase.description.trim()
-                          }
-
-                          if (phase.details) {
-                            updateParam.details = phase.details
-                          }
-
-                          this.props.updatePhase(
-                            phase.projectId,
-                            phase.id,
-                            updateParam
-                          ).then(({ action }) => {
-                            const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
-                            const idx = updatedCreateGameplanPhases.findIndex(phase => phase.id === action.payload.id)
-
-                            // reload phase
-                            updatedCreateGameplanPhases.splice(idx, 1, {
-                              ...action.payload,
-                              edit: this.state.createGameplanPhases[idx].edit,
-                              selected: this.state.createGameplanPhases[idx].selected,
-                            })
-                            this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
-                          })
-
-                          // toggle edit
-                          const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
-                          updatedCreateGameplanPhases.splice(index, 1, {
-                            ...phase,
-                            edit: false,
-                            selected: phase.selected
-                          })
-                          this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
-                        }
-                      }}
-                      onRemoveMilestone={(id) => {
-                        const { createGameplanPhases } = this.state
-                        let index
-                        let projectId
-
-                        if (createGameplanPhases) {
-                          index = createGameplanPhases.findIndex(phase => phase.id === id)
-                          projectId = createGameplanPhases[index].projectId
-                        } else {
-                          index = phases.findIndex(phase => phase.id === id)
-                          projectId = phases[index].projectId
-                        }
-
-                        this.props.deleteProjectPhase(
-                          projectId,
-                          id
-                        ).then(() => {
-                          if (!this.state.createGameplanPhases) {
-                            return
-                          }
-
-                          // remove phase
-                          const index = this.state.createGameplanPhases.findIndex(phase => phase.id === id)
-                          const newGameplanPhases = [...this.state.createGameplanPhases]
-                          newGameplanPhases.splice(index, 1)
-                          this.setState({createGameplanPhases: newGameplanPhases})
-                        })
-                      }}
-                    />
-                  )}
+                        }}
+                      />
+                    )
+                  })()}
                 </div>
               )}
             </div>
@@ -426,7 +453,7 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState, projectTopics, templates, topics }) => {
+const mapStateToProps = ({ notifications, projectState, projectTopics, templates, topics, members }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (hasPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -447,6 +474,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     isFeedsLoading: projectTopics.isLoading,
     phasesStates: projectState.phasesStates,
     phasesTopics: topics,
+    members: members.members
   }
 }
 
@@ -472,6 +500,7 @@ const mapDispatchToProps = {
   updateProjectAttachment,
   removeProjectAttachment,
   updatePhase,
+  loadMembers,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(DashboardContainer))

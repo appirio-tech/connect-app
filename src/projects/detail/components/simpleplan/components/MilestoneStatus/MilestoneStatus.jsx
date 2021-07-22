@@ -3,14 +3,14 @@
  */
 import React from 'react'
 import PT from 'prop-types'
-import * as formatHelper from '../helpers/format'
-
+import { PHASE_STATUS_OPTIONS } from '../../../../../../config/constants'
 import './MilestoneStatus.scss'
 
 function MilestoneStatus({ status }) {
+  const label = PHASE_STATUS_OPTIONS.find(option => option.value === status).label
   return (
     <span styleName={`milestone-status ${status}`}>
-      {formatHelper.formatCapitalizedText(status)}
+      {label}
     </span>
   )
 }

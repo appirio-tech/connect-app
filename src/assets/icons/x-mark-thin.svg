@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28.863 28.863">
-  <g id="Close_Icon" data-name="Close Icon" transform="translate(0.343 0.343)">
-    <line id="Line_17" data-name="Line 17" x1="28.178" y2="26.52" transform="translate(0 0.829)" fill="none" stroke="#707070" stroke-width="1"/>
-    <line id="Line_18" data-name="Line 18" x1="28.178" y2="26.52" transform="translate(27.349) rotate(90)" fill="none" stroke="#707070" stroke-width="1"/>
+  <g id="Close_Icon" transform="translate(0.343 0.343)">
+    <line id="Line_17" x1="28.178" y2="26.52" transform="translate(0 0.829)" fill="none" stroke="#707070" stroke-width="1"/>
+    <line id="Line_18" x1="28.178" y2="26.52" transform="translate(27.349) rotate(90)" fill="none" stroke="#707070" stroke-width="1"/>
   </g>
 </svg>

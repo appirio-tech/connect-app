@@ -1,6 +1,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import uncontrollable from 'uncontrollable'
+import { PROJECT_ROLE_COPILOT } from '../../../../../../config/constants'
 import { PERMISSIONS } from '../../../../../../config/permissions'
 import { hasPermission } from '../../../../../../helpers/permissions'
 import Select from '../../../../../../components/Select/Select'
@@ -25,7 +26,8 @@ function AddCopilotsSidebar({
   const projectMemberOptions = projectMembers.map(projectMember => ({
     label: projectMember.handle,
     value: projectMember
-  })).filter(option => copilots.indexOf(option.value) === -1)
+  })).filter(option => copilots.indexOf(option.value) === -1 && option.value.role === PROJECT_ROLE_COPILOT)
+
 
   return (
     <aside styleName="add-copilots-sidebar">

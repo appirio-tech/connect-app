@@ -8,12 +8,11 @@ import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 import _ from 'lodash'
 import { isValidStartEndDates } from '../../../../../../helpers/utils'
 import FormsySelect from '../../../../../../components/Select/FormsySelect'
-import MilestoneCopilots from '../MilestoneCopilots'
+// import MilestoneCopilots from '../MilestoneCopilots'
 import MilestoneStatus from '../MilestoneStatus'
 import MilestoneBudget from '../MilestoneBudget'
 import MilestoneDeleteButton from '../MilestoneDeleteButton'
-import * as formatHelper from '../helpers/format'
-import * as constants from '../../../../../../config/constants'
+import { PHASE_STATUS_OPTIONS } from '../../../../../../config/constants'
 import IconCheck from '../../../../../../assets/icons/icon-check-thin.svg'
 import IconXMark from '../../../../../../assets/icons/icon-x-mark-thin.svg'
 import IconPencil from '../../../../../../assets/icons/icon-ui-pencil.svg'
@@ -23,37 +22,6 @@ import IconDots from '../../../../../../assets/icons/icon-dots.svg'
 import styles from './MilestoneRow.scss'
 
 const TCFormFields = FormsyForm.Fields
-
-const phaseStatusOptions = [
-  {
-    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_DRAFT),
-    value: constants.PHASE_STATUS_DRAFT,
-  },
-  {
-    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_IN_REVIEW),
-    value: constants.PHASE_STATUS_IN_REVIEW,
-  },
-  {
-    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_REVIEWED),
-    value: constants.PHASE_STATUS_REVIEWED,
-  },
-  {
-    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_ACTIVE),
-    value: constants.PHASE_STATUS_ACTIVE,
-  },
-  {
-    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_COMPLETED),
-    value: constants.PHASE_STATUS_COMPLETED,
-  },
-  {
-    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_CANCELLED),
-    value: constants.PHASE_STATUS_CANCELLED,
-  },
-  {
-    label: formatHelper.formatCapitalizedText(constants.PHASE_STATUS_PAUSED),
-    value: constants.PHASE_STATUS_PAUSED,
-  },
-]
 
 function MilestoneRow({
   milestone,
@@ -65,11 +33,20 @@ function MilestoneRow({
   projectMembers,
   allMilestones,
   isCreatingRow,
-  isProjectLive
+  isUpdatable,
+  members,
 }) {
-  const copilotIds = _.get(milestone, 'details.copilots', [])
-  const copilots = copilotIds.map(userId => projectMembers.find(member => member.userId === userId)).filter(Boolean)
+  const phaseStatusOptions = PHASE_STATUS_OPTIONS
   const edit = milestone.edit
+  const copilotIds = _.get(milestone, 'details.copilots', [])
+  let copilots = copilotIds.map(userId => projectMembers.find(member => member.userId === userId)).filter(Boolean)
+
+  if (copilots.length !== copilotIds.length) {
+    const missingCopilotIds = _.difference(copilotIds, projectMembers.map(member => member.userId))
+    const missingCopilots = missingCopilotIds.map(userId => members[userId])
+    copilots = copilots.concat(missingCopilots)
+  }
+
 
   let milestoneRef
   let startDateRef
@@ -106,7 +83,7 @@ function MilestoneRow({
           required
           type="text"
           name={`title-${rowId}`}
-          value={milestone.name}
+          value={milestone.name  || ''}
           maxLength={48}
           onChange={(_, value) => {
             if (!milestone.origin) {
@@ -121,7 +98,7 @@ function MilestoneRow({
       <td styleName="description">
         <TCFormFields.Textarea
           name={`description-${rowId}`}
-          value={milestone.description}
+          value={milestone.description || ''}
           maxLength={255}
           onChange={(_, value) => {
             if (!milestone.origin) {
@@ -215,7 +192,7 @@ function MilestoneRow({
           required
           type="number"
           name={`budget-${rowId}`}
-          value={milestone.budget}
+          value={milestone.budget || 0}
           onChange={(_, value) => {
             if (!milestone.origin) {
               milestone.origin = {...milestone}
@@ -226,7 +203,7 @@ function MilestoneRow({
           innerRef={ref => budgetRef = ref}
         />
       </td>
-      <td styleName="copilots">
+      {/* <td styleName="copilots">
         <MilestoneCopilots
           edit
           copilots={copilots}
@@ -248,7 +225,7 @@ function MilestoneRow({
             onChange({...milestone, details: { ...details, copilots: copilotIdsUpdated } })
           }}
         />
-      </td>
+      </td> */}
       <td styleName="action">
         <div styleName="inline-menu">
           <button
@@ -301,12 +278,12 @@ function MilestoneRow({
       <td styleName="end-date">{moment(milestone.endDate).format('MM-DD-YYYY')}</td>
       <td styleName="status"><MilestoneStatus status={milestone.status} /></td>
       <td styleName="budget"><MilestoneBudget spent={milestone.spentBudget} budget={milestone.budget} /></td>
-      <td styleName="copilots">
+      {/* <td styleName="copilots">
         <MilestoneCopilots copilots={copilots} />
-      </td>
+      </td> */}
       <td styleName="action">
         <div styleName="inline-menu">
-          {isProjectLive && [
+          {isUpdatable && (
             <button
               type="button"
               className="tc-btn tc-btn-link"
@@ -316,13 +293,15 @@ function MilestoneRow({
               }}
             >
               <IconPencil />
-            </button>,
+            </button>
+          )}
+          {isUpdatable && (
             <MilestoneDeleteButton
               onDelete={() => {
                 onRemove(milestone.id)
               }}
             />
-          ]}
+          )}
           <button type="button" className="tc-btn tc-btn-link" styleName="icon-button">
             <IconDots />
           </button>
@@ -342,7 +321,8 @@ MilestoneRow.propTypes = {
   projectMembers: PT.arrayOf(PT.shape()),
   allMilestones: PT.arrayOf(PT.shape()),
   isCreatingRow: PT.bool,
-  isProjectLive: PT.bool,
+  isUpdatable: PT.bool,
+  members: PT.object,
 }
 
 export default MilestoneRow

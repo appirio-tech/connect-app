@@ -46,7 +46,7 @@ function MilestoneHeaderRow ({ milestones, onChangeMilestones }) {
       <th>END DATE</th>
       <th>STATUS</th>
       <th>BUDGET</th>
-      <th>COPILOTS</th>
+      {/* <th>COPILOTS</th> */}
       <th>ACTION</th>
     </tr>
   )
