@@ -5,7 +5,7 @@ import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
 import GenericMenu from '../../../../../components/GenericMenu'
-import ProjectDetailsWidget from '../ProjectDetailsWidget'
+// import ProjectDetailsWidget from '../ProjectDetailsWidget'
 import ManageMilestones from '../ManageMilestones'
 import * as milestoneHelper from '../components/helpers/milestone'
 
@@ -46,7 +46,7 @@ class CreateSimplePlan extends React.Component {
   render () {
     const {
       project,
-      phases,
+      // phases,
       milestones,
       onChangeMilestones,
       onSaveMilestone,
