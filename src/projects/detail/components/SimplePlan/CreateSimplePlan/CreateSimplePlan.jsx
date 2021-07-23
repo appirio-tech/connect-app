@@ -76,7 +76,7 @@ class CreateSimplePlan extends React.Component {
 
     return (
       <div>
-        <ProjectDetailsWidget project={project} phases={phases} />
+        {/* <ProjectDetailsWidget project={project} phases={phases} /> */}
         <div styleName="milestones-container">
           <div styleName="tabs-header">
             <GenericMenu navLinks={createTabs(onClickMilestonesTab)} />
