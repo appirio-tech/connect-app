@@ -69,11 +69,10 @@
     }
     .tc-textarea {
       height: 25px;
-      max-width: 140px;
       min-height: 25px;
       padding-top: 0;
       padding-bottom: 0;
-      margin-bottom: 0;
+      margin: 0;
       overflow: hidden;
       resize: vertical;
       font-size: $tc-body-sm;
@@ -86,6 +85,7 @@
   :global {
     .tc-file-field__inputs {
       padding: 0;
+      max-width: 120px;
 
       &::-webkit-calendar-picker-indicator {
         width: 16px;
@@ -101,44 +101,60 @@
 
 .status {
   :global {
-    .react-select__control {
-      height: auto;
-      min-height: 25px;
-      overflow: hidden;
-
-      .react-select__value-container {
+    .react-select-hiddendropdown-container {
+      .react-select__control {
         height: auto;
-        padding-top: 0;
-        padding-bottom: 0;
+        min-height: 25px;
+        overflow: hidden;
 
-        input {
-          margin-bottom: 0;
+        .react-select__value-container {
+          height: auto;
+          padding-top: 0;
+          padding-bottom: 0;
+
+          input {
+            margin-bottom: 0;
+          }
+        }
+        .react-select__single-value {
+          margin-left: 0;
+          margin-right: 0;
+        }
+        .react-select__indicators {
+          display: flex;
+          height: auto;
+        }
+        .react-select__clear-indicator {
+          display: none;
+        }
+        .react-select__indicator-separator {
+          display: none;
+        }
+        .react-select__dropdown-indicator {
+          display: flex;
         }
       }
-      .react-select__single-value {
-        margin-left: 0;
-        margin-right: 0;
+      .react-select__menu {
+        min-width: 100px;
       }
-      .react-select__indicators {
-        display: flex;
-      }
-      .react-select__indicator-separator {
-        display: none;
-      }
-      .react-select__dropdown-indicator {
-        display: flex;
-      }
-    }
-    .react-select__menu {
-      min-width: 100px;
     }
   }
 }
 
 .budget {
+  position: relative;
+
+  .prefix-icon {
+    position: absolute;
+    left: 0;
+    top: calc(50% - 6px);
+    z-index: 1;
+  }
+
   :global {
     .tc-file-field__inputs {
       padding-right: 0;
+      padding-left: 20px;
     }
   }
 }

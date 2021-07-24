@@ -88,7 +88,11 @@ export default function(state = {}, action) {
 
   case CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS:
   case CREATE_PROJECT_PHASE_SUCCESS: {
-    Alert.success('Project phase created.')
+    if (state.project.version === 'v4') {
+      Alert.success('Project milestone created.')
+    } else {
+      Alert.success('Project phase created.')
+    }
     return state
   }
 
@@ -102,11 +106,11 @@ export default function(state = {}, action) {
     Alert.success('Project deleted.')
     return state
 
-  case CREATE_TIMELINE_MILESTONE_SUCCESS: 
+  case CREATE_TIMELINE_MILESTONE_SUCCESS:
     Alert.success('Milestone created.')
     return state
 
-  case CREATE_TIMELINE_MILESTONE_FAILURE: 
+  case CREATE_TIMELINE_MILESTONE_FAILURE:
     Alert.error('Unable to create milestone')
     return state
   case COMPLETE_PRODUCT_MILESTONE_SUCCESS:
