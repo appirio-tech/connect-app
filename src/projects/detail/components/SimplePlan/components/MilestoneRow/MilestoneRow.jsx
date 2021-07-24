@@ -9,7 +9,7 @@ import _ from 'lodash'
 import { components } from 'react-select'
 import { isValidStartEndDates } from '../../../../../../helpers/utils'
 import FormsySelect from '../../../../../../components/Select/FormsySelect'
-// import MilestoneCopilots from '../MilestoneCopilots'
+import MilestoneCopilots from '../MilestoneCopilots'
 import MilestoneStatus from '../MilestoneStatus'
 import MilestoneBudget from '../MilestoneBudget'
 import MilestoneDeleteButton from '../MilestoneDeleteButton'
@@ -36,10 +36,11 @@ function MilestoneRow({
   isCreatingRow,
   isUpdatable,
   members,
+  phaseMembers,
 }) {
   const phaseStatusOptions = PHASE_STATUS_OPTIONS
   const edit = milestone.edit
-  const copilotIds = _.get(milestone, 'details.copilots', [])
+  const copilotIds = (phaseMembers || []).map(i => i.userId)
   let copilots = copilotIds.map(userId => projectMembers.find(member => member.userId === userId)).filter(Boolean)
 
   if (copilots.length !== copilotIds.length) {
@@ -221,7 +222,7 @@ function MilestoneRow({
           innerRef={ref => budgetRef = ref}
         />
       </td>
-      {/* <td styleName="copilots">
+      <td styleName="copilots">
         <MilestoneCopilots
           edit
           copilots={copilots}
@@ -230,20 +231,20 @@ function MilestoneRow({
             if (!milestone.origin) {
               milestone.origin = {...milestone}
             }
-            const details = milestone.details
-            const copilotIdsUpdated = copilots.map(copilot => copilot.userId).concat(member.userId)
-            onChange({...milestone, details: { ...details, copilots: copilotIdsUpdated } })
+            const copilotsUpdated = copilots
+              .concat(member)
+            onChange({...milestone, members: copilotsUpdated })
           }}
           onRemove={(member) => {
             if (!milestone.origin) {
               milestone.origin = {...milestone}
             }
-            const details = milestone.details
-            const copilotIdsUpdated = copilots.filter(copilot => copilot.userId !== member.userId).map(copilot => copilot.userId)
-            onChange({...milestone, details: { ...details, copilots: copilotIdsUpdated } })
+            const copilotsUpdated = copilots
+              .filter(copilot => copilot.userId !== member.userId)
+            onChange({...milestone, members: copilotsUpdated })
           }}
         />
-      </td> */}
+      </td>
       <td styleName="action">
         <div styleName="inline-menu">
           <button
@@ -310,9 +311,9 @@ function MilestoneRow({
       <td styleName="budget">
         <MilestoneBudget spent={milestone.spentBudget} budget={milestone.budget} />
       </td>
-      {/* <td styleName="copilots">
+      <td styleName="copilots">
         <MilestoneCopilots copilots={copilots} />
-      </td> */}
+      </td>
       {isUpdatable && (
         <td styleName="action">
           <div styleName="inline-menu">

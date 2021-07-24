@@ -187,6 +187,7 @@ function getProjectPhasesWithProducts(projectId) {
       'spentBudget',
       'startDate',
       'status',
+      'members',
       'updatedAt',
       'updatedBy',
     ].join(',')
@@ -286,14 +287,13 @@ function createProductsTimelineAndMilestone(project) {
  *
  * @return {Promise} project
  */
-export function createProjectPhaseAndProduct(project, productTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate, createTimeline = true, budget, details) {
+export function createProjectPhaseAndProduct(project, productTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate, createTimeline = true, budget) {
   const param = {
     status,
     name: productTemplate.name,
     description: productTemplate.description,
     productTemplateId: productTemplate.id,
     budget,
-    details,
   }
   if (startDate) {
     param['startDate'] = startDate.format('YYYY-MM-DD')
@@ -358,12 +358,12 @@ function createPhaseAndMilestonesRequest(project, productTemplate, status = PHAS
  * @param {*} startDate 
  * @param {*} endDate 
  */
-export function createPhaseWithoutTimeline(project, productTemplate, status, startDate, endDate, budget, details) {
+export function createPhaseWithoutTimeline(project, productTemplate, status, startDate, endDate, budget) {
   return (dispatch) => {
     console.log(CREATE_PROJECT_PHASE)
     return dispatch({
       type: CREATE_PROJECT_PHASE,
-      payload: createProjectPhaseAndProduct(project, productTemplate, status, startDate, endDate, false, budget, details)
+      payload: createProjectPhaseAndProduct(project, productTemplate, status, startDate, endDate, false, budget)
     })
   }
 }

@@ -130,6 +130,7 @@ class ManageMilestones extends React.Component {
                     isCreatingRow={`${milestone.id}`.startsWith('new-milestone')}
                     isUpdatable={isUpdatable}
                     members={members}
+                    phaseMembers={milestone.members}
                   />
                 ))}
               </tbody>
