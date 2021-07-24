@@ -97,7 +97,11 @@ export default function(state = {}, action) {
   }
 
   case DELETE_PROJECT_PHASE_SUCCESS: {
-    Alert.success('Project phase deleted.')
+    if (state.project.version === 'v4') {
+      Alert.success('Project milestone deleted.')
+    } else {
+      Alert.success('Project phase deleted.')
+    }
 
     return state
   }
