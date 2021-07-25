@@ -30,6 +30,7 @@ class ManageMilestones extends React.Component {
     const index = milestones.findIndex(m => m.id === updatedMilestone.id)
 
     const updatedMilestones = [...milestones]
+    updatedMilestones.forEach(milestone => milestone.editting = false)
     updatedMilestones.splice(index, 1, updatedMilestone)
     onChangeMilestones(updatedMilestones)
   }
@@ -97,18 +98,22 @@ class ManageMilestones extends React.Component {
           <Formsy.Form>
             <table styleName="milestones-table">
               <colgroup>
-                <col style={{width: '20px'}} />{/* CHECKBOX */}
-                <col style={{width: '10%'}} />{/* MILESTONE */}
-                <col style={{minWidth: '140px'}} />{/* DESCRIPTION */}
-                <col style={{width: '10%', minWidth: '80px'}} />{/* START DATE */}
-                <col style={{width: '10%', minWidth: '80px'}} />{/* END DATE */}
-                <col style={{width: '10%'}} />{/* STATUS */}
-                <col style={{width: '15%'}} />{/* BUDGET */}
-                {/* <col style={{width: '10%'}} /> */}{/* COPILOTS */}
-                <col style={{width: '80px'}} />{/* ACTION */}
+                <col style={{ width: '20px' }} />{/* CHECKBOX */}
+                <col style={{ width: '8%' }} />{/* MILESTONE */}
+                <col />{/* DESCRIPTION */}
+                <col style={{ width: '12%' }} />{/* START DATE */}
+                <col style={{ width: '11%' }} />{/* END DATE */}
+                <col style={{ width: '10%' }} />{/* STATUS */}
+                <col style={{ width: '12%' }} />{/* BUDGET */}
+                <col style={{ width: '13%' }} />{/* COPILOTS */}
+                {isUpdatable && (<col style={{ width: '80px' }} />)}{/* ACTION */}
               </colgroup>
               <thead>
-                <MilestoneHeaderRow milestones={milestones} onChangeMilestones={onChangeMilestones} />
+                <MilestoneHeaderRow
+                  milestones={milestones}
+                  onChangeMilestones={onChangeMilestones}
+                  isUpdatable={isUpdatable}
+                />
               </thead>
               <tbody>
                 {milestones.map((milestone) => (

@@ -9,7 +9,7 @@ import './MilestoneHeaderRow.scss'
 
 const TCFormFields = FormsyForm.Fields
 
-function MilestoneHeaderRow ({ milestones, onChangeMilestones }) {
+function MilestoneHeaderRow ({ milestones, onChangeMilestones, isUpdatable }) {
   const checked = milestones.reduce(
     (selected, milestone) => selected = selected && milestone.selected,
     milestones.length > 0
@@ -47,7 +47,7 @@ function MilestoneHeaderRow ({ milestones, onChangeMilestones }) {
       <th>STATUS</th>
       <th>BUDGET</th>
       {/* <th>COPILOTS</th> */}
-      <th>ACTION</th>
+      {isUpdatable && (<th>ACTION</th>)}
     </tr>
   )
 }
