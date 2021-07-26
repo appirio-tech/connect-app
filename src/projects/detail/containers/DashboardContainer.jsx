@@ -342,14 +342,14 @@ class DashboardContainer extends React.Component {
                           const index = createGameplanPhases.findIndex(phase => phase.id === id)
                           const phase = createGameplanPhases[index]
 
-                          const updatePhaseMembers = () => {
+                          const updatePhaseMembers = (projectId, phaseId) => {
                             const phaseMembers = _.get(phase, 'members', [])
                             const oldPhaseMembers = _.get(phase, 'origin.members', [])
                             if (phaseMembers.length !== oldPhaseMembers.length ||
                               _.differenceBy(phaseMembers, oldPhaseMembers, member => member.userId).length !== 0) {
                               this.props.updatePhaseMembers(
-                                phase.projectId,
-                                phase.id,
+                                projectId,
+                                phaseId,
                                 phaseMembers.map(member => member.userId)
                               )
                             }
@@ -365,6 +365,8 @@ class DashboardContainer extends React.Component {
                               productTemplate.description = phase.description.trim()
                             }
 
+                            const projectId = project.id
+                            let phaseId
                             this.props.createPhaseWithoutTimeline(
                               project,
                               productTemplate,
@@ -373,6 +375,7 @@ class DashboardContainer extends React.Component {
                               moment.utc(phase.endDate),
                               phase.budget
                             ).then(({ action }) => {
+                              phaseId = action.payload.phase.id
                               // reload phase
                               const updatedCreateGameplanPhases = [...createGameplanPhases]
                               updatedCreateGameplanPhases.splice(index, 1, {
@@ -380,7 +383,7 @@ class DashboardContainer extends React.Component {
                                 selected: phase.selected
                               })
                               this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
-                            }).then(() => updatePhaseMembers())
+                            }).then(() => updatePhaseMembers(projectId, phaseId))
                           } else {
                             const updateParam =  {
                               name: phase.name,
@@ -409,7 +412,7 @@ class DashboardContainer extends React.Component {
                                 selected: this.state.createGameplanPhases[idx].selected,
                               })
                               this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
-                            }).then(() => updatePhaseMembers())
+                            }).then(() => updatePhaseMembers(phase.projectId, phase.id))
 
                             // toggle edit
                             const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
