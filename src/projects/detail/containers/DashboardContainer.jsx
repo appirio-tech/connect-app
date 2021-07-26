@@ -304,9 +304,10 @@ class DashboardContainer extends React.Component {
                 </div>
               ) : (
                 <div styleName="simple-plan">
-                  {((!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) && (!visiblePhases || visiblePhases.length === 0))
+                  {/* check if visiblePhases/phases is non-null and empty */}
+                  {((!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) && (visiblePhases && visiblePhases.length === 0))
                     || (hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) &&
-                      (!phases || phases.length === 0) &&
+                      (phases && phases.length === 0) &&
                       (!this.state.createGameplanPhases || this.state.createGameplanPhases.length === 0))
                   ) && (
                     <div styleName="welcome-message">
@@ -332,7 +333,7 @@ class DashboardContainer extends React.Component {
                         isCustomer={!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)}
                         project={project}
                         phases={phases}
-                        milestones={this.state.createGameplanPhases || phases}
+                        milestones={this.state.createGameplanPhases || visiblePhases || []}
                         onChangeMilestones={(milestones) => {
                           this.setState({createGameplanPhases: milestones})
                         }}
