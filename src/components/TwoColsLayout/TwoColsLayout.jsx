@@ -27,7 +27,7 @@ TwoColsLayout.Sidebar = ({ children, wrapperClass }) => (
 
 TwoColsLayout.Content = ({ children }) => (
   <div styleName="content">
-    <div styleName="content-inner">
+    <div styleName="content-inner" className="twoColsLayout-contentInner">
       {children}
     </div>
   </div>

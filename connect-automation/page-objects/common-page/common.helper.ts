@@ -367,4 +367,11 @@ export const CommonHelper = {
      }
      return isElementPresent;
   },
+
+  /**
+   * Get Join Project Button
+   */
+  get joinProjectButton() {
+      return ElementHelper.getElementByButtonText('Join project');
+  },
 };

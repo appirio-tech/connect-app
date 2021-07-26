@@ -632,6 +632,16 @@ export const PHASE_STATUS = [
   // {color: 'red', name: 'Paused', fullName: 'Phase is paused', value: PHASE_STATUS_PAUSED, order: 7, dropDownOrder: 7 }
 ]
 
+export const PHASE_STATUS_OPTIONS = [
+  { label: 'Draft', value: PHASE_STATUS_DRAFT },
+  { label: 'In Review', value: PHASE_STATUS_IN_REVIEW },
+  { label: 'Reviewed', value: PHASE_STATUS_REVIEWED },
+  { label: 'Active', value: PHASE_STATUS_ACTIVE },
+  { label: 'Completed', value: PHASE_STATUS_COMPLETED },
+  { label: 'Cancelled', value: PHASE_STATUS_CANCELLED },
+  { label: 'Phased', value: PHASE_STATUS_PAUSED },
+]
+
 // this defines default criteria to filter projects for projects list
 export const PROJECT_LIST_DEFAULT_CRITERIA = {
   sort: 'lastActivityAt desc'

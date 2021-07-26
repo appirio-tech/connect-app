@@ -1,0 +1,41 @@
+.milestones-container {
+  margin-top: 50px;
+}
+
+.tabs-header {
+  height: 0;
+  float: left;
+
+  nav {
+    justify-content: flex-start;
+    background-color: transparent;
+  }
+
+  ul {
+    > li:first-child {
+      margin-left: 0;
+    }
+
+    > li:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.welcome-message {
+  margin: 0 auto;
+  max-width: 760px;
+}
+
+.add-new-milestone {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.twoColsLayout-contentInner {
+  max-width: 947px;
+
+  @media screen and (min-width: 1280px) {
+    margin-left: calc((100% - 947px) * 0.41);
+  }
+}

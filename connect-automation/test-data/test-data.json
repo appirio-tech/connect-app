@@ -26,6 +26,19 @@
     },
     "notes": "Notes from test"
   },
+  "taas": {
+    "title": "test Taas Project",
+    "jobTitle": "Test Job Title",
+    "email": "mailmemakar@gmail.com",
+    "numOfPeople": 4,
+    "duration": 10,
+    "description": "test description",
+    "answers": {
+      "beforeWeStart": "I need work done",
+      "startDate": "As soon as possible",
+      "requirement": "No additional onboarding processes are required"
+    }
+  },
   "inviteCopilot": {
     "copilotHandle": "TCConnCopilot"
   },

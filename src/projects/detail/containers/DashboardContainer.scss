@@ -1,0 +1,16 @@
+@import '~styles/variables';
+
+.simple-plan {
+  @media screen and (min-width: $screen-md) {
+    margin-top: 30px;
+  }
+
+  @media screen and (max-width: $screen-md - 1px) {
+    padding: 0 20px;
+  }
+}
+
+.welcome-message {
+  margin: 0 auto;
+  max-width: 760px;
+}

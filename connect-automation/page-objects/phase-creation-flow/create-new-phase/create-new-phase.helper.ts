@@ -19,6 +19,12 @@ export class CreateNewPhaseHelper {
    * @param formData phase creation form data defined in test data
    */
   public static async verifyCreateNewPhase(formData: IPhaseCreationData) {
+    // If user is invited to project, click on "Join Project" to proceed.
+    await BrowserHelper.sleep(4000);
+    if (await CommonHelper.joinProjectButton.isPresent()) {
+      await CommonHelper.joinProjectButton.click();
+    }
+
     await this.clickOnAddNewPhaseButton();
     await this.fillCreatePhaseForm(formData.title, formData.daysBetweenStartAndEndDate);
 
