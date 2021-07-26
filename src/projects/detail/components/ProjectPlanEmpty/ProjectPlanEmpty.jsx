@@ -7,11 +7,15 @@ import { hasPermission } from '../../../../helpers/permissions'
 
 import './ProjectPlanEmpty.scss'
 
-const ProjectPlanEmpty = () => {
+const ProjectPlanEmpty = ({ version }) => {
   return hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) ? (
     <div styleName="container">
       <h2>Build Your Project Plan</h2>
-      <p>Build your project plan in Connect to reflect delivery progress to the customer. Begin by clicking the "Add Phase" button, select the template that best matches your need, and modify the phase title and milestone dates prior to publishing to the customer.</p>
+      {version === 'v4' ? (
+        <p>Build your project plan in Connect to reflect delivery progress to the customer. Begin by clicking the "Add Milestone" button, and modify the milestone attributes prior to publishing to the customer.</p>
+      ) : (
+        <p>Build your project plan in Connect to reflect delivery progress to the customer. Begin by clicking the "Add Phase" button, select the template that best matches your need, and modify the phase title and milestone dates prior to publishing to the customer.</p>
+      )}
       <p><b>Important Note:</b> To move the project into <i>'Active'</i> status, you must set at least one phase in Connect's Project Plan to be in 'Planned' status, which signifies to customers that delivery planning and execution has begun.</p>
       <p>If you feel like you have more things to send over, or want to reach out to us, please drop us a line at support@topcoder.com. Thanks!</p>
     </div>

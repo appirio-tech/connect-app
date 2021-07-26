@@ -5,7 +5,7 @@ import UserTooltip from '../../../../components/User/UserTooltip'
 
 import styles from './ProjectManagerAvatars.scss'
 
-const ProjectManagerAvatars = ({ managers, maxShownNum = 3 }) => {
+const ProjectManagerAvatars = ({ managers, maxShownNum = 3, size = 35 }) => {
   let extM = false
   if (!managers || !managers.length)
     return <div className="user-block txt-italic">Unclaimed</div>
@@ -19,7 +19,7 @@ const ProjectManagerAvatars = ({ managers, maxShownNum = 3 }) => {
       {uniqManagers.map((user, i) => {
         return (
           <div className={`stack-avatar stack-avatar-${i}`} key={i}>
-            <UserTooltip usr={user} id={i} size={35} previewAvatar />
+            <UserTooltip usr={user} id={i} size={size} previewAvatar />
           </div>
         )
       })}

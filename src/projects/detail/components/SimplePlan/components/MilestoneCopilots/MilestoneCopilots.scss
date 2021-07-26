@@ -1,0 +1,9 @@
+@import '~styles/variables';
+
+.milestone-copilots {
+  .edit-copilots-button {
+    height: 25px;
+    padding: 0 8px;
+    border-radius: 2 * $corner-radius;
+  }
+}

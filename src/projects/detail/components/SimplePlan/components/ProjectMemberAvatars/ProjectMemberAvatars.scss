@@ -1,0 +1,69 @@
+@import '~styles/variables';
+
+$avatar-overlap: 5px;
+
+.project-member-avatars {
+  :global {
+    .plus-user {
+      top: 0;
+      left: auto;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+
+      @include roboto-bold;
+      color: $tc-white;
+    }
+    .stack-avatar {
+      &:last-of-type {
+        .sb-avatar {
+          position: relative;
+
+          // mask
+          &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(#000, .62);
+            border-radius: 50%;
+          }
+        }
+      }
+      &:last-child {
+        .sb-avatar {
+          // hide mask
+          &::after {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  &.size-50 {
+    margin-right: -50px;
+
+    :global(.plus-user) {
+      right: 25px;
+      width: 50px;
+      height: 50px;
+      margin-left: -$avatar-overlap;
+      width: 0;
+    }
+  }
+  &.size-35 {
+    margin-right: -35px;
+
+    :global(.plus-user) {
+      right: 35px;
+      width: 35px;
+      height: 35px;
+      margin-left: -$avatar-overlap;
+    }
+  }
+}

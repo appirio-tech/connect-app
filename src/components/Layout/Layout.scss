@@ -23,4 +23,35 @@
       background-color: $tc-gray-neutral-light;
     }
   }
+
+  .right-sidebar-container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 310px;
+    z-index: 9999;
+    transform: translateX(310px);
+    transition: transform 225ms ease;
+
+    &:not(:empty) {
+      transform: translateX(0);
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: -100vh;
+        left: -100vw;
+        width: 200vw;
+        height: 200vh;
+        z-index: -1;
+      }
+
+      @media screen and (max-width: $screen-md - 1px) {
+        width: 100%;
+        transition: none;
+      }
+    }
+  }
 }
+
