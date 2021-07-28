@@ -52,6 +52,7 @@ import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment 
 import { loadMembers } from '../../../actions/members'
 import ProjectEstimation from '../../create/components/ProjectEstimation'
 import CreateSimplePlan from '../components/SimplePlan/CreateSimplePlan'
+import { updatePhaseMembers } from '../../actions/phaseMember'
 
 import {
   PHASE_STATUS_ACTIVE,
@@ -342,6 +343,19 @@ class DashboardContainer extends React.Component {
                           const index = createGameplanPhases.findIndex(phase => phase.id === id)
                           const phase = createGameplanPhases[index]
 
+                          const updatePhaseMembers = (projectId, phaseId) => {
+                            const phaseMembers = _.get(phase, 'members', [])
+                            const oldPhaseMembers = _.get(phase, 'origin.members', [])
+                            if (phaseMembers.length !== oldPhaseMembers.length ||
+                              _.differenceBy(phaseMembers, oldPhaseMembers, member => member.userId).length !== 0) {
+                              this.props.updatePhaseMembers(
+                                projectId,
+                                phaseId,
+                                phaseMembers.map(member => member.userId)
+                              )
+                            }
+                          }
+
                           if (`${phase.id}`.startsWith('new-milestone')) {
                             const productTemplate = {
                               name: phase.name,
@@ -352,15 +366,17 @@ class DashboardContainer extends React.Component {
                               productTemplate.description = phase.description.trim()
                             }
 
+                            const projectId = project.id
+                            let phaseId
                             this.props.createPhaseWithoutTimeline(
                               project,
                               productTemplate,
                               phase.status,
                               moment.utc(phase.startDate),
                               moment.utc(phase.endDate),
-                              phase.budget,
-                              phase.details
+                              phase.budget
                             ).then(({ action }) => {
+                              phaseId = action.payload.phase.id
                               // reload phase
                               const updatedCreateGameplanPhases = [...createGameplanPhases]
                               updatedCreateGameplanPhases.splice(index, 1, {
@@ -368,7 +384,7 @@ class DashboardContainer extends React.Component {
                                 selected: phase.selected
                               })
                               this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
-                            })
+                            }).then(() => updatePhaseMembers(projectId, phaseId))
                           } else {
                             const updateParam =  {
                               name: phase.name,
@@ -380,10 +396,6 @@ class DashboardContainer extends React.Component {
 
                             if (phase.description && phase.description.trim()) {
                               updateParam.description = phase.description.trim()
-                            }
-
-                            if (phase.details) {
-                              updateParam.details = phase.details
                             }
 
                             this.props.updatePhase(
@@ -401,7 +413,7 @@ class DashboardContainer extends React.Component {
                                 selected: this.state.createGameplanPhases[idx].selected,
                               })
                               this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
-                            })
+                            }).then(() => updatePhaseMembers(phase.projectId, phase.id))
 
                             // toggle edit
                             const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
@@ -502,6 +514,7 @@ const mapDispatchToProps = {
   removeProjectAttachment,
   updatePhase,
   loadMembers,
+  updatePhaseMembers,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(DashboardContainer))
