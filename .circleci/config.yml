@@ -188,7 +188,7 @@ workflows:
             - build-dev
           filters: &filters-dev
             branches:
-              only: ['dev']
+              only: ['dev', 'feature/new-milestone-concept']
 
       - deployTest01:
           context : org-global
