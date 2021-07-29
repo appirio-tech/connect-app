@@ -69,7 +69,6 @@ class ManageMilestones extends React.Component {
       projectMembers,
       onChangeMilestones,
       isUpdatable,
-      members,
     } = this.props
 
     return (
@@ -129,7 +128,6 @@ class ManageMilestones extends React.Component {
                     allMilestones={milestones}
                     isCreatingRow={`${milestone.id}`.startsWith('new-milestone')}
                     isUpdatable={isUpdatable}
-                    members={members}
                     phaseMembers={milestone.members}
                   />
                 ))}
@@ -148,7 +146,6 @@ ManageMilestones.propTypes = {
   onSaveMilestone: PT.func,
   onRemoveMilestone: PT.func,
   projectMembers: PT.arrayOf(PT.shape()),
-  members: PT.object,
   isUpdatable: PT.bool,
 }
 
