@@ -287,13 +287,12 @@ function createProductsTimelineAndMilestone(project) {
  *
  * @return {Promise} project
  */
-export function createProjectPhaseAndProduct(project, productTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate, createTimeline = true, budget) {
+export function createProjectPhaseAndProduct(project, productTemplate, status = PHASE_STATUS_DRAFT, startDate, endDate, createTimeline = true) {
   const param = {
     status,
     name: productTemplate.name,
     description: productTemplate.description,
     productTemplateId: productTemplate.id,
-    budget,
   }
   if (startDate) {
     param['startDate'] = startDate.format('YYYY-MM-DD')
@@ -358,12 +357,12 @@ function createPhaseAndMilestonesRequest(project, productTemplate, status = PHAS
  * @param {*} startDate 
  * @param {*} endDate 
  */
-export function createPhaseWithoutTimeline(project, productTemplate, status, startDate, endDate, budget) {
+export function createPhaseWithoutTimeline(project, productTemplate, status, startDate, endDate) {
   return (dispatch) => {
     console.log(CREATE_PROJECT_PHASE)
     return dispatch({
       type: CREATE_PROJECT_PHASE,
-      payload: createProjectPhaseAndProduct(project, productTemplate, status, startDate, endDate, false, budget)
+      payload: createProjectPhaseAndProduct(project, productTemplate, status, startDate, endDate, false)
     })
   }
 }

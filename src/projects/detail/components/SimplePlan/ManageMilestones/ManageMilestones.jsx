@@ -103,9 +103,8 @@ class ManageMilestones extends React.Component {
                 <col style={{ width: '12%' }} />{/* START DATE */}
                 <col style={{ width: '11%' }} />{/* END DATE */}
                 <col style={{ width: '10%' }} />{/* STATUS */}
-                <col style={{ width: '12%' }} />{/* BUDGET */}
                 <col style={{ width: '13%' }} />{/* COPILOTS */}
-                {isUpdatable && (<col style={{ width: '80px' }} />)}{/* ACTION */}
+                {isUpdatable && (<col style={{ width: '64px' }} />)}{/* ACTION */}
               </colgroup>
               <thead>
                 <MilestoneHeaderRow

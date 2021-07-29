@@ -10,7 +10,6 @@ import { isValidStartEndDates } from '../../../../../../helpers/utils'
 import FormsySelect from '../../../../../../components/Select/FormsySelect'
 import MilestoneCopilots from '../MilestoneCopilots'
 import MilestoneStatus from '../MilestoneStatus'
-import MilestoneBudget from '../MilestoneBudget'
 import MilestoneDeleteButton from '../MilestoneDeleteButton'
 import { PHASE_STATUS_OPTIONS } from '../../../../../../config/constants'
 import IconCheck from '../../../../../../assets/icons/icon-check-thin.svg'
@@ -44,7 +43,6 @@ function MilestoneRow({
   let milestoneRef
   let startDateRef
   let endDateRef
-  let budgetRef
 
   return edit ? (
     <tr styleName="milestone-row" className="edit-milestone-row">
@@ -187,33 +185,6 @@ function MilestoneRow({
           }}
         />
       </td>
-      <td styleName="budget">
-        <span styleName="prefix-icon" className="milestone-budget-prefix-icon">$</span>
-        <TCFormFields.TextInput
-          validations={{
-            isRequired: true,
-            isPositive(values) {
-              return !(values[`budget-${rowId}`] < 0)
-            }
-          }}
-          validationError={'Please, enter budget'}
-          validationErrors={{
-            isPositive: 'Budget cannot be negative'
-          }}
-          required
-          type="number"
-          name={`budget-${rowId}`}
-          value={milestone.budget || 0}
-          onChange={(_, value) => {
-            if (!milestone.origin) {
-              milestone.origin = {...milestone}
-            }
-            onChange({...milestone, budget: value })
-          }}
-          wrapperClass={styles.textInput}
-          innerRef={ref => budgetRef = ref}
-        />
-      </td>
       <td styleName="copilots">
         <MilestoneCopilots
           edit
@@ -249,7 +220,6 @@ function MilestoneRow({
               if (milestoneRef.props.isValid()
                 && startDateRef.props.isValid()
                 && endDateRef.props.isValid()
-                && budgetRef.props.isValid()
               ) {
                 onSave(milestone.id)
               }
@@ -299,9 +269,6 @@ function MilestoneRow({
       </td>
       <td styleName="status">
         <MilestoneStatus status={milestone.status} />
-      </td>
-      <td styleName="budget">
-        <MilestoneBudget spent={milestone.spentBudget} budget={milestone.budget} />
       </td>
       <td styleName="copilots">
         <MilestoneCopilots copilots={copilots} />
