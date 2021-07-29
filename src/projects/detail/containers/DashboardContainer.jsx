@@ -368,8 +368,7 @@ class DashboardContainer extends React.Component {
                               productTemplate,
                               phase.status,
                               moment.utc(phase.startDate),
-                              moment.utc(phase.endDate),
-                              phase.budget
+                              moment.utc(phase.endDate)
                             ).then(({ action }) => {
                               phaseId = action.payload.phase.id
                               // reload phase
@@ -386,7 +385,6 @@ class DashboardContainer extends React.Component {
                               startDate: moment.utc(phase.startDate),
                               endDate: moment.utc(phase.endDate),
                               status: phase.status,
-                              budget: phase.budget,
                             }
 
                             if (phase.description && phase.description.trim()) {
