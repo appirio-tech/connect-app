@@ -87,6 +87,9 @@ class DashboardContainer extends React.Component {
     this.onNotificationRead = this.onNotificationRead.bind(this)
     this.toggleDrawer = this.toggleDrawer.bind(this)
     this.onFormSubmit = this.onFormSubmit.bind(this)
+    this.onChangeMilestones = this.onChangeMilestones.bind(this)
+    this.onSaveMilestone = this.onSaveMilestone.bind(this)
+    this.onRemoveMilestone = this.onRemoveMilestone.bind(this)
   }
 
   onNotificationRead(notification) {
@@ -135,6 +138,148 @@ class DashboardContainer extends React.Component {
     } else {
       createPhaseAndMilestones(project, productTemplate, type, phase.startDate, phase.endDate, milestones)
     }
+  }
+
+  onChangeMilestones(milestones) {
+    this.setState({createGameplanPhases: milestones})
+  }
+
+  onSaveMilestone(id) {
+    const { project, createPhaseWithoutTimeline, updatePhase } = this.props
+    const { createGameplanPhases } = this.state
+    const index = createGameplanPhases.findIndex(phase => phase.id === id)
+    const phase = createGameplanPhases[index]
+
+    /*
+     * @return {Promise} The updated phase members
+     */
+    const updatePhaseMembers = (projectId, phaseId) => {
+      const phaseMembers = _.get(phase, 'members', [])
+      const oldPhaseMembers = _.get(phase, 'origin.members', [])
+      if (phaseMembers.length !== oldPhaseMembers.length ||
+        _.differenceBy(phaseMembers, oldPhaseMembers, member => member.userId).length !== 0) {
+        return this.props.updatePhaseMembers(
+          projectId,
+          phaseId,
+          phaseMembers.map(member => member.userId)
+        ).then(() => phaseMembers) // ignore the result from backend
+      }
+
+      return Promise.resolve([])
+    }
+
+    if (`${phase.id}`.startsWith('new-milestone')) {
+      const productTemplate = {
+        name: phase.name,
+        id: PHASE_PRODUCT_TEMPLATE_ID,
+      }
+
+      if (phase.description && phase.description.trim()) {
+        productTemplate.description = phase.description.trim()
+      }
+
+      const projectId = project.id
+      let phaseId
+      createPhaseWithoutTimeline(
+        project,
+        productTemplate,
+        phase.status,
+        moment.utc(phase.startDate),
+        moment.utc(phase.endDate)
+      ).then(({ action }) => {
+        phaseId = action.payload.phase.id
+        // reload phase
+        const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
+        updatedCreateGameplanPhases.splice(index, 1, {
+          ...action.payload.phase,
+          selected: phase.selected,
+        })
+        this.setState({ createGameplanPhases: updatedCreateGameplanPhases }, () => {
+          updatePhaseMembers(projectId, phaseId)
+            .then((members) => {
+              // reload members
+              const updatedPhases = [...this.state.createGameplanPhases]
+              updatedPhases.splice(index, 1, {
+                ...updatedPhases[index],
+                members
+              })
+              this.setState({ createGameplanPhases: updatedPhases })
+            })
+        })
+
+      })
+    } else {
+      const updateParam =  {
+        name: phase.name,
+        startDate: moment.utc(phase.startDate),
+        endDate: moment.utc(phase.endDate),
+        status: phase.status,
+      }
+
+      if (phase.description && phase.description.trim()) {
+        updateParam.description = phase.description.trim()
+      }
+
+      Promise.all([
+        updatePhase(
+          phase.projectId,
+          phase.id,
+          updateParam
+        ),
+        updatePhaseMembers(phase.projectId, phase.id)
+      ]).then(([{ action }, members]) => {
+        const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
+        const idx = updatedCreateGameplanPhases.findIndex(phase => phase.id === action.payload.id)
+
+        // reload phase
+        updatedCreateGameplanPhases.splice(idx, 1, {
+          ...action.payload,
+          edit: this.state.createGameplanPhases[idx].edit,
+          selected: this.state.createGameplanPhases[idx].selected,
+          members
+        })
+        this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
+      })
+
+      // toggle edit
+      const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
+      updatedCreateGameplanPhases.splice(index, 1, {
+        ...phase,
+        edit: false,
+        selected: phase.selected
+      })
+      this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
+    }
+  }
+
+  onRemoveMilestone(id) {
+    const { phases } = this.props
+    const { createGameplanPhases } = this.state
+    let index
+    let projectId
+
+    if (createGameplanPhases) {
+      index = createGameplanPhases.findIndex(phase => phase.id === id)
+      projectId = createGameplanPhases[index].projectId
+    } else {
+      index = phases.findIndex(phase => phase.id === id)
+      projectId = phases[index].projectId
+    }
+
+    this.props.deleteProjectPhase(
+      projectId,
+      id
+    ).then(() => {
+      if (!this.state.createGameplanPhases) {
+        return
+      }
+
+      // remove phase
+      const index = this.state.createGameplanPhases.findIndex(phase => phase.id === id)
+      const newGameplanPhases = [...this.state.createGameplanPhases]
+      newGameplanPhases.splice(index, 1)
+      this.setState({createGameplanPhases: newGameplanPhases})
+    })
   }
 
 
@@ -330,122 +475,9 @@ class DashboardContainer extends React.Component {
                         project={project}
                         phases={phases}
                         milestones={this.state.createGameplanPhases || visiblePhases || []}
-                        onChangeMilestones={(milestones) => {
-                          this.setState({createGameplanPhases: milestones})
-                        }}
-                        onSaveMilestone={(id) => {
-                          const { createGameplanPhases } = this.state
-                          const index = createGameplanPhases.findIndex(phase => phase.id === id)
-                          const phase = createGameplanPhases[index]
-
-                          const updatePhaseMembers = (projectId, phaseId) => {
-                            const phaseMembers = _.get(phase, 'members', [])
-                            const oldPhaseMembers = _.get(phase, 'origin.members', [])
-                            if (phaseMembers.length !== oldPhaseMembers.length ||
-                              _.differenceBy(phaseMembers, oldPhaseMembers, member => member.userId).length !== 0) {
-                              this.props.updatePhaseMembers(
-                                projectId,
-                                phaseId,
-                                phaseMembers.map(member => member.userId)
-                              )
-                            }
-                          }
-
-                          if (`${phase.id}`.startsWith('new-milestone')) {
-                            const productTemplate = {
-                              name: phase.name,
-                              id: PHASE_PRODUCT_TEMPLATE_ID,
-                            }
-
-                            if (phase.description && phase.description.trim()) {
-                              productTemplate.description = phase.description.trim()
-                            }
-
-                            const projectId = project.id
-                            let phaseId
-                            this.props.createPhaseWithoutTimeline(
-                              project,
-                              productTemplate,
-                              phase.status,
-                              moment.utc(phase.startDate),
-                              moment.utc(phase.endDate)
-                            ).then(({ action }) => {
-                              phaseId = action.payload.phase.id
-                              // reload phase
-                              const updatedCreateGameplanPhases = [...createGameplanPhases]
-                              updatedCreateGameplanPhases.splice(index, 1, {
-                                ...action.payload.phase,
-                                selected: phase.selected
-                              })
-                              this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
-                            }).then(() => updatePhaseMembers(projectId, phaseId))
-                          } else {
-                            const updateParam =  {
-                              name: phase.name,
-                              startDate: moment.utc(phase.startDate),
-                              endDate: moment.utc(phase.endDate),
-                              status: phase.status,
-                            }
-
-                            if (phase.description && phase.description.trim()) {
-                              updateParam.description = phase.description.trim()
-                            }
-
-                            this.props.updatePhase(
-                              phase.projectId,
-                              phase.id,
-                              updateParam
-                            ).then(({ action }) => {
-                              const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
-                              const idx = updatedCreateGameplanPhases.findIndex(phase => phase.id === action.payload.id)
-
-                              // reload phase
-                              updatedCreateGameplanPhases.splice(idx, 1, {
-                                ...action.payload,
-                                edit: this.state.createGameplanPhases[idx].edit,
-                                selected: this.state.createGameplanPhases[idx].selected,
-                              })
-                              this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
-                            }).then(() => updatePhaseMembers(phase.projectId, phase.id))
-
-                            // toggle edit
-                            const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
-                            updatedCreateGameplanPhases.splice(index, 1, {
-                              ...phase,
-                              edit: false,
-                              selected: phase.selected
-                            })
-                            this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
-                          }
-                        }}
-                        onRemoveMilestone={(id) => {
-                          const { createGameplanPhases } = this.state
-                          let index
-                          let projectId
-
-                          if (createGameplanPhases) {
-                            index = createGameplanPhases.findIndex(phase => phase.id === id)
-                            projectId = createGameplanPhases[index].projectId
-                          } else {
-                            index = phases.findIndex(phase => phase.id === id)
-                            projectId = phases[index].projectId
-                          }
-
-                          this.props.deleteProjectPhase(
-                            projectId,
-                            id
-                          ).then(() => {
-                            if (!this.state.createGameplanPhases) {
-                              return
-                            }
-
-                            // remove phase
-                            const index = this.state.createGameplanPhases.findIndex(phase => phase.id === id)
-                            const newGameplanPhases = [...this.state.createGameplanPhases]
-                            newGameplanPhases.splice(index, 1)
-                            this.setState({createGameplanPhases: newGameplanPhases})
-                          })
-                        }}
+                        onChangeMilestones={this.onChangeMilestones}
+                        onSaveMilestone={this.onSaveMilestone}
+                        onRemoveMilestone={this.onRemoveMilestone}
                       />
                     )
                   })()}
