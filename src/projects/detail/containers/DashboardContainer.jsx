@@ -49,7 +49,6 @@ import { getProjectTemplateById } from '../../../helpers/templates'
 import { PERMISSIONS } from '../../../config/permissions'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo, updatePhase } from '../../actions/project'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
-import { loadMembers } from '../../../actions/members'
 import ProjectEstimation from '../../create/components/ProjectEstimation'
 import CreateSimplePlan from '../components/SimplePlan/CreateSimplePlan'
 import { updatePhaseMembers } from '../../actions/phaseMember'
@@ -163,8 +162,6 @@ class DashboardContainer extends React.Component {
       removeProjectAttachment,
       location,
       estimationQuestion,
-      loadMembers,
-      members,
     } = this.props
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
 
@@ -328,8 +325,6 @@ class DashboardContainer extends React.Component {
 
                     return (
                       <CreateSimplePlan
-                        members={members}
-                        loadMembers={loadMembers}
                         isProjectLive={isProjectLive}
                         isCustomer={!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)}
                         project={project}
@@ -466,7 +461,7 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState, projectTopics, templates, topics, members }) => {
+const mapStateToProps = ({ notifications, projectState, projectTopics, templates, topics }) => {
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (hasPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
@@ -487,7 +482,6 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     isFeedsLoading: projectTopics.isLoading,
     phasesStates: projectState.phasesStates,
     phasesTopics: topics,
-    members: members.members
   }
 }
 
@@ -513,7 +507,6 @@ const mapDispatchToProps = {
   updateProjectAttachment,
   removeProjectAttachment,
   updatePhase,
-  loadMembers,
   updatePhaseMembers,
 }
 

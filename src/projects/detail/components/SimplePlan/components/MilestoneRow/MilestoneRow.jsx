@@ -5,7 +5,6 @@ import React from 'react'
 import PT from 'prop-types'
 import moment from 'moment'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
-import _ from 'lodash'
 import { components } from 'react-select'
 import { isValidStartEndDates } from '../../../../../../helpers/utils'
 import FormsySelect from '../../../../../../components/Select/FormsySelect'
@@ -35,19 +34,12 @@ function MilestoneRow({
   allMilestones,
   isCreatingRow,
   isUpdatable,
-  members,
   phaseMembers,
 }) {
   const phaseStatusOptions = PHASE_STATUS_OPTIONS
   const edit = milestone.edit
-  const copilotIds = (phaseMembers || []).map(i => i.userId)
-  let copilots = copilotIds.map(userId => projectMembers.find(member => member.userId === userId)).filter(Boolean)
-
-  if (copilots.length !== copilotIds.length) {
-    const missingCopilotIds = _.difference(copilotIds, projectMembers.map(member => member.userId))
-    const missingCopilots = missingCopilotIds.map(userId => members[userId])
-    copilots = copilots.concat(missingCopilots)
-  }
+  // hide email
+  const copilots = (phaseMembers || []).map(member => ({ ...member, email: undefined }))
 
   let milestoneRef
   let startDateRef
