@@ -165,7 +165,7 @@ class DashboardContainer extends React.Component {
         ).then(() => phaseMembers) // ignore the result from backend
       }
 
-      return Promise.resolve([])
+      return Promise.resolve(phaseMembers)
     }
 
     if (`${phase.id}`.startsWith('new-milestone')) {
