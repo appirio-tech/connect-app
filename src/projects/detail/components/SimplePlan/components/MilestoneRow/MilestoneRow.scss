@@ -11,6 +11,11 @@
     padding: 0;
     border: 0;
   }
+  .expand {
+    > svg {
+      height: 13px;
+    }
+  }
 
   .checkbox {}
 

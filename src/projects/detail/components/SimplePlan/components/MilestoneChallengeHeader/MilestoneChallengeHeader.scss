@@ -1,0 +1,49 @@
+@import '~styles/variables';
+
+.challenge-table-row-wrap {
+    @include roboto-bold;
+
+    font-size: $tc-label-sm;
+    color: $tc-gray-60;
+    line-height: 15px;
+}
+
+.challenge-table-row {
+  display: flex;
+  align-items: center;
+  .title {
+    flex: 1;
+    max-width: 43%;
+    margin-left: 30px;
+    margin-right: 10px;
+  }
+  .status {
+    width: 100px;
+    margin-right: 10px;
+  }
+  .type {
+    width: 100px;
+    margin-right: 10px;
+    div {
+      border-radius: 20px;
+      padding: 4px 0;
+      text-align: center;
+      color: #fff;
+      &.Design { background-color: $tc-light-blue-100; }
+      &.Development { background-color: $tc-green-100; }
+      &.DataScience { background-color: $tc-red-100; }
+      &.QualityAssurance { background-color: $tc-green-100; }
+    }
+  }
+
+  .start-date {
+    width: 90px;
+    margin-right: 10px;
+  }
+
+  .end-date {
+    width: 90px;
+  }
+
+}
+

@@ -37,6 +37,7 @@ class CreateSimplePlan extends React.Component {
       onChangeMilestones,
       onSaveMilestone,
       onRemoveMilestone,
+      onGetChallenges,
       isProjectLive,
       isCustomer,
     } = this.props
@@ -68,6 +69,7 @@ class CreateSimplePlan extends React.Component {
           </div>
           <ManageMilestones
             milestones={milestones}
+            onGetChallenges={onGetChallenges}
             onChangeMilestones={onChangeMilestones}
             onSaveMilestone={onSaveMilestone}
             onRemoveMilestone={onRemoveMilestone}
@@ -87,6 +89,7 @@ CreateSimplePlan.propTypes = {
   onChangeMilestones: PT.func,
   onSaveMilestone: PT.func,
   onRemoveMilestone: PT.func,
+  onGetChallenges: PT.func,
   isCustomer: PT.bool,
 }
 

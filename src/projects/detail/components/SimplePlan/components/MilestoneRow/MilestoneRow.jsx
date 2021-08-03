@@ -12,19 +12,23 @@ import MilestoneCopilots from '../MilestoneCopilots'
 import MilestoneStatus from '../MilestoneStatus'
 import MilestoneDeleteButton from '../MilestoneDeleteButton'
 import { PHASE_STATUS_OPTIONS } from '../../../../../../config/constants'
-import IconCheck from '../../../../../../assets/icons/icon-check-thin.svg'
-import IconXMark from '../../../../../../assets/icons/icon-x-mark-thin.svg'
+import IconCheck from '../../../../../../assets/icons/icon-save2.svg'
+import IconXMark from '../../../../../../assets/icons/icon-delete.svg'
 import IconPencil from '../../../../../../assets/icons/icon-ui-pencil.svg'
 import IconDots from '../../../../../../assets/icons/icon-dots.svg'
 import IconArrowDown from '../../../../../../assets/icons/arrow-6px-carret-down-normal.svg'
+import IconExpand from '../../../../../../assets/icons/arrows-16px-1_minimal-right.svg'
+import IconClose from '../../../../../../assets/icons/arrows-16px-1_minimal-down.svg'
 
 import styles from './MilestoneRow.scss'
 
 const TCFormFields = FormsyForm.Fields
 
 function MilestoneRow({
+  isExpand,
   milestone,
   rowId,
+  onExpand,
   onChange,
   onSave,
   onRemove,
@@ -46,6 +50,7 @@ function MilestoneRow({
 
   return edit ? (
     <tr styleName="milestone-row" className="edit-milestone-row">
+      <td />
       <td styleName="checkbox">
         <TCFormFields.Checkbox
           name={`select-${rowId}`}
@@ -246,6 +251,7 @@ function MilestoneRow({
     </tr>
   ) : (
     <tr styleName="milestone-row">
+      <td styleName="expand" onClick={() => onExpand(!isExpand, milestone)}>{isExpand ? <IconClose />: <IconExpand />}</td>
       <td styleName="checkbox">
         <TCFormFields.Checkbox
           name={`select-${rowId}`}
@@ -308,6 +314,8 @@ MilestoneRow.propTypes = {
   onSave: PT.func,
   onRemove: PT.func,
   onDiscard: PT.func,
+  onExpand: PT.func,
+  isExpand: PT.bool,
   projectMembers: PT.arrayOf(PT.shape()),
   allMilestones: PT.arrayOf(PT.shape()),
   isCreatingRow: PT.bool,

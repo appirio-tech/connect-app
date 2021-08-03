@@ -12,6 +12,11 @@ export const LOAD_USER_CREDENTIAL_PENDING     = 'LOAD_USER_CREDENTIAL_PENDING'
 export const LOAD_USER_CREDENTIAL_SUCCESS     = 'LOAD_USER_CREDENTIAL_SUCCESS'
 export const LOAD_USER_CREDENTIAL_FAILURE     = 'LOAD_USER_CREDENTIAL_FAILURE'
 
+// Load_CHALLEGNES
+export const LOAD_CHALLEGNES = 'LOAD_CHALLEGNES'
+export const LOAD_CHALLEGNES_PENDING = 'LOAD_CHALLEGNES_PENDING'
+export const LOAD_CHALLEGNES_SUCCESS = 'LOAD_CHALLEGNES_SUCCESS'
+export const LOAD_CHALLEGNES_FAILURE = 'Load_CHALLEGNES_FAILURE'
 
 // Load organization configs
 export const LOAD_ORG_CONFIG_SUCCESS     = 'LOAD_ORG_CONFIG_SUCCESS'
@@ -766,6 +771,7 @@ export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL |
 export const TC_API_URL = `https://api.${DOMAIN}`
 export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?formData.projectId=`
 export const WORK_MANAGER_APP = `https://challenges.${DOMAIN}/projects`
+export const CHALLENGE_DETAIL_APP = `https://www.${DOMAIN}/challenges`
 export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
 export const SALESFORCE_BILLING_ACCOUNT_LINK = process.env.SALESFORCE_BILLING_ACCOUNT_LINK
 export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`

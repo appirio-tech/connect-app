@@ -31,6 +31,7 @@ import {
   collapseAllProjectPhases,
   createPhaseAndMilestones,
   createPhaseWithoutTimeline,
+  getChallengesByIds,
 } from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
@@ -90,6 +91,10 @@ class DashboardContainer extends React.Component {
     this.onChangeMilestones = this.onChangeMilestones.bind(this)
     this.onSaveMilestone = this.onSaveMilestone.bind(this)
     this.onRemoveMilestone = this.onRemoveMilestone.bind(this)
+    this.onGetChallenges = this.onGetChallenges.bind(this)
+  }
+  onGetChallenges(milestoneId, challengeIds) {
+    this.props.getChallengesByIds(milestoneId, challengeIds)
   }
 
   onNotificationRead(notification) {
@@ -477,6 +482,7 @@ class DashboardContainer extends React.Component {
                         milestones={this.state.createGameplanPhases || visiblePhases || []}
                         onChangeMilestones={this.onChangeMilestones}
                         onSaveMilestone={this.onSaveMilestone}
+                        onGetChallenges={this.onGetChallenges}
                         onRemoveMilestone={this.onRemoveMilestone}
                       />
                     )
@@ -521,6 +527,7 @@ const mapDispatchToProps = {
   updateProduct,
   createPhaseAndMilestones,
   createPhaseWithoutTimeline,
+  getChallengesByIds,
   fireProductDirty,
   fireProductDirtyUndo,
   addProductAttachment,

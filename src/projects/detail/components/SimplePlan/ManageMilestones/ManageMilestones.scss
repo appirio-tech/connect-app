@@ -7,6 +7,35 @@
   padding: 15px 0 20px;
   min-height: 65px;
 
+  .unselect-bottom {
+    height: 24px;
+    background-color: #00B7F8;
+    border-radius: 24px;
+    color: #FFF;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    padding: 0 5px;
+    cursor: pointer;
+        
+    svg {
+      margin-right: 4px;
+      height: 13px;
+      width: 13px;
+    }
+    margin-right: 20px;
+  }
+  .delete-button {
+    cursor: pointer;
+
+  }
+  .icon {
+    cursor: pointer;
+    svg {
+      margin: 0 8px;
+    }
+  }
+
   .primary-button {
     margin-left: 12px;
   }

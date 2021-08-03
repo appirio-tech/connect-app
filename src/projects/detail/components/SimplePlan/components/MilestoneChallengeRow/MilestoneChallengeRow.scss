@@ -1,0 +1,67 @@
+@import '~styles/variables';
+
+.challenge-table-row-wrap {
+    font-weight: 400;
+    font-size: 13px;
+    color: #6b6b6b;
+}
+
+.challenge-table-row {
+  display: flex;
+  align-items: center;
+  .title {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 30px;
+    max-width: 43%;
+    margin-right: 10px;
+    color: #0A81FF
+  }
+  .status {
+    width: 100px;
+    margin-right: 10px;
+    div {
+      border-radius: 20px;
+      padding: 4px 0;
+      text-align: center;
+      color: #fff;
+      &.Submission { background-color: $tc-light-blue-100; }
+      &.IterativeReview { background-color: $tc-green-100; }
+      &.Registration { background-color: $tc-orange-100; }
+      &.Appeals { background-color: $tc-orange-100; }
+      &.AppealsResponse { background-color: $tc-orange-100; }
+      &.Draft { background-color: $tc-gray-20; }
+      &.Stalled { background-color: $tc-gray-20; }
+      &.Completed { background-color: $tc-green-100; }
+      &.Review { background-color: $tc-orange-100; }
+      &.CheckpointReview { background-color: $tc-orange-100; }
+    }
+
+  }
+  .type {
+    width: 100px;
+    margin-right: 10px;
+    div {
+      border-radius: 20px;
+      padding: 4px 0;
+      text-align: center;
+      color: #fff;
+      &.Design { background-color: $tc-light-blue-100; }
+      &.Development { background-color: $tc-green-100; }
+      &.DataScience { background-color: $tc-orange-100; }
+      &.QualityAssurance { background-color: $tc-green-100; }
+    }
+  }
+
+  .start-date {
+    width: 90px;
+    margin-right: 10px;
+  }
+
+  .end-date {
+    width: 90px;
+  }
+
+}

@@ -9,6 +9,7 @@ import {
   UPDATE_PROJECT_ATTACHMENT_PENDING, UPDATE_PROJECT_ATTACHMENT_SUCCESS, UPDATE_PROJECT_ATTACHMENT_FAILURE,
   REMOVE_PROJECT_ATTACHMENT_PENDING, REMOVE_PROJECT_ATTACHMENT_SUCCESS, REMOVE_PROJECT_ATTACHMENT_FAILURE,
   REMOVE_PENDING_ATTACHMENT, UPDATE_PENDING_ATTACHMENT,
+  LOAD_CHALLEGNES_PENDING, LOAD_CHALLEGNES_SUCCESS,
   ADD_PRODUCT_ATTACHMENT_PENDING, ADD_PRODUCT_ATTACHMENT_SUCCESS, ADD_PRODUCT_ATTACHMENT_FAILURE,
   UPDATE_PRODUCT_ATTACHMENT_PENDING, UPDATE_PRODUCT_ATTACHMENT_SUCCESS, UPDATE_PRODUCT_ATTACHMENT_FAILURE,
   REMOVE_PRODUCT_ATTACHMENT_PENDING, REMOVE_PRODUCT_ATTACHMENT_SUCCESS, REMOVE_PRODUCT_ATTACHMENT_FAILURE,
@@ -163,6 +164,29 @@ export const projectState = function (state=initialState, action) {
       ...state,
       isBillingAccountExpired: false,
     }
+  case LOAD_CHALLEGNES_PENDING: {
+
+    const phaseIndex = _.findIndex(state.phases, { id: action.meta.milestoneId })
+
+    const phase = {
+      ...state.phases[phaseIndex],
+      isLoadingChallenges: true
+    }
+    return update(state, {
+      phases: { $splice: [[phaseIndex, 1, phase]] },
+    })
+  }
+  case LOAD_CHALLEGNES_SUCCESS: {
+    const phaseIndex = _.findIndex(state.phases, { id: action.meta.milestoneId })
+    const phase = {
+      ...state.phases[phaseIndex],
+      challenges: action.payload,
+      isLoadingChallenges: false
+    }
+    return update(state, {
+      phases: { $splice: [[phaseIndex, 1, phase]] },
+    })
+  }
   case CREATE_PROJECT_PHASE_TIMELINE_MILESTONES_SUCCESS:
   case CREATE_PROJECT_PHASE_SUCCESS: {
     const { phase, product } = action.payload

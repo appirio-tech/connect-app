@@ -2,6 +2,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import { flatten, unflatten } from 'flat'
 import { getProjectById,
+  getChallengeById,
   createProject as createProjectAPI,
   updateProject as updateProjectAPI,
   deleteProject as deleteProjectAPI,
@@ -36,6 +37,7 @@ import {
   DELETE_PROJECT,
   PROJECT_DIRTY,
   PROJECT_DIRTY_UNDO,
+  LOAD_CHALLEGNES,
   LOAD_PROJECT_PHASES,
   UPDATE_PRODUCT,
   PROJECT_STATUS_DRAFT,
@@ -161,6 +163,7 @@ export function loadProjectInvite(projectId) {
   }*/
 }
 
+
 /**
  * Get project phases together with products
  *
@@ -193,6 +196,33 @@ function getProjectPhasesWithProducts(projectId) {
     ].join(',')
   })
 }
+
+/**
+ * Get challenges by challenge ids
+ *
+ * @param {Number} milestoneId milestone id
+ * @param {Array} challengeIds challenge ids
+ *
+ * @returns {Promise<[]>} resolves to the list of challenge
+ */
+export function getChallengesByIds(milestoneId, challengeIds) {
+
+  const requests = _.map(challengeIds, id => getChallengeById(id))
+  const challengesAPIs = Promise.all(requests)
+
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_CHALLEGNES,
+      payload: challengesAPIs,
+      meta: {
+        milestoneId 
+      }
+    })
+  }
+
+}
+
+
 
 /**
  * Load project phases with populated products
