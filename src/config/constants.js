@@ -758,6 +758,8 @@ export const PROJECT_ATTACHMENTS_FOLDER = process.env.PROJECT_ATTACHMENTS_FOLDER
 export const FILE_PICKER_ACCEPT = process.env.FILE_PICKER_ACCEPT || ['.bmp', '.gif', '.jpg', '.tex', '.xls', '.xlsx', '.doc', '.docx', '.zip', '.txt', '.pdf', '.png', '.ppt', '.pptx', '.rtf', '.csv']
 
 export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
+
+export const CHALLENGE_ID_MAPPING = process.env.CHALLENGE_ID_MAPPING || 'challengeId'
 /*
  * URLs
  */

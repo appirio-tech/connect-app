@@ -3,6 +3,7 @@
  */
 import React from 'react'
 import _ from 'lodash'
+import cn from 'classnames'
 import PT from 'prop-types'
 import {
   WORK_MANAGER_APP 
@@ -13,9 +14,22 @@ import './MilestoneChallengeFooter.scss'
 class MilestoneChallengeFooter extends React.Component {
   constructor(props) {
     super(props)
-
+    this.state = {
+      curPage: 0
+    }
+    this.loadChallengeBypage = this.loadChallengeBypage.bind(this)
   }
 
+  loadChallengeBypage(page) {
+    const {
+      milestone,
+      onLoadChallengesByPage 
+    } = this.props
+    if (this.state.curPage === page) {
+      return
+    }
+    onLoadChallengesByPage(page, milestone)
+  }
   renderPagination() {
     const {
       milestone
@@ -32,8 +46,8 @@ class MilestoneChallengeFooter extends React.Component {
     return (
       <div styleName="pagination">
         {
-          _.map(_.range(length), i => {
-            return <div>{i+1}</div>
+          _.map(_.range(length), (i, index) => {
+            return <div styleName={cn({selected: index === this.state.curPage})} onClick={() => {this.loadChallengeBypage(index)}}>{i+1}</div>
           })
         }
       </div>
@@ -43,6 +57,7 @@ class MilestoneChallengeFooter extends React.Component {
 
   render() {
     const {
+      isUpdatable,
       milestone
     } = this.props
     const url = `${WORK_MANAGER_APP}/${milestone.projectId}/challenges`
@@ -50,7 +65,7 @@ class MilestoneChallengeFooter extends React.Component {
 
     return (
       <tr styleName="challenge-table-row-wrap">
-        <td colSpan="9">
+        <td colSpan={isUpdatable? '9': '8'}>
           <div styleName="challenge-table-row">
             <div styleName="view-button">
               <a href={url}>
@@ -69,17 +84,9 @@ class MilestoneChallengeFooter extends React.Component {
 }
 
 MilestoneChallengeFooter.propTypes = {
+  onLoadChallengesByPage: PT.func,
   milestone: PT.shape(),
-  rowId: PT.string,
-  onChange: PT.func,
-  onSave: PT.func,
-  onRemove: PT.func,
-  onDiscard: PT.func,
-  projectMembers: PT.arrayOf(PT.shape()),
-  allMilestones: PT.arrayOf(PT.shape()),
-  isCreatingRow: PT.bool,
-  isUpdatable: PT.bool,
-  members: PT.object,
+  isUpdatable: PT.bool
 }
 
 export default MilestoneChallengeFooter

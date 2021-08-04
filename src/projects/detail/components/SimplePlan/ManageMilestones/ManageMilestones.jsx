@@ -3,6 +3,7 @@
  */
 import React from 'react'
 import PT from 'prop-types'
+import moment from 'moment'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 import MilestoneRow from '../components/MilestoneRow'
 import MilestoneChallengeHeader from '../components/MilestoneChallengeHeader'
@@ -11,10 +12,12 @@ import MilestoneChallengeFooter from '../components/MilestoneChallengeFooter'
 import MilestoneHeaderRow from '../components/MilestoneHeaderRow'
 import MilestoneDeleteButton from '../components/MilestoneDeleteButton'
 import MilestoneCopilots from '../components/MilestoneCopilots'
+import MilestoneMoveDateButton from '../components/MilestoneMoveDateButton'
+
 import * as milestoneHelper from '../components/helpers/milestone'
 import IconUnselect from '../../../../../assets/icons/icon-disselect.svg'
 import IconCopilot from '../../../../../assets/icons/icon-copilot.svg'
-import IconCalendar from '../../../../../assets/icons/calendar.svg'
+import { CHALLENGE_ID_MAPPING } from '../../../../../config/constants'
 // import IconGridView from '../../../../../assets/icons/ui-16px-2_grid-45-gray.svg'
 // import IconGnattView from '../../../../../assets/icons/icon-gnatt-gray.svg'
 
@@ -38,8 +41,26 @@ class ManageMilestones extends React.Component {
     this.onUnselectAll = this.onUnselectAll.bind(this)
     this.onDeleteAll = this.onDeleteAll.bind(this)
     this.onAddCopilotAll = this.onAddCopilotAll.bind(this)
+    this.onMoveMilestoneDates = this.onMoveMilestoneDates.bind(this)
+    this.onLoadChallengesByPage = this.onLoadChallengesByPage.bind(this)
   }
+  onMoveMilestoneDates(days) {
+    const {
+      milestones,
+      onSaveMilestone
+    } = this.props
 
+    
+    if (days > 0) {
+      const seletedMilestones = _.filter(milestones, m => m.selected)
+      _.forEach(seletedMilestones, m => {
+        m.startDate = moment(m.startDate).add(days, 'days')
+        m.endDate = moment(m.endDate).add(days, 'days')
+        this.onChange(m)
+        onSaveMilestone(m.id)
+      })
+    }
+  }
   onAddCopilotAll(member, isAdd) {
     const { milestones, onSaveMilestone } = this.props
     const seletedMilestones = _.filter(milestones, m => m.selected)
@@ -81,11 +102,21 @@ class ManageMilestones extends React.Component {
     }))
     onChangeMilestones(milestonesUnselected)
   }
+
+  onLoadChallengesByPage(index, milestone) {
+    const { onGetChallenges } = this.props
+    let challengeIds = _.map(milestone.products, `details.${CHALLENGE_ID_MAPPING}`).slice(6 * index, 7 * (index+1))
+    challengeIds = _.filter(challengeIds)
+    if (!challengeIds.length) {
+      return
+    }
+    onGetChallenges(milestone.id, challengeIds)
+  }
   onExpandChallenges(isExpand, milestone) {
     let expandList = this.state.expandList
     const { onGetChallenges } = this.props
 
-    let challengeIds = _.map(milestone.products, 'details.challengeId').slice(0, 6)
+    let challengeIds = _.map(milestone.products, `details.${CHALLENGE_ID_MAPPING}`).slice(0, 6)
     challengeIds = _.filter(challengeIds)
     if (!challengeIds.length) {
       return
@@ -141,7 +172,7 @@ class ManageMilestones extends React.Component {
 
   isExpandChallengeList(milestone) {
     const isExpand = _.find(this.state.expandList, (i) => i === milestone.id)
-    if (isExpand && milestone.challenges) {
+    if (isExpand) {
       return true
     } else {
       return false
@@ -149,16 +180,38 @@ class ManageMilestones extends React.Component {
   }
 
   renderChallengeTable(milestone) {
+    const {
+      isUpdatable
+    } = this.props
     if (!this.isExpandChallengeList(milestone)) {
       return <tr />
     }
+
+    let challengeIds = _.map(milestone.products, `details.${CHALLENGE_ID_MAPPING}`).slice(0, 6)
+    challengeIds = _.filter(challengeIds)
+    // no challenges
+    if (!challengeIds.length) {
+      return [
+        <MilestoneChallengeHeader isUpdatable={isUpdatable}/>,
+        <MilestoneChallengeRow isEmpty isUpdatable={isUpdatable}/>
+      ]
+    }
+
+    // loading challenges
+    if (milestone.isLoadingChallenges) {
+      return [
+        <MilestoneChallengeHeader isUpdatable={isUpdatable}/>,
+        <MilestoneChallengeRow isLoading isUpdatable={isUpdatable}/>
+      ]
+    }
+
     const rows = _.map(milestone.challenges, (c) => {
-      return <MilestoneChallengeRow challenge={c}/>
+      return <MilestoneChallengeRow challenge={c} isUpdatable={isUpdatable}/>
     })
     return [
-      <MilestoneChallengeHeader />,
+      <MilestoneChallengeHeader isUpdatable={isUpdatable}/>,
       ...rows,
-      <MilestoneChallengeFooter milestone={milestone}/>
+      <MilestoneChallengeFooter milestone={milestone} onLoadChallengesByPage={this.onLoadChallengesByPage} isUpdatable={isUpdatable}/>
     ]
   }
   getSelectCount() {
@@ -170,19 +223,23 @@ class ManageMilestones extends React.Component {
   renderAddCopilot() {
     const {
       projectMembers,
+      milestones,
     } = this.props
 
+    const seletedMilestones = _.filter(milestones, m => m.selected)
+    const copilots = _.intersectionBy(..._.map(seletedMilestones, 'members'), 'userId')
     return (
       <MilestoneCopilots 
         edit 
-        customButton={<IconCopilot />} 
-        copilots={[]} 
+        customButton={<IconCopilot styleName="copilot-icon"/>} 
+        copilots={copilots} 
         projectMembers={projectMembers} 
         onAdd={(member) => this.onAddCopilotAll(member, true)}  
         onRemove={(member) => this.onAddCopilotAll(member, false)}  
       />
     )
   }
+
   render() {
     const {
       milestones,
@@ -191,6 +248,7 @@ class ManageMilestones extends React.Component {
       isUpdatable,
     } = this.props
 
+    const canEdit = isUpdatable && this.getSelectCount() > 0
     return (
       <div>
         <div styleName="toolbar">
@@ -201,18 +259,16 @@ class ManageMilestones extends React.Component {
             <IconGnattView />
           </button>
           <div styleName="separator" /> */}
-          <div styleName="unselect-bottom" onClick={this.onUnselectAll}>
+          {canEdit ? <div styleName="unselect-bottom" onClick={this.onUnselectAll}>
             <IconUnselect /> {this.getSelectCount()} PROJECTS SELECTED
-          </div>
-          <div styleName="delete-button">
+          </div>: null }
+          { canEdit ? <div styleName="delete-button">
             <MilestoneDeleteButton onDelete={this.onDeleteAll}/>
-          </div>
-          <div styleName="icon">
+          </div>: null }
+          { canEdit ? <div styleName="icon">
             {this.renderAddCopilot()}
-          </div>
-          <div styleName="icon">
-            <IconCalendar />
-          </div>
+          </div>: null }
+          { canEdit ? <MilestoneMoveDateButton onMove={this.onMoveMilestoneDates}/>: null}
           {isUpdatable && (
             <button className="tc-btn tc-btn-primary tc-btn-sm" styleName="primary-button" onClick={this.onAdd}>
               ADD
