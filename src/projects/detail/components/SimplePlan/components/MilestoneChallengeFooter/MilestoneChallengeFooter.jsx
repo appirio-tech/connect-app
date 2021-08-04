@@ -29,7 +29,7 @@ class MilestoneChallengeFooter extends React.Component {
     if (this.state.curPage === page) {
       return
     }
-    this.state.curPage = page;
+    this.state.curPage = page
     onLoadChallengesByPage(page, milestone)
   }
   renderPagination() {
