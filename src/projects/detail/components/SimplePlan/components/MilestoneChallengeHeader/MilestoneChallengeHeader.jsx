@@ -2,14 +2,14 @@
  * milestoneChallenge header
  */
 import React from 'react'
+import PT from 'prop-types'
 import './MilestoneChallengeHeader.scss'
 
-function MilestoneChallengeHeader() {
+function MilestoneChallengeHeader({isUpdatable}) {
 
   return (
     <tr styleName="challenge-table-row-wrap">
-      <td colSpan="9">
-
+      <td colSpan={isUpdatable? '9': '8'}>
         <div styleName="challenge-table-row">
           <div styleName="title">TITLE</div>
           <div styleName="status">STATUS</div>
@@ -20,6 +20,10 @@ function MilestoneChallengeHeader() {
       </td>
     </tr>
   )
+}
+
+MilestoneChallengeHeader.propTypes = {
+  isUpdatable: PT.bool
 }
 
 export default MilestoneChallengeHeader

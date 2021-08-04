@@ -1,0 +1,21 @@
+.icon-button{
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+
+  svg {
+    width: 20px;
+  }
+}
+
+.pane {
+  margin-top: 10px;
+  z-index: 1;
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+}

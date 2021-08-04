@@ -27,9 +27,19 @@
   }
   .delete-button {
     cursor: pointer;
+    margin: 0 10px;
 
+    > span > button {
+      height: 20px;
+      width: 20px;
+      svg {
+        height: 20px;
+        width: 20px;
+      }
+    }
   }
   .icon {
+    margin: 0 10px;
     cursor: pointer;
     svg {
       margin: 0 8px;
@@ -51,6 +61,10 @@
     margin-left: 20px;
     background-color: $tc-gray-50;
   }
+}
+
+.copilot-icon {
+  width: 20px;
 }
 
 .view-mode {
@@ -76,29 +90,31 @@
     text-align: left;
     vertical-align: middle;
 
-    // checkbox
+    // expand arrow
     &:nth-child(1) {}
+    // checkbox
+    &:nth-child(2) {}
     // milestone
-    &:nth-child(2) { padding-left: 5px; }
+    &:nth-child(3) { padding-left: 5px; }
     // description
-    &:nth-child(3) { padding-left: 15px; }
+    &:nth-child(4) { padding-left: 15px; }
     // start date
-    &:nth-child(4) { padding-left: 25px; }
+    &:nth-child(5) { padding-left: 25px; }
     // end date
-    &:nth-child(5) { padding-left: 15px; }
+    &:nth-child(6) { padding-left: 15px; }
     // status
-    &:nth-child(6) { padding-left: 20px; }
+    &:nth-child(7) { padding-left: 20px; }
     // copilot
-    &:nth-child(7) { padding-left: 25px; }
+    &:nth-child(8) { padding-left: 25px; }
   }
 
   :global(.edit-milestone-row) {
     th,
     td {
       // description
-      &:nth-child(3) { padding-left: 10px; }
+      &:nth-child(4) { padding-left: 10px; }
       // end date
-      &:nth-child(5) {  padding-left: 10px; }
+      &:nth-child(6) {  padding-left: 10px; }
     }
   }
 
@@ -106,24 +122,24 @@
     th,
     td {
       // description
-      &:nth-child(3) { padding-left: 5px; }
+      &:nth-child(4) { padding-left: 5px; }
       // start date
-      &:nth-child(4) { padding-left: 10px; }
+      &:nth-child(5) { padding-left: 10px; }
       // end date
-      &:nth-child(5) { padding-left: 5px; }
+      &:nth-child(6) { padding-left: 5px; }
       // status
-      &:nth-child(6) { padding-left: 10px; }
+      &:nth-child(7) { padding-left: 10px; }
       // copilot
-      &:nth-child(7) { padding-left: 15px; }
+      &:nth-child(8) { padding-left: 15px; }
     }
 
     :global(.edit-milestone-row) {
       th,
       td {
         // description
-        &:nth-child(3) { padding-left: 5px; }
+        &:nth-child(4) { padding-left: 5px; }
         // end date
-        &:nth-child(5) {  padding-left: 5px; }
+        &:nth-child(6) {  padding-left: 5px; }
       }
     }
   }

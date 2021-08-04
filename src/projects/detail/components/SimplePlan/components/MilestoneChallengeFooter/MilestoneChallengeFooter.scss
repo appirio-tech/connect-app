@@ -22,6 +22,7 @@
   }
   .pagination {
     display: flex;
+    margin-right: 20px;
     div {
       color: #127D60;
       border: 1px solid #127D60;
@@ -31,6 +32,11 @@
       border-radius: 50%;
       text-align: center;
       line-height: 18px;
+      cursor: pointer;
+      &.selected {
+        color: #000;
+        border-color: #000;
+      }
     }
   }
 }
