@@ -6,7 +6,8 @@ import _ from 'lodash'
 import cn from 'classnames'
 import PT from 'prop-types'
 import {
-  WORK_MANAGER_APP 
+  WORK_MANAGER_APP,
+  CHALLENGE_ID_MAPPING
 } from '../../../../../../../src/config/constants'
 import './MilestoneChallengeFooter.scss'
 
@@ -34,7 +35,7 @@ class MilestoneChallengeFooter extends React.Component {
     const {
       milestone
     } = this.props
-    let challengeIds = _.map(milestone.products, 'details.challengeId')
+    let challengeIds = _.map(milestone.products, `details.${CHALLENGE_ID_MAPPING}`)
     challengeIds = _.filter(challengeIds)
     const length = Math.ceil(challengeIds.length/6) 
 
