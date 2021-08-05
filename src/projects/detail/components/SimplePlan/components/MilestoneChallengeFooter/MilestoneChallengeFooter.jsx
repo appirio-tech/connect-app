@@ -29,7 +29,7 @@ class MilestoneChallengeFooter extends React.Component {
     if (this.state.curPage === page) {
       return
     }
-    this.state.curPage = page
+    this.setState({curPage: page})
     onLoadChallengesByPage(page, milestone)
   }
   renderPagination() {
@@ -60,10 +60,15 @@ class MilestoneChallengeFooter extends React.Component {
   render() {
     const {
       isUpdatable,
-      milestone
+      milestone,
+      isLoading,
     } = this.props
-    const url = `${WORK_MANAGER_APP}/${milestone.projectId}/challenges`
 
+    if (isLoading) {
+      return null
+    }
+
+    const url = `${WORK_MANAGER_APP}/${milestone.projectId}/challenges`
 
     return (
       <tr styleName="challenge-table-row-wrap">
@@ -88,7 +93,8 @@ class MilestoneChallengeFooter extends React.Component {
 MilestoneChallengeFooter.propTypes = {
   onLoadChallengesByPage: PT.func,
   milestone: PT.shape(),
-  isUpdatable: PT.bool
+  isUpdatable: PT.bool,
+  isLoading: PT.bool
 }
 
 export default MilestoneChallengeFooter
