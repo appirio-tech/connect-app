@@ -759,7 +759,7 @@ export const FILE_PICKER_ACCEPT = process.env.FILE_PICKER_ACCEPT || ['.bmp', '.g
 
 export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
 
-export const CHALLENGE_ID_MAPPING = process.env.CHALLENGE_ID_MAPPING || 'challengeId'
+export const CHALLENGE_ID_MAPPING = 'challengeGuid'
 /*
  * URLs
  */
