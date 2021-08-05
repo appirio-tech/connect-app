@@ -118,12 +118,11 @@ class ManageMilestones extends React.Component {
 
     let challengeIds = _.map(milestone.products, `details.${CHALLENGE_ID_MAPPING}`).slice(0, 6)
     challengeIds = _.filter(challengeIds)
-    if (!challengeIds.length) {
-      return
-    }
 
     if (isExpand) {
-      onGetChallenges(milestone.id, challengeIds)
+      if (challengeIds.length) {
+        onGetChallenges(milestone.id, challengeIds)
+      }
       expandList.push(milestone.id)
       this.setState({expandList})
     } else {
