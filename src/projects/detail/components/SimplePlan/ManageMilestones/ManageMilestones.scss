@@ -17,13 +17,19 @@
     font-size: 12px;
     padding: 0 5px;
     cursor: pointer;
-        
     svg {
       margin-right: 4px;
       height: 13px;
       width: 13px;
     }
     margin-right: 20px;
+  }
+  .line {
+    width: 1px;
+    height: 20px;
+    display: inline-block;
+    border: 1px solid #C4C4C4;
+    margin-right: 10px;
   }
   .delete-button {
     cursor: pointer;

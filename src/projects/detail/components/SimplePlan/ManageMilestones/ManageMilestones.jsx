@@ -192,26 +192,27 @@ class ManageMilestones extends React.Component {
     // no challenges
     if (!challengeIds.length) {
       return [
-        <MilestoneChallengeHeader isUpdatable={isUpdatable}/>,
-        <MilestoneChallengeRow isEmpty isUpdatable={isUpdatable}/>
+        <MilestoneChallengeHeader key="header" isUpdatable={isUpdatable}/>,
+        <MilestoneChallengeRow isEmpty key="row" isUpdatable={isUpdatable}/>
       ]
     }
 
     // loading challenges
     if (milestone.isLoadingChallenges) {
       return [
-        <MilestoneChallengeHeader isUpdatable={isUpdatable}/>,
-        <MilestoneChallengeRow isLoading isUpdatable={isUpdatable}/>
+        <MilestoneChallengeHeader key="header" isUpdatable={isUpdatable}/>,
+        <MilestoneChallengeRow isLoading key="row" isUpdatable={isUpdatable}/>,
+        <MilestoneChallengeFooter isLoading key="footer" onLoadChallengesByPage={this.onLoadChallengesByPage} isUpdatable={isUpdatable}/>
       ]
     }
 
     const rows = _.map(milestone.challenges, (c) => {
-      return <MilestoneChallengeRow challenge={c} isUpdatable={isUpdatable}/>
+      return <MilestoneChallengeRow key={c.id} challenge={c} isUpdatable={isUpdatable}/>
     })
     return [
-      <MilestoneChallengeHeader isUpdatable={isUpdatable}/>,
+      <MilestoneChallengeHeader key="header" isUpdatable={isUpdatable}/>,
       ...rows,
-      <MilestoneChallengeFooter milestone={milestone} onLoadChallengesByPage={this.onLoadChallengesByPage} isUpdatable={isUpdatable}/>
+      <MilestoneChallengeFooter milestone={milestone} key="footer" onLoadChallengesByPage={this.onLoadChallengesByPage} isUpdatable={isUpdatable}/>
     ]
   }
   getSelectCount() {
@@ -262,6 +263,7 @@ class ManageMilestones extends React.Component {
           {canEdit ? <div styleName="unselect-bottom" onClick={this.onUnselectAll}>
             <IconUnselect /> {this.getSelectCount()} PROJECTS SELECTED
           </div>: null }
+          {canEdit ? <div styleName="line"/>: null}
           { canEdit ? <div styleName="delete-button">
             <MilestoneDeleteButton onDelete={this.onDeleteAll}/>
           </div>: null }
