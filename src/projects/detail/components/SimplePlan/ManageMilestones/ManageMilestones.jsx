@@ -116,8 +116,7 @@ class ManageMilestones extends React.Component {
     let expandList = this.state.expandList
     const { onGetChallenges } = this.props
 
-    let challengeIds = _.map(milestone.products, `details.${CHALLENGE_ID_MAPPING}`).slice(0, 6)
-    challengeIds = _.filter(challengeIds)
+    const challengeIds = _.filter(_.map(milestone.products, `details.${CHALLENGE_ID_MAPPING}`)).slice(0, 6)
 
     if (isExpand) {
       if (challengeIds.length) {
