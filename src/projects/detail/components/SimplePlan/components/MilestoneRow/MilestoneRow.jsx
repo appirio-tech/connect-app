@@ -5,28 +5,30 @@ import React from 'react'
 import PT from 'prop-types'
 import moment from 'moment'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
-import _ from 'lodash'
 import { components } from 'react-select'
 import { isValidStartEndDates } from '../../../../../../helpers/utils'
 import FormsySelect from '../../../../../../components/Select/FormsySelect'
-// import MilestoneCopilots from '../MilestoneCopilots'
+import MilestoneCopilots from '../MilestoneCopilots'
 import MilestoneStatus from '../MilestoneStatus'
-import MilestoneBudget from '../MilestoneBudget'
 import MilestoneDeleteButton from '../MilestoneDeleteButton'
 import { PHASE_STATUS_OPTIONS } from '../../../../../../config/constants'
-import IconCheck from '../../../../../../assets/icons/icon-check-thin.svg'
-import IconXMark from '../../../../../../assets/icons/icon-x-mark-thin.svg'
+import IconCheck from '../../../../../../assets/icons/icon-save2.svg'
+import IconXMark from '../../../../../../assets/icons/icon-delete.svg'
 import IconPencil from '../../../../../../assets/icons/icon-ui-pencil.svg'
 import IconDots from '../../../../../../assets/icons/icon-dots.svg'
 import IconArrowDown from '../../../../../../assets/icons/arrow-6px-carret-down-normal.svg'
+import IconExpand from '../../../../../../assets/icons/arrows-16px-1_minimal-right.svg'
+import IconClose from '../../../../../../assets/icons/arrows-16px-1_minimal-down.svg'
 
 import styles from './MilestoneRow.scss'
 
 const TCFormFields = FormsyForm.Fields
 
 function MilestoneRow({
+  isExpand,
   milestone,
   rowId,
+  onExpand,
   onChange,
   onSave,
   onRemove,
@@ -35,26 +37,20 @@ function MilestoneRow({
   allMilestones,
   isCreatingRow,
   isUpdatable,
-  members,
+  phaseMembers,
 }) {
   const phaseStatusOptions = PHASE_STATUS_OPTIONS
   const edit = milestone.edit
-  const copilotIds = _.get(milestone, 'details.copilots', [])
-  let copilots = copilotIds.map(userId => projectMembers.find(member => member.userId === userId)).filter(Boolean)
-
-  if (copilots.length !== copilotIds.length) {
-    const missingCopilotIds = _.difference(copilotIds, projectMembers.map(member => member.userId))
-    const missingCopilots = missingCopilotIds.map(userId => members[userId])
-    copilots = copilots.concat(missingCopilots)
-  }
+  // hide email
+  const copilots = (phaseMembers || []).map(member => ({ ...member, email: undefined }))
 
   let milestoneRef
   let startDateRef
   let endDateRef
-  let budgetRef
 
   return edit ? (
     <tr styleName="milestone-row" className="edit-milestone-row">
+      <td />
       <td styleName="checkbox">
         <TCFormFields.Checkbox
           name={`select-${rowId}`}
@@ -194,34 +190,7 @@ function MilestoneRow({
           }}
         />
       </td>
-      <td styleName="budget">
-        <span styleName="prefix-icon" className="milestone-budget-prefix-icon">$</span>
-        <TCFormFields.TextInput
-          validations={{
-            isRequired: true,
-            isPositive(values) {
-              return !(values[`budget-${rowId}`] < 0)
-            }
-          }}
-          validationError={'Please, enter budget'}
-          validationErrors={{
-            isPositive: 'Budget cannot be negative'
-          }}
-          required
-          type="number"
-          name={`budget-${rowId}`}
-          value={milestone.budget || 0}
-          onChange={(_, value) => {
-            if (!milestone.origin) {
-              milestone.origin = {...milestone}
-            }
-            onChange({...milestone, budget: value })
-          }}
-          wrapperClass={styles.textInput}
-          innerRef={ref => budgetRef = ref}
-        />
-      </td>
-      {/* <td styleName="copilots">
+      <td styleName="copilots">
         <MilestoneCopilots
           edit
           copilots={copilots}
@@ -230,20 +199,20 @@ function MilestoneRow({
             if (!milestone.origin) {
               milestone.origin = {...milestone}
             }
-            const details = milestone.details
-            const copilotIdsUpdated = copilots.map(copilot => copilot.userId).concat(member.userId)
-            onChange({...milestone, details: { ...details, copilots: copilotIdsUpdated } })
+            const copilotsUpdated = copilots
+              .concat(member)
+            onChange({...milestone, members: copilotsUpdated })
           }}
           onRemove={(member) => {
             if (!milestone.origin) {
               milestone.origin = {...milestone}
             }
-            const details = milestone.details
-            const copilotIdsUpdated = copilots.filter(copilot => copilot.userId !== member.userId).map(copilot => copilot.userId)
-            onChange({...milestone, details: { ...details, copilots: copilotIdsUpdated } })
+            const copilotsUpdated = copilots
+              .filter(copilot => copilot.userId !== member.userId)
+            onChange({...milestone, members: copilotsUpdated })
           }}
         />
-      </td> */}
+      </td>
       <td styleName="action">
         <div styleName="inline-menu">
           <button
@@ -256,7 +225,6 @@ function MilestoneRow({
               if (milestoneRef.props.isValid()
                 && startDateRef.props.isValid()
                 && endDateRef.props.isValid()
-                && budgetRef.props.isValid()
               ) {
                 onSave(milestone.id)
               }
@@ -283,6 +251,7 @@ function MilestoneRow({
     </tr>
   ) : (
     <tr styleName="milestone-row">
+      <td styleName="expand" onClick={() => onExpand(!isExpand, milestone)}>{isExpand ? <IconClose />: <IconExpand />}</td>
       <td styleName="checkbox">
         <TCFormFields.Checkbox
           name={`select-${rowId}`}
@@ -307,12 +276,9 @@ function MilestoneRow({
       <td styleName="status">
         <MilestoneStatus status={milestone.status} />
       </td>
-      <td styleName="budget">
-        <MilestoneBudget spent={milestone.spentBudget} budget={milestone.budget} />
-      </td>
-      {/* <td styleName="copilots">
+      <td styleName="copilots">
         <MilestoneCopilots copilots={copilots} />
-      </td> */}
+      </td>
       {isUpdatable && (
         <td styleName="action">
           <div styleName="inline-menu">
@@ -348,6 +314,8 @@ MilestoneRow.propTypes = {
   onSave: PT.func,
   onRemove: PT.func,
   onDiscard: PT.func,
+  onExpand: PT.func,
+  isExpand: PT.bool,
   projectMembers: PT.arrayOf(PT.shape()),
   allMilestones: PT.arrayOf(PT.shape()),
   isCreatingRow: PT.bool,

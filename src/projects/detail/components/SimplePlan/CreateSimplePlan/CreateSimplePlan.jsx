@@ -3,7 +3,6 @@
  */
 import React from 'react'
 import PT from 'prop-types'
-import _ from 'lodash'
 import GenericMenu from '../../../../../components/GenericMenu'
 // import ProjectDetailsWidget from '../ProjectDetailsWidget'
 import ManageMilestones from '../ManageMilestones'
@@ -21,19 +20,6 @@ const createTabs = ({ onClick } ) => ([
 
 class CreateSimplePlan extends React.Component {
   componentDidMount() {
-    const { project, milestones, loadMembers } = this.props
-
-    let copilotIds = []
-    milestones.forEach((milestone) => {
-      copilotIds = copilotIds.concat(_.get(milestone, 'details.copilots', []))
-    })
-
-    const projectMemberIds = project.members.map(member => member.userId)
-    const missingMemberIds = _.difference(copilotIds, projectMemberIds)
-    if (missingMemberIds.length) {
-      loadMembers(missingMemberIds)
-    }
-
     const contentInnerElement = document.querySelector('.twoColsLayout-contentInner')
     contentInnerElement.classList.add(styles['twoColsLayout-contentInner'])
   }
@@ -51,8 +37,8 @@ class CreateSimplePlan extends React.Component {
       onChangeMilestones,
       onSaveMilestone,
       onRemoveMilestone,
+      onGetChallenges,
       isProjectLive,
-      members,
       isCustomer,
     } = this.props
     const onClickMilestonesTab = () => {}
@@ -83,12 +69,12 @@ class CreateSimplePlan extends React.Component {
           </div>
           <ManageMilestones
             milestones={milestones}
+            onGetChallenges={onGetChallenges}
             onChangeMilestones={onChangeMilestones}
             onSaveMilestone={onSaveMilestone}
             onRemoveMilestone={onRemoveMilestone}
             projectMembers={project.members}
             isUpdatable={isProjectLive && !isCustomer}
-            members={members}
           />
         </div>
       </div>
@@ -103,7 +89,7 @@ CreateSimplePlan.propTypes = {
   onChangeMilestones: PT.func,
   onSaveMilestone: PT.func,
   onRemoveMilestone: PT.func,
-  members: PT.object,
+  onGetChallenges: PT.func,
   isCustomer: PT.bool,
 }
 

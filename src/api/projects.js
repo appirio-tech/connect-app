@@ -34,6 +34,19 @@ export function getProjectSuggestions() {
   // TODO
 }
 
+/**
+ * Get a challenge detail based on it's id
+ * @param  {integer} challenId challenge id
+ * @return {object}           challenge detail returned by api
+ */
+export function getChallengeById(challengeId) {
+  return axios.get(`${PROJECTS_API_URL}/v5/challenges/${challengeId}/`)
+    .then(resp => {
+      const res = resp.data
+      return res
+    })
+}
+
 
 /**
  * Get a project based on it's id
