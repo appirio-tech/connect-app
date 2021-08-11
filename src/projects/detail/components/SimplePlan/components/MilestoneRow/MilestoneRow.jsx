@@ -50,7 +50,7 @@ function MilestoneRow({
 
   return edit ? (
     <tr styleName="milestone-row" className="edit-milestone-row">
-      <td />
+      {isUpdatable ? <td /> : null}
       <td styleName="checkbox">
         <TCFormFields.Checkbox
           name={`select-${rowId}`}
@@ -251,7 +251,7 @@ function MilestoneRow({
     </tr>
   ) : (
     <tr styleName="milestone-row">
-      <td styleName="expand" onClick={() => onExpand(!isExpand, milestone)}>{isExpand ? <IconClose />: <IconExpand />}</td>
+      {isUpdatable ? <td styleName="expand" onClick={() => onExpand(!isExpand, milestone)}>{isExpand ? <IconClose />: <IconExpand />}</td>: null}
       <td styleName="checkbox">
         <TCFormFields.Checkbox
           name={`select-${rowId}`}

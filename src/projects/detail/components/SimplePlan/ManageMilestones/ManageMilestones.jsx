@@ -181,7 +181,7 @@ class ManageMilestones extends React.Component {
     const {
       isUpdatable
     } = this.props
-    if (!this.isExpandChallengeList(milestone)) {
+    if (!isUpdatable ||!this.isExpandChallengeList(milestone)) {
       return <tr />
     }
 
@@ -258,7 +258,7 @@ class ManageMilestones extends React.Component {
             <IconGnattView />
           </button>
           <div styleName="separator" /> */}
-          {canEdit ? <div styleName="unselect-bottom" onClick={this.onUnselectAll}>
+          {this.getSelectCount() > 0 ? <div styleName="unselect-bottom" onClick={this.onUnselectAll}>
             <IconUnselect /> {this.getSelectCount()} PROJECTS SELECTED
           </div>: null }
           {canEdit ? <div styleName="line"/>: null}
