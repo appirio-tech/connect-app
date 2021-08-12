@@ -77,8 +77,55 @@ export function getProjectById(projectId) {
 export function getProjectPhases(projectId, query = {}) {
   const params = _.mapValues(query, (param) => encodeURIComponent(param))
 
+  // const mockaData = [{
+  //   "products":[{"updatedBy":40152856,"actualPrice":0,"phaseId":8730,"billingAccountId":null,"templateId":176,"type":"generic-product","createdAt":"2021-08-05T20:38:08.587Z","createdBy":40152856,"estimatedPrice":0,"name":"Generic Product","details":{},"id":8794,"directProjectId":null,"projectId":18162,"updatedAt":"2021-08-05T20:38:08.588Z"}],
+  //   "budget":0,
+  //   "createdAt":"2021-08-05T20:38:08.575Z",
+  //   "createdBy":40152856,
+  //   "details":{},
+  //   "duration":null,
+  //   "endDate":"2021-08-12T00:00:00.000Z",
+  //   "id":8730,
+  //   "name":"a1",
+  //   "description":null,
+  //   "progress":0,
+  //   "projectId":18162,
+  //   "spentBudget":0,
+  //   "startDate":"2021-08-09T00:00:00.000Z",
+  //   // "status":"in_review",
+  //   "status":"reviewed",
+  //   "updatedAt":"2021-08-06T03:06:39.277Z",
+  //   "updatedBy":40152856,
+  //   // "approvals": [{id: 0, decision: "approve", comment: ""}],
+  //   "approvals": [{id: 0, decision: "reject", comment: "rej"}],
+  //   "members":[]},
+
+  //   {"products":[{"updatedBy":40152856,"actualPrice":0,"phaseId":8730,"billingAccountId":null,"templateId":176,"type":"generic-product","createdAt":"2021-08-05T20:38:08.587Z","createdBy":40152856,"estimatedPrice":0,"name":"Generic Product","details":{},"id":8794,"directProjectId":null,"projectId":18162,"updatedAt":"2021-08-05T20:38:08.588Z"}],
+  //   "budget":0,
+  //   "createdAt":"2021-08-05T20:38:08.575Z",
+  //   "createdBy":40152856,
+  //   "details":{},
+  //   "duration":null,
+  //   "endDate":"2021-08-12T00:00:00.000Z",
+  //   "id":8730,
+  //   "name":"a2",
+  //   "description":null,
+  //   "progress":0,
+  //   "projectId":18162,
+  //   "spentBudget":0,
+  //   "startDate":"2021-08-09T00:00:00.000Z",
+  //   // "status":"in_review",
+  //   "status":"reviewed",
+  //   "updatedAt":"2021-08-06T03:06:39.277Z",
+  //   "updatedBy":40152856,
+  //   // "approvals": [{id: 0, decision: "approve", comment: ""}],
+  //   "approvals": [{id: 0, decision: "reject", comment: "rej1"}],
+  //   "members":[]},
+  // ]
+  // return Promise.resolve(mockaData)
+
   return axios.get(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases`, { params })
-    .then(resp => resp.data)
+    .then(resp => {console.log('resp.data', query, resp.data); return resp.data})
 }
 
 /**
@@ -139,6 +186,21 @@ export function updateScopeChangeRequest(projectId, requestId, updatedProps) {
  */
 export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
   return axios.patch(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}`, updatedProps)
+    .then(resp => {
+      return _.extend(resp.data, {phaseIndex})
+    })
+}
+
+/**
+ * Create phase apprvoal
+ * @param  {integer} projectId    project Id
+ * @param  {integer} phaseId    phase Id
+ * @param  {object} updatedProps updated phase properties
+ * @param  {integer} phaseIndex index of phase in phase list redux store
+ * @return {promise}              created phase approval
+ */
+export function createPhaseApproval(projectId, phaseId, updatedProps, phaseIndex) {
+  return axios.post(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}/approvals`, updatedProps)
     .then(resp => {
       return _.extend(resp.data, {phaseIndex})
     })
