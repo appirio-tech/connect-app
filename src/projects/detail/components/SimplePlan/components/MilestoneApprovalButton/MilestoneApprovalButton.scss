@@ -1,0 +1,90 @@
+@import "../../../../../../styles/variables";
+
+.icon-button {
+  height: 14px;
+  padding: 0 !important;
+  border: 0 !important;
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.icon-button-global {
+  height: 24px;
+  padding: 0;
+  border: 0;
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.with-title {
+  padding: 10px 10px !important;
+  padding-left: 5px !important;
+  border-radius: 24px !important;
+}
+
+.wrapper {
+    position: relative;
+}
+
+.red {
+  &.with-title {
+    background-color: $color-x-mark;
+  }
+  svg {
+    rect {
+      fill: $color-x-mark;
+    }
+    path {
+      stroke: white;
+    }
+  }
+}
+
+.green {
+  &.with-title {
+    background-color: $color-check-mark;
+  }
+  svg {
+    rect {
+      fill: $color-check-mark;
+    }
+    path {
+      stroke: white;
+    }
+  }
+}
+
+.title {
+  margin-left: 0px;
+  color: white;
+}
+
+.pane {
+  margin-top: 10px;
+  margin-right: -20px;
+  z-index: 1;
+  &.with-title {
+    margin-right: -30px;
+
+    .arrow {
+        transform: translateY(calc(-50%)) translateX(10px) rotate(45deg);
+      }
+  }
+}
+
+.arrow {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    top: 0;
+    background-color: white;
+    border: 1px solid #808080;
+    border-bottom: none;
+    border-right: none;
+    transform: translateY(calc(-50%)) translateX(-0px) rotate(45deg);
+
+}

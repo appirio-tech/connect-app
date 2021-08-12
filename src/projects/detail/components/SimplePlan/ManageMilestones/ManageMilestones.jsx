@@ -4,7 +4,6 @@
 import React from 'react'
 import PT from 'prop-types'
 import moment from 'moment'
-import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 import MilestoneRow from '../components/MilestoneRow'
 import MilestoneChallengeHeader from '../components/MilestoneChallengeHeader'
 import MilestoneChallengeRow from '../components/MilestoneChallengeRow'
@@ -17,13 +16,10 @@ import MilestoneMoveDateButton from '../components/MilestoneMoveDateButton'
 import * as milestoneHelper from '../components/helpers/milestone'
 import IconUnselect from '../../../../../assets/icons/icon-disselect.svg'
 import IconCopilot from '../../../../../assets/icons/icon-copilot.svg'
-import { CHALLENGE_ID_MAPPING } from '../../../../../config/constants'
-// import IconGridView from '../../../../../assets/icons/ui-16px-2_grid-45-gray.svg'
-// import IconGnattView from '../../../../../assets/icons/icon-gnatt-gray.svg'
+import { CHALLENGE_ID_MAPPING, PHASE_STATUS_IN_REVIEW } from '../../../../../config/constants'
 
 import './ManageMilestones.scss'
-
-const Formsy = FormsyForm.Formsy
+import MilestoneApprovalButton from '../components/MilestoneApprovalButton'
 
 class ManageMilestones extends React.Component {
   constructor(props) {
@@ -43,6 +39,7 @@ class ManageMilestones extends React.Component {
     this.onAddCopilotAll = this.onAddCopilotAll.bind(this)
     this.onMoveMilestoneDates = this.onMoveMilestoneDates.bind(this)
     this.onLoadChallengesByPage = this.onLoadChallengesByPage.bind(this)
+    this.onApprove = this.onApprove.bind(this)
   }
   onMoveMilestoneDates(days) {
     const {
@@ -167,6 +164,18 @@ class ManageMilestones extends React.Component {
     const {onRemoveMilestone} = this.props
     onRemoveMilestone(id)
   }
+  
+  onApprove({type, comment, item}) {
+    const { milestones, onApproveMilestones } = this.props  
+    if(item) {
+      onApproveMilestones({type, comment, milestones: [item]})
+      return
+    }
+    
+    const updatedMilestones = [...milestones].filter( x => x.selected && x.status === PHASE_STATUS_IN_REVIEW)
+    console.log('need updated milestones', milestones, updatedMilestones)
+    onApproveMilestones({type, comment, milestones: updatedMilestones} )
+  }
 
   isExpandChallengeList(milestone) {
     const isExpand = _.find(this.state.expandList, (i) => i === milestone.id)
@@ -245,9 +254,14 @@ class ManageMilestones extends React.Component {
       projectMembers,
       onChangeMilestones,
       isUpdatable,
+      isCustomer,
     } = this.props
 
-    const canEdit = isUpdatable && this.getSelectCount() > 0
+    // const isNeedApproval = project.status === PROJECT_STATUS_IN_REVIEW
+    const canShowApproval = isCustomer
+
+    const canEdit = (isUpdatable || canShowApproval) && this.getSelectCount() > 0
+
     return (
       <div>
         <div styleName="toolbar">
@@ -261,14 +275,33 @@ class ManageMilestones extends React.Component {
           {this.getSelectCount() > 0 ? <div styleName="unselect-bottom" onClick={this.onUnselectAll}>
             <IconUnselect /> {this.getSelectCount()} PROJECT(S) SELECTED
           </div>: null }
-          {canEdit ? <div styleName="line"/>: null}
-          { canEdit ? <div styleName="delete-button">
-            <MilestoneDeleteButton onDelete={this.onDeleteAll}/>
-          </div>: null }
-          { canEdit ? <div styleName="icon">
-            {this.renderAddCopilot()}
-          </div>: null }
-          { canEdit ? <MilestoneMoveDateButton onMove={this.onMoveMilestoneDates}/>: null}
+          { canEdit ? (() => canShowApproval ? 
+            [
+              <div styleName="hs" key={0}> </div>,
+              <div styleName="approve-button">
+                <MilestoneApprovalButton key={1} type="approve" 
+                  global
+                  title={'APPROVE'}
+                  onClick={() => {this.onApprove({type: 'approve'})}}
+                />
+              </div>,
+              <MilestoneApprovalButton key={2} type="reject" 
+                global
+                title={'REJECT'}
+                onClick={(v) => this.onApprove({type: 'reject', comment: v})}
+              />
+            ] :
+            [
+              <div styleName="line" key={0}/>,
+              <div styleName="delete-button" key={1}>
+                <MilestoneDeleteButton onDelete={this.onDeleteAll}/>
+              </div>,
+              <div styleName="icon" key={2}>
+                {this.renderAddCopilot()}
+              </div>,
+              <MilestoneMoveDateButton onMove={this.onMoveMilestoneDates} key={3}/>
+            ])() : null}
+
           {isUpdatable && (
             <button className="tc-btn tc-btn-primary tc-btn-sm" styleName="primary-button" onClick={this.onAdd}>
               ADD
@@ -288,11 +321,11 @@ class ManageMilestones extends React.Component {
                 <MilestoneHeaderRow
                   milestones={milestones}
                   onChangeMilestones={onChangeMilestones}
-                  isUpdatable={isUpdatable}
+                  isUpdatable={isUpdatable || canShowApproval}
                 />
               </thead>
               <tbody>
-                {milestones.map((milestone) => (
+                {milestones.map((milestone, key) => (
                   [
                     <MilestoneRow
                       isEditingMilestone={!!milestone.edit}
@@ -309,6 +342,8 @@ class ManageMilestones extends React.Component {
                       allMilestones={milestones}
                       isCreatingRow={`${milestone.id}`.startsWith('new-milestone')}
                       isUpdatable={isUpdatable}
+                      isCustomer={isCustomer}
+                      onApprove={this.onApprove}
                       phaseMembers={milestone.members}
                     />,
                     ...this.renderChallengeTable(milestone)
@@ -329,8 +364,11 @@ ManageMilestones.propTypes = {
   onSaveMilestone: PT.func,
   onRemoveMilestone: PT.func,
   onGetChallenges: PT.func,
+  onApproveMilestones: PT.func,
   projectMembers: PT.arrayOf(PT.shape()),
   isUpdatable: PT.bool,
+  isCustomer: PT.bool,
+  project: PT.shape()
 }
 
 export default ManageMilestones

@@ -10,6 +10,7 @@ import { getProjectById,
   getProjectPhases,
   updateProduct as updateProductAPI,
   updatePhase as updatePhaseAPI,
+  createPhaseApproval as createPhaseApprovalAPI,
   createProjectPhase,
   createScopeChangeRequest as createScopeChangeRequestAPI,
   updateScopeChangeRequest as updateScopeChangeRequestAPI,
@@ -191,6 +192,7 @@ function getProjectPhasesWithProducts(projectId) {
       'startDate',
       'status',
       'members',
+      'approvals',
       'updatedAt',
       'updatedBy',
     ].join(',')
@@ -505,6 +507,19 @@ export function activateScopeChange(projectId, scopeChangeRequestId) {
   }
 }
 
+
+export function executePhaseApproval(projectId, phaseId, updatedProps, phaseIndex) {
+  console.log('execute update phases 0')
+  return (dispatch, getState) => {
+    console.log('execute update phases')
+    const state = getState()
+    phaseIndex = phaseIndex ? phaseIndex : _.findIndex(state.projectState.phases, { id: phaseId })
+
+    createPhaseApprovalAPI(projectId, phaseId, updatedProps, phaseIndex).then(() => {
+      dispatch(loadProjectPhasesWithProducts(projectId))
+    })
+  }
+}
 
 /**
  * Update phase info

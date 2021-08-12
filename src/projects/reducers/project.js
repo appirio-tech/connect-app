@@ -434,13 +434,20 @@ export const projectState = function (state=initialState, action) {
         projectAttachments.push(a)
       }
     })
-    return update(state, {
+    // return Object.assign({}, state, {
+    //   project: { attachments : projectAttachments  },
+    //   projectNonDirty: { attachments: projectAttachments  },
+    //   phases: phases ,
+    //   phasesNonDirty: action.payload,
+    //   isLoadingPhases: false
+    // })
+    return {...update(state, {
       project: { attachments : { $set : projectAttachments } },
       projectNonDirty: { attachments: { $set: projectAttachments } },
       phases: { $set:phases },
       phasesNonDirty: { $set: action.payload },
       isLoadingPhases: { $set: false}
-    })
+    })}
   }
 
   case CREATE_SCOPE_CHANGE_REQUEST_SUCCESS: {
