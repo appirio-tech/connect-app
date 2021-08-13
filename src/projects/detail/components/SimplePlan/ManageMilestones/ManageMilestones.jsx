@@ -259,7 +259,7 @@ class ManageMilestones extends React.Component {
           </button>
           <div styleName="separator" /> */}
           {this.getSelectCount() > 0 ? <div styleName="unselect-bottom" onClick={this.onUnselectAll}>
-            <IconUnselect /> {this.getSelectCount()} PROJECTS SELECTED
+            <IconUnselect /> {this.getSelectCount()} PROJECT(S) SELECTED
           </div>: null }
           {canEdit ? <div styleName="line"/>: null}
           { canEdit ? <div styleName="delete-button">
@@ -284,17 +284,6 @@ class ManageMilestones extends React.Component {
         <div styleName="table-container">
           <Formsy.Form>
             <table styleName="milestones-table">
-              <colgroup>
-                <col style={{ width: '20px' }} />
-                <col style={{ width: '20px' }} />{/* CHECKBOX */}
-                <col style={{ width: '8%' }} />{/* MILESTONE */}
-                <col />{/* DESCRIPTION */}
-                <col style={{ width: '12%' }} />{/* START DATE */}
-                <col style={{ width: '11%' }} />{/* END DATE */}
-                <col style={{ width: '10%' }} />{/* STATUS */}
-                <col style={{ width: '13%' }} />{/* COPILOTS */}
-                {isUpdatable && (<col style={{ width: '64px' }} />)}{/* ACTION */}
-              </colgroup>
               <thead>
                 <MilestoneHeaderRow
                   milestones={milestones}
