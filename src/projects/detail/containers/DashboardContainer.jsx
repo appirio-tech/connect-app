@@ -155,9 +155,7 @@ class DashboardContainer extends React.Component {
     const reqs = []
     milestones.forEach( ms => { 
       reqs.push(
-        // executePhaseApproval(ms.projectId, ms.id, {decision: type, comment, startDate: ms.startDate,  expectedEndDate: ms.endDate})
         executePhaseApproval(ms.projectId, ms.id, {decision: type, comment})
-        // executePhaseApproval(ms.projectId, ms.id, {decision: 'reject', comment: 'rej'})
       )
       console.log('type-comment', type, comment, ms)
     })

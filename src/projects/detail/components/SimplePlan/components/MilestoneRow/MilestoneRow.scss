@@ -156,6 +156,14 @@
     svg {
       width: 14px;
       height: 14px;
+  }
+
+
+    &.approve {
+      
+      > *:not(:last-child) {
+        margin-right: 5px;
+      }
     }
   }
 }

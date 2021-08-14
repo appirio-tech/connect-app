@@ -351,21 +351,21 @@ function MilestoneRow({
         </td>
       )}
       {
-        showApproval && (
+        isCustomer && (
           <td styleName="action">
-            <div styleName="inline-menu">
-              <MilestoneApprovalButton 
+            <div styleName="inline-menu approve">
+              {showApproval && <MilestoneApprovalButton 
                 type={'approve'}
                 onClick={() => {
                   onApprove({type: 'approve', item: milestone})
                 }}
-              />
-              <MilestoneApprovalButton 
+              />}
+              { showApproval && <MilestoneApprovalButton 
                 type="reject"
                 onClick={(v) => {
                   onApprove({type: 'reject', comment: v, item: milestone})
                 }}
-              />
+              />}
             </div>
           </td>
         )

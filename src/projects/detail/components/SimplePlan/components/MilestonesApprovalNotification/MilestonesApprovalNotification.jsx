@@ -23,25 +23,45 @@ class MilestonesApprovalNotification extends React.Component {
       open: false,
       show: true,
     }
+
+    this.findLatest = this.findLatest.bind(this)
+  }
+
+  findLatest(approvals) {
+    let d = null;
+    let maxIndex = 0;
+    for(let index = 0; index <  approvals.length; index ++) {
+      const tmp = new Date(approvals[index].createdAt)
+      if(!d) {
+        d = tmp;
+        continue;
+      }
+      if(d < tmp) {
+        d = tmp;
+        maxIndex = index;
+      }
+    }
+    return approvals[maxIndex] || {};
   }
 
   render() {
     const { milestones } = this.props
 
     console.log('milestones', milestones)
+    
     const inReviews = milestones.find(
       (ms) => ms.status === PHASE_STATUS_IN_REVIEW
     )
     const revieweds = milestones.filter(
       (ms) => ms.status === PHASE_STATUS_REVIEWED
-    )
+    ).map( ms => {ms.currentApproval = this.findLatest(ms.approvals); return ms})
 
     const showAllApproved =
       !inReviews && revieweds.length > 0 &&
       !revieweds.find(
         (rd) =>
           !!(
-            rd.approvals && rd.approvals[0].decision !== PHASE_APPROVAL_APPROVE
+            rd.approvals && rd.currentApproval.decision !== PHASE_APPROVAL_APPROVE
           )
       )
 
@@ -55,13 +75,13 @@ class MilestonesApprovalNotification extends React.Component {
         // group item pre-definition
         const toPush = { items: null, comment: null }
 
-        if (ms.approvals[0].decision === PHASE_APPROVAL_REJECT) {
-          (toPush.items = [ms]), (toPush.comment = ms.approvals[0].comment)
+        if (ms.currentApproval.decision === PHASE_APPROVAL_REJECT) {
+          (toPush.items = [ms]), (toPush.comment = ms.currentApproval.comment)
         }
         revieweds.slice(index + 1).forEach((ms2, index2) => {
           if (
-            ms2.approvals[0].decision === PHASE_APPROVAL_REJECT &&
-            ms.approvals[0].comment === ms2.approvals[0].comment
+            ms2.currentApproval.decision === PHASE_APPROVAL_REJECT &&
+            ms.currentApproval.comment === ms2.currentApproval.comment
           ) {
             toPush.items.push(ms2)
             skip.push(index2 + index + 1)

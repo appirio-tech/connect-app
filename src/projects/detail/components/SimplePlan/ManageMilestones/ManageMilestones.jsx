@@ -258,9 +258,11 @@ class ManageMilestones extends React.Component {
     } = this.props
 
     // const isNeedApproval = project.status === PROJECT_STATUS_IN_REVIEW
-    const canShowApproval = isCustomer
+    const isNeedApproval = !milestones.filter(ms => ms.selected === true).find(ms => !(ms.status === PHASE_STATUS_IN_REVIEW))
+    const canShowApproval = isCustomer && isNeedApproval
 
     const canEdit = (isUpdatable || canShowApproval) && this.getSelectCount() > 0
+    const canShowSelectionStatus = canEdit || (isCustomer && this.getSelectCount() > 0)
 
     return (
       <div>
@@ -321,7 +323,7 @@ class ManageMilestones extends React.Component {
                 <MilestoneHeaderRow
                   milestones={milestones}
                   onChangeMilestones={onChangeMilestones}
-                  isUpdatable={isUpdatable || canShowApproval}
+                  isUpdatable={isUpdatable || isCustomer}
                 />
               </thead>
               <tbody>
