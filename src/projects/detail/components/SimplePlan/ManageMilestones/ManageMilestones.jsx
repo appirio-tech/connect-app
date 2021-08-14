@@ -258,10 +258,13 @@ class ManageMilestones extends React.Component {
     } = this.props
 
     // const isNeedApproval = project.status === PROJECT_STATUS_IN_REVIEW
-    const canShowApproval = isCustomer
+    const isNeedApproval = !milestones.filter(ms => ms.selected === true).find(ms => !(ms.status === PHASE_STATUS_IN_REVIEW))
+    const canShowApproval = isCustomer && isNeedApproval
 
     const canEdit = (isUpdatable || canShowApproval) && this.getSelectCount() > 0
     const disableDeleteAction = this.getSelectCount() > 1
+    const canShowSelectionStatus = canEdit || (isCustomer && this.getSelectCount() > 0)
+
     return (
       <div>
         <div styleName="toolbar">
@@ -272,7 +275,7 @@ class ManageMilestones extends React.Component {
             <IconGnattView />
           </button>
           <div styleName="separator" /> */}
-          {this.getSelectCount() > 0 ? <div styleName="unselect-bottom" onClick={this.onUnselectAll}>
+          {(this.getSelectCount() > 0 || canShowSelectionStatus)? <div styleName="unselect-bottom" onClick={this.onUnselectAll}>
             <IconUnselect /> {this.getSelectCount()} PROJECT(S) SELECTED
           </div>: null }
           { canEdit ? (() => canShowApproval ? 
@@ -326,13 +329,13 @@ class ManageMilestones extends React.Component {
                 <col style={{ width: '11%' }} />{/* END DATE */}
                 <col style={{ width: '10%' }} />{/* STATUS */}
                 <col style={{ width: '13%' }} />{/* COPILOTS */}
-                {(isUpdatable || canShowApproval) && (<col style={{ width: '64px' }} />)}{/* ACTION */}
+                {(isUpdatable || isCustomer) && (<col style={{ width: '64px' }} />)}{/* ACTION */}
               </colgroup>
               <thead>
                 <MilestoneHeaderRow
                   milestones={milestones}
                   onChangeMilestones={onChangeMilestones}
-                  isUpdatable={isUpdatable || canShowApproval}
+                  isUpdatable={isUpdatable || isCustomer}
                 />
               </thead>
               <tbody>
