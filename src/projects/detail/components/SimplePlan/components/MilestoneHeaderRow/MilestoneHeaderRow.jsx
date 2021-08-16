@@ -9,7 +9,7 @@ import './MilestoneHeaderRow.scss'
 
 const TCFormFields = FormsyForm.Fields
 
-function MilestoneHeaderRow ({ isEditingMilestone, milestones, onChangeMilestones, isUpdatable }) {
+function MilestoneHeaderRow ({ milestones, onChangeMilestones, isUpdatable }) {
   const checked = milestones.reduce(
     (selected, milestone) => selected = selected && milestone.selected,
     milestones.length > 0
@@ -32,7 +32,7 @@ function MilestoneHeaderRow ({ isEditingMilestone, milestones, onChangeMilestone
   return (
     <tr styleName="milestone-row">
       {isUpdatable ? <th />: null}
-      {isEditingMilestone? <th /> :<th>
+      <th>
         <TCFormFields.Checkbox
           name="select-all"
           value={checked}
@@ -40,7 +40,7 @@ function MilestoneHeaderRow ({ isEditingMilestone, milestones, onChangeMilestone
             value ? selectAll() : unselectAll()
           }}
         />
-      </th>}
+      </th>
       <th>MILESTONE</th>
       <th>DESCRIPTION</th>
       <th>START DATE</th>
@@ -54,7 +54,6 @@ function MilestoneHeaderRow ({ isEditingMilestone, milestones, onChangeMilestone
 
 MilestoneHeaderRow.propTypes = {
   onChangeMilestones: PT.func,
-  isEditingMilestone: PT.bool,
 }
 
 export default MilestoneHeaderRow
