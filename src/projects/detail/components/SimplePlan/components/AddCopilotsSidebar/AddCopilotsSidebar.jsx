@@ -26,8 +26,12 @@ function AddCopilotsSidebar({
   const projectMemberOptions = projectMembers.map(projectMember => ({
     label: projectMember.handle,
     value: projectMember
-  })).filter(option => copilots.indexOf(option.value) === -1 && option.value.role === PROJECT_ROLE_COPILOT)
-
+  })).filter(
+    // check if project member was not added
+    option => copilots.findIndex(copilot => copilot.userId === option.value.userId) === -1 &&
+    // check if project member role is copilot
+    option.value.role === PROJECT_ROLE_COPILOT
+  )
 
   return (
     <aside styleName="add-copilots-sidebar">

@@ -1,0 +1,60 @@
+@import '~styles/variables';
+
+.confirm-delete-milestone {
+  width: 204px;
+  padding: 15px 8px 12px 12px;
+  color: $tc-black;
+  background-color: $tc-white;
+  border: 1px solid $tc-gray-50;
+  border-radius: 3 * $corner-radius;
+  box-shadow: 0 3px 6px rbga(#000, .16);
+
+  .icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    color: red;
+    stroke: currentColor;
+
+    * {
+      stroke: inherit;
+    }
+  }
+  .input-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    >input {
+      height: 26px;
+      line-height: 26px;
+      width: 80px;
+      margin: 0 10px 0 0;
+    }
+  }
+
+
+  .title {
+    @include roboto-bold;
+
+    display: flex;
+    margin-bottom: 8px;
+    font-size: $tc-body-xs;
+    line-height: 15px;
+  }
+
+  .text {
+    @include roboto;
+
+    margin-bottom: 12px;
+    font-size: $tc-body-sm;
+    line-height: 16px;
+  }
+
+  .footer {
+    button + button {
+      margin-left: 10px;
+    }
+  }
+}
+
+

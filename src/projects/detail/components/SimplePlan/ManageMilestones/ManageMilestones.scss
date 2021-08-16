@@ -7,6 +7,51 @@
   padding: 15px 0 20px;
   min-height: 65px;
 
+  .unselect-bottom {
+    height: 24px;
+    background-color: #00B7F8;
+    border-radius: 24px;
+    color: #FFF;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    padding: 0 5px;
+    cursor: pointer;
+    svg {
+      margin-right: 4px;
+      height: 13px;
+      width: 13px;
+    }
+    margin-right: 20px;
+  }
+  .line {
+    width: 1px;
+    height: 20px;
+    display: inline-block;
+    border: 1px solid #C4C4C4;
+    margin-right: 10px;
+  }
+  .delete-button {
+    cursor: pointer;
+    margin: 0 10px;
+
+    > span > button {
+      height: 20px;
+      width: 20px;
+      svg {
+        height: 20px;
+        width: 20px;
+      }
+    }
+  }
+  .icon {
+    margin: 0 10px;
+    cursor: pointer;
+    svg {
+      margin: 0 8px;
+    }
+  }
+
   .primary-button {
     margin-left: 12px;
   }
@@ -22,6 +67,10 @@
     margin-left: 20px;
     background-color: $tc-gray-50;
   }
+}
+
+.copilot-icon {
+  width: 20px;
 }
 
 .view-mode {
@@ -47,23 +96,20 @@
     text-align: left;
     vertical-align: middle;
 
-    // checkbox
+    // expand arrow
     &:nth-child(1) {}
+    // checkbox
+    &:nth-child(2) {}
     // milestone
-    &:nth-child(2) { padding-left: 5px; }
+    &:nth-child(3) { padding-left: 5px; }
     // description
-    &:nth-child(3) { padding-left: 15px; }
+    &:nth-child(4) { padding-left: 15px; }
     // start date
-    &:nth-child(4) { padding-left: 25px; }
+    &:nth-child(5) { padding-left: 25px; }
     // end date
-    &:nth-child(5) { padding-left: 15px; }
+    &:nth-child(6) { padding-left: 15px; }
     // status
-    &:nth-child(6) { padding-left: 20px; }
-    // budget
-    &:nth-child(7) {
-      padding-left: 20px;
-      :global(.milestone-budget-prefix-icon) { left: 25px; }
-    }
+    &:nth-child(7) { padding-left: 20px; }
     // copilot
     &:nth-child(8) { padding-left: 25px; }
   }
@@ -72,9 +118,9 @@
     th,
     td {
       // description
-      &:nth-child(3) { padding-left: 10px; }
+      &:nth-child(4) { padding-left: 10px; }
       // end date
-      &:nth-child(5) {  padding-left: 10px; }
+      &:nth-child(6) {  padding-left: 10px; }
     }
   }
 
@@ -82,26 +128,13 @@
     th,
     td {
       // description
-      &:nth-child(3) { padding-left: 5px; }
+      &:nth-child(4) { padding-left: 5px; }
       // start date
-      &:nth-child(4) { padding-left: 10px; }
+      &:nth-child(5) { padding-left: 10px; }
       // end date
-      &:nth-child(5) { padding-left: 5px; }
+      &:nth-child(6) { padding-left: 5px; }
       // status
-      &:nth-child(6) { padding-left: 10px; }
-      // budget
-      &:nth-child(7) {
-        padding-left: 10px;
-        :global {
-          .milestone-budget-prefix-icon {
-            left: 15px;
-          }
-          .tc-file-field__inputs {
-            min-width: 64px;
-            padding-left: 10px;
-          }
-        }
-      }
+      &:nth-child(7) { padding-left: 10px; }
       // copilot
       &:nth-child(8) { padding-left: 15px; }
     }
@@ -110,9 +143,9 @@
       th,
       td {
         // description
-        &:nth-child(3) { padding-left: 5px; }
+        &:nth-child(4) { padding-left: 5px; }
         // end date
-        &:nth-child(5) {  padding-left: 5px; }
+        &:nth-child(6) {  padding-left: 5px; }
       }
     }
   }

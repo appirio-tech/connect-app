@@ -19,7 +19,8 @@ function MilestoneCopilots({
   copilots,
   projectMembers,
   onAdd,
-  onRemove
+  onRemove, 
+  customButton
 }) {
   const ScrollLock = React.createClass ({
     componentDidMount() {
@@ -40,9 +41,9 @@ function MilestoneCopilots({
 
   return edit ? (
     <span styleName="milestone-copilots">
-      <button type="button" className="tc-btn tc-btn-default" styleName="edit-copilots-button" onClick={() => setOpen(!open)}>
+      {customButton ? React.cloneElement(customButton, {onClick: () => {setOpen(!open)}}) : <button type="button" className="tc-btn tc-btn-default" styleName="edit-copilots-button" onClick={() => setOpen(!open)}>
         <IconDots />
-      </button>
+      </button> }
       {open  && (
         <Gateway into="right-sidebar">
           <ScrollLock />
@@ -66,6 +67,7 @@ MilestoneCopilots.propTypes = {
   edit: PT.bool,
   copilots: PT.arrayOf(PT.shape()),
   projectMembers: PT.arrayOf(PT.shape()),
+  customButton: PT.element,
   onAdd: PT.func,
   onRemove: PT.func,
 }
