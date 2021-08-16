@@ -29,17 +29,11 @@
       padding: 4px 0;
       text-align: center;
       color: #fff;
-      &.Submission { background-color: $tc-light-blue-100; }
-      &.IterativeReview { background-color: $tc-green-100; }
-      &.Registration { background-color: $tc-orange-100; }
-      &.Appeals { background-color: $tc-orange-100; }
-      &.AppealsResponse { background-color: $tc-orange-100; }
-      &.Post-Mortem { background-color: $tc-orange-100; }
+      &.New { background-color: $tc-yellow-100; }
+      &.Active { background-color: $tc-green-100; }
       &.Draft { background-color: $tc-gray-20; }
-      &.Stalled { background-color: $tc-gray-20; }
-      &.Completed { background-color: $tc-green-100; }
-      &.Review { background-color: $tc-orange-100; }
-      &.CheckpointReview { background-color: $tc-orange-100; }
+      &.Completed { background-color: $tc-dark-blue-100; }
+      &.Cancelled { background-color: $tc-gray-100; }
     }
 
   }
