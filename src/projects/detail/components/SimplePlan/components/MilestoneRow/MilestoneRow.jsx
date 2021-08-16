@@ -26,6 +26,7 @@ const TCFormFields = FormsyForm.Fields
 
 function MilestoneRow({
   isExpand,
+  isEditingMilestone,
   milestone,
   rowId,
   onExpand,
@@ -51,7 +52,7 @@ function MilestoneRow({
   return edit ? (
     <tr styleName="milestone-row" className="edit-milestone-row">
       {isUpdatable ? <td /> : null}
-      <td styleName="checkbox">
+      {isEditingMilestone ? <td/ >: <td styleName="checkbox">
         <TCFormFields.Checkbox
           name={`select-${rowId}`}
           value={milestone.selected}
@@ -59,7 +60,7 @@ function MilestoneRow({
             onChange({ ...milestone, selected: value })
           }}
         />
-      </td>
+      </td>}
       <td styleName="milestone">
         <TCFormFields.TextInput
           validations={{
@@ -252,7 +253,7 @@ function MilestoneRow({
   ) : (
     <tr styleName="milestone-row">
       {isUpdatable ? <td styleName="expand" onClick={() => onExpand(!isExpand, milestone)}>{isExpand ? <IconClose />: <IconExpand />}</td>: null}
-      <td styleName="checkbox">
+      {isEditingMilestone ? <td/> : <td styleName="checkbox">
         <TCFormFields.Checkbox
           name={`select-${rowId}`}
           value={milestone.selected}
@@ -260,7 +261,7 @@ function MilestoneRow({
             onChange({ ...milestone, selected: value })
           }}
         />
-      </td>
+      </td>}
       <td styleName="milestone">
         {milestone.name}
       </td>
@@ -309,6 +310,7 @@ function MilestoneRow({
 
 MilestoneRow.propTypes = {
   milestone: PT.shape(),
+  isEditingMilestone: PT.bool,
   rowId: PT.string,
   onChange: PT.func,
   onSave: PT.func,
