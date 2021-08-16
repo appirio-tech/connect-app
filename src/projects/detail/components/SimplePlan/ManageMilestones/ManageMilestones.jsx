@@ -52,7 +52,7 @@ class ManageMilestones extends React.Component {
 
     
     if (days > 0) {
-      const seletedMilestones = _.filter(milestones, m => m.selected)
+      const seletedMilestones = _.filter(milestones, m => m.selected && !m.edit)
       _.forEach(seletedMilestones, m => {
         m.startDate = moment(m.startDate).add(days, 'days')
         m.endDate = moment(m.endDate).add(days, 'days')
@@ -215,7 +215,7 @@ class ManageMilestones extends React.Component {
   }
   getSelectCount() {
     const { milestones } = this.props
-    const seletedMilestones = _.filter(milestones, m => m.selected)
+    const seletedMilestones = _.filter(milestones, m => m.selected && !m.edit)
     return seletedMilestones.length
   }
 
@@ -247,7 +247,6 @@ class ManageMilestones extends React.Component {
       isUpdatable,
     } = this.props
 
-    const isEditingMilestone = !!_.find(milestones, m => m.edit)
     const canEdit = isUpdatable && this.getSelectCount() > 0
     return (
       <div>
@@ -287,7 +286,6 @@ class ManageMilestones extends React.Component {
             <table styleName="milestones-table">
               <thead>
                 <MilestoneHeaderRow
-                  isEditingMilestone={isEditingMilestone}
                   milestones={milestones}
                   onChangeMilestones={onChangeMilestones}
                   isUpdatable={isUpdatable}
@@ -297,7 +295,7 @@ class ManageMilestones extends React.Component {
                 {milestones.map((milestone) => (
                   [
                     <MilestoneRow
-                      isEditingMilestone={isEditingMilestone}
+                      isEditingMilestone={!!milestone.edit}
                       milestone={milestone}
                       key={milestone.id}
                       rowId={`${milestone.id}`}
