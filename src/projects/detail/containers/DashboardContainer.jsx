@@ -162,7 +162,7 @@ class DashboardContainer extends React.Component {
     Promise.all(reqs).then((...args) => {console.log('onApproveMilestones t', args)})
       .catch(e => console.log('onApproveMilestones f', e))
       .finally(() => {
-        this.onChangeMilestones(null);
+        this.onChangeMilestones(null)
       })
   }
 

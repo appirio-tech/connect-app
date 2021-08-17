@@ -8,7 +8,7 @@ import IconReject from '../../../../../../assets/icons/icon-ui-reject.svg'
 
 import { Manager, Popper } from 'react-popper'
 import ConfirmRejectMilestone from '../ConfirmRejectMilestone/ConfirmRejectMilestone'
-import "./MilestoneApprovalButton.scss"
+import './MilestoneApprovalButton.scss'
 
 class MilestoneApprovalButton extends React.Component {
   constructor(props) {
