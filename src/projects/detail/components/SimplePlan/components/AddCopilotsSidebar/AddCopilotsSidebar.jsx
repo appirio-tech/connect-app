@@ -27,7 +27,7 @@ class AddCopilotsSidebar extends React.Component {
       return
     }
 
-    onClose();    
+    onClose()    
   }
 
   componentDidMount() {
@@ -40,13 +40,13 @@ class AddCopilotsSidebar extends React.Component {
 
   render() {
     const {
-        memberToAdd,
-        setMemberToAdd,
-        copilots,
-        projectMembers,
-        onClose,
-        onAdd,
-        onRemove
+      memberToAdd,
+      setMemberToAdd,
+      copilots,
+      projectMembers,
+      onClose,
+      onAdd,
+      onRemove
     } = this.props
     const canManageCopilots = hasPermission(PERMISSIONS.MANAGE_COPILOTS)
     const canRemoveCopilots = hasPermission(PERMISSIONS.REMOVE_COPILOTS)
