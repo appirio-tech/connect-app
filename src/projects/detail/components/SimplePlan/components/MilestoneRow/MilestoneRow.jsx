@@ -39,6 +39,7 @@ function MilestoneRow({
   isCreatingRow,
   isUpdatable,
   phaseMembers,
+  disableDeleteAction
 }) {
   const phaseStatusOptions = PHASE_STATUS_OPTIONS
   const edit = milestone.edit
@@ -294,6 +295,7 @@ function MilestoneRow({
               <IconPencil />
             </button>
             <MilestoneDeleteButton
+              disabled={disableDeleteAction}
               onDelete={() => {
                 onRemove(milestone.id)
               }}
@@ -322,6 +324,7 @@ MilestoneRow.propTypes = {
   allMilestones: PT.arrayOf(PT.shape()),
   isCreatingRow: PT.bool,
   isUpdatable: PT.bool,
+  disableDeleteAction: PT.bool,
   members: PT.object,
 }
 

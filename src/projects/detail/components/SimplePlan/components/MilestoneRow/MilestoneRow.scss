@@ -153,9 +153,17 @@
     > *:not(:last-child) {
       margin-right: 10px;
     }
+
+    button {
+      color: black;
+    }
     svg {
       width: 14px;
       height: 14px;
+
+      path {
+        fill: currentColor
+      }
     }
   }
 }

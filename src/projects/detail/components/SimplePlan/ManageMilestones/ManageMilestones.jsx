@@ -248,6 +248,7 @@ class ManageMilestones extends React.Component {
     } = this.props
 
     const canEdit = isUpdatable && this.getSelectCount() > 0
+    const disableDeleteAction = this.getSelectCount() > 1
     return (
       <div>
         <div styleName="toolbar">
@@ -309,6 +310,7 @@ class ManageMilestones extends React.Component {
                       allMilestones={milestones}
                       isCreatingRow={`${milestone.id}`.startsWith('new-milestone')}
                       isUpdatable={isUpdatable}
+                      disableDeleteAction={disableDeleteAction}
                       phaseMembers={milestone.members}
                     />,
                     ...this.renderChallengeTable(milestone)
