@@ -191,7 +191,7 @@ class ManageMilestones extends React.Component {
     if (!challengeIds.length) {
       return [
         <MilestoneChallengeHeader key="header" isUpdatable={isUpdatable}/>,
-        <MilestoneChallengeRow isEmpty key="row" isUpdatable={isUpdatable}/>
+        <MilestoneChallengeRow milestone={milestone} isEmpty key="row" isUpdatable={isUpdatable}/>
       ]
     }
 
@@ -199,13 +199,13 @@ class ManageMilestones extends React.Component {
     if (milestone.isLoadingChallenges) {
       return [
         <MilestoneChallengeHeader key="header" isUpdatable={isUpdatable}/>,
-        <MilestoneChallengeRow isLoading key="row" isUpdatable={isUpdatable}/>,
+        <MilestoneChallengeRow milestone={milestone} isLoading key="row" isUpdatable={isUpdatable}/>,
         <MilestoneChallengeFooter isLoading key="footer" onLoadChallengesByPage={this.onLoadChallengesByPage} isUpdatable={isUpdatable}/>
       ]
     }
 
     const rows = _.map(milestone.challenges, (c) => {
-      return <MilestoneChallengeRow key={c.id} challenge={c} isUpdatable={isUpdatable}/>
+      return <MilestoneChallengeRow milestone={milestone} key={c.id} challenge={c} isUpdatable={isUpdatable}/>
     })
     return [
       <MilestoneChallengeHeader key="header" isUpdatable={isUpdatable}/>,
