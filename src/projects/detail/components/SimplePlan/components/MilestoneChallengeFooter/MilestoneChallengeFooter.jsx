@@ -75,7 +75,7 @@ class MilestoneChallengeFooter extends React.Component {
         <td colSpan={isUpdatable? '9': '8'}>
           <div styleName="challenge-table-row">
             <div styleName="view-button">
-              <a href={url}>
+              <a href={url} target="_blank">
                 VIEW CHALLENGES
               </a>
             </div>
