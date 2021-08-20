@@ -43,7 +43,7 @@ function MilestoneRow({
   isCreatingRow,
   isUpdatable,
   phaseMembers,
-  disableDeleteAction
+  disableDeleteAction,
   isCustomer
 }) {
   const isNeedApproval = milestone.status === PHASE_STATUS_IN_REVIEW
