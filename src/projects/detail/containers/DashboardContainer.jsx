@@ -32,6 +32,7 @@ import {
   createPhaseAndMilestones,
   createPhaseWithoutTimeline,
   getChallengesByIds,
+  approveMilestone,
 } from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
@@ -67,7 +68,8 @@ import {
   SCREEN_BREAKPOINT_MD,
   CODER_BOT_USERID,
   PROJECT_TYPE_TALENT_AS_A_SERVICE,
-  PHASE_PRODUCT_TEMPLATE_ID
+  PHASE_PRODUCT_TEMPLATE_ID,
+  PHASE_STATUS_REVIEWED
 } from '../../../config/constants'
 
 const SYSTEM_USER = {
@@ -83,7 +85,8 @@ class DashboardContainer extends React.Component {
 
     this.state = {
       open: false,
-      createGameplanPhases: null
+      createGameplanPhases: null,
+      visiblePhases: null
     }
     this.onNotificationRead = this.onNotificationRead.bind(this)
     this.toggleDrawer = this.toggleDrawer.bind(this)
@@ -151,7 +154,7 @@ class DashboardContainer extends React.Component {
   }
 
   onApproveMilestones({type, comment, milestones}) {
-    const { executePhaseApproval } = this.props
+    const { executePhaseApproval, approveMilestone } = this.props
     const reqs = []
     milestones.forEach( ms => { 
       reqs.push(
@@ -159,10 +162,24 @@ class DashboardContainer extends React.Component {
       )
       console.log('type-comment', type, comment, ms)
     })
-    Promise.all(reqs).then((...args) => {console.log('onApproveMilestones t', args)})
-      .catch(e => console.log('onApproveMilestones f', e))
+    const updatedPhases = this.state.createGameplanPhases || this.state.visiblePhases || []
+    Promise.all(reqs).then(() => {
+      milestones.forEach(ms => {
+        const index = updatedPhases.findIndex(phase => phase.id === ms.id)
+        updatedPhases.splice(index, 1, {
+          ...updatedPhases[index],
+          status: PHASE_STATUS_REVIEWED
+        })
+      })
+
+      approveMilestone()
+    })
+      .catch((e) => {
+        console.log('onApproveMilestones f', e)
+        approveMilestone(false)
+      })
       .finally(() => {
-        this.onChangeMilestones(null)
+        this.onChangeMilestones(updatedPhases)
       })
   }
 
@@ -350,6 +367,7 @@ class DashboardContainer extends React.Component {
     const visiblePhases = phases && phases.filter((phase) => (
       hasPermission(PERMISSIONS.VIEW_DRAFT_PHASES) || phase.status !== PHASE_STATUS_DRAFT
     ))
+    this.state.visiblePhases = visiblePhases
     const visiblePhasesIds = _.map(visiblePhases, 'id')
     const visiblePhasesNonDirty = phasesNonDirty && phasesNonDirty.filter((phaseNonDirty) => (
       _.includes(visiblePhasesIds, phaseNonDirty.id)
@@ -565,7 +583,8 @@ const mapDispatchToProps = {
   removeProjectAttachment,
   updatePhase,
   updatePhaseMembers,
-  executePhaseApproval
+  executePhaseApproval,
+  approveMilestone
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(DashboardContainer))

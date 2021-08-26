@@ -71,7 +71,9 @@ import {
   CREATE_PROJECT_PHASE_TIMELINE_MILESTONES,
   LOAD_PROJECT_MEMBER,
   ES_REINDEX_DELAY,
-  CREATE_PROJECT_PHASE
+  CREATE_PROJECT_PHASE,
+  CUSTOMER_APPROVE_MILESTONE_SUCCESS,
+  CUSTOMER_APPROVE_MILESTONE_FAILURE
 } from '../../config/constants'
 import {
   updateProductMilestone,
@@ -515,9 +517,27 @@ export function executePhaseApproval(projectId, phaseId, updatedProps, phaseInde
     const state = getState()
     phaseIndex = phaseIndex ? phaseIndex : _.findIndex(state.projectState.phases, { id: phaseId })
 
-    createPhaseApprovalAPI(projectId, phaseId, updatedProps, phaseIndex).then(() => {
-      dispatch(loadProjectPhasesWithProducts(projectId))
+    return createPhaseApprovalAPI(projectId, phaseId, updatedProps, phaseIndex).then(() => {
+    }).catch(() => {
+      return Promise.reject(new Error('Fail to approve milestone'))
     })
+  }
+}
+
+/**
+ * Dispatch alert message after individual or bulk milestone approval
+ *
+ * @param {Boolean} success is milestone updated successfully
+ *
+ * @return {Promise} phase
+ */
+export function approveMilestone(success = true) {
+  return (dispatch) => {
+    if (success) {
+      dispatch({ type: CUSTOMER_APPROVE_MILESTONE_SUCCESS })
+    } else {
+      dispatch({ type: CUSTOMER_APPROVE_MILESTONE_FAILURE })
+    }
   }
 }
 
