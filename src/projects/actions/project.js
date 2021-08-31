@@ -73,7 +73,13 @@ import {
   ES_REINDEX_DELAY,
   CREATE_PROJECT_PHASE,
   CUSTOMER_APPROVE_MILESTONE_SUCCESS,
-  CUSTOMER_APPROVE_MILESTONE_FAILURE
+  CUSTOMER_APPROVE_MILESTONE_FAILURE,
+  CUSTOMER_APPROVE_MILESTONE_PENDING,
+  CUSTOMER_APPROVE_MILESTONE_FINISHED,
+  CUSTOMER_APPROVE_MILESTONE_APPROVE_SUCCESS,
+  CUSTOMER_APPROVE_MILESTONE_REJECT_FAILURE,
+  CUSTOMER_APPROVE_MILESTONE_APPROVE_FAILURE,
+  CUSTOMER_APPROVE_MILESTONE_REJECT_SUCCESS
 } from '../../config/constants'
 import {
   updateProductMilestone,
@@ -516,9 +522,17 @@ export function executePhaseApproval(projectId, phaseId, updatedProps, phaseInde
     console.log('execute update phases')
     const state = getState()
     phaseIndex = phaseIndex ? phaseIndex : _.findIndex(state.projectState.phases, { id: phaseId })
-
+    dispatch({type: CUSTOMER_APPROVE_MILESTONE_PENDING,
+      payload: {phaseId}
+    })
     return createPhaseApprovalAPI(projectId, phaseId, updatedProps, phaseIndex).then(() => {
+      dispatch({type: CUSTOMER_APPROVE_MILESTONE_FINISHED,
+        payload: {phaseId}
+      })
     }).catch(() => {
+      dispatch({type: CUSTOMER_APPROVE_MILESTONE_FINISHED,
+        payload: {phaseId}
+      })
       return Promise.reject(new Error('Fail to approve milestone'))
     })
   }
@@ -531,12 +545,18 @@ export function executePhaseApproval(projectId, phaseId, updatedProps, phaseInde
  *
  * @return {Promise} phase
  */
-export function approveMilestone(success = true) {
+export function approveMilestone(success = true, approvalType) {
   return (dispatch) => {
+    let type = CUSTOMER_APPROVE_MILESTONE_FAILURE
     if (success) {
-      dispatch({ type: CUSTOMER_APPROVE_MILESTONE_SUCCESS })
+      if (approvalType === 'approve') type = CUSTOMER_APPROVE_MILESTONE_APPROVE_SUCCESS
+      else if (approvalType === 'reject') type = CUSTOMER_APPROVE_MILESTONE_REJECT_SUCCESS
+      else type = CUSTOMER_APPROVE_MILESTONE_SUCCESS;
+      dispatch({ type })
     } else {
-      dispatch({ type: CUSTOMER_APPROVE_MILESTONE_FAILURE })
+      if (approvalType === 'approve') type = CUSTOMER_APPROVE_MILESTONE_APPROVE_FAILURE
+      else if (approvalType === 'reject') type = CUSTOMER_APPROVE_MILESTONE_REJECT_FAILURE
+      dispatch({ type })
     }
   }
 }

@@ -35,6 +35,7 @@ class CreateSimplePlan extends React.Component {
       project,
       // phases,
       milestones,
+      milestonesInApproval,
       onChangeMilestones,
       onSaveMilestone,
       onRemoveMilestone,
@@ -72,6 +73,7 @@ class CreateSimplePlan extends React.Component {
           </div>
           <ManageMilestones
             milestones={milestones}
+            milestonesInApproval={milestonesInApproval}
             onGetChallenges={onGetChallenges}
             onChangeMilestones={onChangeMilestones}
             onSaveMilestone={onSaveMilestone}

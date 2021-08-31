@@ -44,7 +44,8 @@ function MilestoneRow({
   isUpdatable,
   phaseMembers,
   disableDeleteAction,
-  isCustomer
+  isCustomer,
+  isApproving
 }) {
   const isNeedApproval = milestone.status === PHASE_STATUS_IN_REVIEW
   const showApproval = isCustomer && isNeedApproval
@@ -360,6 +361,7 @@ function MilestoneRow({
                 showApproval && 
                 <MilestoneApprovalButton 
                   type={'approve'}
+                  disabled={isApproving}
                   onClick={() => {
                     onApprove({type: 'approve', item: milestone})
                   }}
@@ -369,6 +371,7 @@ function MilestoneRow({
                 showApproval && 
                 <MilestoneApprovalButton 
                   type="reject"
+                  disabled={isApproving}
                   onClick={(v) => {
                     onApprove({type: 'reject', comment: v, item: milestone})
                   }}

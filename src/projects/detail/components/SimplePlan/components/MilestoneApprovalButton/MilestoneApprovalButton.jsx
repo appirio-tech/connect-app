@@ -20,7 +20,7 @@ class MilestoneApprovalButton extends React.Component {
   }
 
   render() {
-    const {type, onClick, global, title, hidePoper} = this.props
+    const {type, onClick, global, title, hidePoper, disabled} = this.props
     const color = type === 'approve' ? 'green' : 'red'
 
     return (
@@ -31,6 +31,7 @@ class MilestoneApprovalButton extends React.Component {
           styleName={`icon-button ${
             global ? 'icon-button-global' : ''
           } ${color} ${title ? 'with-title' : ''}`}
+          disabled={disabled}
           onClick={() => {
             if(type === 'reject') {
               this.setState({open: true})

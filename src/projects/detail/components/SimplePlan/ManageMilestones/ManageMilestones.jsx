@@ -251,6 +251,7 @@ class ManageMilestones extends React.Component {
   render() {
     const {
       milestones,
+      milestonesInApproval,
       projectMembers,
       onChangeMilestones,
       isUpdatable,
@@ -285,12 +286,14 @@ class ManageMilestones extends React.Component {
                 <MilestoneApprovalButton key={1} type="approve" 
                   global
                   title={'APPROVE'}
+                  disabled={milestonesInApproval.length > 0}
                   onClick={() => {this.onApprove({type: 'approve'})}}
                 />
               </div>,
               <MilestoneApprovalButton key={2} type="reject" 
                 global
                 title={'REJECT'}
+                disabled={milestonesInApproval.length > 0}
                 onClick={(v) => this.onApprove({type: 'reject', comment: v})}
               />
             ] :
@@ -361,6 +364,7 @@ class ManageMilestones extends React.Component {
                       isCustomer={isCustomer}
                       onApprove={this.onApprove}
                       phaseMembers={milestone.members}
+                      isApproving={milestonesInApproval.indexOf(milestone.id) !== -1}
                     />,
                     ...this.renderChallengeTable(milestone)
                   ]

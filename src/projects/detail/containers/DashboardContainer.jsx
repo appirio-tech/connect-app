@@ -172,11 +172,11 @@ class DashboardContainer extends React.Component {
         })
       })
 
-      approveMilestone()
+      approveMilestone(true, type)
     })
       .catch((e) => {
         console.log('onApproveMilestones f', e)
-        approveMilestone(false)
+        approveMilestone(false, type)
       })
       .finally(() => {
         this.onChangeMilestones(updatedPhases)
@@ -391,6 +391,7 @@ class DashboardContainer extends React.Component {
     )
 
     const milestones = this.state.createGameplanPhases || visiblePhases || []
+    const milestonesInApproval = this.props.milestonesInApproval || []
 
     return (
       <TwoColsLayout>
@@ -517,6 +518,7 @@ class DashboardContainer extends React.Component {
                         project={project}
                         phases={phases}
                         milestones={milestones}
+                        milestonesInApproval={milestonesInApproval}
                         onChangeMilestones={this.onChangeMilestones}
                         onSaveMilestone={this.onSaveMilestone}
                         onGetChallenges={this.onGetChallenges}
@@ -556,6 +558,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     isFeedsLoading: projectTopics.isLoading,
     phasesStates: projectState.phasesStates,
     phasesTopics: topics,
+    milestonesInApproval: projectState.milestonesInApproval,
   }
 }
 

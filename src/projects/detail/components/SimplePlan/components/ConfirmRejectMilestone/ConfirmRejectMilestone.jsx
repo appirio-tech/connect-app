@@ -33,6 +33,7 @@ class ConfirmRejectMilestone extends React.Component {
             type="button"
             className="tc-btn tc-btn-sm"
             onClick={() => onClose(true, this.state.value)}
+            disabled={this.state.value.trim().length === 0}
           >
             DONE
           </button>

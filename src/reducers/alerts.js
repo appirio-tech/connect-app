@@ -73,7 +73,11 @@ import {
   ACTIVATE_SCOPE_CHANGE_FAILURE,
   CREATE_PROJECT_PHASE_SUCCESS,
   CUSTOMER_APPROVE_MILESTONE_SUCCESS,
-  CUSTOMER_APPROVE_MILESTONE_FAILURE
+  CUSTOMER_APPROVE_MILESTONE_FAILURE,
+  CUSTOMER_APPROVE_MILESTONE_APPROVE_SUCCESS,
+  CUSTOMER_APPROVE_MILESTONE_REJECT_SUCCESS,
+  CUSTOMER_APPROVE_MILESTONE_APPROVE_FAILURE,
+  CUSTOMER_APPROVE_MILESTONE_REJECT_FAILURE
 } from '../config/constants'
 /* eslint-enable no-unused-vars */
 
@@ -266,7 +270,23 @@ export default function(state = {}, action) {
     return state
   }
   case CUSTOMER_APPROVE_MILESTONE_SUCCESS:
+    Alert.success('Approved or Rejected Milestones successfully.')
+    return state
+
+  case CUSTOMER_APPROVE_MILESTONE_APPROVE_SUCCESS:
     Alert.success('Approved Milestones successfully.')
+    return state
+  
+  case CUSTOMER_APPROVE_MILESTONE_REJECT_SUCCESS:
+    Alert.success('Rejected Milestones successfully.')
+    return state
+
+  case CUSTOMER_APPROVE_MILESTONE_APPROVE_FAILURE:
+    Alert.success('Unable to Approve Milestone.')
+    return state
+  
+  case CUSTOMER_APPROVE_MILESTONE_REJECT_FAILURE:
+    Alert.success('Unable to Reject Milestone.')
     return state
 
   case CUSTOMER_APPROVE_MILESTONE_FAILURE:
