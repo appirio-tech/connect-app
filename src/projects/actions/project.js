@@ -551,7 +551,7 @@ export function approveMilestone(success = true, approvalType) {
     if (success) {
       if (approvalType === 'approve') type = CUSTOMER_APPROVE_MILESTONE_APPROVE_SUCCESS
       else if (approvalType === 'reject') type = CUSTOMER_APPROVE_MILESTONE_REJECT_SUCCESS
-      else type = CUSTOMER_APPROVE_MILESTONE_SUCCESS;
+      else type = CUSTOMER_APPROVE_MILESTONE_SUCCESS
       dispatch({ type })
     } else {
       if (approvalType === 'approve') type = CUSTOMER_APPROVE_MILESTONE_APPROVE_FAILURE
