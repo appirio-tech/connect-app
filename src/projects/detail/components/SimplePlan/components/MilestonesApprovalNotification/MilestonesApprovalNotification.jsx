@@ -28,6 +28,8 @@ class MilestonesApprovalNotification extends React.Component {
   }
 
   findLatest(approvals) {
+    if(!approvals) return {};
+    
     let d = null
     let maxIndex = 0
     for(let index = 0; index <  approvals.length; index ++) {
