@@ -36,7 +36,7 @@ class MilestoneDeleteButton extends React.Component {
   }
 
   render() {
-    const { onDelete } = this.props
+    const { onDelete, disabled } = this.props
     const { open } = this.state
 
     return (
@@ -45,6 +45,7 @@ class MilestoneDeleteButton extends React.Component {
           type="button"
           className="tc-btn tc-btn-link"
           styleName="icon-button"
+          disabled={disabled}
           onClick={(event) => {
             event.stopPropagation()
 
@@ -84,6 +85,7 @@ class MilestoneDeleteButton extends React.Component {
 
 MilestoneDeleteButton.propTypes = {
   onDelete: PT.func,
+  disabled: PT.bool
 }
 
 export default MilestoneDeleteButton
