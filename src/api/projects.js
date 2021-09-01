@@ -78,7 +78,7 @@ export function getProjectPhases(projectId, query = {}) {
   const params = _.mapValues(query, (param) => encodeURIComponent(param))
 
   return axios.get(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases`, { params })
-    .then(resp => resp.data)
+    .then(resp => {console.log('resp.data', query, resp.data); return resp.data})
 }
 
 /**
@@ -139,6 +139,21 @@ export function updateScopeChangeRequest(projectId, requestId, updatedProps) {
  */
 export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
   return axios.patch(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}`, updatedProps)
+    .then(resp => {
+      return _.extend(resp.data, {phaseIndex})
+    })
+}
+
+/**
+ * Create phase apprvoal
+ * @param  {integer} projectId    project Id
+ * @param  {integer} phaseId    phase Id
+ * @param  {object} updatedProps updated phase properties
+ * @param  {integer} phaseIndex index of phase in phase list redux store
+ * @return {promise}              created phase approval
+ */
+export function createPhaseApproval(projectId, phaseId, updatedProps, phaseIndex) {
+  return axios.post(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}/approvals`, updatedProps)
     .then(resp => {
       return _.extend(resp.data, {phaseIndex})
     })

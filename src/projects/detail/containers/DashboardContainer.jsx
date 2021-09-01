@@ -32,6 +32,7 @@ import {
   createPhaseAndMilestones,
   createPhaseWithoutTimeline,
   getChallengesByIds,
+  approveMilestone,
 } from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
@@ -48,7 +49,7 @@ import NotificationsReader from '../../../components/NotificationsReader'
 import { hasPermission } from '../../../helpers/permissions'
 import { getProjectTemplateById } from '../../../helpers/templates'
 import { PERMISSIONS } from '../../../config/permissions'
-import { updateProject, fireProjectDirty, fireProjectDirtyUndo, updatePhase } from '../../actions/project'
+import { updateProject, fireProjectDirty, fireProjectDirtyUndo, updatePhase, executePhaseApproval } from '../../actions/project'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import ProjectEstimation from '../../create/components/ProjectEstimation'
 import CreateSimplePlan from '../components/SimplePlan/CreateSimplePlan'
@@ -67,7 +68,8 @@ import {
   SCREEN_BREAKPOINT_MD,
   CODER_BOT_USERID,
   PROJECT_TYPE_TALENT_AS_A_SERVICE,
-  PHASE_PRODUCT_TEMPLATE_ID
+  PHASE_PRODUCT_TEMPLATE_ID,
+  PHASE_STATUS_REVIEWED
 } from '../../../config/constants'
 
 const SYSTEM_USER = {
@@ -84,6 +86,7 @@ class DashboardContainer extends React.Component {
     this.state = {
       open: false,
       createGameplanPhases: null,
+      visiblePhases: null
     }
     this.onNotificationRead = this.onNotificationRead.bind(this)
     this.toggleDrawer = this.toggleDrawer.bind(this)
@@ -92,6 +95,7 @@ class DashboardContainer extends React.Component {
     this.onSaveMilestone = this.onSaveMilestone.bind(this)
     this.onRemoveMilestone = this.onRemoveMilestone.bind(this)
     this.onGetChallenges = this.onGetChallenges.bind(this)
+    this.onApproveMilestones = this.onApproveMilestones.bind(this)
   }
   onGetChallenges(milestoneId, challengeIds) {
     this.props.getChallengesByIds(milestoneId, challengeIds)
@@ -147,6 +151,36 @@ class DashboardContainer extends React.Component {
 
   onChangeMilestones(milestones) {
     this.setState({createGameplanPhases: milestones})
+  }
+
+  onApproveMilestones({type, comment, milestones}) {
+    const { executePhaseApproval, approveMilestone } = this.props
+    const reqs = []
+    milestones.forEach( ms => { 
+      reqs.push(
+        executePhaseApproval(ms.projectId, ms.id, {decision: type, comment})
+      )
+      console.log('type-comment', type, comment, ms)
+    })
+    const updatedPhases = this.state.createGameplanPhases || this.state.visiblePhases || []
+    Promise.all(reqs).then(() => {
+      milestones.forEach(ms => {
+        const index = updatedPhases.findIndex(phase => phase.id === ms.id)
+        updatedPhases.splice(index, 1, {
+          ...updatedPhases[index],
+          status: PHASE_STATUS_REVIEWED
+        })
+      })
+
+      approveMilestone(true, type)
+    })
+      .catch((e) => {
+        console.log('onApproveMilestones f', e)
+        approveMilestone(false, type)
+      })
+      .finally(() => {
+        this.onChangeMilestones(updatedPhases)
+      })
   }
 
   onSaveMilestone(id) {
@@ -333,6 +367,7 @@ class DashboardContainer extends React.Component {
     const visiblePhases = phases && phases.filter((phase) => (
       hasPermission(PERMISSIONS.VIEW_DRAFT_PHASES) || phase.status !== PHASE_STATUS_DRAFT
     ))
+    this.state.visiblePhases = visiblePhases
     const visiblePhasesIds = _.map(visiblePhases, 'id')
     const visiblePhasesNonDirty = phasesNonDirty && phasesNonDirty.filter((phaseNonDirty) => (
       _.includes(visiblePhasesIds, phaseNonDirty.id)
@@ -354,6 +389,9 @@ class DashboardContainer extends React.Component {
         isProjectProcessing={isProcessing}
       />
     )
+
+    const milestones = this.state.createGameplanPhases || visiblePhases || []
+    const milestonesInApproval = this.props.milestonesInApproval || []
 
     return (
       <TwoColsLayout>
@@ -479,11 +517,13 @@ class DashboardContainer extends React.Component {
                         isCustomer={!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)}
                         project={project}
                         phases={phases}
-                        milestones={this.state.createGameplanPhases || visiblePhases || []}
+                        milestones={milestones}
+                        milestonesInApproval={milestonesInApproval}
                         onChangeMilestones={this.onChangeMilestones}
                         onSaveMilestone={this.onSaveMilestone}
                         onGetChallenges={this.onGetChallenges}
                         onRemoveMilestone={this.onRemoveMilestone}
+                        onApproveMilestones={this.onApproveMilestones}
                       />
                     )
                   })()}
@@ -518,6 +558,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
     isFeedsLoading: projectTopics.isLoading,
     phasesStates: projectState.phasesStates,
     phasesTopics: topics,
+    milestonesInApproval: projectState.milestonesInApproval,
   }
 }
 
@@ -545,6 +586,8 @@ const mapDispatchToProps = {
   removeProjectAttachment,
   updatePhase,
   updatePhaseMembers,
+  executePhaseApproval,
+  approveMilestone
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(DashboardContainer))

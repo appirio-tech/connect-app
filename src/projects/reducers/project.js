@@ -26,7 +26,7 @@ import {
   ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING,
   UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION,
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS, APPROVE_SCOPE_CHANGE_SUCCESS, REJECT_SCOPE_CHANGE_SUCCESS, CANCEL_SCOPE_CHANGE_SUCCESS, ACTIVATE_SCOPE_CHANGE_SUCCESS,
-  LOAD_PROJECT_MEMBERS_SUCCESS, LOAD_PROJECT_MEMBER_INVITES_SUCCESS, LOAD_PROJECT_MEMBER_SUCCESS, CREATE_PROJECT_PHASE_PENDING, CREATE_PROJECT_PHASE_SUCCESS,
+  LOAD_PROJECT_MEMBERS_SUCCESS, LOAD_PROJECT_MEMBER_INVITES_SUCCESS, LOAD_PROJECT_MEMBER_SUCCESS, CREATE_PROJECT_PHASE_PENDING, CREATE_PROJECT_PHASE_SUCCESS, CUSTOMER_APPROVE_MILESTONE_PENDING, CUSTOMER_APPROVE_MILESTONE_FINISHED,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -60,7 +60,8 @@ const initialState = {
   isLoadingPhases: false,
   showUserInvited: undefined, // keep default as `undefined` so we can track when it changes values to false/true on load
   userInvitationId: null,
-  phasesStates: {} // controls opened phases and tabs of the phases
+  phasesStates: {}, // controls opened phases and tabs of the phases
+  milestonesInApproval: []
 }
 
 // NOTE: We should always update projectNonDirty state whenever we update the project state
@@ -434,13 +435,20 @@ export const projectState = function (state=initialState, action) {
         projectAttachments.push(a)
       }
     })
-    return update(state, {
+    // return Object.assign({}, state, {
+    //   project: { attachments : projectAttachments  },
+    //   projectNonDirty: { attachments: projectAttachments  },
+    //   phases: phases ,
+    //   phasesNonDirty: action.payload,
+    //   isLoadingPhases: false
+    // })
+    return {...update(state, {
       project: { attachments : { $set : projectAttachments } },
       projectNonDirty: { attachments: { $set: projectAttachments } },
       phases: { $set:phases },
       phasesNonDirty: { $set: action.payload },
       isLoadingPhases: { $set: false}
-    })
+    })}
   }
 
   case CREATE_SCOPE_CHANGE_REQUEST_SUCCESS: {
@@ -955,6 +963,14 @@ export const projectState = function (state=initialState, action) {
     return Object.assign({}, state, {
       updatingMemberIds: _.remove(state.updatingMemberIds, [action.payload.id]),
       error: parseErrorObj(action)
+    })
+  case CUSTOMER_APPROVE_MILESTONE_PENDING:
+    return Object.assign({}, state, {
+      milestonesInApproval: state.milestonesInApproval.concat([action.payload.phaseId])
+    })
+  case CUSTOMER_APPROVE_MILESTONE_FINISHED:
+    return Object.assign({}, state, {
+      milestonesInApproval: state.milestonesInApproval.filter(x => x !== action.payload.phaseId)
     })
 
   default:

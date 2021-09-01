@@ -157,12 +157,20 @@
     button {
       color: black;
     }
+    
     svg {
-      width: 14px;
-      height: 14px;
+      width: 24px;
+      height: 24px;
 
       path {
         fill: currentColor
+      }
+    }
+
+    &.approve {
+      
+      > *:not(:last-child) {
+        margin-right: 5px;
       }
     }
   }
