@@ -28,7 +28,7 @@ class MilestonesApprovalNotification extends React.Component {
   }
 
   findLatest(approvals) {
-    if(!approvals) return {};
+    if(!approvals) return {}
     
     let d = null
     let maxIndex = 0
