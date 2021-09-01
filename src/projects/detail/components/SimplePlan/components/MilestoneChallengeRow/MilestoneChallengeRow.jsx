@@ -5,12 +5,12 @@ import React from 'react'
 import PT from 'prop-types'
 import moment from 'moment'
 import {
-  CHALLENGE_DETAIL_APP
+  WORK_MANAGER_APP
 } from '../../../../../../../src/config/constants'
 
 import './MilestoneChallengeRow.scss'
 
-function MilestoneChallengeRow({challenge, isEmpty, isLoading, isUpdatable}) {
+function MilestoneChallengeRow({challenge, milestone, isEmpty, isLoading, isUpdatable}) {
 
   if (isEmpty) {
     return (
@@ -41,16 +41,17 @@ function MilestoneChallengeRow({challenge, isEmpty, isLoading, isUpdatable}) {
     status,
     track,
     startDate,
-    endDate
+    endDate,
   } = challenge
 
   const statusLabel = status.indexOf('Cancelled') === 0 ? 'Cancelled': status
+  const url = `${WORK_MANAGER_APP}/${milestone.projectId}/challenges/${id}/view`
 
   return (
     <tr styleName="challenge-table-row-wrap">
       <td colSpan={isUpdatable? '9': '8'}>
         <div styleName="challenge-table-row">
-          <div styleName="title"><a href={`${CHALLENGE_DETAIL_APP}/${id}`}>{name}</a></div>
+          <div styleName="title"><a href={`${url}`} target="_blank">{name}</a></div>
           <div styleName="status"><div styleName={statusLabel}>{statusLabel}</div></div>
           <div styleName="type"><div styleName={track.split(' ').join('')}>{track}</div></div>
           <div styleName="start-date">{moment(startDate).format('MM-DD-YYYY')}</div>
@@ -65,7 +66,8 @@ MilestoneChallengeRow.propTypes = {
   challenge: PT.shape(),
   isUpdatable: PT.bool,
   isEmpty: PT.bool,
-  isLoading: PT.bool
+  isLoading: PT.bool,
+  milestone: PT.shape()
 }
 
 export default MilestoneChallengeRow
