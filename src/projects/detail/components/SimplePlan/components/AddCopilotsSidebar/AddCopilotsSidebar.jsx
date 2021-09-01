@@ -31,11 +31,11 @@ class AddCopilotsSidebar extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.onClickOutside)
+    document.addEventListener('mousedown', this.onClickOutside)
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.onClickOutside)
+    document.removeEventListener('mousedown', this.onClickOutside)
   }
 
   render() {
