@@ -655,7 +655,7 @@ export const PHASE_STATUS_OPTIONS = [
   { label: 'Active', value: PHASE_STATUS_ACTIVE },
   { label: 'Completed', value: PHASE_STATUS_COMPLETED },
   { label: 'Cancelled', value: PHASE_STATUS_CANCELLED },
-  { label: 'Phased', value: PHASE_STATUS_PAUSED },
+  { label: 'Paused', value: PHASE_STATUS_PAUSED },
 ]
 
 // this defines default criteria to filter projects for projects list
