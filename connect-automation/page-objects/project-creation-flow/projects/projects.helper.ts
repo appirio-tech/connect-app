@@ -1,5 +1,7 @@
 import _ = require('lodash');
 import { BrowserHelper } from 'topcoder-testing-lib';
+import * as appconfig from '../../../config/app-config.json';
+import { logger } from '../../../logger/logger';
 import { CommonHelper } from '../../common-page/common.helper';
 import { ISearchProject } from './projects.model';
 import { ProjectsPageObject } from './projects.po';
@@ -18,7 +20,7 @@ export class ProjectsHelper {
   public static async open() {
     await ProjectsPageObject.open();
     await CommonHelper.waitForPageDisplayed();
-    await BrowserHelper.sleep(4000);
+    await CommonHelper.waitForProjectsToGetLoaded();
   }
 
   /**
@@ -27,17 +29,18 @@ export class ProjectsHelper {
   public static async verifyCopilotProjectJoin() {
     // Go to Recently created project
     await CommonHelper.goToRecentlyCreatedProject();
-    await BrowserHelper.sleep(4000);
 
     // Click on Join Project button
+    await BrowserHelper.waitUntilClickableOf(
+      CommonHelper.joinProjectButton,
+      appconfig.Timeout.ElementClickable,
+      appconfig.LoggerErrors.ElementClickable
+    );
     await CommonHelper.joinProjectButton.click();
-    const alertElement = CommonHelper.alertBox();
-    await CommonHelper.waitForSuccessAlert(alertElement);
 
     // Verify Success Alert
-    expect(await CommonHelper.successAlert().getText()).toBe(
-      `YOU'VE SUCCESSFULLY JOINED THE PROJECT.`
-    );
+    const message = await CommonHelper.getAlertMessageAndClosePopup();
+    expect(message).toEqual(`YOU'VE SUCCESSFULLY JOINED THE PROJECT.`);
   }
 
   /**
@@ -45,9 +48,11 @@ export class ProjectsHelper {
    * @param searchProject object for search
    */
   public static async verifyProjectSearch(searchProject: ISearchProject) {
-    await BrowserHelper.sleep(3000);
     const allProjectsBeforeSearch = await this.projectsPageObject.projectTitles();
     const beforeSearchLength = allProjectsBeforeSearch.length;
+
+    await CommonHelper.waitForProjectsToGetLoaded();
+
     const firstProjectBeforeSearch = await allProjectsBeforeSearch[0].getText();
 
     // Search by project name
@@ -65,7 +70,19 @@ export class ProjectsHelper {
     // Search by Handle
     await this.projectsPageObject.fillSearchBar(searchProject.searchByHandle);
     await this.verifyProjectSearchByHandle(searchProject.searchByHandle);
+    await BrowserHelper.waitUntilClickableOf(
+      this.projectsPageObject.clearButton,
+      appconfig.Timeout.ElementClickable,
+      appconfig.LoggerErrors.ElementClickable
+    );
     await this.clickCancelButton();
+    await BrowserHelper.sleep(2000);
+
+    await BrowserHelper.waitUntilClickableOf(
+      this.projectsPageObject.loadMoreNoMoreLabel,
+      appconfig.Timeout.ElementClickable,
+      appconfig.LoggerErrors.ElementClickable
+    );
 
     const allProjectsAfterSearch = await this.projectsPageObject.projectTitles();
 
@@ -101,15 +118,52 @@ export class ProjectsHelper {
     ];
 
     tabNames.map(async (currentTab, index) => {
-      await BrowserHelper.sleep(1000);
-      const activeTab = await this.projectsPageObject.tabElement(currentTab);
-      await activeTab.click();
-      const currentUrl = await BrowserHelper.getCurrentUrl();
+      const currentUrl = await this.waitForTabProjectsToLoad(currentTab, expectedLinkStatuses[index]);
       expect(currentUrl).toContain(expectedLinkStatuses[index]);
     });
   }
 
   private static projectsPageObject: ProjectsPageObject;
+
+  private static async waitForTabProjectsToLoad(currentTab: string, linkToCheck: string) {
+    let loopCount = 0;
+
+    const activeTab = await this.projectsPageObject.tabElement(currentTab);
+    await BrowserHelper.waitUntilClickableOf(
+      this.projectsPageObject.loadMoreNoMoreLabel,
+      appconfig.Timeout.ElementClickable,
+      appconfig.LoggerErrors.ElementClickable
+    );
+
+    const previousText = await this.projectsPageObject.loadMoreNoMoreLabel.getText();
+    await activeTab.click();
+
+    await BrowserHelper.waitUntilClickableOf(
+      this.projectsPageObject.loadMoreNoMoreLabel,
+      appconfig.Timeout.ElementClickable,
+      appconfig.LoggerErrors.ElementClickable
+    );
+
+    while (true) {
+      try {
+        if (loopCount > appconfig.Timeout.ElementClickable) {
+          break;
+        }
+        loopCount++;
+
+        const currentText = await this.projectsPageObject.loadMoreNoMoreLabel.getText();
+        const currentUrl = await BrowserHelper.getCurrentUrl();
+        if (currentText !== previousText && currentUrl.includes(linkToCheck)) {
+          break;
+        } else if (currentText === previousText && currentUrl.includes(linkToCheck)) {
+          break;
+        }
+      } catch {
+        continue;
+      }
+    }
+    return BrowserHelper.getCurrentUrl();
+  }
 
   /**
    * Verify all projects
@@ -121,7 +175,6 @@ export class ProjectsHelper {
       const projectName = await project.getText();
       expect(projectName.toLowerCase()).toContain(searchTerm);
     });
-    await BrowserHelper.sleep(1000);
   }
 
   /**
@@ -129,11 +182,8 @@ export class ProjectsHelper {
    * @param searchTerm search term
    */
   private static async verifyProjectWithRef(searchTerm: string) {
-    await BrowserHelper.sleep(5000);
     const ref = await this.projectsPageObject.refText.getText();
     expect(ref).toBe(searchTerm);
-
-    await BrowserHelper.sleep(1000);
   }
 
   /**
@@ -141,7 +191,6 @@ export class ProjectsHelper {
    */
   private static async clickCancelButton() {
     await this.projectsPageObject.clearButton.click();
-    await BrowserHelper.sleep(1000);
   }
 
   /**
@@ -149,12 +198,13 @@ export class ProjectsHelper {
    * @param memberHandle member handle from test data
    */
   private static async verifyProjectSearchByHandle(memberHandle: string) {
-    await CommonHelper.goToRecentlyCreatedProject();
+    await BrowserHelper.sleep(5000);
+    const firstProject = await CommonHelper.firstProject();
+    await firstProject.click();
     await BrowserHelper.waitUntilVisibilityOf(this.projectsPageObject.firstMember);
-    expect(await this.projectsPageObject.firstMember.getText()).toBe(
+    expect(await this.projectsPageObject.firstMember.getText()).toContain(
       memberHandle
     );
     await this.projectsPageObject.backButton.click();
-    await BrowserHelper.sleep(5000);
   }
 }

@@ -35,7 +35,6 @@ export class LoginPageHelper {
    */
   public static async logout() {
     await this.loginPageObject.logout();
-    await BrowserHelper.sleep(5000);
   }
 
   private static loginPageObject: LoginPage;
