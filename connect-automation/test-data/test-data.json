@@ -57,7 +57,7 @@
         }
     },
     "projectSettings": {
-        "enforceTopcoderNDA": "Yes",
+        "enforceTopcoderNDA": "No",
         "intendedWorkGroups": "Hide Challenges",
         "projectUpdatedMessage": "PROJECT UPDATED.",
         "tagName": "Tag1",
