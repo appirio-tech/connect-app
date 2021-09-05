@@ -27,6 +27,9 @@ export class ProjectSettingsPageHelper {
 		await CommonHelper.waitForPageDisplayed();
 		await CommonHelper.waitForElementToGetDisplayed(this.projectSettingsPageObject.getProjectMenu('Project Settings'));
 
+		// If alert dialog appears, close it
+		await this.checkAlertDialog();
+
 		await this.projectSettingsPageObject.getProjectMenu('Project Settings').click();
 
 		// Waiting for page to get loaded
@@ -432,4 +435,13 @@ export class ProjectSettingsPageHelper {
 	}
 
 	private static projectSettingsPageObject: ProjectSettingsPageObject;
+
+	/**
+	 * Check to see if there is error dialog, If so close it
+	 */
+	private static async checkAlertDialog() {
+		if (await this.projectSettingsPageObject.closeIcon.isPresent()) {
+			await this.projectSettingsPageObject.closeIcon.click();
+		}
+	}
 }

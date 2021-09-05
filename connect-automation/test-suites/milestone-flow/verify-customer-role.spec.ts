@@ -25,7 +25,7 @@ describe('Connect App - Verify Customer Role Tests:', () => {
     await ProjectMilestonePageHelper.open();
   });
 
-  it('[TC_001] Should verify Add Milestone button and Draft Milestone should not be displayed for customer role.', async () => {
+  it('[TC_004] Should verify Add Milestone button and Draft Milestone should not be displayed for customer role.', async () => {
     const customerUser = ConfigHelper.getCustomerUser();
     await ProjectMilestonePageHelper.verifyAddMilestoneButtonAndDraftMilestoneShouldNotBeDisplayed(testData.projectMilestone, customerUser);
   });
