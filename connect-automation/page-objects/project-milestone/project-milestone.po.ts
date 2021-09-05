@@ -96,22 +96,6 @@ export class ProjectMilestonePageObject {
 	}
 
 	/**
-	 * Get Action Row's first columns
-	 */
-	public async actionRow() {
-		const els = await ElementHelper.getAllElementsByClassName('_2BPUCg');
-		return els[0];
-	}
-
-	/**
-	 * Get Save button
-	 */
-	public async saveButton() {
-		const actionRow = await this.actionRow();
-		return ElementHelper.getElementByCss("button[type='submit']", actionRow);
-	}
-
-	/**
 	 * Get Milestone SelectAll Checkbox
 	 */
 	public get milestoneSelectAllCheckbox() {
@@ -195,12 +179,35 @@ export class ProjectMilestonePageObject {
 		return ElementHelper.getAllElementsByXPath('//div[contains(@class, "react-select__option")]');
 	}
 
+	/**
+	 * Get project title
+	 */
+	public get projectTitle() {
+		return ElementHelper.getElementByClassName("project-card")
+	}
+
 	public milestoneListXpath = '//div[contains(@class , "react-select__menu-list")]';
 	public addNewMilestoneXpath = '(//button[contains(@class,"tc-btn-primary tc-btn-sm")])[INDEX]';
 	public copilotImageXpath = `//td[contains(text(), "MILESTONE_NAME")]//ancestor::tr//img`;
 	public copilotManagementWindowTitleXpath = '//div[@class="right-sidebar-container"]//h2';
 	public milestoneStatusXpath = '//td[text()="MILESTONE_NAME"]//following-sibling::td/span';
 	public actionButtonForCustomerXpath = "//span[.= 'In Review']/parent::td/following-sibling::td//button[contains(@class, '#')]" // assumes action buttons are available for customers for milestone in review status.
+
+	/**
+	 * Get Action Row's first columns
+	 */
+	public async actionRow() {
+		const els = await ElementHelper.getAllElementsByClassName('_2BPUCg');
+		return els[0];
+	}
+
+	/**
+	 * Get Save button
+	 */
+	public async saveButton() {
+		const actionRow = await this.actionRow();
+		return ElementHelper.getElementByCss("button[type='submit']", actionRow);
+	}
 
 	/**
 	 * Get Add Copilot Button
@@ -286,13 +293,6 @@ export class ProjectMilestonePageObject {
 	 */
 	public allMilestoneApproveNotification() {
 		return ElementHelper.getElementByXPath("//div[@class='_309UjB']")
-	}
-
-	/**
-	 * Get project title
-	 */
-	public get projectTitle() {
-		return ElementHelper.getElementByClassName("project-card")
 	}
 
 	/**
