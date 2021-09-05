@@ -1,7 +1,7 @@
 import { CommonHelper } from '../../page-objects/common-page/common.helper';
 import { LeftMenuPageHelper } from '../../page-objects/profile-update/left-menu/left-menu.helper';
-import { ConfigHelper } from '../../utils/config-helper';
 import { MyProfilePageHelper } from '../../page-objects/profile-update/my-profile/my-profile.helper';
+import { ConfigHelper } from '../../utils/config-helper';
 
 describe('Connect App - Left Menu Tests:', () => {
   /**

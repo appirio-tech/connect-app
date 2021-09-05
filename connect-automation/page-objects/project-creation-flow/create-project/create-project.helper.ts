@@ -18,7 +18,6 @@ export class CreateProjectPageHelper {
   public static async open() {
     await CreateProjectPageObject.open();
     await CommonHelper.waitForPageDisplayed();
-    // await BrowserHelper.sleep(5000);
   }
 
   /**
@@ -57,10 +56,10 @@ export class CreateProjectPageHelper {
     await this.fillRequirementForm(taasData.answers, taasData.email);
 
     await this.createProjectPageObject.submitJobRequest.click();
-    await CommonHelper.verifySuccessAlert(`PROJECT '${taasData.title.toUpperCase()}' CREATED`);
+    const message = await CommonHelper.getAlertMessageAndClosePopup();
+    expect(message).toContain(`PROJECT '${taasData.title.toUpperCase()}' CREATED`);
 
     await this.createProjectPageObject.viewTalentRequestButton.click();
-    await BrowserHelper.sleep(10000);
     await CommonHelper.verifyPageUrl(ConfigHelper.getPlatformUrl());
   }
 
@@ -234,15 +233,16 @@ export class CreateProjectPageHelper {
 
     await dropdownInputs[1].click();
     dropdownOptions = await this.createProjectPageObject.dropdownOptions();
-    await BrowserHelper.sleep(200);
     await dropdownOptions[6].click();
 
     await this.createProjectPageObject.editorTextarea.click();
     await this.createProjectPageObject.editorTextareaInput.sendKeys(description);
 
     await this.createProjectPageObject.skillsInput.click();
-    await BrowserHelper.sleep(2500);
-    await this.createProjectPageObject.multiSelectOption.click();
+    await CommonHelper.waitForListToGetLoaded('xpath', this.createProjectPageObject.multiSelectOptionClassName, 2);
+    
+    const elements = await this.createProjectPageObject.multiSelectOption;
+    await elements[1].click();
 
     await this.createProjectPageObject.nextButton.click();
 
@@ -308,7 +308,7 @@ export class CreateProjectPageHelper {
    */
   private static async verifyAddJobItem() {
     await this.createProjectPageObject.plusIcon.click();
-    let jobFormNumber = await this.createProjectPageObject.taasJobForm();
+    const jobFormNumber = await this.createProjectPageObject.taasJobForm();
     expect(jobFormNumber.length).toBe(2);
   }
 

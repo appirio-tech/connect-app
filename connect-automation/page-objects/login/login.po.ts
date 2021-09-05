@@ -18,6 +18,11 @@ export class LoginPage {
    */
   public async logout() {
     await BrowserHelper.open(ConfigHelper.getLogoutUrl());
+    await BrowserHelper.waitUntilClickableOf(
+      this.startAProjectButton,
+      appconfig.Timeout.ElementClickable,
+      appconfig.LoggerErrors.ElementClickable
+    );
     logger.info('user logged out');
   }
 
@@ -50,15 +55,29 @@ export class LoginPage {
   }
 
   /**
+   * Get Username field
+   */
+   public get loginWindow() {
+    return ElementHelper.getElementById('hiw-login-container');
+  }
+
+  /**
+   * Get Start A Project button
+   */
+  public get startAProjectButton() {
+    return ElementHelper.getElementByXPath('//a[contains(@class, "tc-btn-primary")]');
+  }
+
+  /**
    * Wait for the login form to be displayed
    */
-  public async waitForLoginForm() {
+   public async waitForLoginForm() {
     // Wait until login form appears
-    await BrowserHelper.sleep(8000);
-    CommonHelper.waitUntilVisibilityOf(
-      () => this.loginForm,
-      'Wait for login form',
-      true
+    await CommonHelper.waitForElementToGetDisplayed(this.loginWindow)
+    await BrowserHelper.waitUntilClickableOf(
+      this.loginButton,
+      appconfig.Timeout.ElementClickable,
+      appconfig.LoggerErrors.ElementClickable
     );
     logger.info('Login Form Displayed');
   }

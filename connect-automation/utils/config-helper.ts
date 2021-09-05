@@ -107,23 +107,16 @@ export const ConfigHelper = {
   },
 
   /**
-   * Get Given Project URL
-   */
-   getGivenProjectUrl(): string {
-    return this.getConfig().givenProjectUrl;
-  },
-
-  /**
    * Get Expired Project URL
    */
-   getExpiredProjectUrl(): string {
+  getExpiredProjectUrl(): string {
     return this.getConfig().expiredProjectUrl;
   },
 
   /**
    * Get platform URL
    */
-   getPlatformUrl(): string {
+  getPlatformUrl(): string {
     return this.getConfig().platformUrl;
   },
 };

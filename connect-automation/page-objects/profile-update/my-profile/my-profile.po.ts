@@ -1,8 +1,9 @@
 import { BrowserHelper, ElementHelper } from 'topcoder-testing-lib';
+import { TcElementImpl } from '../../../node_modules/topcoder-testing-lib/dist/src/tc-element-impl';
+
 import { logger } from '../../../logger/logger';
-import { TcElementImpl } from 'topcoder-testing-lib/dist/src/tc-element-impl';
-import { CommonHelper } from '../../common-page/common.helper';
 import { ConfigHelper } from '../../../utils/config-helper';
+import { CommonHelper } from '../../common-page/common.helper';
 
 export class MyProfilePageObject {
   /**
@@ -150,15 +151,6 @@ export class MyProfilePageObject {
   }
 
   /**
-   * Get Success Alert Span
-   */
-  public get successAlert() {
-    return CommonHelper.findElementByText(
-      'span',
-      'Settings successfully saved.'
-    );
-  }
-  /**
    * Find Selected Text From Dropdown Menu
    * @param text string
    * @param parent (optional) parent element
@@ -191,5 +183,9 @@ export class MyProfilePageObject {
    */
   public get businessPhoneDropdown() {
     return ElementHelper.getElementByClassName('dropdown-menu-list');
+  }
+
+  public get myProfileSettingsForm() {
+    return ElementHelper.getElementByXPath('//form[@class="profile-settings-form"]');
   }
 }

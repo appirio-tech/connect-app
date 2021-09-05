@@ -35,7 +35,7 @@
     "webdriver-update": "node node_modules/protractor/bin/webdriver-manager update",
     "pretest": "npm run webdriver-update && npm run clean && npm run tsc",
     "test": "protractor temp/conf.js",
-    "lint": "npx tslint --project ."
+    "lint": "npx tslint --project . --fix"
   },
   "keywords": [
     "protractor",

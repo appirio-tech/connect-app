@@ -37,7 +37,6 @@ describe('Connect App - Copilot Role Project Related Tests:', () => {
 
     // Logout from current user.
     await CommonHelper.logout();
-    await BrowserHelper.sleep(5000);
     expect(await BrowserHelper.getCurrentUrl()).toBe(
       ConfigHelper.getHomePageUrl()
     );

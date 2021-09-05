@@ -4,13 +4,6 @@ import { ConfigHelper } from '../../../utils/config-helper';
 import { CommonHelper } from '../../common-page/common.helper';
 
 export class ProjectsPageObject {
-  /**
-   * Open the Home page
-   */
-  public static async open() {
-    await BrowserHelper.open(ConfigHelper.getHomePageUrl());
-    logger.info('User navigated to Home Page');
-  }
 
   /**
    * Get Search Input
@@ -34,6 +27,48 @@ export class ProjectsPageObject {
   }
 
   /**
+   * Get Project Dashboard Element
+   */
+  public get projectDashboard() {
+    const parentEl = ElementHelper.getElementByClassName('WtXOeL _3rjDL1');
+    return ElementHelper.getElementContainingText('Dashboard', parentEl);
+  }
+
+  /**
+   * Get first member's element
+   */
+  public get firstMember() {
+    return ElementHelper.getElementByXPath('(//div[@class="members"])[1]');
+  }
+
+  /**
+   * Get back to dashboard button
+   */
+  public get backButton() {
+    return ElementHelper.getElementByClassName('_3Ielx-');
+  }
+
+  /**
+   * Get ref containing element
+   */
+  public get refText() {
+    return ElementHelper.getElementByXPath('(//span[@class="txt-gray-md"])[1]');
+  }
+
+  public get loadMoreNoMoreLabel() {
+    return ElementHelper.getElementByXPath(this.loadMoreNoMoreLabelXpath);
+  }
+
+  /**
+   * Open the Home page
+   */
+  public static async open() {
+    await BrowserHelper.open(ConfigHelper.getHomePageUrl());
+    logger.info('User navigated to Home Page');
+  }
+  public loadMoreNoMoreLabelXpath = '//div[@class="gridview-load-more"]/button | //div[@class="gridview-no-more"]';
+
+  /**
    * Get All Projects By Title
    */
   public async projectTitles() {
@@ -48,7 +83,8 @@ export class ProjectsPageObject {
     const searchInput = this.searchInput;
     await CommonHelper.fillInputField(searchInput, inputText);
     await this.searchButton.click();
-    await BrowserHelper.sleep(1000);
+
+    await BrowserHelper.sleep(2000);
   }
 
   /**
@@ -65,39 +101,10 @@ export class ProjectsPageObject {
   }
 
   /**
-   * Get Project Dashboard Element
-   */
-  public get projectDashboard() {
-    const parentEl = ElementHelper.getElementByClassName('WtXOeL _3rjDL1');
-    return ElementHelper.getElementContainingText('Dashboard', parentEl);
-  }
-
-  /**
    * Get Active Tab Element
    */
   public async activeTab() {
     const tabNames = ElementHelper.getAllElementsByClassName('_2ZbGEn E7SY3s');
     return tabNames[0];
-  }
-
-  /**
-   * Get first member's element
-   */
-  public get firstMember() {
-    return ElementHelper.getElementByClassName('GV60ta');
-  }
-
-  /**
-   * Get back to dashboard button
-   */
-  public get backButton() {
-    return ElementHelper.getElementByClassName('_3Ielx-');
-  }
-
-  /**
-   * Get ref containing element
-   */
-  public get refText() {
-    return ElementHelper.getElementByClassName('txt-gray-md');
   }
 }
