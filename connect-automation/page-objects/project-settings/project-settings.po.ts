@@ -404,4 +404,8 @@ export class ProjectSettingsPageObject {
 	public get noAccountAvailableLabel() {
 		return ElementHelper.getElementByXPath('(//div[@class="container"]//div[contains(@class,"react-select__placeholder")])[1]');
 	}
+
+	public get closeIcon() {
+		return ElementHelper.getElementByClassName("s-alert-close");
+	}
 }

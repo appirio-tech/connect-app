@@ -25,7 +25,7 @@ describe('Connect App - Verify Customer Role Tests:', () => {
     await ProjectMilestonePageHelper.open();
   });
 
-  it('[TC_001] Should verify user can approve the milestone for Customer role', async () => {
+  it('[TC_005] Should verify user can approve the milestone for Customer role', async () => {
     const customerUser = ConfigHelper.getCustomerUser();
     const copilotUser = ConfigHelper.getCopilotUser();
     await ProjectMilestonePageHelper.takeActionOnMilestone(testData.projectMilestone, customerUser, copilotUser)
