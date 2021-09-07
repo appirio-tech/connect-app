@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { BrowserHelper } from 'topcoder-testing-lib';
+import * as appconfig from '../../config/app-config.json';
 import { CommonHelper } from '../common-page/common.helper';
 import { ProjectSettingsPageObject } from '../project-settings/project-settings.po';
 import { IProjectSettings } from './project-settings.model';
@@ -13,14 +14,30 @@ export class ProjectSettingsPageHelper {
 	}
 
 	/**
-	 * Open Home page
-	 * @param expired
+	 * Open Expired Project
 	 */
-	public static async open(expired = false) {
-		await ProjectSettingsPageObject.open(expired);
+	public static async openExpiredProject() {
+		await ProjectSettingsPageObject.openExpiredProject();
+	}
+
+	/**
+	 * Open Settings
+	 */
+	public static async openSettings() {
 		await CommonHelper.waitForPageDisplayed();
-		await BrowserHelper.sleep(10000);
 		await CommonHelper.waitForElementToGetDisplayed(this.projectSettingsPageObject.getProjectMenu('Project Settings'));
+
+		// If alert dialog appears, close it
+		await this.checkAlertDialog();
+
+		await this.projectSettingsPageObject.getProjectMenu('Project Settings').click();
+
+		// Waiting for page to get loaded
+		await BrowserHelper.waitUntilClickableOf(
+			this.projectSettingsPageObject.projectSettingsForm,
+			appconfig.Timeout.ElementClickable,
+			appconfig.LoggerErrors.ElementClickable
+		);
 	}
 
 	/**
@@ -29,11 +46,8 @@ export class ProjectSettingsPageHelper {
 	 * @param projectSettings Test Data for the test
 	 */
 	public static async editProjectSettings(projectSettings: IProjectSettings) {
-		// Click on Project Settings Menu
-		await this.projectSettingsPageObject.getProjectMenu('Project Settings').click();
-
 		// Select Enforce NDA Yes Button
-		const enforceTopcoderNDARadioButtons = await this.projectSettingsPageObject.enforceTopcoderNDARadioButtons;
+		const enforceTopcoderNDARadioButtons = await this.projectSettingsPageObject.enforceTopcoderNDARadioButtons();
 		const index = (projectSettings.enforceTopcoderNDA === 'Yes') ? 0 : 1;
 		await enforceTopcoderNDARadioButtons[index].click();
 
@@ -48,7 +62,7 @@ export class ProjectSettingsPageHelper {
 		await this.projectSettingsPageObject.saveButton.click();
 
 		// Verify the Alert Message
-		const message = await CommonHelper.getAlertBox.getText();
+		const message = await CommonHelper.getAlertMessageAndClosePopup();
 		expect(message).toBe(projectSettings.projectUpdatedMessage);
 
 		// Verify the Enforce NDA Yes Button is selected
@@ -64,38 +78,32 @@ export class ProjectSettingsPageHelper {
 	 * Resets the Project Settings as a pre-requisite for TC001
 	 */
 	public static async resetSettings() {
-		// Resetting the project settings
-		await this.projectSettingsPageObject.getProjectMenu('Project Settings').click();
-
-		// Waiting for page to get loaded
-		await BrowserHelper.sleep(5000);
-
 		// Resetting Enforce NDA to No
-		const allProjectsBeforeSearch = await this.projectSettingsPageObject.enforceTopcoderNDARadioButtons;
+		const allProjectsBeforeSearch = await this.projectSettingsPageObject.enforceTopcoderNDARadioButtons();
 		await allProjectsBeforeSearch[1].click();
-		
+		await BrowserHelper.sleep(2000);
+
 		// Deleting the Existing Intended Work Group if present
 		await this.projectSettingsPageObject.intendedWorkGroupsCloseIcon.click().catch((err) => {
 			// Do Nothing
-		 });
-		
+		});
+
 		// Clicking on Save button if any changes are present
-		await this.projectSettingsPageObject.saveButton.click().catch((err) => {
+		await this.projectSettingsPageObject.saveButton.click().then(async () => {
+			await CommonHelper.getAlertMessageAndClosePopup();
+		}).catch((err) => {
 			// Do Nothing
-		 });
-		await BrowserHelper.sleep(1000);
-		
+		});
+
 		// Navigating to the project URL again
-		await this.open();
+		await CommonHelper.goToRecentlyCreatedProject();
+		await this.openSettings();
 	}
 
 	/**
 	 * Verify Account Expiry Information
 	 */
 	public static async verifyAccountExpiryInformation() {
-		// Resetting the project settings
-		await this.projectSettingsPageObject.getProjectMenu('Project Settings').click();
-
 		// Verify that Account Expiry Icon is present
 		const isIconPresent = await CommonHelper.isElementPresent('xpath', this.projectSettingsPageObject.projectSettingsExpiryIcon);
 		expect(isIconPresent).toBe(true);
@@ -119,7 +127,7 @@ export class ProjectSettingsPageHelper {
 		const isTabSelected = await this.projectSettingsPageObject.isTabSelected('Files');
 		expect(isTabSelected).toBe(true);
 
-		// Get Current File Count before ading new file
+		// Get Current File Count before adding new file
 		const previousCount = (await this.projectSettingsPageObject.getCount('Files').getText()).toString();
 
 		// Click on Add New Button and Wait for Upload Dialog box to appear
@@ -127,7 +135,7 @@ export class ProjectSettingsPageHelper {
 		const fileUploadDialogBox = this.projectSettingsPageObject.fileUploadDialogBox;
 		await CommonHelper.waitForElementToGetDisplayed(fileUploadDialogBox)
 
-		// Verify that File Uplodder Window is displayed
+		// Verify that File Uploader Window is displayed
 		const isIconPresent = await CommonHelper.isElementPresent('xpath', this.projectSettingsPageObject.fileUploadContentArea);
 		expect(isIconPresent).toBe(true);
 
@@ -149,7 +157,7 @@ export class ProjectSettingsPageHelper {
 		await BrowserHelper.waitUntilInVisibilityOf(attachmentOptionsDialogBox)
 
 		// Verify Alert Message
-		let message = await CommonHelper.getAlertBox.getText();
+		let message = await CommonHelper.getAlertMessageAndClosePopup();
 		expect(message).toBe(projectSettings.newFileAdditionMessage);
 
 		// Verify the newly added File Name
@@ -158,10 +166,16 @@ export class ProjectSettingsPageHelper {
 
 		// Get Current Count after adding file
 		const currentCount = (await this.projectSettingsPageObject.getCount('Files').getText()).toString();
-		expect(parseInt(currentCount, 10)).toEqual(parseInt(previousCount, 10)+1);
+		expect(parseInt(currentCount, 10)).toBeGreaterThan(parseInt(previousCount, 10));
 
 		// Click on the Assets Library File Name that's newly Added and Verify new tab is opened
 		await this.clickOnLinkAndVerifyNewTab(tagName);
+
+		await BrowserHelper.waitUntilClickableOf(
+			this.projectSettingsPageObject.getGridButton(tagName),
+			appconfig.Timeout.ElementClickable,
+			appconfig.LoggerErrors.ElementClickable
+		);
 
 		// Click On Grid Button against newly added file and click Edit Link
 		await this.projectSettingsPageObject.getGridButton(tagName).click();
@@ -185,7 +199,7 @@ export class ProjectSettingsPageHelper {
 		await this.projectSettingsPageObject.saveChangesButton.click();
 
 		// Verify Alert Message
-		message = await CommonHelper.getAlertBox.getText();
+		message = await CommonHelper.getAlertMessageAndClosePopup();
 		expect(message).toBe(projectSettings.attachmentUpdationSuccessMessage);
 
 		// Fetch Updated file name from the Files tab
@@ -196,7 +210,7 @@ export class ProjectSettingsPageHelper {
 		await this.projectSettingsPageObject.getGridButton(tagName).click();
 		await this.projectSettingsPageObject.getGridRemoveButton(tagName).click();
 
-		// Verify Delte Popup Title 
+		// Verify Delete Popup Title 
 		const deletePopupTitle = (await this.projectSettingsPageObject.editAttachmentWindow.getText()).toString();
 		expect(deletePopupTitle).toEqual(projectSettings.deletePopupTitle);
 
@@ -208,9 +222,8 @@ export class ProjectSettingsPageHelper {
 		await this.projectSettingsPageObject.deleteFileButton.click();
 
 		// Verify Alert Message
-		const attachmentRemovalMessage = await CommonHelper.getAlertBox.getText();
+		const attachmentRemovalMessage = await CommonHelper.getAlertMessageAndClosePopup();
 		expect(attachmentRemovalMessage).toBe(projectSettings.attachmentRemovalMessage);
-		await BrowserHelper.sleep(2000);
 
 		// Verify Files Count after File Deletion
 		const countAfterDeletion = (await this.projectSettingsPageObject.getCount('Files').getText()).toString();
@@ -255,7 +268,7 @@ export class ProjectSettingsPageHelper {
 		await this.projectSettingsPageObject.addLinkButton.click();
 
 		// Verify Alert Message
-		let message = await CommonHelper.getAlertBox.getText();
+		let message = await CommonHelper.getAlertMessageAndClosePopup();
 		expect(message).toBe(projectSettings.linkAttachmentSuccessMessage);
 
 		// Verify Uploaded link Name
@@ -264,10 +277,16 @@ export class ProjectSettingsPageHelper {
 
 		// Verify Link could should be updated by 1
 		const currentCount = (await this.projectSettingsPageObject.getCount('Links').getText()).toString();
-		expect(parseInt(currentCount, 10)).toEqual(parseInt(previousCount, 10)+1);
+		expect(parseInt(currentCount, 10)).toEqual(parseInt(previousCount, 10) + 1);
 
 		// Click on Recently Added Link and Verify new tab is opened
 		await this.clickOnLinkAndVerifyNewTab(tagName);
+
+		await BrowserHelper.waitUntilClickableOf(
+			this.projectSettingsPageObject.getGridButton(tagName),
+			appconfig.Timeout.ElementClickable,
+			appconfig.LoggerErrors.ElementClickable
+		);
 
 		// Click On Grid Button against newly added Link and click Edit button
 		await this.projectSettingsPageObject.getGridButton(tagName).click();
@@ -293,12 +312,12 @@ export class ProjectSettingsPageHelper {
 		const updatedTitleName = CommonHelper.appendDate(titleName);
 		await editLinkTitleName.clear();
 		await editLinkTitleName.sendKeys(updatedTitleName);
-		
+
 		// Click on Edit Link button
 		await this.projectSettingsPageObject.editLinkButton.click()
 
 		// Verify Alert Message
-		message = await CommonHelper.getAlertBox.getText();
+		message = await CommonHelper.getAlertMessageAndClosePopup();
 		expect(message).toBe(projectSettings.attachmentUpdationSuccessMessage);
 
 		// Verify Updated Link Title
@@ -313,7 +332,7 @@ export class ProjectSettingsPageHelper {
 		const deletePopupTitle = (await this.projectSettingsPageObject.editAttachmentWindow.getText()).toString();
 		expect(deletePopupTitle).toEqual(projectSettings.deleteLinkPopupTitle);
 
-		// Verify Delte Link Popup Message
+		// Verify Delete Link Popup Message
 		const deletePopupMessage = (await this.projectSettingsPageObject.deletePopupMessage.getText()).toString();
 		expect(deletePopupMessage).toEqual(projectSettings.deletePopupMessage);
 
@@ -321,9 +340,8 @@ export class ProjectSettingsPageHelper {
 		await this.projectSettingsPageObject.deleteLinkButton.click();
 
 		// Verify Alert Message
-		const attachmentRemovalMessage = await CommonHelper.getAlertBox.getText();
+		const attachmentRemovalMessage = await CommonHelper.getAlertMessageAndClosePopup();
 		expect(attachmentRemovalMessage).toBe(projectSettings.attachmentRemovalMessage);
-		await BrowserHelper.sleep(2000);
 
 		// Verify Link Count after Deleting link
 		const countAfterDeletion = (await this.projectSettingsPageObject.getCount('Links').getText()).toString();
@@ -391,7 +409,7 @@ export class ProjectSettingsPageHelper {
 	 */
 	public static async clickOnLinkAndVerifyNewTab(tagName: string) {
 		await this.projectSettingsPageObject.getAssetsLibraryFileName(tagName).click();
-		await BrowserHelper.sleep(5000);
+		await BrowserHelper.sleep(2000);
 		await BrowserHelper.getAllWindowHandles().then((handles) => {
 			expect(handles.length).toEqual(2);
 			BrowserHelper.switchToWindow(handles[1]);
@@ -417,4 +435,13 @@ export class ProjectSettingsPageHelper {
 	}
 
 	private static projectSettingsPageObject: ProjectSettingsPageObject;
+
+	/**
+	 * Check to see if there is error dialog, If so close it
+	 */
+	private static async checkAlertDialog() {
+		if (await this.projectSettingsPageObject.closeIcon.isPresent()) {
+			await this.projectSettingsPageObject.closeIcon.click();
+		}
+	}
 }

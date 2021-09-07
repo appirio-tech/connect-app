@@ -4,11 +4,10 @@ import { ConfigHelper } from '../../utils/config-helper';
 
 export class ProjectSettingsPageObject {
 	/**
-	 * Open the Given Project URL
-	 * @param expired 
+	 * Open the Given Expired Project URL
 	 */
-	public static async open(expired = false) {
-		const url = expired ? ConfigHelper.getExpiredProjectUrl() : ConfigHelper.getGivenProjectUrl()
+	public static async openExpiredProject() {
+		const url = ConfigHelper.getExpiredProjectUrl()
 		await BrowserHelper.open(url);
 		logger.info('User navigated to Project Page');
 	}
@@ -27,14 +26,14 @@ export class ProjectSettingsPageObject {
 			case 'Messages': index = 2; break;
 			case 'Assets Library': index = 5; break;
 			case 'Project Settings': index = 7; break;
-		} 
+		}
 		return ElementHelper.getElementByXPath(`(//a[contains(@href,'/projects/')]/span)[${index}]`);
 	}
 
 	/**
 	 * Get Enforce Topcoder NDA Radio Buttons List
 	 */
-	public get enforceTopcoderNDARadioButtons() {
+	public async enforceTopcoderNDARadioButtons() {
 		return ElementHelper.getAllElementsByXPath('//label[contains(@for,"nda-opt")]');
 	}
 
@@ -130,7 +129,7 @@ export class ProjectSettingsPageObject {
 	public async isTabSelected(tabName: string) {
 		const selectedTabXpath = `//span[text()='${tabName}']/parent::li`;
 		const className = (await ElementHelper.getElementByXPath(selectedTabXpath).getAttribute('class')).toString()
-		return (className.trim().length !== 0) ? true: false;
+		return (className.trim().length !== 0) ? true : false;
 	}
 
 	/**
@@ -396,5 +395,17 @@ export class ProjectSettingsPageObject {
 	 */
 	public get uploadedFile() {
 		return ElementHelper.getElementByXPath('//a[contains(@href, "/projects/messages")]');
+	}
+
+	public get projectSettingsForm() {
+		return ElementHelper.getElementByXPath('//div[contains(@class, "edit-project-defaults-form")]');
+	}
+
+	public get noAccountAvailableLabel() {
+		return ElementHelper.getElementByXPath('(//div[@class="container"]//div[contains(@class,"react-select__placeholder")])[1]');
+	}
+
+	public get closeIcon() {
+		return ElementHelper.getElementByClassName("s-alert-close");
 	}
 }

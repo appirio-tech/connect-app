@@ -9,6 +9,7 @@ import ManageMilestones from '../ManageMilestones'
 import * as milestoneHelper from '../components/helpers/milestone'
 
 import styles from './CreateSimplePlan.scss'
+import MilestonesApprovalNotification from '../components/MilestonesApprovalNotification'
 
 const createTabs = ({ onClick } ) => ([
   {
@@ -34,10 +35,12 @@ class CreateSimplePlan extends React.Component {
       project,
       // phases,
       milestones,
+      milestonesInApproval,
       onChangeMilestones,
       onSaveMilestone,
       onRemoveMilestone,
       onGetChallenges,
+      onApproveMilestones,
       isProjectLive,
       isCustomer,
     } = this.props
@@ -64,17 +67,22 @@ class CreateSimplePlan extends React.Component {
       <div>
         {/* <ProjectDetailsWidget project={project} phases={phases} /> */}
         <div styleName="milestones-container">
+          {!isCustomer && <MilestonesApprovalNotification milestones={milestones} />}
           <div styleName="tabs-header">
             <GenericMenu navLinks={createTabs(onClickMilestonesTab)} />
           </div>
           <ManageMilestones
             milestones={milestones}
+            milestonesInApproval={milestonesInApproval}
             onGetChallenges={onGetChallenges}
             onChangeMilestones={onChangeMilestones}
             onSaveMilestone={onSaveMilestone}
             onRemoveMilestone={onRemoveMilestone}
+            onApproveMilestones={onApproveMilestones}
             projectMembers={project.members}
+            project={project}
             isUpdatable={isProjectLive && !isCustomer}
+            isCustomer={isCustomer}
           />
         </div>
       </div>
@@ -90,6 +98,7 @@ CreateSimplePlan.propTypes = {
   onSaveMilestone: PT.func,
   onRemoveMilestone: PT.func,
   onGetChallenges: PT.func,
+  onApproveMilestones: PT.func,
   isCustomer: PT.bool,
 }
 

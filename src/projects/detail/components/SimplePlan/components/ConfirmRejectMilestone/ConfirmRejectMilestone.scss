@@ -1,0 +1,65 @@
+@import '~styles/variables';
+
+.confirm-reject-milestone {
+  width: 404px;
+  padding: 15px 8px 12px 12px;
+  color: $tc-black;
+  background-color: $tc-white;
+  border: 1px solid $tc-gray-50;
+  border-radius: 3 * $corner-radius;
+  box-shadow: 0 3px 6px rbga(#000, .16);
+
+  .icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    color: red;
+    stroke: currentColor;
+
+    * {
+      stroke: inherit;
+    }
+  }
+
+  .title {
+    @include roboto-bold;
+
+    display: flex;
+    margin-bottom: 8px;
+    font-size: $tc-body-xs;
+    line-height: 15px;
+  }
+
+  .text {
+    @include roboto;
+
+    margin-bottom: 12px;
+    font-size: $tc-body-sm;
+    line-height: 16px;
+  }
+
+  textarea {
+    height: 211px;
+    resize: none;
+  }
+
+  .footer {
+    button + button {
+      margin-left: 10px;
+    }
+
+    button {
+      border: 0 !important;
+      color: white !important;
+      border-radius: 24px !important;
+      &:nth-child(1) {
+        background-color: $color-check-mark !important;
+      }
+      &:nth-child(2) {
+        background-color: $color-x-mark !important;
+      }
+    }
+  }
+}
+
+

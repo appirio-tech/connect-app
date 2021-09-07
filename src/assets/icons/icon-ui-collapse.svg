@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="51" height="51" viewBox="0 0 51 51">
+    <defs>
+        <style>
+            .svg-a {
+                fill: #fff;
+            }
+            .svg-a,
+            .svg-b {
+                stroke: #707070;
+            }
+            .svg-b,
+            .d {
+                fill: none;
+            }
+            .svg-b {
+                stroke-linecap: round;
+                stroke-width: 4px;
+            }
+            .c {
+                stroke: none;
+            }
+        </style>
+    </defs>
+    <g transform="translate(0 51) rotate(-90)">
+        <g class="svg-a"><circle class="c" cx="25.5" cy="25.5" r="25.5"/><circle class="d" cx="25.5" cy="25.5" r="25"/></g>
+        <g transform="matrix(-0.017, 1, -1, -0.017, 34.917, 23.827)"><line class="svg-b" x2="9.377" y2="8.39"/><line class="svg-b" x1="9.007" y2="10.254" transform="translate(0.493 8.5)"/></g>
+    </g>
+</svg>

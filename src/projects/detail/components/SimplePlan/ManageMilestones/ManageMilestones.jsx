@@ -4,7 +4,6 @@
 import React from 'react'
 import PT from 'prop-types'
 import moment from 'moment'
-import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 import MilestoneRow from '../components/MilestoneRow'
 import MilestoneChallengeHeader from '../components/MilestoneChallengeHeader'
 import MilestoneChallengeRow from '../components/MilestoneChallengeRow'
@@ -17,13 +16,10 @@ import MilestoneMoveDateButton from '../components/MilestoneMoveDateButton'
 import * as milestoneHelper from '../components/helpers/milestone'
 import IconUnselect from '../../../../../assets/icons/icon-disselect.svg'
 import IconCopilot from '../../../../../assets/icons/icon-copilot.svg'
-import { CHALLENGE_ID_MAPPING } from '../../../../../config/constants'
-// import IconGridView from '../../../../../assets/icons/ui-16px-2_grid-45-gray.svg'
-// import IconGnattView from '../../../../../assets/icons/icon-gnatt-gray.svg'
+import { CHALLENGE_ID_MAPPING, PHASE_STATUS_IN_REVIEW } from '../../../../../config/constants'
 
 import './ManageMilestones.scss'
-
-const Formsy = FormsyForm.Formsy
+import MilestoneApprovalButton from '../components/MilestoneApprovalButton'
 
 class ManageMilestones extends React.Component {
   constructor(props) {
@@ -43,6 +39,7 @@ class ManageMilestones extends React.Component {
     this.onAddCopilotAll = this.onAddCopilotAll.bind(this)
     this.onMoveMilestoneDates = this.onMoveMilestoneDates.bind(this)
     this.onLoadChallengesByPage = this.onLoadChallengesByPage.bind(this)
+    this.onApprove = this.onApprove.bind(this)
   }
   onMoveMilestoneDates(days) {
     const {
@@ -167,6 +164,18 @@ class ManageMilestones extends React.Component {
     const {onRemoveMilestone} = this.props
     onRemoveMilestone(id)
   }
+  
+  onApprove({type, comment, item}) {
+    const { milestones, onApproveMilestones } = this.props  
+    if(item) {
+      onApproveMilestones({type, comment, milestones: [item]})
+      return
+    }
+    
+    const updatedMilestones = [...milestones].filter( x => x.selected && x.status === PHASE_STATUS_IN_REVIEW)
+    console.log('need updated milestones', milestones, updatedMilestones)
+    onApproveMilestones({type, comment, milestones: updatedMilestones} )
+  }
 
   isExpandChallengeList(milestone) {
     const isExpand = _.find(this.state.expandList, (i) => i === milestone.id)
@@ -242,13 +251,21 @@ class ManageMilestones extends React.Component {
   render() {
     const {
       milestones,
+      milestonesInApproval,
       projectMembers,
       onChangeMilestones,
       isUpdatable,
+      isCustomer,
     } = this.props
 
-    const canEdit = isUpdatable && this.getSelectCount() > 0
+    // const isNeedApproval = project.status === PROJECT_STATUS_IN_REVIEW
+    const isNeedApproval = !milestones.filter(ms => ms.selected === true).find(ms => !(ms.status === PHASE_STATUS_IN_REVIEW))
+    const canShowApproval = isCustomer && isNeedApproval
+
+    const canEdit = (isUpdatable || canShowApproval) && this.getSelectCount() > 0
     const disableDeleteAction = this.getSelectCount() > 1
+    const canShowSelectionStatus = canEdit || (isCustomer && this.getSelectCount() > 0)
+
     return (
       <div>
         <div styleName="toolbar">
@@ -259,17 +276,38 @@ class ManageMilestones extends React.Component {
             <IconGnattView />
           </button>
           <div styleName="separator" /> */}
-          {this.getSelectCount() > 0 ? <div styleName="unselect-bottom" onClick={this.onUnselectAll}>
+          {(this.getSelectCount() > 0 || canShowSelectionStatus)? <div styleName="unselect-bottom" onClick={this.onUnselectAll}>
             <IconUnselect /> {this.getSelectCount()} PROJECT(S) SELECTED
           </div>: null }
-          {canEdit ? <div styleName="line"/>: null}
-          { canEdit ? <div styleName="delete-button">
-            <MilestoneDeleteButton onDelete={this.onDeleteAll}/>
-          </div>: null }
-          { canEdit ? <div styleName="icon">
-            {this.renderAddCopilot()}
-          </div>: null }
-          { canEdit ? <MilestoneMoveDateButton onMove={this.onMoveMilestoneDates}/>: null}
+          { canEdit ? (() => canShowApproval ? 
+            [
+              <div styleName="hs" key={0}> </div>,
+              <div styleName="approve-button">
+                <MilestoneApprovalButton key={1} type="approve" 
+                  global
+                  title={'APPROVE'}
+                  disabled={milestonesInApproval.length > 0}
+                  onClick={() => {this.onApprove({type: 'approve'})}}
+                />
+              </div>,
+              <MilestoneApprovalButton key={2} type="reject" 
+                global
+                title={'REJECT'}
+                disabled={milestonesInApproval.length > 0}
+                onClick={(v) => this.onApprove({type: 'reject', comment: v})}
+              />
+            ] :
+            [
+              <div styleName="line"  key={0}/>,
+              <div styleName="delete-button" key={1}>
+                <MilestoneDeleteButton onDelete={this.onDeleteAll}/>
+              </div>,
+              <div styleName="icon" key={2}>
+                {this.renderAddCopilot()}
+              </div>,
+              <MilestoneMoveDateButton onMove={this.onMoveMilestoneDates} key={3}/>
+            ])() : null}
+
           {isUpdatable && (
             <button className="tc-btn tc-btn-primary tc-btn-sm" styleName="primary-button" onClick={this.onAdd}>
               ADD
@@ -285,18 +323,30 @@ class ManageMilestones extends React.Component {
         <div styleName="table-container">
           <Formsy.Form>
             <table styleName="milestones-table">
+              <colgroup>
+                <col style={{ width: '20px' }} />
+                <col style={{ width: '20px' }} />{/* CHECKBOX */}
+                <col style={{ width: '8%' }} />{/* MILESTONE */}
+                <col />{/* DESCRIPTION */}
+                <col style={{ width: '12%' }} />{/* START DATE */}
+                <col style={{ width: '11%' }} />{/* END DATE */}
+                <col style={{ width: '10%' }} />{/* STATUS */}
+                <col style={{ width: '13%' }} />{/* COPILOTS */}
+                {(isUpdatable || isCustomer) && (<col style={{ width: '64px' }} />)}{/* ACTION */}
+              </colgroup>
               <thead>
                 <MilestoneHeaderRow
                   milestones={milestones}
                   onChangeMilestones={onChangeMilestones}
-                  isUpdatable={isUpdatable}
+                  isUpdatable={isUpdatable || isCustomer}
                 />
               </thead>
               <tbody>
-                {milestones.map((milestone) => (
+                {milestones.map((milestone, key) => (
                   [
                     <MilestoneRow
                       isEditingMilestone={!!milestone.edit}
+                      key={key}
                       milestone={milestone}
                       key={milestone.id}
                       rowId={`${milestone.id}`}
@@ -311,7 +361,10 @@ class ManageMilestones extends React.Component {
                       isCreatingRow={`${milestone.id}`.startsWith('new-milestone')}
                       isUpdatable={isUpdatable}
                       disableDeleteAction={disableDeleteAction}
+                      isCustomer={isCustomer}
+                      onApprove={this.onApprove}
                       phaseMembers={milestone.members}
+                      isApproving={milestonesInApproval.indexOf(milestone.id) !== -1}
                     />,
                     ...this.renderChallengeTable(milestone)
                   ]
@@ -331,8 +384,11 @@ ManageMilestones.propTypes = {
   onSaveMilestone: PT.func,
   onRemoveMilestone: PT.func,
   onGetChallenges: PT.func,
+  onApproveMilestones: PT.func,
   projectMembers: PT.arrayOf(PT.shape()),
   isUpdatable: PT.bool,
+  isCustomer: PT.bool,
+  project: PT.shape()
 }
 
 export default ManageMilestones

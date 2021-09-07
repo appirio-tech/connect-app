@@ -7,6 +7,17 @@
   padding: 15px 0 20px;
   min-height: 65px;
 
+  .hs {
+    height: 24px;
+    width: 1px;
+    margin-right: 20px;
+    background-color: $color-border;
+  }
+
+  .approve-button {
+    margin-right: 10px;
+  }
+
   .unselect-bottom {
     height: 24px;
     background-color: #00B7F8;
@@ -31,6 +42,19 @@
     border: 1px solid #C4C4C4;
     margin-right: 10px;
   }
+
+  .check-button {
+    svg {
+      g {
+        fill: green;
+      }
+    }
+  }
+
+  .reject-button{
+
+  }
+
   .delete-button {
     cursor: pointer;
     margin: 0 10px;

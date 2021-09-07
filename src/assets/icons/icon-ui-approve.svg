@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+    <defs>
+        <style>
+            .a {
+                fill: #0ab88a;
+            }
+            .b {
+                fill: none;
+                stroke: #fff;
+                stroke-linecap: round;
+                stroke-width: 4px;
+            }
+        </style>
+    </defs>
+    <rect class="a" width="50" height="50" rx="25"/>
+    <g transform="translate(11 16)">
+        <line class="b" x2="9" y2="10" transform="translate(0 7.5)"/>
+        <line class="b" x1="19" y2="17" transform="translate(9.5)"/>
+    </g>
+</svg>

@@ -4,13 +4,6 @@ import { ConfigHelper } from '../../../utils/config-helper';
 import { CommonHelper } from '../../common-page/common.helper';
 
 export class CreateProjectPageObject {
-  /**
-   * Open the Home page
-   */
-  public static async open() {
-    await BrowserHelper.open(ConfigHelper.getHomePageUrl());
-    logger.info('User navigated to Home Page');
-  }
 
   /**
    * Get New Project Button
@@ -48,16 +41,6 @@ export class CreateProjectPageObject {
       'SelectProjectTemplate'
     );
     return ElementHelper.getElementByTag('h1', parentEl);
-  }
-
-  /**
-   * Get Select Button
-   */
-  public async selectButton() {
-    const selectButtons = await ElementHelper.getAllElementsByButtonText(
-      'Select'
-    );
-    return selectButtons[0];
   }
 
   /**
@@ -175,43 +158,12 @@ export class CreateProjectPageObject {
   }
 
   /**
-   * Get taas job form
-   */
-  public async taasJobForm() {
-    return ElementHelper.getAllElementsByClassName('_3mAtc-');
-  }
-
-  /**
    * Get sub title
    */
   public get subTitle() {
     return ElementHelper.getElementContainingText(
       'Your project has been created'
     );
-  }
-
-  /**
-   * Get number input elements
-   */
-  public async numberInputEls() {
-    const els = await ElementHelper.getAllElementsByCss('.tc-file-field__inputs.trlMaU');
-    return els;
-  }
-
-  /**
-   * Get dropdown elements
-   */
-  public async dropdownEls() {
-    const els = await ElementHelper.getAllElementsByCss('.dropdown-wrap.SelectDropdown.default');
-    return els;
-  }
-
-  /**
-   * Get dropdown options
-   */
-  public async dropdownOptions() {
-    const els = await ElementHelper.getAllElementsByClassName('dropdown-menu-list-item');
-    return els;
   }
 
   /**
@@ -239,7 +191,57 @@ export class CreateProjectPageObject {
    * Get multi select option
    */
   public get multiSelectOption() {
-    return ElementHelper.getElementByCss('.css-fk865s-option.react-select__option');
+    return ElementHelper.getAllElementsByXPath(this.multiSelectOptionClassName);
+  }
+
+  /**
+   * Open the Home page
+   */
+  public static async open() {
+    await BrowserHelper.open(ConfigHelper.getHomePageUrl());
+    logger.info('User navigated to Home Page');
+  }
+  public multiSelectOptionClassName = '//div[contains(@class, "css-fk865s-option react-select__option")]';
+
+  /**
+   * Get Select Button
+   */
+  public async selectButton() {
+    const selectButtons = await ElementHelper.getAllElementsByButtonText(
+      'Select'
+    );
+    return selectButtons[0];
+  }
+
+  /**
+   * Get taas job form
+   */
+  public async taasJobForm() {
+    return ElementHelper.getAllElementsByClassName('_3mAtc-');
+  }
+
+  /**
+   * Get number input elements
+   */
+  public async numberInputEls() {
+    const els = await ElementHelper.getAllElementsByCss('.tc-file-field__inputs.trlMaU');
+    return els;
+  }
+
+  /**
+   * Get dropdown elements
+   */
+  public async dropdownEls() {
+    const els = await ElementHelper.getAllElementsByCss('.dropdown-wrap.SelectDropdown.default');
+    return els;
+  }
+
+  /**
+   * Get dropdown options
+   */
+  public async dropdownOptions() {
+    const els = await ElementHelper.getAllElementsByClassName('dropdown-menu-list-item');
+    return els;
   }
 
   /**

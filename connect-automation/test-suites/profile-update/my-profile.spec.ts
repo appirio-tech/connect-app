@@ -1,7 +1,7 @@
 import { CommonHelper } from '../../page-objects/common-page/common.helper';
+import { MyProfilePageHelper } from '../../page-objects/profile-update/my-profile/my-profile.helper';
 import * as testData from '../../test-data/test-data.json';
 import { ConfigHelper } from '../../utils/config-helper';
-import { MyProfilePageHelper } from '../../page-objects/profile-update/my-profile/my-profile.helper';
 
 describe('Connect App - My Profile Page Tests:', () => {
   /**

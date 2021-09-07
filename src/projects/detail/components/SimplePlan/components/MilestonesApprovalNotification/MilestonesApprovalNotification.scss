@@ -1,0 +1,139 @@
+@import '~styles/variables';
+
+
+.hs {
+   height: 16px;
+   width: 1px;
+   background-color: $color-border;
+   margin-left: 15px; 
+   margin-right: 15px; 
+}
+.milestones-notifications {
+    display: flex;   
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: $color-bg-green;
+
+    .milestones-notifications-left {
+        display: flex;
+        align-items: center;
+
+        button {
+            margin-right: 10px !important;
+        }
+    }
+
+    
+}
+
+.dismiss-button {
+    border: 1px solid $color-dark-green !important;
+    border-radius: 24px !important;
+    background-color: white !important;
+    .title {
+        color: $color-dark-green !important;
+    }   
+}
+
+.tranparent-button {
+    border: none !important;
+    background-color: transparent !important;
+
+}
+
+.icon-expand {
+    width: 24px;
+    height: 24px;
+
+    &.open {
+        transform: rotate(90deg);
+    }
+}
+
+.reject-notifications {
+
+    .trigger {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 20px;
+        background-color: #f4f4f4;
+        border: 1px solid #d0d0d0;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+
+        &:not(.open) {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .left {
+            display: flex;
+            align-items: center;
+
+            button {
+                padding: 0;
+                padding-right: 10px;
+            }
+        }
+        .right {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .body {
+        padding: 20px calc(35px + 20px);
+        border: 1px solid $color-border;
+        border-top: none;
+        background-color: white;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+}
+
+.trigger-text {
+    strong {
+        font-weight: bold;
+    }
+    div {
+        font-size: 90%;
+        margin-top: 5px;
+    }
+}
+
+.trigger-action-reject {
+    display: flex;
+    align-items: center;
+    color: $color-x-mark;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    button {
+        margin-right: 10px !important;
+    }
+}
+
+.body {
+    .accordion-body-item + .accordion-body-item {
+        margin-top: 10px;
+    }
+}
+
+.accordion-body-item {
+    font-size: 90%;
+         
+    .body-item-one {
+        flex: 20;
+    }
+
+    .body-item-two {
+        flex: 45;
+    }
+
+    &:first-child {
+        font-weight: bold;
+    }
+}

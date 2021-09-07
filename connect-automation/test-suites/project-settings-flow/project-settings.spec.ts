@@ -25,32 +25,36 @@ describe('Connect App - Project Settings Tests:', () => {
   });
 
   it('[TC_001] Should verify user can update Project Details ( eg NDA, Default Group)', async () => {
-    // Step Sequence #1: Go to the given app URL
-    await ProjectSettingsPageHelper.open();
+    await CommonHelper.goToRecentlyCreatedProject();
+    await ProjectSettingsPageHelper.openSettings();
     // Resetting Existing Project Settings
     await ProjectSettingsPageHelper.resetSettings();
-    
+
     // Editing Project Settings
     await ProjectSettingsPageHelper.editProjectSettings(testData.projectSettings);
   });
 
   it('[TC_002] Should verify system showing Billing Account expiry information.', async () => {
-    await ProjectSettingsPageHelper.open(true);
+    await ProjectSettingsPageHelper.openExpiredProject();
+    await ProjectSettingsPageHelper.openSettings();
     await ProjectSettingsPageHelper.verifyAccountExpiryInformation();
   });
 
   it('[TC_003] Should verify user can Add/Edit/Delete/Download Files', async () => {
-    await ProjectSettingsPageHelper.open();
+    await CommonHelper.goToRecentlyCreatedProject();
+    await CommonHelper.waitForAddNewMilestones();
     await ProjectSettingsPageHelper.verifyUserCanAddEditDeleteDownloadFiles(testData.projectSettings);
   });
 
   it('[TC_004] Should verify user can Add/Edit/Delete/Download Links', async () => {
-    await ProjectSettingsPageHelper.open();
+    await CommonHelper.goToRecentlyCreatedProject();
+    await CommonHelper.waitForAddNewMilestones();
     await ProjectSettingsPageHelper.verifyUserCanAddEditDeleteDownloadLinks(testData.projectSettings);
   });
 
   it('[TC_005] Should verify user can Add Message with Files Attachment', async () => {
-    await ProjectSettingsPageHelper.open();
+    await CommonHelper.goToRecentlyCreatedProject();
+    await CommonHelper.waitForAddNewMilestones();
     await ProjectSettingsPageHelper.verifyUserCanAddMessageWithFileAttachment(testData.projectSettings);
   });
 });

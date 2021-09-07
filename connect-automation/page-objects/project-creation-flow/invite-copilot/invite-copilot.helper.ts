@@ -1,4 +1,5 @@
 import { BrowserHelper } from 'topcoder-testing-lib';
+import * as appconfig from '../../../config/app-config.json';
 import { CommonHelper } from '../../common-page/common.helper';
 import { InviteCopilotPageObject } from './invite-copilot.po';
 
@@ -16,7 +17,6 @@ export class InviteCopilotHelper {
   public static async open() {
     await InviteCopilotPageObject.open();
     await CommonHelper.waitForPageDisplayed();
-    // await BrowserHelper.sleep(8000);
   }
 
   /**
@@ -36,7 +36,6 @@ export class InviteCopilotHelper {
    */
   private static async clickOnManageLink() {
     await CommonHelper.waitAndClickElement(this.inviteCopilotPageObject.manageCopilotLink);
-    await BrowserHelper.sleep(2000);
   }
 
   /**
@@ -46,15 +45,16 @@ export class InviteCopilotHelper {
   private static async sendInvitationToCopilot(copilotHandle: string) {
     const inputField = this.inviteCopilotPageObject.inviteInputField;
     await this.inviteCopilotPageObject.dropdownElement.click();
-    await BrowserHelper.sleep(200);
     await inputField.sendKeys(copilotHandle);
     await this.inviteCopilotPageObject.selectedOption.click();
-    await this.inviteCopilotPageObject.sendInviteButton.click();
-    const alertElement = CommonHelper.alertBox();
-    await CommonHelper.waitForSuccessAlert(alertElement);
-
-    expect(await CommonHelper.successAlert().getText()).toBe(
-      `YOU'VE SUCCESSFULLY INVITED MEMBER(S).`
+    await BrowserHelper.waitUntilClickableOf(
+      this.inviteCopilotPageObject.sendInviteButton,
+      appconfig.Timeout.ElementClickable,
+      appconfig.LoggerErrors.ElementClickable
     );
+    await this.inviteCopilotPageObject.sendInviteButton.click();
+
+    const message = await CommonHelper.getAlertMessageAndClosePopup();
+    expect(message).toEqual(`YOU'VE SUCCESSFULLY INVITED MEMBER(S).`);
   }
 }

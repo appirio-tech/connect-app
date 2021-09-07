@@ -11,7 +11,9 @@ import FormsySelect from '../../../../../../components/Select/FormsySelect'
 import MilestoneCopilots from '../MilestoneCopilots'
 import MilestoneStatus from '../MilestoneStatus'
 import MilestoneDeleteButton from '../MilestoneDeleteButton'
-import { PHASE_STATUS_OPTIONS } from '../../../../../../config/constants'
+import { PHASE_STATUS_IN_REVIEW, PHASE_STATUS_OPTIONS } from '../../../../../../config/constants'
+import IconApprove from '../../../../../../assets/icons/icon-ui-approve.svg'
+import IconReject from '../../../../../../assets/icons/icon-ui-reject.svg'
 import IconCheck from '../../../../../../assets/icons/icon-save2.svg'
 import IconXMark from '../../../../../../assets/icons/icon-delete.svg'
 import IconPencil from '../../../../../../assets/icons/icon-ui-pencil.svg'
@@ -21,6 +23,7 @@ import IconExpand from '../../../../../../assets/icons/arrows-16px-1_minimal-rig
 import IconClose from '../../../../../../assets/icons/arrows-16px-1_minimal-down.svg'
 
 import styles from './MilestoneRow.scss'
+import MilestoneApprovalButton from '../MilestoneApprovalButton'
 
 const TCFormFields = FormsyForm.Fields
 
@@ -34,13 +37,19 @@ function MilestoneRow({
   onSave,
   onRemove,
   onDiscard,
+  onApprove,
   projectMembers,
   allMilestones,
   isCreatingRow,
   isUpdatable,
   phaseMembers,
-  disableDeleteAction
+  disableDeleteAction,
+  isCustomer,
+  isApproving
 }) {
+  const isNeedApproval = milestone.status === PHASE_STATUS_IN_REVIEW
+  const showApproval = isCustomer && isNeedApproval
+
   const phaseStatusOptions = PHASE_STATUS_OPTIONS
   const edit = milestone.edit
   // hide email
@@ -215,45 +224,83 @@ function MilestoneRow({
           }}
         />
       </td>
-      <td styleName="action">
-        <div styleName="inline-menu">
-          <button
-            type="submit"
-            className="tc-btn tc-btn-link"
-            styleName="icon-button"
-            onClick={() => {
-              milestone.editted = true
-              milestone.editting = true
-              if (milestoneRef.props.isValid()
-                && startDateRef.props.isValid()
-                && endDateRef.props.isValid()
-              ) {
-                onSave(milestone.id)
-              }
-            }}
-          >
-            <IconCheck />
-          </button>
-          <button
-            type="button"
-            className="tc-btn tc-btn-link"
-            styleName="icon-button"
-            onClick={() => {
-              if (isCreatingRow) {
-                onDiscard(milestone.id)
-              } else {
-                onChange({ ...(milestone.origin || milestone), edit: false })
-              }
-            }}
-          >
-            <IconXMark />
-          </button>
-        </div>
-      </td>
+      {
+        showApproval ? <td styleName="action">
+          <div styleName="inline-menu">
+            <button
+              type="submit"
+              className="tc-btn tc-btn-link"
+              styleName="icon-button"
+              onClick={() => {
+                milestone.editted = true
+                milestone.editting = true
+                if (milestoneRef.props.isValid()
+                  && startDateRef.props.isValid()
+                  && endDateRef.props.isValid()
+                ) {
+                  onSave(milestone.id)
+                }
+              }}
+            >
+              <IconApprove />
+            </button>
+            <button
+              type="button"
+              className="tc-btn tc-btn-link"
+              styleName="icon-button"
+              onClick={() => {
+                if (isCreatingRow) {
+                  onDiscard(milestone.id)
+                } else {
+                  onChange({ ...(milestone.origin || milestone), edit: false })
+                }
+              }}
+            >
+              <IconReject />
+            </button>
+          </div>
+        </td> :
+          <td styleName="action">
+            <div styleName="inline-menu">
+              <button
+                type="submit"
+                className="tc-btn tc-btn-link"
+                styleName="icon-button"
+                onClick={() => {
+                  milestone.editted = true
+                  milestone.editting = true
+                  if (milestoneRef.props.isValid()
+                  && startDateRef.props.isValid()
+                  && endDateRef.props.isValid()
+                  ) {
+                    onSave(milestone.id)
+                  }
+                }}
+              >
+                <IconCheck />
+              </button>
+              <button
+                type="button"
+                className="tc-btn tc-btn-link"
+                styleName="icon-button"
+                onClick={() => {
+                  if (isCreatingRow) {
+                    onDiscard(milestone.id)
+                  } else {
+                    onChange({ ...(milestone.origin || milestone), edit: false })
+                  }
+                }}
+              >
+                <IconXMark />
+              </button>
+            </div>
+          </td>
+      }
+
     </tr>
   ) : (
     <tr styleName="milestone-row">
-      {isUpdatable ? <td styleName="expand" onClick={() => onExpand(!isExpand, milestone)}>{isExpand ? <IconClose />: <IconExpand />}</td>: null}
+      {isUpdatable ? <td styleName="expand" onClick={() => onExpand(!isExpand, milestone)}>{isExpand ? <IconClose />: <IconExpand />}</td>: <td />}
       {isEditingMilestone ? <td/> : <td styleName="checkbox">
         <TCFormFields.Checkbox
           name={`select-${rowId}`}
@@ -306,6 +353,34 @@ function MilestoneRow({
           </div>
         </td>
       )}
+      {
+        isCustomer && (
+          <td styleName="action">
+            <div styleName="inline-menu approve">
+              {
+                showApproval && 
+                <MilestoneApprovalButton 
+                  type={'approve'}
+                  disabled={isApproving}
+                  onClick={() => {
+                    onApprove({type: 'approve', item: milestone})
+                  }}
+                />
+              }
+              { 
+                showApproval && 
+                <MilestoneApprovalButton 
+                  type="reject"
+                  disabled={isApproving}
+                  onClick={(v) => {
+                    onApprove({type: 'reject', comment: v, item: milestone})
+                  }}
+                />
+              }
+            </div>
+          </td>
+        )
+      }
     </tr>
   )
 }
@@ -325,6 +400,7 @@ MilestoneRow.propTypes = {
   isCreatingRow: PT.bool,
   isUpdatable: PT.bool,
   disableDeleteAction: PT.bool,
+  isCustomer: PT.bool,
   members: PT.object,
 }
 

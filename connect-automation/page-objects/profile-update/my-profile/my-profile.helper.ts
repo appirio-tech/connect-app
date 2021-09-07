@@ -1,7 +1,8 @@
 import { BrowserHelper, ElementHelper } from 'topcoder-testing-lib';
+import * as appconfig from '../../../config/app-config.json';
 import { logger } from '../../../logger/logger';
-import { CommonHelper } from '../../common-page/common.helper';
 import { ConfigHelper } from '../../../utils/config-helper';
+import { CommonHelper } from '../../common-page/common.helper';
 import { IUserProfile } from './my-profile.model';
 import { MyProfilePageObject } from './my-profile.po';
 
@@ -19,7 +20,11 @@ export class MyProfilePageHelper {
   public static async open() {
     await MyProfilePageObject.open();
     await CommonHelper.waitForPageDisplayed();
-    await BrowserHelper.sleep(5000);
+    await BrowserHelper.waitUntilClickableOf(
+      this.myProfilePageObject.firstNameField,
+      appconfig.Timeout.ElementClickable,
+      appconfig.LoggerErrors.ElementClickable
+    );
   }
 
   /**
@@ -119,11 +124,9 @@ export class MyProfilePageHelper {
   public static async updateCountryDropdown(country: string) {
     const el = await this.myProfilePageObject.countryField();
     await el.click();
-    await BrowserHelper.sleep(200);
     const selectOption = await this.myProfilePageObject.selectTextFromDropDown(
       country
     );
-    await BrowserHelper.sleep(200);
     logger.info(`Updated Country Field: ${country}`);
     await selectOption.click();
   }
@@ -144,8 +147,7 @@ export class MyProfilePageHelper {
     await this.myProfilePageObject.submitButton.click();
 
     // Wait until Success Alert Message Appears
-    const alertElement = this.myProfilePageObject.successAlert;
-    await CommonHelper.waitForSuccessAlert(alertElement);
+    await CommonHelper.getAlertMessageAndClosePopup();
   }
 
   /**
@@ -177,9 +179,14 @@ export class MyProfilePageHelper {
 
     await this.updateProfileInformation(userProfile);
 
-    await BrowserHelper.sleep(1000);
     // Go To User Profile Page Again
     await this.open();
+
+    await BrowserHelper.waitUntilClickableOf(
+      this.myProfilePageObject.myProfileSettingsForm,
+      appconfig.Timeout.ElementClickable,
+      appconfig.LoggerErrors.ElementClickable
+    );
 
     const firstName = await this.myProfilePageObject.getFirstNameValue();
     const lastName = await this.myProfilePageObject.getLastNameValue();
