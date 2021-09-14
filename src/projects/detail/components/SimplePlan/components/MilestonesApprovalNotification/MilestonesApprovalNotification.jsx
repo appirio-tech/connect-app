@@ -6,7 +6,6 @@ import PT from 'prop-types'
 import {
   PHASE_APPROVAL_APPROVE,
   PHASE_APPROVAL_REJECT,
-  PHASE_STATUS_IN_REVIEW,
   PHASE_STATUS_REVIEWED,
 } from '../../../../../../config/constants'
 import IconCollapse from '../../../../../../assets/icons/icon-ui-collapse.svg'
