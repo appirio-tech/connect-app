@@ -1,2 +1,4 @@
 # ignore dist directory to speed up linting after we build project
 dist/*
+# ignore test automation folder as it uses TypeScript with its own Eslint config
+connect-automation/*
