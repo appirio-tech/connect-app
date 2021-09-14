@@ -35,7 +35,7 @@ class MilestoneApprovalButton extends React.Component {
           onClick={() => {
             if(type === 'reject') {
               this.setState({open: true})
-            } else {
+            } else if(onClick) {
               onClick()
             }
           }}
