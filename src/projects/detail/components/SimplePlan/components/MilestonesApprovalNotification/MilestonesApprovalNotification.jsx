@@ -50,16 +50,13 @@ class MilestonesApprovalNotification extends React.Component {
     const { milestones } = this.props
 
     console.log('milestones', milestones)
-    
-    const inReviews = milestones.find(
-      (ms) => ms.status === PHASE_STATUS_IN_REVIEW
-    )
+
     const revieweds = milestones.filter(
       (ms) => ms.status === PHASE_STATUS_REVIEWED
     ).map( ms => {ms.currentApproval = this.findLatest(ms.approvals); return ms})
 
     const showAllApproved =
-      !inReviews && revieweds.length > 0 &&
+      revieweds.length > 0 &&
       !revieweds.find(
         (rd) =>
           !!(
