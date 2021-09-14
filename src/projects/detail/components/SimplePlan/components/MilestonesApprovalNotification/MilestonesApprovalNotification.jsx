@@ -114,17 +114,45 @@ class MilestonesApprovalNotification extends React.Component {
 
     if (showAllApproved && this.state.show) {
       return (
-        <div styleName="milestones-notifications">
-          <div styleName="milestones-notifications-left">
-            <MilestoneApprovalButton
-              type="approve"
-              global
-            />
-            The following milestone(s) has been approved:  
+        <div styleName="approved-notifications">
+          <div styleName="milestones-notifications">
+            <div styleName="milestones-notifications-left">
+              <button
+                type="submit"
+                className="tc-btn"
+                styleName="tranparent-button"
+                onClick={() => {
+                  this.setState({ open: !this.state.open })
+                }}
+              >
+                <IconCollapse
+                  styleName={`icon-expand ${this.state.open ? 'open' : ''}`}
+                />
+              </button>
+              The following milestone(s) has been approved&nbsp;
+              <MilestoneApprovalButton
+                type="approve"
+              />
+            </div>
+            {renderDismissButton(() => {
+              this.setState({ show: false })
+            })}
           </div>
-          {renderDismissButton(() => {
-            this.setState({ show: false })
-          })}
+          {this.state.open && (
+            <div styleName="body">
+              {revieweds.map((item, key) => (
+                <div
+                  className="flex middle"
+                  styleName="accordion-body-item"
+                  key={key}
+                >
+                  <div styleName="body-item-one">
+                    <p styleName="bullet">{item.name}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )
     }
