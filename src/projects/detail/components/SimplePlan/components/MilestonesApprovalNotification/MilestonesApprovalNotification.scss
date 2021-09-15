@@ -51,6 +51,47 @@
     }
 }
 
+.approved-notifications {
+    .milestones-notifications-left {
+        display: flex;
+        align-items: center;
+        
+        button {
+            padding: 0;
+        }
+    }
+
+    .body {
+        padding: 20px calc(35px + 20px);
+        border-top: none;
+        background-color: white;
+
+        .accordion-body-item {
+            font-size: 90%;
+                 
+            .body-item-one {
+                flex: 20;
+            }
+        
+            .body-item-two {
+                flex: 45;
+            }
+        
+            &:first-child {
+                font-weight: normal;
+            }
+            
+            .body-item-one {
+                .bullet {
+                    display: list-item;
+                    list-style-type: disc;
+                    list-style-position: inside;            
+                }
+            }
+        }
+    }
+}
+
 .reject-notifications {
 
     .trigger {

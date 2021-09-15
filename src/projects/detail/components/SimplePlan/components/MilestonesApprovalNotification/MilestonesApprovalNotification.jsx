@@ -6,7 +6,6 @@ import PT from 'prop-types'
 import {
   PHASE_APPROVAL_APPROVE,
   PHASE_APPROVAL_REJECT,
-  PHASE_STATUS_IN_REVIEW,
   PHASE_STATUS_REVIEWED,
 } from '../../../../../../config/constants'
 import IconCollapse from '../../../../../../assets/icons/icon-ui-collapse.svg'
@@ -50,16 +49,13 @@ class MilestonesApprovalNotification extends React.Component {
     const { milestones } = this.props
 
     console.log('milestones', milestones)
-    
-    const inReviews = milestones.find(
-      (ms) => ms.status === PHASE_STATUS_IN_REVIEW
-    )
+
     const revieweds = milestones.filter(
       (ms) => ms.status === PHASE_STATUS_REVIEWED
     ).map( ms => {ms.currentApproval = this.findLatest(ms.approvals); return ms})
 
     const showAllApproved =
-      !inReviews && revieweds.length > 0 &&
+      revieweds.length > 0 &&
       !revieweds.find(
         (rd) =>
           !!(
@@ -114,17 +110,45 @@ class MilestonesApprovalNotification extends React.Component {
 
     if (showAllApproved && this.state.show) {
       return (
-        <div styleName="milestones-notifications">
-          <div styleName="milestones-notifications-left">
-            <MilestoneApprovalButton
-              type="approve"
-              global
-            />
-            The following milestone(s) has been approved:  
+        <div styleName="approved-notifications">
+          <div styleName="milestones-notifications">
+            <div styleName="milestones-notifications-left">
+              <button
+                type="submit"
+                className="tc-btn"
+                styleName="tranparent-button"
+                onClick={() => {
+                  this.setState({ open: !this.state.open })
+                }}
+              >
+                <IconCollapse
+                  styleName={`icon-expand ${this.state.open ? 'open' : ''}`}
+                />
+              </button>
+              The following milestone(s) has been approved&nbsp;
+              <MilestoneApprovalButton
+                type="approve"
+              />
+            </div>
+            {renderDismissButton(() => {
+              this.setState({ show: false })
+            })}
           </div>
-          {renderDismissButton(() => {
-            this.setState({ show: false })
-          })}
+          {this.state.open && (
+            <div styleName="body">
+              {revieweds.map((item, key) => (
+                <div
+                  className="flex middle"
+                  styleName="accordion-body-item"
+                  key={key}
+                >
+                  <div styleName="body-item-one">
+                    <p styleName="bullet">{item.name}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )
     }
