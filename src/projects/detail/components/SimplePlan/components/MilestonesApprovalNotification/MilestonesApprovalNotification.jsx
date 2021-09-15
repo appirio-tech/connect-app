@@ -120,7 +120,7 @@ class MilestonesApprovalNotification extends React.Component {
               type="approve"
               global
             />
-            The following milestone(s) has been approved:  
+            All the milestone(s) has been approved by the customer
           </div>
           {renderDismissButton(() => {
             this.setState({ show: false })
