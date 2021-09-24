@@ -253,7 +253,8 @@ export const PERMISSIONS = {
     ],
     topcoderRoles: [
       ...TOPCODER_ADMINS,
-      ROLE_CONNECT_COPILOT_MANAGER
+      ROLE_CONNECT_COPILOT_MANAGER,
+      ROLE_CONNECT_COPILOT
     ]
   },
 
