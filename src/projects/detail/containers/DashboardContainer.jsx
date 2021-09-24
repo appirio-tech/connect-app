@@ -275,6 +275,8 @@ class DashboardContainer extends React.Component {
           ...action.payload,
           edit: this.state.createGameplanPhases[idx].edit,
           selected: this.state.createGameplanPhases[idx].selected,
+          products: this.state.createGameplanPhases[idx].products,
+          challenges: this.state.createGameplanPhases[idx].challenges,
           members
         })
         this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
