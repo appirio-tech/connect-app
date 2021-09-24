@@ -31,7 +31,7 @@ function MilestoneHeaderRow ({ milestones, onChangeMilestones, isUpdatable }) {
 
   return (
     <tr styleName="milestone-row">
-      {isUpdatable ? <th />: null}
+      <th />
       <th>
         <TCFormFields.Checkbox
           name="select-all"
