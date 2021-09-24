@@ -223,3 +223,8 @@ export function deleteProjectPhase(projectId, phaseId) {
   return axios.delete(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases/${phaseId}`)
     .then(() => ({ projectId, phaseId }))
 }
+
+export function deleteBulkProjectPhase(projectId, phaseIds) {
+  return axios.delete(`${PROJECTS_API_URL}/v5/projects/${projectId}/phases`, { data: { phaseIds } })
+    .then(() => ({ phaseIds }))
+}

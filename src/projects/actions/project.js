@@ -7,6 +7,7 @@ import { getProjectById,
   updateProject as updateProjectAPI,
   deleteProject as deleteProjectAPI,
   deleteProjectPhase as deleteProjectPhaseAPI,
+  deleteBulkProjectPhase as deleteBulkProjectPhaseAPI,
   getProjectPhases,
   updateProduct as updateProductAPI,
   updatePhase as updatePhaseAPI,
@@ -79,7 +80,8 @@ import {
   CUSTOMER_APPROVE_MILESTONE_APPROVE_SUCCESS,
   CUSTOMER_APPROVE_MILESTONE_REJECT_FAILURE,
   CUSTOMER_APPROVE_MILESTONE_APPROVE_FAILURE,
-  CUSTOMER_APPROVE_MILESTONE_REJECT_SUCCESS
+  CUSTOMER_APPROVE_MILESTONE_REJECT_SUCCESS,
+  DELETE_BULK_PROJECT_PHASE
 } from '../../config/constants'
 import {
   updateProductMilestone,
@@ -437,6 +439,15 @@ export function deleteProjectPhase(projectId, phaseId) {
     return dispatch({
       type: DELETE_PROJECT_PHASE,
       payload: deleteProjectPhaseAPI(projectId, phaseId)
+    })
+  }
+}
+
+export function deleteBulkProjectPhase(projectId, phaseIds) {
+  return (dispatch) => {
+    return dispatch({
+      type: DELETE_BULK_PROJECT_PHASE,
+      payload: deleteBulkProjectPhaseAPI(projectId, phaseIds)
     })
   }
 }

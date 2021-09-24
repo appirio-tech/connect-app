@@ -84,11 +84,14 @@ class ManageMilestones extends React.Component {
   }
 
   onDeleteAll() {
-    const { milestones, onRemoveMilestone } = this.props
-    const seletedMilestones = _.filter(milestones, m => m.selected)
-    _.forEach(seletedMilestones, m => {
-      onRemoveMilestone(m.id)
-    })
+    const { milestones, onRemoveAllMilestones } = this.props
+    const selectedPhases = _.filter(milestones, m => m.selected)
+
+    if (selectedPhases.length) {
+      const { projectId } = selectedPhases[0]
+      const phaseIds = selectedPhases.map(m => m.id)
+      onRemoveAllMilestones(projectId, phaseIds)
+    }
   }
 
   onUnselectAll() {
@@ -388,6 +391,7 @@ ManageMilestones.propTypes = {
   onChangeMilestones: PT.func,
   onSaveMilestone: PT.func,
   onRemoveMilestone: PT.func,
+  onRemoveAllMilestones: PT.func,
   onGetChallenges: PT.func,
   onApproveMilestones: PT.func,
   projectMembers: PT.arrayOf(PT.shape()),

@@ -26,6 +26,7 @@ import {
   fireProductDirty,
   fireProductDirtyUndo,
   deleteProjectPhase,
+  deleteBulkProjectPhase,
   expandProjectPhase,
   collapseProjectPhase,
   collapseAllProjectPhases,
@@ -94,6 +95,7 @@ class DashboardContainer extends React.Component {
     this.onChangeMilestones = this.onChangeMilestones.bind(this)
     this.onSaveMilestone = this.onSaveMilestone.bind(this)
     this.onRemoveMilestone = this.onRemoveMilestone.bind(this)
+    this.onRemoveAllMilestones = this.onRemoveAllMilestones.bind(this)
     this.onGetChallenges = this.onGetChallenges.bind(this)
     this.onApproveMilestones = this.onApproveMilestones.bind(this)
   }
@@ -323,6 +325,21 @@ class DashboardContainer extends React.Component {
     })
   }
 
+  onRemoveAllMilestones(projectId, phaseIds) {
+    this.props.deleteBulkProjectPhase(
+      projectId,
+      phaseIds
+    ).then(() => {
+      if (!this.state.createGameplanPhases) {
+        return
+      }
+
+      // remove phases
+      const newGameplanPhases = this.state.createGameplanPhases.filter(phase => !phaseIds.includes(phase.id))
+      this.setState({createGameplanPhases: newGameplanPhases})
+    })
+  }
+
 
   render() {
     const {
@@ -525,6 +542,7 @@ class DashboardContainer extends React.Component {
                         onSaveMilestone={this.onSaveMilestone}
                         onGetChallenges={this.onGetChallenges}
                         onRemoveMilestone={this.onRemoveMilestone}
+                        onRemoveAllMilestones={this.onRemoveAllMilestones}
                         onApproveMilestones={this.onApproveMilestones}
                       />
                     )
@@ -577,6 +595,7 @@ const mapDispatchToProps = {
   updateProductAttachment,
   removeProductAttachment,
   deleteProjectPhase,
+  deleteBulkProjectPhase,
   expandProjectPhase,
   collapseProjectPhase,
   collapseAllProjectPhases,
