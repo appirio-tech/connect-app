@@ -216,7 +216,7 @@ class DashboardContainer extends React.Component {
       }
 
       const phaseMembers = getUpdatedPhaseMembers()
-      if(phaseMembers !== undefined) {
+      if(phaseMembers !== null) {
         productTemplate.members = phaseMembers.map(member => member.userId)
       }
 
@@ -248,7 +248,7 @@ class DashboardContainer extends React.Component {
       }
 
       const phaseMembers = getUpdatedPhaseMembers()
-      if(phaseMembers !== undefined) {
+      if(phaseMembers !== null) {
         updateParam.members = phaseMembers.map(member => member.userId)
       }
 
@@ -256,7 +256,7 @@ class DashboardContainer extends React.Component {
         phase.projectId,
         phase.id,
         updateParam
-      ).then(([{ action }]) => {
+      ).then(({ action }) => {
         const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
         const idx = updatedCreateGameplanPhases.findIndex(phase => phase.id === action.payload.id)
 
