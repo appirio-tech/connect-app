@@ -249,7 +249,7 @@ export const PERMISSIONS = {
       description: 'Remove copilots form the project.',
     },
     projectRoles: [
-      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_COPILOT, PROJECT_ROLE_CUSTOMER])
+      ..._.difference(PROJECT_ALL, [PROJECT_ROLE_CUSTOMER])
     ],
     topcoderRoles: [
       ...TOPCODER_ADMINS,

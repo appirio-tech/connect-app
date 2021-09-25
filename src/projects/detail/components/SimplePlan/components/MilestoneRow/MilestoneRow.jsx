@@ -45,7 +45,8 @@ function MilestoneRow({
   phaseMembers,
   disableDeleteAction,
   isCustomer,
-  isApproving
+  isApproving,
+  hideCheckbox
 }) {
   const isNeedApproval = milestone.status === PHASE_STATUS_IN_REVIEW
   const showApproval = isCustomer && isNeedApproval
@@ -58,11 +59,12 @@ function MilestoneRow({
   let milestoneRef
   let startDateRef
   let endDateRef
+  const tdEl = hideCheckbox ? null : <td/>
 
   return edit ? (
     <tr styleName="milestone-row" className="edit-milestone-row">
       {isUpdatable ? <td /> : null}
-      {isEditingMilestone ? <td/ >: <td styleName="checkbox">
+      {(isEditingMilestone || hideCheckbox) ? <td/ >: <td styleName="checkbox">
         <TCFormFields.Checkbox
           name={`select-${rowId}`}
           value={milestone.selected}
@@ -301,7 +303,7 @@ function MilestoneRow({
   ) : (
     <tr styleName="milestone-row">
       {isUpdatable ? <td styleName="expand" onClick={() => onExpand(!isExpand, milestone)}>{isExpand ? <IconClose />: <IconExpand />}</td>: <td />}
-      {isEditingMilestone ? <td/> : <td styleName="checkbox">
+      {(isEditingMilestone || hideCheckbox) ? tdEl : <td styleName="checkbox">
         <TCFormFields.Checkbox
           name={`select-${rowId}`}
           value={milestone.selected}
@@ -402,6 +404,7 @@ MilestoneRow.propTypes = {
   disableDeleteAction: PT.bool,
   isCustomer: PT.bool,
   members: PT.object,
+  hideCheckbox: PT.bool,
 }
 
 export default MilestoneRow
