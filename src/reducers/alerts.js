@@ -77,7 +77,8 @@ import {
   CUSTOMER_APPROVE_MILESTONE_APPROVE_SUCCESS,
   CUSTOMER_APPROVE_MILESTONE_REJECT_SUCCESS,
   CUSTOMER_APPROVE_MILESTONE_APPROVE_FAILURE,
-  CUSTOMER_APPROVE_MILESTONE_REJECT_FAILURE
+  CUSTOMER_APPROVE_MILESTONE_REJECT_FAILURE,
+  DELETE_BULK_PROJECT_PHASE_SUCCESS
 } from '../config/constants'
 /* eslint-enable no-unused-vars */
 
@@ -107,6 +108,16 @@ export default function(state = {}, action) {
       Alert.success('Project milestone deleted.')
     } else {
       Alert.success('Project phase deleted.')
+    }
+
+    return state
+  }
+
+  case DELETE_BULK_PROJECT_PHASE_SUCCESS: {
+    if (state.project.version === 'v4') {
+      Alert.success('Project milestones deleted.')
+    } else {
+      Alert.success('Project phases deleted.')
     }
 
     return state
