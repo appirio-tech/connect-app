@@ -356,7 +356,7 @@ function MilestoneRow({
         </td>
       )}
       {
-        isCustomer && (
+        (isCustomer && isUpdatable) && (
           <td styleName="action">
             <div styleName="inline-menu approve">
               {
