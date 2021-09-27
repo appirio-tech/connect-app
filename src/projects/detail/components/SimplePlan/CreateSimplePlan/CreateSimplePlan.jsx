@@ -10,6 +10,7 @@ import * as milestoneHelper from '../components/helpers/milestone'
 
 import styles from './CreateSimplePlan.scss'
 import MilestonesApprovalNotification from '../components/MilestonesApprovalNotification'
+import { PHASE_STATUS_IN_REVIEW } from '../../../../../config/constants'
 
 const createTabs = ({ onClick } ) => ([
   {
@@ -47,6 +48,10 @@ class CreateSimplePlan extends React.Component {
     } = this.props
     const onClickMilestonesTab = () => {}
 
+    const isUpdatable =
+      isCustomer ? project.status === PHASE_STATUS_IN_REVIEW
+        : isProjectLive
+
     if (milestones.length === 0) {
       return isCustomer ? null : (
         <div styleName="add-new-milestone">
@@ -83,7 +88,7 @@ class CreateSimplePlan extends React.Component {
             onApproveMilestones={onApproveMilestones}
             projectMembers={project.members}
             project={project}
-            isUpdatable={isProjectLive && !isCustomer}
+            isUpdatable={isUpdatable}
             isCustomer={isCustomer}
           />
         </div>

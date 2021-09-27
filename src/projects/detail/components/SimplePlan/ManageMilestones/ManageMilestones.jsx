@@ -338,13 +338,13 @@ class ManageMilestones extends React.Component {
                 <col style={{ width: '11%' }} />{/* END DATE */}
                 <col style={{ width: '10%' }} />{/* STATUS */}
                 <col style={{ width: '13%' }} />{/* COPILOTS */}
-                {(isUpdatable || isCustomer) && (<col style={{ width: '64px' }} />)}{/* ACTION */}
+                {(isUpdatable) && (<col style={{ width: '64px' }} />)}{/* ACTION */}
               </colgroup>
               <thead>
                 <MilestoneHeaderRow
                   milestones={milestones}
                   onChangeMilestones={onChangeMilestones}
-                  isUpdatable={isUpdatable || isCustomer}
+                  isUpdatable={isUpdatable}
                   hideCheckbox={hideCheckbox}
                 />
               </thead>
