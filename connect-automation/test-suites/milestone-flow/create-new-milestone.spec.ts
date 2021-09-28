@@ -35,6 +35,7 @@ describe('Connect App - Create New Milestone Tests:', () => {
 
   it('[TC_003] Should verify user can bulk update the milestone.', async () => {
     await ProjectMilestonePageHelper.deleteAllMilestones(testData.projectMilestone);
+    await CommonHelper.waitForAddNewMilestones();
     const milestoneNames = await ProjectMilestonePageHelper.addMilestones(testData.projectMilestone, 2, testData.projectMilestone.active);
     await ProjectMilestonePageHelper.verifyUserCanBulkUpdateTheMilestone(testData.projectMilestone);
   });
