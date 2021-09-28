@@ -48,8 +48,8 @@ class CreateSimplePlan extends React.Component {
     } = this.props
     const onClickMilestonesTab = () => {}
 
-    const isUpdatable =
-      isCustomer ? project.status === PHASE_STATUS_IN_REVIEW
+    const isInReview =
+      isCustomer ?  (milestones.filter( x => x.status === PHASE_STATUS_IN_REVIEW).length > 0 && isProjectLive)
         : isProjectLive
 
     if (milestones.length === 0) {
@@ -88,7 +88,8 @@ class CreateSimplePlan extends React.Component {
             onApproveMilestones={onApproveMilestones}
             projectMembers={project.members}
             project={project}
-            isUpdatable={isUpdatable}
+            isUpdatable={isProjectLive && !isCustomer}
+            isInReview={isInReview}
             isCustomer={isCustomer}
           />
         </div>

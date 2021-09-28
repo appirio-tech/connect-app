@@ -259,6 +259,7 @@ class ManageMilestones extends React.Component {
       onChangeMilestones,
       isUpdatable,
       isCustomer,
+      isInReview,
       project,
     } = this.props
 
@@ -338,13 +339,13 @@ class ManageMilestones extends React.Component {
                 <col style={{ width: '11%' }} />{/* END DATE */}
                 <col style={{ width: '10%' }} />{/* STATUS */}
                 <col style={{ width: '13%' }} />{/* COPILOTS */}
-                {(isUpdatable) && (<col style={{ width: '64px' }} />)}{/* ACTION */}
+                {(isUpdatable || isInReview) && (<col style={{ width: '64px' }} />)}{/* ACTION */}
               </colgroup>
               <thead>
                 <MilestoneHeaderRow
                   milestones={milestones}
                   onChangeMilestones={onChangeMilestones}
-                  isUpdatable={isUpdatable}
+                  isUpdatable={isUpdatable || isInReview}
                   hideCheckbox={hideCheckbox}
                 />
               </thead>
@@ -373,6 +374,7 @@ class ManageMilestones extends React.Component {
                       phaseMembers={milestone.members}
                       isApproving={milestonesInApproval.indexOf(milestone.id) !== -1}
                       hideCheckbox={hideCheckbox}
+                      isInReview={isInReview}
                     />,
                     ...this.renderChallengeTable(milestone)
                   ]
@@ -397,6 +399,7 @@ ManageMilestones.propTypes = {
   projectMembers: PT.arrayOf(PT.shape()),
   isUpdatable: PT.bool,
   isCustomer: PT.bool,
+  isInReview: PT.bool,
   project: PT.shape()
 }
 

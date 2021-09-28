@@ -46,7 +46,8 @@ function MilestoneRow({
   disableDeleteAction,
   isCustomer,
   isApproving,
-  hideCheckbox
+  hideCheckbox,
+  isInReview
 }) {
   const isNeedApproval = milestone.status === PHASE_STATUS_IN_REVIEW
   const showApproval = isCustomer && isNeedApproval
@@ -356,7 +357,7 @@ function MilestoneRow({
         </td>
       )}
       {
-        (isCustomer && isUpdatable) && (
+        (isCustomer && isInReview) && (
           <td styleName="action">
             <div styleName="inline-menu approve">
               {
@@ -405,6 +406,7 @@ MilestoneRow.propTypes = {
   isCustomer: PT.bool,
   members: PT.object,
   hideCheckbox: PT.bool,
+  isInReview: PT.bool,
 }
 
 export default MilestoneRow
