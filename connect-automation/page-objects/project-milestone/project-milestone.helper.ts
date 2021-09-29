@@ -438,9 +438,9 @@ export class ProjectMilestonePageHelper {
 			await this.projectMilestonePageObject.yesButton.click();
 			logger.info('Clicked Yes button');
 
-			const milestoneDeletionMessage = await CommonHelper.getAlertMessageAndClosePopup();
-			expect(milestoneDeletionMessage).toEqual(projectMilestones.milestoneDeletionMessage);
-			logger.info(`Verified Delete Milestone Message ${milestoneDeletionMessage}`);
+			const milestoneBulkDeletionMessage = await CommonHelper.getAlertMessageAndClosePopup();
+			expect(milestoneBulkDeletionMessage).toEqual(projectMilestones.milestoneBulkDeletionMessage);
+			logger.info(`Verified Delete Milestone Message ${milestoneBulkDeletionMessage}`);
 
 			await BrowserHelper.waitUntilClickableOf(
 				this.projectMilestonePageObject.getAddButton(),
