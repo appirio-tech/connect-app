@@ -44,18 +44,21 @@ describe('Connect App - Project Settings Tests:', () => {
   it('[TC_003] Should verify user can Add/Edit/Delete/Download Files', async () => {
     await CommonHelper.goToRecentlyCreatedProject();
     await BrowserHelper.sleep(5000);
+    await CommonHelper.waitForAddNewMilestones();
     await ProjectSettingsPageHelper.verifyUserCanAddEditDeleteDownloadFiles(testData.projectSettings);
   });
 
   it('[TC_004] Should verify user can Add/Edit/Delete/Download Links', async () => {
     await CommonHelper.goToRecentlyCreatedProject();
     await BrowserHelper.sleep(5000);
+    await CommonHelper.waitForAddNewMilestones();
     await ProjectSettingsPageHelper.verifyUserCanAddEditDeleteDownloadLinks(testData.projectSettings);
   });
 
   it('[TC_005] Should verify user can Add Message with Files Attachment', async () => {
     await CommonHelper.goToRecentlyCreatedProject();
     await BrowserHelper.sleep(5000);
+    await CommonHelper.waitForAddNewMilestones();
     await ProjectSettingsPageHelper.verifyUserCanAddMessageWithFileAttachment(testData.projectSettings);
   });
 });

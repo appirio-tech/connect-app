@@ -166,6 +166,13 @@ jobs:
       LOGICAL_ENV: "dev"
     steps: *smoke_testing
 
+  smoke-testing-prod:
+    <<: *test_defaults
+    environment:
+      DEPLOY_ENV: "PROD"
+      LOGICAL_ENV: "prod"
+    steps: *smoke_testing
+
 workflows:
   version: 2
   build:
@@ -202,7 +209,7 @@ workflows:
           context : org-global
           requires:
             - build-prod
-          filters:
+          filters: &filters-prod
             branches:
               only: master
 
@@ -217,3 +224,9 @@ workflows:
             - Hold [Smoke-Testing]
           filters:
             <<: *filters-dev
+      - smoke-testing-prod:
+          context : org-global
+          requires:
+            - Hold [Smoke-Testing]
+          filters:
+            <<: *filters-prod

@@ -85,6 +85,7 @@ export class ProjectsPageObject {
     await this.searchButton.click();
 
     await BrowserHelper.sleep(4000);
+ 
   }
 
   /**

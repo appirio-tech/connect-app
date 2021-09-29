@@ -347,9 +347,11 @@ export class ProjectMilestonePageHelper {
 		await this.projectMilestonePageObject.yesButton.click();
 		logger.info('Clicked Yes button');
 
+
 		const milestoneBulkDeletionMessage = await CommonHelper.getAlertMessageAndClosePopup();
 		expect(milestoneBulkDeletionMessage).toEqual(projectMilestones.milestoneBulkDeletionMessage);
 		logger.info(`Verified Delete Milestone Message ${milestoneBulkDeletionMessage}`);
+
 	}
 
 	/**
@@ -438,9 +440,11 @@ export class ProjectMilestonePageHelper {
 			await this.projectMilestonePageObject.yesButton.click();
 			logger.info('Clicked Yes button');
 
+
 			const milestoneBulkDeletionMessage = await CommonHelper.getAlertMessageAndClosePopup();
 			expect(milestoneBulkDeletionMessage).toEqual(projectMilestones.milestoneBulkDeletionMessage);
 			logger.info(`Verified Delete Milestone Message ${milestoneBulkDeletionMessage}`);
+
 
 			await BrowserHelper.waitUntilClickableOf(
 				this.projectMilestonePageObject.getAddButton(),
