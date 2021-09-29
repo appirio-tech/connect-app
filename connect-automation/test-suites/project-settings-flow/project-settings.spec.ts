@@ -1,3 +1,4 @@
+import { BrowserHelper } from 'topcoder-testing-lib';
 import { CommonHelper } from '../../page-objects/common-page/common.helper';
 import { ProjectSettingsPageHelper } from '../../page-objects/project-settings/project-settings.helper'
 import * as testData from '../../test-data/test-data.json';
@@ -42,19 +43,19 @@ describe('Connect App - Project Settings Tests:', () => {
 
   it('[TC_003] Should verify user can Add/Edit/Delete/Download Files', async () => {
     await CommonHelper.goToRecentlyCreatedProject();
-    await CommonHelper.waitForAddNewMilestones();
+    await BrowserHelper.sleep(5000);
     await ProjectSettingsPageHelper.verifyUserCanAddEditDeleteDownloadFiles(testData.projectSettings);
   });
 
   it('[TC_004] Should verify user can Add/Edit/Delete/Download Links', async () => {
     await CommonHelper.goToRecentlyCreatedProject();
-    await CommonHelper.waitForAddNewMilestones();
+    await BrowserHelper.sleep(5000);
     await ProjectSettingsPageHelper.verifyUserCanAddEditDeleteDownloadLinks(testData.projectSettings);
   });
 
   it('[TC_005] Should verify user can Add Message with Files Attachment', async () => {
     await CommonHelper.goToRecentlyCreatedProject();
-    await CommonHelper.waitForAddNewMilestones();
+    await BrowserHelper.sleep(5000);
     await ProjectSettingsPageHelper.verifyUserCanAddMessageWithFileAttachment(testData.projectSettings);
   });
 });

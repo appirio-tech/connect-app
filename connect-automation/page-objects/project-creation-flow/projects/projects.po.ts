@@ -84,7 +84,7 @@ export class ProjectsPageObject {
     await CommonHelper.fillInputField(searchInput, inputText);
     await this.searchButton.click();
 
-    await BrowserHelper.sleep(2000);
+    await BrowserHelper.sleep(4000);
   }
 
   /**
