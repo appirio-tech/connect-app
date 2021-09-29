@@ -26,6 +26,7 @@ import {
   fireProductDirty,
   fireProductDirtyUndo,
   deleteProjectPhase,
+  deleteBulkProjectPhase,
   expandProjectPhase,
   collapseProjectPhase,
   collapseAllProjectPhases,
@@ -53,7 +54,6 @@ import { updateProject, fireProjectDirty, fireProjectDirtyUndo, updatePhase, exe
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import ProjectEstimation from '../../create/components/ProjectEstimation'
 import CreateSimplePlan from '../components/SimplePlan/CreateSimplePlan'
-import { updatePhaseMembers } from '../../actions/phaseMember'
 
 import {
   PHASE_STATUS_ACTIVE,
@@ -94,6 +94,7 @@ class DashboardContainer extends React.Component {
     this.onChangeMilestones = this.onChangeMilestones.bind(this)
     this.onSaveMilestone = this.onSaveMilestone.bind(this)
     this.onRemoveMilestone = this.onRemoveMilestone.bind(this)
+    this.onRemoveAllMilestones = this.onRemoveAllMilestones.bind(this)
     this.onGetChallenges = this.onGetChallenges.bind(this)
     this.onApproveMilestones = this.onApproveMilestones.bind(this)
   }
@@ -188,23 +189,20 @@ class DashboardContainer extends React.Component {
     const { createGameplanPhases } = this.state
     const index = createGameplanPhases.findIndex(phase => phase.id === id)
     const phase = createGameplanPhases[index]
+    
 
-    /*
-     * @return {Promise} The updated phase members
+    /**
+     * Helper function to get changes in members
      */
-    const updatePhaseMembers = (projectId, phaseId) => {
+    const getUpdatedPhaseMembers = () => {
       const phaseMembers = _.get(phase, 'members', [])
       const oldPhaseMembers = _.get(phase, 'origin.members', [])
-      if (phaseMembers.length !== oldPhaseMembers.length ||
-        _.differenceBy(phaseMembers, oldPhaseMembers, member => member.userId).length !== 0) {
-        return this.props.updatePhaseMembers(
-          projectId,
-          phaseId,
-          phaseMembers.map(member => member.userId)
-        ).then(() => phaseMembers) // ignore the result from backend
+      const updatedPhaseMembers =
+        _.differenceBy(phaseMembers, oldPhaseMembers, member => member.userId)
+      if(phaseMembers.length !== oldPhaseMembers.length || updatedPhaseMembers.length !== 0) {
+        return phaseMembers
       }
-
-      return Promise.resolve(phaseMembers)
+      return null
     }
 
     if (`${phase.id}`.startsWith('new-milestone')) {
@@ -217,8 +215,11 @@ class DashboardContainer extends React.Component {
         productTemplate.description = phase.description.trim()
       }
 
-      const projectId = project.id
-      let phaseId
+      const phaseMembers = getUpdatedPhaseMembers()
+      if(phaseMembers !== null) {
+        productTemplate.members = phaseMembers.map(member => member.userId)
+      }
+
       createPhaseWithoutTimeline(
         project,
         productTemplate,
@@ -226,26 +227,13 @@ class DashboardContainer extends React.Component {
         moment.utc(phase.startDate),
         moment.utc(phase.endDate)
       ).then(({ action }) => {
-        phaseId = action.payload.phase.id
         // reload phase
         const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
         updatedCreateGameplanPhases.splice(index, 1, {
           ...action.payload.phase,
           selected: phase.selected,
         })
-        this.setState({ createGameplanPhases: updatedCreateGameplanPhases }, () => {
-          updatePhaseMembers(projectId, phaseId)
-            .then((members) => {
-              // reload members
-              const updatedPhases = [...this.state.createGameplanPhases]
-              updatedPhases.splice(index, 1, {
-                ...updatedPhases[index],
-                members
-              })
-              this.setState({ createGameplanPhases: updatedPhases })
-            })
-        })
-
+        this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
       })
     } else {
       const updateParam =  {
@@ -259,14 +247,16 @@ class DashboardContainer extends React.Component {
         updateParam.description = phase.description.trim()
       }
 
-      Promise.all([
-        updatePhase(
-          phase.projectId,
-          phase.id,
-          updateParam
-        ),
-        updatePhaseMembers(phase.projectId, phase.id)
-      ]).then(([{ action }, members]) => {
+      const phaseMembers = getUpdatedPhaseMembers()
+      if(phaseMembers !== null) {
+        updateParam.members = phaseMembers.map(member => member.userId)
+      }
+
+      updatePhase(
+        phase.projectId,
+        phase.id,
+        updateParam
+      ).then(({ action }) => {
         const updatedCreateGameplanPhases = [...this.state.createGameplanPhases]
         const idx = updatedCreateGameplanPhases.findIndex(phase => phase.id === action.payload.id)
 
@@ -275,7 +265,8 @@ class DashboardContainer extends React.Component {
           ...action.payload,
           edit: this.state.createGameplanPhases[idx].edit,
           selected: this.state.createGameplanPhases[idx].selected,
-          members
+          products: this.state.createGameplanPhases[idx].products,
+          challenges: this.state.createGameplanPhases[idx].challenges,
         })
         this.setState({ createGameplanPhases: updatedCreateGameplanPhases })
       })
@@ -317,6 +308,21 @@ class DashboardContainer extends React.Component {
       const index = this.state.createGameplanPhases.findIndex(phase => phase.id === id)
       const newGameplanPhases = [...this.state.createGameplanPhases]
       newGameplanPhases.splice(index, 1)
+      this.setState({createGameplanPhases: newGameplanPhases})
+    })
+  }
+
+  onRemoveAllMilestones(projectId, phaseIds) {
+    this.props.deleteBulkProjectPhase(
+      projectId,
+      phaseIds
+    ).then(() => {
+      if (!this.state.createGameplanPhases) {
+        return
+      }
+
+      // remove phases
+      const newGameplanPhases = this.state.createGameplanPhases.filter(phase => !phaseIds.includes(phase.id))
       this.setState({createGameplanPhases: newGameplanPhases})
     })
   }
@@ -523,6 +529,7 @@ class DashboardContainer extends React.Component {
                         onSaveMilestone={this.onSaveMilestone}
                         onGetChallenges={this.onGetChallenges}
                         onRemoveMilestone={this.onRemoveMilestone}
+                        onRemoveAllMilestones={this.onRemoveAllMilestones}
                         onApproveMilestones={this.onApproveMilestones}
                       />
                     )
@@ -575,6 +582,7 @@ const mapDispatchToProps = {
   updateProductAttachment,
   removeProductAttachment,
   deleteProjectPhase,
+  deleteBulkProjectPhase,
   expandProjectPhase,
   collapseProjectPhase,
   collapseAllProjectPhases,
@@ -585,7 +593,6 @@ const mapDispatchToProps = {
   updateProjectAttachment,
   removeProjectAttachment,
   updatePhase,
-  updatePhaseMembers,
   executePhaseApproval,
   approveMilestone
 }

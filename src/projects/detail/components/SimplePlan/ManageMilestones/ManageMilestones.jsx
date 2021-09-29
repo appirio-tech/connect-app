@@ -16,7 +16,7 @@ import MilestoneMoveDateButton from '../components/MilestoneMoveDateButton'
 import * as milestoneHelper from '../components/helpers/milestone'
 import IconUnselect from '../../../../../assets/icons/icon-disselect.svg'
 import IconCopilot from '../../../../../assets/icons/icon-copilot.svg'
-import { CHALLENGE_ID_MAPPING, PHASE_STATUS_IN_REVIEW } from '../../../../../config/constants'
+import { CHALLENGE_ID_MAPPING, PHASE_STATUS_IN_REVIEW, PROJECT_STATUS_CANCELLED, PROJECT_STATUS_COMPLETED } from '../../../../../config/constants'
 
 import './ManageMilestones.scss'
 import MilestoneApprovalButton from '../components/MilestoneApprovalButton'
@@ -84,11 +84,14 @@ class ManageMilestones extends React.Component {
   }
 
   onDeleteAll() {
-    const { milestones, onRemoveMilestone } = this.props
-    const seletedMilestones = _.filter(milestones, m => m.selected)
-    _.forEach(seletedMilestones, m => {
-      onRemoveMilestone(m.id)
-    })
+    const { milestones, onRemoveAllMilestones } = this.props
+    const selectedPhases = _.filter(milestones, m => m.selected)
+
+    if (selectedPhases.length) {
+      const { projectId } = selectedPhases[0]
+      const phaseIds = selectedPhases.map(m => m.id)
+      onRemoveAllMilestones(projectId, phaseIds)
+    }
   }
 
   onUnselectAll() {
@@ -256,7 +259,11 @@ class ManageMilestones extends React.Component {
       onChangeMilestones,
       isUpdatable,
       isCustomer,
+      isInReview,
+      project,
     } = this.props
+
+    const hideCheckbox = project.status === PROJECT_STATUS_CANCELLED || project.status === PROJECT_STATUS_COMPLETED
 
     // const isNeedApproval = project.status === PROJECT_STATUS_IN_REVIEW
     const isNeedApproval = !milestones.filter(ms => ms.selected === true).find(ms => !(ms.status === PHASE_STATUS_IN_REVIEW))
@@ -325,20 +332,21 @@ class ManageMilestones extends React.Component {
             <table styleName="milestones-table">
               <colgroup>
                 <col style={{ width: '20px' }} />
-                <col style={{ width: '20px' }} />{/* CHECKBOX */}
+                {hideCheckbox ? null : <col style={{ width: '20px' }} />}{/* CHECKBOX */}
                 <col style={{ width: '8%' }} />{/* MILESTONE */}
                 <col />{/* DESCRIPTION */}
                 <col style={{ width: '12%' }} />{/* START DATE */}
                 <col style={{ width: '11%' }} />{/* END DATE */}
                 <col style={{ width: '10%' }} />{/* STATUS */}
                 <col style={{ width: '13%' }} />{/* COPILOTS */}
-                {(isUpdatable || isCustomer) && (<col style={{ width: '64px' }} />)}{/* ACTION */}
+                {(isUpdatable || isInReview) && (<col style={{ width: '64px' }} />)}{/* ACTION */}
               </colgroup>
               <thead>
                 <MilestoneHeaderRow
                   milestones={milestones}
                   onChangeMilestones={onChangeMilestones}
-                  isUpdatable={isUpdatable || isCustomer}
+                  isUpdatable={isUpdatable || isInReview}
+                  hideCheckbox={hideCheckbox}
                 />
               </thead>
               <tbody>
@@ -365,6 +373,8 @@ class ManageMilestones extends React.Component {
                       onApprove={this.onApprove}
                       phaseMembers={milestone.members}
                       isApproving={milestonesInApproval.indexOf(milestone.id) !== -1}
+                      hideCheckbox={hideCheckbox}
+                      isInReview={isInReview}
                     />,
                     ...this.renderChallengeTable(milestone)
                   ]
@@ -383,11 +393,13 @@ ManageMilestones.propTypes = {
   onChangeMilestones: PT.func,
   onSaveMilestone: PT.func,
   onRemoveMilestone: PT.func,
+  onRemoveAllMilestones: PT.func,
   onGetChallenges: PT.func,
   onApproveMilestones: PT.func,
   projectMembers: PT.arrayOf(PT.shape()),
   isUpdatable: PT.bool,
   isCustomer: PT.bool,
+  isInReview: PT.bool,
   project: PT.shape()
 }
 

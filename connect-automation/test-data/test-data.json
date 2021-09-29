@@ -83,6 +83,8 @@
         "deleteConfirmation": "Deletion Confirmation",
         "deletePopupMessage": "Are you sure you want to delete the selected Milestone (s)?",
         "milestoneDeletionMessage": "PROJECT MILESTONE DELETED.",
+
+        "milestoneBulkDeletionMessage": "PROJECT MILESTONES DELETED.",
         "copilot": "Copilot",
         "copilotName": "TCConnCopilot",
         "moveMilestoneDatesTitle": "Move Milestone Dates",
@@ -94,6 +96,8 @@
         "inReview": "In Review",
         "actionOnMilestoneApprove": "approve",
         "milestoneApprovedMessageStr": "APPROVED MILESTONES SUCCESSFULLY.",
-        "allMilestoneApprovedNotificationStr": "All the milestone(s) has been approved by the customer"
+
+        "allMilestoneApprovedNotificationStr": "The following milestone(s) has been approved"
+
     }
 }

@@ -10,6 +10,7 @@ import * as milestoneHelper from '../components/helpers/milestone'
 
 import styles from './CreateSimplePlan.scss'
 import MilestonesApprovalNotification from '../components/MilestonesApprovalNotification'
+import { PHASE_STATUS_IN_REVIEW } from '../../../../../config/constants'
 
 const createTabs = ({ onClick } ) => ([
   {
@@ -39,12 +40,17 @@ class CreateSimplePlan extends React.Component {
       onChangeMilestones,
       onSaveMilestone,
       onRemoveMilestone,
+      onRemoveAllMilestones,
       onGetChallenges,
       onApproveMilestones,
       isProjectLive,
       isCustomer,
     } = this.props
     const onClickMilestonesTab = () => {}
+
+    const isInReview =
+      isCustomer ?  (milestones.filter( x => x.status === PHASE_STATUS_IN_REVIEW).length > 0 && isProjectLive)
+        : isProjectLive
 
     if (milestones.length === 0) {
       return isCustomer ? null : (
@@ -78,10 +84,12 @@ class CreateSimplePlan extends React.Component {
             onChangeMilestones={onChangeMilestones}
             onSaveMilestone={onSaveMilestone}
             onRemoveMilestone={onRemoveMilestone}
+            onRemoveAllMilestones={onRemoveAllMilestones}
             onApproveMilestones={onApproveMilestones}
             projectMembers={project.members}
             project={project}
             isUpdatable={isProjectLive && !isCustomer}
+            isInReview={isInReview}
             isCustomer={isCustomer}
           />
         </div>
@@ -97,6 +105,7 @@ CreateSimplePlan.propTypes = {
   onChangeMilestones: PT.func,
   onSaveMilestone: PT.func,
   onRemoveMilestone: PT.func,
+  onRemoveAllMilestones: PT.func,
   onGetChallenges: PT.func,
   onApproveMilestones: PT.func,
   isCustomer: PT.bool,

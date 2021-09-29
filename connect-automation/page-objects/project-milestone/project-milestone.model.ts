@@ -7,6 +7,8 @@ export interface IProjectMilestone {
     deleteConfirmation: string;
     deletePopupMessage: string;
     milestoneDeletionMessage: string;
+
+    milestoneBulkDeletionMessage: string;
     copilot: string;
     copilotName: string;
     moveMilestoneDatesTitle: string;

@@ -425,7 +425,7 @@ export class ProjectSettingsPageHelper {
 	public static async specifyUploadFilePathAndClickUploadButton() {
 		// Specify the File Upload Path
 		const fileToUploadElement = this.projectSettingsPageObject.selectFileToUploadButton;
-		const fileToUpload = '../../sample.pdf';
+		const fileToUpload = '../../../sample.pdf';
 		let absolutePath = path.resolve(__dirname, fileToUpload);
 		absolutePath = absolutePath.replace('/temp/', '/');
 		await fileToUploadElement.sendKeys(absolutePath);

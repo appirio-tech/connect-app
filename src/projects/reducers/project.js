@@ -26,7 +26,7 @@ import {
   ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING,
   UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION,
   CREATE_SCOPE_CHANGE_REQUEST_SUCCESS, APPROVE_SCOPE_CHANGE_SUCCESS, REJECT_SCOPE_CHANGE_SUCCESS, CANCEL_SCOPE_CHANGE_SUCCESS, ACTIVATE_SCOPE_CHANGE_SUCCESS,
-  LOAD_PROJECT_MEMBERS_SUCCESS, LOAD_PROJECT_MEMBER_INVITES_SUCCESS, LOAD_PROJECT_MEMBER_SUCCESS, CREATE_PROJECT_PHASE_PENDING, CREATE_PROJECT_PHASE_SUCCESS, CUSTOMER_APPROVE_MILESTONE_PENDING, CUSTOMER_APPROVE_MILESTONE_FINISHED,
+  LOAD_PROJECT_MEMBERS_SUCCESS, LOAD_PROJECT_MEMBER_INVITES_SUCCESS, LOAD_PROJECT_MEMBER_SUCCESS, CREATE_PROJECT_PHASE_PENDING, CREATE_PROJECT_PHASE_SUCCESS, CUSTOMER_APPROVE_MILESTONE_PENDING, CUSTOMER_APPROVE_MILESTONE_FINISHED, DELETE_BULK_PROJECT_PHASE_PENDING, DELETE_BULK_PROJECT_PHASE_SUCCESS,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -519,6 +519,7 @@ export const projectState = function (state=initialState, action) {
   case UPDATE_PROJECT_PENDING:
   case UPDATE_PHASE_PENDING:
   case DELETE_PROJECT_PHASE_PENDING:
+  case DELETE_BULK_PROJECT_PHASE_PENDING:
     return Object.assign({}, state, {
       isLoading: false,
       processing: true,
@@ -559,6 +560,18 @@ export const projectState = function (state=initialState, action) {
       phases: { $splice: [[phaseIndex, 1]] },
       phasesNonDirty: { $splice: [[phaseIndex, 1]] },
       processing: { $set: false },
+    })
+  }
+
+  case DELETE_BULK_PROJECT_PHASE_SUCCESS: {
+    const { phaseIds } = action.payload
+
+    const newPhases = state.phases.filter(phase => !phaseIds.includes(phase.id))
+
+    return Object.assign({}, state, {
+      phases: newPhases,
+      phasesNonDirty: newPhases,
+      processing: false,
     })
   }
 
