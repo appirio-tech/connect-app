@@ -12,3 +12,5 @@ npm-debug.log
 # e2e test case
 connect-automation/temp
 connect-automation/test-results
+# avoid accidental pushing of the production config to the repository
+connect-automation/config/connect-automation-config-prod.json
