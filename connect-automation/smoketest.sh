@@ -18,6 +18,7 @@ APPCONFIGFILENAME=$1
 LOGICAL_PATH=$2
 
 cd connect-automation
+# file from AWS would override the file from the repo
 aws s3 cp s3://tc-platform-${LOGICAL_PATH}/securitymanager/${APPCONFIGFILENAME} ./config/
 cp config/${APPCONFIGFILENAME} config/config.json
 track_error $? "Environment setting"
