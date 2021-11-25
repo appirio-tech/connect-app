@@ -18,8 +18,8 @@ APPCONFIGFILENAME=$1
 LOGICAL_PATH=$2
 
 cd connect-automation
-aws s3 cp s3://tc-platform-${LOGICAL_PATH}/securitymanager/${APPCONFIGFILENAME} .
-cp ${APPCONFIGFILENAME} config/config.json
+aws s3 cp s3://tc-platform-${LOGICAL_PATH}/securitymanager/${APPCONFIGFILENAME} ./config/
+cp config/${APPCONFIGFILENAME} config/config.json
 track_error $? "Environment setting"
 
 docker build -t comm-smoke:latest .
