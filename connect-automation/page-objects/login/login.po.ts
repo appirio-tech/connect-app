@@ -76,7 +76,7 @@ export class LoginPage {
     await CommonHelper.waitForElementToGetDisplayed(this.loginWindow)
     await BrowserHelper.waitUntilClickableOf(
       this.loginButton,
-      appconfig.Timeout.ElementClickable,
+      appconfig.Timeout.PageLoad,
       appconfig.LoggerErrors.ElementClickable
     );
     logger.info('Login Form Displayed');
@@ -100,7 +100,7 @@ export class LoginPage {
     );
     await BrowserHelper.waitUntilClickableOf(
       this.loginButton,
-      appconfig.Timeout.ElementClickable,
+      appconfig.Timeout.PageLoad,
       appconfig.LoggerErrors.ElementClickable
     );
     await this.loginButton.click();

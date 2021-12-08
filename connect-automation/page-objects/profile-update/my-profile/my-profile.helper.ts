@@ -86,6 +86,7 @@ export class MyProfilePageHelper {
       localTimezone
     );
     logger.info(`Updated Local Time Field: ${localTimezone}`);
+    await BrowserHelper.sleep(3000);
     await selectOption.click();
   }
 

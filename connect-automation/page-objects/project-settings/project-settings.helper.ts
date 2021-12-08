@@ -104,6 +104,7 @@ export class ProjectSettingsPageHelper {
 	 * Verify Account Expiry Information
 	 */
 	public static async verifyAccountExpiryInformation() {
+		await BrowserHelper.sleep(2000);
 		// Verify that Account Expiry Icon is present
 		const isIconPresent = await CommonHelper.isElementPresent('xpath', this.projectSettingsPageObject.projectSettingsExpiryIcon);
 		expect(isIconPresent).toBe(true);
