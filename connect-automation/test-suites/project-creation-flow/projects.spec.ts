@@ -28,9 +28,11 @@ describe('Connect App - Copilot Role Project Related Tests:', () => {
     await ProjectsHelper.open();
   });
 
-  it('[TC_003] should verify whether the Copilot can Join the project', async () => {
-    await ProjectsHelper.verifyCopilotProjectJoin();
-  });
+  if (ConfigHelper.getEnvironment() !== 'prod') {
+    it('[TC_003] should verify whether the Copilot can Join the project', async () => {
+      await ProjectsHelper.verifyCopilotProjectJoin();
+    });
+  }
 
   it('[TC_004] should verify user can search for projects using project name, user handle, ref code', async () => {
     await ProjectsHelper.verifyProjectSearch(testData.searchProject);

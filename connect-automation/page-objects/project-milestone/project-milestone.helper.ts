@@ -282,6 +282,12 @@ export class ProjectMilestonePageHelper {
 		await this.projectMilestonePageObject.milestoneSelectAllCheckbox.click();
 		logger.info('Click on Milestone Select All checkbox');
 
+		await BrowserHelper.waitUntilClickableOf(
+			this.projectMilestonePageObject.projectSelectedLabel,
+			config.Timeout.ElementClickable,
+			config.LoggerErrors.ElementClickable
+		);
+
 		const message = await this.projectMilestonePageObject.projectSelectedLabel.getText();
 		expect(message).toContain(projectMilestones.projectsSelected);
 		logger.info(`Verified Message ${message}`);
@@ -324,16 +330,18 @@ export class ProjectMilestonePageHelper {
 		moveMilestoneInputBoxElement.clear();
 		moveMilestoneInputBoxElement.sendKeys(projectMilestones.noOfDays);
 		logger.info(`Specified Value ${projectMilestones.noOfDays} in Move Milestone Textbox`);
+		await BrowserHelper.sleep(2000);
 
 		await this.projectMilestonePageObject.getMoveMilestoneButton().click();
 		logger.info('Clicked on Move Milestone button');
+		await BrowserHelper.sleep(5000);
 
 		const afterRowDates = await this.getDateDetailsForAvailableMilestones();
 		await this.verifyMilestoneDatesAfterMovingDates(beforeRowDates, afterRowDates, projectMilestones.noOfDays);
 
 		await this.projectMilestonePageObject.deleteMilestoneButton.click();
 		logger.info('Clicked on Move Milestone Delete button');
-
+		
 		await BrowserHelper.waitUntilClickableOf(
 			this.projectMilestonePageObject.moveMilestonePopupMessage,
 			config.Timeout.ElementClickable,
@@ -514,6 +522,7 @@ export class ProjectMilestonePageHelper {
 		logger.info('Logged in using Copilot User');
 
 		await this.open();
+		await CommonHelper.waitForElementToGetDisplayed(this.projectMilestonePageObject.allMilestoneApproveNotification())
 		const milestoneApproveNotification = this.projectMilestonePageObject.allMilestoneApproveNotification()
 		await BrowserHelper.waitUntilVisibilityOf(milestoneApproveNotification)
 		logger.info(`'${await milestoneApproveNotification.getText()}' is displayed on the page.`)
@@ -533,8 +542,7 @@ export class ProjectMilestonePageHelper {
 
 		logger.info(`Total ${numberOfInReviewMilestones} numbers of milestone found with 'In review' status`)
 
-		const approveMilestoneButton1 = this.projectMilestonePageObject.getMilestoneActionButtonForCustomer('approve')
-		await BrowserHelper.sleep(2000);
+		const approveMilestoneButton1 = this.projectMilestonePageObject.getApproveButtonForCustomer()
 		while (numberOfInReviewMilestones !== 0) {
 			logger.info("Approve milestone button is displayed on  the page.")
 			try {

@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { BrowserHelper } from 'topcoder-testing-lib';
 import * as appconfig from '../../config/app-config.json';
+import { logger } from '../../logger/logger';
 import { CommonHelper } from '../common-page/common.helper';
 import { ProjectSettingsPageObject } from '../project-settings/project-settings.po';
 import { IProjectSettings } from './project-settings.model';
@@ -440,8 +441,16 @@ export class ProjectSettingsPageHelper {
 	 * Check to see if there is error dialog, If so close it
 	 */
 	private static async checkAlertDialog() {
-		if (await this.projectSettingsPageObject.closeIcon.isPresent()) {
-			await this.projectSettingsPageObject.closeIcon.click();
+		try {
+			if (await this.projectSettingsPageObject.closeIcon.isPresent()) {
+				await BrowserHelper.waitUntilClickableOf(this.projectSettingsPageObject.closeIcon);			
+				await this.projectSettingsPageObject.closeIcon.click();
+				logger.info('Alert Dialog Closed.')
+			} else {
+				logger.info('No Alert Dialog Present to Close.')
+			}
+		} catch (e) {
+			logger.error('Alert Dialog - Close Icon Not Found.' + e);
 		}
 	}
 }
