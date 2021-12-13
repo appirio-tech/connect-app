@@ -99,7 +99,7 @@ export class ProjectMilestonePageObject {
 	 * Get Milestone SelectAll Checkbox
 	 */
 	public get milestoneSelectAllCheckbox() {
-		return ElementHelper.getElementByXPath('//label[@for="select-all" and not (@class)]');
+		return ElementHelper.getElementByXPath('//label[@for="select-all" and not (@class)]//ancestor::div[contains(@class, "checkbox-group-item")]');
 	}
 
 	/**
@@ -300,5 +300,14 @@ export class ProjectMilestonePageObject {
 	 */
 	public getDismissAllMilestoneApprovedNotificationButton() {
 		return ElementHelper.getElementByXPath("//button/div[.='DISMISS']")
+	}
+
+	
+	/**
+	 * 
+	 * @returns Get Approval Button for Customer
+	 */
+	 public getApproveButtonForCustomer() {
+		return ElementHelper.getElementByXPath("(//button[@type='submit' and contains(@class, 'tc-btn-link')])[1]")
 	}
 }

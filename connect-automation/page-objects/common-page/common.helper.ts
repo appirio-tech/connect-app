@@ -38,7 +38,7 @@ const projectTableXpath = '//div[@class="flex-data"]';
 const customerProjectsXpath = '//div[@class="project-header-details"]';
 const contentWrapperXpath = '//div[@class="twoColsLayout-contentInner"]';
 const milestoneXpath = "//th[contains(text(),'MILESTONE')]";
-const addNewMilestonesXpath = "//button[contains(text(),'Add New Milestone')]";
+const addNewMilestonesXpath = "//button[contains(text(),'Add New Milestone')] | //button[text()='ADD']";
 
 export const CommonHelper = {
   /**
@@ -48,7 +48,9 @@ export const CommonHelper = {
    */
   async login(username: string, password: string) {
     await BrowserHelper.initialize();
+    logger.info('Starting Browser');
     await BrowserHelper.maximize();
+    logger.info('Maximizing Browser')
 
     await LoginPageHelper.open();
     await LoginPageHelper.login(username, password);
@@ -269,11 +271,9 @@ export const CommonHelper = {
    * Get recent project title element
    * @param isCustomer true if current logged in user had customer role
    */
-  async firstProject(isCustomer = false) {
-    const projectClassName = isCustomer ? 'project-header-details' : 'project-title'
-    const titles = await ElementHelper.getAllElementsByClassName(projectClassName);
-
-    return titles[0];
+  firstProject() {
+    const firstProjectXpath = '(//div[@class="project-name"] | //a[@class="link-title"])[1]'
+    return ElementHelper.getElementByXPath(firstProjectXpath)
   },
 
   /**
@@ -282,10 +282,10 @@ export const CommonHelper = {
    */
   async goToRecentlyCreatedProject(isCustomer = false) {
     await BrowserHelper.open(ConfigHelper.getHomePageUrl());
-    await BrowserHelper.sleep(5000);
-    isCustomer ? await this.waitForCustomerProjects() : await this.waitForProjectsToGetLoaded();
-    const testElement = await this.firstProject(isCustomer);
-    await testElement.click();
+    await this.waitForElementToGetDisplayed(this.allProjectsTable());
+    await this.waitForElementToGetDisplayed(this.firstProject());
+    await this.firstProject().click();
+    logger.info('Clicked on Recently Created Project');
   },
 
   /**
@@ -393,6 +393,10 @@ export const CommonHelper = {
 
     while (true) {
       try {
+        if (count > appconfig.Timeout.PageLoad) {
+          logger.info(`CountValue: ${count} Timeout: ${appconfig.Timeout.PageLoad}`)
+          break;
+        }
         switch (identifierType.toLowerCase()) {
           case 'xpath': webElement = ElementHelper.getElementByXPath(identifierValue); break;
         }
@@ -404,16 +408,15 @@ export const CommonHelper = {
           textVerification = text.length !== 0 ? true : false;
         }
         if (isElementDisplayed && isElementEnabled && textVerification) {
+          logger.info(`Element found and is visible ${identifierValue} in ${count} tries`)
           break;
         }
       } catch (error) {
-        continue;
+        logger.debug('Element Not found Yet.')
+      } finally {
+        await BrowserHelper.sleep(100);
+        count++;
       }
-      if (count > appconfig.Timeout.PageLoad) {
-        break;
-      }
-      await BrowserHelper.sleep(100);
-      count++;
     }
     return webElement;
   },
@@ -518,6 +521,13 @@ export const CommonHelper = {
    */
   async waitForAddNewMilestones() {
     await this.waitForElementToBeVisible('xpath', addNewMilestonesXpath, true);
+  },
+
+  /**
+   * Get All Projects Table
+   */
+   allProjectsTable() {
+    return ElementHelper.getElementByXPath('//div[@class="flex-area"] | //div[contains(@class, "card-view")]');
   }
 };
 
