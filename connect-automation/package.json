@@ -35,7 +35,10 @@
     "webdriver-update": "node node_modules/protractor/bin/webdriver-manager update",
     "pretest": "npm run webdriver-update && npm run clean && npm run tsc",
     "test": "protractor temp/conf.js",
-    "lint": "npx tslint --project . --fix"
+    "lint": "npx tslint --project . --fix",
+    "test:local": "cp config/connect-automation-config-local.json config/config.json && npm run pretest && protractor temp/conf.js",
+    "test:dev": "cp config/connect-automation-config-dev.json config/config.json && npm run pretest && protractor temp/conf.js",
+    "test:prod": "cp config/connect-automation-config-prod.json config/config.json && npm run pretest && protractor temp/conf.js"
   },
   "keywords": [
     "protractor",

@@ -83,8 +83,9 @@ export class ProjectsPageObject {
     const searchInput = this.searchInput;
     await CommonHelper.fillInputField(searchInput, inputText);
     await this.searchButton.click();
-
-    await BrowserHelper.sleep(4000);
+    logger.info(`Searched ${inputText}`);
+    
+    await BrowserHelper.sleep(6000);
  
   }
 

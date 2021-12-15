@@ -124,6 +124,7 @@ export class MyProfilePageHelper {
   public static async updateCountryDropdown(country: string) {
     const el = await this.myProfilePageObject.countryField();
     await el.click();
+    await BrowserHelper.sleep(1000);
     const selectOption = await this.myProfilePageObject.selectTextFromDropDown(
       country
     );
@@ -157,6 +158,7 @@ export class MyProfilePageHelper {
   public static async changeBusinessPhoneCountry(businessPhoneCountry: string) {
     const countryField = this.myProfilePageObject.businessPhoneCountryField;
     await countryField.click();
+    await BrowserHelper.sleep(1000);
     const dropDownParent = this.myProfilePageObject.businessPhoneDropdown;
     const selectOptions = await ElementHelper.getAllElementsByLinkText(
       businessPhoneCountry,
@@ -225,6 +227,9 @@ export class MyProfilePageHelper {
     ).toEqual(businessPhoneCountry);
 
     await this.updateCountryDropdown(country);
+
+    await BrowserHelper.sleep(1000)
+    
     businessNumber = await this.myProfilePageObject.getBusinessPhoneValue();
     currentCountryCode = businessNumber.substr(0, countryCode.length);
     const countryAbbreviation = await this.myProfilePageObject.countryAbbreviation();
