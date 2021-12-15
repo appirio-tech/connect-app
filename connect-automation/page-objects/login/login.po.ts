@@ -105,5 +105,14 @@ export class LoginPage {
     );
     await this.loginButton.click();
     logger.info('Submitted login form');
+
+    await CommonHelper.waitForElementToGetDisplayed(this.allProjectsTable)
+  }
+
+  /**
+   * Get All Projects Table
+   */
+  public get allProjectsTable() {
+    return ElementHelper.getElementByXPath('//div[@class="flex-area"] | //div[contains(@class, "card-view")]');
   }
 }

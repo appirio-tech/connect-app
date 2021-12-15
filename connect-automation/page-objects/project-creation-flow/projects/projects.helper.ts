@@ -170,11 +170,27 @@ export class ProjectsHelper {
    * @param searchTerm search term
    */
   private static async verifyAllProjects(searchTerm: string) {
-    const searchResultElements = await this.projectsPageObject.projectTitles();
-    searchResultElements.map(async (project) => {
-      const projectName = await project.getText();
-      expect(projectName.toLowerCase()).toContain(searchTerm);
-    });
+    try {
+      let searchResultElements = await this.projectsPageObject.projectTitles();
+      if(searchResultElements.length === 0) {
+        throw new Error('No Projects Found To Verify.');
+      }
+
+      let cnt=0;
+      for(const element of searchResultElements) {
+        searchResultElements = await this.projectsPageObject.projectTitles();
+        await BrowserHelper.waitUntilVisibilityOf(searchResultElements[cnt]);
+        logger.info(`${await searchResultElements[cnt].getText()} is visible.`);
+        cnt++;
+      }
+      searchResultElements.map(async (project) => {
+        const projectName = await project.getText();
+        logger.info(`ProjectName ${projectName} : SearchTerm ${searchTerm}`)
+        expect(projectName.toLowerCase()).toContain(searchTerm);
+      });
+		} catch (e) {
+			throw new Error('No Projects Found To Verify ' + e);
+		}
   }
 
   /**
