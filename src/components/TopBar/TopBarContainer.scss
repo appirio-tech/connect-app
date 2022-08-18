@@ -67,20 +67,12 @@
           height: auto;
           width: 53px;
           @media screen and (max-width: $screen-md - 1px) {
-            /* adjust so visible logo starts from the beginning of .logo  */
-            margin-left: -4px;
-            margin-top: -1px;
-            /* real visible logo is 53px when svg has width 60px */
+            margin-top: -8px;
             width: 60px;
-
-            /* hide "connect" text under the logo */
-            path:last-child {
-              display: none;
-            }
           }
 
           path {
-            fill: $tc-gray-10;
+            fill: $tc-white;
           }
         }
       }
