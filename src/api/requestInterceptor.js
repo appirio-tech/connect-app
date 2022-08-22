@@ -1,6 +1,6 @@
 import axios from 'axios'
 import store from '../config/store'
-import { getFreshToken, isTokenExpired } from 'tc-auth-lib'
+import { getFreshToken, isTokenExpired } from '@topcoder-platform/tc-auth-lib'
 
 export const getToken = () => {
   return new Promise((resolve, reject) => {

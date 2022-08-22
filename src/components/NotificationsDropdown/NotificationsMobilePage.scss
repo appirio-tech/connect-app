@@ -25,16 +25,11 @@
   overflow: hidden;
 
   svg {
-    margin-left: -4px;
-    margin-top: -1px;
+    margin-top: -8px;
     width: 60px;
 
     path {
-      fill: $tc-gray-10;
-
-      &:last-child {
-        display: none;
-      }
+      fill: $tc-white;
     }
   }
 }
