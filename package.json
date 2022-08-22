@@ -113,7 +113,7 @@
     "linkify-it": "^2.0.3",
     "lodash": "^4.16.4",
     "mobile-detect": "^1.4.2",
-    "moment": "^2.14.1",
+    "moment": "^2.29.4",
     "moment-range": "^4.0.1",
     "moment-timezone": "^0.5.27",
     "prop-types": "^15.6.0",
