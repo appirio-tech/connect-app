@@ -67,7 +67,12 @@ build_steps: &build_steps
       - setup_remote_docker
       - run: *install_dependency
       - run: *install_deploysuite
-      - run: npm install
+      - run: 
+          name: "Installing npm dependency"
+          command: |
+            npm config set unsafe-perm true
+            git config --global url."https://git@".insteadOf git://
+            npm install
       - run:
           name: "configuring environment"
           command: |
@@ -195,7 +200,7 @@ workflows:
             - build-dev
           filters: &filters-dev
             branches:
-              only: ['dev', 'feature/milestone-customer-approval']
+              only: ['dev', 'feature/milestone-customer-approval', 'reskin']
 
       - deployTest01:
           context : org-global
