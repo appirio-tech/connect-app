@@ -4,7 +4,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { render } from 'react-dom'
-import { SEGMENT_KEY } from './config/constants'
+import { SEGMENT_KEY, UNIVERSAL_NAV_URL } from './config/constants'
 import App from './App'
 
 import 'styles/main.scss'
@@ -18,6 +18,34 @@ if (!_.isEmpty(SEGMENT_KEY)) {
   analytics.page();
   }}();
 }
+/* eslint-enable */
+
+// <!-- Start of topcoder Topcoder Universal Navigation script -->
+/* eslint-disable */
+!(function (n, t, e, a, c, i, o) {
+// eslint-disable-next-line no-unused-expressions, no-sequences
+  ;(n['TcUnivNavConfig'] = c),
+  (n[c] =
+    n[c] ||
+    function () {
+      ;(n[c].q = n[c].q || []).push(arguments)
+    }),
+  (n[c].l = 1 * new Date())
+  // eslint-disable-next-line no-unused-expressions, no-sequences
+  ;(i = t.createElement(e)), (o = t.getElementsByTagName(e)[0])
+  i.crossOrigin="anonymous"
+  i.async = 1
+  i.type = 'module'
+  i.src = a
+  o.parentNode.insertBefore(i, o)
+})(
+  window,
+  document,
+  'script',
+  UNIVERSAL_NAV_URL,
+  'tcUniNav'
+)
+// <!-- End of topcoder Topcoder Universal Navigation script -->
 /* eslint-enable */
 
 render(<App />, mountNode)

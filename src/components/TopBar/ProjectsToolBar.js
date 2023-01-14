@@ -1,5 +1,5 @@
 require('./ProjectsToolBar.scss')
-
+/* global tcUniNav */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import querystring from 'query-string'
@@ -7,7 +7,6 @@ import { withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import SearchBar from 'appirio-tech-react-components/components/SearchBar/SearchBar'
-import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
 import MobileMenu from '../MobileMenu/MobileMenu'
 import MobileMenuToggle from '../MobileMenu/MobileMenuToggle'
@@ -16,21 +15,34 @@ import { loadProjectsMetadata } from '../../actions/templates'
 import { getNewProjectLink } from '../../helpers/projectHelper'
 import { hasPermission } from '../../helpers/permissions'
 import { PERMISSIONS } from '../../config/permissions'
+import { HEADER_AUTH_URLS_HREF, HEADER_AUTH_URLS_LOCATION, DOMAIN } from '../../config/constants'
+import { getInitials } from '../../helpers/format'
+
+const HEADER_AUTH_URLS = {
+  href: HEADER_AUTH_URLS_HREF,
+  location: HEADER_AUTH_URLS_LOCATION
+}
+const BASE = `https://www.${DOMAIN}`
+
+let uniqueId = 0
 
 class ProjectsToolBar extends Component {
 
   constructor(props) {
     super(props)
+    uniqueId += 1
     this.state = {
       errorCreatingProject: false,
       isMobileMenuOpen: false,
-      isMobileSearchVisible: false
+      isMobileSearchVisible: false,
+      headerId: uniqueId,
     }
     this.applyFilters = this.applyFilters.bind(this)
     this.handleTermChange = this.handleTermChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.toggleMobileMenu = this.toggleMobileMenu.bind(this)
     this.onLeave = this.onLeave.bind(this)
+    this.uniNavInitialized = false
   }
 
   componentWillMount() {
@@ -69,6 +81,43 @@ class ProjectsToolBar extends Component {
   componentDidMount() {
     // sets window unload hook to show unsaved changes alert and persist incomplete project
     window.addEventListener('beforeunload', this.onLeave)
+  }
+
+  componentDidUpdate() {
+    if (!!this.state.headerId && !this.uniNavInitialized) {
+      const user = this.props.user
+      const navigationUserInfo = {
+        ...user,
+        initials: getInitials(user.firstName, user.lastName)
+      }
+      const authToken = user ? user.token : null
+      this.uniNavInitialized = true
+      const headerId = this.state.headerId
+      const isAuthenticated = !!authToken
+      const authURLs = HEADER_AUTH_URLS
+
+      const regSource = window.location.pathname.split('/')[1]
+      const retUrl = encodeURIComponent(window.location.href)
+      tcUniNav('init', `headerNav-${headerId}`, {
+        type: 'tool',
+        toolName: 'Connect',
+        toolRoot: '/',
+        user: isAuthenticated ? navigationUserInfo : null,
+        signOut: () => {
+          window.location = `${BASE}/logout?ref=nav`
+        },
+        signIn: () => {
+          window.location = `${authURLs.location
+            .replace('%S', retUrl)
+            .replace('member?', '#!/member?')}&regSource=${regSource}`
+        },
+        signUp: () => {
+          window.location = `${authURLs.location
+            .replace('%S', retUrl)
+            .replace('member?', '#!/member?')}&mode=signUp&regSource=${regSource}`
+        }
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -146,8 +195,8 @@ class ProjectsToolBar extends Component {
   }
 
   render() {
-    const { renderLogoSection, userMenu, userRoles, user, mobileMenu, location, orgConfig } = this.props
-    const { isMobileMenuOpen, isMobileSearchVisible } = this.state
+    const { userRoles, user, mobileMenu, orgConfig } = this.props
+    const { isMobileMenuOpen, isMobileSearchVisible, headerId } = this.state
     const isLoggedIn = !!(userRoles && userRoles.length)
 
     const onLeaveMessage = this.onLeave() || ''
@@ -158,8 +207,8 @@ class ProjectsToolBar extends Component {
           when={!!onLeaveMessage}
           message={onLeaveMessage}
         />
+        <div id={`headerNav-${headerId}`} />
         <div className="primary-toolbar">
-          { renderLogoSection() }
           { isLoggedIn && !hasPermission(PERMISSIONS.SEARCH_PROJECTS) && <div className="projects-title-mobile">MY PROJECTS</div> }
           {
             isLoggedIn && hasPermission(PERMISSIONS.SEARCH_PROJECTS) &&
@@ -176,10 +225,6 @@ class ProjectsToolBar extends Component {
           }
           <div className="actions">
             {isLoggedIn && <NewProjectNavLink link={getNewProjectLink(orgConfig)} />}
-            { userMenu }
-            {/* pass location, to make sure that component is re-rendered when location is changed
-                it's necessary to hide notification dropdown on mobile when users uses browser history back/forward buttons */}
-            { isLoggedIn && <NotificationsDropdown location={location} /> }
             { isLoggedIn && <MobileMenuToggle onToggle={this.toggleMobileMenu}/> }
           </div>
         </div>
