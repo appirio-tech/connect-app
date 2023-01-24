@@ -1235,3 +1235,7 @@ export const DEFAULT_NDA_UUID = process.env.DEFAULT_NDA_UUID
  * The minimal duration of a TaaS Job in weeks
  */
 export const TAAS_MIN_JOB_DURATION = 4
+
+export const UNIVERSAL_NAV_URL = process.env.UNIVERSAL_NAV_URL || '//uni-nav.topcoder-dev.com/v1/tc-universal-nav.js'
+export const HEADER_AUTH_URLS_HREF = process.env.HEADER_AUTH_URLS_HREF || `https://accounts-auth0.${DOMAIN}?utm_source=community-app-main`
+export const HEADER_AUTH_URLS_LOCATION = process.env.HEADER_AUTH_URLS_LOCATION || `https://accounts-auth0.${DOMAIN}?retUrl=%S&utm_source=community-app-main`

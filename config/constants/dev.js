@@ -1,3 +1,5 @@
+const DOMAIN = 'topcoder-dev.com'
+
 module.exports = {
   API_URL           : 'https://api.topcoder-dev.com/v3',
   API_URL_V2        : 'https://api.topcoder-dev.com/v2',
@@ -59,5 +61,8 @@ module.exports = {
   CONTENTFUL_SPACE_ID : process.env.CONTENTFUL_SPACE_ID,
 
   TAAS_APP_URL: 'https://platform.topcoder-dev.com/taas',
-  DEFAULT_NDA_UUID: 'e5811a7b-43d1-407a-a064-69e5015b4900'
+  DEFAULT_NDA_UUID: 'e5811a7b-43d1-407a-a064-69e5015b4900',
+  UNIVERSAL_NAV_URL: '//uni-nav.topcoder-dev.com/v1/tc-universal-nav.js',
+  HEADER_AUTH_URLS_HREF: `https://accounts-auth0.${DOMAIN}?utm_source=community-app-main`,
+  HEADER_AUTH_URLS_LOCATION: `https://accounts-auth0.${DOMAIN}?retUrl=%S&utm_source=community-app-main`
 }
