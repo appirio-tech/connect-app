@@ -96,14 +96,12 @@
 
     &.tc-header__connect {
       padding: 0;
-      min-height: 120px;
       height: auto;
       @media screen and (max-width: $screen-md - 1px) {
         min-height: 50px;
       }
 
       .top-bar {
-        height: 120px;
         background-color: $tc-black;
         position: relative;
         @media screen and (max-width: $screen-md - 1px) {
