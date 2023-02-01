@@ -132,6 +132,13 @@ jobs:
       LOGICAL_ENV: "dev"
     steps: *build_steps
 
+  build-qa:
+    <<: *defaults
+    environment:
+      DEPLOY_ENV: "QA"
+      LOGICAL_ENV: "qa"
+    steps: *build_steps
+    
   build-prod:
     <<: *defaults
     environment:
@@ -145,6 +152,14 @@ jobs:
     environment:
       DEPLOY_ENV: "DEV"
       LOGICAL_ENV: "dev"
+      ENABLE_CACHE: false
+    steps: *deploy_steps
+
+  deployQa:
+    <<: *deploy_defaults
+    environment:
+      DEPLOY_ENV: "QA"
+      LOGICAL_ENV: "qa"
       ENABLE_CACHE: false
     steps: *deploy_steps
 
@@ -187,7 +202,12 @@ workflows:
           context : org-global
           filters:
             branches:
-              ignore: ['master']
+              ignore: ['master','qa']
+      - build-qa:
+          context : org-global
+          filters:
+            branches:
+              only: ['qa']              
       - build-prod:
           context : org-global
           filters:
@@ -201,6 +221,14 @@ workflows:
           filters: &filters-dev
             branches:
               only: ['dev', 'universal_nav', 'feature/milestone-customer-approval', 'reskin']
+
+      - deployQa:
+          context : org-global
+          requires:
+            - build-qa
+          filters: &filters-dev
+            branches:
+              only: ['qa']
 
       - deployTest01:
           context : org-global

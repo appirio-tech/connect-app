@@ -1,4 +1,4 @@
-const DOMAIN = 'topcoder-dev.com'
+const DOMAIN = 'topcoder-qa.com'
 
 module.exports = {
   API_URL           : 'https://api.topcoder-qa.com/v3',
@@ -16,7 +16,7 @@ module.exports = {
   DOMAIN            : 'topcoder-qa.com',
   ENV               : 'QA',
 
-  PROJECTS_API_URL  : 'http://api.topcoder-dev.com',
+  PROJECTS_API_URL  : 'http://api.topcoder-qa.com',
 
   NEW_RELIC_APPLICATION_ID: process.env.TRAVIS_BRANCH ? '11199233' : '',
 
@@ -30,10 +30,10 @@ module.exports = {
   SWIFT_PROGRAM_URL  : 'apple.topcoder-qa.com',
   TCO16_URL          : 'http://tco16.topcoder-qa.com',
   TCO17_URL          : 'http://tco17.topcoder-qa.com',
-  TCO_HOME_URL       : 'https://www.topcoder-dev.com/tco',
+  TCO_HOME_URL       : 'https://www.topcoder-qa.com/tco',
 
-  ACCOUNTS_APP_URL             : 'https://accounts.topcoder-qa.com/#!/member',
-  ACCOUNTS_APP_CONNECTOR_URL   : 'https://accounts.topcoder-qa.com/connector.html',
+  ACCOUNTS_APP_URL             : 'https://accounts-auth0.topcoder-qa.com',
+  ACCOUNTS_APP_CONNECTOR_URL   : 'https://accounts-auth0.topcoder-qa.com',
   TYPEFORM_URL      : 'https://topcoder.typeform.com/to/vgqiBXdk',
 
   FILE_PICKER_API_KEY: process.env.FILE_PICKER_API_KEY_QA,
@@ -48,16 +48,20 @@ module.exports = {
   HEAP_ANALYTICS_APP_ID     : '4153837120',
   PHASE_PRODUCT_TEMPLATE_ID : 176,
 
-  TC_NOTIFICATION_URL: 'https://api.topcoder-dev.com/v5/notifications',
+  TC_NOTIFICATION_URL: 'https://api.topcoder-qa.com/v5/notifications',
   CONNECT_MESSAGE_API_URL: 'https://api.topcoder-qa.com/v5',
   TC_SYSTEM_USERID: process.env.QA_TC_SYSTEM_USERID,
   MAINTENANCE_MODE: process.env.QA_MAINTENANCE_MODE,
 
   TC_CDN_URL: process.env.TC_CDN_URL,
+ 
+  DASHBOARD_FAQ_CONTENT_ID : process.env.DASHBOARD_FAQ_CONTENT_ID,
+  CONTENTFUL_DELIVERY_KEY : process.env.CONTENTFUL_DELIVERY_KEY,
+  CONTENTFUL_SPACE_ID : process.env.CONTENTFUL_SPACE_ID,
 
-  TAAS_APP_URL: 'https://platform.topcoder-dev.com/taas',
+  TAAS_APP_URL: 'https://platform.topcoder-qa.com/taas',
   DEFAULT_NDA_UUID: 'e5811a7b-43d1-407a-a064-69e5015b4900',
-  UNIVERSAL_NAV_URL: '//uni-nav.topcoder-dev.com/v1/tc-universal-nav.js',
+  UNIVERSAL_NAV_URL: '//uni-nav.topcoder-qa.com/v1/tc-universal-nav.js',
   HEADER_AUTH_URLS_HREF: `https://accounts-auth0.${DOMAIN}?utm_source=community-app-main`,
   HEADER_AUTH_URLS_LOCATION: `https://accounts-auth0.${DOMAIN}?retUrl=%S&utm_source=community-app-main`
 }
