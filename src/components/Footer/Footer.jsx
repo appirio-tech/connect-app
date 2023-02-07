@@ -15,7 +15,7 @@ class Footer extends Component {
     if (!!this.footerIdRef && !this.uniNavInitialized) {
       this.uniNavInitialized = true
       tcUniNav('init', `footerNav-${this.footerIdRef}`, {
-        fullFooter: true,
+        fullFooter: false,
         type: 'footer',
       })
     }
