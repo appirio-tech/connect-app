@@ -14,7 +14,6 @@ import { loadProjectsMetadata } from '../../actions/templates'
 import { getNewProjectLink } from '../../helpers/projectHelper'
 import { hasPermission } from '../../helpers/permissions'
 import { PERMISSIONS } from '../../config/permissions'
-import NavBar from './NavBar'
 
 class ProjectsToolBar extends Component {
 
@@ -158,7 +157,6 @@ class ProjectsToolBar extends Component {
           when={!!onLeaveMessage}
           message={onLeaveMessage}
         />
-        <NavBar user={user} />
         {isLoggedIn ? (<div className="primary-toolbar">
           { !hasPermission(PERMISSIONS.SEARCH_PROJECTS) && <div className="projects-title-mobile">MY PROJECTS</div> }
           {

@@ -3,8 +3,6 @@
 :global {
   .main-wrapper {
     min-height: calc(100vh - 120px); // minus height
-    padding-top: 120px;
-    overflow: hidden;
 
     @media screen and (max-width: $screen-md - 1px) {
       padding-top: 0;

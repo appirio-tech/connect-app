@@ -9,6 +9,7 @@ import {
 } from '../../config/constants'
 import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
 import { getAvatarResized, getFullNameWithFallback } from '../../helpers/tcHelpers.js'
+import NavBar from './NavBar'
 require('./TopBarContainer.scss')
 
 
@@ -88,7 +89,7 @@ class TopBarContainer extends React.Component {
           { label: 'Account and security', link: '/settings/account' },
           { label: 'Notification settings', link: '/settings/notifications' },
         ]
-      }, 
+      },
       {
         items: [
           { label: 'Log Out', link: logoutLink, absolute: true, onClick: logoutClick },
@@ -125,6 +126,7 @@ class TopBarContainer extends React.Component {
       <div className="TopBarContainer">
         <div className="tc-header tc-header__connect" id="TopToolbar">
           <div className="top-bar">
+            <NavBar user={user} />
             {
               ToolBar &&
               <ToolBar

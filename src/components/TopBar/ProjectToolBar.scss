@@ -18,6 +18,7 @@
       width: 100%;
       height: 60px;
       background-color: $tc-black;
+      padding: 0 20px;
 
       @media screen and (max-width: $screen-md - 1px) {
         height: 50px;

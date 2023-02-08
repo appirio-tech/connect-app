@@ -7,7 +7,6 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import { getNewProjectLink } from '../../helpers/projectHelper'
-import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
 import MobileMenu from '../MobileMenu/MobileMenu'
 import MobileMenuToggle from '../MobileMenu/MobileMenuToggle'
@@ -53,15 +52,13 @@ class ProjectToolBar extends React.Component {
   }
 
   render() {
-    const { renderLogoSection, userMenu, project, user, mobileMenu, location, orgConfig } = this.props
+    const { project, user, mobileMenu, orgConfig } = this.props
     const { isTooltipVisible, isMobileMenuOpen } = this.state
 
     return (
       <div className="ProjectToolBar">
         <div className="tool-bar">
-          <div className="bar-column">
-            {renderLogoSection()}
-          </div>
+          <div className="bar-column" />
           {project && project.name && <div className="bar-column project-name">
             <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{_.unescape(project.name)}</span>
             {isTooltipVisible && <div className="breadcrumb-tooltip">{_.unescape(project.name)}</div>}
@@ -69,10 +66,6 @@ class ProjectToolBar extends React.Component {
           {project && project.name && <div className="bar-column project-name mobile"><span>{_.unescape(project.name)}</span></div>}
           <div className="bar-column">
             <NewProjectNavLink compact link={getNewProjectLink(orgConfig)} />
-            {userMenu}
-            {/* pass location, to make sure that component is re-rendered when location is changed
-                it's necessary to hide notification dropdown on mobile when users uses browser history back/forward buttons */}
-            <NotificationsDropdown location={location} />
             <MobileMenuToggle onToggle={this.toggleMobileMenu}/>
           </div>
         </div>

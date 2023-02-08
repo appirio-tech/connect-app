@@ -26,14 +26,6 @@ class NavBar extends Component {
 
   componentDidMount() {
     if (!!this.headerIdRef && !this.uniNavInitialized) {
-      const user = this.props.user
-      const navigationUserInfo = user ? {
-        ...user,
-        initials: getInitials(user.firstName, user.lastName),
-      } : null
-      const authToken = user ? user.token : null
-      const isAuthenticated = !!authToken
-
       this.uniNavInitialized = true
       const headerId = this.headerIdRef
       const authURLs = HEADER_AUTH_URLS
@@ -44,7 +36,7 @@ class NavBar extends Component {
         type: 'tool',
         toolName: 'Connect',
         toolRoot: '/',
-        user: isAuthenticated ? navigationUserInfo : null,
+        user: 'auto',
         signOut: () => {
           window.location = `${BASE}/logout?ref=nav`
         },
