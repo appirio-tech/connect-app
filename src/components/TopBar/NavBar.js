@@ -6,7 +6,6 @@ import {
   HEADER_AUTH_URLS_LOCATION,
   DOMAIN,
 } from '../../config/constants'
-import { getInitials } from '../../helpers/format'
 
 const HEADER_AUTH_URLS = {
   href: HEADER_AUTH_URLS_HREF,
