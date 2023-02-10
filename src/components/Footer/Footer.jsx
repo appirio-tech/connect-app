@@ -1,6 +1,8 @@
 /* global tcUniNav */
 import React, { Component } from 'react'
 
+import './styles.scss'
+
 let uniqueId = 0
 
 class Footer extends Component {
@@ -22,7 +24,7 @@ class Footer extends Component {
   }
 
   render() {
-    return <div id={`footerNav-${this.footerIdRef}`} />
+    return <div styleName="footer-conatiner" id={`footerNav-${this.footerIdRef}`} />
   }
 }
 

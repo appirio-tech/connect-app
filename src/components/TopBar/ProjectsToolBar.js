@@ -160,17 +160,17 @@ class ProjectsToolBar extends Component {
         {isLoggedIn ? (<div className="primary-toolbar">
           { !hasPermission(PERMISSIONS.SEARCH_PROJECTS) && <div className="projects-title-mobile">MY PROJECTS</div> }
           {
-            hasPermission(PERMISSIONS.SEARCH_PROJECTS) &&
-            <div className="search-widget">
-              <SearchBar
-                hideSuggestionsWhenEmpty
-                showPopularSearchHeader={ false }
-                searchTermKey="keyword"
-                onTermChange={ this.handleTermChange }
-                onSearch={ this.handleSearch }
-                onClearSearch={ this.handleSearch }
-              />
-            </div>
+            hasPermission(PERMISSIONS.SEARCH_PROJECTS) ?
+              (<div className="search-widget">
+                <SearchBar
+                  hideSuggestionsWhenEmpty
+                  showPopularSearchHeader={ false }
+                  searchTermKey="keyword"
+                  onTermChange={ this.handleTermChange }
+                  onSearch={ this.handleSearch }
+                  onClearSearch={ this.handleSearch }
+                />
+              </div>) : (<div />)
           }
           <div className="actions">
             <NewProjectNavLink link={getNewProjectLink(orgConfig)} />
