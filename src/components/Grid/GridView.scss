@@ -228,6 +228,7 @@
 
   .gridview-load-more {
     text-align: center;
+    margin-bottom: 20px;
 
     @media screen and (max-width: $screen-md - 1px) {
       padding: 2 * $base-unit 0;

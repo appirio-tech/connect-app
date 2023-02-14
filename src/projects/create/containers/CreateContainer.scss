@@ -3,7 +3,6 @@
 
 :global {
   .WizardCreateProject {
-    margin-top: -60px; // Counteract the push from the main wrapper, top of vewport
     align-content: flex-start;
 
     @include mobile-tablet {

@@ -11,12 +11,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import './SectionToolBar.scss'
-import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
 import XMark from '../../assets/icons/x-mark.svg'
 
 
 const SectionToolBar = (props) => {
-  const logo = <Link key="logo" to="/" className="logo"><ConnectLogoMono className="icon-connect-logo-mono" /></Link>
+  const logo = <div />
   const title = <div key="title" className="title">{props.title}</div>
   const close = <Link key="close" to="/" className="close"><XMark className="icon-x-mark" /></Link>
   const menu = props.menu ? <div key="menu" className="menu">{props.menu}</div> : null

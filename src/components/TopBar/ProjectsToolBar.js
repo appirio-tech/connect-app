@@ -1,5 +1,4 @@
 require('./ProjectsToolBar.scss')
-
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import querystring from 'query-string'
@@ -7,7 +6,6 @@ import { withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import SearchBar from 'appirio-tech-react-components/components/SearchBar/SearchBar'
-import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
 import MobileMenu from '../MobileMenu/MobileMenu'
 import MobileMenuToggle from '../MobileMenu/MobileMenuToggle'
@@ -31,6 +29,7 @@ class ProjectsToolBar extends Component {
     this.handleSearch = this.handleSearch.bind(this)
     this.toggleMobileMenu = this.toggleMobileMenu.bind(this)
     this.onLeave = this.onLeave.bind(this)
+    this.uniNavInitialized = false
   }
 
   componentWillMount() {
@@ -146,7 +145,7 @@ class ProjectsToolBar extends Component {
   }
 
   render() {
-    const { renderLogoSection, userMenu, userRoles, user, mobileMenu, location, orgConfig } = this.props
+    const { userRoles, user, mobileMenu, orgConfig } = this.props
     const { isMobileMenuOpen, isMobileSearchVisible } = this.state
     const isLoggedIn = !!(userRoles && userRoles.length)
 
@@ -158,31 +157,26 @@ class ProjectsToolBar extends Component {
           when={!!onLeaveMessage}
           message={onLeaveMessage}
         />
-        <div className="primary-toolbar">
-          { renderLogoSection() }
-          { isLoggedIn && !hasPermission(PERMISSIONS.SEARCH_PROJECTS) && <div className="projects-title-mobile">MY PROJECTS</div> }
+        {isLoggedIn ? (<div className="primary-toolbar">
+          { !hasPermission(PERMISSIONS.SEARCH_PROJECTS) && <div className="projects-title-mobile">MY PROJECTS</div> }
           {
-            isLoggedIn && hasPermission(PERMISSIONS.SEARCH_PROJECTS) &&
-            <div className="search-widget">
-              <SearchBar
-                hideSuggestionsWhenEmpty
-                showPopularSearchHeader={ false }
-                searchTermKey="keyword"
-                onTermChange={ this.handleTermChange }
-                onSearch={ this.handleSearch }
-                onClearSearch={ this.handleSearch }
-              />
-            </div>
+            hasPermission(PERMISSIONS.SEARCH_PROJECTS) ?
+              (<div className="search-widget">
+                <SearchBar
+                  hideSuggestionsWhenEmpty
+                  showPopularSearchHeader={ false }
+                  searchTermKey="keyword"
+                  onTermChange={ this.handleTermChange }
+                  onSearch={ this.handleSearch }
+                  onClearSearch={ this.handleSearch }
+                />
+              </div>) : (<div />)
           }
           <div className="actions">
-            {isLoggedIn && <NewProjectNavLink link={getNewProjectLink(orgConfig)} />}
-            { userMenu }
-            {/* pass location, to make sure that component is re-rendered when location is changed
-                it's necessary to hide notification dropdown on mobile when users uses browser history back/forward buttons */}
-            { isLoggedIn && <NotificationsDropdown location={location} /> }
-            { isLoggedIn && <MobileMenuToggle onToggle={this.toggleMobileMenu}/> }
+            <NewProjectNavLink link={getNewProjectLink(orgConfig)} />
+            <MobileMenuToggle onToggle={this.toggleMobileMenu}/>
           </div>
-        </div>
+        </div>) : null}
         { isMobileSearchVisible && isLoggedIn &&
           <div className="secondary-toolbar">
             <SearchBar
@@ -203,6 +197,7 @@ class ProjectsToolBar extends Component {
 
 ProjectsToolBar.propTypes = {
   criteria              : PropTypes.object.isRequired,
+  user                  : PropTypes.object,
   /**
    * Function which render the logo section in the top bar
    */

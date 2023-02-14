@@ -1,6 +1,12 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
+  .TopBarContainer {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+  }
+
   .login-wrapper {
     align-items: center;
     display: flex;
@@ -33,10 +39,11 @@
     background-color: $tc-black;
     z-index: 20;
     padding: 0 20px;
-    position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    width: 100%;
+
     @media screen and (max-width: $screen-md - 1px) {
       height: auto;
       line-height: 50px;
@@ -96,16 +103,17 @@
 
     &.tc-header__connect {
       padding: 0;
-      min-height: 60px;
       height: auto;
       @media screen and (max-width: $screen-md - 1px) {
         min-height: 50px;
       }
 
       .top-bar {
-        height: 60px;
         background-color: $tc-black;
         position: relative;
+        display: flex;
+        flex-direction: column;
+
         @media screen and (max-width: $screen-md - 1px) {
           height: auto;
         }

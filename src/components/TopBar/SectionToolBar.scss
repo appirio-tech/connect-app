@@ -3,8 +3,7 @@
 
 :global {
   .tc-header.tc-header__connect .top-bar{
-    height: 60px;
-    background-color: $tc-gray-100;
+    background: $tc-gray-05;
     position: relative;
     display: flex;
 
@@ -32,7 +31,7 @@
     .title {
       @include roboto;
       font-size: 20px;
-      color: $tc-gray-10;
+      color: $tc-black;
       text-align: center;
     }
 

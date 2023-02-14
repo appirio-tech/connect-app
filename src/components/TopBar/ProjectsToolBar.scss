@@ -15,6 +15,9 @@
       height: 60px;
       justify-content: space-between;
       user-select: none;
+      padding: 0 20px;
+      background: $tc-gray-05;
+
       @media screen and (max-width: $screen-md - 1px) {
         height: auto;
         min-height: 50px;
