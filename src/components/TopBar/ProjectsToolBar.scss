@@ -157,6 +157,15 @@
       margin-top: 15px;
       display: flex;
 
+      :global {
+        .SearchBar {
+          .search-bar__text,
+          .search-typeahead-text {
+            z-index: 18;
+          }
+        }
+      }
+
       @media screen and (max-width: $screen-md - 1px) {
         height: 32px;
         margin-top: 9px;
