@@ -12,7 +12,6 @@ import AllProjectsIcon from '../../assets/icons/v.2.5/icon-all-projects.svg'
 import MyProfileIcon from '../../assets/icons/v.2.5/icon-my-profile.svg'
 import ReportsIcon from '../../assets/icons/v.2.5/icon-reports.svg'
 import NotificationSettingsIcon from '../../assets/icons/v.2.5/icon-notification-setting.svg'
-import AccountSecurityIcon from '../../assets/icons/v.2.5/icon-account-security.svg'
 
 import './UserSidebar.scss'
 import FooterNeedHelp from '../FooterNeedHelp/FooterNeedHelp'
