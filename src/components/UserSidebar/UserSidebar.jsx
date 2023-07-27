@@ -36,20 +36,9 @@ const navLinks = [{
   iconClassName: 'fill',
   children: [
     {
-      label: 'PROFILE INFORMATION',
-      to: '/settings/profile',
-      Icon: MyProfileIcon,
-      iconClassName: 'fill',
-    },
-    {
       label: 'NOTIFICATION SETTINGS',
       to: '/settings/notifications',
       Icon: NotificationSettingsIcon,
-      iconClassName: 'fill',
-    }, {
-      label: 'ACCOUNT & SECURITY',
-      to: '/settings/account',
-      Icon: AccountSecurityIcon,
       iconClassName: 'fill',
     }
   ]
