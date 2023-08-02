@@ -33,6 +33,11 @@ const navLinks = [{
   to: '/settings/profile',
   Icon: MyProfileIcon,
   iconClassName: 'fill',
+  // NOTE - we have removed the ability to update profiles in Connect to
+  // force everyone to use the new profiles app.  There is still the *code*
+  // to update the profiles in Connect, but we have removed navigation to it
+  // TODO: Remove all the profile update code, views, services etc...
+  // https://topcoder.atlassian.net/browse/MP-294?focusedCommentId=57460
   children: [
     {
       label: 'NOTIFICATION SETTINGS',
