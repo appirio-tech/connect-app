@@ -12,7 +12,6 @@ import AllProjectsIcon from '../../assets/icons/v.2.5/icon-all-projects.svg'
 import MyProfileIcon from '../../assets/icons/v.2.5/icon-my-profile.svg'
 import ReportsIcon from '../../assets/icons/v.2.5/icon-reports.svg'
 import NotificationSettingsIcon from '../../assets/icons/v.2.5/icon-notification-setting.svg'
-import AccountSecurityIcon from '../../assets/icons/v.2.5/icon-account-security.svg'
 
 import './UserSidebar.scss'
 import FooterNeedHelp from '../FooterNeedHelp/FooterNeedHelp'
@@ -34,22 +33,16 @@ const navLinks = [{
   to: '/settings/profile',
   Icon: MyProfileIcon,
   iconClassName: 'fill',
+  // NOTE - we have removed the ability to update profiles in Connect to
+  // force everyone to use the new profiles app.  There is still the *code*
+  // to update the profiles in Connect, but we have removed navigation to it
+  // TODO: Remove all the profile update code, views, services etc...
+  // https://topcoder.atlassian.net/browse/MP-294?focusedCommentId=57460
   children: [
-    {
-      label: 'PROFILE INFORMATION',
-      to: '/settings/profile',
-      Icon: MyProfileIcon,
-      iconClassName: 'fill',
-    },
     {
       label: 'NOTIFICATION SETTINGS',
       to: '/settings/notifications',
       Icon: NotificationSettingsIcon,
-      iconClassName: 'fill',
-    }, {
-      label: 'ACCOUNT & SECURITY',
-      to: '/settings/account',
-      Icon: AccountSecurityIcon,
       iconClassName: 'fill',
     }
   ]
