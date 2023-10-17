@@ -12,7 +12,7 @@ import qs from 'query-string'
  * @returns {Promise<*>}
  */
 export const searchSkills = async (term) => {
-  const skills = await axios.get(`${TC_API_URL}/v5/emsi-skills/skills/auto-complete?${qs.stringify({
+  const skills = await axios.get(`${TC_API_URL}/v5/standardized-skills/skills/autocomplete?${qs.stringify({
     term
   })}`)
   return _.get(skills, 'data', [])
