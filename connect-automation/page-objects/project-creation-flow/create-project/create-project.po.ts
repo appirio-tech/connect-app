@@ -72,13 +72,6 @@ export class CreateProjectPageObject {
   }
 
   /**
-   * Get view Talent Request button
-   */
-  public get viewTalentRequestButton() {
-    return ElementHelper.getElementByCss('.go-to-project-dashboard-btn');
-  }
-
-  /**
    * Get Current Form Page's title element
    */
   public get formPageTitle() {

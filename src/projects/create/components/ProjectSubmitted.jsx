@@ -4,24 +4,17 @@ import qs from 'query-string'
 
 require('./ProjectSubmitted.scss')
 import {
-  CONNECT_MAIN_PAGE_URL, PROJECT_TYPE_TALENT_AS_A_SERVICE, TAAS_APP_URL
+  CONNECT_MAIN_PAGE_URL, PROJECT_TYPE_TALENT_AS_A_SERVICE
 } from '../../../config/constants'
 
 class ProjectSubmitted extends React.Component {
   /**
    * Build project URL based on the `type` query param in URL.
    *
-   * @param {boolean} isTaas
    * @param {String} projectId project id
    */
-  getProjectUrl(isTaas, projectId = '') {
-    const url = isTaas
-      // if the project type is TaaS, then use link to TaaS App
-      ? `${TAAS_APP_URL}/myteams/${projectId}`
-      // otherwise use link inside Connect App
-      : `${CONNECT_MAIN_PAGE_URL}/projects/${projectId}`
-
-    return url
+  getProjectUrl(projectId = '') {
+    return `${CONNECT_MAIN_PAGE_URL}/projects/${projectId}`
   }
 
   getPageConfiguration() {
@@ -45,12 +38,12 @@ In the meantime, get a jump on the process by inviting your coworkers to your pr
       leftButton: {
         header: 'All Projects',
         subText: 'View all of your projects',
-        url: this.getProjectUrl(isTaas)
+        url: this.getProjectUrl()
       },
       rightButton: {
         header: 'Go to Project',
         subText: 'Invite your team members and share requirements',
-        url: this.getProjectUrl(isTaas, projectId)
+        url: this.getProjectUrl(projectId)
       },
     }
 
@@ -64,12 +57,12 @@ In the meantime, get a jump on the process by inviting your coworkers to your pr
       leftButton: {
         header: 'All Projects',
         subText: 'View all of your projects',
-        url: this.getProjectUrl(false) // also showing link to Connect App Project List
+        url: this.getProjectUrl() // also showing link to Connect App Project List
       },
       rightButton: {
-        header: 'View Talent Request',
-        subText: 'Modify your request and track fulfillment',
-        url: this.getProjectUrl(isTaas, projectId)
+        header: 'Go to Project',
+        subText: 'Invite your team members and share requirements',
+        url: this.getProjectUrl(projectId)
       },
     }
 

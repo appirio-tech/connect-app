@@ -45,7 +45,6 @@ import SystemFeed from '../../../components/Feed/SystemFeed'
 import ProjectScopeDrawer from '../components/ProjectScopeDrawer'
 import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
-import TaasProjectWelcome from '../components/TaasProjectWelcome'
 import NotificationsReader from '../../../components/NotificationsReader'
 import { hasPermission } from '../../../helpers/permissions'
 import { getProjectTemplateById } from '../../../helpers/templates'
@@ -67,7 +66,6 @@ import {
   PHASE_STATUS_DRAFT,
   SCREEN_BREAKPOINT_MD,
   CODER_BOT_USERID,
-  PROJECT_TYPE_TALENT_AS_A_SERVICE,
   PHASE_PRODUCT_TEMPLATE_ID,
   PHASE_STATUS_REVIEWED
 } from '../../../config/constants'
@@ -157,7 +155,7 @@ class DashboardContainer extends React.Component {
   onApproveMilestones({type, comment, milestones}) {
     const { executePhaseApproval, approveMilestone } = this.props
     const reqs = []
-    milestones.forEach( ms => { 
+    milestones.forEach( ms => {
       reqs.push(
         executePhaseApproval(ms.projectId, ms.id, {decision: type, comment})
       )
@@ -189,7 +187,7 @@ class DashboardContainer extends React.Component {
     const { createGameplanPhases } = this.state
     const index = createGameplanPhases.findIndex(phase => phase.id === id)
     const phase = createGameplanPhases[index]
-    
+
 
     /**
      * Helper function to get changes in members
@@ -381,8 +379,6 @@ class DashboardContainer extends React.Component {
 
     const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
 
-    const isTaasProject = project.type === PROJECT_TYPE_TALENT_AS_A_SERVICE
-
     const leftArea = (
       <ProjectInfoContainer
         location={location}
@@ -430,114 +426,110 @@ class DashboardContainer extends React.Component {
         </TwoColsLayout.Sidebar>
 
         <TwoColsLayout.Content>
-          {isTaasProject ? (
-            <TaasProjectWelcome projectId={project.id} />
-          ) : (
-            <div>
-              {unreadProjectUpdate.length > 0 &&
-                <SystemFeed
-                  messages={sortedUnreadProjectUpdates}
-                  user={SYSTEM_USER}
-                  onNotificationRead={this.onNotificationRead}
-                />
-              }
-              {/* <button type="button" onClick={this.toggleDrawer}>Toggle drawer</button> */}
-              {!!estimationQuestion &&
-                <ProjectEstimation
-                  onClick={this.toggleDrawer}
-                  question={estimationQuestion}
-                  template={template}
-                  project={project}
-                  showPrice={!_.get(template, 'hidePrice')}
-                  theme="dashboard"
-                />
-              }
-              {/* The following containerStyle and overlayStyle are needed for shrink drawer and overlay size for not
-                  covering sidebar and topbar
-              */}
-              <ProjectScopeDrawer
-                open={this.state.open}
-                containerStyle={{top: '60px', height: 'calc(100% - 60px)', display: 'flex', flexDirection: 'column' }}
-                overlayStyle={{top: '60px', left: '280px'}}
-                onRequestChange={(open) => this.setState({open})}
-                project={project}
-                template={template}
-                updateProject={updateProject}
-                processing={isProcessing}
-                fireProjectDirty={fireProjectDirty}
-                fireProjectDirtyUndo= {fireProjectDirtyUndo}
-                addProjectAttachment={addProjectAttachment}
-                updateProjectAttachment={updateProjectAttachment}
-                removeProjectAttachment={removeProjectAttachment}
-                productTemplates={productTemplates}
-                productCategories={productCategories}
+          <div>
+            {unreadProjectUpdate.length > 0 &&
+              <SystemFeed
+                messages={sortedUnreadProjectUpdates}
+                user={SYSTEM_USER}
+                onNotificationRead={this.onNotificationRead}
               />
+            }
+            {/* <button type="button" onClick={this.toggleDrawer}>Toggle drawer</button> */}
+            {!!estimationQuestion &&
+              <ProjectEstimation
+                onClick={this.toggleDrawer}
+                question={estimationQuestion}
+                template={template}
+                project={project}
+                showPrice={!_.get(template, 'hidePrice')}
+                theme="dashboard"
+              />
+            }
+            {/* The following containerStyle and overlayStyle are needed for shrink drawer and overlay size for not
+                covering sidebar and topbar
+            */}
+            <ProjectScopeDrawer
+              open={this.state.open}
+              containerStyle={{top: '60px', height: 'calc(100% - 60px)', display: 'flex', flexDirection: 'column' }}
+              overlayStyle={{top: '60px', left: '280px'}}
+              onRequestChange={(open) => this.setState({open})}
+              project={project}
+              template={template}
+              updateProject={updateProject}
+              processing={isProcessing}
+              fireProjectDirty={fireProjectDirty}
+              fireProjectDirtyUndo= {fireProjectDirtyUndo}
+              addProjectAttachment={addProjectAttachment}
+              updateProjectAttachment={updateProjectAttachment}
+              removeProjectAttachment={removeProjectAttachment}
+              productTemplates={productTemplates}
+              productCategories={productCategories}
+            />
 
-              {project.version !== 'v4' ? (
-                <div>
-                  {visiblePhases && visiblePhases.length > 0 ? (
-                    <ProjectStages
-                      {...{
-                        ...this.props,
-                        phases: visiblePhases,
-                        phasesNonDirty: visiblePhasesNonDirty,
-                      }}
+            {project.version !== 'v4' ? (
+              <div>
+                {visiblePhases && visiblePhases.length > 0 ? (
+                  <ProjectStages
+                    {...{
+                      ...this.props,
+                      phases: visiblePhases,
+                      phasesNonDirty: visiblePhasesNonDirty,
+                    }}
+                  />
+                ) : (
+                  <ProjectPlanEmpty />
+                )}
+                {isCreatingPhase? <LoadingIndicator/>: null}
+                {isProjectLive && !isCreatingPhase && hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)  && !isLoadingPhases && (
+                  <CreatePhaseForm
+                    projectVersion={parseInt((project.version || 'v2').substring(1))}
+                    onSubmit={this.onFormSubmit}
+                  />
+                )}
+              </div>
+            ) : (
+              <div styleName="simple-plan">
+                {/* check if visiblePhases/phases is non-null and empty */}
+                {((!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) && (visiblePhases && visiblePhases.length === 0))
+                  || (hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) &&
+                    (phases && phases.length === 0) &&
+                    (!this.state.createGameplanPhases || this.state.createGameplanPhases.length === 0))
+                ) && (
+                  <div styleName="welcome-message">
+                    <ProjectPlanEmpty version="v4" />
+                  </div>
+                )}
+                {(() => {
+                  // is loading
+                  if (isCreatingPhase || isLoadingPhases) {
+                    return null
+                  }
+
+                  // hide milestones form if customer and no visible milestones
+                  if (!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) && visiblePhases && visiblePhases.length === 0) {
+                    return null
+                  }
+
+                  return (
+                    <CreateSimplePlan
+                      isProjectLive={isProjectLive}
+                      isCustomer={!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)}
+                      project={project}
+                      phases={phases}
+                      milestones={milestones}
+                      milestonesInApproval={milestonesInApproval}
+                      onChangeMilestones={this.onChangeMilestones}
+                      onSaveMilestone={this.onSaveMilestone}
+                      onGetChallenges={this.onGetChallenges}
+                      onRemoveMilestone={this.onRemoveMilestone}
+                      onRemoveAllMilestones={this.onRemoveAllMilestones}
+                      onApproveMilestones={this.onApproveMilestones}
                     />
-                  ) : (
-                    <ProjectPlanEmpty />
-                  )}
-                  {isCreatingPhase? <LoadingIndicator/>: null}
-                  {isProjectLive && !isCreatingPhase && hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)  && !isLoadingPhases && (
-                    <CreatePhaseForm
-                      projectVersion={parseInt((project.version || 'v2').substring(1))}
-                      onSubmit={this.onFormSubmit}
-                    />
-                  )}
-                </div>
-              ) : (
-                <div styleName="simple-plan">
-                  {/* check if visiblePhases/phases is non-null and empty */}
-                  {((!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) && (visiblePhases && visiblePhases.length === 0))
-                    || (hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) &&
-                      (phases && phases.length === 0) &&
-                      (!this.state.createGameplanPhases || this.state.createGameplanPhases.length === 0))
-                  ) && (
-                    <div styleName="welcome-message">
-                      <ProjectPlanEmpty version="v4" />
-                    </div>
-                  )}
-                  {(() => {
-                    // is loading
-                    if (isCreatingPhase || isLoadingPhases) {
-                      return null
-                    }
-
-                    // hide milestones form if customer and no visible milestones
-                    if (!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN) && visiblePhases && visiblePhases.length === 0) {
-                      return null
-                    }
-
-                    return (
-                      <CreateSimplePlan
-                        isProjectLive={isProjectLive}
-                        isCustomer={!hasPermission(PERMISSIONS.MANAGE_PROJECT_PLAN)}
-                        project={project}
-                        phases={phases}
-                        milestones={milestones}
-                        milestonesInApproval={milestonesInApproval}
-                        onChangeMilestones={this.onChangeMilestones}
-                        onSaveMilestone={this.onSaveMilestone}
-                        onGetChallenges={this.onGetChallenges}
-                        onRemoveMilestone={this.onRemoveMilestone}
-                        onRemoveAllMilestones={this.onRemoveAllMilestones}
-                        onApproveMilestones={this.onApproveMilestones}
-                      />
-                    )
-                  })()}
-                </div>
-              )}
-            </div>
-          )}
+                  )
+                })()}
+              </div>
+            )}
+          </div>
         </TwoColsLayout.Content>
       </TwoColsLayout>
     )

@@ -112,11 +112,4 @@ export const ConfigHelper = {
   getExpiredProjectUrl(): string {
     return this.getConfig().expiredProjectUrl;
   },
-
-  /**
-   * Get platform URL
-   */
-  getPlatformUrl(): string {
-    return this.getConfig().platformUrl;
-  },
 };
