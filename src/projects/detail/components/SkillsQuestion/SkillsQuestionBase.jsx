@@ -12,7 +12,8 @@ const fetchSkills = _.debounce((inputValue, callback) => {
       const suggestedOptions = skills.map((skillItem) => ({
         label: skillItem.name,
         name: skillItem.name,
-        value: skillItem.id
+        value: skillItem.id,
+        skillId: skillItem.id
       }))
       return callback(suggestedOptions)
     })
