@@ -10,9 +10,7 @@ const fetchSkills = _.debounce((inputValue, callback) => {
   searchSkills(inputValue).then(
     (skills) => {
       const suggestedOptions = skills.map((skillItem) => ({
-        label: skillItem.name,
         name: skillItem.name,
-        value: skillItem.id,
         skillId: skillItem.id
       }))
       return callback(suggestedOptions)
@@ -186,9 +184,7 @@ class SkillsQuestion extends React.PureComponent {
 
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
 
-    let currentValues = getValue() || []
-    // remove from currentValues not available options but still keep created custom options without skillId
-    currentValues = currentValues.filter(skill => _.some(availableOptions, skill) || !skill.skillId)
+    const currentValues = getValue() || []
 
     const questionDisabled = isFormDisabled() || disabled || (selectedCategories.length === 0 && _.isUndefined(skillsCategories))
     const hasError = !isPristine() && !isValid()
@@ -224,7 +220,7 @@ class SkillsQuestion extends React.PureComponent {
             placeholder="Start typing a skill then select from the list"
             value={selectGroupValues}
             getOptionLabel={(option) => option.name || ''}
-            getOptionValue={(option) => (option.name || '').trim()}
+            getOptionValue={(option) => (option.skillId || '').trim()}
             onInputChange={this.onSelectType}
             onChange={(val) => {
               this.handleChange(_.union(val, checkboxGroupValues))
