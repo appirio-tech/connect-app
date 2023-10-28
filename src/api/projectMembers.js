@@ -3,40 +3,31 @@ import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL, PROJECTS_API_URL } from '../config/constants'
 
 export function getMembersById (userIds) {
-  const _userIdArr = _.map(userIds, _id => `userId:${_id}`)
   // only requesting certain member attributes
-  const fields = 'userId,handle,photoURL,details'
-  const query = _userIdArr.join(' OR ')
-  const url = `${TC_API_URL}/v3/members/_search/?fields=`
-    + encodeURIComponent(fields)
-    + `&query=${encodeURIComponent(query)}`
-    + '&limit=' + userIds.length
+  const fields = 'userId,handle,photoURL,firstName,lastName'
+  const url = `${TC_API_URL}/v5/members?userIds=[${userIds.join(',')}]&fields=${encodeURIComponent(fields)}`;
   return axios.get(url)
     .then(resp => {
-      return resp.data.result.content
+      return resp.data
     })
 }
 
 export function getMembersByHandle (handles) {
-  const _handlesArr = _.map(handles, _handle => `handleLower:${_handle.toLowerCase()}`)
   // only requesting certain member attributes
-  const fields = 'userId,handle,photoURL,details'
-  const query = _handlesArr.join(' OR ')
-  const url = `${TC_API_URL}/v3/members/_search/?fields=`
-    + encodeURIComponent(fields)
-    + `&query=${encodeURIComponent(query)}`
-    + '&limit=' + handles.length
+  const fields = 'userId,handle,photoURL,firstName,lastName'
+  const quotedHandles = handles.map(handle => JSON.stringify(handle)).join(',');
+  const url = `${TC_API_URL}/v5/members?handles=[${quotedHandles}]&fields=${encodeURIComponent(fields)}`;
   return axios.get(url)
     .then(resp => {
-      return resp.data.result.content
+      return resp.data
     })
 }
 
 export function loadMemberSuggestions(value) {
-  const url = `${TC_API_URL}/v3/members/_suggest/${value}`
+  const url = `${TC_API_URL}/v5/members/autocomplete?term=${value}`
   return axios.get(url)
     .then(resp => {
-      return resp.data.result.content
+      return resp.data
     })
 }
 
