@@ -1,11 +1,10 @@
-import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL, PROJECTS_API_URL } from '../config/constants'
 
 export function getMembersById (userIds) {
   // only requesting certain member attributes
   const fields = 'userId,handle,photoURL,firstName,lastName'
-  const url = `${TC_API_URL}/v5/members?userIds=[${userIds.join(',')}]&fields=${encodeURIComponent(fields)}`;
+  const url = `${TC_API_URL}/v5/members?userIds=[${userIds.join(',')}]&fields=${encodeURIComponent(fields)}`
   return axios.get(url)
     .then(resp => {
       return resp.data
@@ -15,8 +14,8 @@ export function getMembersById (userIds) {
 export function getMembersByHandle (handles) {
   // only requesting certain member attributes
   const fields = 'userId,handle,photoURL,firstName,lastName'
-  const quotedHandles = handles.map(handle => JSON.stringify(handle)).join(',');
-  const url = `${TC_API_URL}/v5/members?handles=[${quotedHandles}]&fields=${encodeURIComponent(fields)}`;
+  const quotedHandles = handles.map(handle => JSON.stringify(handle)).join(',')
+  const url = `${TC_API_URL}/v5/members?handles=[${quotedHandles}]&fields=${encodeURIComponent(fields)}`
   return axios.get(url)
     .then(resp => {
       return resp.data
