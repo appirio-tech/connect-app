@@ -60,7 +60,6 @@ module.exports = {
   CONTENTFUL_DELIVERY_KEY : process.env.CONTENTFUL_DELIVERY_KEY,
   CONTENTFUL_SPACE_ID : process.env.CONTENTFUL_SPACE_ID,
 
-  TAAS_APP_URL: 'https://platform.topcoder-dev.com/taas',
   DEFAULT_NDA_UUID: 'e5811a7b-43d1-407a-a064-69e5015b4900',
   UNIVERSAL_NAV_URL: '//uni-nav.topcoder-dev.com/v1/tc-universal-nav.js',
   HEADER_AUTH_URLS_HREF: `https://accounts-auth0.${DOMAIN}?utm_source=community-app-main`,

@@ -63,8 +63,8 @@ export function updateUserProfile(handle, updatedProfile, queryParams = {}) {
  * @returns {Promise<Array>} member traits
  */
 export const getMemberTraits = (handle) => {
-  return axios.get(`${TC_API_URL}/v3/members/${handle}/traits`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.get(`${TC_API_URL}/v5/members/${handle}/traits`)
+    .then(resp => resp.data)
 }
 
 /**
@@ -76,10 +76,10 @@ export const getMemberTraits = (handle) => {
  * @returns {Promise<Array>} member traits
  */
 export const updateMemberTraits = (handle, updatedTraits) => {
-  return axios.put(`${TC_API_URL}/v3/members/${handle}/traits`, {
-    param: updatedTraits
-  })
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.put(`${TC_API_URL}/v5/members/${handle}/traits`, (updatedTraits || []).map(traitInfo => {
+    return _.pick(traitInfo, ['categoryName', 'traitId', 'traits', ])
+  }))
+    .then(resp => resp.data)
 }
 
 /**
@@ -91,10 +91,10 @@ export const updateMemberTraits = (handle, updatedTraits) => {
  * @returns {Promise<Array>} member traits
  */
 export const createMemberTraits = (handle, traits) => {
-  return axios.post(`${TC_API_URL}/v3/members/${handle}/traits`, {
-    param: traits
-  })
-    .then(resp => _.get(resp.data, 'result.content', {}))
+  return axios.post(`${TC_API_URL}/v5/members/${handle}/traits`, (traits || []).map(traitInfo => {
+    return _.pick(traitInfo, ['categoryName', 'traitId', 'traits', ])
+  }))
+    .then(resp => resp.data)
 }
 
 /**

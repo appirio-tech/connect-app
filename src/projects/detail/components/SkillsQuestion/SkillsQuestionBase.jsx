@@ -3,8 +3,22 @@ import _ from 'lodash'
 import SkillsCheckboxGroup from './SkillsCheckboxGroup'
 import Select from '../../../../components/Select/Select'
 import './SkillsQuestion.scss'
-import { createFilter } from 'react-select'
-import { getSkills } from '../../../../api/skills'
+import { searchSkills } from '../../../../api/skills.ts'
+
+
+const fetchSkills = _.debounce((inputValue, callback) => {
+  searchSkills(inputValue).then(
+    (skills) => {
+      const suggestedOptions = skills.map((skillItem) => ({
+        name: skillItem.name,
+        skillId: skillItem.id
+      }))
+      return callback(suggestedOptions)
+    })
+    .catch(() => {
+      return callback(null)
+    })
+}, 150)
 
 /**
  * If `categoriesMapping` is defined - filter options using selected categories.
@@ -48,13 +62,6 @@ class SkillsQuestion extends React.PureComponent {
   }
 
   componentWillMount() {
-    getSkills().then(skills => {
-      const options = skills.map(skill => ({
-        skillId: skill.id,
-        name: skill.name
-      }))
-      this.updateOptions(options)
-    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -177,9 +184,7 @@ class SkillsQuestion extends React.PureComponent {
 
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
 
-    let currentValues = getValue() || []
-    // remove from currentValues not available options but still keep created custom options without skillId
-    currentValues = currentValues.filter(skill => _.some(availableOptions, skill) || !skill.skillId)
+    const currentValues = getValue() || []
 
     const questionDisabled = isFormDisabled() || disabled || (selectedCategories.length === 0 && _.isUndefined(skillsCategories))
     const hasError = !isPristine() && !isValid()
@@ -205,7 +210,7 @@ class SkillsQuestion extends React.PureComponent {
           />) : null}
         <div styleName="select-wrapper" className={selectWrapperClass}>
           <Select
-            createOption
+            asyncOption
             isMulti
             closeMenuOnSelect
             showDropdownIndicator
@@ -215,16 +220,15 @@ class SkillsQuestion extends React.PureComponent {
             placeholder="Start typing a skill then select from the list"
             value={selectGroupValues}
             getOptionLabel={(option) => option.name || ''}
-            filterOption={createFilter({ ignoreAccents: false })}
-            getOptionValue={(option) => (option.name || '').trim()}
+            getOptionValue={(option) => (option.skillId || '').trim()}
             onInputChange={this.onSelectType}
             onChange={(val) => {
               this.handleChange(_.union(val, checkboxGroupValues))
             }}
             noOptionsMessage={() => 'No results found'}
-            options={selectGroupOptions}
             isDisabled={questionDisabled}
-
+            cacheOptions
+            loadOptions={fetchSkills}
           />
         </div>
         { hasError && (<p styleName="error-message">{errorMessage}</p>) }

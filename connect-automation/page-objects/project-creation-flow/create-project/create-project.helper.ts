@@ -58,9 +58,6 @@ export class CreateProjectPageHelper {
     await this.createProjectPageObject.submitJobRequest.click();
     const message = await CommonHelper.getAlertMessageAndClosePopup();
     expect(message).toContain(`PROJECT '${taasData.title.toUpperCase()}' CREATED`);
-
-    await this.createProjectPageObject.viewTalentRequestButton.click();
-    await CommonHelper.verifyPageUrl(ConfigHelper.getPlatformUrl());
   }
 
   private static createProjectPageObject: CreateProjectPageObject;
@@ -240,7 +237,7 @@ export class CreateProjectPageHelper {
 
     await this.createProjectPageObject.skillsInput.click();
     await CommonHelper.waitForListToGetLoaded('xpath', this.createProjectPageObject.multiSelectOptionClassName, 2);
-    
+
     const elements = await this.createProjectPageObject.multiSelectOption;
     await elements[1].click();
 

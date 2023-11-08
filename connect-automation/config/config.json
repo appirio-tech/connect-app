@@ -23,6 +23,5 @@
     "accountAndSecurityUrl": "https://connect.topcoder-dev.com/settings/account",
     "notificationsUrl": "https://connect.topcoder-dev.com/notifications",
     "allProjectsUrl": "https://connect.topcoder-dev.com/projects",
-    "expiredProjectUrl": "https://connect.topcoder-dev.com/projects/17236",
-    "platformUrl": "https://platform.topcoder-dev.com/taas/myteams"
+    "expiredProjectUrl": "https://connect.topcoder-dev.com/projects/17236"
 }

@@ -1135,11 +1135,6 @@ export const PROFILE_FIELDS_CONFIG = {
 export const PROJECT_TYPE_TALENT_AS_A_SERVICE = 'talent-as-a-service'
 
 /**
- * URL to the Topcoder TaaS App
- */
-export const TAAS_APP_URL = process.env.TAAS_APP_URL || 'https://platform.topcoder-dev.com/taas'
-
-/**
  * Milestone Types
  */
 export const MILESTONE_TYPE = {
