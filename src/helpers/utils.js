@@ -3,7 +3,7 @@
  */
 import _ from 'lodash'
 import moment from 'moment'
-import { logger } from '../../logger/logger';
+import { logger } from '../../logger/logger'
 
 /**
  * Finds the difference between two objects.
