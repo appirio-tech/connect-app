@@ -3,6 +3,7 @@
  */
 import _ from 'lodash'
 import moment from 'moment'
+import { logger } from '../../logger/logger';
 
 /**
  * Finds the difference between two objects.
@@ -55,7 +56,8 @@ export const compareEmail = (email1, email2, options = { UNIQUE_GMAIL_VALIDATION
  * @returns {Boolean} true if two user handles are same
  */
 export const compareHandles = (handle1, handle2) => {
-  if (handle1 === undefined || handle2 === undefined) {
+  if (handle1 === undefined || handle2 === undefined || handle1 === null || handle2 === null ) {
+    logger.info(`Comparing: ${handle1} to ${handle2}`)
     return false
   }
   let h1 = handle1
